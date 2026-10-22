@@ -1,0 +1,1557 @@
+{
+  "repository": "https://github.com/nginx/nginx",
+  "commit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+  "version": "1.31.9",
+  "reviewType": "source reading; no builds or runtime validation",
+  "scope": "All files assigned in feasibility_review-manifest.txt: src/mail and src/stream",
+  "statusDefinitions": {
+    "full_read": "Every line output to reviewer without truncation",
+    "partial": "Only listed ranges read",
+    "structural": "Inventory/symbol inspection only",
+    "unread": "No source lines read"
+  },
+  "files": [
+    {
+      "path": "src/mail/ngx_mail.c",
+      "lines": 485,
+      "sha256": "9651e5347aea4df6182ab4ef5529678a474790700857d6d53e8f21983e0f4cff",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          485
+        ]
+      ],
+      "role": "mail{} module contexts, config merge, port/address grouping, wildcard/bind listeners, IPv4/IPv6, SSL/PROXY flags",
+      "directives": [
+        "mail"
+      ],
+      "definedFunctions": [
+        "ngx_mail_block",
+        "ngx_mail_add_ports",
+        "ngx_mail_optimize_servers",
+        "ngx_mail_add_addrs",
+        "ngx_mail_add_addrs6",
+        "ngx_mail_cmp_conf_addrs"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail.h",
+      "lines": 425,
+      "sha256": "05836404eb1fa61feec83615e13609c292d2dacfbb1e5fe26905bc59f9712ce9",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          425
+        ]
+      ],
+      "role": "mail session/protocol/config types, POP3/IMAP/SMTP auth states, callbacks and per-session parser state",
+      "directives": [],
+      "definedFunctions": []
+    },
+    {
+      "path": "src/mail/ngx_mail_auth_http_module.c",
+      "lines": 1662,
+      "sha256": "edb4e22957a2092bca503fac9899db28497d234073fbf8e1555cedced839b223",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          850
+        ],
+        [
+          851,
+          1662
+        ]
+      ],
+      "role": "Nonblocking HTTP/1.0 auth subrequest, Auth-* response state machine, wait/retry timers, upstream address/port validation, escaped credentials/certificate metadata",
+      "directives": [
+        "auth_http",
+        "auth_http_timeout",
+        "auth_http_header",
+        "auth_http_pass_client_cert"
+      ],
+      "definedFunctions": [
+        "ngx_mail_auth_http_init",
+        "ngx_mail_auth_http_write_handler",
+        "ngx_mail_auth_http_read_handler",
+        "ngx_mail_auth_http_ignore_status_line",
+        "ngx_mail_auth_http_process_headers",
+        "ngx_mail_auth_sleep_handler",
+        "ngx_mail_auth_http_parse_header_line",
+        "ngx_mail_auth_http_block_read",
+        "ngx_mail_auth_http_dummy_handler",
+        "ngx_mail_auth_http_create_request",
+        "ngx_mail_auth_http_escape",
+        "ngx_mail_auth_http_create_conf",
+        "ngx_mail_auth_http_merge_conf",
+        "ngx_mail_auth_http",
+        "ngx_mail_auth_http_header"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_core_module.c",
+      "lines": 728,
+      "sha256": "575d1569204be1fec166c7c855df26f40a7e23e6286a205cabfe2df5e848a1ee",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          728
+        ]
+      ],
+      "role": "Mail server/listen/protocol/resolver/timeout/max_errors directives, defaults, address deduplication and platform socket options",
+      "directives": [
+        "server",
+        "listen",
+        "protocol",
+        "timeout",
+        "server_name",
+        "error_log",
+        "resolver",
+        "resolver_timeout",
+        "max_errors"
+      ],
+      "definedFunctions": [
+        "ngx_mail_core_create_main_conf",
+        "ngx_mail_core_create_srv_conf",
+        "ngx_mail_core_merge_srv_conf",
+        "ngx_mail_core_server",
+        "ngx_mail_core_listen",
+        "ngx_mail_core_protocol",
+        "ngx_mail_core_error_log",
+        "ngx_mail_core_resolver",
+        "ngx_mail_capabilities"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_handler.c",
+      "lines": 1020,
+      "sha256": "16cadb07e34d6d9244a3ddf31c0cfe02278bd89c22e563719985e6c0702d8558",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          1020
+        ]
+      ],
+      "role": "Accept/local-address dispatch, PROXY input+trusted realip, TLS/STARTTLS/client-cert verification, authentication decoding, partial writes/read-command limits and cleanup",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_mail_init_connection",
+        "ngx_mail_proxy_protocol_handler",
+        "ngx_mail_init_session_handler",
+        "ngx_mail_starttls_handler",
+        "ngx_mail_ssl_init_connection",
+        "ngx_mail_ssl_handshake_handler",
+        "ngx_mail_verify_cert",
+        "ngx_mail_init_session",
+        "ngx_mail_salt",
+        "ngx_mail_starttls_only",
+        "ngx_mail_auth_plain",
+        "ngx_mail_auth_login_username",
+        "ngx_mail_auth_login_password",
+        "ngx_mail_auth_cram_md5_salt",
+        "ngx_mail_auth_cram_md5",
+        "ngx_mail_auth_external",
+        "ngx_mail_send",
+        "ngx_mail_read_command",
+        "ngx_mail_auth",
+        "ngx_mail_session_internal_server_error",
+        "ngx_mail_close_connection",
+        "ngx_mail_log_error"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_imap_handler.c",
+      "lines": 478,
+      "sha256": "bfea2490cf6eedd418d68206801ce01aa578d0741a6d5432b73250152f02a488",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          478
+        ]
+      ],
+      "role": "IMAP pre-auth state machine, tagged replies, LOGIN/AUTHENTICATE/CAPABILITY/STARTTLS and continuations",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_mail_imap_init_session",
+        "ngx_mail_imap_init_protocol",
+        "ngx_mail_imap_auth_state",
+        "ngx_mail_imap_login",
+        "ngx_mail_imap_authenticate",
+        "ngx_mail_imap_capability",
+        "ngx_mail_imap_starttls"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_imap_module.c",
+      "lines": 258,
+      "sha256": "1e5d2eb5f193a96316cf82a8a2687b0209fa4193685f58d585e5ae28fcfb500b",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          258
+        ]
+      ],
+      "role": "IMAP defaults/capability and auth strings, STARTTLS-only suppression, page-sized client buffer",
+      "directives": [
+        "imap_client_buffer",
+        "imap_capabilities",
+        "imap_auth"
+      ],
+      "definedFunctions": [
+        "ngx_mail_imap_create_srv_conf",
+        "ngx_mail_imap_merge_srv_conf"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_imap_module.h",
+      "lines": 39,
+      "sha256": "5f7ddd652479d7a8ce09cffac4c66010fa566638617c73869074ec434277a5e8",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          39
+        ]
+      ],
+      "role": "IMAP configuration and handler declarations",
+      "directives": [],
+      "definedFunctions": []
+    },
+    {
+      "path": "src/mail/ngx_mail_parse.c",
+      "lines": 974,
+      "sha256": "a23ecf8d9fd60fa969da9e7863449b82b952a6b8e4f276039fb4ea424ec6c8db",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          974
+        ]
+      ],
+      "role": "Full incremental POP3/IMAP/SMTP command parsers, quoted/literal IMAP arguments, invalid-line recovery, AUTH mechanism parsing",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_mail_pop3_parse_command",
+        "ngx_mail_imap_parse_command",
+        "ngx_mail_smtp_parse_command",
+        "ngx_mail_auth_parse"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_pop3_handler.c",
+      "lines": 545,
+      "sha256": "4a0a60ac79ec11cdb4ea75d2a42da98855d59685ff0d0cdf0ddd54ef78c0f6a3",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          545
+        ]
+      ],
+      "role": "POP3 greeting/salt, USER/PASS/APOP/AUTH/CAPA/STLS states, blocked output/input and auth handoff",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_mail_pop3_init_session",
+        "ngx_mail_pop3_init_protocol",
+        "ngx_mail_pop3_auth_state",
+        "ngx_mail_pop3_user",
+        "ngx_mail_pop3_pass",
+        "ngx_mail_pop3_capa",
+        "ngx_mail_pop3_stls",
+        "ngx_mail_pop3_apop",
+        "ngx_mail_pop3_auth"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_pop3_module.c",
+      "lines": 323,
+      "sha256": "2847fd1ad5935efca5fdee52d7e4ac662ede1ee88e06cf46bb0bb8ca5f8089a6",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          323
+        ]
+      ],
+      "role": "POP3 capability/auth defaults and STARTTLS capability variants",
+      "directives": [
+        "pop3_capabilities",
+        "pop3_auth"
+      ],
+      "definedFunctions": [
+        "ngx_mail_pop3_create_srv_conf",
+        "ngx_mail_pop3_merge_srv_conf"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_pop3_module.h",
+      "lines": 38,
+      "sha256": "d1927e5fae54c237403d52ffd8f9ed370f677a776ef96bb383dd1f958b853f5c",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          38
+        ]
+      ],
+      "role": "POP3 config and handler declarations",
+      "directives": [],
+      "definedFunctions": []
+    },
+    {
+      "path": "src/mail/ngx_mail_proxy_module.c",
+      "lines": 1428,
+      "sha256": "b8341b104fdbc3f755d3d436c560f2bcc8c4239bb6c58ec28f42244e3cb1d6f0",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          850
+        ],
+        [
+          851,
+          1428
+        ]
+      ],
+      "role": "Mail upstream login handshakes, SMTP XCLIENT/AUTH/MAIL/RCPT replay before tunnel, PROXY v1/v2, bidirectional buffered proxy and timeout cleanup",
+      "directives": [
+        "proxy",
+        "proxy_buffer",
+        "proxy_timeout",
+        "proxy_pass_error_message",
+        "xclient",
+        "proxy_smtp_auth",
+        "proxy_protocol"
+      ],
+      "definedFunctions": [
+        "ngx_mail_proxy_init",
+        "ngx_mail_proxy_block_read",
+        "ngx_mail_proxy_pop3_handler",
+        "ngx_mail_proxy_imap_handler",
+        "ngx_mail_proxy_smtp_handler",
+        "ngx_mail_proxy_write_handler",
+        "ngx_mail_proxy_send_proxy_protocol",
+        "ngx_mail_proxy_read_response",
+        "ngx_mail_proxy_handler",
+        "ngx_mail_proxy_upstream_error",
+        "ngx_mail_proxy_internal_server_error",
+        "ngx_mail_proxy_close_session",
+        "ngx_mail_proxy_create_conf",
+        "ngx_mail_proxy_merge_conf"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_realip_module.c",
+      "lines": 269,
+      "sha256": "233b7f4a29d4b63c6d1cd03ac3a2da87d910bdf69d42c15cd1490376a431e304",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          269
+        ]
+      ],
+      "role": "Trusted-peer CIDR/Unix/hostname configuration and PROXY-derived client-address replacement",
+      "directives": [
+        "set_real_ip_from"
+      ],
+      "definedFunctions": [
+        "ngx_mail_realip_handler",
+        "ngx_mail_realip_set_addr",
+        "ngx_mail_realip_from",
+        "ngx_mail_realip_create_srv_conf",
+        "ngx_mail_realip_merge_srv_conf"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_smtp_handler.c",
+      "lines": 984,
+      "sha256": "e6af2879ed6c260d447f13202919694556527246d6d4ec672beba63d18176a7b",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          984
+        ]
+      ],
+      "role": "SMTP reverse+forward DNS validation, greeting delay, pipelining rejection, auth/MAIL/RCPT/STARTTLS pre-auth state",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_mail_smtp_init_session",
+        "ngx_mail_smtp_resolve_addr_handler",
+        "ngx_mail_smtp_validate_host",
+        "ngx_mail_smtp_resolve_name",
+        "ngx_mail_smtp_resolve_name_handler",
+        "ngx_mail_smtp_block_reading",
+        "ngx_mail_smtp_greeting",
+        "ngx_mail_smtp_invalid_pipelining",
+        "ngx_mail_smtp_init_protocol",
+        "ngx_mail_smtp_create_buffer",
+        "ngx_mail_smtp_auth_state",
+        "ngx_mail_smtp_helo",
+        "ngx_mail_smtp_auth",
+        "ngx_mail_smtp_mail",
+        "ngx_mail_smtp_rcpt",
+        "ngx_mail_smtp_rset",
+        "ngx_mail_smtp_starttls",
+        "ngx_mail_smtp_discard_command",
+        "ngx_mail_smtp_log_rejected_command"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_smtp_module.c",
+      "lines": 312,
+      "sha256": "b19b839b2c41583151dea9bf6a6eb7313ace007a31102cc6ce099e0b3db0621e",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          312
+        ]
+      ],
+      "role": "SMTP capabilities/greeting/client buffer/auth default merge",
+      "directives": [
+        "smtp_client_buffer",
+        "smtp_greeting_delay",
+        "smtp_capabilities",
+        "smtp_auth"
+      ],
+      "definedFunctions": [
+        "ngx_mail_smtp_create_srv_conf",
+        "ngx_mail_smtp_merge_srv_conf"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_smtp_module.h",
+      "lines": 45,
+      "sha256": "989de549448d58e24220ac01f1a71b9ca67eedd4efc268736ccbfa5d86837238",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          45
+        ]
+      ],
+      "role": "SMTP server config and handlers",
+      "directives": [],
+      "definedFunctions": []
+    },
+    {
+      "path": "src/mail/ngx_mail_ssl_module.c",
+      "lines": 714,
+      "sha256": "f6c41c2a2196743a3b95dfd5390327c917cce91ec5698173da2867cb5bb7f2c7",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          714
+        ]
+      ],
+      "role": "Mail TLS and STARTTLS config, ALPN, cert/key validation, verify modes, session/tickets/shared cache and SSL config commands",
+      "directives": [
+        "starttls",
+        "ssl_certificate",
+        "ssl_certificate_key",
+        "ssl_password_file",
+        "ssl_certificate_compression",
+        "ssl_dhparam",
+        "ssl_ecdh_curve",
+        "ssl_protocols",
+        "ssl_ciphers",
+        "ssl_prefer_server_ciphers",
+        "ssl_session_cache",
+        "ssl_session_tickets",
+        "ssl_session_ticket_key",
+        "ssl_session_timeout",
+        "ssl_verify_client",
+        "ssl_verify_depth",
+        "ssl_client_certificate",
+        "ssl_trusted_certificate",
+        "ssl_crl",
+        "ssl_conf_command"
+      ],
+      "definedFunctions": [
+        "ngx_mail_ssl_alpn_select",
+        "ngx_mail_ssl_create_conf",
+        "ngx_mail_ssl_merge_conf",
+        "ngx_mail_ssl_starttls",
+        "ngx_mail_ssl_password_file",
+        "ngx_mail_ssl_session_cache",
+        "ngx_mail_ssl_conf_command_check"
+      ]
+    },
+    {
+      "path": "src/mail/ngx_mail_ssl_module.h",
+      "lines": 66,
+      "sha256": "3ecb2cf560566cbfc7ee2b54499e19ea3c657c2e5e5cf0e1277a182ca6c0b972",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          66
+        ]
+      ],
+      "role": "Mail SSL/STARTTLS states and TLS config type",
+      "directives": [],
+      "definedFunctions": []
+    },
+    {
+      "path": "src/stream/ngx_stream.c",
+      "lines": 1176,
+      "sha256": "ed2d7c2ed3ab43302bf55c239f21ca312b8706dd30c4d13ee3ca1a9e26a1668f",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          1176
+        ]
+      ],
+      "role": "stream contexts/config merges, phase compilation, port/address/virtual-name hashes, listener optimization and defaults",
+      "directives": [
+        "stream"
+      ],
+      "definedFunctions": [
+        "ngx_stream_block",
+        "ngx_stream_init_phases",
+        "ngx_stream_init_phase_handlers",
+        "ngx_stream_add_listen",
+        "ngx_stream_add_addresses",
+        "ngx_stream_add_address",
+        "ngx_stream_add_server",
+        "ngx_stream_optimize_servers",
+        "ngx_stream_server_names",
+        "ngx_stream_cmp_conf_addrs",
+        "ngx_stream_cmp_dns_wildcards",
+        "ngx_stream_init_listening",
+        "ngx_stream_add_listening",
+        "ngx_stream_add_addrs",
+        "ngx_stream_add_addrs6"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream.h",
+      "lines": 384,
+      "sha256": "a0d65bb84a413fd8e711b4abb082c0969906a97ac7efeb1155ba286665e73142",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          384
+        ]
+      ],
+      "role": "stream phase engine/session/listener/virtual-server API and structures",
+      "directives": [],
+      "definedFunctions": []
+    },
+    {
+      "path": "src/stream/ngx_stream_access_module.c",
+      "lines": 453,
+      "sha256": "d4dfc66f0fe99fb5947baa502c3f9ae71a4e34709d89b285f6fde5f64d10944f",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          453
+        ]
+      ],
+      "role": "First-match IPv4/IPv6/v4mapped/Unix allow-deny in ACCESS phase and config inheritance",
+      "directives": [
+        "allow",
+        "deny"
+      ],
+      "definedFunctions": [
+        "ngx_stream_access_handler",
+        "ngx_stream_access_inet",
+        "ngx_stream_access_inet6",
+        "ngx_stream_access_unix",
+        "ngx_stream_access_found",
+        "ngx_stream_access_rule",
+        "ngx_stream_access_create_srv_conf",
+        "ngx_stream_access_merge_srv_conf",
+        "ngx_stream_access_init"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_core_module.c",
+      "lines": 1523,
+      "sha256": "90323557cff294fc9bce33d637afdb03c6b1b50f79c721377fc1702fcd93ff2e",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          850
+        ],
+        [
+          851,
+          1523
+        ]
+      ],
+      "role": "phase execution/preread peek-read state, virtual host validation/lookup, stream/listen/resolver/server_name directives and defaults",
+      "directives": [
+        "variables_hash_max_size",
+        "variables_hash_bucket_size",
+        "server_names_hash_max_size",
+        "server_names_hash_bucket_size",
+        "server",
+        "listen",
+        "server_name",
+        "error_log",
+        "resolver",
+        "resolver_timeout",
+        "proxy_protocol_timeout",
+        "tcp_nodelay",
+        "preread_buffer_size",
+        "preread_timeout"
+      ],
+      "definedFunctions": [
+        "ngx_stream_core_run_phases",
+        "ngx_stream_core_generic_phase",
+        "ngx_stream_core_preread_phase",
+        "ngx_stream_preread_can_peek",
+        "ngx_stream_preread_peek",
+        "ngx_stream_preread",
+        "ngx_stream_core_content_phase",
+        "ngx_stream_validate_host",
+        "ngx_stream_find_virtual_server",
+        "ngx_stream_core_preconfiguration",
+        "ngx_stream_core_create_main_conf",
+        "ngx_stream_core_init_main_conf",
+        "ngx_stream_core_create_srv_conf",
+        "ngx_stream_core_merge_srv_conf",
+        "ngx_stream_core_error_log",
+        "ngx_stream_core_server",
+        "ngx_stream_core_listen",
+        "ngx_stream_core_server_name",
+        "ngx_stream_core_resolver"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_geo_module.c",
+      "lines": 1632,
+      "sha256": "bf8b18415f167d1c4df6ae4c9298a7bffb739a43a5bbec5c49319d67c9546d63",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          850
+        ],
+        [
+          851,
+          1632
+        ]
+      ],
+      "role": "geo CIDR/ranges IPv4/IPv6 lookup, value interning, include/delete/volatile and binary range database validation/write",
+      "directives": [
+        "geo"
+      ],
+      "definedFunctions": [
+        "ngx_stream_geo_cidr_variable",
+        "ngx_stream_geo_range_variable",
+        "ngx_stream_geo_addr",
+        "ngx_stream_geo_block",
+        "ngx_stream_geo",
+        "ngx_stream_geo_range",
+        "ngx_stream_geo_add_range",
+        "ngx_stream_geo_delete_range",
+        "ngx_stream_geo_cidr",
+        "ngx_stream_geo_cidr_add",
+        "ngx_stream_geo_value",
+        "ngx_stream_geo_cidr_value",
+        "ngx_stream_geo_include",
+        "ngx_stream_geo_include_binary_base",
+        "ngx_stream_geo_create_binary_base",
+        "ngx_stream_geo_copy_values"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_geoip_module.c",
+      "lines": 1679,
+      "sha256": "2e8d5db4379a5fb57f55d7d0cc5876c11c911dcbb98d514b8cf0e2096d2aebcc",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          850
+        ],
+        [
+          851,
+          1679
+        ]
+      ],
+      "role": "GeoIP and MaxMindDB country/org/city variables, typed MMDB access, IPv4/v6 mapping, DB open/cleanup and alpha3 conversion",
+      "directives": [
+        "geoip_country",
+        "geoip_org",
+        "geoip_city"
+      ],
+      "definedFunctions": [
+        "ngx_stream_geoip_addr",
+        "ngx_stream_geoip_addr_v6",
+        "ngx_stream_geoip_country_variable",
+        "ngx_stream_geoip_org_variable",
+        "ngx_stream_geoip_city_variable",
+        "ngx_stream_geoip_region_name_variable",
+        "ngx_stream_geoip_city_float_variable",
+        "ngx_stream_geoip_city_int_variable",
+        "ngx_stream_geoip_get_city_record",
+        "ngx_stream_geoip_str",
+        "ngx_stream_geoip_code3",
+        "ngx_stream_geoip_float",
+        "ngx_stream_geoip_int",
+        "ngx_stream_geoip_lookup",
+        "ngx_stream_geoip_add_variables",
+        "ngx_stream_geoip_create_conf",
+        "ngx_stream_geoip_country",
+        "ngx_stream_geoip_org",
+        "ngx_stream_geoip_city",
+        "ngx_stream_geoip_open",
+        "ngx_stream_geoip_charset",
+        "ngx_stream_geoip_cleanup"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_handler.c",
+      "lines": 389,
+      "sha256": "4baf2e30896fa32ba88eaeff84021119513d63b92de0502a4ea691d5d8b665b4",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          389
+        ]
+      ],
+      "role": "TCP/UDP session init, address selection, PROXY input/timers, phase dispatch, log/finalize/SSL cleanup",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_stream_init_connection",
+        "ngx_stream_proxy_protocol_handler",
+        "ngx_stream_session_handler",
+        "ngx_stream_finalize_session",
+        "ngx_stream_log_session",
+        "ngx_stream_close_connection",
+        "ngx_stream_log_error"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_limit_conn_module.c",
+      "lines": 753,
+      "sha256": "f8dfbf0f5925a959551a62dce681536e6165a9053c4ca4fe36b93b93dd3bae9f",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          753
+        ]
+      ],
+      "role": "Shared-zone key-based connection limits, dry-run/status, mutex+rbtree/slab accounting and rollback cleanup",
+      "directives": [
+        "limit_conn_zone",
+        "limit_conn",
+        "limit_conn_log_level",
+        "limit_conn_dry_run"
+      ],
+      "definedFunctions": [
+        "ngx_stream_limit_conn_handler",
+        "ngx_stream_limit_conn_rbtree_insert_value",
+        "ngx_stream_limit_conn_lookup",
+        "ngx_stream_limit_conn_cleanup",
+        "ngx_stream_limit_conn_cleanup_all",
+        "ngx_stream_limit_conn_cleanup_node",
+        "ngx_stream_limit_conn_init_zone",
+        "ngx_stream_limit_conn_status_variable",
+        "ngx_stream_limit_conn_create_conf",
+        "ngx_stream_limit_conn_merge_conf",
+        "ngx_stream_limit_conn_zone",
+        "ngx_stream_limit_conn",
+        "ngx_stream_limit_conn_add_variables",
+        "ngx_stream_limit_conn_init"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_log_module.c",
+      "lines": 1665,
+      "sha256": "2b674aaa0b03095ac91527412e077314dc7048d2391b83f31e354d6610bf7c73",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          850
+        ],
+        [
+          851,
+          1665
+        ]
+      ],
+      "role": "Compiled log formats/default-json-none escaping, conditional logs, buffers/timed flush/gzip/syslog, variable filenames/open cache and write failure behavior",
+      "directives": [
+        "log_format",
+        "access_log",
+        "open_log_file_cache"
+      ],
+      "definedFunctions": [
+        "ngx_stream_log_handler",
+        "ngx_stream_log_write",
+        "ngx_stream_log_script_write",
+        "ngx_stream_log_gzip",
+        "ngx_stream_log_gzip_alloc",
+        "ngx_stream_log_gzip_free",
+        "ngx_stream_log_flush",
+        "ngx_stream_log_flush_handler",
+        "ngx_stream_log_copy_short",
+        "ngx_stream_log_copy_long",
+        "ngx_stream_log_variable_compile",
+        "ngx_stream_log_variable_getlen",
+        "ngx_stream_log_variable",
+        "ngx_stream_log_escape",
+        "ngx_stream_log_json_variable_getlen",
+        "ngx_stream_log_json_variable",
+        "ngx_stream_log_unescaped_variable_getlen",
+        "ngx_stream_log_unescaped_variable",
+        "ngx_stream_log_check_length",
+        "ngx_stream_log_create_main_conf",
+        "ngx_stream_log_create_srv_conf",
+        "ngx_stream_log_merge_srv_conf",
+        "ngx_stream_log_set_log",
+        "ngx_stream_log_set_format",
+        "ngx_stream_log_compile_format",
+        "ngx_stream_log_open_file_cache",
+        "ngx_stream_log_init"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_map_module.c",
+      "lines": 588,
+      "sha256": "ca5e2f11bb011a5781b5574135cf1083a5c4ff213ae588e60ec262be1974a968",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          588
+        ]
+      ],
+      "role": "Lazy map complex-value evaluation, exact/hostname wildcard/regex/default lookup, volatile/include, deduplicated values and hash tuning",
+      "directives": [
+        "map",
+        "map_hash_max_size",
+        "map_hash_bucket_size"
+      ],
+      "definedFunctions": [
+        "ngx_stream_map_variable",
+        "ngx_stream_map_create_conf",
+        "ngx_stream_map_block",
+        "ngx_stream_map_cmp_dns_wildcards",
+        "ngx_stream_map"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_pass_module.c",
+      "lines": 336,
+      "sha256": "9e2fc5c6112ac513d1ff7b6e0286bcdb55a423f4e181f240994040232e9588ea",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          336
+        ]
+      ],
+      "role": "Local TCP listener handoff with cycle cap10, no UDP or buffered preread, variable addresses and listener matching",
+      "directives": [
+        "pass"
+      ],
+      "definedFunctions": [
+        "ngx_stream_pass_handler",
+        "ngx_stream_pass_check_cycle",
+        "ngx_stream_pass_cleanup",
+        "ngx_stream_pass_match",
+        "ngx_stream_pass_create_srv_conf",
+        "ngx_stream_pass"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_proxy_module.c",
+      "lines": 2904,
+      "sha256": "949a1fa1a0e139fe04b68a29a8c15c761063e989ebf08caab1800dd61290d4b9",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          1000
+        ],
+        [
+          1001,
+          2000
+        ],
+        [
+          2001,
+          2904
+        ]
+      ],
+      "role": "Full TCP/UDP proxy lifecycle, dynamic target DNS, bind/transparent sockets, PROXY v1/v2, upstream TLS/SNI/ALPN/cert caches, rate/backpressure/half-close/failover/timers",
+      "directives": [
+        "proxy_pass",
+        "proxy_bind",
+        "proxy_socket_keepalive",
+        "proxy_socket_rcvbuf",
+        "proxy_socket_sndbuf",
+        "proxy_connect_timeout",
+        "proxy_timeout",
+        "proxy_buffer_size",
+        "proxy_downstream_buffer",
+        "proxy_upstream_buffer",
+        "proxy_upload_rate",
+        "proxy_download_rate",
+        "proxy_requests",
+        "proxy_responses",
+        "proxy_next_upstream",
+        "proxy_next_upstream_tries",
+        "proxy_next_upstream_timeout",
+        "proxy_protocol",
+        "proxy_half_close",
+        "proxy_ssl",
+        "proxy_ssl_session_reuse",
+        "proxy_ssl_protocols",
+        "proxy_ssl_ciphers",
+        "proxy_ssl_name",
+        "proxy_ssl_server_name",
+        "proxy_ssl_alpn",
+        "proxy_ssl_verify",
+        "proxy_ssl_verify_depth",
+        "proxy_ssl_trusted_certificate",
+        "proxy_ssl_crl",
+        "proxy_ssl_certificate",
+        "proxy_ssl_certificate_key",
+        "proxy_ssl_certificate_cache",
+        "proxy_ssl_password_file",
+        "proxy_ssl_conf_command"
+      ],
+      "definedFunctions": [
+        "ngx_stream_proxy_handler",
+        "ngx_stream_proxy_eval",
+        "ngx_stream_proxy_set_local",
+        "ngx_stream_proxy_connect",
+        "ngx_stream_proxy_init_upstream",
+        "ngx_stream_proxy_send_proxy_protocol",
+        "ngx_stream_proxy_ssl_alpn_set_slot",
+        "ngx_stream_proxy_ssl_certificate_cache",
+        "ngx_stream_proxy_ssl_password_file",
+        "ngx_stream_proxy_ssl_conf_command_check",
+        "ngx_stream_proxy_ssl_init_connection",
+        "ngx_stream_proxy_ssl_handshake",
+        "ngx_stream_proxy_ssl_save_session",
+        "ngx_stream_proxy_ssl_name",
+        "ngx_stream_proxy_ssl_alpn",
+        "ngx_stream_proxy_ssl_certificate",
+        "ngx_stream_proxy_downstream_handler",
+        "ngx_stream_proxy_resolve_handler",
+        "ngx_stream_proxy_upstream_handler",
+        "ngx_stream_proxy_process_connection",
+        "ngx_stream_proxy_connect_handler",
+        "ngx_stream_proxy_test_connect",
+        "ngx_stream_proxy_process",
+        "ngx_stream_proxy_test_finalize",
+        "ngx_stream_proxy_next_upstream",
+        "ngx_stream_proxy_finalize",
+        "ngx_stream_proxy_log_error",
+        "ngx_stream_proxy_create_srv_conf",
+        "ngx_stream_proxy_merge_srv_conf",
+        "ngx_stream_proxy_merge_ssl",
+        "ngx_stream_proxy_merge_ssl_passwords",
+        "ngx_stream_proxy_set_ssl",
+        "ngx_stream_proxy_pass",
+        "ngx_stream_proxy_bind"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_realip_module.c",
+      "lines": 401,
+      "sha256": "096c1c8a978d02cdcfcac95201a1d09ddd6c7f43077787f9ef516302964b3b40",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          401
+        ]
+      ],
+      "role": "Trusted PROXY address rewrite in POST_ACCEPT; original realip_remote_addr/port variables",
+      "directives": [
+        "set_real_ip_from"
+      ],
+      "definedFunctions": [
+        "ngx_stream_realip_handler",
+        "ngx_stream_realip_set_addr",
+        "ngx_stream_realip_from",
+        "ngx_stream_realip_create_srv_conf",
+        "ngx_stream_realip_merge_srv_conf",
+        "ngx_stream_realip_add_variables",
+        "ngx_stream_realip_init",
+        "ngx_stream_realip_remote_addr_variable",
+        "ngx_stream_realip_remote_port_variable"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_return_module.c",
+      "lines": 218,
+      "sha256": "1e6b5d79a963ef25447323ebb15a9c0b455a9600c81c528fefc36c7d993c4781",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          218
+        ]
+      ],
+      "role": "Complex-value text response through top filter, last_buf/write timer and completion",
+      "directives": [
+        "return"
+      ],
+      "definedFunctions": [
+        "ngx_stream_return_handler",
+        "ngx_stream_return_write_handler",
+        "ngx_stream_return_create_srv_conf",
+        "ngx_stream_return"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_script.c",
+      "lines": 1080,
+      "sha256": "e6e0d082e98dd81e038c44bebb3229580ab84a859c0fbd47310dd396125d9602",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          1080
+        ]
+      ],
+      "role": "Compile/evaluate complex values via length/copy/variable/capture/full-name code, flush nocacheable vars and buffer bounds",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_stream_script_flush_complex_value",
+        "ngx_stream_complex_value",
+        "ngx_stream_complex_value_size",
+        "ngx_stream_compile_complex_value",
+        "ngx_stream_set_complex_value_slot",
+        "ngx_stream_set_complex_value_zero_slot",
+        "ngx_stream_set_complex_value_size_slot",
+        "ngx_stream_script_variables_count",
+        "ngx_stream_script_compile",
+        "ngx_stream_script_run",
+        "ngx_stream_script_flush_no_cacheable_variables",
+        "ngx_stream_script_init_arrays",
+        "ngx_stream_script_done",
+        "ngx_stream_script_add_code",
+        "ngx_stream_script_check_length",
+        "ngx_stream_script_add_copy_code",
+        "ngx_stream_script_copy_len_code",
+        "ngx_stream_script_copy_code",
+        "ngx_stream_script_add_var_code",
+        "ngx_stream_script_copy_var_len_code",
+        "ngx_stream_script_copy_var_code",
+        "ngx_stream_script_add_capture_code",
+        "ngx_stream_script_copy_capture_len_code",
+        "ngx_stream_script_copy_capture_code",
+        "ngx_stream_script_add_full_name_code",
+        "ngx_stream_script_full_name_len_code",
+        "ngx_stream_script_full_name_code"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_script.h",
+      "lines": 142,
+      "sha256": "a60fbd5cd02c10599c13994fe3aafdb5fad078bb74fb46e742ce72f69290e129",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          142
+        ]
+      ],
+      "role": "Script engine/compiler and complex-value ABI",
+      "directives": [],
+      "definedFunctions": []
+    },
+    {
+      "path": "src/stream/ngx_stream_set_module.c",
+      "lines": 226,
+      "sha256": "591d9238defe57342b0da120d440310470a3f3bfe0c8e74f9a9a77fa0effe4b4",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          226
+        ]
+      ],
+      "role": "set PREACCESS handler, weak changeable variables and complex value assignment",
+      "directives": [
+        "set"
+      ],
+      "definedFunctions": [
+        "ngx_stream_set_handler",
+        "ngx_stream_set_var",
+        "ngx_stream_set_init",
+        "ngx_stream_set_create_srv_conf",
+        "ngx_stream_set"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_split_clients_module.c",
+      "lines": 249,
+      "sha256": "2884039a17588d96022147457a74e9063bed7eb4cbf2d4e90867eb1e041b795a",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          249
+        ]
+      ],
+      "role": "Deterministic MurmurHash2 percentage split, cumulative thresholds and total validation",
+      "directives": [
+        "split_clients"
+      ],
+      "definedFunctions": [
+        "ngx_stream_split_clients_variable",
+        "ngx_conf_split_clients_block",
+        "ngx_stream_split_clients"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_ssl_module.c",
+      "lines": 1787,
+      "sha256": "3cd507dd58431c5bf2121e9808a6ab9c7e8e16ee621ff41da54d24f9f4c52952",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          950
+        ],
+        [
+          951,
+          1787
+        ]
+      ],
+      "role": "Stream TLS termination SSL phase, SNI virtual-server switch, client-cert/OCSP/stapling/ECH/cert cache/tickets/ALPN and config validation",
+      "directives": [
+        "ssl_handshake_timeout",
+        "ssl_certificate",
+        "ssl_certificate_key",
+        "ssl_certificate_cache",
+        "ssl_ech_file",
+        "ssl_password_file",
+        "ssl_certificate_compression",
+        "ssl_dhparam",
+        "ssl_ecdh_curve",
+        "ssl_protocols",
+        "ssl_ciphers",
+        "ssl_verify_client",
+        "ssl_verify_depth",
+        "ssl_client_certificate",
+        "ssl_trusted_certificate",
+        "ssl_prefer_server_ciphers",
+        "ssl_session_cache",
+        "ssl_session_tickets",
+        "ssl_session_ticket_key",
+        "ssl_session_timeout",
+        "ssl_crl",
+        "ssl_ocsp",
+        "ssl_ocsp_responder",
+        "ssl_ocsp_cache",
+        "ssl_stapling",
+        "ssl_stapling_file",
+        "ssl_stapling_responder",
+        "ssl_stapling_verify",
+        "ssl_conf_command",
+        "ssl_reject_handshake",
+        "ssl_alpn"
+      ],
+      "definedFunctions": [
+        "ngx_stream_ssl_handler",
+        "ngx_stream_ssl_init_connection",
+        "ngx_stream_ssl_handshake_handler",
+        "ngx_stream_ssl_servername",
+        "ngx_stream_ssl_alpn_select",
+        "ngx_stream_ssl_certificate",
+        "ngx_stream_ssl_static_variable",
+        "ngx_stream_ssl_variable",
+        "ngx_stream_ssl_add_variables",
+        "ngx_stream_ssl_create_srv_conf",
+        "ngx_stream_ssl_merge_srv_conf",
+        "ngx_stream_ssl_compile_certificates",
+        "ngx_stream_ssl_certificate_cache",
+        "ngx_stream_ssl_password_file",
+        "ngx_stream_ssl_session_cache",
+        "ngx_stream_ssl_ocsp_cache",
+        "ngx_stream_ssl_alpn",
+        "ngx_stream_ssl_conf_command_check",
+        "ngx_stream_ssl_init"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_ssl_module.h",
+      "lines": 75,
+      "sha256": "1b26f5ed19fc4475eb236177d369aa72c534311930f81de2ffe32f6c2566fad9",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          75
+        ]
+      ],
+      "role": "Stream TLS configuration structure",
+      "directives": [],
+      "definedFunctions": []
+    },
+    {
+      "path": "src/stream/ngx_stream_ssl_preread_module.c",
+      "lines": 715,
+      "sha256": "225edeeea0487178ecb2d7a0d8e497757ef870066b108c13ad0aa499b6c63d92",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          715
+        ]
+      ],
+      "role": "Incremental ClientHello record parser, preread SNI/ALPN/protocol vars and virtual-server selection without TLS termination",
+      "directives": [
+        "ssl_preread"
+      ],
+      "definedFunctions": [
+        "ngx_stream_ssl_preread_handler",
+        "ngx_stream_ssl_preread_parse_record",
+        "ngx_stream_ssl_preread_servername",
+        "ngx_stream_ssl_preread_protocol_variable",
+        "ngx_stream_ssl_preread_server_name_variable",
+        "ngx_stream_ssl_preread_alpn_protocols_variable",
+        "ngx_stream_ssl_preread_add_variables",
+        "ngx_stream_ssl_preread_create_srv_conf",
+        "ngx_stream_ssl_preread_merge_srv_conf",
+        "ngx_stream_ssl_preread_init"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_upstream.c",
+      "lines": 868,
+      "sha256": "288e33eabe40d56b4d720d47017a009ebadf81423d8096a2518af335e9de756d",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          868
+        ]
+      ],
+      "role": "Upstream/server config, weights/max_conns/fails/backups/down/resolve/SRV, resolver directives and per-attempt timing/byte vars",
+      "directives": [
+        "upstream",
+        "server",
+        "resolver",
+        "resolver_timeout"
+      ],
+      "definedFunctions": [
+        "ngx_stream_upstream_add_variables",
+        "ngx_stream_upstream_addr_variable",
+        "ngx_stream_upstream_bytes_variable",
+        "ngx_stream_upstream_response_time_variable",
+        "ngx_stream_upstream",
+        "ngx_stream_upstream_server",
+        "ngx_stream_upstream_resolver",
+        "ngx_stream_upstream_add",
+        "ngx_stream_upstream_create_main_conf",
+        "ngx_stream_upstream_init_main_conf"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_upstream.h",
+      "lines": 169,
+      "sha256": "d93fdb7b401d7f7882b578466eb3d72175e24e231b767eca4a63cf486618ea94",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          169
+        ]
+      ],
+      "role": "Upstream config/state/resolution/runtime data and peer notification ABI",
+      "directives": [],
+      "definedFunctions": []
+    },
+    {
+      "path": "src/stream/ngx_stream_upstream_hash_module.c",
+      "lines": 755,
+      "sha256": "5c3057c33cb5c6c2bf91b79d9be79b86162f027e501970d70f62075e6329e5fc",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          755
+        ]
+      ],
+      "role": "Hash and consistent hash compatibility, weighted160-point ring, generation rebuild and bounded fallback to RR",
+      "directives": [
+        "hash"
+      ],
+      "definedFunctions": [
+        "ngx_stream_upstream_init_hash",
+        "ngx_stream_upstream_init_hash_peer",
+        "ngx_stream_upstream_get_hash_peer",
+        "ngx_stream_upstream_init_chash",
+        "ngx_stream_upstream_update_chash",
+        "ngx_stream_upstream_chash_cmp_points",
+        "ngx_stream_upstream_find_chash_point",
+        "ngx_stream_upstream_init_chash_peer",
+        "ngx_stream_upstream_get_chash_peer",
+        "ngx_stream_upstream_hash_create_conf",
+        "ngx_stream_upstream_hash"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_upstream_least_conn_module.c",
+      "lines": 322,
+      "sha256": "88c885dfac63d04e04e9b119b497e015e69edb62a099cb77fd67edcff44a8e01",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          322
+        ]
+      ],
+      "role": "Weighted least connections with RR ties, tried/down/fail/max_conns filters, backup and shared generation protection",
+      "directives": [
+        "least_conn"
+      ],
+      "definedFunctions": [
+        "ngx_stream_upstream_init_least_conn",
+        "ngx_stream_upstream_init_least_conn_peer",
+        "ngx_stream_upstream_get_least_conn_peer",
+        "ngx_stream_upstream_least_conn"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_upstream_least_time_module.c",
+      "lines": 666,
+      "sha256": "c79ae22379bb940312e9ea7622f9aed00a6fcfb7dab95952cdea93d2d7757f62",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          666
+        ]
+      ],
+      "role": "Native least_time connect/first_byte/last_byte with inflight, successful EWMA sampling, weighted ETA/RR ties/backups",
+      "directives": [
+        "least_time"
+      ],
+      "definedFunctions": [
+        "ngx_stream_upstream_init_least_time",
+        "ngx_stream_upstream_init_least_time_peer",
+        "ngx_stream_upstream_get_least_time_peer",
+        "ngx_stream_upstream_least_time_eta",
+        "ngx_stream_upstream_least_time_notify",
+        "ngx_stream_upstream_least_time_inflight_done",
+        "ngx_stream_upstream_free_least_time_peer",
+        "ngx_stream_upstream_least_time_create_conf",
+        "ngx_stream_upstream_least_time"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_upstream_random_module.c",
+      "lines": 531,
+      "sha256": "acbf55ffdfd7f43b1234cfc64c7f60208a96c8900578435066b2fc27f481adac",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          531
+        ]
+      ],
+      "role": "Weighted random/range binary search and random two least_conn, failure filters/generation rebuild/fallback",
+      "directives": [
+        "random"
+      ],
+      "definedFunctions": [
+        "ngx_stream_upstream_init_random",
+        "ngx_stream_upstream_update_random",
+        "ngx_stream_upstream_init_random_peer",
+        "ngx_stream_upstream_get_random_peer",
+        "ngx_stream_upstream_get_random2_peer",
+        "ngx_stream_upstream_peek_random_peer",
+        "ngx_stream_upstream_random_create_conf",
+        "ngx_stream_upstream_random"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_upstream_round_robin.c",
+      "lines": 1110,
+      "sha256": "eec99d4e909cd9373d9f194709d74a32254f6bf5c8a664c33d7b1db21e31b67b",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          1110
+        ]
+      ],
+      "role": "Weighted smooth RR, per-attempt tried bitmap, single/backup/failure recovery, peer refs/generation and SSL session reuse",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_stream_upstream_init_round_robin",
+        "ngx_stream_upstream_init_round_robin_peer",
+        "ngx_stream_upstream_create_round_robin_peer",
+        "ngx_stream_upstream_get_round_robin_peer",
+        "ngx_stream_upstream_get_peer",
+        "ngx_stream_upstream_free_round_robin_peer",
+        "ngx_stream_upstream_free_round_robin_peer_locked",
+        "ngx_stream_upstream_notify_round_robin_peer",
+        "ngx_stream_upstream_notify_round_robin_peer_locked",
+        "ngx_stream_upstream_set_round_robin_peer_session",
+        "ngx_stream_upstream_save_round_robin_peer_session",
+        "ngx_stream_upstream_empty_set_session",
+        "ngx_stream_upstream_empty_save_session"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_upstream_round_robin.h",
+      "lines": 252,
+      "sha256": "60c8d5f6aa0dad551ce21e4be42fbbf92ff7e28158808d9e86a027b83bc16b02",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          252
+        ]
+      ],
+      "role": "Shared peer fields/locks/ref-zombie lifetime, tried-generation data and EWMA/peer API",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_stream_upstream_rr_peer_free_locked",
+        "ngx_stream_upstream_rr_peer_free",
+        "ngx_stream_upstream_rr_peer_unref"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_upstream_zone_module.c",
+      "lines": 1005,
+      "sha256": "9eca17e657fb7be8447d7f5c7f171ba4c07feda3bcbcd046d0110f1f9f80c51f",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          1005
+        ]
+      ],
+      "role": "Shared memory zone copy, preresolved state across reload, worker DNS timers/SRV priority, incremental peer mutation/ref lifecycle",
+      "directives": [
+        "zone"
+      ],
+      "definedFunctions": [
+        "ngx_stream_upstream_zone",
+        "ngx_stream_upstream_init_zone",
+        "ngx_stream_upstream_zone_copy_peers",
+        "ngx_stream_upstream_zone_copy_peer",
+        "ngx_stream_upstream_zone_preresolve",
+        "ngx_stream_upstream_zone_set_single",
+        "ngx_stream_upstream_zone_remove_peer_locked",
+        "ngx_stream_upstream_zone_init_worker",
+        "ngx_stream_upstream_zone_resolve_timer",
+        "ngx_stream_upstream_zone_resolve_handler"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_variables.c",
+      "lines": 1340,
+      "sha256": "11cc4663c322c0a45361d934b2182b65ad98e2c919ed2a94d0896ecdd85e0263",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          700
+        ],
+        [
+          701,
+          1340
+        ]
+      ],
+      "role": "Variable registration/index/hash/prefix/cache/depth guard, core addresses/proxy TLV/time/status/counters, map regex captures and init",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_stream_add_variable",
+        "ngx_stream_add_prefix_variable",
+        "ngx_stream_get_variable_index",
+        "ngx_stream_get_indexed_variable",
+        "ngx_stream_get_flushed_variable",
+        "ngx_stream_get_variable",
+        "ngx_stream_variable_binary_remote_addr",
+        "ngx_stream_variable_remote_addr",
+        "ngx_stream_variable_remote_port",
+        "ngx_stream_variable_proxy_protocol_addr",
+        "ngx_stream_variable_proxy_protocol_port",
+        "ngx_stream_variable_proxy_protocol_tlv",
+        "ngx_stream_variable_server_addr",
+        "ngx_stream_variable_server_port",
+        "ngx_stream_variable_server_name",
+        "ngx_stream_variable_bytes",
+        "ngx_stream_variable_session_time",
+        "ngx_stream_variable_status",
+        "ngx_stream_variable_connection",
+        "ngx_stream_variable_nginx_version",
+        "ngx_stream_variable_hostname",
+        "ngx_stream_variable_pid",
+        "ngx_stream_variable_msec",
+        "ngx_stream_variable_time_iso8601",
+        "ngx_stream_variable_time_local",
+        "ngx_stream_variable_protocol",
+        "ngx_stream_map_find",
+        "ngx_stream_variable_not_found",
+        "ngx_stream_regex_compile",
+        "ngx_stream_regex_exec",
+        "ngx_stream_variables_add_core_vars",
+        "ngx_stream_variables_init_vars"
+      ]
+    },
+    {
+      "path": "src/stream/ngx_stream_variables.h",
+      "lines": 113,
+      "sha256": "617a773a6a10ef35cd9645de0fd9859729543512ee9acb8a81fb62742d87ade0",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          113
+        ]
+      ],
+      "role": "Variable flags/callback/map/regex types and API",
+      "directives": [],
+      "definedFunctions": []
+    },
+    {
+      "path": "src/stream/ngx_stream_write_filter_module.c",
+      "lines": 306,
+      "sha256": "412ad2a59042c51295183800a0639bde02a11d38fc9661cb1b850c4ebeffd9ac",
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          306
+        ]
+      ],
+      "role": "Per-direction saved chains, special/last/flush buffers, send_chain/backpressure/lowlevel buffered invariants",
+      "directives": [],
+      "definedFunctions": [
+        "ngx_stream_write_filter",
+        "ngx_stream_write_filter_init"
+      ]
+    }
+  ],
+  "summary": {
+    "files": 52,
+    "lines": 36605,
+    "fullReadFiles": 52,
+    "fullReadLines": 36605,
+    "partialFiles": 0,
+    "structuralOnlyFiles": 0,
+    "unreadFiles": 0
+  },
+  "sourceReadComplete": true
+}

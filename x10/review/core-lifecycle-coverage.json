@@ -1,0 +1,90 @@
+{
+  "source_commit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+  "source_version": "1.31.9",
+  "method": "Read all source text in nontruncated raw outputs, including platform/conditional and disabled code. Inclusive physical line ranges. Symbol searches only supplement full reading.",
+  "files": [
+    {
+      "path": "src/core/ngx_connection.c",
+      "line_count": 1663,
+      "sha256": "56896a9af65da2f4246a47ff27c4772ad6b0e3137752c65c997ffa6675d61c11",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          850
+        ],
+        [
+          851,
+          1663
+        ]
+      ],
+      "notes": [
+        "Full socket/listener lifecycle, inherited descriptors, reuseport and protocol transition, nonblocking bind/listen retries, platform socket options, event/timer/posted-event teardown, free list and instance toggling, reusable idle connection pressure drain, protocol-aware idle close."
+      ]
+    },
+    {
+      "path": "src/core/ngx_connection.h",
+      "line_count": 239,
+      "sha256": "234ac0765d0ba480315efc4dfca8ac85e746ab3215ffbb14428828053b78b013",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          239
+        ]
+      ],
+      "notes": [
+        "Complete listening and connection data layouts, socket ownership and event/protocol state flags, public lifecycle APIs."
+      ]
+    },
+    {
+      "path": "src/core/ngx_cycle.c",
+      "line_count": 1484,
+      "sha256": "9f4474071bc95db1e0b51e4db39c12bad09be0ac126760b3643f95abe95f9ad6",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          800
+        ],
+        [
+          801,
+          1484
+        ]
+      ],
+      "notes": [
+        "Full candidate cycle initialization, parser/init_conf, files/zones/listener reuse, commit, failure cleanup, old-cycle retention, zone identity and slab pool initialization, pid/signals/log reopening, bounded shutdown timer callback."
+      ]
+    },
+    {
+      "path": "src/core/ngx_cycle.h",
+      "line_count": 149,
+      "sha256": "d2a77aa635c4520b43fc413a4975975f6e76d61876d0e64856f9a14eaf4630fa",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          149
+        ]
+      ],
+      "notes": [
+        "Complete cycle/shared-zone/core-conf layouts and lifecycle API declarations."
+      ]
+    }
+  ],
+  "summary": {
+    "assigned_files": 4,
+    "fully_read_files": 4,
+    "physical_lines": 3535,
+    "fully_read_lines": 3535,
+    "partially_read_files": 0,
+    "structural_only_files": 0,
+    "unread_files": 0,
+    "source_modified": false
+  },
+  "scope_limits": [
+    "Textual reading, not exhaustive runtime verification.",
+    "Master/worker process-cycle and event/protocol shutdown handlers are separate transitive scopes.",
+    "Late module/shared-state side effects do not inherit an ACID guarantee from candidate-cycle cleanup."
+  ]
+}
