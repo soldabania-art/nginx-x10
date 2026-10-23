@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "date": "2026-10-23",
+  "publication": {
+    "rawRecordSha256": "084fe974540a93517645bc617bbcf2b9426913dba41d7309cebac587789dbc95",
+    "rawRecordRetainedLocally": true,
+    "omitted": [
+      "absolute filesystem paths",
+      "live process and namespace identities",
+      "ephemeral network endpoints",
+      "raw configuration and certificate metadata",
+      "native and child logs",
+      "embedded raw reports and command output"
+    ],
+    "note": "This is a publication summary, not a raw runner record or input to the aggregate validator."
+  },
+  "suite": "native-control-api-runner-verification",
+  "passed": true,
+  "tests": [
+    {
+      "name": "control-api-baseline.mjs-sigterm-after-actual-old-response",
+      "passed": true,
+      "signalled": true,
+      "groupGone": true,
+      "prefixGone": true,
+      "report": {
+        "suite": "native-control-api-baseline",
+        "success": false,
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "native-profile-and-configuration-validation",
+            "status": "passed"
+          },
+          {
+            "name": "control-api-is-not-opened-without-explicit-listen-option",
+            "status": "passed"
+          },
+          {
+            "name": "explicit-isolated-control-listener-and-api-discovery",
+            "status": "passed"
+          },
+          {
+            "name": "native-version-process-identities-and-active-configuration",
+            "status": "passed"
+          },
+          {
+            "name": "unsupported-methods-and-unknown-path-are-rejected",
+            "status": "passed"
+          },
+          {
+            "name": "accepted-old-response-is-held-before-control-reload",
+            "status": "passed"
+          }
+        ],
+        "skipCount": 0,
+        "interrupted": true,
+        "fixtureErrorCount": 0,
+        "unexpectedNativeErrorCount": 0,
+        "nativeErrorLogRead": true,
+        "provenance": {
+          "sourceUnchangedDuringTest": true,
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "sourceFilesSha256": {
+            "src/core/nginx.c": "e10938c9cec230d0e1f3eab17bddd69f7abf4904c760149d54005f2776c3ce17",
+            "src/os/unix/ngx_control.c": "7cfcf5ad2cdf9eb7546281c3ce2dc0254a257b7d009a6c494e913cee4a36f2e0",
+            "src/os/unix/ngx_process.c": "a354c634854617bed643d8db8b6218aa84cb603a7de1b15d9402427b4a471677",
+            "src/os/unix/ngx_process_cycle.c": "dd2f45a62724d9a297005f080efa0dcdd34ce7760d7591ec829ff6d3407ce819",
+            "src/core/ngx_cycle.c": "9f4474071bc95db1e0b51e4db39c12bad09be0ac126760b3643f95abe95f9ad6",
+            "src/os/unix/ngx_control.h": "6273ebce9a188abe9319758cd745c0c1688d24a11db151f9654b675e2dae4541",
+            "src/os/unix/ngx_process.h": "7098dfaa875fd04aff122c344f0dfa72bad5fb5f572b7177d30766303b3f27f6"
+          },
+          "harnessSha256": "b81d396fb7193120d505c72c668a26e2e1ce3a79af2b8884c3c7bbfa565a1786",
+          "binaryUnchangedDuringTest": true,
+          "harnessUnchangedDuringTest": true
+        },
+        "transport": {
+          "kind": "tcp",
+          "automaticFallback": false
+        },
+        "cleanup": {
+          "nativeStopped": true,
+          "fixturesStopped": true,
+          "openSockets": 0,
+          "temporaryRootRemoved": true,
+          "shutdowns": [
+            {
+              "mode": "SIGQUIT",
+              "exited": true,
+              "exitCode": 0,
+              "signal": null
+            },
+            {
+              "mode": "SIGQUIT",
+              "exited": true,
+              "exitCode": 0,
+              "signal": null
+            }
+          ],
+          "errorCount": 0
+        }
+      }
+    },
+    {
+      "name": "generations.mjs-sigterm-after-actual-old-response",
+      "passed": true,
+      "signalled": true,
+      "groupGone": true,
+      "prefixGone": true,
+      "report": {
+        "suite": "native-control-generations",
+        "success": false,
+        "mode": "candidate",
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "native-profile-and-configuration-validation",
+            "status": "passed"
+          },
+          {
+            "name": "control-api-is-not-opened-without-explicit-listen-option",
+            "status": "passed"
+          },
+          {
+            "name": "initial-master-generation-one-and-unique-process-births",
+            "status": "passed"
+          }
+        ],
+        "skipCount": 0,
+        "interrupted": true,
+        "fixtureErrorCount": 0,
+        "unexpectedNativeErrorCount": 0,
+        "nativeErrorLogRead": true,
+        "provenance": {
+          "sourceUnchangedDuringTest": true,
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "sourceFilesSha256": {
+            "src/core/nginx.c": "e10938c9cec230d0e1f3eab17bddd69f7abf4904c760149d54005f2776c3ce17",
+            "src/os/unix/ngx_control.c": "7cfcf5ad2cdf9eb7546281c3ce2dc0254a257b7d009a6c494e913cee4a36f2e0",
+            "src/os/unix/ngx_process.c": "a354c634854617bed643d8db8b6218aa84cb603a7de1b15d9402427b4a471677",
+            "src/os/unix/ngx_process_cycle.c": "dd2f45a62724d9a297005f080efa0dcdd34ce7760d7591ec829ff6d3407ce819",
+            "src/core/ngx_cycle.c": "9f4474071bc95db1e0b51e4db39c12bad09be0ac126760b3643f95abe95f9ad6",
+            "src/os/unix/ngx_control.h": "6273ebce9a188abe9319758cd745c0c1688d24a11db151f9654b675e2dae4541",
+            "src/os/unix/ngx_process.h": "7098dfaa875fd04aff122c344f0dfa72bad5fb5f572b7177d30766303b3f27f6"
+          },
+          "harnessSha256": "39f335e42152dcb3022d153a32ac71fa5a0910fb24acf38975eee2010b894354",
+          "fixtureSha256": "b81d396fb7193120d505c72c668a26e2e1ce3a79af2b8884c3c7bbfa565a1786",
+          "binaryUnchangedDuringTest": true,
+          "harnessUnchangedDuringTest": true,
+          "fixtureUnchangedDuringTest": true
+        },
+        "transport": {
+          "kind": "tcp",
+          "automaticFallback": false
+        },
+        "cleanup": {
+          "nativeStopped": true,
+          "fixturesStopped": true,
+          "openSockets": 0,
+          "temporaryRootRemoved": true,
+          "shutdowns": [
+            {
+              "mode": "SIGQUIT",
+              "exited": true,
+              "exitCode": 0,
+              "signal": null
+            },
+            {
+              "mode": "SIGQUIT",
+              "exited": true,
+              "exitCode": 0,
+              "signal": null
+            }
+          ],
+          "errorCount": 0
+        }
+      }
+    }
+  ],
+  "provenance": {
+    "sourceFilesSha256": {
+      "x10/test/control-api-baseline.mjs": "b81d396fb7193120d505c72c668a26e2e1ce3a79af2b8884c3c7bbfa565a1786",
+      "x10/test/generations.mjs": "39f335e42152dcb3022d153a32ac71fa5a0910fb24acf38975eee2010b894354"
+    }
+  }
+}

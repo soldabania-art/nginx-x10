@@ -1,5 +1,12 @@
 # Native compatibility checks
 
+Milestone-6 files committed under `x10/evidence` are explicit public summaries,
+not raw runner records. They retain result names/counts and source/binary
+hashes; host paths, runtime process/namespace identities, raw configurations,
+certificate metadata and logs are omitted. Each summary records the hash of
+the complete local record. Validators operate on fresh, complete suite output;
+the publication summaries are not validator inputs.
+
 `x10/test/official-tests.sh` runs a pinned sample of the official
 [nginx-tests](https://github.com/nginx/nginx-tests) alongside the X10 regression
 fixtures. The upstream tests are not rewritten, vendored or made easier to pass.
@@ -55,7 +62,7 @@ mismatched installed version fails its required group rather than recording a
 passing skip. See [HTTP3.md](test/HTTP3.md) and [http3-head.md](test/http3-head.md)
 for exact identities, cleanup and coverage boundaries.
 
-The current default aggregate runs fourteen groups; `--official` adds the fifteenth.
+The current default aggregate runs seventeen groups; `--official` adds the eighteenth.
 Build/source provenance is checked before and after the groups and is not
 counted as another protocol test. `--provenance-only` performs no functional
 checks.
@@ -76,13 +83,17 @@ checks.
 | `managed-native-control` | Controller transactions, bounded journal/storage interruption and recovery, plus explicit listener snapshot/inspection CLI cases |
 | `listener-observer-boundaries` | Separate observer identity, namespace, snapshot-integrity, descriptor-race, I/O and resource-bound checks |
 | `reload-listener-observation` | Seven live native case groups separating new responses, captured old-listener closure and accepted-stream completion |
+| `native-control-api` | Nine existing optional control-API compatibility groups on explicit ephemeral IPv4 loopback |
+| `native-process-generations` | Ten candidate groups for accepted/rejected HUP/PATCH, old drain and real worker respawn |
+| `native-generation-boundaries` | Twenty production-TU assertions with ASan/UBSan, including uint64 formatting and exhaustion |
 | `official-nginx-tests` | The pinned upstream sample; skips and TODO remain separately counted |
 
 The saved [milestone-4 aggregate](evidence/native-checks-milestone-4.json)
 reports the earlier twelve-group profile: 12/12 successful groups and controller
-TAP pass 66/fail 0. The current [milestone-5 aggregate](evidence/native-checks-milestone-5.json)
+TAP pass 66/fail 0. The preceding [milestone-5 aggregate](evidence/native-checks-milestone-5.json)
 passed 15/15 groups, with controller TAP 68/68 and separate observer TAP 29/29,
-after the independent HEAD cancellation fix. Hosted results belong to their
+after the independent HEAD cancellation fix. The new [milestone-6 aggregate](evidence/native-checks-milestone-6.json)
+passed 18/18 groups on the rebuilt native generation implementation. Hosted results belong to their
 exact commit and are checked separately. See [STATUS.md](STATUS.md). Group counts,
 TAP assertions and generated parser inputs are different units and are not
 summed into a test or feature count. The [reference parser record](evidence/quic-frames-reference.json)
@@ -220,6 +231,33 @@ is absent. Node filesystem calls cannot cancel a stalled kernel/procfs operation
 the elapsed budget must not be described as a hard wall-clock guarantee under
 such a stall. The separate boundary tests and live fixture do not cover the full
 platform, QUIC/UDP or process-churn matrix.
+
+## Native generation feature gates
+
+The native [generation endpoint](test/GENERATIONS.md) adds master-scoped
+configuration/birth identities to the explicitly enabled control API. It
+preserves the existing process/cycle layouts and legacy process fields. Numbers
+are decimal strings; readiness, listener closure and global uniqueness across
+master lifetimes are outside this contract.
+
+The required local aggregate uses explicit ephemeral `127.0.0.1` TCP fixtures.
+The test transport never falls back automatically. Local AF_UNIX creation is
+refused by the execution kernel; that unsuccessful observation is retained in
+[control-api-unix-unavailable.json](evidence/control-api-unix-unavailable.json).
+It is not counted as a Unix PASS. The hosted workflow separately requires:
+
+```sh
+node x10/test/control-api-baseline.mjs --transport unix
+node x10/test/generations.mjs --transport unix
+bash x10/test/control-disabled.sh --output x10/.build/control-disabled.json
+```
+
+The last check serially rebuilds the same Linux module profile without control
+API support in a separate object directory. It verifies the macro/object are
+absent and `-l` is rejected, and preserves the default build inputs/binary and
+root Makefile. No configure jobs may overlap. Its result is separate from the
+18-group aggregate. This is a Linux feature-off build, not a full OS or dynamic
+module ABI certification. See [build evidence](evidence/control-disabled-build.json).
 
 ## GitHub Actions
 

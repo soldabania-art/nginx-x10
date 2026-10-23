@@ -131,6 +131,52 @@ function command(file, args, { timeoutMs, env }) {
 }
 
 function jsonChecks(data, kind) {
+  if (kind === 'native-control' || kind === 'generations') {
+    const generations = kind === 'generations', cleanup = data.cleanup;
+    const serial = value => typeof value === 'string' && /^[1-9][0-9]{0,19}$/.test(value) && BigInt(value) <= 18446744073709551615n;
+    const snapshot = (value, current) => value?.scope === 'master-process' && value.master_pid === data.identity?.master?.pid &&
+      value.available === true && value.reason === '' && serial(value.current_generation) && value.current_generation === current &&
+      Number.isInteger(value.excluded_detached) && value.excluded_detached >= 0 &&
+      Array.isArray(value.processes) && value.processes.length > 0 && value.processes.length <= 1024 &&
+      value.processes.every(p => typeof p.name === 'string' && p.name.length > 0 && p.name.length <= 128 &&
+        Number.isSafeInteger(p.pid) && p.pid > 1 && Number.isInteger(p.slot) && p.slot >= 0 && p.slot < 1024 &&
+        typeof p.exiting === 'boolean' && typeof p.exited === 'boolean' && serial(p.generation) && serial(p.birth) &&
+        BigInt(p.generation) <= BigInt(current)) &&
+      new Set(value.processes.map(p => p.pid)).size === value.processes.length &&
+      new Set(value.processes.map(p => p.slot)).size === value.processes.length &&
+      new Set(value.processes.map(p => p.birth)).size === value.processes.length;
+    const valid = data.suite === (generations ? 'native-control-generations' : 'native-control-api-baseline') &&
+      data.success === true && data.interrupted === false &&
+      Array.isArray(data.tests) && data.tests.length === (generations ? 10 : 9) && data.tests.every(t => t.status === 'passed') &&
+      Array.isArray(data.skips) && data.skips.length === 0 && Array.isArray(data.fixtureErrors) && data.fixtureErrors.length === 0 &&
+      data.nativeErrorLogRead === true && Array.isArray(data.unexpectedNativeErrors) && data.unexpectedNativeErrors.length === 0 &&
+      data.sourceUnchangedDuringTest === true && data.identity?.binaryUnchangedDuringTest === true &&
+      Number.isSafeInteger(data.identity.master?.pid) && data.identity.master.pid > 1 &&
+      data.identity.harnessUnchangedDuringTest === true && /^[a-f0-9]{64}$/.test(data.identity.binarySha256 || '') &&
+      data.transport?.kind === 'tcp' && data.transport.host === '127.0.0.1' && data.transport.automaticFallback === false &&
+      Number.isInteger(data.transport.port) && data.transport.port > 0 && data.transport.port <= 65535 &&
+      cleanup?.nativeStopped === true && Array.isArray(cleanup.shutdowns) && cleanup.shutdowns.length === 2 &&
+      cleanup.shutdowns.every(s => s.mode === 'SIGQUIT' && s.exited === true && s.exitCode === 0 && s.signal === null) &&
+      cleanup.fixturesStopped === true && cleanup.openSockets === 0 && cleanup.temporaryRootRemoved === true &&
+      Array.isArray(cleanup.errors) && cleanup.errors.length === 0;
+    if (!generations) return valid;
+    const o = data.observations, r = o?.respawn;
+    return valid && data.mode === 'candidate' && data.identity.fixtureUnchangedDuringTest === true &&
+      snapshot(o?.initialGeneration, '1') && snapshot(o.afterPatch, '2') && snapshot(o.afterHup, '3') && snapshot(r?.snapshot, '3') &&
+      o.rejectedPatch?.status === 422 && o.rejectedPatch.generation === '2' &&
+      o.rejectedHup?.generation === '3' && o.rejectedHup.actualRejectionLogged === true &&
+      r?.victim?.generation === '3' && r.replacement?.generation === '3' &&
+      serial(r.victim.birth) && serial(r.replacement.birth) && BigInt(r.replacement.birth) > BigInt(r.victim.birth) &&
+      Number.isSafeInteger(r.victim.pid) && r.victim.pid > 1 && Number.isSafeInteger(r.replacement.pid) && r.replacement.pid > 1 &&
+      r.victim.pid !== r.replacement.pid && Number.isInteger(r.victim.slot) && r.victim.slot >= 0 && r.victim.slot < 1024 && r.victim.slot === r.replacement.slot;
+  }
+  if (kind === 'generation-boundaries') return data.suite === 'native-generation-boundaries' && data.passed === true &&
+    Array.isArray(data.tests) && data.tests.length === 20 && data.tests.every(t => t.passed === true) &&
+    data.networkUsed === false && data.sourceUnchangedDuringTest === true && data.generatedFilesUnchangedDuringTest === true &&
+    data.harnessUnchangedDuringTest === true && data.runnerUnchangedDuringTest === true &&
+    data.compileExitCode === 0 && data.executionExitCode === 0 && data.sanitizerDiagnostics === '' &&
+    data.sanitizers?.enabled?.includes('address') && data.sanitizers.enabled.includes('undefined') &&
+    data.temporaryRootRemoved === true && data.activeChildren === 0 && data.interrupted === null;
   if (kind === 'handover') return data.suite === 'native-reload-listener-observation' && data.success === true &&
     data.nativeErrorLogRead === true && Array.isArray(data.unexpectedNativeErrors) && data.unexpectedNativeErrors.length === 0 &&
     data.interrupted === false && Array.isArray(data.tests) && data.tests.length === 7 && data.tests.every(t => t.status === 'passed') &&
@@ -231,6 +277,9 @@ async function main() {
     { name: 'managed-native-control', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/control.test.mjs'], kind: 'tap' },
     { name: 'listener-observer-boundaries', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/listeners.test.mjs'], kind: 'tap' },
     { name: 'reload-listener-observation', file: process.execPath, args: ['x10/test/handover-baseline.mjs', '--binary', p.binary], kind: 'handover' },
+    { name: 'native-control-api', file: process.execPath, args: ['x10/test/control-api-baseline.mjs', '--binary', p.binary, '--source', p.source, '--transport', 'tcp'], kind: 'native-control' },
+    { name: 'native-process-generations', file: process.execPath, args: ['x10/test/generations.mjs', '--binary', p.binary, '--source', p.source, '--transport', 'tcp'], kind: 'generations' },
+    { name: 'native-generation-boundaries', file: 'bash', args: ['x10/test/generation-boundaries.sh', '--source', p.source, '--objs', p.objects], kind: 'generation-boundaries' },
   ];
   if (opts.official) suites.push({ name: 'official-nginx-tests', file: 'bash', args: ['x10/test/official-tests.sh', '--binary', p.binary], kind: 'official', timeoutMs: 600_000 });
   for (const suite of opts.provenanceOnly ? [] : suites) {
@@ -252,9 +301,35 @@ async function main() {
       if (observedBinaryHash && observedBinaryHash !== p.binarySha256) {
         valid = false; verificationError = 'Suite result identifies different binary bytes';
       }
-      if (['mail-tls', 'adapters', 'http3', 'http3-head', 'handover'].includes(suite.kind)) {
+      if (['mail-tls', 'adapters', 'http3', 'http3-head', 'handover', 'native-control', 'generations'].includes(suite.kind)) {
         if (typeof data.identity?.binary !== 'string' || path.resolve(data.identity.binary) !== p.binary) {
           valid = false; verificationError = 'Protocol suite result does not identify the selected binary path';
+        }
+      }
+      if (suite.kind === 'native-control' || suite.kind === 'generations') {
+        const filename = suite.kind === 'generations' ? 'generations.mjs' : 'control-api-baseline.mjs';
+        if (data.identity?.harnessSha256 !== digest(await readFile(path.join(root, 'x10/test', filename))) ||
+          data.identity?.sourceCheckout !== p.source) {
+          valid = false; verificationError = 'Native control result identifies different fixture or source checkout';
+        }
+        if (suite.kind === 'generations' && data.identity?.fixtureSha256 !== digest(await readFile(path.join(root, 'x10/test/control-api-baseline.mjs')))) {
+          valid = false; verificationError = 'Generation result identifies a different shared control fixture';
+        }
+        const files = ['src/core/nginx.c', 'src/os/unix/ngx_control.c', 'src/os/unix/ngx_process.c',
+          'src/os/unix/ngx_process_cycle.c', 'src/core/ngx_cycle.c', 'src/os/unix/ngx_control.h', 'src/os/unix/ngx_process.h'];
+        for (const file of files) if (data.identity?.sourceFilesSha256?.[file] !== digest(await readFile(path.join(p.source, file)))) {
+          valid = false; verificationError = 'Native control result identifies different native source bytes';
+        }
+      }
+      if (suite.kind === 'generation-boundaries') {
+        if (data.sourceSha256 !== digest(await readFile(path.join(p.source, 'src/os/unix/ngx_control.c'))) ||
+          data.harnessSha256 !== digest(await readFile(path.join(root, 'x10/test/generation-boundaries.c'))) ||
+          data.runnerSha256 !== digest(await readFile(path.join(root, 'x10/test/generation-boundaries.sh'))) ||
+          data.generatedConfigSha256 !== p.generatedConfigSha256) {
+          valid = false; verificationError = 'Generation boundary result identifies different source or generated config';
+        }
+        for (const [name, record] of Object.entries(p.generatedFiles)) if (data.generatedFilesSha256?.[name] !== record.sha256) {
+          valid = false; verificationError = 'Generation boundary result identifies different generated inputs';
         }
       }
       if (suite.kind === 'http3' && data.dependencyLockSha256 !== digest(await readFile(path.join(root, 'x10/test/http3-baseline.requirements.txt')))) {

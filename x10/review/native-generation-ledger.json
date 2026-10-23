@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "checkpoint": "8d769208cf79b8a583077ccb75be30f59e9563a1",
+  "feature": "Optional native master generation and child birth identities",
+  "files": [
+    {
+      "path": "src/os/unix/ngx_control.c",
+      "beforeSha256": "69fd6f589cabc38ccc4131d102078c4c2ac2697259985e329dcd09d757d9c094",
+      "afterSha256": "7cfcf5ad2cdf9eb7546281c3ce2dc0254a257b7d009a6c494e913cee4a36f2e0",
+      "changedHunks": [
+        {
+          "oldStart": 50,
+          "oldLines": 0,
+          "newStart": 51,
+          "newLines": 28
+        },
+        {
+          "oldStart": 63,
+          "oldLines": 0,
+          "newStart": 92,
+          "newLines": 3
+        },
+        {
+          "oldStart": 82,
+          "oldLines": 0,
+          "newStart": 114,
+          "newLines": 8
+        },
+        {
+          "oldStart": 108,
+          "oldLines": 0,
+          "newStart": 148,
+          "newLines": 62
+        },
+        {
+          "oldStart": 134,
+          "oldLines": 0,
+          "newStart": 236,
+          "newLines": 70
+        },
+        {
+          "oldStart": 624,
+          "oldLines": 1,
+          "newStart": 795,
+          "newLines": 3
+        },
+        {
+          "oldStart": 671,
+          "oldLines": 1,
+          "newStart": 844,
+          "newLines": 1
+        },
+        {
+          "oldStart": 690,
+          "oldLines": 0,
+          "newStart": 864,
+          "newLines": 11
+        },
+        {
+          "oldStart": 897,
+          "oldLines": 0,
+          "newStart": 1082,
+          "newLines": 108
+        },
+        {
+          "oldStart": 1012,
+          "oldLines": 0,
+          "newStart": 1305,
+          "newLines": 1
+        }
+      ],
+      "reviewScope": "Changed hunks and referenced spawn/reload/lifetime/data-serialization contracts; not a new whole-file/platform audit."
+    },
+    {
+      "path": "src/os/unix/ngx_control.h",
+      "beforeSha256": "12fda7d274b520f1550f550ba276ec4307d8c8b70f238a2d99e2d02b031fcf36",
+      "afterSha256": "6273ebce9a188abe9319758cd745c0c1688d24a11db151f9654b675e2dae4541",
+      "changedHunks": [
+        {
+          "oldStart": 14,
+          "oldLines": 0,
+          "newStart": 15,
+          "newLines": 4
+        }
+      ],
+      "reviewScope": "Changed hunks and referenced spawn/reload/lifetime/data-serialization contracts; not a new whole-file/platform audit."
+    },
+    {
+      "path": "src/os/unix/ngx_process.c",
+      "beforeSha256": "5097cec7f4a3e95c766b31692eb4e9b16fb00ffa11e5c750d7f6bc93bd9d01f5",
+      "afterSha256": "a354c634854617bed643d8db8b6218aa84cb603a7de1b15d9402427b4a471677",
+      "changedHunks": [
+        {
+          "oldStart": 210,
+          "oldLines": 0,
+          "newStart": 211,
+          "newLines": 7
+        }
+      ],
+      "reviewScope": "Changed hunks and referenced spawn/reload/lifetime/data-serialization contracts; not a new whole-file/platform audit."
+    },
+    {
+      "path": "src/os/unix/ngx_process_cycle.c",
+      "beforeSha256": "b8811ead5647f9cfc76f3085f4f57e622e434f403de2ca7aa131d33442fdbda6",
+      "afterSha256": "dd2f45a62724d9a297005f080efa0dcdd34ce7760d7591ec829ff6d3407ce819",
+      "changedHunks": [
+        {
+          "oldStart": 126,
+          "oldLines": 0,
+          "newStart": 127,
+          "newLines": 3
+        },
+        {
+          "oldStart": 253,
+          "oldLines": 0,
+          "newStart": 257,
+          "newLines": 3
+        }
+      ],
+      "reviewScope": "Changed hunks and referenced spawn/reload/lifetime/data-serialization contracts; not a new whole-file/platform audit."
+    }
+  ],
+  "implementationReview": "native-generation-contract.md",
+  "independentReview": "native-generation-review.md",
+  "rootReview": "Four-file diff and referenced native source contracts read before building; source and build identities checked separately.",
+  "limitations": [
+    "No worker listener-close acknowledgment or all-traffic transaction",
+    "No full platform/ABI or security certification",
+    "Original source coverage ledger remains historical and unchanged"
+  ]
+}

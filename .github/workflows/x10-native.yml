@@ -51,6 +51,12 @@ jobs:
           cp x10/.build/manifest.json x10/.build/ci-evidence/build.json
       - name: Native regressions and pinned official compatibility sample
         run: node x10/test/all.mjs --official > x10/.build/ci-evidence/checks.json
+      - name: Verify private Unix control transport
+        run: |
+          node x10/test/control-api-baseline.mjs --transport unix > x10/.build/ci-evidence/control-api-unix.json
+          node x10/test/generations.mjs --transport unix > x10/.build/ci-evidence/generations-unix.json
+      - name: Build profile without control API
+        run: bash x10/test/control-disabled.sh --output x10/.build/ci-evidence/control-disabled.json
       - name: Preserve JSON evidence
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6

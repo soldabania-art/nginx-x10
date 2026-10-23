@@ -1,6 +1,6 @@
 # NGINX X10: проверенное состояние
 
-Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, реальным HTTP/3 interop и генерируемыми QUIC-проверками под санитайзерами. Последний единый локальный прогон завершился **15/15 успешных групп**: [milestone-5 JSON](evidence/native-checks-milestone-5.json). Этот этап меняет контроллер и проверяющие инструменты; native C и ранее собранный бинарник не изменены. Это development-кандидат; performance acceptance и готовность к production остаются открытыми.
+Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, реальным HTTP/3 interop и генерируемыми QUIC-проверками под санитайзерами. Последний единый локальный прогон завершился **18/18 успешных групп**: [milestone-6 JSON](evidence/native-checks-milestone-6.json). Этот этап добавляет native API поколений конфигурации и процессов; бинарник реально пересобран. Это development-кандидат; performance acceptance и готовность к production остаются открытыми.
 
 ## Основа и чтение исходников
 
@@ -8,9 +8,9 @@
 
 [Первый проход чтения](review/coverage-summary.json) выполнен семью читателями: **533 текстовых файла кода и поддержки, 273 702 строки**. Ещё 10 исторических документов, 33 283 строки, находятся вне этого прохода; одна бинарная иконка учтена структурно. Диапазоны и хэши записаны в coverage-ledgers, агрегатор сообщает ноль ошибок согласованности. Это учёт прочитанного, а не формальное доказательство полного понимания, безопасности или проверки всех сочетаний платформ и модулей. Исходный [inventory](review/inventory.json) отражает начальное распределение; итоговые статусы находятся в coverage-summary.
 
-[Механический каталог](feature-catalog.json) содержит **125 определений модулей, 783 записи директив и 3340 определений функций**. Счётчики включают варианты препроцессора и повторения по контекстам; они не обозначают столько уникальных возможностей, включённых модулей или выполненных тестов. Архитектурные выводы и инварианты находятся в [отчётах review](review/), включая [event/TLS/QUIC](review/event-tls-quic.md) и [независимую проверку parser patch](review/quic-cross-review.md).
+[Первоначальный механический каталог закреплённого snapshot](feature-catalog.json) содержит **125 определений модулей, 783 записи директив и 3340 определений функций**. Счётчики включают варианты препроцессора и повторения по контекстам; они не обозначают столько уникальных возможностей, включённых модулей или выполненных тестов. Архитектурные выводы и инварианты находятся в [отчётах review](review/), включая [event/TLS/QUIC](review/event-tls-quic.md) и [независимую проверку parser patch](review/quic-cross-review.md).
 
-## Конкретное изменение C
+## Первый parser patch C
 
 В [ngx_event_quic_transport.c](../src/event/quic/ngx_event_quic_transport.c) изменены три строки: тип ID в объявлении и определении helper расширен с `uint16_t` до `uint64_t`; числовое значение теперь должно полностью потреблять своё declared value поле (`p == end`). Исправлены **два класса дефектов**, воспроизведённые тремя контрпримерами:
 
@@ -260,6 +260,66 @@ selector как EINTR и позволять запросам продолжит�
 и reap-ит незавершённый request child, затем закрывает native process и prefix.
 [Raw review controls](evidence/http3-head-review-controls.json) сохраняют прежнее
 неверное поведение и финальную проверку реальной остановки запросов отдельно.
+
+## Native поколения конфигурации: шестой этап
+
+JSON этого этапа публикуются как `public-evidence-summary`: результаты,
+имена проверок и хэши без внутренних путей, runtime process/namespace IDs,
+сырых конфигураций, сведений о сертификатах и логов. Полные исходные records
+сохранены локально; в каждой сводке указан их SHA-256. Сводки не являются
+входом для aggregate validator, который проверял полные результаты suites.
+
+Добавлен read-only `GET /1/control/generations` в явно включённый native control
+API. Начальная конфигурация получает generation `"1"`; каждый успешно принятый
+HUP/PATCH cycle — следующий ID. Каждый успешный parent fork получает новый
+birth serial, включая respawn и повторное использование slot. Старый worker
+с активным ответом сохраняет прежнее поколение. Отклонённый reload ничего не
+прибавляет. IDs передаются decimal strings, без потери uint64 precision;
+неизвестные и exhausted состояния не превращаются в достоверные значения.
+[Контракт](review/native-generation-contract.md), [per-file ledger](review/native-generation-ledger.json).
+
+Изменения ограничены четырьмя Unix C/H files; `ngx_cycle_t` и `ngx_process_t`
+layouts и старые поля `/1/control/processes` не изменены. Новое поле discovery
+аддитивно. Без активного control socket hooks не ведут identities; без
+`NGX_CONTROL_API` feature не компилируется. Worker ACK/listener fence и обычные
+условия apply/recover не добавлены. `available:true` означает классификацию
+master bookkeeping, а не worker readiness, health или завершение старых потоков.
+Master PID требует внешней привязки к namespace/start ticks: IDs не глобальны
+между restart/exec. Реальный binary upgrade ещё не проверен.
+
+| Проверка | Результат | Evidence |
+| --- | --- | --- |
+| Существующий control API | 9/9 candidate и pristine; явный ephemeral IPv4 loopback | [candidate](evidence/control-api-fixed.json), [reference](evidence/control-api-reference.json) |
+| Native generations | 10/10 candidate; reference 3/3 с ожидаемым 404 нового endpoint | [candidate](evidence/generations-fixed.json), [reference](evidence/generations-reference.json) |
+| Counter/serialization boundaries | 20/20, 18 реально rendered JSON records, ASan/UBSan без диагностик | [JSON](evidence/generation-boundaries-fixed.json) |
+| Control feature выключен | 4/4, реальная отдельная сборка, 105 modules и остальные flags сохранены; `-l` отклонён | [JSON](evidence/control-disabled-build.json) |
+| Runtime interruption | 2/2 после живого старого ответа, неуспех и полная cleanup | [JSON](evidence/control-api-runner-verification.json) |
+| Единый локальный profile | 18/18; controller 68 TAP, observer 29 TAP; official 1083 PASS/25 SKIP/1 TODO/0 FAIL | [milestone-6](evidence/native-checks-milestone-6.json) |
+
+[Независимый review](review/native-generation-review.md) также проверил реальный
+пакет из двух принятых PATCH до одного нового worker spawn sweep: поколение
+перешло с 1 на 3, новые workers получили поколение 3. Отдельные 137 direct
+контролей validator включают три положительных record и 134 отклонённых
+мутации; это не 137 runtime-сценариев. [Доказательства](evidence/native-generation-review-controls.json).
+Реальные отказы fork/памяти/отправки, неуспешная worker initialization и binary
+upgrade остаются source-reviewed путями без соответствующей fault injection.
+
+[Реальная пересборка](evidence/build-milestone-6.json) записала candidate SHA-256
+`e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139`,
+105 compiled modules и прежний профиль зависимостей. Default binary/manifest и
+три generated input остались неизменны при отдельной feature-off сборке.
+Все suites проверены на замороженных файлах до публикации; hosted CI нового
+commit проверяется отдельно.
+
+Локальный kernel отклоняет AF_UNIX `socket()` с EPERM; [неуспешный Unix diagnostic](evidence/control-api-unix-unavailable.json)
+сохранён и не считается PASS. Основной local aggregate явно использует
+`127.0.0.1` ephemeral TCP без fallback. Hosted CI отдельно обязан пройти Unix
+control API и generations, затем feature-off build. Никакой постоянный или
+внешний management listener в проекте не развёрнут.
+
+Это новая наблюдаемость native процессов, не увеличение throughput.
+[Срез продукта и этапы выпуска](ROADMAP.md) отделяет готовое от будущего:
+локальная alpha, измеренная beta и кандидат промышленного релиза.
 
 ## Производительность: измеритель и открытый результат
 

@@ -124,6 +124,9 @@ ngx_master_process_cycle(ngx_cycle_t *cycle)
 
     ngx_setproctitle(title);
 
+#if (NGX_CONTROL_API)
+    ngx_control_generation_start(cycle);
+#endif
 
     ccf = (ngx_core_conf_t *) ngx_get_conf(cycle->conf_ctx, ngx_core_module);
 
@@ -251,6 +254,9 @@ ngx_master_process_cycle(ngx_cycle_t *cycle)
             }
 
             ngx_cycle = cycle;
+#if (NGX_CONTROL_API)
+            ngx_control_generation_commit(cycle);
+#endif
             ccf = (ngx_core_conf_t *) ngx_get_conf(cycle->conf_ctx,
                                                    ngx_core_module);
             ngx_start_worker_processes(cycle, ccf->worker_processes,
