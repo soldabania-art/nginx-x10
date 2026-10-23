@@ -97,20 +97,26 @@ independent integration base; `x10-development` targets it for review. Keeping
 the original upstream reference does not require applying F5 publisher checks
 to this independent project's pull requests.
 
-The inherited F5 CLA workflow has a job-level repository guard on the integration
-base and development head: `github.repository == 'nginx/nginx'`. The F5 job still
-runs in the original publisher's repository. It is skipped in this independent
-fork without accepting an agreement, posting a CLA phrase, editing signature
-storage or provisioning publisher secrets. Native build, compatibility,
-whitespace and commit-message checks remain enabled.
+The inherited F5 CLA workflow has a job-level repository guard on the
+integration base and development head: `github.repository == 'nginx/nginx'`.
+That workflow version is intended to run the F5 job only in its original
+publisher's repository. Native build, compatibility, whitespace and
+commit-message checks remain enabled.
 
-This guard must exist on the pull request's base branch, because
-`pull_request_target` loads that branch's workflow. A guard added only to the
-development head cannot change the inherited base workflow. The `issue_comment`
-event loads the repository's default branch instead. Use `x10-main` as the
-independent fork's default branch so it also receives the guard. If the default
-still points to the unmodified `master`, its original special F5 comment
-triggers remain present; default-branch settings must be checked separately.
+The guard is not effective for the current default branch. Both
+`pull_request_target` and `issue_comment` obtain their workflow from the base
+repository's **default branch**, currently the pristine upstream `master`.
+Retargeting a pull request to `x10-main` does not change this. See the current
+[GitHub reference](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target).
+The observed CLA run [39896918773](https://github.com/soldabania-art/nginx-x10/actions/runs/39896918773)
+on development head `ebb693ea8ae0b2833550991d7e59a4ec26973da6` failed because
+the inherited publisher assistant expected its remote-signature token. It is
+an unresolved publisher integration, separate from native test results.
+
+Making `x10-main` the default branch would activate the repository guard while
+preserving `master` as an upstream mirror. The connected repository tools do
+not expose that setting, so it has not been changed. No agreement was accepted,
+CLA phrase posted, signature storage edited or publisher secret provisioned.
 
 ## Local validation on 23 October 2026
 
