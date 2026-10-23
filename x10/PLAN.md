@@ -206,3 +206,20 @@ Official1083 strictPASS/25SKIP/1expectedTODO/0FAIL учитываются отд
 Exact новый SHA ожидает hosted CI;996e997 принят ранее. Полный alert/control/
 EOF/shutdown inventory и usage gates ещё не закрыты; далее эти границы доC2b.
 Semantic export/import, смена TLS code и native NGINX continuation не готовы.
+
+## Continuum C2a: unexpected transport EOF
+
+Добавлен один actual-TLS case после exact request/echo ACK: клиент уничтожает
+transport без TLS end/close_notify. Требуются фактический relay FIN и C READ
+raw0/SSL_ERROR_SSL1/first-error reason294. RST, retry или clean close не PASS.
+Две неизменные metadata snapshots отказывают; после fatal error нет TLS I/O
+или SSL_shutdown. IGNORE_UNEXPECTED_EOF/quiet shutdown не включаются.
+wire=null: full wire, server FIN и graceful closure этим case не заявляются.
+
+Локально19/19=16 ordinary actual-TLS scenarios+2 runtime signals+1 no-TLS
+source control. Независимые heldouts/cleanup/identities — в [evidence](evidence/continuum-c2a-eof.json).
+Core21/process7, C1 27=18 synthetic+9 runtime и native20/20 прошли;
+official1083 strictPASS/25SKIP/1expectedTODO/0FAIL учитываются отдельно.
+Exact новый SHA ожидает hosted CI;1f92d82 принят ранее. Другие alert/partial/
+EOF/control states и usage gates остаются перед C2b. Semantic export/import,
+смена TLS code и native NGINX continuation ещё не реализованы.

@@ -16,6 +16,8 @@
  * Its SSL_shutdown.pod distinguishes first-send return 0 from an error;
  * SSL_get_error must not classify that 0. Repeating shutdown may finish it.
  * No SSL_write is permitted after starting shutdown.
+ * Its SSL_get_error.pod classifies unexpected EOF as SSL_ERROR_SSL with
+ * SSL_R_UNEXPECTED_EOF_WHILE_READING; fatal errors forbid later TLS I/O.
  */
 #define _POSIX_C_SOURCE 200809L
 #include <openssl/ssl.h>
@@ -260,7 +262,8 @@ int main(int argc, char **argv)
         "unread-plaintext", "empty-read-retry", "write-backpressure", "queued-key-update",
         "completed-key-update", "completed-read-retry", "unrelated-write-read-retry",
         "peer-key-update-pending", "peer-key-update-completed", "completed-write-retry",
-        "overlapping-read-write-retry", "server-shutdown-lifecycle"};
+        "overlapping-read-write-retry", "server-shutdown-lifecycle",
+        "unexpected-transport-eof"};
     SSL_CTX *ctx = NULL;
     PEER peer;
     X10_PROBE_RESULT first, second;
@@ -277,7 +280,8 @@ int main(int argc, char **argv)
     int listener = -1, status = 1, known = 0, size = 4096;
     int quiescent, unread, partial, pressure_case, ku, empty, completed_ku, exchange;
     int completed_read, unrelated_write, completed_write, overlap, allowed_case;
-    int peer_ku, peer_ku_pending, peer_ku_completed, shutdown_lifecycle;
+    int peer_ku, peer_ku_pending, peer_ku_completed, shutdown_lifecycle, unexpected_eof;
+    unsigned long eof_error = 0;
     int64_t deadline;
 
     memset(&peer, 0, sizeof(peer)); peer.fd = -1;
@@ -333,8 +337,10 @@ int main(int argc, char **argv)
     peer_ku_completed = !strcmp(scenario, "peer-key-update-completed");
     peer_ku = peer_ku_pending || peer_ku_completed;
     shutdown_lifecycle = !strcmp(scenario, "server-shutdown-lifecycle");
+    unexpected_eof = !strcmp(scenario, "unexpected-transport-eof");
     allowed_case = quiescent || completed_read || completed_write;
-    exchange = allowed_case || completed_ku || peer_ku_completed || shutdown_lifecycle;
+    exchange = allowed_case || completed_ku || peer_ku_completed
+        || shutdown_lifecycle || unexpected_eof;
     if (unread && wanted < 2) goto done;
     if ((completed_write || overlap) && wanted != MAX_APPLICATION_BYTES) goto done;
 
@@ -642,6 +648,42 @@ int main(int argc, char **argv)
         if (peer.error != SSL_ERROR_WANT_WRITE || peer.ledger.retry_call != X10_CALL_WRITE) goto done;
     }
 
+    if (unexpected_eof) {
+        /* The client acknowledges the exact echoed payload, then closes the
+         * transport without TLS close_notify. A real FIN must cause the pin's
+         * fatal EOF classification; a retry/RST/clean close is not a PASS. */
+        failure = "eof_ready";
+        if (!observe(&peer, &first) || !first.allowed
+            || peer.ledger.retry_call != X10_CALL_NONE
+            || (SSL_get_options(peer.ssl) & SSL_OP_IGNORE_UNEXPECTED_EOF)
+            || SSL_get_quiet_shutdown(peer.ssl)
+            || SSL_pending(peer.ssl) != 0 || SSL_has_pending(peer.ssl)) goto done;
+        printf("{\"event\":\"eof-ready\",\"scenario\":\"%s\","
+            "\"applicationBytesRead\":%zu,\"applicationBytesWritten\":%zu}\n",
+            scenario, total, wanted);
+        if (!step(deadline) || !ready(peer.fd, POLLIN, deadline)) goto done;
+        failure = "unexpected_eof_state_not_reached";
+        if (invoke(&peer, X10_CALL_READ, &trailer, 1)) goto done;
+        /* invoke classified the actual raw return with SSL_get_error first.
+         * Match SSL_get_error's first queue entry: fatal alert dispatch may
+         * append a secondary BIO error. Never print or drain the error queue. */
+        eof_error = ERR_peek_error();
+        if (peer.last_result != 0 || peer.error != SSL_ERROR_SSL
+            || ERR_GET_LIB(eof_error) != ERR_LIB_SSL
+            || ERR_GET_REASON(eof_error) != SSL_R_UNEXPECTED_EOF_WHILE_READING
+            || peer.amount != 0 || peer.ledger.last_call != X10_CALL_READ
+            || peer.ledger.last_outcome != X10_OUTCOME_ERROR
+            || peer.ledger.retry_call != X10_CALL_NONE) goto done;
+        printf("{\"event\":\"eof-observed\",\"scenario\":\"%s\","
+            "\"call\":%d,\"outcome\":%d,\"retryCall\":%d,\"rawResult\":%d,"
+            "\"sslError\":%d,\"errorReason\":%d,\"applicationBytesRead\":%zu}\n",
+            scenario, (int) peer.ledger.last_call,
+            (int) peer.ledger.last_outcome, (int) peer.ledger.retry_call,
+            peer.last_result, peer.error, ERR_GET_REASON(eof_error), peer.amount);
+        /* After SSL_ERROR_SSL, only metadata probes and resource cleanup may
+         * follow. No read/write/control/handshake/shutdown operation is legal. */
+    }
+
     if (shutdown_lifecycle) {
         /* The client withholds close_notify until both sent-only snapshots.
          * This exact-echo ACK excludes unread application data for this narrow
@@ -701,7 +743,15 @@ int main(int argc, char **argv)
     if (interrupted || now_ms() >= deadline) goto done;
     if (!observe(&peer, &first)) goto done;
     emit_probe(scenario, completed_write || overlap || shutdown_lifecycle ? 3 : 1, &peer, &first);
-    if (shutdown_lifecycle) {
+    if (unexpected_eof) {
+        if (first.allowed || !(first.reasons & X10_REASON_LEDGER)
+            || first.ledger_last_call != X10_CALL_READ
+            || first.ledger_last_outcome != X10_OUTCOME_ERROR
+            || first.ledger_retry_call != X10_CALL_NONE) goto done;
+        if (!observe(&peer, &second)) goto done;
+        emit_probe(scenario, 2, &peer, &second);
+        if (memcmp(&first, &second, sizeof(first))) goto done;
+    } else if (shutdown_lifecycle) {
         /* A fully closed session remains outside the live continuation
          * safepoint, even after its shutdown retry is actually complete. */
         if (first.allowed || !(first.reasons & X10_REASON_CONTROL)
@@ -810,7 +860,7 @@ int main(int argc, char **argv)
     printf("{\"event\":\"done\",\"scenario\":\"%s\",\"observed\":true,\"allowed\":%s,"
         "\"graceful\":%s,\"applicationBytesRead\":%zu,\"applicationBytesWritten\":%zu,"
         "\"pressureBytesCompleted\":%zu}\n", scenario, allowed_case ? "true" : "false",
-        exchange ? "true" : "false", exchange || peer_ku ? total : (unread ? (size_t) 1 : (size_t) 0),
+        exchange && !unexpected_eof ? "true" : "false", exchange || peer_ku ? total : (unread ? (size_t) 1 : (size_t) 0),
         exchange || unrelated_write || overlap ? wanted : (size_t) 0, pressure_total);
     status = 0;
 done:

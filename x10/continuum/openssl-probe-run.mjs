@@ -18,7 +18,7 @@ const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
 const SCENARIOS = ['quiescent', 'partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update', 'completed-key-update',
-  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle'];
+  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'unexpected-transport-eof'];
 const SECRET_LABELS = Object.freeze({
   CLIENT_HANDSHAKE_TRAFFIC_SECRET: 'clientHandshake', SERVER_HANDSHAKE_TRAFFIC_SECRET: 'serverHandshake',
   CLIENT_TRAFFIC_SECRET_0: 'clientApplication', SERVER_TRAFFIC_SECRET_0: 'serverApplication',
@@ -415,6 +415,18 @@ function independentClient(port, ca, payload, sockets, secrets, signal, explicit
   }), 'client_timeout', DEADLINE_MS, signal);
   return { socket, secure: () => wait(() => negotiated !== undefined),
     write() { applicationWrites++; socket.write(payload, error => { if (error) { failure = new ProbeFixtureError('client_write'); wake(); } }); },
+    async abortTransport() {
+      assertFixture(!failure && received.equals(payload) && applicationWrites === 1 &&
+        !socket.writableEnded && !socket.destroyed, 'eof_transport_not_ready');
+      // Deliberately close TCP without calling TLS end()/SSL_shutdown.
+      // The relay's actual 'end' observation and C's pinned EOF reason must
+      // confirm FIN; an RST or unrelated transport failure is not accepted.
+      const closure = bounded(new Promise(resolve => socket.once('close', resolve)),
+        'eof_client_close', DEADLINE_MS, signal);
+      socket.destroy();
+      await closure;
+      assertFixture(socket.destroyed && !socket.writableEnded, 'eof_transport_close');
+    },
     endOnEcho() { endAfterEcho = true; if (received.equals(payload)) socket.end(); }, finish: () => wait(() => closed && ended && received.equals(payload)),
     receivedPayload: () => wait(() => received.equals(payload)), receivedBytes: () => received.length,
     applicationWrites: () => applicationWrites,
@@ -583,6 +595,25 @@ function checkedShutdownProbe(probe, completed) {
     probe.wbufLeft === 0 && probe.wnum === 0, 'shutdown_refusal_not_observed');
 }
 
+function checkedEOFEvent(message, event, payloadBytes) {
+  const ready = event === 'eof-ready';
+  const keys = ready ? ['event', 'scenario', 'applicationBytesRead', 'applicationBytesWritten'] :
+    ['event', 'scenario', 'call', 'outcome', 'retryCall', 'rawResult', 'sslError', 'errorReason', 'applicationBytesRead'];
+  assertFixture(message?.event === event && message.scenario === 'unexpected-transport-eof' &&
+    Object.keys(message).sort().join(',') === keys.sort().join(','), 'eof_event_schema');
+  if (ready) assertFixture(message.applicationBytesRead === payloadBytes &&
+    message.applicationBytesWritten === payloadBytes, 'eof_echo_counts');
+  else assertFixture(message.call === 2 && message.outcome === 4 && message.retryCall === 0 &&
+    message.rawResult === 0 && message.sslError === 1 && message.errorReason === 294 &&
+    message.applicationBytesRead === 0, 'eof_error_not_observed');
+  return structuredClone(message);
+}
+function checkedEOFProbe(probe) {
+  assertFixture(!probe.allowed && probe.ledgerLastCall === 2 &&
+    probe.ledgerLastOutcome === 4 && probe.ledgerRetryCall === 0 &&
+    (BigInt(probe.reasons) & 4n) !== 0n, 'eof_refusal_not_observed');
+}
+
 function checkedImmutablePair(first, second) {
   const normalized = value => { const copy = { ...value }; delete copy.sample; return copy; };
   assertFixture(second.sample === first.sample + 1 &&
@@ -608,6 +639,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
   const retryScenario = retryCompleted || retryUnrelatedWrite || overlappingRetry;
   const writeRetryCompleted = scenario === 'completed-write-retry';
   const shutdownScenario = scenario === 'server-shutdown-lifecycle';
+  const eofScenario = scenario === 'unexpected-transport-eof';
   const allowed = scenario === 'quiescent' || retryCompleted || writeRetryCompleted;
   const graceful = allowed || scenario === 'completed-key-update' || peerCompleted || shutdownScenario;
   const owned = scope(25000);
@@ -644,7 +676,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       client.socket.pause(); relay.pauseServerReads();
     } else if (writeRetryCompleted) {
       client.socket.pause(); relay.pauseServerReads(); client.write();
-    } else if ((graceful && !retryCompleted) || scenario === 'unread-plaintext') {
+    } else if ((graceful && !retryCompleted) || scenario === 'unread-plaintext' || eofScenario) {
       if (graceful && !shutdownScenario) client.endOnEcho();
       client.write();
     } else if (scenario === 'write-backpressure') {
@@ -727,16 +759,36 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         immutableInitialProbes: true, peerCloseWithheldUntilInitialProbes: true,
         peerExplicitEndAfterInitialProbes: true, clientApplicationWrites: 1 };
     }
+    let eofLifecycle;
+    if (eofScenario) {
+      const ready = checkedEOFEvent(await native.wait('eof-ready'), 'eof-ready', payloadBytes);
+      await client.receivedPayload();
+      assertFixture(client.applicationWrites() === 1 && client.receivedBytes() === payloadBytes &&
+        !client.socket.writableEnded && !client.socket.destroyed, 'eof_before_exact_echo');
+      await client.abortTransport();
+      await stepNative(native, owned.signal);
+      const observed = checkedEOFEvent(await native.wait('eof-observed'), 'eof-observed', payloadBytes);
+      assertFixture(relay.observed.clientFin === true && client.socket.destroyed &&
+        !client.socket.writableEnded && client.applicationWrites() === 1, 'eof_fin_not_observed');
+      eofLifecycle = { ready, observed, exactEchoBeforeTransportClose: true,
+        clientApplicationWrites: 1, clientTransportDestroyed: true,
+        clientTLSEndCalled: false, relayClientFinObserved: true,
+        transportClose: 'node-tls-socket-destroy-confirmed-by-relay-fin-and-pinned-server-error' };
+    }
     const firstSample = writeRetryCompleted || overlappingRetry || shutdownScenario ? 3 : 1;
     const first = checkedProbe(await native.wait('probe', message => message.sample === firstSample), scenario);
     let immutableRepeatedProbe = false;
-    if (graceful || peerScenario || overlappingRetry) {
+    if (graceful || peerScenario || overlappingRetry || eofScenario) {
       const second = checkedProbe(await native.wait('probe', message => message.sample === firstSample + 1), scenario);
       assertFixture(first.allowed === allowed, 'stable_probe_changed_or_wrong_gate');
       checkedImmutablePair(first, second);
       if (overlappingRetry) {
         checkedOverlapProbe(first, true); checkedOverlapProbe(second, true);
         overlapRetryLifecycle.repeatedCompleted = second;
+      }
+      if (eofScenario) {
+        checkedEOFProbe(first); checkedEOFProbe(second);
+        eofLifecycle.repeatedRefused = second;
       }
       if (shutdownScenario) {
         checkedShutdownProbe(first, true); checkedShutdownProbe(second, true);
@@ -789,6 +841,15 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         !native.messages.some(message => message.event === 'shutdown') && done.applicationBytesRead === 0 &&
         done.applicationBytesWritten === 65536 && done.pressureBytesCompleted === 0 && client.applicationWrites() === 0,
       'overlap_event_order_or_counts');
+    }
+    if (eofScenario) {
+      const expected = ['ready', 'eof-ready', 'eof-observed', 'probe', 'probe', 'done'];
+      assertFixture(native.messages.filter(message => expected.includes(message.event)).map(message => message.event).join(',') === expected.join(',') &&
+        native.messages.filter(message => message.event === 'probe').map(message => message.sample).join(',') === '1,2' &&
+        !native.messages.some(message => message.event === 'shutdown') &&
+        done.applicationBytesRead === payloadBytes && done.applicationBytesWritten === payloadBytes &&
+        done.pressureBytesCompleted === 0 && client.applicationWrites() === 1,
+      'eof_event_order_or_counts');
     }
     if (shutdownScenario) {
       const expected = ['ready', 'shutdown-ready', 'shutdown-started', 'probe', 'probe', 'shutdown-completed', 'probe', 'probe', 'shutdown', 'done'];
@@ -852,6 +913,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       ...(writeRetryLifecycle ? { writeRetryLifecycle } : {}),
       ...(overlapRetryLifecycle ? { overlapRetryLifecycle } : {}),
       ...(shutdownLifecycle ? { shutdownLifecycle } : {}),
+      ...(eofLifecycle ? { eofLifecycle } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {
     if (owned.signal.aborted) throw owned.signal.reason;

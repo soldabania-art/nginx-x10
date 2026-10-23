@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-eof-20261023T231937617Z",
-    "owner": "cloud-coordinator",
-    "baseCommit": "6a24fc94fbec1f85cb73cd7abcb70d88aa3c6807",
-    "acquiredAtUTC": "2026-10-23T23:19:37.617Z",
-    "expiresAtUTC": "2026-10-24T00:04:37.617Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -512,10 +506,26 @@
       "evidence": "x10/evidence/continuum-c2a-overlap-native-regression.json",
       "freshCheckoutBinarySha256": "66d09eb4a07d91971f192798a27ff99e2a35705ba30789cda081e784a58ffc07",
       "earlierCheckoutBinaryIdentityClaimed": false
+    },
+    "c2aEOFLocal": {
+      "state": "success-local-refusal-observation-hosted-pending",
+      "flatTests": 19,
+      "ordinaryActualTLSScenarios": 16,
+      "handledRuntimeSignalControls": 2,
+      "nonTLSCachedSourceControl": 1,
+      "independentActualTLSHeldouts": 2,
+      "evidence": "x10/evidence/continuum-c2a-eof.json",
+      "nativeEvidence": "x10/evidence/continuum-c2a-eof-native-regression.json",
+      "completeInventoryAccepted": false,
+      "terminalStateAdmission": false,
+      "semanticExportImport": false,
+      "migration": false,
+      "implementationIdentity": "Commit containing this checkpoint; exact SHA after publication."
     }
   },
   "pendingVerification": [
-    "C2a remaining inventory: other control/alert/EOF/shutdown and sequence/key usage admission. Normal server-first close_notify refusal observed locally; full inventory and overlapping history/admission remain unsupported.",
+    "Unexpected EOF implementation: canonical19=16TLS+2signals+1source and C0/C1/native plus independent2 heldouts passed locally; exact new SHA research/native push and PR CI pending. Resolve first next pass.",
+    "C2a remaining inventory: other control/alert/partial/EOF/shutdown and sequence/key usage admission. Normal server-first shutdown and post-echo unexpected FIN refusal observed locally; full inventory and overlap admission remain unsupported.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
     "First scheduled cloud development run has not been independently verified by recorded run history."
@@ -534,7 +544,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Normal server-first shutdown refusal accepted locally and hosted: actual0/SENT1 to1/flags3, retryclears butclosedstate staysrefused. Other alert/control/EOF/shutdown and sequence/key usage gates remain before C2b."
+      "goal": "Post-echo unexpected transport FIN observed locally as fatal SSL_ERROR_SSL/reason294 with immutable refusal;19checks=16TLS+2signals+1source. First exact hosted CI, then other alert/partial/control and usage gates before C2b."
     },
     {
       "id": "C3",
@@ -682,31 +692,17 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
-    "runId": "continuum-shutdown-20261023T221849093Z",
-    "baseCommit": "732b8ab560706a914dfeefcc75249506388239a7",
-    "publicationParent": "ba8512a89c416b7bb479f29d91e9335d25bca716",
-    "result": "Canonical18/18, independent2 actualTLS heldouts, C0 core21/process7, C1 27 and native20 passed locally. Exact1f92d82 research/native push and PR CI completed success. Actual shutdown0 then1; both states refused, no migration.",
+    "runId": "continuum-eof-20261023T231937617Z",
+    "baseCommit": "6a24fc94fbec1f85cb73cd7abcb70d88aa3c6807",
+    "publicationParent": "69d8d564ae4199da0515e30e47280ec3d874d5de",
+    "result": "Canonical19/19, independent2 actualTLS heldouts, core21/process7, C1 27 and native20 passed locally. Actual FIN/SSL_ERROR_SSL reason294 refusal; wire=null, no migration. Exact hosted SHA pending.",
     "helpers": "5 temporary delegated roles; only coordinator integrates/publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-shutdown-ledger.json",
-    "retainedMetadataSourceReferences": [
-      "https://github.com/openssl/openssl/blob/85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c/ssl/record/rec_layer_s3.c",
-      "https://github.com/openssl/openssl/blob/85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c/ssl/record/record_local.h",
-      "https://github.com/openssl/openssl/blob/85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c/ssl/s3_lib.c"
-    ],
+    "perFileLedger": "x10/review/continuum-c2a-eof-ledger.json",
     "hostedVerification": {
-      "state": "success",
-      "researchRuns": [
-        40033951784,
-        40033956592
-      ],
-      "nativeRuns": [
-        40033951855,
-        40033955843
-      ]
-    },
-    "implementationCommit": "1f92d82c42d0c49c82029412fd882036da4e6da8"
+      "state": "pending-exact-implementation-SHA"
+    }
   },
   "lastVerificationReceipt": {
     "runId": "continuum-shutdown-ci-20261023T223043549Z",
@@ -1503,28 +1499,33 @@
       "selfDigest": "BACKGROUND after bytes are identified by Git tree/commit; no recursive digest."
     }
   },
-  "nextConcreteTask": "Bounded other control/alert/EOF shutdown observations and sequence/key usage admission. Preserve refusal for unsupported states and overlapping history; C2b semantic export/import remains evidence-gated.",
+  "nextConcreteTask": "First exact unexpected-EOF CI, then bounded other alert/control/partial closure observations and sequence/key usage admission. Preserve refusal for unsupported states; C2b semantic export/import remains evidence-gated.",
   "previousDevelopmentPass": {
-    "runId": "continuum-overlap-20261023T211942Z",
-    "baseCommit": "2760af0f4dfed38ed569ca314babfa17771139d4",
-    "publicationParent": "ca30d0058e3b4043affe5b9fa6ddbd967a1808c9",
-    "result": "Canonical17/17, independent2 actualTLS heldouts, C0 core21/process7, C1 27 and native20 passed locally. Exact996e997 research/native push and PR CI completed success. WRITE completion retains READ refusal; no overlap admission or migration.",
+    "runId": "continuum-shutdown-20261023T221849093Z",
+    "baseCommit": "732b8ab560706a914dfeefcc75249506388239a7",
+    "publicationParent": "ba8512a89c416b7bb479f29d91e9335d25bca716",
+    "result": "Canonical18/18, independent2 actualTLS heldouts, C0 core21/process7, C1 27 and native20 passed locally. Exact1f92d82 research/native push and PR CI completed success. Actual shutdown0 then1; both states refused, no migration.",
     "helpers": "5 temporary delegated roles; only coordinator integrates/publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-overlap-ledger.json",
+    "perFileLedger": "x10/review/continuum-c2a-shutdown-ledger.json",
+    "retainedMetadataSourceReferences": [
+      "https://github.com/openssl/openssl/blob/85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c/ssl/record/rec_layer_s3.c",
+      "https://github.com/openssl/openssl/blob/85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c/ssl/record/record_local.h",
+      "https://github.com/openssl/openssl/blob/85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c/ssl/s3_lib.c"
+    ],
     "hostedVerification": {
       "state": "success",
       "researchRuns": [
-        40027640168,
-        40027647320
+        40033951784,
+        40033956592
       ],
       "nativeRuns": [
-        40027640039,
-        40027647366
+        40033951855,
+        40033955843
       ]
     },
-    "implementationCommit": "996e997a6db359333d196d8db445580384db02ed"
+    "implementationCommit": "1f92d82c42d0c49c82029412fd882036da4e6da8"
   },
   "previousVerificationReceipt": {
     "runId": "continuum-overlap-ci-20261023T213447981Z",

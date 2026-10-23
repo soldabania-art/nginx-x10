@@ -436,3 +436,18 @@ metadata, not a claim of an unprocessed alert. Other control/alert/EOF/shutdown
 and usage gates remain pending; no export/import, TLS-code migration or native
 NGINX continuation. Local evidence retains at-publication pending status; this
 exact-SHA receipt records later hosted acceptance.
+
+## Unexpected EOF local checkpoint
+
+Canonical19/19 passed:16 ordinary actual-TLS cases,2 handled runtime signals,
+1 no-TLS source control. New post-echo raw-close case requires actual relay FIN
+and actual C READ0/SSL_ERROR_SSL1/first-error reason294. Two immutable refused
+snapshots follow; no subsequent TLS I/O/shutdown, no ignore-EOF or quiet option.
+wire=null/graceful=false; full stream verification and server FIN not claimed.
+[Evidence](../evidence/continuum-c2a-eof.json) records independent heldouts,
+source/build identities, baseline no-TLS capability control and cleanup.
+Core21/process7, C1 27=18synthetic+9runtime and native20/20 passed locally;
+official1083 strictPASS/25SKIP/1expectedTODO/0FAIL remain separate. New exact
+implementation research/native CI pending;1f92d82 hosted acceptance retained.
+Other alert/EOF/partial/control inventory and usage gates remain before C2b;
+no semantic export/import, actual TLS-code migration or native continuation.

@@ -275,6 +275,41 @@ test('server shutdown remains refused from sent close_notify through reciprocal 
   assert.equal(result.migration, false);
 });
 
+test('actual transport EOF without close_notify leaves immutable fatal-read refusal', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'unexpected-transport-eof', payloadBytes: 8093 });
+  const lifecycle = result.eofLifecycle;
+  assert.equal(result.outcome, 'pass');
+  assert.equal(result.negotiated.authorized, true);
+  assert.equal(lifecycle.ready.applicationBytesRead, 8093);
+  assert.equal(lifecycle.ready.applicationBytesWritten, 8093);
+  assert.equal(lifecycle.exactEchoBeforeTransportClose, true);
+  assert.equal(lifecycle.clientApplicationWrites, 1);
+  assert.equal(lifecycle.clientTransportDestroyed, true);
+  assert.equal(lifecycle.clientTLSEndCalled, false);
+  assert.equal(lifecycle.relayClientFinObserved, true);
+  assert.equal(lifecycle.observed.rawResult, 0);
+  assert.equal(lifecycle.observed.sslError, 1);
+  assert.equal(lifecycle.observed.errorReason, 294);
+  assert.equal(lifecycle.observed.call, 2);
+  assert.equal(lifecycle.observed.outcome, 4);
+  assert.equal(lifecycle.observed.retryCall, 0);
+  assert.equal(lifecycle.observed.applicationBytesRead, 0);
+  for (const probe of [result.probe, lifecycle.repeatedRefused]) {
+    assert.equal(probe.allowed, false);
+    assert.equal(probe.ledgerLastCall, 2);
+    assert.equal(probe.ledgerLastOutcome, 4);
+    assert.equal(probe.ledgerRetryCall, 0);
+    assert.ok((BigInt(probe.reasons) & 4n) !== 0n);
+  }
+  assert.equal(result.immutableRepeatedProbe, true);
+  assert.equal(result.fixtureGracefulShutdown, false);
+  assert.equal(result.wire, null);
+  assert.equal(result.clientConnections, 1);
+  assert.equal(result.serverConnections, 1);
+  assert.equal(result.semanticExportImport, false);
+  assert.equal(result.migration, false);
+});
+
 for (const scenario of ['partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update']) {
   test(`real TLS private ${scenario} state refuses the read-only safepoint`, { timeout: 30000 }, async () => {
     const result = await runProbeScenario({ scenario });

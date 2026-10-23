@@ -441,3 +441,33 @@ Other peer-first/partial/fatal alerts and EOF states, control inventory and
 sequence/key usage admission remain pending. Normal close_notify refusal does
 not establish a complete shutdown model, single-writer fence, export/import,
 actual TLS-code version change or native NGINX continuation.
+
+## Unexpected transport EOF after completed echo
+
+`unexpected-transport-eof` authenticates the independent Node client and verifies
+exact bounded request/echo receipt. C must first observe the allowed quiescent
+profile, no retry, IGNORE_UNEXPECTED_EOF off and quiet shutdown off. Only then
+does Node destroy the TLS socket without end()/SSL_shutdown. Destroy alone is
+not a FIN guarantee: actual relay frontend end observation and exact pinned
+server EOF classification are both mandatory. RST/retry/clean close cannot pass.
+
+After bounded POLLIN/HUP readiness, one actual READ must return0, SSL_ERROR_SSL1,
+first queue SSL reason294 and zero application bytes. Error queue is cleared
+before I/O, SSL_get_error classifies immediately, then ERR_peek_error inspects
+the first entry. Fatal handling may emit an internal alert/secondary BIO error;
+no raw queue is published. Two probes are immutable/refused with last READ ERROR
+and no outstanding retry in this case. Existing terminal-error ledger behavior
+is unchanged; it does not generally clear a previously outstanding retry.
+
+No further TLS read/write/control/handshake/shutdown occurs after fatal error;
+metadata and cleanup are separate. wire=null and graceful=false; no full capture
+oracle, server FIN, post-fatal sequence acceptance or general truncation proof.
+The scoped endpoint confirms payload receipt before raw close, not migration.
+[Evidence](../evidence/continuum-c2a-eof.json) retains actual masks/metadata,
+source/build identities, independent cases and cleanup. Counts19 mean16 ordinary
+TLS scenarios,2 runtime signals and1 no-TLS source control. Existing18 tests,
+probe/header/patch/build/oracle, ledger semantics and caps remain unchanged.
+
+Partial/truncated records, RST, peer-first closure and other fatal/control states
+remain separate inventory; sequence/key usage gates precede C2b. No complete
+state model, concurrency fence, export/import or actual TLS-code change is proven.
