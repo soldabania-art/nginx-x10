@@ -50,6 +50,24 @@ The manifest also records changed `src/`, `auto/` and `conf/` paths relative to
 the pinned upstream revision, plus SHA-256 of that Git binary diff. This keeps
 source-change provenance after a patch is committed as well as before commit.
 
+Both `configured` and `built` manifests contain `generatedFiles` entries for
+`ngx_auto_config.h`, `ngx_auto_headers.h` and `ngx_modules.c`. Each entry records
+SHA-256, byte count and permission mode. The writer opens regular, readable
+files without following symlinks and checks their identity while reading and
+again before publishing the manifest. Missing, nonregular, unreadable-mode or
+changed generated inputs produce `verification_failed` with `binary: null`.
+The generated module catalog is parsed from the same verified bytes.
+
+The unified checker requires these recorded identities before starting any
+functional suite and checks the complete map afterward. Changing a generated
+header before the check, including an unchanged-byte permission change, is
+therefore rejected. Older manifests without this field require a fresh
+`bash x10/build.sh`; do not add hashes to an old manifest to imply that the
+headers were the inputs of its earlier compilation. These are local build
+records, not signed attestations or protection against a malicious same-user
+process that can rewrite both the files and manifest. Concurrent builds remain
+unsupported.
+
 The `built` status requires a regular executable file, execute permission for the
 current user, a successful `nginx -V`, and unchanged file identity, size, mode and
 timestamps during verification. The manifest records its executable mode. A
@@ -95,3 +113,16 @@ an existing binary were checked. Configure-only correctly omitted the previous
 binary hash. The full build produced a manifest whose SHA-256 matched the
 executable; the runtime prefix was not created and tracked upstream files had no
 diff. No throughput or latency improvement is established by compilation.
+
+On 23 October 2026 the old checker was reproduced accepting a generated config
+header changed before `--provenance-only`, because the old manifest did not
+record its digest. [Generated-input verification](evidence/build-identity-verification.json)
+records that expected protection failure separately from 16 successful new
+controls: actual checker rejection of pre-check mutations in all three files,
+missing recorded identities, symlinks, directories and ordinary/special permission-bit changes; writer
+acceptance of configured/built snapshots; and writer rejection of missing,
+symlink, unreadable-mode and during-verification mutations. The binary symlink
+negative control also fails verification. The controls used isolated copies of
+objects and the real embedded manifest writer; canonical headers and binary
+were unchanged. They ran no native functional suite and did not refresh the
+canonical manifest. A real build is required before the next aggregate run.

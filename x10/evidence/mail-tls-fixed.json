@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-mail-tls-baseline",
+  "passed": true,
+  "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+  "version": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+  "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+  "identity": {
+    "sourceFilesSha256": {
+      "src/mail/ngx_mail_handler.c": "16cadb07e34d6d9244a3ddf31c0cfe02278bd89c22e563719985e6c0702d8558",
+      "src/mail/ngx_mail_ssl_module.c": "f6c41c2a2196743a3b95dfd5390327c917cce91ec5698173da2867cb5bb7f2c7",
+      "src/mail/ngx_mail_smtp_handler.c": "e6af2879ed6c260d447f13202919694556527246d6d4ec672beba63d18176a7b",
+      "src/mail/ngx_mail_imap_handler.c": "bfea2490cf6eedd418d68206801ce01aa578d0741a6d5432b73250152f02a488",
+      "src/mail/ngx_mail_pop3_handler.c": "4a0a60ac79ec11cdb4ea75d2a42da98855d59685ff0d0cdf0ddd54ef78c0f6a3",
+      "src/mail/ngx_mail_auth_http_module.c": "edb4e22957a2092bca503fac9899db28497d234073fbf8e1555cedced839b223",
+      "src/mail/ngx_mail_proxy_module.c": "b8341b104fdbc3f755d3d436c560f2bcc8c4239bb6c58ec28f42244e3cb1d6f0"
+    },
+    "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+    "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+    "harnessSha256": "c5662a3941090d75ca371c45c157236c53757d90708ab2de13add25cf58550fd",
+    "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+    "certificates": {
+      "caSha256": "776e1c621b01ed018868303297090bf61a3cf0bbf5aafaaaf4d78a58814072c2",
+      "untrustedCaSha256": "df43712a635ef632fa7552ccf82607a39a2368952a6e7d371c7a65827d9b2858",
+      "serverSha256": "fdde0e3983d05b32e9c96df51c2c34c63b140ed4cb35af0502d2731a8eadb93b"
+    },
+    "binaryUnchangedDuringTest": true,
+    "sourceUnchangedDuringTest": true
+  },
+  "scope": "Synthetic loopback native SMTP/IMAP/POP3 TLS and STARTTLS/STLS compatibility; clients verify server certificates.",
+  "processMode": "master_process off; one native process retaining the invoking UID",
+  "limits": [
+    "Not a complete TLS library, protocol-version or client matrix",
+    "No client-certificate authentication or TLS resumption coverage",
+    "No real mailbox, external identity provider, delivery, upstream TLS or production-readiness claim",
+    "Pipelined plaintext test covers a single coalesced write, not every TCP fragmentation pattern"
+  ],
+  "tests": [
+    {
+      "name": "config.native_validation",
+      "passed": true,
+      "configSha256": "7713cfa67f8ed6d665ec2e64831bb21f7df1b332c74ba7501290d07c9b3abf5a",
+      "mailListeners": 7,
+      "elapsedMs": 10
+    },
+    {
+      "name": "smtp.required_upgrade_policy_capability_pipeline_and_tunnel",
+      "passed": true,
+      "verifiedPeer": true,
+      "tlsProtocol": "TLSv1.3",
+      "plaintextAuthRefused": true,
+      "pipelinedPlaintextDiscarded": true,
+      "postUpgradeCapabilitiesChecked": true,
+      "secondUpgradeRefused": true,
+      "nativeAuthenticatedTunnel": true,
+      "elapsedMs": 59
+    },
+    {
+      "name": "smtp.implicit_tls_verified_auth_and_tunnel",
+      "passed": true,
+      "verifiedPeer": true,
+      "tlsProtocol": "TLSv1.3",
+      "nativeAuthenticatedTunnel": true,
+      "elapsedMs": 46
+    },
+    {
+      "name": "smtp.upgrade_wrong_ca_rejected",
+      "passed": true,
+      "expectedCertificateError": "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+      "rejectUnauthorized": true,
+      "elapsedMs": 3
+    },
+    {
+      "name": "smtp.implicit_wrong_hostname_rejected",
+      "passed": true,
+      "expectedCertificateError": "ERR_TLS_CERT_ALTNAME_INVALID",
+      "rejectUnauthorized": true,
+      "elapsedMs": 2
+    },
+    {
+      "name": "imap.required_upgrade_policy_capability_pipeline_and_tunnel",
+      "passed": true,
+      "verifiedPeer": true,
+      "tlsProtocol": "TLSv1.3",
+      "plaintextAuthRefused": true,
+      "pipelinedPlaintextDiscarded": true,
+      "postUpgradeCapabilitiesChecked": true,
+      "secondUpgradeRefused": true,
+      "nativeAuthenticatedTunnel": true,
+      "elapsedMs": 47
+    },
+    {
+      "name": "imap.implicit_tls_verified_auth_and_tunnel",
+      "passed": true,
+      "verifiedPeer": true,
+      "tlsProtocol": "TLSv1.3",
+      "nativeAuthenticatedTunnel": true,
+      "elapsedMs": 48
+    },
+    {
+      "name": "imap.upgrade_wrong_ca_rejected",
+      "passed": true,
+      "expectedCertificateError": "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+      "rejectUnauthorized": true,
+      "elapsedMs": 3
+    },
+    {
+      "name": "imap.implicit_wrong_hostname_rejected",
+      "passed": true,
+      "expectedCertificateError": "ERR_TLS_CERT_ALTNAME_INVALID",
+      "rejectUnauthorized": true,
+      "elapsedMs": 2
+    },
+    {
+      "name": "pop3.required_upgrade_policy_capability_pipeline_and_tunnel",
+      "passed": true,
+      "verifiedPeer": true,
+      "tlsProtocol": "TLSv1.3",
+      "plaintextAuthRefused": true,
+      "pipelinedPlaintextDiscarded": true,
+      "postUpgradeCapabilitiesChecked": true,
+      "secondUpgradeRefused": true,
+      "nativeAuthenticatedTunnel": true,
+      "elapsedMs": 50
+    },
+    {
+      "name": "pop3.implicit_tls_verified_auth_and_tunnel",
+      "passed": true,
+      "verifiedPeer": true,
+      "tlsProtocol": "TLSv1.3",
+      "nativeAuthenticatedTunnel": true,
+      "elapsedMs": 48
+    },
+    {
+      "name": "pop3.upgrade_wrong_ca_rejected",
+      "passed": true,
+      "expectedCertificateError": "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+      "rejectUnauthorized": true,
+      "elapsedMs": 4
+    },
+    {
+      "name": "pop3.implicit_wrong_hostname_rejected",
+      "passed": true,
+      "expectedCertificateError": "ERR_TLS_CERT_ALTNAME_INVALID",
+      "rejectUnauthorized": true,
+      "elapsedMs": 2
+    },
+    {
+      "name": "smtp.starttls_discards_pre_upgrade_helo_and_mail_state",
+      "passed": true,
+      "authHttpHelo": "",
+      "authHttpHeloHeaderPresent": true,
+      "preUpgradeHeloDiscarded": true,
+      "staleMailStateRejected": true,
+      "elapsedMs": 47
+    },
+    {
+      "name": "fixtures.tls_auth_metadata_and_backend_counts",
+      "passed": true,
+      "authRequests": 7,
+      "allAuthRequestsEncrypted": true,
+      "backendConnections": {
+        "smtp": 3,
+        "imap": 2,
+        "pop3": 2
+      },
+      "backendHandshakes": {
+        "smtp": 3,
+        "imap": 2,
+        "pop3": 2
+      },
+      "elapsedMs": 1
+    }
+  ],
+  "skips": [],
+  "authCalls": [
+    {
+      "protocol": "smtp",
+      "method": "plain",
+      "ssl": "on",
+      "tlsProtocol": "TLSv1.3"
+    },
+    {
+      "protocol": "smtp",
+      "method": "plain",
+      "ssl": "on",
+      "tlsProtocol": "TLSv1.3"
+    },
+    {
+      "protocol": "imap",
+      "method": "plain",
+      "ssl": "on",
+      "tlsProtocol": "TLSv1.3"
+    },
+    {
+      "protocol": "imap",
+      "method": "plain",
+      "ssl": "on",
+      "tlsProtocol": "TLSv1.3"
+    },
+    {
+      "protocol": "pop3",
+      "method": "plain",
+      "ssl": "on",
+      "tlsProtocol": "TLSv1.3"
+    },
+    {
+      "protocol": "pop3",
+      "method": "plain",
+      "ssl": "on",
+      "tlsProtocol": "TLSv1.3"
+    },
+    {
+      "protocol": "smtp",
+      "method": "none",
+      "ssl": "on",
+      "tlsProtocol": "TLSv1.3",
+      "helo": "",
+      "from": "MAIL FROM:<fresh@example.test>",
+      "to": "RCPT TO:<fresh-recipient@example.test>"
+    }
+  ],
+  "backendConnections": {
+    "smtp": 3,
+    "imap": 2,
+    "pop3": 2
+  },
+  "backendHandshakes": {
+    "smtp": 3,
+    "imap": 2,
+    "pop3": 2
+  },
+  "fixtureErrors": [],
+  "sourceUnchangedDuringTest": true,
+  "binaryUnchangedDuringTest": true,
+  "cleanup": {
+    "nativeStopped": true,
+    "fixturesStopped": true,
+    "openSockets": 0,
+    "temporaryRootRemoved": true,
+    "commandChildren": 0,
+    "errors": [],
+    "nativeExit": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "unexpectedNginxErrors": [],
+  "expectedHandshakeDiagnosticCount": 6
+}

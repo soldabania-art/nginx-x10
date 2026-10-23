@@ -3,7 +3,7 @@
 import { spawn, execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { constants } from 'node:fs';
-import { access, mkdir, readFile, realpath, stat, writeFile, rename } from 'node:fs/promises';
+import { access, lstat, mkdir, readFile, realpath, stat, writeFile, rename } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
@@ -66,12 +66,27 @@ async function provenance(opts) {
   if (digest(sourceDiff) !== manifest.sourceDiffSha256) {
     throw new Error('Native source changed after the recorded build; rebuild before checking');
   }
-  const configHash = digest(await readFile(path.join(objects, 'ngx_auto_config.h')));
+  const generatedFiles = {};
+  for (const name of ['ngx_auto_config.h', 'ngx_auto_headers.h', 'ngx_modules.c']) {
+    const recorded = manifest.generatedFiles?.[name];
+    if (!recorded || !/^[a-f0-9]{64}$/.test(recorded.sha256 || '')) {
+      throw new Error(`Build manifest lacks generated input identity for ${name}; rebuild before checking`);
+    }
+    const file = path.join(objects, name);
+    const info = await lstat(file);
+    if (!info.isFile() || info.isSymbolicLink()) throw new Error(`Generated build input is not a regular file: ${name}`);
+    const observed = { sha256: digest(await readFile(file)), bytes: info.size,
+      mode: (info.mode & 0o7777).toString(8).padStart(4, '0') };
+    if (observed.sha256 !== recorded.sha256 || observed.bytes !== recorded.bytes || observed.mode !== recorded.mode) {
+      throw new Error(`Generated build input differs from its manifest: ${name}; rebuild before checking`);
+    }
+    generatedFiles[name] = observed;
+  }
   const { stderr } = await execute(binary, ['-V'], { timeout: 10_000, maxBuffer: 256 * 1024 });
   if (stderr.trim() !== manifest.nginxVersionOutput?.trim()) throw new Error('Binary -V differs from its build manifest');
   return { binary, source, objects, manifestPath, manifestSha256: digest(manifestBytes), binarySha256: binaryHash,
     upstreamRevision: pin.commit, checkoutRevision: (await git(source, ['rev-parse', 'HEAD'])).trim(),
-    sourceDiffSha256: digest(sourceDiff), generatedConfigSha256: configHash, nginxVersion: manifest.nginxVersion,
+    sourceDiffSha256: digest(sourceDiff), generatedFiles, generatedConfigSha256: generatedFiles['ngx_auto_config.h'].sha256, nginxVersion: manifest.nginxVersion,
     compiledModuleCount: manifest.compiledModules.length };
 }
 
@@ -116,6 +131,20 @@ function command(file, args, { timeoutMs, env }) {
 }
 
 function jsonChecks(data, kind) {
+  if (kind === 'adapters' || kind === 'mail-tls') {
+    const mailTLS = kind === 'mail-tls';
+    const cleanup = data.cleanup;
+    return data.suite === (mailTLS ? 'native-mail-tls-baseline' : 'native-protocol-adapters') &&
+      (mailTLS ? data.passed === true : data.success === true) &&
+      Array.isArray(data.tests) && data.tests.length > 0 &&
+      data.tests.every(t => mailTLS ? t.passed === true : t.status === 'passed') &&
+      Array.isArray(data.skips) && data.skips.length === 0 &&
+      data.sourceUnchangedDuringTest === true && data.identity?.binaryUnchangedDuringTest === true &&
+      /^[a-f0-9]{64}$/.test(data.identity?.binarySha256 || '') &&
+      cleanup?.nativeStopped === true && cleanup.fixturesStopped === true &&
+      cleanup.openSockets === 0 && cleanup.temporaryRootRemoved === true &&
+      Array.isArray(cleanup.errors) && cleanup.errors.length === 0;
+  }
   if (kind === 'http') return data.success === true && Array.isArray(data.tests) && data.tests.length > 0 && data.tests.every(t => t.status === 'passed');
   if (kind === 'mail') return data.passed === true && Array.isArray(data.tests) && data.tests.length > 0 && data.tests.every(t => t.passed === true);
   if (kind === 'quic') return data.strict?.failed === 0 && data.strict?.caseCount > 0 && data.sourceUnchangedDuringTest === true;
@@ -145,6 +174,8 @@ async function main() {
   const suites = [
     { name: 'http-tls-http2-reload', file: process.execPath, args: ['x10/test/http-baseline.mjs', '--binary', p.binary], kind: 'http' },
     { name: 'stream-mail', file: process.execPath, args: ['x10/test/stream-mail-baseline.mjs'], kind: 'mail' },
+    { name: 'mail-tls-starttls', file: process.execPath, args: ['x10/test/mail-tls-baseline.mjs', '--binary', p.binary], kind: 'mail-tls' },
+    { name: 'protocol-adapters', file: process.execPath, args: ['x10/test/adapters-baseline.mjs', '--binary', p.binary], kind: 'adapters' },
     { name: 'native-features', file: process.execPath, args: ['x10/test/features-baseline.mjs', '--binary', p.binary], kind: 'http' },
     { name: 'quic-regression', file: 'bash', args: ['x10/test/runner.sh', '--source', p.source, '--objs', p.objects], kind: 'quic' },
     { name: 'quic-generated-sanitized', file: 'bash', args: ['x10/test/quic-generated.sh', '--source', p.source, '--objs', p.objects], kind: 'generated' },
@@ -169,6 +200,11 @@ async function main() {
       const observedBinaryHash = data.identity?.binarySha256 || data.binary?.sha256;
       if (observedBinaryHash && observedBinaryHash !== p.binarySha256) {
         valid = false; verificationError = 'Suite result identifies different binary bytes';
+      }
+      if (suite.kind === 'mail-tls' || suite.kind === 'adapters') {
+        if (typeof data.identity?.binary !== 'string' || path.resolve(data.identity.binary) !== p.binary) {
+          valid = false; verificationError = 'Protocol suite result does not identify the selected binary path';
+        }
       }
       if (suite.kind === 'mail' && path.resolve(data.binary || '') !== p.binary) {
         valid = false; verificationError = 'Mail suite result identifies a different binary path';
@@ -198,7 +234,7 @@ async function main() {
   // A parallel build or source edit invalidates the entire aggregate.
   const after = await provenance(opts);
   if (after.binarySha256 !== p.binarySha256 || after.sourceDiffSha256 !== p.sourceDiffSha256 ||
-      after.generatedConfigSha256 !== p.generatedConfigSha256 || after.manifestSha256 !== p.manifestSha256) {
+      JSON.stringify(after.generatedFiles) !== JSON.stringify(p.generatedFiles) || after.manifestSha256 !== p.manifestSha256) {
     throw new Error('Build or source identity changed during checks; rerun required');
   }
   result.success = !interrupted && (opts.provenanceOnly || result.suites.length > 0) && result.suites.every(suite => suite.passed);

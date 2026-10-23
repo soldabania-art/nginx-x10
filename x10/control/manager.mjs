@@ -138,7 +138,30 @@ async function readRevision(settings, id) {
   return value;
 }
 
-async function load(state) {
+function stateShape(value) {
+  const keys = ['schemaVersion', 'activeRevision', 'previousRevision', 'binding', 'historyHead'];
+  if (!value || value.schemaVersion !== 1 || Object.keys(value).some(k => !keys.includes(k))
+      || keys.some(k => !Object.hasOwn(value, k)) || !idPattern.test(value.activeRevision)
+      || (value.previousRevision !== null && !idPattern.test(value.previousRevision))
+      || (value.historyHead !== null && !/^[a-f0-9]{64}$/.test(value.historyHead))
+      || (value.binding !== null && (typeof value.binding !== 'object' || Array.isArray(value.binding))))
+    fail('state_integrity', 'Unsupported or inconsistent controller state');
+  return value;
+}
+
+function transactionShape(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value) || value.schemaVersion !== 1 || !idPattern.test(value.previous) || !idPattern.test(value.candidate)
+      || (value.rollbackRevision !== undefined && !idPattern.test(value.rollbackRevision))
+      || !['prepared', 'installed', 'reload_requested', 'restoring', 'ambiguous'].includes(value.stage))
+    fail('journal_integrity', 'Pending transaction is inconsistent');
+  return value;
+}
+
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const commitFile = settings => path.join(settings.state, 'event-commit.json');
+async function clearCommit(settings) { await rm(commitFile(settings)); await syncDirectory(settings.state); }
+
+async function load(state, allowCommit = false) {
   const settings = await json(path.join(state, 'settings.json'));
   if (settings.schemaVersion !== 1 || settings.state !== state || settings.prefix !== path.dirname(state)) fail('settings_integrity', 'Controller path identity changed');
   if (await readlink('/proc/self/ns/pid') !== settings.pidNamespace) fail('runtime_namespace', 'Controller must run in its initialized PID namespace');
@@ -146,34 +169,160 @@ async function load(state) {
     if (!safePath(p) || path.dirname(p) !== settings.prefix) fail('settings_integrity', 'Controlled paths must be direct children of the private prefix');
   }
   await owned(settings.prefix, true, true); await owned(path.join(state, 'revisions'), true, true);
-  const current = await json(path.join(state, 'state.json'));
-  const history = await readHistory(settings, current);
-  const pending = await exists(path.join(state, 'pending.json')) ? await json(path.join(state, 'pending.json')) : null;
-  return { settings, current, history, pending };
+  const current = stateShape(await json(path.join(state, 'state.json')));
+  const hasCommit = await exists(commitFile(settings));
+  const commit = hasCommit ? await json(commitFile(settings)) : null;
+  if (hasCommit && (!commit || typeof commit !== 'object' || Array.isArray(commit))) fail('commit_integrity', 'Invalid event commit envelope');
+  if (hasCommit && !allowCommit) fail('commit_pending', 'Interrupted event commit requires explicit recover');
+  const history = await readHistory(settings, current, hasCommit && allowCommit);
+  const pending = await exists(path.join(state, 'pending.json')) ? transactionShape(await json(path.join(state, 'pending.json'))) : null;
+  return { settings, current, history, pending, commit };
 }
 
-async function readHistory(settings, current) {
+function eventShape(row) {
+  const keys = ['sequence', 'at', 'type', 'details', 'previousHash', 'hash'];
+  return row && typeof row === 'object' && !Array.isArray(row) && Object.keys(row).length === keys.length
+    && keys.every(k => Object.hasOwn(row, k)) && Number.isSafeInteger(row.sequence) && row.sequence > 0
+    && typeof row.at === 'string' && typeof row.type === 'string' && row.details && typeof row.details === 'object'
+    && !Array.isArray(row.details) && (row.previousHash === null || /^[a-f0-9]{64}$/.test(row.previousHash))
+    && typeof row.hash === 'string' && /^[a-f0-9]{64}$/.test(row.hash);
+}
+
+async function readHistory(settings, current, allowHeadMismatch = false) {
   const file = path.join(settings.state, 'history.jsonl'); await owned(file);
   const s = await lstat(file); if (s.size > 16 * 1024 * 1024) fail('history_limit', 'History exceeds this controller version\'s 16 MiB limit');
-  const records = (await readFile(file, 'utf8')).trim().split('\n').filter(Boolean).map(JSON.parse);
+  const bytes = await readFile(file, 'utf8');
+  let records;
+  try {
+    if (bytes && !bytes.endsWith('\n')) throw new Error('Incomplete history line');
+    records = bytes ? bytes.slice(0, -1).split('\n').map(line => {
+      const record = JSON.parse(line);
+      if (line !== JSON.stringify(record)) throw new Error('Noncanonical history line');
+      return record;
+    }) : [];
+  } catch { fail('history_integrity', 'History contains a partial, malformed or noncanonical record'); }
   let previous = null;
   for (let i = 0; i < records.length; i++) {
-    const { hash: digest, ...body } = records[i];
+    const row = records[i];
+    if (!eventShape(row)) fail('history_integrity', 'History record shape is inconsistent');
+    const { hash: digest, ...body } = row;
     if (body.sequence !== i + 1 || body.previousHash !== previous || hash(JSON.stringify(body)) !== digest) fail('history_integrity', 'History hash chain is inconsistent');
     previous = digest;
   }
-  if (current.historyHead !== previous) fail('history_integrity', 'State and history head disagree; operator inspection is required');
+  if (!allowHeadMismatch && current.historyHead !== previous) fail('history_integrity', 'State and history head disagree; operator inspection is required');
   return records;
 }
 
-async function event(settings, current, type, details) {
-  const history = await readHistory(settings, current);
-  const body = { sequence: history.length + 1, at: now(), type, details, previousHash: current.historyHead };
-  const record = { ...body, hash: hash(JSON.stringify(body)) };
+async function appendEvent(settings, record) {
   const handle = await open(path.join(settings.state, 'history.jsonl'), constants.O_WRONLY | constants.O_APPEND | constants.O_NOFOLLOW);
   try { await handle.writeFile(`${JSON.stringify(record)}\n`); await handle.sync(); } finally { await handle.close(); }
-  current.historyHead = record.hash;
-  await save(path.join(settings.state, 'state.json'), current);
+}
+
+async function event(settings, current, type, details) {
+  if (await exists(commitFile(settings))) fail('commit_pending', 'Interrupted event commit requires explicit recover');
+  const before = stateShape(await json(path.join(settings.state, 'state.json')));
+  const history = await readHistory(settings, before);
+  if (current.historyHead !== before.historyHead) fail('state_integrity', 'Event uses a stale state head');
+  const body = { sequence: history.length + 1, at: now(), type, details, previousHash: before.historyHead };
+  const record = { ...body, hash: hash(JSON.stringify(body)) };
+  const after = { ...current, historyHead: record.hash };
+  const intent = { schemaVersion: 1, before, after, record };
+  intent.sha256 = hash(JSON.stringify(intent));
+  if ((await lstat(path.join(settings.state, 'history.jsonl'))).size + Buffer.byteLength(JSON.stringify(record)) + 1 > 16 * 1024 * 1024)
+    fail('history_limit', 'Next event would exceed the history limit');
+  await save(commitFile(settings), intent);
+  await appendEvent(settings, record);
+  await save(path.join(settings.state, 'state.json'), after);
+  Object.assign(current, after);
+  await clearCommit(settings);
+}
+
+async function validateCommit(settings, intent, current, records, transaction) {
+  if (!intent || typeof intent !== 'object' || Array.isArray(intent)) fail('commit_integrity', 'Invalid event commit envelope');
+  const { sha256, ...envelope } = intent;
+  if (intent.schemaVersion !== 1 || Object.keys(envelope).join(',') !== 'schemaVersion,before,after,record'
+      || hash(JSON.stringify(envelope)) !== sha256) fail('commit_integrity', 'Event commit envelope is inconsistent');
+  const before = stateShape(intent.before), after = stateShape(intent.after), record = intent.record;
+  if (!eventShape(record)) fail('commit_integrity', 'Invalid event record shape');
+  if (!same(current, before) && !same(current, after)) fail('commit_integrity', 'State matches neither recorded event boundary');
+  const { hash: digest, ...body } = record;
+  if (hash(JSON.stringify(body)) !== digest || record.previousHash !== before.historyHead || after.historyHead !== digest)
+    fail('commit_integrity', 'Event commit hash linkage is inconsistent');
+  const appended = records.at(-1)?.hash === digest;
+  if (appended ? !same(records.at(-1), record) || record.sequence !== records.length
+      : before.historyHead !== (records.at(-1)?.hash || null) || record.sequence !== records.length + 1)
+    fail('commit_integrity', 'History does not match either exact event boundary');
+  if (appended && (records.at(-2)?.hash || null) !== before.historyHead)
+    fail('commit_integrity', 'Event commit has an unexpected history predecessor');
+  if (!appended && same(current, after)) fail('commit_integrity', 'State advanced without its history record');
+  const old = await readRevision(settings, before.activeRevision), active = await readRevision(settings, after.activeRevision);
+  for (const id of [before.previousRevision, after.previousRevision, transaction?.rollbackRevision].filter(Boolean)) await readRevision(settings, id);
+  if (transaction) {
+    const previous = await readRevision(settings, transaction.previous), target = await readRevision(settings, transaction.candidate);
+    if (target.parent !== previous.id) fail('commit_integrity', 'Pending candidate does not descend from its recorded previous revision');
+  }
+  const unchanged = same({ ...before, historyHead: null }, { ...after, historyHead: null });
+  const bindingUnchanged = same(before.binding, after.binding);
+  const d = record.details;
+  let valid = false;
+  if (record.type === 'initialized_unbound')
+    valid = unchanged && before.binding === null && before.previousRevision === null && record.sequence === 1 && d.revision === active.id && !transaction;
+  if (record.type === 'bound')
+    valid = before.binding === null && after.binding !== null && before.activeRevision === after.activeRevision
+      && before.previousRevision === after.previousRevision && d.revision === active.id && d.pid === after.binding.pid && !transaction;
+  if (record.type === 'apply_started') {
+    const target = transaction && await readRevision(settings, transaction.candidate);
+    valid = unchanged && Boolean(before.binding) && transaction?.stage === 'prepared' && transaction.previous === old.id
+      && d.previous === old.id && d.revision === target?.id && target.parent === old.id;
+  }
+  if (record.type === 'applied')
+    valid = bindingUnchanged && Boolean(after.binding) && after.previousRevision === old.id && active.parent === old.id
+      && d.previous === old.id && d.revision === active.id && transaction?.previous === old.id
+      && transaction?.candidate === active.id && transaction.stage === 'reload_requested';
+  if (record.type === 'rejected') {
+    const target = transaction && await readRevision(settings, transaction.candidate);
+    valid = unchanged && Boolean(after.binding) && transaction?.previous === old.id && d.revision === target?.id
+      && target.parent === old.id && ['installed', 'reload_requested'].includes(transaction.stage) && typeof d.reason === 'string';
+  }
+  if (record.type === 'rolled_back')
+    valid = bindingUnchanged && Boolean(after.binding) && after.previousRevision === old.id && active.parent === old.id
+      && active.sourceRevision === old.id && active.inputSha256 === old.inputSha256 && d.revision === active.id
+      && d.restoredContentFrom === old.id && d.failedRevision === transaction?.candidate && transaction?.previous === old.id
+      && transaction?.rollbackRevision === active.id && transaction.stage === 'restoring' && typeof d.reason === 'string';
+  if (!valid) fail('commit_integrity', 'Event transition does not match its state, revisions and pending transaction');
+  await verifyConfirmed(settings, after, active);
+  return { after, record, appended };
+}
+
+async function verifyConfirmed(settings, current, revision) {
+  await guard(settings, current, [revision.fragmentSha256]);
+  if (current.binding) {
+    await acknowledged(settings, revision);
+    await guard(settings, current, [revision.fragmentSha256]);
+  } else await nativeTest(settings);
+}
+
+async function reconcileCommit(context) {
+  const { settings, current, history, pending: transaction, commit } = context;
+  const checked = await validateCommit(settings, commit, current, history, transaction);
+  if (!checked.appended) await appendEvent(settings, checked.record);
+  if (!same(current, checked.after)) await save(path.join(settings.state, 'state.json'), checked.after);
+  await clearCommit(settings);
+  return checked.record;
+}
+
+function terminalEvent(current, transaction, records) {
+  const record = records.at(-1), d = record?.details;
+  if (!transaction || record?.hash !== current.historyHead) return null;
+  if (record.type === 'applied' && d.revision === current.activeRevision && d.previous === transaction.previous
+      && transaction.candidate === current.activeRevision && current.previousRevision === transaction.previous
+      && transaction.stage === 'reload_requested') return record;
+  if (record.type === 'rejected' && d.revision === transaction.candidate && current.activeRevision === transaction.previous
+      && ['installed', 'reload_requested'].includes(transaction.stage)) return record;
+  if (record.type === 'rolled_back' && d.failedRevision === transaction.candidate && d.revision === current.activeRevision
+      && d.restoredContentFrom === transaction.previous && current.previousRevision === transaction.previous
+      && transaction.rollbackRevision === current.activeRevision && transaction.stage === 'restoring') return record;
+  return null;
 }
 
 async function guard(settings, current, allowFragments) {
@@ -406,8 +555,28 @@ export async function revert(state, revision) {
 
 export async function recover(state) {
   return lock(state, async state => {
-    const { settings, current, pending: transaction } = await load(state);
-    if (!transaction) return { ok: true, outcome: 'nothing_pending' };
+    let context = await load(state, true), reconciled;
+    if (context.commit) {
+      reconciled = await reconcileCommit(context);
+      context = await load(state);
+    }
+    const { settings, current, pending: transaction, history: records } = context;
+    const terminal = terminalEvent(current, transaction, records);
+    if (terminal) {
+      const revision = await readRevision(settings, current.activeRevision);
+      const previous = await readRevision(settings, transaction.previous), target = await readRevision(settings, transaction.candidate);
+      const transitionValid = terminal.type === 'applied'
+        ? revision.parent === previous.id
+        : terminal.type === 'rejected' ? target.parent === previous.id
+        : revision.parent === previous.id && revision.sourceRevision === previous.id && revision.inputSha256 === previous.inputSha256;
+      if (!transitionValid || target.parent !== previous.id || !current.binding) fail('commit_integrity', 'Terminal history does not match its revision relationship and binding');
+      await verifyConfirmed(settings, current, revision);
+      await clearPending(settings);
+      return { ok: true, outcome: 'reconciled', recordedOutcome: terminal.type, revision: revision.id, historyHead: current.historyHead, pendingCleared: true };
+    }
+    if (!transaction) return reconciled
+      ? { ok: true, outcome: 'reconciled', recordedOutcome: reconciled.type, revision: current.activeRevision, historyHead: current.historyHead, pendingCleared: false }
+      : { ok: true, outcome: 'nothing_pending' };
     if (!current.binding) fail('unbound', 'Cannot recover an unbound controller');
     const ids = [current.activeRevision, transaction.previous, transaction.candidate, transaction.rollbackRevision].filter(Boolean);
     const revisions = await Promise.all(ids.map(id => readRevision(settings, id)));

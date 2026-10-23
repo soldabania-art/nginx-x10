@@ -74,6 +74,29 @@ remain separate work. Unsafe tests are disabled. The Perl TLS helpers used by
 some upstream tests have their own verification policies; these checks do not
 replace the X10 harness's trusted-CA/hostname negative controls.
 
+## Self-contained protocol fixtures
+
+The X10 aggregate also runs [mail TLS/STARTTLS](test/MAIL-TLS.md) and
+[FastCGI/SCGI/uWSGI adapters](test/ADAPTERS.md) against the selected native
+binary. These are separate local fixtures, not replacements or edits to the
+pinned upstream sample. Their synthetic servers use Node builtins; they do not
+need the optional Perl adapter clients. An upstream dependency skip remains a
+skip even when an X10 fixture checks part of that protocol.
+
+The required profile must pass all cases in both new suites without skips.
+Aggregate acceptance requires the exact suite and binary identity, unchanged
+source/binary, normal case success and zero leaked sockets/processes or cleanup
+errors. Mail certificate negatives must identify trust or hostname rejection.
+Adapter failures must show a real parsed backend receipt before asserting the
+expected 502/504 or incomplete response.
+
+Generated config headers and module source are now checked against identities
+recorded during the real build, before any suite starts and again afterward.
+The controller fixture also exercises real process interruption at known durable
+journal boundaries. Those tests do not simulate power loss or make an
+all-traffic cutover guarantee. See [BUILD.md](BUILD.md), [controller boundaries](control/README.md)
+and [native handover review](review/handover-boundaries.md).
+
 ## GitHub Actions
 
 [x10-native.yml](../.github/workflows/x10-native.yml) builds the Linux profile and

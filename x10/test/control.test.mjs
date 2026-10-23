@@ -1,14 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { spawn } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { chmod, mkdir, mkdtemp, readFile, rename, rm, symlink, writeFile } from 'node:fs/promises';
 import http from 'node:http';
 import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { promisify } from 'node:util';
 import { initialize, bind, apply, revert, recover, status, history } from '../control/manager.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -255,4 +256,250 @@ include ${fragmentPath};
     if (!report.passed) t.diagnostic(childOutput.slice(-4096));
     if (report.tests.length === 16) assert.equal(report.passed, true, 'native process must cleanly exit');
   }
+});
+
+
+// Faults exist only in this child-side fixture. Production controller code has
+// no crash environment variable or test-only execution branch. Each pause is
+// after the actual filesystem sync resolved; the parent then sends SIGKILL.
+const faultWorker = `
+import fs from 'node:fs';
+import path from 'node:path';
+import { syncBuiltinESMExports } from 'node:module';
+import { pathToFileURL } from 'node:url';
+const [manager, state, operation, inputJSON, type, boundary] = process.argv.slice(1);
+const originalOpen = fs.promises.open.bind(fs.promises);
+const originalRename = fs.promises.rename.bind(fs.promises);
+const originalRm = fs.promises.rm.bind(fs.promises);
+let renamed, removedType;
+const commit = path.join(state, 'event-commit.json');
+const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
+const pause = async actual => {
+  process.send({ paused: true, type, boundary: actual });
+  setInterval(() => {}, 1000);
+  await new Promise(() => {});
+};
+fs.promises.rename = async (from, to) => { await originalRename(from, to); renamed = to; };
+fs.promises.rm = async (file, ...rest) => {
+  if (file === commit) removedType = read(commit).record.type;
+  return originalRm(file, ...rest);
+};
+fs.promises.open = async (file, ...rest) => {
+  const handle = await originalOpen(file, ...rest), sync = handle.sync.bind(handle);
+  handle.sync = async () => {
+    await sync();
+    if (boundary === 'history' && file === path.join(state, 'history.jsonl')) {
+      const records = fs.readFileSync(file, 'utf8').trim().split('\\n').filter(Boolean).map(JSON.parse);
+      if (records.at(-1)?.type === type) await pause('history');
+    }
+    if (file !== state) return;
+    if (boundary === 'cleared' && removedType === type && !fs.existsSync(commit)) await pause('cleared');
+    if (!fs.existsSync(commit) || read(commit).record.type !== type) return;
+    if (boundary === 'intent' && renamed === commit) await pause('intent');
+    if (boundary === 'state' && renamed === path.join(state, 'state.json')) await pause('state');
+  };
+  return handle;
+};
+syncBuiltinESMExports();
+const control = await import(pathToFileURL(manager).href);
+const result = operation === 'bind' ? await control.bind(state)
+  : operation === 'recover' ? await control.recover(state)
+  : await control.apply(state, JSON.parse(inputJSON));
+console.log(JSON.stringify(result));
+process.exitCode = result.ok ? 0 : 1;
+`;
+
+test('native durable event commit reconciliation and crash boundaries', { timeout: 120000 }, async t => {
+  const baselineCommit = '29746068bfca299b85062e981df250aa3e12abb8';
+  const managerPath = path.join(root, 'x10/control/manager.mjs');
+  const baselineSource = (await promisify(execFile)('git', ['show', `${baselineCommit}:x10/control/manager.mjs`], { cwd: root })).stdout;
+  const report = { schemaVersion: 1, suite: 'native-control-event-recovery', startedAt: new Date().toISOString(),
+    binary, binarySha256: digest(await readFile(binary)), managerSha256: digest(await readFile(managerPath)),
+    testSha256: digest(await readFile(fileURLToPath(import.meta.url))),
+    baseline: { commit: baselineCommit, managerSha256: digest(baselineSource) }, tests: [], shutdowns: [], passed: false,
+    limitations: ['Actual process SIGKILL after synced filesystem boundaries; not a disk/power-loss simulation.',
+      'No automatic stale-lock deletion. The exact killed fixture process has exited before test operator lock removal.',
+      'Only a valid event-commit intent and exact canonical history/state boundaries can be reconciled; arbitrary old mismatches and partial lines fail closed.',
+      'Fresh sampled revision/health and master identity are rechecked; this does not prove atomic all-traffic handover or undo requests.'] };
+  let activeChild, activeWorker, backend;
+  const interrupted = () => {
+    report.interrupted = true;
+    if (activeWorker && activeWorker.exitCode === null && activeWorker.signalCode === null) activeWorker.kill('SIGTERM');
+    if (activeChild?.pid) { try { process.kill(-activeChild.pid, 'SIGTERM'); } catch (error) { if (error.code !== 'ESRCH') throw error; } }
+    backend?.closeAllConnections();
+  };
+  process.once('SIGINT', interrupted); process.once('SIGTERM', interrupted);
+  const check = async (name, fn) => t.test(name, async () => {
+    assert.equal(report.interrupted, undefined);
+    let prefix, output = '', shutdown;
+    try {
+      prefix = await mkdtemp(path.join(os.tmpdir(), 'x10-recovery-')); await chmod(prefix, 0o700);
+      const health = { healthy: true };
+      backend = http.createServer((req, res) => { const good = health.healthy && req.url === '/healthy'; res.writeHead(good ? 200 : 503); res.end(good ? 'healthy' : 'unhealthy'); });
+      const healthPort = await listen(backend), port = await unusedPort();
+      const configPath = path.join(prefix, 'nginx.conf'), fragmentPath = path.join(prefix, 'managed.conf');
+      const config = `${process.getuid() === 0 ? `user ${os.userInfo().username};` : ''}
+daemon off; master_process on; worker_processes 1;
+pid ${prefix}/nginx.pid;
+error_log ${prefix}/error.log notice;
+events { worker_connections 128; }
+http { access_log off;
+include ${fragmentPath};
+}
+`;
+      await writeFile(configPath, config, { mode: 0o600 });
+      const input = text => ({ serverBody: `location / { return 200 "${text}"; }`, healthURL: `http://127.0.0.1:${healthPort}/healthy` });
+      const init = await initialize({ prefix, binary, port, gateTimeoutMs: 600 }, input('A'));
+      const state = init.state;
+      activeChild = spawn(binary, ['-p', `${prefix}/`, '-c', configPath], { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
+      activeChild.stdout.on('data', data => output += data); activeChild.stderr.on('data', data => output += data);
+      await waitFor(async () => (await get(port)).body === 'A');
+      if (!name.startsWith('bound-')) await bind(state);
+      const crash = async (type, boundary, { operation = 'apply', candidate = input('B'), manager = managerPath } = {}) => {
+        let paused, childOutput = '';
+        activeWorker = spawn(process.execPath, ['--input-type=module', '-e', faultWorker, manager, state, operation, JSON.stringify(candidate), type, boundary], { stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });
+        const worker = activeWorker;
+        worker.stdout.on('data', chunk => childOutput += chunk); worker.stderr.on('data', chunk => childOutput += chunk);
+        worker.on('message', data => { paused = data; });
+        await waitFor(() => {
+          if (worker.exitCode !== null || worker.signalCode !== null) throw new Error(`Fault worker exited before ${type}/${boundary}: ${childOutput}`);
+          return paused;
+        });
+        assert.deepEqual(paused, { paused: true, type, boundary });
+        worker.kill('SIGKILL'); await once(worker, 'exit');
+        assert.equal(worker.signalCode, 'SIGKILL'); activeWorker = null;
+        await assert.rejects(status(state), { code: 'locked' });
+        await rm(path.join(state, 'lock')); // exact killed process is confirmed exited
+      };
+      const recoverCLI = async () => {
+        const result = await promisify(execFile)(process.execPath, [path.join(root, 'x10/control/cli.mjs'), 'recover', '--state', state], { timeout: 6000 });
+        assert.equal(result.stderr, ''); return JSON.parse(result.stdout);
+      };
+      await fn({ prefix, state, init, port, input, crash, health, config, configPath, fragmentPath, recoverCLI });
+    } catch (error) { t.diagnostic(output.slice(-4096)); throw error; }
+    finally {
+      if (activeWorker && activeWorker.exitCode === null && activeWorker.signalCode === null) { activeWorker.kill('SIGKILL'); await once(activeWorker, 'exit'); }
+      activeWorker = null;
+      shutdown = await stop(activeChild); activeChild = null;
+      report.shutdowns.push(shutdown);
+      if (backend) { backend.closeAllConnections(); await new Promise(resolve => backend.close(resolve)); backend = null; }
+      if (prefix) await rm(prefix, { recursive: true, force: true });
+    }
+    assert.equal(shutdown?.exitCode, 0); assert.equal(shutdown?.signal, null);
+    report.tests.push({ name, passed: true });
+  });
+  try {
+    await check('baseline-terminal-history-state-window-is-reproduced', async ({ prefix, state, input, crash }) => {
+      const baselinePath = path.join(prefix, 'baseline-manager.mjs'); await writeFile(baselinePath, baselineSource, { mode: 0o600 });
+      await crash('applied', 'history', { manager: baselinePath });
+      const baseline = await import(pathToFileURL(baselinePath).href);
+      await assert.rejects(baseline.recover(state), { code: 'history_integrity' });
+      await assert.rejects(recover(state), { code: 'history_integrity' });
+      report.baseline.reproduced = true; report.baseline.outcome = 'history_integrity';
+    });
+    for (const boundary of ['intent', 'history', 'state', 'cleared']) {
+      await check(`applied-${boundary}-recovers-without-duplicate-history`, async ({ state, port, crash }) => {
+        await crash('applied', boundary);
+        const before = (await readFile(path.join(state, 'history.jsonl'), 'utf8')).split('\n').filter(Boolean).length;
+        if (boundary !== 'cleared') await assert.rejects(status(state), { code: 'commit_pending' });
+        const result = await recover(state); assert.equal(result.outcome, 'reconciled'); assert.equal(result.recordedOutcome, 'applied');
+        const s = await status(state), records = (await history(state)).records;
+        assert.equal(records.length, before + (boundary === 'intent' ? 1 : 0));
+        assert.equal(records.filter(row => row.type === 'applied').length, 1);
+        assert.equal(s.pending, null); assert.equal(s.lastConfirmedRevision, result.revision); assert.equal(s.runtime.observedRevision, result.revision);
+        assert.equal((await get(port)).body, 'B');
+        assert.deepEqual(await recover(state), { ok: true, outcome: 'nothing_pending' });
+      });
+    }
+    await check('bound-history-reconciliation-retains-verified-master-binding', async ({ state, crash, init }) => {
+      await crash('bound', 'history', { operation: 'bind' });
+      const result = await recover(state); assert.equal(result.recordedOutcome, 'bound');
+      const s = await status(state); assert.equal(s.runtime.identityValid, true); assert.equal(s.lastConfirmedRevision, init.revision);
+    });
+    await check('apply-started-history-reconciliation-restores-original-content', async ({ state, port, crash }) => {
+      await crash('apply_started', 'history');
+      const result = await recover(state); assert.equal(result.outcome, 'rolled_back'); assert.equal((await get(port)).body, 'A');
+      assert.equal((await status(state)).pending, null);
+    });
+    await check('rejected-history-reconciliation-does-not-activate-invalid-input', async ({ state, port, input, crash, recoverCLI }) => {
+      await crash('rejected', 'history', { candidate: { ...input('unused'), serverBody: 'location / { x10_nonexistent_directive on; }' } });
+      const result = await recoverCLI(); assert.equal(result.ok, true); assert.equal(result.outcome, 'reconciled'); assert.equal(result.recordedOutcome, 'rejected'); assert.equal((await get(port)).body, 'A');
+      assert.equal((await status(state)).pending, null);
+    });
+    await check('rolled-back-history-reconciliation-keeps-fresh-restoration', async ({ state, port, input, crash, recoverCLI }) => {
+      await crash('rolled_back', 'history', { candidate: { ...input('bad'), healthURL: input('bad').healthURL.replace('/healthy', '/unhealthy') } });
+      const result = await recoverCLI(); assert.equal(result.ok, true); assert.equal(result.outcome, 'reconciled'); assert.equal(result.recordedOutcome, 'rolled_back'); assert.equal((await get(port)).body, 'A');
+    });
+    await check('interrupted-recover-is-idempotent-at-history-boundary', async ({ state, port, crash }) => {
+      await crash('applied', 'intent');
+      await crash('applied', 'history', { operation: 'recover' });
+      const result = await recover(state); assert.equal(result.recordedOutcome, 'applied');
+      assert.equal((await history(state)).records.filter(row => row.type === 'applied').length, 1);
+      assert.equal((await get(port)).body, 'B');
+    });
+    await check('reconciliation-refuses-conflicting-operator-bytes', async ({ state, configPath, config, crash }) => {
+      await crash('applied', 'history');
+      const changed = `${config}\n# operator edit after crash\n`; await writeFile(configPath, changed);
+      const historyBytes = await readFile(path.join(state, 'history.jsonl')), stateBytes = await readFile(path.join(state, 'state.json'));
+      await assert.rejects(recover(state), { code: 'operator_config_changed' });
+      assert.equal(await readFile(configPath, 'utf8'), changed); assert.deepEqual(await readFile(path.join(state, 'history.jsonl')), historyBytes);
+      assert.deepEqual(await readFile(path.join(state, 'state.json')), stateBytes);
+      await writeFile(configPath, config); assert.equal((await recover(state)).outcome, 'reconciled');
+    });
+    await check('reconciliation-refuses-stale-binding-and-unhealthy-runtime', async ({ state, health, prefix, crash }) => {
+      await crash('applied', 'state');
+      const pidFile = path.join(prefix, 'nginx.pid'), original = await readFile(pidFile); await writeFile(pidFile, '9999999\n');
+      await assert.rejects(recover(state), { code: 'runtime_identity' }); await writeFile(pidFile, original);
+      health.healthy = false; await assert.rejects(recover(state), { code: 'health_gate_failed' });
+      health.healthy = true; assert.equal((await recover(state)).outcome, 'reconciled');
+    });
+    await check('reconciliation-refuses-partial-history-and-invalid-event-transition', async ({ state, crash }) => {
+      await crash('applied', 'history');
+      const historyFile = path.join(state, 'history.jsonl'), bytes = await readFile(historyFile);
+      await writeFile(historyFile, Buffer.concat([bytes, Buffer.from('{"partial":')]));
+      await assert.rejects(recover(state), { code: 'history_integrity' }); assert.deepEqual(await readFile(historyFile), Buffer.concat([bytes, Buffer.from('{"partial":')]));
+      await writeFile(historyFile, bytes);
+      const intentFile = path.join(state, 'event-commit.json'), intentBytes = await readFile(intentFile), intent = JSON.parse(intentBytes);
+      intent.after.previousRevision = null; delete intent.sha256; intent.sha256 = digest(JSON.stringify(intent));
+      await writeFile(intentFile, JSON.stringify(intent));
+      const stateFile = path.join(state, 'state.json'), stateBytes = await readFile(stateFile);
+      await assert.rejects(recover(state), { code: 'commit_integrity' });
+      assert.deepEqual(await readFile(historyFile), bytes); assert.deepEqual(await readFile(stateFile), stateBytes);
+      await writeFile(intentFile, intentBytes); assert.equal((await recover(state)).outcome, 'reconciled');
+    });
+    await check('before-append-invalid-record-shape-preserves-all-durable-bytes', async ({ state, fragmentPath, crash }) => {
+      await crash('applied', 'intent');
+      const intentFile = path.join(state, 'event-commit.json'), original = await readFile(intentFile), intent = JSON.parse(original);
+      intent.record.at = 123; delete intent.record.hash; intent.record.hash = digest(JSON.stringify(intent.record));
+      intent.after.historyHead = intent.record.hash; delete intent.sha256; intent.sha256 = digest(JSON.stringify(intent));
+      const altered = JSON.stringify(intent); await writeFile(intentFile, altered);
+      const files = [path.join(state, 'state.json'), path.join(state, 'history.jsonl'), fragmentPath];
+      const before = await Promise.all(files.map(file => readFile(file)));
+      await assert.rejects(recover(state), { code: 'commit_integrity' });
+      assert.equal(await readFile(intentFile, 'utf8'), altered);
+      for (let i = 0; i < files.length; i++) assert.deepEqual(await readFile(files[i]), before[i]);
+      await writeFile(intentFile, original); assert.equal((await recover(state)).outcome, 'reconciled');
+    });
+    await check('present-falsy-or-array-journals-are-corruption-not-absence', async ({ state, fragmentPath, input }) => {
+      const files = [path.join(state, 'state.json'), path.join(state, 'history.jsonl'), fragmentPath];
+      const before = await Promise.all(files.map(file => readFile(file)));
+      for (const name of ['pending.json', 'event-commit.json']) {
+        const file = path.join(state, name), code = name === 'pending.json' ? 'journal_integrity' : 'commit_integrity';
+        for (const value of [null, false, 0, '', []]) {
+          const bytes = JSON.stringify(value); await writeFile(file, bytes, { mode: 0o600 });
+          await assert.rejects(recover(state), { code }); await assert.rejects(status(state), { code });
+          await assert.rejects(apply(state, input('must-not-apply')), { code });
+          assert.equal(await readFile(file, 'utf8'), bytes);
+          for (let i = 0; i < files.length; i++) assert.deepEqual(await readFile(files[i]), before[i]);
+          await rm(file);
+        }
+      }
+      assert.equal((await recover(state)).outcome, 'nothing_pending');
+    });
+    report.passed = report.tests.length === 15 && !report.interrupted;
+  } finally {
+    report.finishedAt = new Date().toISOString(); process.removeListener('SIGINT', interrupted); process.removeListener('SIGTERM', interrupted);
+    if (process.env.X10_CONTROL_RECOVERY_EVIDENCE) await writeFile(path.resolve(process.env.X10_CONTROL_RECOVERY_EVIDENCE), `${JSON.stringify(report, null, 2)}\n`, { mode: 0o600 });
+  }
+  assert.equal(report.passed, true);
 });

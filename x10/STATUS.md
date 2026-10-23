@@ -1,6 +1,6 @@
 # NGINX X10: проверенное состояние
 
-Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, проверками дополнительных функций и генерируемыми QUIC-свойствами под санитайзерами. Единый проверочный прогон завершился **7/7 успешных групп**. Это development-кандидат; performance acceptance и готовность к production остаются открытыми.
+Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, проверками дополнительных функций и генерируемыми QUIC-свойствами под санитайзерами. Последний единый проверочный прогон после реальной пересборки завершился **9/9 успешных групп**: [milestone-3 JSON](evidence/native-checks-milestone-3.json). Это development-кандидат; performance acceptance и готовность к production остаются открытыми.
 
 ## Основа и чтение исходников
 
@@ -69,7 +69,74 @@ Features fixtures имеют реальные отрицательные кон�
 
 Во время review исправлены обработка конфликтующих файлов при rollback, quoted/escaped directive names, наследование cache/POST в health route, trickle-response deadline и очистка изолированных fixture-процессов. Контроллер ограничен Linux и доверенным локальным оператором; удалённого admin API и TLS/RBAC пока нет.
 
-Кандидат уже может обслуживать трафик во время health gate. Native handover допускает краткое обслуживание старым поколением после наблюдения нового; это не мгновенный общий cutover. Rollback не отменяет выполненные запросы. Разрыв между history append и state replacement может потребовать ручной проверки; автоматическое восстановление произвольного повреждённого журнала не заявляется.
+Кандидат уже может обслуживать трафик во время health gate. Native handover допускает краткое обслуживание старым поколением после наблюдения нового; это не мгновенный общий cutover. Rollback не отменяет выполненные запросы. Известный разрыв между history append и state replacement теперь согласуется только при точном durable event intent и подтверждённом runtime; старый mismatch без intent и произвольное повреждение журнала требуют ручной проверки.
+
+## Укрепление восстановления и протоколов
+
+Полный локальный `node x10/test/all.mjs --official` после пересборки и восстановления execute-bit: **9/9 PASS**, controller **33/33 TAP**, official sample — прежние **1083 strict PASS / 25 SKIP / 1 expected TODO / 0 strict FAIL**. [Результат](evidence/native-checks-milestone-3.json) содержит неизменные до/после binary/source/manifest/generated identities. Этот прогон выполнен на замороженных файлах текущего рабочего дерева до публикации; результаты нового hosted CI проверяются отдельно по commit.
+
+Третий development-этап добавляет durable event intent: `before/after` снимки
+состояния и точный hash-linked event записываются до history append. Explicit
+`recover` согласует только известные границы intent/history/state, проверяя
+связи ревизий, неизменные файлы, master identity и свежий health. Завершённый
+terminal event с оставшимся pending очищается без повторного reload. Формат
+старых schema-1 records сохранён. Старый mismatch без intent, частичная история,
+повреждение или противоречие остаются отказом с ручной проверкой.
+
+[Новый recovery report](evidence/control-recovery-fixed.json) содержит **15
+сценариев**, включая действительный SIGKILL предыдущего controller из
+`29746068bfca299b85062e981df250aa3e12abb8`, воспроизводящий `history_integrity`.
+Кандидат проверен на intent/history/state/intent-removal boundaries, повторном
+прерывании самого recover, stale master, health regression и конфликтующих
+файлах. При review исправлены present-but-falsy pending/intent и hash-valid
+record с неверным типом `at`; такие входы теперь отвергаются до записи durable
+данных. Полный controller TAP: **33/33** — 16 прежних и 15 новых сценариев,
+плюс два parent tests. Все 15 masters recovery-набора завершились SIGQUIT exit 0.
+Это проверка гибели процесса после fsync, не симуляция отключения питания.
+`initialized_unbound` reconciliation прочитан, но отдельного crash-case пока нет.
+Stale lock по-прежнему снимается только оператором после проверки процесса.
+
+| Дополнительная группа | Candidate / pristine baseline | Что реально проверено |
+| --- | --- | --- |
+| [Mail TLS](test/MAIL-TLS.md) | 15/15 / 15/15, без skips | SMTP/IMAP/POP3 STARTTLS/STLS, implicit TLS, plaintext auth policy, capabilities/state reset, synthetic auth/tunnel, точный отказ неверного CA/hostname |
+| [FastCGI/SCGI/uWSGI](test/ADAPTERS.md) | 21/21 / 21/21, без skips | Настоящий adapter wire framing/metadata, бинарный POST 71 687 bytes, chunked input, fragmented responses, invalid/truncated headers, incomplete body, preheader timeout |
+
+JSON: [mail fixed](evidence/mail-tls-fixed.json), [mail reference](evidence/mail-tls-reference.json),
+[adapters fixed](evidence/adapters-fixed.json), [adapters reference](evidence/adapters-reference.json).
+Все fixtures используют loopback и синтетические backends. Это дополнительные
+проверки сохранения возможностей; новых production C fixes в этих модулях нет.
+Они не превращают skipped upstream tests в PASS и не заменяют реальные
+mailbox/application-runtime interoperability проверки.
+
+[Независимый protocol review](review/milestone-3-review.md),
+[проверки validator и adapter CLI](evidence/protocol-runner-verification.json) и
+[mail interruption](evidence/mail-tls-runner-verification.json) разделяют прямые
+проверки функции validator и реальные запуски CLI. Прерывания после настоящего
+старта native процесса возвращают неуспех и очищают процессы, сокеты и prefix.
+
+Build manifest теперь записывает SHA-256, размер и полный permission mode трёх
+generated inputs: `ngx_auto_config.h`, `ngx_auto_headers.h`, `ngx_modules.c`.
+Runner сверяет их до и после suites. [16 проверок](evidence/build-identity-verification.json)
+отвергают предшествующую запуску подмену, symlink, неверный тип/режим и изменение
+во время записи manifest. Старый checker действительно пропускал pre-check
+header change; контрпример сохранён отдельно от успешных новых проверок.
+Manifest без новых identities требует реальной пересборки. Это локальная
+согласованность build records, не signed/reproducible-build attestation.
+
+Реальная пересборка сохранила SHA-256 candidate `66ba1756…` и 105 modules.
+[Build snapshot](evidence/build-milestone-3.json) записал mode `0755`, однако
+в следующем preflight файл оказался `0644`: ctime позже manifest, bytes и mtime
+не изменились. [Отказ до запуска suites](evidence/native-checks-milestone-3-preflight-failure.json)
+сохранён. [Точечное восстановление execute-bit](evidence/executable-mode-milestone-3.json)
+вернуло `0755` при том же SHA и `-V`; причина смены режима не установлена.
+Это наблюдение и ремонт состояния файла, не новое исправление C и не гарантия
+будущих permissions. Полный прогон запускается после повторной проверки identity.
+
+[Source review native handover](review/handover-boundaries.md) разобрал порядок
+старта/остановки workers, TCP listener closure, активные потоки, respawn и QUIC.
+Новый ответ может предшествовать закрытию старых TCP listeners. Контроллер
+продолжает подтверждать sampled readiness; полный generation/listener fence
+не добавлен и не заявляется.
 
 ## Производительность: измеритель и открытый результат
 
@@ -88,7 +155,7 @@ Features fixtures имеют реальные отрицательные кон�
 ## Оставшиеся границы
 
 - HTTP/3 и QUIC end-to-end, сетевые потери/миграция, полная TLS-library matrix и 32-битные сборки не проверены. Компиляция HTTP/3 с OpenSSL compatibility path этого не заменяет.
-- Mail TLS/STARTTLS, upstream HTTP/2/multiplexing, полный набор protocol adapters, optional modules, ОС и аварийных веток ещё требуют отдельных тестов. Проверка отказа reload охватывает синтаксис, а не все поздние side effects и ошибки инициализации.
+- Mail TLS/STARTTLS и FastCGI/SCGI/uWSGI получили описанные выше bounded fixtures. Расширенные TLS/protocol state matrices, upstream HTTP/2/multiplexing, остальные adapters/optional modules, ОС и аварийные ветки ещё требуют отдельных тестов. Проверка отказа reload охватывает синтаксис, а не все поздние side effects и ошибки инициализации.
 - Полная официальная suite, длительный fuzzing, полноценная crash matrix и стабильная performance matrix ещё не выполнены. Генерируемые свойства и короткие loopback measurements не заменяют эти работы; преимущество «10x» не установлено.
 - Публичный native gateway не развёрнут. Ранее размещённая на Vercel консоль относится к Node-прототипу; она не запускает и не подтверждает доступность native NGINX X10.
 

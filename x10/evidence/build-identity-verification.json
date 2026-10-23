@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-generated-build-identity",
+  "startedAt": "2026-10-23T08:56:08.772438+00:00",
+  "scope": "Manifest writer and actual --provenance-only CLI controls; no native functional suite, canonical generated files or executable changed.",
+  "tests": [
+    {
+      "name": "matching-generated-identities-accepted",
+      "passed": true,
+      "exitCode": 0,
+      "reportedSuccess": true,
+      "functionalSuites": 0
+    },
+    {
+      "name": "legacy-manifest-without-generated-identities-rejected",
+      "passed": true,
+      "exitCode": 1,
+      "reportedSuccess": false,
+      "functionalSuites": 0,
+      "error": "Build manifest lacks generated input identity for ngx_auto_config.h; rebuild before checking"
+    },
+    {
+      "name": "precheck-ngx_auto_config.h-mutation-rejected",
+      "passed": true,
+      "exitCode": 1,
+      "reportedSuccess": false,
+      "functionalSuites": 0,
+      "error": "Generated build input differs from its manifest: ngx_auto_config.h; rebuild before checking"
+    },
+    {
+      "name": "precheck-ngx_auto_headers.h-mutation-rejected",
+      "passed": true,
+      "exitCode": 1,
+      "reportedSuccess": false,
+      "functionalSuites": 0,
+      "error": "Generated build input differs from its manifest: ngx_auto_headers.h; rebuild before checking"
+    },
+    {
+      "name": "precheck-ngx_modules.c-mutation-rejected",
+      "passed": true,
+      "exitCode": 1,
+      "reportedSuccess": false,
+      "functionalSuites": 0,
+      "error": "Generated build input differs from its manifest: ngx_modules.c; rebuild before checking"
+    },
+    {
+      "name": "same-byte-symlink-generated-header-rejected",
+      "passed": true,
+      "exitCode": 1,
+      "reportedSuccess": false,
+      "functionalSuites": 0,
+      "error": "Generated build input is not a regular file: ngx_auto_config.h"
+    },
+    {
+      "name": "same-byte-generated-header-mode-change-rejected",
+      "passed": true,
+      "exitCode": 1,
+      "reportedSuccess": false,
+      "functionalSuites": 0,
+      "error": "Generated build input differs from its manifest: ngx_auto_config.h; rebuild before checking"
+    },
+    {
+      "name": "same-byte-generated-header-special-mode-bit-change-rejected",
+      "passed": true,
+      "exitCode": 1,
+      "reportedSuccess": false,
+      "functionalSuites": 0,
+      "error": "Generated build input differs from its manifest: ngx_auto_config.h; rebuild before checking"
+    },
+    {
+      "name": "generated-header-directory-rejected",
+      "passed": true,
+      "exitCode": 1,
+      "reportedSuccess": false,
+      "functionalSuites": 0,
+      "error": "Generated build input is not a regular file: ngx_auto_config.h"
+    },
+    {
+      "name": "configured-writer-records-three-inputs-without-binary",
+      "passed": true,
+      "exitCode": 0,
+      "manifestStatus": "configured",
+      "generatedFiles": 3
+    },
+    {
+      "name": "built-writer-records-three-inputs-and-binary",
+      "passed": true,
+      "exitCode": 0,
+      "manifestStatus": "built",
+      "generatedFiles": 3
+    },
+    {
+      "name": "writer-missing-generated-header-invalidates-old-success",
+      "passed": true,
+      "exitCode": 1,
+      "manifestStatus": "verification_failed",
+      "generatedFiles": 1,
+      "errorPhase": "generated_inputs",
+      "error": "[Errno 2] No such file or directory: '/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/build-identity-verification/isolated-qdy_o7_o/writer-missing/objs/ngx_auto_headers.h'"
+    },
+    {
+      "name": "writer-symlink-generated-header-invalidates-old-success",
+      "passed": true,
+      "exitCode": 1,
+      "manifestStatus": "verification_failed",
+      "generatedFiles": 1,
+      "errorPhase": "generated_inputs",
+      "error": "Generated input is not a readable regular file: /workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/build-identity-verification/isolated-qdy_o7_o/writer-symlink/objs/ngx_auto_headers.h"
+    },
+    {
+      "name": "writer-unreadable-mode-invalidates-old-success",
+      "passed": true,
+      "exitCode": 1,
+      "manifestStatus": "verification_failed",
+      "generatedFiles": 1,
+      "errorPhase": "generated_inputs",
+      "error": "Generated input is not a readable regular file: /workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/build-identity-verification/isolated-qdy_o7_o/writer-unreadable/objs/ngx_auto_headers.h"
+    },
+    {
+      "name": "writer-generated-mutation-during-verification-invalidates-success",
+      "passed": true,
+      "exitCode": 1,
+      "manifestStatus": "verification_failed",
+      "generatedFiles": 3,
+      "errorPhase": "generated_inputs",
+      "error": "Generated input changed during manifest verification: ngx_auto_headers.h"
+    },
+    {
+      "name": "writer-symlink-binary-invalidates-old-success",
+      "passed": true,
+      "exitCode": 1,
+      "manifestStatus": "verification_failed",
+      "generatedFiles": 3,
+      "errorPhase": "binary_verification",
+      "error": "Binary is not an executable regular file: /workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/build-identity-verification/isolated-qdy_o7_o/writer-binary-symlink/objs/nginx"
+    }
+  ],
+  "baselineGap": {
+    "observed": true,
+    "checkerRevision": "29746068bfca299b85062e981df250aa3e12abb8",
+    "name": "old checker accepts a generated config header changed before provenance-only checks",
+    "expectedFailureOfProtection": true,
+    "exitCode": 0,
+    "reportedSuccess": true,
+    "functionalSuites": 0
+  },
+  "identity": {
+    "buildScriptSha256": "8f4bcb4c91224a07fe2f15376d4f9a4b772dc7e81a9c97c72a7d67c17712b51f",
+    "checkerSha256": "69a00ef5b24c04454a11e7ec038401adcbb9d276672a1ba20f4135ac02403714",
+    "canonicalBinarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf"
+  },
+  "passed": true,
+  "canonicalFilesUnchanged": true,
+  "cleanup": {
+    "temporaryRootRemoved": true,
+    "nativeProcessesStarted": 0
+  },
+  "finishedAt": "2026-10-23T08:56:10.298507+00:00"
+}

@@ -128,11 +128,18 @@ started native master and its readiness before enabling changes.
    remains pending/ambiguous and blocks further changes.
 
 Private state contains mode `0400` revision files, a SHA-256 history chain and
-synced state/pending records. These detect accidental changes and incomplete
+synced state/pending records. Each new history event also has a durable
+`event-commit.json` intent containing its before/after state, exact next record
+and envelope hash. The write order is intent, append/sync history, replace/sync
+state, then remove/sync intent. These detect accidental changes and incomplete
 operations; they are not signatures against a malicious process with the same
-UID. Atomic writes sync the file and directory. A storage error can leave the
-history and state head inconsistent; that requires operator inspection rather
-than silently discarding records.
+UID. Atomic writes sync the file and directory. Normal commands refuse an
+unfinished event commit with `commit_pending`; reconciliation is explicit.
+
+Existing schema-1 state, revision and history files remain supported without a
+rewrite or migration. New in-flight events gain the additional intent. An old
+history/state mismatch without such an intent remains refused; the tool does
+not invent a missing before/after snapshot for a historical crash.
 
 The PID file is resolved through `NSpid` and the exact PID namespace inode, then
 checked against UID, canonical `/proc/.../exe`, start ticks and native master
@@ -145,8 +152,12 @@ implemented.
 
 ## Recovery and boundaries
 
-All output is JSON. An applied/bound operation has `ok:true`. Rejection, verified
-rollback and ambiguity have nonzero CLI status; inspect `outcome`. `status`
+All output is JSON. An applied/bound operation has `ok:true`. An apply that is
+rejected, rolled back or ambiguous has nonzero CLI status; inspect `outcome`.
+A successful durable reconciliation has `ok:true,outcome:"reconciled"` and exits
+zero: this means recovery succeeded. Its `recordedOutcome` preserves whether the
+original operation was `applied`, `bound`, `rejected` or `rolled_back`; recovery
+success does not turn a rejected apply into a successful apply. `status`
 distinguishes the last confirmed revision from a pending transaction and an
 observed runtime revision.
 
@@ -160,12 +171,26 @@ to known revision bytes before recovery:
 node x10/control/cli.mjs recover --state /home/alex/x10-run/.x10-control
 ```
 
-Recovery validates and freshly activates the last confirmed input. Its result
-is `rolled_back`, with nonzero CLI status recording the failed original
-transaction; a subsequent `status` shows the confirmed recovery. Unknown file
-contents, changed operator config/binary, stale master identity or inconsistent
-history are refused. Do not erase pending/history to make an unknown state
-appear successful. An initialized but unbound bad initial configuration has no
+Recovery first handles an exact interrupted event commit, if present. It
+requires a valid envelope, event-specific state/revision/pending relationships,
+and history at exactly the before or appended-record boundary. Before advancing
+or merely deleting the intent, it rechecks config/binary/fragment bytes, the
+bound native master identity, and fresh revision/health probes. A candidate that
+was once healthy but is unhealthy now stays unresolved. A valid unbound initial
+event can be completed after native syntax validation; it remains unbound.
+Recovery appends or replaces only the missing durable stages. It never truncates
+history. If a terminal event already completed but pending removal was
+interrupted, exact terminal record/revision relationships and fresh runtime
+checks permit clearing that pending record without another activation.
+Repeating recovery after completion returns `nothing_pending`.
+
+For a consistent nonterminal pending transaction, recovery validates and freshly
+activates the last confirmed input. Its result is `rolled_back`, with nonzero
+CLI status recording the failed original transaction; a subsequent `status`
+shows the confirmed recovery. Unknown bytes, partial/noncanonical history
+records, contradictory snapshots, changed operator config/binary or stale
+master identity are refused. Do not erase pending/history/intent to make an
+unknown state appear successful. An unbound bad initial configuration has no
 automatic runtime recovery; inspect it before starting or binding the master.
 
 Native configuration testing and reload can create files, affect shared zones,
@@ -184,10 +209,14 @@ rollback does not undo requests or application side effects. Two fresh generatio
 probes do not provide a linearizable all-traffic cutover: fresh connections can
 temporarily reach the prior generation during native handover.
 
-History append and state replacement are separate durable operations. An
-interruption between them can leave a history-head mismatch; this version refuses
-it and requires operator inspection. `recover` handles a consistent pending
-transaction, not arbitrary corruption or every power-loss point.
+Recovery covers the recorded event intent/history/state boundaries and a
+completed terminal event whose pending removal was interrupted. It does not
+claim every crash or power-loss point. Partial history writes, missing or
+malformed intents, and an old mismatch without an intent require operator
+inspection. A normal I/O error that changes pending stage to `ambiguous` after
+an event write began can also leave a contradictory intent; it stays refused.
+An immutable revision created before a killed operation recorded its intent can
+remain orphaned and is never adopted merely because it exists.
 
 ## Verification
 
@@ -203,3 +232,14 @@ concurrent operator conflict, lock refusal, path/config/revision/history
 integrity and a real killed CLI followed by explicit recovery. It uses native
 master/workers and local synthetic HTTP endpoints; it is not a load test.
 Fixture cancellation relays termination to its own native process group.
+
+The durable event fixture additionally reproduces the previous controller's
+history/state mismatch after a real SIGKILL, then exercises intent, history,
+state and intent-removal boundaries for `applied`; the history boundary for
+`bound`, `apply_started`, `rejected` and `rolled_back`; and a second SIGKILL
+inside recovery. It checks idempotence, conflicting config, stale identity,
+health regression, partial history, hash-valid invalid transitions/record shapes,
+and present falsy/array journals that must never be treated as absent. These
+are process-interruption tests after actual filesystem sync calls, not simulated
+power loss or a full storage-failure matrix. Frozen milestone-2 evidence stays
+unchanged; the additional run is recorded separately.

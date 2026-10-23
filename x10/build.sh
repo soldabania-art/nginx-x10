@@ -103,10 +103,52 @@ def command(argv):
         raise RuntimeError(f"{argv[0]} failed: {result.stderr.strip()}")
     return result.stdout.strip()
 
+def write_json(value):
+    temporary = state / "manifest.json.tmp"
+    temporary.write_text(json.dumps(value, indent=2) + "\n")
+    temporary.replace(state / "manifest.json")
+
+def identity(value):
+    return (value.st_dev, value.st_ino, value.st_size, value.st_mode,
+            value.st_mtime_ns, value.st_ctime_ns)
+
+generated_files = {}
+generated_bytes = {}
+generated_identity = {}
+try:
+    for name in ("ngx_auto_config.h", "ngx_auto_headers.h", "ngx_modules.c"):
+        path = objects / name
+        before = path.lstat()
+        if not stat.S_ISREG(before.st_mode) or not before.st_mode & 0o444:
+            raise RuntimeError(f"Generated input is not a readable regular file: {path}")
+        descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+        with os.fdopen(descriptor, "rb") as stream:
+            if identity(before) != identity(os.fstat(stream.fileno())):
+                raise RuntimeError(f"Generated input changed while opening it: {path}")
+            data = stream.read()
+            if identity(before) != identity(os.fstat(stream.fileno())):
+                raise RuntimeError(f"Generated input changed while reading it: {path}")
+        if identity(before) != identity(path.lstat()):
+            raise RuntimeError(f"Generated input changed while verifying it: {path}")
+        generated_files[name] = {"sha256": hashlib.sha256(data).hexdigest(),
+                                 "bytes": len(data),
+                                 "mode": f"{stat.S_IMODE(before.st_mode):04o}"}
+        generated_bytes[name] = data
+        generated_identity[name] = identity(before)
+except (OSError, RuntimeError) as error:
+    write_json({"schemaVersion": 1, "profile": "nginx-x10-linux",
+                "status": "verification_failed",
+                "generatedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                "upstreamRevision": upstream, "generatedFiles": generated_files,
+                "binary": None,
+                "error": {"phase": "generated_inputs", "message": str(error)}})
+    print(error, file=sys.stderr)
+    sys.exit(1)
+
 source_diff = subprocess.run(
     ["git", "diff", "--binary", upstream, "--", "src", "auto", "conf"],
     cwd=source, capture_output=True, check=True).stdout
-modules_text = (objects / "ngx_modules.c").read_text()
+modules_text = generated_bytes["ngx_modules.c"].decode()
 module_array = re.search(r"ngx_module_t\s*\*ngx_modules\[\]\s*=\s*\{(.*?)\};",
                          modules_text, re.S)
 if module_array is None:
@@ -139,10 +181,11 @@ if shutil.which("pkg-config"):
 binary = None
 version_output = None
 verification_error = None
+verification_phase = "binary_verification"
 if status == "built":
     path = objects / "nginx"
     try:
-        before = path.stat()
+        before = path.lstat()
         if not stat.S_ISREG(before.st_mode) or not before.st_mode & 0o111:
             raise RuntimeError(f"Binary is not an executable regular file: {path}")
         if not os.access(path, os.X_OK):
@@ -155,9 +198,7 @@ if status == "built":
             digest = hashlib.file_digest(stream, "sha256").hexdigest() if hasattr(hashlib, "file_digest") else None
         if digest is None:
             digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        after = path.stat()
-        identity = lambda value: (value.st_ino, value.st_size, value.st_mode,
-                                  value.st_mtime_ns, value.st_ctime_ns)
+        after = path.lstat()
         if identity(before) != identity(after) or not os.access(path, os.X_OK):
             raise RuntimeError("Binary changed while verifying it")
         binary = {"path": str(path), "sha256": digest, "bytes": after.st_size,
@@ -166,6 +207,17 @@ if status == "built":
         status = "verification_failed"
         verification_error = str(error)
         version_output = None
+
+try:
+    for name, expected in generated_identity.items():
+        if identity((objects / name).lstat()) != expected:
+            raise RuntimeError(f"Generated input changed during manifest verification: {name}")
+except (OSError, RuntimeError) as error:
+    status = "verification_failed"
+    verification_error = str(error)
+    verification_phase = "generated_inputs"
+    binary = None
+    version_output = None
 
 manifest = {
     "schemaVersion": 1,
@@ -189,6 +241,7 @@ manifest = {
     "compiler": compiler,
     "compilerFlags": compiler_flags,
     "compiledModules": modules,
+    "generatedFiles": generated_files,
     "dependencyVersionsFromHeaders": header_versions,
     "dependencyVersionsFromPkgConfig": packages,
     "dependencyVersionNote": "Header versions are from the configured compiler preprocessor; pkg-config is optional package metadata; nginxVersionOutput records binary -V build/runtime information",
@@ -197,10 +250,8 @@ manifest = {
     "installed": False,
 }
 if verification_error:
-    manifest["error"] = {"phase": "binary_verification", "message": verification_error}
-temporary = state / "manifest.json.tmp"
-temporary.write_text(json.dumps(manifest, indent=2) + "\n")
-temporary.replace(state / "manifest.json")
+    manifest["error"] = {"phase": verification_phase, "message": verification_error}
+write_json(manifest)
 if verification_error:
     print(verification_error, file=sys.stderr)
     sys.exit(1)

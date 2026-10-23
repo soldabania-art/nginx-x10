@@ -9,7 +9,7 @@
 - Сохранены исходная история, ветки и теги NGINX.
 - Команда выполнила первый проход по всему текстовому коду выбранного снимка. [Покрытие](review/coverage-summary.json) разделяет реально прочитанные файлы, историческую документацию и бинарную иконку. Это не доказательство отсутствия дефектов или полного понимания всех взаимодействий.
 - Подготовлен [нативный профиль сборки](BUILD.md) с учётом реальных configure flags, зависимостей и состава модулей.
-- Добавлены настоящие HTTP/TLS/HTTP2, stream/mail и QUIC parser regression fixtures; границы каждого набора записываются в JSON.
+- Добавлены настоящие HTTP/TLS/HTTP2, stream/mail и QUIC parser regression fixtures; границы каждого набора записываются в JSON. [Почтовый TLS-набор](test/MAIL-TLS.md) проверяет SMTP/IMAP/POP3 upgrade и implicit TLS с CA/hostname controls. [Adapter-набор](test/ADAPTERS.md) проверяет FastCGI/SCGI/uWSGI на локальных backend без optional Perl-модулей.
 - Первый минимальный C patch исправляет сужение QUIC transport parameter ID и неполное потребление числового значения. Исходная и исправленная версии проверяются одним parser harness. Политика дубликатов пока не меняется.
 - Добавлен [локальный контроллер](control/README.md): ревизии одного управляемого HTTP server fragment, native `-t`, привязка к конкретному master, проверка нового поколения, health gate, rollback и журнал. Остальная конфигурация остаётся у оператора.
 - [Официальные nginx-tests](CI.md) закреплены по ревизии и запускаются без изменения исходных тестов; пропуски, TODO и строгие ошибки считаются отдельно.
@@ -29,7 +29,7 @@ node x10/test/all.mjs --official
 node x10/test/all.mjs --provenance-only
 ```
 
-Общий runner отвергает устаревший build manifest, изменённые native исходники и подмену бинарника; затем последовательно запускает HTTP/TLS/HTTP2/reload, stream/mail, features, два parser harness и native control. `--official` добавляет закреплённый официальный sample. Прерывание возвращает неуспех и передаёт сигнал fixture-процессам для очистки. Сравнение производительности запускается отдельно в спокойном окружении.
+Общий runner отвергает устаревший build manifest, изменённые native исходники, подмену бинарника и расхождение трёх generated build inputs с записанными SHA-256/размером/режимом. Затем последовательно запускаются HTTP/TLS/HTTP2/reload, stream/mail, mail TLS/STARTTLS, FastCGI/SCGI/uWSGI, features, два parser harness и native control. Старый manifest без generated identities требует настоящей пересборки. `--official` добавляет закреплённый официальный sample. Прерывание возвращает неуспех и передаёт сигнал fixture-процессам для очистки. Сравнение производительности запускается отдельно в спокойном окружении.
 
 Зависимости и точные ограничения профиля указаны в BUILD.md и [CI.md](CI.md). Для fixtures нужны Node.js 22+, Python, C compiler и OpenSSL CLI; для официального sample — Perl и указанные optional clients. Тесты используют временные каталоги, локальные upstream и синтетические учётные данные. Шлюз не устанавливается глобально и не публикуется в интернет.
 

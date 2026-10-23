@@ -56,8 +56,8 @@ Development branch не является промышленным релизом
 
 Ближайшие работы после этого checkpoint:
 
-1. Проверить границу native handover: перед подтверждением полного cutover доказать закрытие старых listening sockets, сохранив завершение старых потоков. Сейчас контроллер подтверждает наблюдаемое новое поколение и health, а кандидат уже может обслуживать трафик во время проверки.
-2. Расширить crash recovery на разрыв между history append и state replacement; текущая версия при несовпадении журнала требует проверки оператора.
-3. Закрыть пропуски protocol adapters, добавить HTTP3/QUIC interoperability, mail STARTTLS и матрицу TLS libraries/ОС. Полный upstream suite и длительный fuzzing остаются отдельными работами.
+1. Следовать [разобранным native handover contracts](review/handover-boundaries.md): перед подтверждением полного cutover доказать закрытие старых listening sockets, сохранив завершение старых потоков. Сейчас контроллер подтверждает наблюдаемое новое поколение и health, а кандидат уже может обслуживать трафик во время проверки.
+2. После укрепления recorded event intent/history/state recovery расширять crash/storage-failure matrix. Известный разрыв между history append и state replacement закрывается только при точном валидном intent и подтверждённом runtime; старое несогласованное состояние без intent, partial records и противоречия остаются для ручной проверки.
+3. Расширять уже добавленные FastCGI/SCGI/uWSGI и mail TLS/STARTTLS fixtures: дополнительные framing/state/error ветки, многопоточность и TLS-library matrix. Добавить HTTP3/QUIC interoperability и матрицу ОС. Полный upstream suite и длительный fuzzing остаются отдельными работами; self-contained fixtures не отменяют upstream dependency skips.
 4. Добавлять более широкие workloads и искать измеренные bottlenecks. Текущий короткий HTTP1 benchmark не доказывает ускорение QUIC patch или масштабирование нескольких workers.
 5. После укрепления локального управления добавить удалённый API с TLS/RBAC/audit и подключение консоли; проверить размещение native-процесса, обновление и откат в выбранной инфраструктуре проекта.
