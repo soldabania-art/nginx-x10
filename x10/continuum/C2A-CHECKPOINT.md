@@ -451,3 +451,35 @@ official1083 strictPASS/25SKIP/1expectedTODO/0FAIL remain separate. New exact
 implementation research/native CI pending;1f92d82 hosted acceptance retained.
 Other alert/EOF/partial/control inventory and usage gates remain before C2b;
 no semantic export/import, actual TLS-code migration or native continuation.
+
+## Exact EOF research success and native CI investigation
+
+Implementation `d4bb2bc1c4b73d30b2097426863976fca691d9e8`: research push40040044905
+and PR40040050370 (jobs120708789647/120708801705) completed success. Both logs
+confirm core21/process7/C1-27/C2a-19, no failures/skips/cancellations/TODO.
+Nineteen C2a checks mean16 ordinary actual-TLS cases+2 runtime signals+1 no-TLS
+source control. C1 remains18 synthetic oracle controls+9 runtime checks.
+Native PR40040050401/job120708803304 completed all stages successfully.
+
+Native push40040045133 attempt1/job120708800093 failed its aggregate:19/20
+groups passed, local-alpha-lifecycle failed with runtime_identity during stop
+after library-drift control, followed by uninstall failure. TAP6pass/3fail
+includes the enclosing parent, not three independent defects. Artifact12538224312
+archive SHA256f3f512ad89a2c530c04b943302bd0caf861d1c793cd40ba1b88314e7b2481a44
+was inspected privately; only allowlisted facts are retained in BACKGROUND.
+A source-based graceful-exit observation-race hypothesis is not proven: no
+failure-time per-field process snapshot exists. Alpha sources are unchanged.
+
+One exact failed-job retry: attempt2, statuscompleted, conclusionsuccess, job120711043827.
+
+The original failure remains evidence even if retry succeeds. No race fix was
+implemented; native candidate stays under investigation and last fully accepted
+native checkpoint1f92d82 remains separate. Next bounded task must reproduce and
+resolve this stop-identity failure without weakening foreign/PID protections.
+Local native20/20 and official1083 strictPASS/25SKIP/1expectedTODO remain separate.
+
+Format40040050377/40040050390/40040050408 succeeded. F5 CLA40040047294 remains
+an inherited failed integration; no agreement accepted. EOF research remains
+narrow refusal only: wire=null, no full graceful wire/server FIN claim, state
+export/import, TLS-code migration or native NGINX continuation. Local evidence
+retains at-publication pending status; this receipt records later observed CI.
