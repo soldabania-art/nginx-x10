@@ -16,11 +16,26 @@ const PROBE_SOURCE = fileURLToPath(new URL('./openssl-probe.c', import.meta.url)
 const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
-const SCENARIOS = ['quiescent', 'partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update', 'completed-key-update'];
+const SCENARIOS = ['quiescent', 'partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update', 'completed-key-update',
+  'completed-read-retry', 'unrelated-write-read-retry'];
 const SECRET_LABELS = Object.freeze({
   CLIENT_HANDSHAKE_TRAFFIC_SECRET: 'clientHandshake', SERVER_HANDSHAKE_TRAFFIC_SECRET: 'serverHandshake',
   CLIENT_TRAFFIC_SECRET_0: 'clientApplication', SERVER_TRAFFIC_SECRET_0: 'serverApplication',
 });
+// Preserve only fixed builder stage names. Arbitrary codes/messages may contain
+// private paths or command output and remain a generic dependency failure.
+const BUILD_ERROR_CODES = new Set([
+  'C2A_BUILD_artifact_invalid', 'C2A_BUILD_tool_unavailable', 'C2A_BUILD_aborted',
+  'C2A_BUILD_deadline', 'C2A_BUILD_output_limit', 'C2A_BUILD_unsupported_platform',
+  'C2A_BUILD_patch_invalid', 'C2A_BUILD_source_init', 'C2A_BUILD_source_fetch',
+  'C2A_BUILD_source_checkout', 'C2A_BUILD_source_identity', 'C2A_BUILD_source_dirty',
+  'C2A_BUILD_source_epoch', 'C2A_BUILD_patch_check', 'C2A_BUILD_patch_apply',
+  'C2A_BUILD_patch_identity', 'C2A_BUILD_compiler_identity', 'C2A_BUILD_configure',
+  'C2A_BUILD_configuration_identity', 'C2A_BUILD_compile', 'C2A_BUILD_binary_identity',
+  'C2A_BUILD_provider_identity', 'C2A_BUILD_cleanup', 'C2A_BUILD_identity_unavailable',
+  'C2A_BUILD_source_changed', 'C2A_BUILD_patch_changed', 'C2A_BUILD_artifact_changed',
+  'C2A_BUILD_unavailable',
+]);
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const assertFixture = (condition, code) => { if (!condition) throw new ProbeFixtureError(code); };
 let nodeBinaryHash;
@@ -191,7 +206,9 @@ export async function prepareProbeHarness() {
         await build?.cleanup();
       }
       if (owned.signal.aborted) throw owned.signal.reason;
-      throw new ProbeFixtureError(error instanceof ProbeFixtureError ? error.code : 'probe_build_failed');
+      const code = error instanceof ProbeFixtureError || BUILD_ERROR_CODES.has(error?.code)
+        ? error.code : 'probe_build_failed';
+      throw new ProbeFixtureError(code);
     } finally { owned.close(); preparing = undefined; }
   })();
   return preparing;
@@ -285,6 +302,7 @@ function independentClient(port, ca, payload, sockets, secrets, signal) {
   let endAfterEcho = false;
   let ended = false;
   let closed = false;
+  let applicationWrites = 0;
   const observers = new Set();
   const wake = () => { for (const callback of observers) callback(); };
   socket.on('keylog', line => {
@@ -329,8 +347,10 @@ function independentClient(port, ca, payload, sockets, secrets, signal) {
     observers.add(callback); callback();
   }), 'client_timeout', DEADLINE_MS, signal);
   return { socket, secure: () => wait(() => negotiated !== undefined),
-    write() { socket.write(payload, error => { if (error) { failure = new ProbeFixtureError('client_write'); wake(); } }); },
+    write() { applicationWrites++; socket.write(payload, error => { if (error) { failure = new ProbeFixtureError('client_write'); wake(); } }); },
     endOnEcho() { endAfterEcho = true; }, finish: () => wait(() => closed && ended && received.equals(payload)),
+    receivedPayload: () => wait(() => received.equals(payload)), receivedBytes: () => received.length,
+    applicationWrites: () => applicationWrites,
     negotiated: () => negotiated, random: () => clientRandom,
   };
 }
@@ -362,6 +382,25 @@ function checkRefusal(probe, scenario) {
   else if (scenario === 'empty-read-retry') assertFixture(probe.sslPending === 0 && probe.packetLength === 0 && (reasons & (1n << 4n)) !== 0n && probe.ledgerRetryCall === 2 && probe.ledgerLastOutcome === 2, 'empty_retry_not_observed');
   else if (scenario === 'write-backpressure') assertFixture(probe.wbufLeft > 0 && probe.ledgerRetryCall === 3 && probe.ledgerLastOutcome === 3 && (reasons & ((1n << 9n) | (1n << 10n))) !== 0n, 'write_pressure_not_observed');
   else if (scenario === 'queued-key-update') assertFixture(probe.keyUpdate === 0 && (reasons & ((1n << 12n) | (1n << 15n))) !== 0n, 'queued_key_update_not_observed');
+  else if (scenario === 'unrelated-write-read-retry') assertFixture(probe.reasons === '16' &&
+    probe.sslPending === 0 && probe.sslHasPending === false && probe.ledgerRetryCall === 2 &&
+    probe.ledgerLastCall === 3 && probe.ledgerLastOutcome === 1, 'unrelated_write_cleared_read_retry');
+}
+
+function checkedRetryEvent(message, event, scenario, payloadBytes) {
+  const completed = event === 'retry-completed';
+  const keys = ['event', 'scenario', 'call', 'outcome', 'retryCall', 'applicationBytesRead', 'sslPending',
+    ...(completed ? ['sameReadArguments'] : [])];
+  assertFixture(message?.event === event && message.scenario === scenario &&
+    Object.keys(message).sort().join(',') === keys.sort().join(','), 'retry_event_schema');
+  assertFixture(message.call === 2 && message.outcome === (completed ? 1 : 2) &&
+    message.retryCall === (completed ? 0 : 2), 'retry_event_ledger');
+  assertFixture(Number.isSafeInteger(message.sslPending) && message.sslPending >= 0 &&
+    message.sslPending <= 65536, 'retry_event_pending');
+  assertFixture(Number.isSafeInteger(message.applicationBytesRead) && (completed
+    ? message.applicationBytesRead >= 1 && message.applicationBytesRead <= Math.min(payloadBytes, 16384) && message.sameReadArguments === true
+    : message.applicationBytesRead === 0 && message.sslPending === 0), 'retry_event_transition');
+  return structuredClone(message);
 }
 
 /** Observe only; controlled refusal cases intentionally terminate the fixture
@@ -374,7 +413,11 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
   assertFixture(!running, 'concurrent_probe_fixture');
   assertFixture(!process.execArgv.some(value => value.startsWith('--tls-keylog')) && !(process.env.NODE_OPTIONS ?? '').includes('--tls-keylog'), 'external_keylog_option');
   running = true;
-  const graceful = scenario === 'quiescent' || scenario === 'completed-key-update';
+  const retryCompleted = scenario === 'completed-read-retry';
+  const retryUnrelatedWrite = scenario === 'unrelated-write-read-retry';
+  const retryScenario = retryCompleted || retryUnrelatedWrite;
+  const allowed = scenario === 'quiescent' || retryCompleted;
+  const graceful = allowed || scenario === 'completed-key-update';
   const owned = scope(25000);
   const children = new Set();
   const sockets = new Set();
@@ -402,27 +445,59 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     await native.wait('ready', message => message.scenario === scenario);
     if (scenario.startsWith('partial-')) {
       relay.prefix(prefix); client.write(); await relay.waitPrefix();
-    } else if (graceful || scenario === 'unread-plaintext') {
+    } else if ((graceful && !retryCompleted) || scenario === 'unread-plaintext') {
       if (graceful) client.endOnEcho();
       client.write();
     } else if (scenario === 'write-backpressure') {
       client.socket.pause(); relay.pauseServerReads();
     }
     await bounded(new Promise((resolve, reject) => native.child.stdin.write('STEP\n', error => error ? reject(new ProbeFixtureError('native_step')) : resolve())), 'native_step', DEADLINE_MS, owned.signal);
+    let retryLifecycle;
+    if (retryScenario) {
+      const ready = checkedRetryEvent(await native.wait('retry-ready'), 'retry-ready', scenario, payloadBytes);
+      assertFixture(client.applicationWrites() === 0, 'application_sent_before_read_retry');
+      retryLifecycle = { ready, completed: null, clientApplicationWritesBeforeRetry: 0 };
+      if (retryCompleted) {
+        client.endOnEcho(); client.write();
+        const completed = checkedRetryEvent(await native.wait('retry-completed'), 'retry-completed', scenario, payloadBytes);
+        assertFixture(client.receivedBytes() === 0 && client.applicationWrites() === 1, 'echo_before_retry_completion');
+        retryLifecycle.completed = completed;
+        await bounded(new Promise((resolve, reject) => native.child.stdin.write('STEP\n', error => error ? reject(new ProbeFixtureError('native_step')) : resolve())), 'native_step', DEADLINE_MS, owned.signal);
+      }
+    }
     const first = checkedProbe(await native.wait('probe', message => message.sample === 1), scenario);
     let immutableRepeatedProbe = false;
     if (graceful) {
       const second = checkedProbe(await native.wait('probe', message => message.sample === 2), scenario);
       const normalized = value => { const copy = { ...value }; delete copy.sample; return copy; };
-      assertFixture(first.allowed === (scenario === 'quiescent') && second.allowed === first.allowed &&
+      assertFixture(first.allowed === allowed && second.allowed === first.allowed &&
         JSON.stringify(normalized(first)) === JSON.stringify(normalized(second)), 'stable_probe_changed_or_wrong_gate');
       if (scenario === 'completed-key-update') assertFixture(first.reasons === '64' &&
         first.readGeneration === '0' && first.writeGeneration === '1' && first.mutationSerial === '3' && first.keyUpdate === -1, 'completed_key_update_not_observed');
       immutableRepeatedProbe = true;
     } else checkRefusal(first, scenario);
+    if (retryScenario) {
+      if (retryCompleted) assertFixture(first.ledgerRetryCall === 0 && first.ledgerLastCall === 3 &&
+        first.ledgerLastOutcome === 1, 'completed_retry_not_cleared');
+      else {
+        assertFixture(client.applicationWrites() === 0, 'unrelated_retry_client_write');
+        await client.receivedPayload();
+        await bounded(new Promise((resolve, reject) => native.child.stdin.write('STEP\n', error => error ? reject(new ProbeFixtureError('native_step')) : resolve())), 'native_step', DEADLINE_MS, owned.signal);
+      }
+    }
     const done = await native.wait('done');
     const exit = await bounded(native.closed, 'native_exit', DEADLINE_MS, owned.signal);
-    assertFixture(exit.code === 0 && exit.signal === null && native.validOutput() && done.scenario === scenario && done.observed === true && done.allowed === (scenario === 'quiescent') && done.graceful === graceful, 'native_scenario_failed');
+    assertFixture(exit.code === 0 && exit.signal === null && native.validOutput() && done.scenario === scenario && done.observed === true && done.allowed === allowed && done.graceful === graceful, 'native_scenario_failed');
+    if (retryScenario) {
+      const events = native.messages.map(message => message.event);
+      assertFixture(events.filter(event => event === 'retry-ready').length === 1 &&
+        events.filter(event => event === 'retry-completed').length === (retryCompleted ? 1 : 0), 'retry_event_count');
+      const readyAt = events.indexOf('retry-ready');
+      const completedAt = events.indexOf('retry-completed');
+      const probeAt = events.indexOf('probe');
+      assertFixture(events.indexOf('ready') < readyAt && readyAt < probeAt && probeAt < events.indexOf('done') &&
+        (!retryCompleted || readyAt < completedAt && completedAt < probeAt), 'retry_event_order');
+    }
     let wire;
     if (graceful) {
       await client.finish(); await relay.waitClosed();
@@ -438,6 +513,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       negotiated: client.negotiated(), probe: first, immutableRepeatedProbe, wire: wire ?? null,
       topology: 'two-leg-recording-relay-not-migration', clientConnections: 1, serverConnections: 1,
       fragmentPrefix: scenario.startsWith('partial-') ? prefix : null, fixtureGracefulShutdown: done.graceful,
+      ...(retryLifecycle ? { retryLifecycle } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {
     if (owned.signal.aborted) throw owned.signal.reason;

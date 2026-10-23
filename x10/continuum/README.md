@@ -79,7 +79,7 @@ TLS binary или native NGINX integration.
 ## C2a: read-only probe закреплённого OpenSSL
 
 Новый [C2a probe](C2A-PROFILE.md) наблюдает private state отдельной pinned-source
-сборки OpenSSL 3.0.13. Восемь реальных TLS scenarios прошли локально: quiescent,
+сборки OpenSSL 3.0.13. В исходном checkpoint восемь реальных TLS scenarios прошли: quiescent,
 partial header/body, unread plaintext, empty read retry, write backpressure,
 queued и completed server KeyUpdate. Начальная quiescent metadata разрешена;
 остальные состояния отклонены. Completed KeyUpdate подтверждён wire oracle,
@@ -90,6 +90,14 @@ queued и completed server KeyUpdate. Начальная quiescent metadata ра
 по identity. Это read-only observation, а не полный inventory, допуск traffic,
 semantic export/import или миграция. Следующий task расширяет inventory и
 контрпримеры перед C2b. Hosted C2a требует результата именно implementation SHA.
+
+Текущий набор дополнен `completed-read-retry` и `unrelated-write-read-retry`:
+реальный WANT_READ завершается исходным READ, а посторонний WRITE success не
+снимает эту caller obligation. Отдельные progress events и bounded ACKs
+исключают подмену завершения чтения последующим echo. [Retry evidence](../evidence/continuum-c2a-retry.json)
+учитывает 10-case набор и отдельные controls; прежний hosted checkpoint не
+принимает новый код автоматически. Полнота состояния и перенос не следуют
+из этих двух новых проверок.
 
 ## Проверяемая гипотеза переноса
 

@@ -247,21 +247,23 @@ int main(int argc, char **argv)
     const char *runtime_version = OpenSSL_version(OPENSSL_VERSION);
     const char *scenarios[] = {"quiescent", "partial-header", "partial-body",
         "unread-plaintext", "empty-read-retry", "write-backpressure", "queued-key-update",
-        "completed-key-update"};
+        "completed-key-update", "completed-read-retry", "unrelated-write-read-retry"};
     SSL_CTX *ctx = NULL;
     PEER peer;
     X10_PROBE_RESULT first, second;
     struct sockaddr_in address;
     struct sigaction action;
     socklen_t address_len = sizeof(address);
-    unsigned char challenge[16] = {0}, *payload = NULL, trailer = 0;
+    unsigned char challenge[16] = {0}, *payload = NULL, *outbound = NULL, trailer = 0;
+    void *retry_buffer = NULL;
     unsigned char pressure[16384];
     const unsigned char *selected = NULL;
     unsigned int selected_len = 0;
     unsigned long parsed = 0;
-    size_t i, wanted = 0, total = 0, pressure_total = 0;
+    size_t i, wanted = 0, total = 0, pressure_total = 0, retry_size = 0;
     int listener = -1, status = 1, known = 0, size = 4096;
     int quiescent, unread, partial, pressure_case, ku, empty, completed_ku, exchange;
+    int completed_read, unrelated_write, allowed_case;
     int64_t deadline;
 
     memset(&peer, 0, sizeof(peer)); peer.fd = -1;
@@ -309,7 +311,10 @@ int main(int argc, char **argv)
     ku = !strcmp(scenario, "queued-key-update");
     empty = !strcmp(scenario, "empty-read-retry");
     completed_ku = !strcmp(scenario, "completed-key-update");
-    exchange = quiescent || completed_ku;
+    completed_read = !strcmp(scenario, "completed-read-retry");
+    unrelated_write = !strcmp(scenario, "unrelated-write-read-retry");
+    allowed_case = quiescent || completed_read;
+    exchange = allowed_case || completed_ku;
     if (unread && wanted < 2) goto done;
 
     failure = "configuration";
@@ -375,6 +380,56 @@ int main(int argc, char **argv)
     if (!payload) goto done;
 
     failure = "scenario_unreached";
+    if (completed_read || unrelated_write) {
+        /* The orchestrator withholds all application bytes until this real
+         * empty read reports WANT_READ. Keep the original read arguments;
+         * enum equality in the fixture ledger is not an argument fence. */
+        retry_buffer = payload; retry_size = wanted;
+        if (invoke(&peer, X10_CALL_READ, retry_buffer, retry_size)
+            || peer.error != SSL_ERROR_WANT_READ || peer.amount != 0
+            || peer.ledger.last_call != X10_CALL_READ
+            || peer.ledger.last_outcome != X10_OUTCOME_WANT_READ
+            || peer.ledger.retry_call != X10_CALL_READ
+            || SSL_pending(peer.ssl) != 0) goto done;
+        printf("{\"event\":\"retry-ready\",\"scenario\":\"%s\",\"call\":%d,"
+            "\"outcome\":%d,\"retryCall\":%d,\"applicationBytesRead\":%zu,"
+            "\"sslPending\":%d}\n", scenario, (int) peer.ledger.last_call,
+            (int) peer.ledger.last_outcome, (int) peer.ledger.retry_call,
+            peer.amount, SSL_pending(peer.ssl));
+        if (completed_read) {
+            if (retry_buffer != payload || retry_size != wanted
+                || !complete(&peer, X10_CALL_READ, payload, wanted, deadline)
+                || !peer.amount || peer.amount > wanted
+                || peer.ledger.last_call != X10_CALL_READ
+                || peer.ledger.last_outcome != X10_OUTCOME_SUCCESS
+                || peer.ledger.retry_call != X10_CALL_NONE) goto done;
+            total = peer.amount;
+            /* Record this immediately: an echo write cannot be mistaken for
+             * the successful operation that cleared the original read retry. */
+            printf("{\"event\":\"retry-completed\",\"scenario\":\"%s\",\"call\":%d,"
+                "\"outcome\":%d,\"retryCall\":%d,\"applicationBytesRead\":%zu,"
+                "\"sslPending\":%d,\"sameReadArguments\":%s}\n", scenario,
+                (int) peer.ledger.last_call, (int) peer.ledger.last_outcome,
+                (int) peer.ledger.retry_call, peer.amount, SSL_pending(peer.ssl),
+                retry_buffer == payload && retry_size == wanted ? "true" : "false");
+            /* A separate bounded control ACK prevents stdout/TCP delivery
+             * ordering from weakening the before-echo observation. */
+            failure = "retry_completion_step";
+            if (!step(deadline)) goto done;
+            failure = "scenario_unreached";
+        } else {
+            /* Keep the pending read buffer separate and untouched. Successful
+             * unrelated output must leave the original READ retry outstanding. */
+            outbound = OPENSSL_malloc(wanted);
+            if (!outbound) goto done;
+            for (i = 0; i < wanted; i++)
+                outbound[i] = (unsigned char) (((i * 29 + 7) & 255) ^ challenge[i % 16]);
+            if (!complete(&peer, X10_CALL_WRITE, outbound, wanted, deadline)
+                || peer.amount != wanted || peer.ledger.last_call != X10_CALL_WRITE
+                || peer.ledger.last_outcome != X10_OUTCOME_SUCCESS
+                || peer.ledger.retry_call != X10_CALL_READ) goto done;
+        }
+    }
     if (exchange) {
         while (total < wanted) {
             if (!complete(&peer, X10_CALL_READ, payload + total, wanted - total, deadline)
@@ -415,7 +470,7 @@ int main(int argc, char **argv)
     if (!observe(&peer, &first)) goto done;
     emit_probe(scenario, 1, &peer, &first);
     if (exchange) {
-        if (quiescent && (!first.allowed || first.reasons != 0)) goto done;
+        if (allowed_case && (!first.allowed || first.reasons != 0)) goto done;
         if (completed_ku && (first.allowed || !(first.reasons & X10_REASON_GENERATION)
             || first.read_generation != 0 || first.write_generation != 1
             || first.mutation_serial != 3 || first.key_update != SSL_KEY_UPDATE_NONE
@@ -444,21 +499,34 @@ int main(int argc, char **argv)
             || !(first.packet_length || first.rbuf_left))) goto done;
         if (unread && (!(first.reasons & X10_REASON_READ_RECORD) || !first.unread_record_bytes)) goto done;
         if (empty && !(first.reasons & X10_REASON_RETRY)) goto done;
+        if (unrelated_write && (first.reasons != X10_REASON_RETRY
+            || first.ledger_last_call != X10_CALL_WRITE
+            || first.ledger_last_outcome != X10_OUTCOME_SUCCESS
+            || first.ledger_retry_call != X10_CALL_READ
+            || SSL_pending(peer.ssl) != 0 || SSL_has_pending(peer.ssl))) goto done;
         if (ku && !(first.reasons & X10_REASON_KEY_UPDATE)) goto done;
         if (pressure_case && (!(first.reasons & X10_REASON_RETRY)
             || !(first.reasons & (X10_REASON_WRITE_BUFFER | X10_REASON_WRITE_CALL))
             || !(first.wbuf_left || first.wnum))) goto done;
+        if (unrelated_write) {
+            /* Wait for the peer's exact plaintext receipt before raw teardown;
+             * stdout/TCP/EOF scheduling must not decide the negative result. */
+            failure = "unrelated_write_receipt_step";
+            if (!step(deadline)) goto done;
+            failure = "probe";
+        }
     }
     if (interrupted || now_ms() >= deadline) goto done;
     printf("{\"event\":\"done\",\"scenario\":\"%s\",\"observed\":true,\"allowed\":%s,"
         "\"graceful\":%s,\"applicationBytesRead\":%zu,\"applicationBytesWritten\":%zu,"
-        "\"pressureBytesCompleted\":%zu}\n", scenario, quiescent ? "true" : "false",
+        "\"pressureBytesCompleted\":%zu}\n", scenario, allowed_case ? "true" : "false",
         exchange ? "true" : "false", exchange ? total : (unread ? (size_t) 1 : (size_t) 0),
-        exchange ? wanted : (size_t) 0, pressure_total);
+        exchange || unrelated_write ? wanted : (size_t) 0, pressure_total);
     status = 0;
 done:
     alarm(0);
     if (payload) OPENSSL_clear_free(payload, wanted);
+    if (outbound) OPENSSL_clear_free(outbound, wanted);
     OPENSSL_cleanse(challenge, sizeof(challenge)); OPENSSL_cleanse(pressure, sizeof(pressure));
     OPENSSL_cleanse(&trailer, sizeof(trailer));
     SSL_free(peer.ssl); SSL_CTX_free(ctx);

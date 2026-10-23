@@ -30,6 +30,43 @@ test('completed real server KeyUpdate advances monitored generation and refuses 
   assert.equal(result.fixtureGracefulShutdown, true);
 });
 
+test('the same real read retry completes before echo and clears its outstanding obligation', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'completed-read-retry' });
+  assert.equal(result.retryLifecycle.clientApplicationWritesBeforeRetry, 0);
+  assert.equal(result.retryLifecycle.ready.outcome, 2);
+  assert.equal(result.retryLifecycle.ready.retryCall, 2);
+  assert.equal(result.retryLifecycle.ready.applicationBytesRead, 0);
+  assert.equal(result.retryLifecycle.completed.call, 2);
+  assert.equal(result.retryLifecycle.completed.outcome, 1);
+  assert.equal(result.retryLifecycle.completed.retryCall, 0);
+  assert.equal(result.retryLifecycle.completed.sameReadArguments, true);
+  assert.equal(result.probe.allowed, true);
+  assert.equal(result.probe.reasons, '0');
+  assert.equal(result.probe.ledgerRetryCall, 0);
+  assert.equal(result.immutableRepeatedProbe, true);
+  assert.equal(result.wire.passed, true);
+  assert.equal(result.fixtureGracefulShutdown, true);
+  assert.equal(result.migration, false);
+});
+
+test('a successful unrelated write preserves the outstanding real read retry', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'unrelated-write-read-retry' });
+  assert.equal(result.retryLifecycle.clientApplicationWritesBeforeRetry, 0);
+  assert.equal(result.retryLifecycle.ready.outcome, 2);
+  assert.equal(result.retryLifecycle.ready.retryCall, 2);
+  assert.equal(result.retryLifecycle.completed, null);
+  assert.equal(result.probe.allowed, false);
+  assert.equal(result.probe.reasons, '16');
+  assert.equal(result.probe.ledgerLastCall, 3);
+  assert.equal(result.probe.ledgerLastOutcome, 1);
+  assert.equal(result.probe.ledgerRetryCall, 2);
+  assert.equal(result.probe.sslPending, 0);
+  assert.equal(result.probe.sslHasPending, false);
+  assert.equal(result.fixtureGracefulShutdown, false);
+  assert.equal(result.wire, null);
+  assert.equal(result.migration, false);
+});
+
 for (const scenario of ['partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update']) {
   test(`real TLS private ${scenario} state refuses the read-only safepoint`, { timeout: 30000 }, async () => {
     const result = await runProbeScenario({ scenario });

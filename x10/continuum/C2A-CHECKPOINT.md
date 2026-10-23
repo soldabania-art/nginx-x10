@@ -85,3 +85,35 @@ Per-file receipt ledger (SHA256):
 
 Coordinator checked exact source identity and completed workflow/job results;
 raw hosted logs, host paths, PIDs and session material are not published.
+
+## Read retry lifecycle checkpoint
+
+The former pending format-successor native runs39995200740 /39995212470
+for624f70fa1b5061c5be65759eed5a45a4d56a4af7 completed success, confirmed
+before starting this bounded implementation task.
+
+Two new actual TLS cases extend the initial8 to10. Coordinator aggregate
+passes10/10 on final runnerc43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3,
+with no skips/failures/cancellations/TODO. A real pending READ completes before
+echo, while an unrelated successful WRITE leaves the READ obligation recorded
+and produces exact RETRY16 refusal. Trusted fixture discipline is not a general
+argument-identity or I/O ownership fence.
+
+[Retry evidence](../evidence/continuum-c2a-retry.json) separates four exact-source
+held-out TLS cases, one actual-TLS private-mutant sensitivity check, four
+no-build diagnostic controls, and two non-TLS unsupported-API baseline checks.
+The first build-hook attempt failed before any TLS case; its cause remains
+unknown. Subsequent pinned builds and the final runtime aggregate passed.
+Only28 fixed build-stage codes can now pass through the runner's dependency
+error path; arbitrary codes/messages remain generic.
+
+Native source is unchanged. A fresh identified checkout build passed20/20
+aggregate groups; its binary is not claimed identical to the prior checkout.
+C0 core21/process7 and C1 tests22 passed separately. Source/build identities,
+cleanup boundaries and per-file changes are recorded in the evidence and
+[retry ledger](../review/continuum-c2a-retry-ledger.json).
+
+Hosted verification of this new retry implementation is pending its exact
+publication SHA; old runtime/metadata CI does not accept it. After that gate,
+peer/read KeyUpdate, WRITE retry completion and remaining control/shutdown/
+usage-limit/cancellation inventory precede any C2b export/import work.

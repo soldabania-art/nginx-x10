@@ -118,3 +118,11 @@ Research push/PR exact C2a SHA `99a017e` прошли; native и format-policy
 Далее закрыть peer/read KeyUpdate,
 retry/control/shutdown inventory и runtime cancellation. C2b semantic capsule
 не начинается с предположения о полноте одного положительного probe.
+
+Текущий bounded срез добавляет реальные `completed-read-retry` и
+`unrelated-write-read-retry`: завершение исходного READ до echo и сохранение
+его retry при постороннем WRITE success. [Retry evidence](evidence/continuum-c2a-retry.json)
+отделяет coverage baseline, 10-case aggregate, независимые held-out cases,
+диагностические controls и первый отказ build hook. Далее — peer/read
+KeyUpdate, завершение write retry и остальные control/shutdown/limit obligations.
+Экспорт/import и opt-in native integration требуют своих последующих gates.

@@ -1,6 +1,7 @@
 # C2a: профиль read-only OpenSSL probe
 
-Профиль замороженных build/probe/runner. Владелец runtime подтвердил локально
+Первоначальный профиль build/probe/runner implementation `99a017e`.
+Владелец runtime подтвердил локально
 **8/8 PASS**, exit 0, без skips; 81,75 секунды вместе с одним свежим build.
 Hosted research push/PR implementation `99a017e` завершились success;
 оба подтвердили 21 core, 7 process, 22 C1 и 8 C2a без skips/failures.
@@ -106,7 +107,7 @@ plaintext/ciphertext captures, private fixture paths и raw failure assertions
 
 ## Приёмка и CI
 
-Все восемь случаев достигнуты в настоящих TLS connections, а не выставлением
+Первоначальные восемь случаев достигнуты в настоящих TLS connections, а не выставлением
 private flags. CA/hostname проверяет Node TLS client; record observation
 использует C1 oracle с теми же границами PKI/Finished MAC, описанными в README.
 
@@ -125,6 +126,80 @@ private flags. CA/hostname проверяет Node TLS client; record observatio
 initial-generation profile, а не перенос KeyUpdate state. Negative fixtures с
 неполным I/O не объявляют graceful TLS closure; teardown проверяется отдельно.
 Probe не выдаёт traffic grant и не устанавливает usage-limit admission policy.
+
+### Дополнение: lifecycle незавершённого чтения
+
+Два новых сценария расширяют проверку существующего typed ledger contract.
+Они не исправляют ранее доказанный defect ledger: правило сохранения чужого
+retry и снятия своего retry уже присутствовало в `invoke`. Владелец runtime
+получил **10/10 PASS**, exit 0, без skips/cancellations/TODO, за 80,98 секунды
+с одним свежим pinned build. Это первый полный author run новых случаев;
+финальный coordinator aggregate на окончательных исходниках также прошёл
+**10/10**, exit 0, без skips/cancellations/TODO. Независимые четыре held-out
+TLS cases на точных окончательных исходниках также прошли, exit 0.
+Hosted приёмка нового implementation SHA пока не получена.
+Прежние 8/8 и hosted `99a017e` не принимают новый код автоматически.
+
+Первая попытка нового набора остановилась в before hook с
+`probe_build_failed`: TLS runtime cases не выполнялись. Причина исходного
+build failure не установлена; последующая отдельная свежая сборка тем же
+builder прошла с cleanup. Этот отказ не объявляется дефектом TLS и сохраняется
+отдельно в evidence координатора. Дополнительная static build-stage диагностика
+проверяется отдельно от реальных TLS cases, без публикации raw compiler logs.
+
+Held-out положительные payloads 33 371 и 53 419 bytes подтвердили промежуточный
+READ success/retry NONE на первых 16 384 bytes и последующий полный echo;
+финальные next sequences совпали с wire 3/3 и 4/4, TLS closure нормальное.
+Отрицательные payloads 2 293 и 49 807 bytes дали ровно RETRY `16` при WRITE
+success и сохранённом READ retry; Node действительно получил payload до ACK
+и raw close. Эти четыре дополнительных запуска не прибавляются к 10 тестам
+aggregate как новые виды возможностей. Временные build/binary/PKI roots
+независимого запуска удалены; исходные implementation files не изменены.
+
+Отдельный sensitivity control на частной C-mutant копии намеренно стирал
+retry после любого success. После настоящего handshake, WANT_READ и успешной
+записи 1 379 bytes READ retry ошибочно стал NONE; guard fixture остановил
+сценарий, а runner вернул `native_early_exit`. Это один отдельный actual TLS
+контроль чувствительности caller contract, не пятый held-out case точного
+кандидата и не доказательство защиты probe от лживого ledger.
+Первоначальный implementation такой ошибки не имел. Четыре private no-build
+контроля фиксированной build-error allowlist прошли отдельно; это не TLS tests.
+
+| Новый runtime case | Проверяемая последовательность |
+| --- | --- |
+| `completed-read-retry` | Настоящий `SSL_read_ex` сначала получает WANT_READ при отсутствии application bytes; только после `retry-ready` клиент отправляет payload. Первый успешный retry использует исходные buffer pointer и length, а fixture проверяет READ success и снятый retry до следующих операций. Затем проверяются полный echo, повторные probe metadata, wire sequences и нормальное TLS closure. |
+| `unrelated-write-read-retry` | После фактического WANT_READ выполняется успешный `SSL_write_ex` с отдельным outbound buffer. READ retry остаётся незавершённым при последнем WRITE success; probe должен отказать по RETRY (`16`). Node проверяет точный полученный plaintext перед bounded ACK, разрешающим raw teardown. Последующее чтение для искусственного снятия обязанности не выполняется. |
+
+Фиксированное событие `retry-ready` содержит только scenario, call/outcome/
+retryCall enums и нулевые applicationBytesRead/sslPending. Оно выдаётся после
+проверки реального результата OpenSSL, а не заменяет его. Node runner должен
+проверить эти поля и задержать клиентские application bytes в положительном
+сценарии; отрицательный не отправляет их вообще.
+
+В положительном случае отдельное `retry-completed` фиксирует READ success,
+retry NONE, число прочитанных bytes и `sameReadArguments=true` до нового
+READ/WRITE. Fixture ждёт второй bounded STEP ACK перед последующими reads
+и echo. Сравнение исходных аргументов выполняет доверенный C fixture;
+сам enum `retry_call` не является проверкой buffer arguments или их ownership.
+Отдельный ACK в отрицательном случае отделяет stdout probe от доставки
+application bytes и raw EOF; он не объявляет такой teardown graceful TLS close.
+
+Один успешный READ может вернуть только первый record. Оставшийся payload
+допускает последующие обычные reads; профиль fixture при этом завершает
+исходный retry тем же buffer/length. Это дисциплина данного fixture, а не
+заявление об общем требовании OpenSSL к аргументам retry чтения.
+Negative fixture намеренно закрывает
+transport без утверждения о graceful TLS close или полном wire transcript.
+Успешная запись сама по себе не устраняет ранее возникшую обязанность чтения,
+даже если public pending getters не показывают application data.
+Это отказ по caller contract fixture, а не дефект публичных getters или
+доказательство скрытого ciphertext в данном quiescent private state.
+
+Это не поддержка переноса pending read, write retry completion, peer/read
+KeyUpdate, полного control/alert/shutdown inventory или runtime cancellation.
+Ни один новый сценарий не меняет TLS code version, I/O owner или соединение.
+Публичные evidence и hosted результат нового implementation SHA фиксирует
+координатор отдельно.
 
 Aggregate entry point — `node x10/continuum/openssl-probe-check.mjs`.
 Wrapper ограничен 650 секундами и 512 KiB суммарного child output, test process —

@@ -581,3 +581,37 @@ C/probe/patch bytes сохранены; в частную JS-копию доба
 control/alert/shutdown, usage-limit admission и actual TLS-runtime interruption.
 Semantic export/import, разные TLS code releases и native integration ещё
 не реализованы. Коммерческая модель и бюджет сохранены без новых покупок.
+
+## Continuum C2a: lifecycle незавершённого чтения
+
+Добавлены два настоящих TLS cases в C fixture и Node runner. В
+`completed-read-retry` клиент ждёт фактический WANT_READ, затем отправляет
+данные. Отдельное событие фиксирует READ success и снятие retry до echo;
+после bounded ACK проверяются остаток payload, wire sequences и TLS close.
+В `unrelated-write-read-retry` успешная запись с отдельным буфером сохраняет
+первоначальный READ retry. Probe отказывает по RETRY (`16`) даже при нулевых
+public pending getters и последнем успешном WRITE. Отрицательный fixture
+закрывается после подтверждённого получения payload, без graceful-close claim.
+
+Это проверка существующего caller-ledger контракта, а не исправление
+доказанной ошибки OpenSSL. Одинаковые READ pointer/length — дисциплина этого
+доверенного fixture; enum ledger не обеспечивает argument identity или lock.
+Финальный aggregate координатора прошёл 10/10 TLS scenarios, exit 0, без
+skips/cancellations/TODO. Независимо пройдены четыре held-out TLS cases и
+одна отдельная проверка чувствительности с намеренно неверным private ledger.
+Точные executed counts,
+source/build identities, независимые controls и неблагоприятный первый
+build-hook результат сохранены в [retry evidence](evidence/continuum-c2a-retry.json).
+Новый hosted результат относится к implementation SHA отдельно.
+
+Для диагностики сборки runner передаёт только 28 явно разрешённых кодов этапа;
+неизвестные значения и сообщения остаются generic. Четыре private controls
+отделены от реального TLS. Первый build hook отказал до всех TLS cases;
+его причина неизвестна, последующая неизменённая pinned сборка прошла.
+
+Свежая native сборка и official aggregate прошли 20/20 групп. Native C source
+сохранён; новый checkout/prefix имеет отдельный binary hash, совпадение с
+прежним бинарником не заявляется. [Native evidence](evidence/continuum-c2a-retry-native-regression.json)
+сохраняет 1083 strict PASS, 25 SKIP, 1 expected TODO и 0 strict FAIL.
+Peer/read KeyUpdate, write retry completion, control/shutdown/usage limits,
+TLS-runtime cancellation и semantic export/import остаются следующими работами.

@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-retry-20261023T182702Z",
-    "owner": "root-retry-coordinator",
-    "baseCommit": "3d7d74fc6d34ebb2a85d5ba76b5aeec5f32997b4",
-    "acquiredAtUTC": "2026-10-23T18:27:02.877Z",
-    "expiresAtUTC": "2026-10-23T19:12:02.877Z",
-    "coordinationOnly": true
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -29,10 +22,10 @@
   },
   "acceptedCheckpoint": {
     "nativeCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/39985217372",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/39994034390",
     "continuumStage": "C2a narrow pinned OpenSSL read-only observation accepted locally and research hosted; full inventory/export-import pending",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-c1.json",
+    "continuumEvidence": "x10/evidence/continuum-c2a.json",
     "nativeHostedCI": {
       "state": "success",
       "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
@@ -158,11 +151,40 @@
         "researchJobID": 120556933469
       },
       "originalRuntimeAcceptance": "99a017e64b33eda537ea0fc19db623984fa2dd9e"
+    },
+    "formatSuccessorNativeCI": {
+      "implementationCommit": "624f70fa1b5061c5be65759eed5a45a4d56a4af7",
+      "state": "success",
+      "pushRun": 39995200740,
+      "pullRequestRun": 39995212470,
+      "verifiedAtUTC": "2026-10-23T18:42:00.866Z"
+    },
+    "c2aRetryLocal": {
+      "state": "success-local-pending-hosted",
+      "tests": 10,
+      "skipped": 0,
+      "scope": "Actual read retry completion and unrelated successful write preserving a READ obligation; existing ledger contract, no migration.",
+      "evidence": "x10/evidence/continuum-c2a-retry.json",
+      "finalRunnerSha256": "c43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3",
+      "fixtureSha256": "7754dc56122bf46f4d80d7c6d5fa9d5b472f0c7a2d45eb88757e599fe0d369cf",
+      "independentExactSourceTLSControls": 4,
+      "diagnosticControls": 4,
+      "fullInventoryAccepted": false,
+      "semanticExportImport": false,
+      "nativeNginxIntegration": false
+    },
+    "c2aRetryNativeLocal": {
+      "state": "success",
+      "groups": 20,
+      "sourceBaselineCommit": "3d7d74fc6d34ebb2a85d5ba76b5aeec5f32997b4",
+      "freshCheckoutBinarySha256": "5daf222464cf97145f82ae848123f65f7e627bfb626db0e267bfd6147134562f",
+      "earlierCheckoutBinaryIdentityClaimed": false,
+      "evidence": "x10/evidence/continuum-c2a-retry-native-regression.json"
     }
   },
   "pendingVerification": [
-    "Unchanged-source format successor624f70fa1b5061c5be65759eed5a45a4d56a4af7 native push39995200740/PR39995212470 last observed in_progress; accept only completed success. Original full native99a017e already accepted. Coordination-only descendants are not new runtime acceptance.",
-    "C2a extended inventory: peer-requested/read KeyUpdate, retry completion and unrelated success, control/alert/shutdown, sequence/key usage admission and actual TLS-runtime interruption cleanup.",
+    "Read hosted research/native workflows for the exact first implementation SHA introducing continuum-c2a-retry.json; record SHA/run IDs after publication and accept only completed success.",
+    "C2a remaining inventory: peer-requested/read KeyUpdate, same-operation WRITE retry completion, overlapping retry obligations, control/alert/shutdown, sequence/key usage admission and actual TLS-runtime interruption cleanup.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
     "First scheduled cloud development run has not been independently verified by recorded run history."
@@ -181,7 +203,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "First pinned-source read-only observation profile implemented with8 real TLS tests; accept exact hosted SHA, extend peer/read KeyUpdate, retry/control/shutdown/limits/cancellation inventory before reviewed C2b semantic export/import. Narrow allowed is not traffic grant or completeness."
+      "goal": "Initial8 and new2 actual TLS read-retry lifecycle cases are implemented and locally verified; accept exact hosted implementation SHA, then peer/read KeyUpdate, WRITE retry/control/shutdown/limits/cancellation inventory before C2b. Caller ledger is trusted, not an argument or ownership fence."
     },
     {
       "id": "C3",
@@ -277,11 +299,13 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
-    "runId": "continuum-c2a-receipt-20261023T172920Z",
-    "baseCommit": "624f70fa1b5061c5be65759eed5a45a4d56a4af7",
-    "publicationParent": "d3cd87ed4234c48533151109677eb108bce1f062",
-    "result": "Recorded exact successful implementation research/native and patch-policy hosted runs; unchanged-source successor native runs remain pending.",
-    "perFileLedger": "x10/continuum/C2A-CHECKPOINT.md#ci-receipt",
-    "spendingUSD": 0
+    "runId": "continuum-retry-20261023T182702Z",
+    "baseCommit": "3d7d74fc6d34ebb2a85d5ba76b5aeec5f32997b4",
+    "publicationParent": "a438d472bd89e2a258fbc6b53ed11438c1d8f0c4",
+    "result": "Two real TLS retry lifecycle cases plus bounded static build diagnostics; root10/10, independent exact-source4 cases, C0/C1/native regressions passed. Full state inventory/export-import remain pending.",
+    "helpers": "5 temporary delegated roles available; only coordinator publishes",
+    "nativeSourceChanged": false,
+    "spendingUSD": 0,
+    "perFileLedger": "x10/review/continuum-c2a-retry-ledger.json"
   }
 }

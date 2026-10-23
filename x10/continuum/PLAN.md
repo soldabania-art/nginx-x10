@@ -255,10 +255,13 @@ keys/завершённого server KeyUpdate, private buffers и typed retry l
 [C2A-CHECKPOINT](C2A-CHECKPOINT.md).
 
 Следующий bounded task — закрыть **C2a extended inventory**: peer-requested
-KeyUpdate/read-key generation, завершение outstanding retry той же операцией
-и сохранение его при постороннем success, control/alert/shutdown states,
-sequence/key usage limits и TLS-runtime interruption cleanup. Сначала закрыть
-оставшийся format-policy CI этого checkpoint. Неизвестные состояния не получают traffic grant.
+KeyUpdate/read-key generation, завершение outstanding write retry,
+control/alert/shutdown states, sequence/key usage limits и TLS-runtime
+interruption cleanup. Format-policy и прежние отложенные native runs завершены.
+READ retry completion и сохранение READ retry при постороннем WRITE теперь
+имеют отдельные actual TLS cases; [retry evidence](../evidence/continuum-c2a-retry.json)
+фиксирует новый implementation scope и pending hosted verification.
+Неизвестные состояния не получают traffic grant.
 Полнота inventory ещё не принята; решение о первом C2b exporter/importer
 принимается после review этого gate. Public session APIs его не подменяют.
 
