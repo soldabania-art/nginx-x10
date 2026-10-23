@@ -225,3 +225,22 @@ Per-file receipt ledger (SHA256):
 
 Only fixed facts, counts and workflow/job IDs are published here; no raw
 logs, host paths, process IDs, PKI or session material.
+
+## Peer-requested KeyUpdate local checkpoint
+
+New frozen sources passed canonical15/15, no failure/skip/cancellation/TODO:
+12 ordinary actual-TLS scenarios,2 handled-runtime signals,1 no-TLS source
+control. Four independently selected actual-TLS heldouts passed. Pending
+snapshots1/0 serial3 reasons32832 retain queued response before any WRITE;
+completed1/1 serial4 reasons64 follow real echo WRITE, with exact new-key
+payload, both close_notify and FIN. Updated generations remain refused.
+Two new C endpoints share pinned OpenSSL3.0.13; observer does not independently
+validate PKI or Finished MAC. No export/import or code migration is implemented.
+
+C0 core21/process7, C1 tests27=18 synthetic controls+9 runtime checks and
+native20/20 passed. Official1083 strictPASS/25SKIP/1expectedTODO/0FAIL.
+Exact identities, source-driven plan correction, reporter observation and
+remaining gates are preserved in [peer evidence](../evidence/continuum-c2a-peer-key-update.json)
+and [native evidence](../evidence/continuum-c2a-peer-key-update-native-regression.json).
+The previous85bc255 hosted receipt remains accepted separately. New exact
+implementation SHA/run IDs are pending after publication. No new spending.

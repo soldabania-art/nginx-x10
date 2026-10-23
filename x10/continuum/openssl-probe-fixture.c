@@ -247,7 +247,8 @@ int main(int argc, char **argv)
     const char *runtime_version = OpenSSL_version(OPENSSL_VERSION);
     const char *scenarios[] = {"quiescent", "partial-header", "partial-body",
         "unread-plaintext", "empty-read-retry", "write-backpressure", "queued-key-update",
-        "completed-key-update", "completed-read-retry", "unrelated-write-read-retry"};
+        "completed-key-update", "completed-read-retry", "unrelated-write-read-retry",
+        "peer-key-update-pending", "peer-key-update-completed"};
     SSL_CTX *ctx = NULL;
     PEER peer;
     X10_PROBE_RESULT first, second;
@@ -264,6 +265,7 @@ int main(int argc, char **argv)
     int listener = -1, status = 1, known = 0, size = 4096;
     int quiescent, unread, partial, pressure_case, ku, empty, completed_ku, exchange;
     int completed_read, unrelated_write, allowed_case;
+    int peer_ku, peer_ku_pending, peer_ku_completed;
     int64_t deadline;
 
     memset(&peer, 0, sizeof(peer)); peer.fd = -1;
@@ -313,8 +315,11 @@ int main(int argc, char **argv)
     completed_ku = !strcmp(scenario, "completed-key-update");
     completed_read = !strcmp(scenario, "completed-read-retry");
     unrelated_write = !strcmp(scenario, "unrelated-write-read-retry");
+    peer_ku_pending = !strcmp(scenario, "peer-key-update-pending");
+    peer_ku_completed = !strcmp(scenario, "peer-key-update-completed");
+    peer_ku = peer_ku_pending || peer_ku_completed;
     allowed_case = quiescent || completed_read;
-    exchange = allowed_case || completed_ku;
+    exchange = allowed_case || completed_ku || peer_ku_completed;
     if (unread && wanted < 2) goto done;
 
     failure = "configuration";
@@ -430,7 +435,7 @@ int main(int argc, char **argv)
                 || peer.ledger.retry_call != X10_CALL_READ) goto done;
         }
     }
-    if (exchange) {
+    if (exchange || peer_ku) {
         while (total < wanted) {
             if (!complete(&peer, X10_CALL_READ, payload + total, wanted - total, deadline)
                 || !peer.amount || peer.amount > wanted - total) goto done;
@@ -438,10 +443,40 @@ int main(int argc, char **argv)
         }
         for (i = 0; i < wanted; i++)
             if (payload[i] != (unsigned char) (((i * 29 + 7) & 255) ^ challenge[i % 16])) goto done;
+        if (peer_ku) {
+            /* The peer requested this update on the wire. No server control,
+             * handshake or write call precedes this successful READ snapshot.
+             * The pinned tls_process_key_update installs read keys and queues
+             * a NOT_REQUESTED response; it does not send that response here. */
+            if (!observe(&peer, &first) || first.allowed
+                || first.reasons != (X10_REASON_GENERATION | X10_REASON_KEY_UPDATE)
+                || !first.monitor_known || first.read_generation != 1
+                || first.write_generation != 0 || first.mutation_serial != 3
+                || first.key_update != SSL_KEY_UPDATE_NOT_REQUESTED
+                || first.ledger_last_call != X10_CALL_READ
+                || first.ledger_last_outcome != X10_OUTCOME_SUCCESS
+                || first.ledger_retry_call != X10_CALL_NONE
+                || SSL_pending(peer.ssl) != 0 || SSL_has_pending(peer.ssl)) goto done;
+            printf("{\"event\":\"peer-update-received\",\"scenario\":\"%s\",\"call\":%d,"
+                "\"outcome\":%d,\"retryCall\":%d,\"applicationBytesRead\":%zu,"
+                "\"sslPending\":%d,\"keyUpdate\":%d,\"readGeneration\":\"%" PRIu64 "\","
+                "\"writeGeneration\":\"%" PRIu64 "\",\"mutationSerial\":\"%" PRIu64 "\"}\n",
+                scenario, (int) first.ledger_last_call,
+                (int) first.ledger_last_outcome, (int) first.ledger_retry_call,
+                total, SSL_pending(peer.ssl), first.key_update,
+                first.read_generation, first.write_generation, first.mutation_serial);
+            /* In this pin SSL_do_handshake alone does not re-enter init for
+             * an automatically queued peer response. The actual echo WRITE
+             * below takes ssl3_write_bytes' queued-control path, flushes the
+             * response, installs write keys, then sends application data. */
+        }
         if (completed_ku && (!invoke(&peer, X10_CALL_CONTROL, NULL, 0)
             || !complete(&peer, X10_CALL_HANDSHAKE, NULL, 0, deadline)
             || SSL_get_key_update_type(peer.ssl) != SSL_KEY_UPDATE_NONE)) goto done;
-        if (!complete(&peer, X10_CALL_WRITE, payload, wanted, deadline) || peer.amount != wanted) goto done;
+        if (exchange && (!complete(&peer, X10_CALL_WRITE, payload, wanted, deadline)
+            || peer.amount != wanted)) goto done;
+        if (peer_ku_completed
+            && SSL_get_key_update_type(peer.ssl) != SSL_KEY_UPDATE_NONE) goto done;
     } else if (unread) {
         if (!ready(peer.fd, POLLIN, deadline)
             || !complete(&peer, X10_CALL_READ, payload, 1, deadline)
@@ -477,6 +512,13 @@ int main(int argc, char **argv)
             || first.ledger_last_call != X10_CALL_WRITE
             || first.ledger_last_outcome != X10_OUTCOME_SUCCESS
             || first.ledger_retry_call != X10_CALL_NONE)) goto done;
+        if (peer_ku_completed && (first.allowed || first.reasons != X10_REASON_GENERATION
+            || !first.monitor_known || first.read_generation != 1
+            || first.write_generation != 1 || first.mutation_serial != 4
+            || first.key_update != SSL_KEY_UPDATE_NONE
+            || first.ledger_last_call != X10_CALL_WRITE
+            || first.ledger_last_outcome != X10_OUTCOME_SUCCESS
+            || first.ledger_retry_call != X10_CALL_NONE)) goto done;
         if (!observe(&peer, &second)) goto done;
         emit_probe(scenario, 2, &peer, &second);
         if (memcmp(&first, &second, sizeof(first))) goto done;
@@ -505,6 +547,23 @@ int main(int argc, char **argv)
             || first.ledger_retry_call != X10_CALL_READ
             || SSL_pending(peer.ssl) != 0 || SSL_has_pending(peer.ssl))) goto done;
         if (ku && !(first.reasons & X10_REASON_KEY_UPDATE)) goto done;
+        if (peer_ku_pending) {
+            if (first.reasons != (X10_REASON_GENERATION | X10_REASON_KEY_UPDATE)
+                || !first.monitor_known || first.read_generation != 1
+                || first.write_generation != 0 || first.mutation_serial != 3
+                || first.key_update != SSL_KEY_UPDATE_NOT_REQUESTED
+                || first.ledger_last_call != X10_CALL_READ
+                || first.ledger_last_outcome != X10_OUTCOME_SUCCESS
+                || first.ledger_retry_call != X10_CALL_NONE) goto done;
+            if (!observe(&peer, &second)) goto done;
+            emit_probe(scenario, 2, &peer, &second);
+            if (memcmp(&first, &second, sizeof(first))) goto done;
+            /* Both snapshots precede any outgoing TLS operation. Wait for
+             * the bounded receipt ACK before intentionally raw teardown. */
+            failure = "peer_key_update_pending_step";
+            if (!step(deadline)) goto done;
+            failure = "probe";
+        }
         if (pressure_case && (!(first.reasons & X10_REASON_RETRY)
             || !(first.reasons & (X10_REASON_WRITE_BUFFER | X10_REASON_WRITE_CALL))
             || !(first.wbuf_left || first.wnum))) goto done;
@@ -520,7 +579,7 @@ int main(int argc, char **argv)
     printf("{\"event\":\"done\",\"scenario\":\"%s\",\"observed\":true,\"allowed\":%s,"
         "\"graceful\":%s,\"applicationBytesRead\":%zu,\"applicationBytesWritten\":%zu,"
         "\"pressureBytesCompleted\":%zu}\n", scenario, allowed_case ? "true" : "false",
-        exchange ? "true" : "false", exchange ? total : (unread ? (size_t) 1 : (size_t) 0),
+        exchange ? "true" : "false", exchange || peer_ku ? total : (unread ? (size_t) 1 : (size_t) 0),
         exchange || unrelated_write ? wanted : (size_t) 0, pressure_total);
     status = 0;
 done:

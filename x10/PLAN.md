@@ -133,3 +133,25 @@ no-TLS cached-source control. [Evidence](evidence/continuum-c2a-interruption.jso
 сохраняет независимые отказы при PKI debris и занятом relay listener, а также
 исходные ошибки самого стенда. Native C сохранён, свежая регрессия20/20.
 Приёмка exact hosted SHA ожидается; далее actual peer/read KeyUpdate inventory.
+
+## Continuum C2a: входящий KeyUpdate
+
+Добавлены два настоящих TLS scenarios с C-клиентом на той же закреплённой
+OpenSSL3.0.13: REQUESTED update, READ generation и ожидающий ответ до WRITE;
+затем реальный echo WRITE отправляет queued response без повторного запроса.
+Probe неизменён: pending1/0 отказывает по32832, completed1/1 по64, повторное
+наблюдение не меняет state. Epoch-relative sequences сверены до close_notify.
+
+Финальный локальный aggregate —15/15:12 обычных TLS scenarios,2 handled
+runtime signals,1 no-TLS source control. Независимо пройдены4 held-out cases.
+C0 core21/process7, C1 **27=18 synthetic oracle controls+9 runtime checks**,
+native20/20 пройдены. Official1083 strict PASS/25SKIP/1expectedTODO/0FAIL.
+[Peer evidence](evidence/continuum-c2a-peer-key-update.json) сохраняет hashes, build identities и ограничения.
+Hosted85bc255 принят ранее; новый exact implementation SHA ожидает своей CI.
+
+Оба C endpoint используют одну OpenSSL3.0.13; две relay TCP legs не являются
+перенесённым соединением. Pending case закрывается raw; completed проверяет
+точные данные, оба close_notify и FIN. PKI/hostname и Finished проверяет C
+endpoint; observer не является независимым PKI/Finished verifier. Далее —
+WRITE retry completion, overlap/control/shutdown/usage limits, затем C2b.
+Semantic export/import, actual TLS-code update и native migration ещё не готовы.

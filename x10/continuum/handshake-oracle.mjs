@@ -128,7 +128,7 @@ function authenticated(state, wire) {
   try { return openRecord(state, wire); }
   catch { reject('oracle_authentication'); }
 }
-function direction(all, helloRecords, handshakeSecret, applicationSecret, expected, client, expectedUpdates, ownedStates) {
+function direction(all, helloRecords, handshakeSecret, applicationSecret, expected, client, expectedUpdates, requestedExchange, ownedStates) {
   let at = helloRecords, ccs = 0, handshakeRecords = 0, messages = 0, pending = Buffer.alloc(0);
   let hs = { trafficSecret: Buffer.from(handshakeSecret), epoch: 0n, sequence: 0n }; ownedStates.push(hs);
   const order = client ? [20] : [8, 11, 15, 20];
@@ -159,10 +159,14 @@ function direction(all, helloRecords, handshakeSecret, applicationSecret, expect
     }
     const preApplicationRecords = at;
     let app = { trafficSecret: Buffer.from(applicationSecret), epoch: 0n, sequence: 0n }; ownedStates.push(app);
-    let applicationBytes = 0, applicationRecords = 0, keyUpdates = 0, closed = false;
+    let applicationBytes = 0, applicationRecords = 0, keyUpdates = 0, postUpdateApplicationRecords = 0, closed = false;
+    let beforeCloseNotify;
     for (; at < all.length; at++) {
       if (closed) reject('oracle_trailing');
       const r = all[at]; if (r.type !== 23) reject('oracle_record');
+      // These counters are bounded by MAX_CAPTURE_RECORDS, so Number conversion
+      // is exact. Application-record totals do not reset with the traffic key.
+      const beforeRecord = { epoch: Number(app.epoch), nextSequence: Number(app.sequence) };
       const opened = authenticated(app, r.wire);
       try {
         app = advanceSequence(app); ownedStates.push(app);
@@ -170,20 +174,28 @@ function direction(all, helloRecords, handshakeSecret, applicationSecret, expect
           if (!opened.content.length || applicationBytes + opened.content.length > expected.length
             || !opened.content.equals(expected.subarray(applicationBytes, applicationBytes + opened.content.length))) reject('oracle_application');
           applicationBytes += opened.content.length; applicationRecords++;
+          if (keyUpdates) postUpdateApplicationRecords++;
         } else if (opened.contentType === 22) {
           let update; try { update = parseKeyUpdate(opened.content); } catch { reject('oracle_key_update'); }
-          if (client || update.requestUpdate || ++keyUpdates > expectedUpdates) reject('oracle_key_update');
+          // The optional client profile permits exactly one requested update;
+          // its server response must not request another update. Existing C1
+          // server-only updates retain request_update=0 and their old defaults.
+          if (update.requestUpdate !== client || ++keyUpdates > expectedUpdates) reject('oracle_key_update');
           app = updateTrafficState(app); ownedStates.push(app);
         } else if (opened.contentType === 21) {
           if (!opened.content.equals(Buffer.from([1, 0])) || applicationBytes !== expected.length || !applicationRecords) reject('oracle_close_notify');
+          beforeCloseNotify = beforeRecord;
           closed = true;
         } else reject('oracle_record');
       } finally { opened.content.fill(0); }
     }
     if (!closed) reject('oracle_close_notify');
     if (keyUpdates !== expectedUpdates) reject('oracle_key_update');
+    if (requestedExchange && !postUpdateApplicationRecords) reject('oracle_key_update');
     return { captureRecords: all.length, preApplicationRecords, helloRecords, compatibilityCCSRecords: ccs,
-      encryptedHandshakeRecords: handshakeRecords, applicationRecords, applicationBytes, keyUpdates, closeNotify: true, trailingBytes: 0 };
+      encryptedHandshakeRecords: handshakeRecords, applicationRecords, applicationBytes, keyUpdates,
+      beforeCloseNotify, finalEpoch: Number(app.epoch), finalNextSequence: Number(app.sequence),
+      closeNotify: true, trailingBytes: 0 };
   } finally { pending.fill(0); }
 }
 
@@ -192,11 +204,16 @@ function direction(all, helloRecords, handshakeSecret, applicationSecret, expect
  * Four keylog labels must share clientRandom; we bind it to the captured Hello.
  * The no-tickets/no-client-auth profile is explicit. No resynchronization/search
  * past any failed encrypted record is attempted, including the first app record.
+ * expectedClientKeyUpdates defaults to 0. Setting it to 1 selects a bounded
+ * request/response profile: client request_update=1, one server update with
+ * request_update=0, and application data in both new directional epochs.
+ * Separate directional captures establish each stream's order, not the
+ * cross-direction time at which the server received the client's request.
  */
 export function verifyHandshakeCapture(input) {
   const owned = [], wires = [], hellos = [];
   try {
-    exact(input, ['clientToServer', 'serverToClient', 'clientRandom', 'secrets', 'expected', 'negotiated', 'clientFin', 'serverFin'], ['expectedServerKeyUpdates']);
+    exact(input, ['clientToServer', 'serverToClient', 'clientRandom', 'secrets', 'expected', 'negotiated', 'clientFin', 'serverFin'], ['expectedServerKeyUpdates', 'expectedClientKeyUpdates']);
     exact(input.secrets, ['clientHandshake', 'serverHandshake', 'clientApplication', 'serverApplication']);
     for (const secret of Object.values(input.secrets)) bytes(secret, 32, 32);
     bytes(input.clientRandom, 32, 32);
@@ -208,13 +225,15 @@ export function verifyHandshakeCapture(input) {
     if (input.clientFin !== true || input.serverFin !== true) reject('oracle_terminal');
     const updates = input.expectedServerKeyUpdates ?? 0;
     if (updates !== 0 && updates !== 1) reject('oracle_input');
+    const clientUpdates = input.expectedClientKeyUpdates === undefined ? 0 : input.expectedClientKeyUpdates;
+    if ((clientUpdates !== 0 && clientUpdates !== 1) || (clientUpdates === 1 && updates !== 1)) reject('oracle_input');
     const cw = capture(input.clientToServer); wires.push(cw);
     const sw = capture(input.serverToClient); wires.push(sw);
     const cr = records(cw), sr = records(sw), ch = helloBody(cr, true); hellos.push(ch.body);
     const sh = helloBody(sr, false); hellos.push(sh.body);
     const sid = clientHello(ch.body, input.clientRandom); serverHello(sh.body, sid);
-    const client = direction(cr, ch.records, input.secrets.clientHandshake, input.secrets.clientApplication, input.expected.clientApplication, true, 0, owned);
-    const server = direction(sr, sh.records, input.secrets.serverHandshake, input.secrets.serverApplication, input.expected.serverApplication, false, updates, owned);
+    const client = direction(cr, ch.records, input.secrets.clientHandshake, input.secrets.clientApplication, input.expected.clientApplication, true, clientUpdates, clientUpdates === 1, owned);
+    const server = direction(sr, sh.records, input.secrets.serverHandshake, input.secrets.serverApplication, input.expected.serverApplication, false, updates, clientUpdates === 1, owned);
     return { schemaVersion: 1, recordKind: 'tls13-handshake-wire-oracle', passed: true,
       protocol: 'TLSv1.3', cipher: 'TLS_AES_128_GCM_SHA256', alpn: 'continuum-c1',
       endpointAuthorizationObserved: true, authenticatedHandshakeBoundary: true,

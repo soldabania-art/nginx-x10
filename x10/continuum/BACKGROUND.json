@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-peer-ku-20261023T193405Z",
-    "owner": "cloud-coordinator",
-    "baseCommit": "ab1f9ad68ef665b9a12683aecf5b9bf9953d7b4f",
-    "acquiredAtUTC": "2026-10-23T19:34:05Z",
-    "expiresAtUTC": "2026-10-23T20:19:05Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -282,10 +276,28 @@
       "state": "success",
       "groups": 20,
       "evidence": "x10/evidence/continuum-c2a-native-regression.json"
+    },
+    "c2aPeerKeyUpdateLocal": {
+      "state": "success-local-hosted-pending",
+      "flatTests": 15,
+      "ordinaryActualTLSScenarios": 12,
+      "handledRuntimeSignalControls": 2,
+      "nonTLSCachedSourceControl": 1,
+      "independentActualTLSHeldouts": 4,
+      "c1FlatTests": 27,
+      "c1SyntheticOracleControls": 18,
+      "c1ExistingRuntimeChecks": 9,
+      "evidence": "x10/evidence/continuum-c2a-peer-key-update.json",
+      "nativeEvidence": "x10/evidence/continuum-c2a-peer-key-update-native-regression.json",
+      "completeInventoryAccepted": false,
+      "semanticExportImport": false,
+      "migration": false,
+      "implementationIdentity": "Commit containing this checkpoint; resolve exact SHA after publication."
     }
   },
   "pendingVerification": [
-    "C2a remaining inventory: peer-requested/read KeyUpdate, same-operation WRITE retry completion, overlapping retry obligations, control/alert/shutdown and sequence/key usage admission. Handled SIGTERM/SIGINT after one application-read boundary are tested; other runtime interruption/crash boundaries remain pending.",
+    "Peer KeyUpdate implementation: canonical15=12TLS+2signals+1source, independent4, C0/C1/native passed locally; exact new implementation SHA research/native push and PR CI pending. Resolve this first next pass.",
+    "C2a remaining inventory: same-operation WRITE retry completion, overlapping retry obligations, control/alert/shutdown and sequence/key usage admission. Peer/read KeyUpdate is observed locally in two cases; full inventory and other interruption boundaries remain pending.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
     "First scheduled cloud development run has not been independently verified by recorded run history."
@@ -304,7 +316,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "READ retry accepted on356f993;13 local/hosted checks accepted on85bc255 separate10 TLS scenarios,2 handled runtime signals,1 noTLS source control. Next actual peer/read KeyUpdate, then remaining WRITE/control/shutdown/usage-limit inventory before C2b."
+      "goal": "Peer/read KeyUpdate locally observed in two new scenarios;15checks=12TLS+2signals+1source and independent4 passed. First exact hosted CI, then actual WRITE retry completion/overlaps/control/shutdown/usage limits before C2b."
     },
     {
       "id": "C3",
@@ -416,6 +428,32 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
+    "runId": "continuum-peer-ku-20261023T193405Z",
+    "baseCommit": "ab1f9ad68ef665b9a12683aecf5b9bf9953d7b4f",
+    "publicationParent": "07b52d01b753ea77d954ddca8581b1933edbf014",
+    "result": "Canonical15/15, independent4 actualTLS heldouts, C0 core21/process7, C1 27=18synthetic+9runtime, native20 passed. Peer read1/write0 queued and read1/write1 completed response observed; no migration. Exact hosted SHA pending.",
+    "helpers": "6 temporary delegated roles; only coordinator integrates/publishes",
+    "nativeSourceChanged": false,
+    "spendingUSD": 0,
+    "perFileLedger": "x10/review/continuum-c2a-peer-key-update-ledger.json",
+    "hostedVerification": {
+      "state": "pending-exact-implementation-SHA"
+    }
+  },
+  "lastVerificationReceipt": {
+    "runId": "continuum-interrupt-ci-20261023T192336Z",
+    "baseCommit": "85bc255d457087cdce7768755c45b39843f015a5",
+    "publicationParent": "1583e8aa1cd3a2a77d14890b576ff1d7e448e910",
+    "verifiedAtUTC": "2026-10-23T19:28:56Z",
+    "files": [
+      "x10/continuum/BACKGROUND.json",
+      "x10/continuum/C2A-CHECKPOINT.md"
+    ],
+    "runtimeSourcesChanged": false,
+    "spendingUSD": 0
+  },
+  "nextConcreteTask": "First verify new peer-KeyUpdate implementation exact SHA CI; then actual WRITE retry completion and overlapping/control/alert/shutdown/usage-limit obligations. Do not begin C2b from an assumed complete inventory.",
+  "previousDevelopmentPass": {
     "runId": "continuum-interrupt-20261023T185831Z",
     "baseCommit": "2e6fb8af405bd02177459ee4d0c57bdb123e9de9",
     "publicationParent": "eadd6801d0a02cb6a59f8a263f7b6eb892b7e342",
@@ -434,41 +472,6 @@
       "nativeRuns": [
         40010935834,
         40010942898
-      ]
-    }
-  },
-  "lastVerificationReceipt": {
-    "runId": "continuum-interrupt-ci-20261023T192336Z",
-    "baseCommit": "85bc255d457087cdce7768755c45b39843f015a5",
-    "publicationParent": "1583e8aa1cd3a2a77d14890b576ff1d7e448e910",
-    "verifiedAtUTC": "2026-10-23T19:28:56Z",
-    "files": [
-      "x10/continuum/BACKGROUND.json",
-      "x10/continuum/C2A-CHECKPOINT.md"
-    ],
-    "runtimeSourcesChanged": false,
-    "spendingUSD": 0
-  },
-  "nextConcreteTask": "Actual peer-requested KeyUpdate: observe read generation, queued response and directional wire/sequence obligations; retain refusal of unsupported generations and no migration claim.",
-  "previousDevelopmentPass": {
-    "runId": "continuum-retry-20261023T182702Z",
-    "baseCommit": "3d7d74fc6d34ebb2a85d5ba76b5aeec5f32997b4",
-    "publicationParent": "a438d472bd89e2a258fbc6b53ed11438c1d8f0c4",
-    "result": "Two real TLS retry lifecycle cases plus bounded static build diagnostics; root10/10, independent exact-source4 cases, C0/C1/native regressions passed. Full state inventory/export-import remain pending.",
-    "helpers": "5 temporary delegated roles available; only coordinator publishes",
-    "nativeSourceChanged": false,
-    "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-retry-ledger.json",
-    "implementationCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
-    "hostedVerification": {
-      "state": "success",
-      "researchRuns": [
-        40006143682,
-        40006152124
-      ],
-      "nativeRuns": [
-        40006143712,
-        40006152459
       ]
     }
   }

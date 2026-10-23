@@ -296,3 +296,45 @@ Git/Perl/Make/C compiler dependencies устанавливаются явно; `
 перенос partial output/control obligations, смена actual TLS code, исключительное
 право target I/O и retirement прежнего code path. Число tests или положительный
 read-only snapshot этих свойств не устанавливают; novelty/10× claims отсутствуют.
+
+## Peer-requested KeyUpdate: queued response и завершённый WRITE
+
+Новые `peer-key-update-pending` / `peer-key-update-completed` используют
+реальный C/OpenSSL client на той же pinned3.0.13 сборке, что и C server.
+Client проверяет CA/hostname, выполняет SSL_key_update(REQUESTED), flush и
+посылает application bytes под новым write key. Session resumption и early
+application data не допускаются. Private fd3 переносит bounded keylog только
+в память runner; raw secrets/captures не публикуются. Это не новая TLS release.
+
+Server действительно читает весь payload и выдаёт READ-success checkpoint
+до первого WRITE. Pending snapshot: read/write generation1/0, serial3,
+queued NOT_REQUESTED, reasons32832=GEN64|KEY_UPDATE32768; public pending0 и
+retry NONE не снимают refusal. После ACK обе стороны закрываются raw;
+полный graceful wire transcript для pending не заявляется.
+
+В completed реальный echo SSL_write_ex сам flushes queued response, затем
+application bytes. Не вызывается повторный SSL_key_update для подмены response.
+Snapshot: generation1/1, serial4, getterNONE, reasons64. Исходный probe/header/
+patch/build не менялись, updated generations по-прежнему unsupported.
+Standalone SSL_do_handshake после получения запроса не объявляется достаточным:
+такое предположение скорректировано по pinned source до runtime проверки,
+а не по выполненному неудачному тесту.
+
+Observer дополнен optional expectedClientKeyUpdates0|1 (default0). REQUESTED
+client KU и NOT_REQUESTED server response аутентифицируются старым ключом
+своего направления; затем directional epoch увеличивается, а sequence
+сбрасывается перед application records.
+Сравниваются epoch-relative beforeCloseNotify sequences, lifetime application
+record count не подменяет sequence. Close_notify расходует следующий номер.
+C endpoint проверяет PKI/hostname/Finished; inherited comment observer про
+Node относится к прежнему C1 caller, новый caller — authenticated C client.
+Observer не проверяет PKI или Finished MAC независимо. Отдельные captures
+не устанавливают cross-direction timing; это дисциплина trusted fixture.
+
+Локально15/15 (12TLS+2signals+1source), независимые heldouts4/4. Два schedules
+дробят relay write calls, но не гарантируют TCP segmentation. C1 aggregate27
+состоит из18 synthetic oracle controls и9 runtime checks. Новые5 synthetic
+controls не объявляются дополнительными actual handshakes. Evidence и hashes:
+[peer update](../evidence/continuum-c2a-peer-key-update.json). Следующие gates —
+реальный WRITE retry completion, overlaps/control/shutdown/limits. Экспорт,
+import, distinct-version change и native continuation остаются unimplemented.

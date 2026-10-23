@@ -35,6 +35,51 @@ test('completed real server KeyUpdate advances monitored generation and refuses 
   assert.equal(result.fixtureGracefulShutdown, true);
 });
 
+test('real requested peer KeyUpdate leaves a read generation and immutable queued response', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'peer-key-update-pending', payloadBytes: 8093 });
+  assert.equal(result.outcome, 'pass');
+  assert.equal(result.negotiated.authorized, true);
+  assert.equal(result.peerReceived.applicationBytesRead, 8093);
+  assert.equal(result.peerReceived.keyUpdate, 0);
+  assert.equal(result.peerReceived.readGeneration, '1');
+  assert.equal(result.peerReceived.writeGeneration, '0');
+  assert.equal(result.probe.allowed, false);
+  assert.equal(result.probe.reasons, '32832');
+  assert.equal(result.probe.readGeneration, '1');
+  assert.equal(result.probe.writeGeneration, '0');
+  assert.equal(result.probe.keyUpdate, 0);
+  assert.equal(result.probe.mutationSerial, '3');
+  assert.equal(result.immutableRepeatedProbe, true);
+  assert.equal(result.fixtureGracefulShutdown, false);
+  assert.equal(result.wire, null);
+  assert.equal(result.migration, false);
+});
+
+test('real requested peer KeyUpdate completes both directions and matches reset wire sequences', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'peer-key-update-completed', payloadBytes: 32791 });
+  assert.equal(result.outcome, 'pass');
+  assert.equal(result.peerReceived.readGeneration, '1');
+  assert.equal(result.peerReceived.writeGeneration, '0');
+  assert.equal(result.peerReceived.keyUpdate, 0);
+  assert.equal(result.probe.allowed, false);
+  assert.equal(result.probe.reasons, '64');
+  assert.equal(result.probe.readGeneration, '1');
+  assert.equal(result.probe.writeGeneration, '1');
+  assert.equal(result.probe.keyUpdate, -1);
+  assert.equal(result.probe.mutationSerial, '4');
+  assert.equal(result.immutableRepeatedProbe, true);
+  assert.equal(result.wire.passed, true);
+  for (const direction of ['client', 'server']) {
+    assert.equal(result.wire.directions[direction].keyUpdates, 1);
+    assert.equal(result.wire.directions[direction].beforeCloseNotify.epoch, 1);
+    assert.equal(result.wire.directions[direction].closeNotify, true);
+  }
+  assert.equal(BigInt('0x' + result.probe.readNextSequence), BigInt(result.wire.directions.client.beforeCloseNotify.nextSequence));
+  assert.equal(BigInt('0x' + result.probe.writeNextSequence), BigInt(result.wire.directions.server.beforeCloseNotify.nextSequence));
+  assert.equal(result.fixtureGracefulShutdown, true);
+  assert.equal(result.migration, false);
+});
+
 test('the same real read retry completes before echo and clears its outstanding obligation', { timeout: 30000 }, async () => {
   const result = await runProbeScenario({ scenario: 'completed-read-retry' });
   assert.equal(result.retryLifecycle.clientApplicationWritesBeforeRetry, 0);

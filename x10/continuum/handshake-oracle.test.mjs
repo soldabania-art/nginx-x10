@@ -54,6 +54,27 @@ function fixture({ update = false, handshakeSplit = false, length = 257 } = {}) 
     clientFin: true, serverFin: true, expectedServerKeyUpdates: update ? 1 : 0 };
   return { input, client, server, clientHello, serverHello, flight, payload, serverSecret };
 }
+function requestedFixture() {
+  const f = fixture(), { secrets } = f.input;
+  const clientSecret = label(secrets.clientApplication, 'traffic upd', 32);
+  const serverSecret = label(secrets.serverApplication, 'traffic upd', 32);
+  // Deliberately different segmentation before/after each update distinguishes
+  // lifetime application-record totals from the next sequence in the new epoch.
+  f.client.splice(3, 2,
+    encrypted(secrets.clientApplication, 0n, f.payload.subarray(0, 3)),
+    encrypted(secrets.clientApplication, 1n, f.payload.subarray(3, 11)),
+    encrypted(secrets.clientApplication, 2n, Buffer.from([24, 0, 0, 1, 1]), 22),
+    encrypted(clientSecret, 0n, f.payload.subarray(11)),
+    encrypted(clientSecret, 1n, Buffer.from([1, 0]), 21));
+  f.server.splice(3, 2,
+    encrypted(secrets.serverApplication, 0n, f.payload.subarray(0, 7)),
+    encrypted(secrets.serverApplication, 1n, Buffer.from([24, 0, 0, 1, 0]), 22),
+    encrypted(serverSecret, 0n, f.payload.subarray(7, 19)),
+    encrypted(serverSecret, 1n, f.payload.subarray(19)),
+    encrypted(serverSecret, 2n, Buffer.from([1, 0]), 21));
+  f.input.expectedClientKeyUpdates = 1; f.input.expectedServerKeyUpdates = 1;
+  return { ...f, clientSecret, serverSecret };
+}
 function rejected(input, expectedCode) {
   assert.throws(() => verifyHandshakeCapture(input), error => error instanceof HandshakeOracleError
     && error.message === 'TLS capture rejected' && /^oracle_[a-z_]+$/.test(error.code)
@@ -74,7 +95,8 @@ test('complete synthetic framing is independently assembled across TCP chunk sch
     assert.equal(result.passed, true); assert.equal(result.independentFinishedMacVerification, false);
     assert.equal(result.fullHandshakeVerifier, false); assert.equal(result.migration, false);
     assert.deepEqual(result.directions.client, { captureRecords: 5, preApplicationRecords: 3, helloRecords: 1,
-      compatibilityCCSRecords: 1, encryptedHandshakeRecords: 1, applicationRecords: 1, applicationBytes: 257, keyUpdates: 0, closeNotify: true, trailingBytes: 0 });
+      compatibilityCCSRecords: 1, encryptedHandshakeRecords: 1, applicationRecords: 1, applicationBytes: 257, keyUpdates: 0,
+      beforeCloseNotify: { epoch: 0, nextSequence: 1 }, finalEpoch: 0, finalNextSequence: 2, closeNotify: true, trailingBytes: 0 });
     assert.equal(result.directions.server.encryptedHandshakeRecords, 4);
     assert.equal(result.directions.server.preApplicationRecords, 6);
     assert.equal(result.directions.server.closeNotify, true);
@@ -142,12 +164,107 @@ test('direction keys, duplicate sequence and record reordering fail authenticati
 test('optional server KeyUpdate authenticates old epoch then resets only that direction', () => {
   const f = fixture({ update: true }), result = verifyHandshakeCapture(f.input);
   assert.equal(result.directions.server.keyUpdates, 1); assert.equal(result.directions.client.keyUpdates, 0);
+  assert.deepEqual(result.directions.client.beforeCloseNotify, { epoch: 0, nextSequence: 1 });
+  assert.deepEqual(result.directions.server.beforeCloseNotify, { epoch: 1, nextSequence: 1 });
   const wrongSequence = fixture({ update: true }); wrongSequence.server[4] = encrypted(wrongSequence.serverSecret, 1n, wrongSequence.payload); rejected(wrongSequence.input, 'oracle_authentication');
   const wrongSecret = fixture({ update: true }); wrongSecret.server[4] = encrypted(wrongSecret.input.secrets.serverApplication, 0n, wrongSecret.payload); rejected(wrongSecret.input, 'oracle_authentication');
   const requested = fixture({ update: true }); requested.server[3] = encrypted(requested.input.secrets.serverApplication, 0n, Buffer.from([24, 0, 0, 1, 1]), 22); rejected(requested.input, 'oracle_key_update');
   const unannounced = fixture({ update: true }); unannounced.input.expectedServerKeyUpdates = 0; rejected(unannounced.input, 'oracle_key_update');
   const missing = fixture(); missing.input.expectedServerKeyUpdates = 1; rejected(missing.input, 'oracle_key_update');
   const clientUpdate = fixture(); clientUpdate.client[3] = encrypted(clientUpdate.input.secrets.clientApplication, 0n, Buffer.from([24, 0, 0, 1, 0]), 22); rejected(clientUpdate.input, 'oracle_key_update');
+});
+
+test('requested client KeyUpdate remains unsupported unless explicitly selected', () => {
+  for (const explicitZero of [false, true]) {
+    const f = requestedFixture();
+    if (explicitZero) f.input.expectedClientKeyUpdates = 0;
+    else delete f.input.expectedClientKeyUpdates;
+    rejected(f.input, 'oracle_key_update');
+  }
+  for (const invalid of [-1, 2, null, true, 1n, NaN, '1']) {
+    const f = requestedFixture(); f.input.expectedClientKeyUpdates = invalid; rejected(f.input, 'oracle_input');
+  }
+  const mismatch = requestedFixture(); mismatch.input.expectedServerKeyUpdates = 0; rejected(mismatch.input, 'oracle_input');
+});
+
+test('requested client KeyUpdate and server response authenticate independent epochs and exact data', () => {
+  for (const steps of [[1], [3, 17, 4096]]) {
+    const f = requestedFixture(), before = JSON.stringify(f.input);
+    f.input.clientToServer = chunks(Buffer.concat(f.client), steps);
+    f.input.serverToClient = chunks(Buffer.concat(f.server), steps.toReversed());
+    const result = verifyHandshakeCapture(f.input);
+    for (const name of ['client', 'server']) {
+      const d = result.directions[name];
+      assert.equal(d.keyUpdates, 1); assert.equal(d.applicationRecords, 3);
+      assert.equal(d.applicationBytes, f.payload.length); assert.equal(d.finalEpoch, 1);
+      assert.equal(d.closeNotify, true); assert.equal(d.trailingBytes, 0);
+    }
+    assert.deepEqual(result.directions.client.beforeCloseNotify, { epoch: 1, nextSequence: 1 });
+    assert.deepEqual(result.directions.server.beforeCloseNotify, { epoch: 1, nextSequence: 2 });
+    assert.equal(result.directions.client.finalNextSequence, 2);
+    assert.equal(result.directions.server.finalNextSequence, 3);
+    // compare the original arrays too: oracle never owns or wipes caller bytes.
+    f.input.clientToServer = f.client; f.input.serverToClient = f.server;
+    assert.equal(JSON.stringify(f.input), before);
+  }
+});
+
+test('requested profile rejects missing response, wrong request byte and extra updates', () => {
+  const missingClient = fixture({ update: true }); missingClient.input.expectedClientKeyUpdates = 1;
+  rejected(missingClient.input, 'oracle_key_update');
+  const missingServer = requestedFixture(), { serverApplication } = missingServer.input.secrets;
+  // A complete authenticated old-epoch server stream cannot discharge a
+  // request merely by delivering the exact expected payload and close_notify.
+  missingServer.server.splice(3, missingServer.server.length - 3,
+    encrypted(serverApplication, 0n, missingServer.payload), encrypted(serverApplication, 1n, Buffer.from([1, 0]), 21));
+  rejected(missingServer.input, 'oracle_key_update');
+  for (const request of [0, 2, 255]) {
+    const f = requestedFixture(); f.client[5] = encrypted(f.input.secrets.clientApplication, 2n, Buffer.from([24, 0, 0, 1, request]), 22);
+    rejected(f.input, 'oracle_key_update');
+  }
+  const recursive = requestedFixture(); recursive.server[4] = encrypted(recursive.input.secrets.serverApplication, 1n, Buffer.from([24, 0, 0, 1, 1]), 22);
+  rejected(recursive.input, 'oracle_key_update');
+  const extra = requestedFixture(); extra.client.splice(7, 0, encrypted(extra.clientSecret, 1n, Buffer.from([24, 0, 0, 1, 1]), 22));
+  rejected(extra.input, 'oracle_key_update');
+});
+
+test('requested profile rejects premature keys, retained old keys and sequences in either direction', () => {
+  for (const name of ['client', 'server']) {
+    const updateIndex = name === 'client' ? 5 : 4, oldSequence = name === 'client' ? 2n : 1n;
+    const request = name === 'client' ? 1 : 0, offset = name === 'client' ? 11 : 7, end = name === 'client' ? 257 : 19;
+    const premature = requestedFixture();
+    premature[name][updateIndex] = encrypted(premature[`${name}Secret`], oldSequence, Buffer.from([24, 0, 0, 1, request]), 22);
+    rejected(premature.input, 'oracle_authentication');
+    const wrongKey = requestedFixture();
+    wrongKey[name][updateIndex + 1] = encrypted(wrongKey.input.secrets[`${name}Application`], 0n, wrongKey.payload.subarray(offset, end));
+    rejected(wrongKey.input, 'oracle_authentication');
+    for (const sequence of [1n, oldSequence + 1n]) {
+      const wrongSequence = requestedFixture();
+      wrongSequence[name][updateIndex + 1] = encrypted(wrongSequence[`${name}Secret`], sequence, wrongSequence.payload.subarray(offset, end));
+      rejected(wrongSequence.input, 'oracle_authentication');
+    }
+    const skipped = requestedFixture(); skipped[name].splice(updateIndex, 1); rejected(skipped.input, 'oracle_authentication');
+    const corruptClose = requestedFixture(); corruptClose[name].at(-1)[5] ^= 1; rejected(corruptClose.input, 'oracle_authentication');
+  }
+});
+
+test('requested profile requires application data after both updates and exact new-epoch closure', () => {
+  for (const name of ['client', 'server']) {
+    const f = requestedFixture(), initial = f.input.secrets[`${name}Application`];
+    f[name].splice(3, f[name].length - 3,
+      encrypted(initial, 0n, f.payload),
+      encrypted(initial, 1n, Buffer.from([24, 0, 0, 1, name === 'client' ? 1 : 0]), 22),
+      encrypted(f[`${name}Secret`], 0n, Buffer.from([1, 0]), 21));
+    rejected(f.input, 'oracle_key_update');
+    const missingClose = requestedFixture(); missingClose[name].pop(); rejected(missingClose.input, 'oracle_close_notify');
+    const trailing = requestedFixture(); trailing[name].push(encrypted(trailing[`${name}Secret`], name === 'client' ? 2n : 3n, Buffer.from('late')));
+    rejected(trailing.input, 'oracle_trailing');
+  }
+  const changed = requestedFixture(), wrong = Buffer.from(changed.payload.subarray(11)); wrong[0] ^= 1;
+  changed.client[6] = encrypted(changed.clientSecret, 0n, wrong); rejected(changed.input, 'oracle_application');
+  const short = requestedFixture(); short.client[6] = encrypted(short.clientSecret, 0n, short.payload.subarray(11, -1));
+  rejected(short.input, 'oracle_close_notify');
+  const noFin = requestedFixture(); noFin.input.serverFin = false; rejected(noFin.input, 'oracle_terminal');
 });
 
 test('wire Hello version, cipher, session identity, client random and encrypted ALPN are checked', () => {

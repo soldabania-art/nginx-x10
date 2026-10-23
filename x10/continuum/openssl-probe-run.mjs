@@ -12,12 +12,13 @@ import { verifyHandshakeCapture } from './handshake-oracle.mjs';
 import { buildOpenSSL } from './openssl-build.mjs';
 
 const SOURCE = fileURLToPath(new URL('./openssl-probe-fixture.c', import.meta.url));
+const PEER_SOURCE = fileURLToPath(new URL('./openssl-peer-client.c', import.meta.url));
 const PROBE_SOURCE = fileURLToPath(new URL('./openssl-probe.c', import.meta.url));
 const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
 const SCENARIOS = ['quiescent', 'partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update', 'completed-key-update',
-  'completed-read-retry', 'unrelated-write-read-retry'];
+  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed'];
 const SECRET_LABELS = Object.freeze({
   CLIENT_HANDSHAKE_TRAFFIC_SECRET: 'clientHandshake', SERVER_HANDSHAKE_TRAFFIC_SECRET: 'serverHandshake',
   CLIENT_TRAFFIC_SECRET_0: 'clientApplication', SERVER_TRAFFIC_SECRET_0: 'serverApplication',
@@ -55,9 +56,9 @@ function bounded(promise, code, milliseconds = DEADLINE_MS, signal) {
     timer = setTimeout(() => reject(new ProbeFixtureError(code)), milliseconds);
   })]).finally(() => { clearTimeout(timer); if (onAbort) signal.removeEventListener('abort', onAbort); });
 }
-function trackedSpawn(command, args, children, signal) {
+function trackedSpawn(command, args, children, signal, privatePipe = false) {
   signal.throwIfAborted();
-  const child = spawn(command, args, { stdio: ['pipe', 'pipe', 'pipe'], signal, killSignal: 'SIGTERM',
+  const child = spawn(command, args, { stdio: privatePipe ? ['pipe', 'pipe', 'pipe', 'pipe'] : ['pipe', 'pipe', 'pipe'], signal, killSignal: 'SIGTERM',
     env: { ...process.env, OPENSSL_CONF: '/dev/null' } });
   children.add(child);
   child.on('error', () => {});
@@ -86,8 +87,8 @@ async function command(commandName, args, children, signal) {
   assertFixture(exit.code === 0 && exit.signal === null && !overflow, 'tool_failed');
   return output;
 }
-function nativeChannel(binary, args, children, signal) {
-  const process = trackedSpawn(binary, args, children, signal);
+function nativeChannel(binary, args, children, signal, privateSecrets) {
+  const process = trackedSpawn(binary, args, children, signal, privateSecrets !== undefined);
   const messages = [];
   const waiters = new Set();
   let pending = '';
@@ -115,6 +116,7 @@ function nativeChannel(binary, args, children, signal) {
     stderrBytes += chunk.length;
     if (stderrBytes > 16384) { failure = true; process.child.kill('SIGKILL'); }
   });
+  const keylog = privateSecrets ? privateKeylog(process.child.stdio[3], privateSecrets, () => { failure = true; process.child.kill('SIGKILL'); wake(); }) : undefined;
   process.closed.then(value => { closed = value; if (pending.length) failure = true; wake(); });
   const wait = (event, predicate = () => true) => bounded(new Promise((resolve, reject) => {
     const callback = () => {
@@ -125,8 +127,64 @@ function nativeChannel(binary, args, children, signal) {
     };
     waiters.add(callback); callback();
   }), 'native_event_timeout', DEADLINE_MS, signal);
-  return { ...process, messages, wait, validOutput: () => !failure && pending.length === 0 };
+  return { ...process, messages, wait, keylog, validOutput: () => !failure && pending.length === 0 && (!keylog || keylog.valid()) };
 }
+// Only the peer fixture inherits fd 3. NSS material stays in bounded buffers,
+// never enters the JSON channel or files, and is scrubbed during final cleanup.
+function privateKeylog(stream, secrets, fail) {
+  let pending = Buffer.alloc(0), random, bytes = 0, invalid = false, ended = false;
+  const hex = buffer => {
+    assertFixture(buffer.length === 64, 'keylog_invalid');
+    const output = Buffer.alloc(32);
+    const nibble = value => value >= 48 && value <= 57 ? value - 48 : value >= 65 && value <= 70 ? value - 55 : value >= 97 && value <= 102 ? value - 87 : -1;
+    try {
+      for (let i = 0; i < output.length; i++) {
+        const high = nibble(buffer[i * 2]), low = nibble(buffer[i * 2 + 1]);
+        assertFixture(high >= 0 && low >= 0, 'keylog_invalid'); output[i] = high * 16 + low;
+      }
+      return output;
+    } catch (error) { output.fill(0); throw error; }
+  };
+  const line = buffer => {
+    assertFixture(buffer.length > 0 && buffer.length <= 512, 'keylog_invalid');
+    const a = buffer.indexOf(32), b = buffer.indexOf(32, a + 1);
+    assertFixture(a > 0 && b === a + 65 && buffer.length === b + 65, 'keylog_invalid');
+    const label = buffer.subarray(0, a).toString('ascii');
+    assertFixture(/^[A-Z0-9_]{1,64}$/.test(label), 'keylog_invalid');
+    let binding, value;
+    try {
+      binding = hex(buffer.subarray(a + 1, b)); value = hex(buffer.subarray(b + 1));
+      if (random) assertFixture(random.equals(binding), 'keylog_binding');
+      else { random = binding; binding = undefined; }
+      if (Object.hasOwn(SECRET_LABELS, label)) {
+        const name = SECRET_LABELS[label];
+        if (secrets[name]) assertFixture(secrets[name].equals(value), 'keylog_binding');
+        else { secrets[name] = value; value = undefined; }
+      }
+    } finally { binding?.fill(0); value?.fill(0); }
+  };
+  stream.on('data', chunk => {
+    try {
+      bytes += chunk.length;
+      assertFixture(bytes <= 16384 && pending.length + chunk.length <= 16384, 'keylog_limit');
+      const combined = Buffer.concat([pending, chunk]); pending.fill(0); pending = combined;
+      let end;
+      while ((end = pending.indexOf(10)) !== -1) {
+        const current = pending.subarray(0, end);
+        try { line(current); } finally { current.fill(0); }
+        const rest = Buffer.from(pending.subarray(end + 1)); pending.fill(0); pending = rest;
+      }
+      assertFixture(pending.length <= 512, 'keylog_limit');
+    } catch { invalid = true; fail(); }
+    finally { chunk.fill(0); }
+  });
+  stream.on('error', () => { invalid = true; fail(); });
+  stream.on('end', () => { ended = true; if (pending.length) { invalid = true; fail(); } });
+  return { random: () => random,
+    valid: () => !invalid && ended && pending.length === 0 && Object.values(SECRET_LABELS).every(name => secrets[name]?.length === 32),
+    clear() { pending.fill(0); random?.fill(0); } };
+}
+
 async function makeCertificates(directory, children, signal, openssl) {
   const path = name => join(directory, name);
   await command(openssl, ['req', '-config', '/dev/null', '-x509', '-newkey', 'ec', '-pkeyopt', 'ec_paramgen_curve:P-256', '-nodes',
@@ -139,7 +197,7 @@ async function makeCertificates(directory, children, signal, openssl) {
   await command(openssl, ['x509', '-req', '-in', path('leaf.csr'), '-CA', path('ca.crt'), '-CAkey', path('ca.key'),
     '-set_serial', '0x1001', '-days', '1', '-sha256', '-extfile', path('leaf.ext'), '-out', path('leaf.crt')], children, signal);
   await Promise.all([chmod(path('ca.key'), 0o600), chmod(path('leaf.key'), 0o600)]);
-  return { cert: path('leaf.crt'), key: path('leaf.key'), ca: await readFile(path('ca.crt')) };
+  return { cert: path('leaf.crt'), key: path('leaf.key'), caPath: path('ca.crt'), ca: await readFile(path('ca.crt')) };
 }
 
 function scope(milliseconds) {
@@ -167,7 +225,7 @@ async function reap(children) {
 let harness;
 let preparing;
 let running = false;
-const sourceFiles = { fixture: SOURCE, probe: PROBE_SOURCE,
+const sourceFiles = { fixture: SOURCE, peerClient: PEER_SOURCE, probe: PROBE_SOURCE,
   header: fileURLToPath(new URL('./openssl-probe.h', import.meta.url)), patch: PATCH };
 const sourceHashes = async () => Object.fromEntries(await Promise.all(Object.entries(sourceFiles).map(async ([name, path]) => [name, sha256(await readFile(path))])));
 
@@ -192,13 +250,19 @@ export async function prepareProbeHarness() {
         ...include.flatMap(path => ['-I', path]), '-o', binary, SOURCE, PROBE_SOURCE,
         paths.libssl, paths.libcrypto, '-pthread', '-ldl'], children, owned.signal);
       await chmod(binary, 0o700);
+      const peerBinary = join(directory, 'openssl-peer-client');
+      await command(paths.compiler ?? 'cc', ['-std=c11', '-O2', '-Wall', '-Wextra', '-Werror',
+        ...include.flatMap(path => ['-I', path]), '-o', peerBinary, PEER_SOURCE,
+        paths.libssl, paths.libcrypto, '-pthread', '-ldl'], children, owned.signal);
+      await chmod(peerBinary, 0o700);
       assertFixture(JSON.stringify(await sourceHashes()) === JSON.stringify(hashes), 'probe_source_changed_during_compile');
       nodeBinaryHash ??= readFile(process.execPath).then(sha256);
       const binaryHash = sha256(await readFile(binary));
+      const peerBinaryHash = sha256(await readFile(peerBinary));
       const identity = { schemaVersion: 1, pinnedBuild: build.identity, sourceSha256: hashes,
-        fixtureBinarySha256: binaryHash, nodeBinarySha256: await nodeBinaryHash,
+        fixtureBinarySha256: binaryHash, peerClientBinarySha256: peerBinaryHash, nodeBinarySha256: await nodeBinaryHash,
         nodeVersion: process.version, nodeOpenSSLVersion: process.versions.openssl };
-      harness = { build, directory, binary, binaryHash, hashes, identity };
+      harness = { build, directory, binary, binaryHash, peerBinary, peerBinaryHash, hashes, identity };
       return structuredClone(identity);
     } catch (error) {
       try { await reap(children); } finally {
@@ -217,7 +281,8 @@ async function verifyHarness(signal) {
   assertFixture(harness !== undefined, 'probe_build_not_prepared');
   await bounded(harness.build.verifyIdentity({ signal }), 'build_identity_timeout', 30000, signal);
   assertFixture(JSON.stringify(await sourceHashes()) === JSON.stringify(harness.hashes) &&
-    sha256(await readFile(harness.binary)) === harness.binaryHash, 'probe_identity_changed');
+    sha256(await readFile(harness.binary)) === harness.binaryHash &&
+    sha256(await readFile(harness.peerBinary)) === harness.peerBinaryHash, 'probe_identity_changed');
 }
 export async function cleanupProbeHarness() {
   assertFixture(!running && !preparing, 'probe_harness_busy');
@@ -355,6 +420,58 @@ function independentClient(port, ca, payload, sockets, secrets, signal) {
   };
 }
 
+async function stepNative(channel, signal) {
+  await bounded(new Promise((resolve, reject) => channel.child.stdin.write('STEP\n', error =>
+    error ? reject(new ProbeFixtureError('native_step')) : resolve())), 'native_step', DEADLINE_MS, signal);
+}
+function peerClient(port, cert, scenario, payloadBytes, challenge, children, secrets, signal) {
+  const channel = nativeChannel(harness.peerBinary, ['--port', String(port), '--ca', cert.caPath,
+    '--scenario', scenario, '--bytes', String(payloadBytes), '--challenge', challenge.toString('hex')], children, signal, secrets);
+  let negotiated;
+  return { channel, random: () => channel.keylog.random(), negotiated: () => negotiated,
+    async secure() {
+      const message = await channel.wait('handshake');
+      assertFixture(message.version === 'TLSv1.3' && message.cipher === 'TLS_AES_128_GCM_SHA256' &&
+        message.alpn === 'continuum-c1' && message.resumed === false && message.authorized === true &&
+        message.opensslVersion === 'OpenSSL 3.0.13 30 Jan 2024' && message.opensslHeadersVersion === message.opensslVersion,
+      'peer_client_profile');
+      negotiated = { protocol: message.version, cipher: message.cipher, alpn: message.alpn, authorized: true };
+      await channel.wait('ready', item => item.scenario === scenario);
+    },
+    async send() {
+      await stepNative(channel, signal);
+      const sent = await channel.wait('sent');
+      assertFixture(Object.keys(sent).sort().join(',') === 'applicationBytesWritten,event,keyUpdateRequested,scenario' &&
+        sent.scenario === scenario && sent.applicationBytesWritten === payloadBytes && sent.keyUpdateRequested === true,
+      'peer_client_sent');
+    },
+    async finish() {
+      const done = await channel.wait('done');
+      const graceful = scenario === 'peer-key-update-completed';
+      assertFixture(Object.keys(done).sort().join(',') === 'applicationBytesRead,applicationBytesWritten,event,graceful,scenario' &&
+        done.scenario === scenario && done.graceful === graceful && done.applicationBytesWritten === payloadBytes &&
+        done.applicationBytesRead === (graceful ? payloadBytes : 0), 'peer_client_done');
+      if (graceful) {
+        const shutdown = await channel.wait('shutdown');
+        assertFixture(shutdown.clean === true && shutdown.shutdownBits === 3, 'peer_client_shutdown');
+      }
+      const exit = await bounded(channel.closed, 'peer_client_exit', DEADLINE_MS, signal);
+      assertFixture(exit.code === 0 && exit.signal === null && channel.validOutput(), 'peer_client_failed');
+    },
+    clear() { channel.keylog.clear(); },
+  };
+}
+function checkedPeerReceived(message, scenario, payloadBytes) {
+  const keys = ['event', 'scenario', 'call', 'outcome', 'retryCall', 'applicationBytesRead', 'sslPending',
+    'keyUpdate', 'readGeneration', 'writeGeneration', 'mutationSerial'];
+  assertFixture(message?.event === 'peer-update-received' && message.scenario === scenario &&
+    Object.keys(message).sort().join(',') === keys.sort().join(',') && message.call === 2 && message.outcome === 1 &&
+    message.retryCall === 0 && message.applicationBytesRead === payloadBytes && message.sslPending === 0 &&
+    message.keyUpdate === 0 && message.readGeneration === '1' && message.writeGeneration === '0' &&
+    message.mutationSerial === '3', 'peer_update_received');
+  return structuredClone(message);
+}
+
 const decimalFields = ['reasons', 'readGeneration', 'writeGeneration', 'mutationSerial', 'ledgerCallSerial'];
 const sequenceFields = ['readNextSequence', 'writeNextSequence'];
 const booleanFields = ['allowed', 'sslHasPending', 'monitorKnown'];
@@ -413,11 +530,13 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
   assertFixture(!running, 'concurrent_probe_fixture');
   assertFixture(!process.execArgv.some(value => value.startsWith('--tls-keylog')) && !(process.env.NODE_OPTIONS ?? '').includes('--tls-keylog'), 'external_keylog_option');
   running = true;
+  const peerScenario = scenario.startsWith('peer-key-update-');
+  const peerCompleted = scenario === 'peer-key-update-completed';
   const retryCompleted = scenario === 'completed-read-retry';
   const retryUnrelatedWrite = scenario === 'unrelated-write-read-retry';
   const retryScenario = retryCompleted || retryUnrelatedWrite;
   const allowed = scenario === 'quiescent' || retryCompleted;
-  const graceful = allowed || scenario === 'completed-key-update';
+  const graceful = allowed || scenario === 'completed-key-update' || peerCompleted;
   const owned = scope(25000);
   const children = new Set();
   const sockets = new Set();
@@ -440,10 +559,13 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     assertFixture(Number.isInteger(listening.port) && listening.port >= 1 && listening.port <= 65535, 'native_port');
     relay = relayTo(listening.port, sockets, owned.signal);
     await bounded(new Promise((resolve, reject) => { relay.server.once('error', reject); relay.server.listen({ port: 0, host: '127.0.0.1', signal: owned.signal }, resolve); }), 'relay_listen', DEADLINE_MS, owned.signal);
-    client = independentClient(relay.server.address().port, cert.ca, payload, sockets, secrets, owned.signal);
+    client = peerScenario
+      ? peerClient(relay.server.address().port, cert, scenario, payloadBytes, challenge, children, secrets, owned.signal)
+      : independentClient(relay.server.address().port, cert.ca, payload, sockets, secrets, owned.signal);
     await client.secure();
     await native.wait('ready', message => message.scenario === scenario);
-    if (scenario.startsWith('partial-')) {
+    if (peerScenario) { await client.send(); }
+    else if (scenario.startsWith('partial-')) {
       relay.prefix(prefix); client.write(); await relay.waitPrefix();
     } else if ((graceful && !retryCompleted) || scenario === 'unread-plaintext') {
       if (graceful) client.endOnEcho();
@@ -452,6 +574,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       client.socket.pause(); relay.pauseServerReads();
     }
     await bounded(new Promise((resolve, reject) => native.child.stdin.write('STEP\n', error => error ? reject(new ProbeFixtureError('native_step')) : resolve())), 'native_step', DEADLINE_MS, owned.signal);
+    const peerReceived = peerScenario ? checkedPeerReceived(await native.wait('peer-update-received'), scenario, payloadBytes) : undefined;
     let retryLifecycle;
     if (retryScenario) {
       const ready = checkedRetryEvent(await native.wait('retry-ready'), 'retry-ready', scenario, payloadBytes);
@@ -467,13 +590,18 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     }
     const first = checkedProbe(await native.wait('probe', message => message.sample === 1), scenario);
     let immutableRepeatedProbe = false;
-    if (graceful) {
+    if (graceful || peerScenario) {
       const second = checkedProbe(await native.wait('probe', message => message.sample === 2), scenario);
       const normalized = value => { const copy = { ...value }; delete copy.sample; return copy; };
       assertFixture(first.allowed === allowed && second.allowed === first.allowed &&
         JSON.stringify(normalized(first)) === JSON.stringify(normalized(second)), 'stable_probe_changed_or_wrong_gate');
       if (scenario === 'completed-key-update') assertFixture(first.reasons === '64' &&
         first.readGeneration === '0' && first.writeGeneration === '1' && first.mutationSerial === '3' && first.keyUpdate === -1, 'completed_key_update_not_observed');
+      if (peerScenario) {
+        assertFixture(first.allowed === false && first.readGeneration === '1' && first.writeGeneration === (peerCompleted ? '1' : '0') &&
+          first.mutationSerial === (peerCompleted ? '4' : '3') && first.keyUpdate === (peerCompleted ? -1 : 0) &&
+          first.reasons === (peerCompleted ? '64' : '32832') && first.ledgerRetryCall === 0, 'peer_key_update_not_observed');
+      }
       immutableRepeatedProbe = true;
     } else checkRefusal(first, scenario);
     if (retryScenario) {
@@ -485,6 +613,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         await bounded(new Promise((resolve, reject) => native.child.stdin.write('STEP\n', error => error ? reject(new ProbeFixtureError('native_step')) : resolve())), 'native_step', DEADLINE_MS, owned.signal);
       }
     }
+    if (peerScenario && !peerCompleted) { await stepNative(native, owned.signal); await stepNative(client.channel, owned.signal); }
     const done = await native.wait('done');
     const exit = await bounded(native.closed, 'native_exit', DEADLINE_MS, owned.signal);
     assertFixture(exit.code === 0 && exit.signal === null && native.validOutput() && done.scenario === scenario && done.observed === true && done.allowed === allowed && done.graceful === graceful, 'native_scenario_failed');
@@ -498,13 +627,25 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       assertFixture(events.indexOf('ready') < readyAt && readyAt < probeAt && probeAt < events.indexOf('done') &&
         (!retryCompleted || readyAt < completedAt && completedAt < probeAt), 'retry_event_order');
     }
+    if (peerScenario) {
+      const events = native.messages.map(message => message.event);
+      assertFixture(events.filter(event => event === 'peer-update-received').length === 1 &&
+        events.indexOf('ready') < events.indexOf('peer-update-received') &&
+        events.indexOf('peer-update-received') < events.indexOf('probe') && events.indexOf('probe') < events.indexOf('done'), 'peer_event_order');
+      if (!peerCompleted) await client.finish();
+    }
     let wire;
     if (graceful) {
       await client.finish(); await relay.waitClosed();
       wire = verifyHandshakeCapture({ ...relay.capture, secrets, clientRandom: client.random(),
         expected: { clientApplication: payload, serverApplication: payload }, negotiated: client.negotiated(),
-        clientFin: relay.observed.clientFin, serverFin: relay.observed.serverFin, expectedServerKeyUpdates: scenario === 'completed-key-update' ? 1 : 0 });
-      assertFixture(first.readGeneration === '0' && first.writeGeneration === (scenario === 'completed-key-update' ? '1' : '0') &&
+        clientFin: relay.observed.clientFin, serverFin: relay.observed.serverFin, expectedServerKeyUpdates: scenario === 'completed-key-update' || peerCompleted ? 1 : 0,
+        expectedClientKeyUpdates: peerCompleted ? 1 : 0 });
+      if (peerCompleted) assertFixture(wire.directions.client.beforeCloseNotify.epoch === 1 &&
+        wire.directions.server.beforeCloseNotify.epoch === 1 &&
+        BigInt(`0x${first.readNextSequence}`) === BigInt(wire.directions.client.beforeCloseNotify.nextSequence) &&
+        BigInt(`0x${first.writeNextSequence}`) === BigInt(wire.directions.server.beforeCloseNotify.nextSequence), 'peer_wire_probe_sequence_mismatch');
+      else assertFixture(first.readGeneration === '0' && first.writeGeneration === (scenario === 'completed-key-update' ? '1' : '0') &&
         BigInt(`0x${first.readNextSequence}`) === BigInt(wire.directions.client.applicationRecords) &&
         BigInt(`0x${first.writeNextSequence}`) === BigInt(wire.directions.server.applicationRecords), 'wire_probe_sequence_mismatch');
     }
@@ -513,7 +654,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       negotiated: client.negotiated(), probe: first, immutableRepeatedProbe, wire: wire ?? null,
       topology: 'two-leg-recording-relay-not-migration', clientConnections: 1, serverConnections: 1,
       fragmentPrefix: scenario.startsWith('partial-') ? prefix : null, fixtureGracefulShutdown: done.graceful,
-      ...(retryLifecycle ? { retryLifecycle } : {}),
+      ...(retryLifecycle ? { retryLifecycle } : {}), ...(peerReceived ? { peerReceived } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {
     if (owned.signal.aborted) throw owned.signal.reason;
@@ -525,7 +666,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     finally {
       try { await reap(children); }
       finally {
-        try { for (const value of Object.values(secrets)) value.fill(0); client?.random()?.fill(0); if (directory) await rm(directory, { recursive: true, force: true }); }
+        try { for (const value of Object.values(secrets)) value.fill(0); client?.random()?.fill(0); client?.clear?.(); if (directory) await rm(directory, { recursive: true, force: true }); }
         finally { running = false; owned.close(); }
       }
     }
