@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-write-ci-20261023T203443Z",
-    "owner": "cloud-coordinator",
-    "baseCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
-    "acquiredAtUTC": "2026-10-23T20:34:43.750Z",
-    "expiresAtUTC": "2026-10-23T20:54:43.750Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -27,19 +21,19 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "2fac5b5496c702d9fea6ca127128f733b993af67",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40014631185",
-    "continuumStage": "C2a narrow read-only peer-requested KeyUpdate observation accepted locally and hosted; full inventory/export-import pending",
+    "nativeCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40020048420",
+    "continuumStage": "C2a narrow read-only same-operation WRITE retry completion accepted locally and hosted; overlap/control/shutdown/usage inventory and export-import pending",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-c2a-peer-key-update.json",
+    "continuumEvidence": "x10/evidence/continuum-c2a-write-retry.json",
     "nativeHostedCI": {
       "state": "success",
-      "implementationCommit": "2fac5b5496c702d9fea6ca127128f733b993af67",
-      "pushRun": 40014631185,
-      "pullRequestRun": 40014641688,
+      "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
+      "pushRun": 40020048420,
+      "pullRequestRun": 40020055770,
       "nativeJobIDs": [
-        120623498669,
-        120623548086
+        120642038792,
+        120642077361
       ],
       "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
     },
@@ -53,12 +47,12 @@
     },
     "continuumHostedCI": {
       "state": "success",
-      "implementationCommit": "2fac5b5496c702d9fea6ca127128f733b993af67",
-      "pushRun": 40014631224,
-      "pullRequestRun": 40014641655,
+      "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
+      "pushRun": 40020048397,
+      "pullRequestRun": 40020055569,
       "researchJobIDs": [
-        120623485610,
-        120623533299
+        120642031973,
+        120642134355
       ],
       "coreTests": 21,
       "processTests": 7,
@@ -67,26 +61,26 @@
         "syntheticOracleControls": 18,
         "existingRuntimeChecks": 9
       },
-      "c2aTests": 15,
+      "c2aTests": 16,
       "c2aFamilies": {
-        "ordinaryActualTLSScenarios": 12,
+        "ordinaryActualTLSScenarios": 13,
         "handledRuntimeSignals": 2,
         "nonTLSCachedSourceControl": 1
       },
-      "skipped": 0,
       "failed": 0,
+      "skipped": 0,
       "cancelled": 0,
       "todo": 0,
-      "scope": "Read-only peer-requested/read KeyUpdate and queued-response observation on one pinned TLS release; incomplete state inventory and no migration"
+      "scope": "Same-operation actual WRITE retry completion with immutable pending/completed observation; incomplete inventory, no migration"
     },
-    "continuumImplementationCommit": "2fac5b5496c702d9fea6ca127128f733b993af67",
-    "implementationIdentityRule": "Runtime acceptance tied to2fac5b5 and exact frozen sources; previous85bc255 interruption,356f993 retry and99a017e observation acceptance retained separately. Metadata receipts are not new runtime acceptance.",
+    "continuumImplementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
+    "implementationIdentityRule": "Runtime acceptance tied toea64ec1 and exact frozen sources; previous2fac5b5 peer update,85bc255 interruption,356f993 read retry and99a017e observation retained separately. Metadata receipts are not new runtime acceptance.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
       "state": "success",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-c2a-peer-key-update-native-regression.json",
-      "freshCheckoutBinarySha256": "bdaeaabce3c70ee0b0875838e9cdc4480e9919c05f90e6b6c0ff67e69036c61f",
+      "evidence": "x10/evidence/continuum-c2a-write-retry-native-regression.json",
+      "freshCheckoutBinarySha256": "409980f18fbe1077a4198c0231df3f80943b2130fe165bc05e1d846ecae5dcd2",
       "earlierCheckoutBinaryIdentityClaimed": false
     },
     "previousNativeCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
@@ -123,12 +117,12 @@
     "c2aHostedCheckpoint": "x10/continuum/C2A-CHECKPOINT.md",
     "nativeCandidateCI": {
       "state": "success",
-      "implementationCommit": "2fac5b5496c702d9fea6ca127128f733b993af67",
-      "pushRun": 40014631185,
-      "pullRequestRun": 40014641688,
+      "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
+      "pushRun": 40020048420,
+      "pullRequestRun": 40020055770,
       "nativeJobIDs": [
-        120623498669,
-        120623548086
+        120642038792,
+        120642077361
       ],
       "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
     },
@@ -340,7 +334,7 @@
       "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
     },
     "c2aWriteRetryLocal": {
-      "state": "success-local-hosted-pending",
+      "state": "success-local-and-hosted-narrow-profile",
       "flatTests": 16,
       "ordinaryActualTLSScenarios": 13,
       "handledRuntimeSignalControls": 2,
@@ -350,12 +344,50 @@
       "completeInventoryAccepted": false,
       "semanticExportImport": false,
       "migration": false,
-      "implementationIdentity": "Commit containing this checkpoint; resolve exact SHA after publication."
+      "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217"
+    },
+    "previousC2aPeerKeyUpdateHostedCI": {
+      "state": "success",
+      "implementationCommit": "2fac5b5496c702d9fea6ca127128f733b993af67",
+      "pushRun": 40014631224,
+      "pullRequestRun": 40014641655,
+      "researchJobIDs": [
+        120623485610,
+        120623533299
+      ],
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 27,
+      "c1Families": {
+        "syntheticOracleControls": 18,
+        "existingRuntimeChecks": 9
+      },
+      "c2aTests": 15,
+      "c2aFamilies": {
+        "ordinaryActualTLSScenarios": 12,
+        "handledRuntimeSignals": 2,
+        "nonTLSCachedSourceControl": 1
+      },
+      "skipped": 0,
+      "failed": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "scope": "Read-only peer-requested/read KeyUpdate and queued-response observation on one pinned TLS release; incomplete state inventory and no migration"
+    },
+    "previousC2aPeerKeyUpdateNativeHostedCI": {
+      "state": "success",
+      "implementationCommit": "2fac5b5496c702d9fea6ca127128f733b993af67",
+      "pushRun": 40014631185,
+      "pullRequestRun": 40014641688,
+      "nativeJobIDs": [
+        120623498669,
+        120623548086
+      ],
+      "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
     }
   },
   "pendingVerification": [
-    "WRITE retry completion implementation: canonical16=13TLS+2signals+1source, independent heldouts/sensitivity and C0/C1/native passed locally; exact new SHA research/native push and PR CI pending. Resolve first next pass.",
-    "C2a remaining inventory: overlapping retry obligations, control/alert/shutdown and sequence/key usage admission. Same-operation WRITE completion is observed locally with real WANT_WRITE; other interruption boundaries and full inventory remain pending.",
+    "C2a remaining inventory: overlapping retry obligations, control/alert/shutdown and sequence/key usage admission. Same-operation WRITE completion is accepted locally and hosted on ea64ec1; other interruption boundaries and full inventory remain pending.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
     "First scheduled cloud development run has not been independently verified by recorded run history."
@@ -374,7 +406,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "WRITE retry completion locally observed with original pointer/content/full length, immutable refusal→success snapshots and exact65536 echo. First exact hosted CI, then overlaps/control/shutdown/usage limits before C2b."
+      "goal": "WRITE retry completion accepted locally and hosted on ea64ec1:16checks=13TLS+2signals+1source,2 independent heldouts and1 separate sensitivity. Next lawful overlap refusal, then control/shutdown/usage limits before C2b."
     },
     {
       "id": "C3",
@@ -438,6 +470,15 @@
       "commitMessageRun": 40014641627,
       "versionBumpRun": 40014641775,
       "inheritedF5CLAFailedRun": 40014636478
+    },
+    {
+      "name": "WRITE retry implementation format checks",
+      "state": "success",
+      "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
+      "whitespaceRun": 40020055548,
+      "commitMessageRun": 40020055550,
+      "versionBumpRun": 40020055547,
+      "inheritedF5CLAFailedRun": 40020051024
     }
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
@@ -498,20 +539,29 @@
     "runId": "continuum-write-retry-20261023T201826Z",
     "baseCommit": "7bd6e065b94b05326cae1d0dc1291fba4356fcd4",
     "publicationParent": "dd7adb9bc8233dbd634e6cf59d477c74f6b30de9",
-    "result": "Local16checks=13ordinaryTLS+2signals+1source passed; independent heldouts and stale-ledger sensitivity recorded separately. C0 core21/process7, C1 27, native20 passed. Real same-call WRITE retry clears its obligation; no migration. Exact hosted SHA pending.",
+    "result": "Canonical16/16,2 independent actualTLS heldouts and1 separate stale-ledger sensitivity passed; C0 core21/process7, C1 27, native20 passed locally. Exact ea64ec1 research/native push and PR CI accepted. Full inventory and migration remain pending.",
     "helpers": "5 temporary delegated roles; only coordinator integrates/publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
     "perFileLedger": "x10/review/continuum-c2a-write-retry-ledger.json",
     "hostedVerification": {
-      "state": "pending-exact-implementation-SHA"
-    }
+      "state": "success",
+      "researchRuns": [
+        40020048397,
+        40020055569
+      ],
+      "nativeRuns": [
+        40020048420,
+        40020055770
+      ]
+    },
+    "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217"
   },
   "lastVerificationReceipt": {
-    "runId": "continuum-peer-ku-ci-20261023T195633Z",
-    "baseCommit": "2fac5b5496c702d9fea6ca127128f733b993af67",
-    "publicationParent": "ee7ddfc450b965c4bca134c77606f7739bc5498a",
-    "verifiedAtUTC": "2026-10-23T19:58:35.199655Z",
+    "runId": "continuum-write-ci-20261023T203443Z",
+    "baseCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
+    "publicationParent": "4f768c022d291be5ac162c168e84807869185871",
+    "verifiedAtUTC": "2026-10-23T20:38:26.833906Z",
     "files": [
       "x10/continuum/BACKGROUND.json",
       "x10/continuum/C2A-CHECKPOINT.md"
@@ -519,7 +569,7 @@
     "runtimeSourcesChanged": false,
     "spendingUSD": 0
   },
-  "nextConcreteTask": "First verify exact WRITE-retry implementation CI; then overlapping READ/WRITE retry obligations and control/alert/shutdown/sequence-key usage inventory. Retain unsupported refusals and no general ledger ownership claim; C2b remains evidence-gated.",
+  "nextConcreteTask": "Lawful overlap refusal case: original READ returns WANT_READ, distinct bounded WRITE returns WANT_WRITE, observe immutable refusal; complete original WRITE first with identical arguments after resuming both readers, retain READ refusal. Never perform other I/O while WRITE/WANT_WRITE remains. Explicitly refuse unrepresented overlapping history; any eventual admission needs evidence for all obligations. Then control/shutdown/usage inventory before C2b.",
   "previousDevelopmentPass": {
     "runId": "continuum-peer-ku-20261023T193405Z",
     "baseCommit": "ab1f9ad68ef665b9a12683aecf5b9bf9953d7b4f",

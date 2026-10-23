@@ -307,3 +307,50 @@ build identities must not be conflated. New exact implementation hosted CI
 is pending after publication; previous2fac5b5 acceptance remains separate.
 Next: overlaps/control/shutdown/usage inventory; no semantic export/import,
 actual TLS-code change or native continuation implemented. No new spending.
+
+## Same-operation WRITE retry implementation hosted CI receipt
+
+Implementation: `ea64ec1a1ab8b7601d4fd946ce13563ec1558217`.
+Both research workflows completed success:
+[push40020048397](https://github.com/soldabania-art/nginx-x10/actions/runs/40020048397)
+and [PR40020055569](https://github.com/soldabania-art/nginx-x10/actions/runs/40020055569).
+Jobs120642031973 /120642134355 confirm core21, process7, C1 tests27 and
+C2a16 without failures/skips/cancellations/TODO. C1 is18 synthetic oracle
+controls+9 runtime checks; C2a is13 ordinary actual-TLS scenarios,2 handled
+runtime signals and1 no-TLS source control. Hosted Node22 results are separate
+from local Node24 source/build identities,2 heldouts and1 mutated control.
+
+Both full native workflows completed success:
+[push40020048420](https://github.com/soldabania-art/nginx-x10/actions/runs/40020048420)
+and [PR40020055770](https://github.com/soldabania-art/nginx-x10/actions/runs/40020055770).
+Jobs120642038792 /120642077361 completed native/official aggregate, tenant
+cache/Unix gates, feature-off build, alpha package and checksum. These hosted
+step results are distinct from local20-group counts and native binary identity.
+Whitespace40020055548, commit-message40020055550 and version40020055547 also
+succeeded. Inherited F5 CLA40020051024 failed separately; no agreement accepted.
+
+Original evidence retains its at-publication pending status; this receipt
+records subsequent exact implementation acceptance. Original-pointer/content/
+full-length WRITE completion and immutable allowed snapshots remain narrow
+read-only observation. Full inventory, semantic export/import, actual TLS-code
+release change and native continuation remain unimplemented.
+
+Next bounded case must obey the exact pinned SSL_get_error contract: after
+WRITE/WANT_WRITE, repeat that WRITE before any other I/O-triggering operation.
+A lawful sequence begins READ/WANT_READ, then a separate WRITE/WANT_WRITE,
+freezes a refused snapshot pair and finishes WRITE first while retaining READ.
+The current first-obligation enum cannot represent both; no acceptance bug is
+established. Unrepresented overlap history must remain refused/unsupported;
+its eventual clearance needs evidence for every obligation. Primary source:
+[SSL_get_error.pod at the pin](https://github.com/openssl/openssl/blob/85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c/doc/man3/SSL_get_error.pod).
+This is a read-only source handoff, not executed overlap coverage.
+
+This receipt changes only BACKGROUND and this checkpoint over its own live
+lease, then releases it. Runtime/workflow/economic/automation files and spending
+are unchanged. Per-file receipt ledger (SHA256, exact leased parent):
+
+- BACKGROUND before `b4bf2621a817565ff88513584782fc7d82dd8243cf49ef86f88ff580e1338da5`; after `bd700724f96727f13de4b4400d815f22b4dc1a39edeeb12846b33b07935499ad`.
+- C2A-CHECKPOINT before `4702bfddc50d6fe6501b2b56787625665e19e4d1f729dc6cb272232aac247c71`; result identified by Git tree/commit to avoid recursive own digest.
+
+Only allowlisted counts, hashes and workflow/job IDs are retained; no raw
+runtime logs, host paths, process IDs, PKI or session material.
