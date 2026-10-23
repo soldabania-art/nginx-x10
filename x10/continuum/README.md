@@ -31,10 +31,45 @@ Continuum исследует перенос уже установленного 
 сохранён как контрпример и исправлен.
 
 Это один Node executable и одна TLS library, общий worker-файл и ручной
-application-layout adapter. TLS `close_notify`, handshake, смена библиотеки,
-автоматический compiler и native NGINX пока не реализованы. Полный перенос
+application-layout adapter. Сам C0 не выполняет TLS `close_notify` или handshake
+и не реализует смену библиотеки, автоматический compiler или native NGINX. Полный перенос
 состояния C/TLS между независимыми releases этим срезом не доказан. Hosted CI
 проверяет опубликованный commit отдельно; локальные результаты его не заменяют.
+
+## C1: настоящий handshake и наблюдение records
+
+Добавлен отдельный fixture: [C/OpenSSL server](handshake-server.c),
+[Node TLS client и relay](handshake.mjs), [record observer](handshake-oracle.mjs)
+и bounded [aggregate runner](handshake-check.mjs). Итоговая матрица содержит
+**22 проверки**: 13 observer controls и 9 runtime cases. Итоговый локальный
+запуск root подтверждён: **22/22 PASS**, exit 0. Hosted C1 ожидает публикации
+и своего CI результата.
+Это отдельный набор, его counts не прибавляются к C0 как доказательство миграции.
+
+Runtime cases: два положительных обмена, без KeyUpdate и с server KeyUpdate;
+пять отказов до application data — unknown CA, wrong hostname, TLS 1.2 only,
+cipher mismatch и ALPN mismatch; два фактических прерывания SIGTERM/SIGINT
+после native listening с проверкой child exit и удаления private fixture PKI.
+Клиент аутентифицирует server через fixture CA и hostname; согласуются TLS 1.3,
+`TLS_AES_128_GCM_SHA256` и ALPN `continuum-c1`, без session resumption.
+
+Relay сохраняет capture между **двумя TCP legs**: client→relay и relay→server.
+Он не переносит socket или TLS state. Observer использует временные fixture
+traffic secrets в RAM, независимо разбирает framing, проверяет AEAD, directional
+sequence/KeyUpdate, exact application data, оба `close_notify`, отсутствие
+trailing ciphertext и завершение TCP. Он не является независимым PKI verifier
+и не проверяет Finished MAC: certificate/hostname и handshake authentication
+остаются обязанностью Node/OpenSSL client. Observer controls на synthetic
+records отдельно проверяют отказы при повреждениях и неоднозначных boundaries.
+
+Локально наблюдались C/OpenSSL 3.0.13 и Node/OpenSSL 3.5.7: разные endpoints и
+версии одной OpenSSL family, а не две независимые implementation families.
+Source/executable hashes и runtime strings не фиксируют точные bytes всех DSO;
+такой library pin здесь не заявлен. [OPENSSL-STATE.md](OPENSSL-STATE.md) отделяет
+публичные getters от private record state. Следующий C2 начинает с read-only
+instrumentation/inventory/safepoint pinned source; exporter/importer следует
+только после этого gate. C1 не завершает перенос live OpenSSL state, обновление
+TLS binary или native NGINX integration.
 
 ## Проверяемая гипотеза
 
@@ -66,11 +101,11 @@ Linux/одна машина — ограничение этого экспери
    доказать свойства record engine и конкретного handover. Он не выполняет
    authenticated TLS handshake, не проверяет сертификаты и не становится
    обычным TLS endpoint для произвольного клиента.
-2. **Handshake/library bridge.** Независимый клиент устанавливает настоящее
-   TLS-соединение; изученный адаптер извлекает и восстанавливает нужное
-   established state согласованной TLS-библиотеки. Это отдельная работа с
-   OpenSSL или другим явно выбранным backend. Наличие session ticket либо
-   успешной resumption не доказывает перенос прежнего соединения.
+2. **Handshake и backend bridge.** C1 проверяет настоящее TLS-соединение с
+   отдельным клиентом и наблюдение records. Следующий C2 изучает полный inventory
+   и safepoint, затем adapter извлечения/восстановления established state
+   закреплённого backend. Handshake не завершает этот adapter. Наличие session
+   ticket либо успешной resumption не доказывает перенос прежнего соединения.
 3. **Native NGINX integration.** Изучены connection/request/buffer/event/module
    lifetimes, добавлен opt-in adapter и перенесены реальные HTTP/WebSocket
    connections при обновлении native кода. Успех первых двух уровней не
@@ -86,12 +121,14 @@ engine на пути данных. Завершение старого проц�
 ```sh
 node x10/continuum/check.mjs
 node --test x10/continuum/process-handover.test.mjs
+node x10/continuum/handshake-check.mjs
 ```
 
-Первая команда относится к deterministic core checks, вторая — к TCP fixture с
-дочерними процессами. Их наличие и результат не подразумевают handshake,
-OpenSSL export/import или NGINX integration. Точные выполненные случаи и
-неподдержанные состояния должны быть перечислены в результате запуска.
+Первая команда относится к deterministic core checks, вторая — к synthetic TCP
+process fixture, третья — к настоящему handshake/record observation. Третья
+выводит очищенный JSON с counts и exit facts, без raw TAP или session material.
+Ни одна команда не подтверждает OpenSSL export/import или NGINX integration.
+Точные выполненные случаи и неподдержанные состояния перечисляются отдельно.
 
 ## Переносимое представление и адаптеры
 
@@ -175,7 +212,8 @@ Backpressure не разрешает неограниченно копить д�
 connection. HTTP request parsing, WebSocket fragmentation/control frames,
 compression state и upstream TLS требуют самостоятельных adapters.
 
-Секреты эксперимента синтетические. Реальные traffic secrets, keys и capsules
+В C0 используются synthetic secrets; C1 создаёт временные локальные PKI и TLS
+session secrets для своего fixture. Traffic secrets, private keys и capsules
 не должны попадать в stdout, git, обычные logs или публичные artifacts. Работа
 с памятью и очисткой secrets требует отдельного review; отсутствие их в JSON
 не доказывает отсутствие копий в процессе или crash dump.

@@ -494,7 +494,42 @@ binary SHA сохранён; official sample — 1083 strict PASS, 25 SKIP,
 или неполном ciphertext после ожидаемого payload; контрпример сохранён.
 
 Один Node binary/TLS library и shared worker с ручным v1/v2 layout adapter
-не доказывают cross-release TLS upgrade. Handshake/OpenSSL bridge/native NGINX,
-automatic adapter compiler, partial-output/backpressure/crash matrix и TLS
-close_notify ещё не реализованы. Нативная основа не менялась. Новый hosted
+не доказывают cross-release TLS upgrade. На этапе C0 handshake/OpenSSL bridge,
+native NGINX, automatic adapter compiler, partial-output/backpressure/crash
+matrix и TLS close_notify ещё не реализованы. Нативная основа не менялась. Новый hosted
 результат относится только к опубликованному SHA и проверяется отдельно.
+
+## Continuum C1: настоящий TLS handshake и наблюдение records
+
+[C1 evidence](evidence/continuum-c1.json): локальный aggregate прошёл **22/22** —
+13 проверок отдельного wire observer и 9 проверок реального C/OpenSSL↔Node TLS
+стенда. Клиент проверяет CA и hostname. Проверены TLS 1.3 / AES-128-GCM / ALPN,
+точные challenge-bound application bytes, server KeyUpdate и двусторонний
+authenticated `close_notify` с FIN. Пять отрицательных профилей отклонены до
+application I/O. Observer проверяет AEAD, границу handshake/application,
+sequence и завершение; PKI и Finished MAC проверяет TLS endpoint.
+
+Независимый review отдельно подтвердил 7 wire/trust/crash controls на runner
+до lifecycle patch и 2 прерывания уже после реального application echo на
+финальном runner. Найдены и исправлены false PASS при аварии C child во время
+ALPN reject и остаток временных PKI-файлов при SIGTERM. Последний контрпример
+воспроизведён до исправления; после него временный каталог удаляется и child
+завершается. Авторские SIGINT/SIGTERM controls также проверяют освобождение порта.
+
+Это recording relay с **двумя TCP-соединениями**. Он не переносит живое TLS
+состояние. OpenSSL export/import, native NGINX migration и смена TLS release
+остаются следующими этапами. Версии backend наблюдаются, но shared library
+bytes не закреплены. Сертификаты/traffic secrets/wire captures не публикуются;
+полное стирание памяти managed runtime не доказано.
+
+Нативная регрессия повторена: [20/20 групп](evidence/continuum-c1-native-regression.json),
+1083 strict PASS, 25 SKIP, 1 expected TODO, 0 strict FAIL в official sample.
+Native binary и C0 source hashes сохранены. CI classifier теперь проверяет
+delta события, пропускает дорогие jobs при metadata-only изменении и при
+неопределённости запускает проверки; SHA в concurrency сохраняет предыдущий
+implementation run. Hosted C1 ещё требует результата на опубликованном SHA.
+
+Следующий bounded task C2 — read-only instrumentation закреплённого OpenSSL:
+инвентаризация sequences, key generations, pending buffers и control obligations,
+затем проверяемый safepoint. Semantic exporter/importer разрабатывается после
+этого контракта; opaque context copying не используется.

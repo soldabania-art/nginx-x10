@@ -3,8 +3,9 @@
 Этот план проверяет гипотезу переноса живого encrypted потока при смене процесса
 и кода. Он не является обещанием сроков, совместимости всех версий, безопасности
 или коммерческого выпуска. Архитектурные границы и prior art: [README](README.md).
-Начальный статус этапов — разработка/ожидает независимой приёмки; завершение
-отмечается только по конкретному record, source/binary hashes и контрпримеру.
+Статус конкретных срезов указан в checkpoints ниже; остальные требования
+остаются исследованием. Приёмка привязана к конкретному record, source/binary
+hashes и контрпримеру, а не к общему названию этапа.
 
 ## Правила исследования
 
@@ -130,19 +131,34 @@ commit timeout и потерю coordinator. До появления соотве
 
 ## Этап 4: настоящий handshake и TLS backend adapter
 
-Выбрать и закрепить одну версию TLS backend. Прочитать его record, buffer,
-KeyUpdate, alert и shutdown lifetimes; определить, какие state доступны через
-поддерживаемый интерфейс, а для каких нужен ограниченный изученный patch.
-Не заявлять совместимость со stock OpenSSL до реального bridge.
+Этот этап разделён на gates C1, C2a и C2b. Настоящий handshake и наблюдение
+records не означают наличие library exporter или доказанного update point.
 
-Независимый клиент выполняет TLS 1.3 handshake, проверяет certificate chain и
-hostname и затем сохраняет одно соединение во время переноса. Цель — перенести
-реальное established state; resumption/new handshake не считается результатом.
-Неподдержанные negotiated features отклоняются до обещания миграции.
+**C1 — handshake interoperability.** C/OpenSSL server и Node TLS client
+выполняют TLS 1.3 handshake с проверкой fixture CA/hostname, cipher и ALPN.
+Relay имеет два TCP legs; миграции между процессами здесь нет. Record observer
+проверяет AEAD, sequence, KeyUpdate и closure, но не независимые PKI/Finished MAC.
+Два OpenSSL versions остаются одной implementation family. Runtime strings и
+executable hashes не являются pin всех загруженных DSO bytes.
 
-Нужны отдельный разбор обращения с secrets, допустимых backend updates и
-неподдержанных transitions. Переход между schemas одного research engine не
-доказывает возможность переносить context между произвольными OpenSSL releases.
+**C2a — read-only inventory и safepoint.** Начать с изолированного build из
+точного source pin и исследовательского instrumentation patch, не с чтения
+opaque layout установленного Ubuntu DSO. Прочитать record/buffer/KeyUpdate/
+alert/shutdown lifetimes и составить полный inventory обязательств.
+[OPENSSL-STATE.md](OPENSSL-STATE.md) фиксирует начальное чтение public/private
+surface, version mismatch и минимальный semantic probe. Первый gate только
+наблюдает поддержанную quiescent boundary: directional next sequence и key
+generation, private buffered input/plaintext/output, retries и control state.
+Неподдержанный или неизвестный state отвергается до ownership change.
+
+**C2b — export/import после inventory gate.** Отдельный reviewed adapter создаёт
+свежие target library objects из semantic capsule без `memcpy` SSL/EVP/BIO.
+Клиент сохраняет прежний поток после выхода source и смены actual TLS code;
+session serialization/resumption/new handshake не считаются переносом.
+Изменённые source/target layouts требуют своих adapters и identities.
+Нужны review обращения с secrets, допустимых backend updates, неподдержанных
+transitions и held-out partial I/O/KeyUpdate/backpressure cases. Переход между
+schemas одного research engine не доказывает произвольную OpenSSL совместимость.
 
 Стоп/пересмотр: механизм требует бесконечно сохранять прежнюю TLS-библиотеку
 на пути данных; экспорт невозможен без непроверяемого копирования внутренних
@@ -207,17 +223,32 @@ TLS-library matrix и release maintenance потребуют отдельног�
 ## Checkpoint C0 от 23 октября 2026 года
 
 Принят узкий подготовительный срез: record/state **21/21**, process **7/7**
-локально, без skips/TODO. Перечень, hashes и контрпримеры:
+локально и в отдельном hosted CI, без skips/TODO. Перечень, hashes и контрпримеры:
 [continuum-c0 evidence](../evidence/continuum-c0.json). Это части этапов 1–3,
 а не объявление завершёнными всех их требований или разных TLS releases.
 Один shared worker и ручной layout adapter остаются явным ограничением.
 
-Следующий bounded task C1 начинает с pending hosted CI, затем проверяет
-настоящий TLS 1.3 handshake независимым клиентом и изучает экспортируемость
-полного состояния закреплённого backend в объявленной точке quiesce. Сначала
-устанавливаем, где хранятся read/write sequence, KeyUpdate obligations и
-userspace buffers и какие данные доступны через публичный API. Session
-resumption не подменяет перенос того же соединения.
+## Checkpoint C1: локально 22/22, hosted pending
+
+Добавлены C/OpenSSL server, Node TLS client/relay, record observer и bounded
+`node x10/continuum/handshake-check.mjs`. Финальная матрица — **13 observer
+controls + 9 runtime cases = 22**. Итоговый локальный запуск root подтверждён:
+**22/22 PASS**, exit 0. Hosted C1 ожидает публикации и отдельного CI результата.
+Девять runtime cases: два положительных обмена с/без server KeyUpdate,
+пять trust/profile отказов до application bytes и два фактических interrupt
+cleanup после native listening (SIGTERM/SIGINT, child exit, private PKI removal).
+
+Клиент проверяет CA/hostname; observer проверяет authenticated record continuity
+и closure, но не заменяет PKI/Finished MAC verifier. Два TCP legs не мигрируют.
+Наблюдавшиеся server OpenSSL 3.0.13 и Node OpenSSL 3.5.7 не означают две
+независимые implementation families; exact DSO bytes не закреплены.
+Ни state export/import, ни distinct TLS-release upgrade, ни NGINX integration
+этим checkpoint не приняты. C0 counts сохраняются отдельно.
+
+Следующий bounded task — **C2a read-only instrumentation/inventory/safepoint**
+на pinned source по [OPENSSL-STATE.md](OPENSSL-STATE.md). Только после его
+приёмки решается допустимость первого exporter/importer, направления adapter
+и переносимого профиля. Public session APIs не подменяют этот gate.
 
 Не наращивать тысячи запусков toy fixture, панель, cluster или маркетинг
 вместо проверки этого основного неизвестного. Source/binary/version changes

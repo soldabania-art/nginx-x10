@@ -102,24 +102,50 @@ build, использующие общий root Makefile или общие gener
 
 | Механизм | Текущее/планируемое состояние | Что он делает |
 | --- | --- | --- |
-| Cloud assistant automation | **Enabled:** часовое расписание создано 2026-10-23; точный ID/VEVENT в `BACKGROUND.json`. Первый завершённый запуск ещё не наблюдался. | Возобновляет ограниченную сессию по checkpoint, выбирает следующий task и сохраняет результат. |
-| Native CI | `.github/workflows/x10-native.yml`: push/PR/manual, standard `ubuntu-24.04`, текущий timeout 20 минут. | Собирает и проверяет соответствующий commit. |
-| CONTINUUM CI | `.github/workflows/x10-continuum.yml`: push/PR/manual, Node 22, standard `ubuntu-24.04`, timeout 10 минут. Hosted результат текущего commit проверяется отдельно. | Проверяет CONTINUUM по изменениям, отдельный результат на commit. |
-| GitHub cron | **Не включён.** | Scheduled execution не предполагается. |
+| Cloud assistant automation | Часовое расписание включено; точные ID/VEVENT и наблюдения запуска находятся в `BACKGROUND.json`. | Возобновляет ограниченную сессию по свежему Git checkpoint и подключает доступную команду. |
+| Source scope | В обоих workflows: отдельный job с timeout 5 минут, Node 22 и семью тестами classifier. | Выбирает нужный дорогостоящий профиль по точному изменению исходников; сам протоколы не проверяет. |
+| Native CI | `.github/workflows/x10-native.yml`: push/PR/manual, standard Ubuntu 24.04, основной job 20 минут. | Собирает и проверяет соответствующий native commit, когда профиль выбран. |
+| Continuum CI | `.github/workflows/x10-continuum.yml`: push/PR/manual, Node 22, standard Ubuntu 24.04, основной job 10 минут. | Проверяет C0 и реальный handshake/record-observer C1; новый hosted результат относится к точному implementation SHA. |
+| GitHub cron | Не включён. | Постоянное выполнение тестов не предполагается. |
 
-Для проектного CI установлен верхний предел **30 минут на job**; отдельные jobs
-могут иметь меньший timeout. GPU и larger runners не используются. Actions
-получают минимальные permissions; dependencies/actions фиксируются версиями
-или hashes, результаты относятся к точному commit.
+Branch filters сохранены, workflow path filters удалены. Поэтому событие в
+выбранной ветке сначала получает дешёвый scope job, а не зависит от diff всего
+PR или ограниченного списка путей GitHub. Для push сравниваются точные before/
+after. Для PR synchronize сравнивается дельта head, after сверяется с PR head,
+а текущий base должен быть предком before. Неясные refs, новая ветка, изменённый/
+разошедшийся base, ошибка Git/входа или превышенный лимит означают запуск обоих
+профилей. Открытый/повторно открытый PR проверяет полный base/head diff.
 
-GitHub schedule работает с default branch; наличие workflow только в рабочей
-ветке его не активирует. Текущий default branch — upstream `master`; cron не
-добавляется ради повторного запуска неизменных тестов. Часовой assistant resume
-и проверки CI по изменениям — разные механизмы: тесты не разрабатывают продукт.
+Только явный `false` от успешно завершённого scope job позволяет пропустить
+дорогостоящий job. При отказе classifier тот job всё равно допускается к запуску,
+но общий workflow остаётся failed. Пропуск не считается успешной protocol/native
+проверкой. Scope — оптимизация CI, а не security boundary или доказательство
+приёмки прежнего кода. Отчётный `sourceSha` — сравниваемый head, а не идентичность
+PR merge checkout; реальную сборку идентифицирует build manifest.
 
-Даже включённое часовое расписание не гарантирует непрерывную работу, время
-старта или завершение следующего этапа. При недоступной среде/квоте сохраняется
-честный checkpoint; не создаются бесконечные циклы агентов или скрытые расходы.
+Native scope сохраняет `src/auto/conf` и `x10` вне исследовательского каталога.
+Research scope включает код/данные `x10/continuum`, кроме точного
+`BACKGROUND.json` и Markdown непосредственно в корне research каталога.
+Изменение classifier или его тестов запускает оба профиля; изменение workflow
+запускает его собственный профиль. Rename detection отключён при получении
+списка изменений, поэтому удаление native source не скрывается новым именем.
+
+Concurrency group содержит ref и SHA: новый metadata checkpoint не отменяет
+работающий workflow другого implementation SHA. Идентичности, пропуски и
+результаты всё равно фиксируются отдельно. Изменение только lease теперь
+требует лишь коротких scope jobs, если сравнение однозначно; оно не является
+новым подтверждением native или TLS поведения.
+
+Для проектного CI установлен верхний предел 30 минут на job; текущие jobs имеют
+меньшие timeout. GPU и larger runners не используются. Actions имеют минимальные
+permissions, версии/hashes зафиксированы. C1 явно устанавливает C compiler,
+OpenSSL CLI и development headers. Стоимость хранения/retention рассматривается
+отдельно от бесплатного standard compute публичного репозитория.
+
+Часовой assistant resume и CI по изменениям — разные механизмы: тесты не
+разрабатывают продукт. Расписание не гарантирует непрерывную работу, точное
+время старта или завершение следующего этапа. При недоступной среде/квоте нужен
+честный checkpoint, а не бесконечные циклы помощников или скрытые расходы.
 
 ## Публичные результаты
 
@@ -138,17 +164,31 @@ Public CI evidence создаётся на public runner; локальные и�
 - [Workflow events and schedule](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows).
 - [Scheduled workflow limitations](https://docs.github.com/en/actions/how-tos/troubleshoot-workflows).
 
-Lease-only `BACKGROUND.json` и markdown внутри research каталога исключены из
-Continuum CI path filters. Native CI исключает из своего широкого `x10/**`
-самостоятельный каталог `x10/continuum/**`. Это фильтрует push events. Для pull_request GitHub проверяет diff всего PR: даже
-lease-only synchronize может снова запустить или отменить PR workflow. Поэтому
-исключение metadata не является полным admission gate. Фиксировать принятый
-implementation SHA и его push run отдельно от последующих coordination-only
-HEAD; реальные native/research изменения проверяются своими workflows.
-Schedule не заменяет review и принятие CI.
-
 Принятый C0 implementation: `a1ef4af6bebfbac52447e971ead0b16e183f2c1f`.
 Native push run `39979729141` и research push/PR runs `39979729081` /
 `39979846870` завершились success. C0 остаётся synthetic record/process
 экспериментом, не переносом OpenSSL/NGINX. Первый будущий scheduled run
 на момент настройки ещё не наблюдался.
+
+## Подготовительный C1 и следующая приёмка
+
+Команда C1: `node x10/continuum/handshake-check.mjs`. Локальный результат —
+13 observer и 9 runner tests, всего 22/22 без skips. Это отдельный набор от
+C0 (21 core и 7 process) и от семи classifier tests.
+
+C/OpenSSL server и независимый Node TLS client выполняют настоящий TLS 1.3
+handshake с CA/hostname проверкой, выбранными cipher/ALPN и точным двунаправленным
+payload. Observer использует handshake/application secrets только в памяти,
+проверяет последовательность records, выбранный server KeyUpdate и TLS
+close_notify. Две TCP legs recording relay не объявляются одним перенесённым
+соединением. C1 не реализует state export/import, обновление TLS library или
+native NGINX migration и не доказывает полноту backend state.
+
+Runner собирает C server в private temporary root и удаляет certificates/keys/
+binary. `handshake-check.mjs` удерживает raw TAP внутри процесса и выдаёт только
+очищенные counts/exit facts. Реальные secrets, captures и содержимое failed
+assertions не включаются в публичные отчёты или Git.
+
+Hosted C1 пока pending: координатор должен опубликовать implementation, проверить
+run именно для его SHA и записать подтверждённый результат в `BACKGROUND.json`.
+C0 hosted acceptance выше сохраняется и не переносится автоматически на C1.

@@ -336,9 +336,10 @@ remain. Artifacts are development snapshots, not signed releases or claims of
 cross-machine ABI compatibility. The workflow neither deploys a gateway nor
 changes billing, secrets or native test assertions.
 
-The workflow is configured for relevant changes on `x10-development` and
-`x10-main`, relevant pull requests into those branches or `master`, and manual
-dispatch. A local pass or a committed workflow is not proof that GitHub Actions
+The workflows accept push events on `x10-continuum-development`,
+`x10-development` and `x10-main`, pull requests into those branches or `master`,
+and manual dispatch. The source-scope job below decides which expensive profile
+is required for each event. A local pass or a committed workflow is not proof that GitHub Actions
 actually ran; runner access and optional daemon availability can still affect a
 specific hosted run. See [STATUS.md](STATUS.md) for observed commit/run results.
 
@@ -346,7 +347,9 @@ specific hosted run. See [STATUS.md](STATUS.md) for observed commit/run results.
 
 `master` is the unmodified upstream reference. Fork-owned changes, including CI
 adaptation, belong on `x10-main` and development branches. `x10-main` is the
-independent integration base; `x10-development` targets it for review. Keeping
+independent integration base; active Continuum development on
+`x10-continuum-development` targets it for review. The earlier
+`x10-development` branch is retained as history. Keeping
 the original upstream reference does not require applying F5 publisher checks
 to this independent project's pull requests.
 
@@ -413,26 +416,91 @@ action pins were verified against official Git refs (`checkout` v6.0.2,
 run or establish a performance advantage; hosted results belong to the exact
 commit identified in [STATUS.md](STATUS.md) and GitHub Actions.
 
+## Source-scope classification before expensive jobs
+
+Both X10 workflows retain their branch filters and push/PR/manual events, but
+have no workflow-level path filters. Every eligible event first runs a bounded
+five-minute `scope` job with full Git history, Node 22, the classifier's seven
+tests and `.github/scripts/x10-change-scope.mjs`. This avoids depending on
+GitHub's whole-PR or truncated path list for admission to the classifier.
+
+For an existing-branch push, the classifier compares exact event before/after
+commits. For PR synchronize it uses the same exact head delta, requires after
+to match the PR head, and requires the current base to be an ancestor of before.
+A changed/divergent base, unavailable refs, unknown event, malformed/bounded-out
+input or Git error selects both expensive profiles. Opened/reopened PRs use the
+full base/head comparison; a new branch or manual dispatch conservatively runs.
+Diffs disable rename detection so a source deletion cannot disappear behind a
+new excluded filename. The reported `sourceSha` identifies the compared head,
+not the PR merge checkout; native build evidence records the actual checkout.
+
+| Changed path | Expensive profile |
+| --- | --- |
+| `src/**`, `auto/**`, `conf/**`, or `x10/**` outside `x10/continuum/**` | Native |
+| Research files in `x10/continuum/**` | Continuum |
+| Exact research `BACKGROUND.json` or root-level research Markdown | Neither, if these are the only relevant changes |
+| Either classifier source/test file | Both |
+| One X10 workflow file | Its own profile |
+
+Only explicit `false` outputs from a successful scope job skip an expensive
+job. A scope failure still allows that job to run and leaves the workflow
+failed. Manual cancellation remains cancellation. Scope tests and decisions
+are an optimization, not a passed native/TLS test, a security boundary or proof
+that any prior implementation ran. Record skipped jobs separately from passes.
+
+Concurrency groups contain both ref and SHA, so a later metadata-only head
+cannot cancel a different implementation SHA's running workflow. Required source
+runs remain independent even while a coordination update's scope job skips the
+expensive profiles. Full native and research jobs retain 20- and 10-minute
+timeouts, standard Ubuntu 24.04, pinned actions and read-only contents access.
+
 ## Continuum research workflow
 
-`.github/workflows/x10-continuum.yml` runs the isolated research kernel on
-standard Ubuntu 24.04 / Node 22 with a 10-minute job timeout, read-only contents
-permission and pinned checkout/setup actions. It runs `node x10/continuum/check.mjs`
-then the separate process-handover TAP suite. Push/PR/manual are enabled; no cron
-is configured. This is not the native NGINX workflow or a persistent AI worker.
+`.github/workflows/x10-continuum.yml` runs these separate checks when selected:
 
-Native workflow paths exclude the independent `x10/continuum/**` directory.
-Research push paths exclude `BACKGROUND.json` and research Markdown. PR path
-filters examine the whole PR diff, so a lease-only synchronize can still rerun
-or cancel PR checks. The exclusion is not a complete admission gate. Record
-the accepted implementation SHA/push run independently of coordination-only
-HEAD. Native source/control/tests continue to trigger native checks. Both outcomes must be attached to the actual changed
-implementation commit; local tests and a configured schedule do not prove a
-future hosted run.
+```sh
+node x10/continuum/check.mjs
+node --test --test-reporter=tap x10/continuum/process-handover.test.mjs
+node x10/continuum/handshake-check.mjs
+```
 
-The C0 implementation at `a1ef4af6bebfbac52447e971ead0b16e183f2c1f` has
-successful [native push CI](https://github.com/soldabania-art/nginx-x10/actions/runs/39979729141)
+The first two retain C0's 21 record/state tests and seven synthetic process
+transfer tests. C1 adds a separate sanitized aggregate: 13 observer tests and
+nine real-handshake fixture tests, **22/22 locally** without skips. These units
+are not added to the native aggregate's 20 group count or the classifier tests.
+The workflow explicitly installs `build-essential`, `libssl-dev` and `openssl`
+for C1; tests compile a private temporary C/OpenSSL server rather than changing
+the native NGINX build. Node 22 is the independent TLS client's runtime.
+
+C1 verifies a real TLS 1.3 handshake with CA/hostname validation, the selected
+cipher/ALPN, exact application bytes and both TLS close_notify messages. Its
+observer authenticates captured handshake/application records in order and
+checks selected server KeyUpdate and terminal-record boundaries. Negative
+trust/profile cases must reject before application exchange. The recording
+relay has **two TCP legs**; this is interoperability/record observation, not
+live session migration, an OpenSSL state export/import bridge, a library upgrade
+or native NGINX handover. It does not independently verify Finished MACs beyond
+the real TLS client's own handshake validation.
+
+Real traffic secrets and wire captures stay in fixture memory. The C1 aggregate
+captures TAP internally and publishes only fixed labels, counts and exit facts;
+it does not print raw failed assertion state. Temporary fixture certificates,
+keys and binaries are removed. Public RFC vectors and source hashes are distinct
+from real session material. There is no cron or persistent AI worker in either
+workflow; scheduled development is a separate hosted automation.
+
+## Accepted hosted checkpoint and pending C1
+
+C0 implementation `a1ef4af6bebfbac52447e971ead0b16e183f2c1f` has successful
+[native push CI](https://github.com/soldabania-art/nginx-x10/actions/runs/39979729141)
 and [research PR CI](https://github.com/soldabania-art/nginx-x10/actions/runs/39979846870).
-Research logs confirm 21 core and 7 process tests with no failures or skips.
+Research logs confirm its 21 core and seven process tests without failures or
+skips. These hosted results remain C0 evidence; they do not validate the new C1
+or classifier files. C1 hosted acceptance is pending publication and inspection
+of its exact implementation SHA/run. Local tests and configured workflows do
+not establish that future result.
+
 The inherited F5 CLA publisher check remains a separate failed integration;
-these technical outcomes do not claim that all repository checks passed.
+technical outcomes do not claim that all repository checks passed. Current
+publication/ownership, exact CI references and pending work are recorded in
+[Continuum BACKGROUND.json](continuum/BACKGROUND.json).

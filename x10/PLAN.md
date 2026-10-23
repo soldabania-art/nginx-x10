@@ -98,3 +98,12 @@ NGINX integration. Полный исходный NGINX и прежние отр�
 является плановым ограничением, а не гарантией стоимости завершения или
 поручением автоматически покупать услуги. Коммерческий масштаб и затраты
 на поддержку рассматриваются отдельно в [ECONOMICS](continuum/ECONOMICS.md).
+
+Срез C1 добавил настоящий authenticated TLS 1.3 handshake и bounded wire
+observer: локально 22/22, независимо проверены отрицательные wire/trust и
+прерывание с живым TLS. [Evidence](evidence/continuum-c1.json) сохраняет
+контрпримеры, source hashes и границы проверки. Это двухсоединительный relay,
+а не миграция. C0 и полный native aggregate повторены без изменения native
+бинарника. Следующий C2 начинается с read-only state inventory/safepoint в
+[закреплённом OpenSSL](continuum/OPENSSL-STATE.md); реальный semantic
+export/import и native integration остаются отдельными работами.
