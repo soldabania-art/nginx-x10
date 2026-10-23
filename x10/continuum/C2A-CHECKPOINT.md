@@ -371,3 +371,26 @@ ea64ec1 hosted acceptance is retained; new exact implementation CI is pending.
 Probe/ledger and native source remain unchanged. No overlap admission,
 full graceful wire verification, semantic export/import or TLS-code migration
 is implemented. Next: control/alert/shutdown and sequence/key usage inventory.
+
+## Exact unsupported-overlap hosted acceptance
+
+Implementation `996e997a6db359333d196d8db445580384db02ed` completed success in
+research push40027640168/PR40027647320 (jobs120667838222/120667827548)
+and native push40027640039/PR40027647366 (jobs120667900969/120667856291).
+Both research job logs independently confirm core21/process7/C1-27/C2a-17,
+zero failures/skips/cancellations/TODO. Seventeen C2a checks comprise14 ordinary
+actual-TLS scenarios,2 handled runtime signals and1 no-TLS source control;
+C1 remains18 synthetic oracle controls+9 runtime checks.
+
+Native jobs completed aggregate, tenant-cache/Unix, feature-off build and alpha
+package/checksum steps; their hosted success is separate from the local20/20
+and official1083 strictPASS/25SKIP/1expectedTODO sample. Format checks
+40027647458/40027647281/40027647362 succeeded. F5 CLA40027642566 remains an
+inherited failed integration; no agreement was accepted for the owner.
+
+Prior ea64ec1 WRITE-retry acceptance remains separate. This checkpoint accepts
+only refusal observation: the original READ remains owed after exact WRITE
+success. Raw close, wire=null, no overlap admission, semantic export/import,
+actual TLS-code migration or native NGINX continuation. Next control/alert/
+shutdown and sequence/key usage gates remain pending. Local evidence retains
+at-publication pending status; this exact-SHA receipt records later acceptance.

@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-overlap-ci-20261023T213447981Z",
-    "owner": "cloud-coordinator",
-    "baseCommit": "996e997a6db359333d196d8db445580384db02ed",
-    "acquiredAtUTC": "2026-10-23T21:34:47.981Z",
-    "expiresAtUTC": "2026-10-23T21:59:47.981Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -27,19 +21,19 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40020048420",
-    "continuumStage": "C2a narrow read-only same-operation WRITE retry completion accepted locally and hosted; overlap/control/shutdown/usage inventory and export-import pending",
+    "nativeCommit": "996e997a6db359333d196d8db445580384db02ed",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40027640039",
+    "continuumStage": "C2a narrow unsupported-overlap refusal accepted locally and hosted; control/alert/shutdown/usage and full overlap admission remain pending",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-c2a-write-retry.json",
+    "continuumEvidence": "x10/evidence/continuum-c2a-overlap.json",
     "nativeHostedCI": {
       "state": "success",
-      "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
-      "pushRun": 40020048420,
-      "pullRequestRun": 40020055770,
+      "implementationCommit": "996e997a6db359333d196d8db445580384db02ed",
+      "pushRun": 40027640039,
+      "pullRequestRun": 40027647366,
       "nativeJobIDs": [
-        120642038792,
-        120642077361
+        120667900969,
+        120667856291
       ],
       "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
     },
@@ -53,12 +47,12 @@
     },
     "continuumHostedCI": {
       "state": "success",
-      "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
-      "pushRun": 40020048397,
-      "pullRequestRun": 40020055569,
+      "implementationCommit": "996e997a6db359333d196d8db445580384db02ed",
+      "pushRun": 40027640168,
+      "pullRequestRun": 40027647320,
       "researchJobIDs": [
-        120642031973,
-        120642134355
+        120667838222,
+        120667827548
       ],
       "coreTests": 21,
       "processTests": 7,
@@ -67,9 +61,9 @@
         "syntheticOracleControls": 18,
         "existingRuntimeChecks": 9
       },
-      "c2aTests": 16,
+      "c2aTests": 17,
       "c2aFamilies": {
-        "ordinaryActualTLSScenarios": 13,
+        "ordinaryActualTLSScenarios": 14,
         "handledRuntimeSignals": 2,
         "nonTLSCachedSourceControl": 1
       },
@@ -77,16 +71,16 @@
       "skipped": 0,
       "cancelled": 0,
       "todo": 0,
-      "scope": "Same-operation actual WRITE retry completion with immutable pending/completed observation; incomplete inventory, no migration"
+      "scope": "Unsupported overlapping retry refusal only; completed WRITE retains original READ; incomplete inventory, no migration"
     },
-    "continuumImplementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
-    "implementationIdentityRule": "Runtime acceptance tied toea64ec1 and exact frozen sources; previous2fac5b5 peer update,85bc255 interruption,356f993 read retry and99a017e observation retained separately. Metadata receipts are not new runtime acceptance.",
+    "continuumImplementationCommit": "996e997a6db359333d196d8db445580384db02ed",
+    "implementationIdentityRule": "Runtime acceptance tied to996e997 and exact frozen sources; previousea64ec1 WRITE retry,2fac5b5 peer update,85bc255 interruption,356f993 read retry and99a017e observation retained separately. Metadata receipts are not new runtime acceptance.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
       "state": "success",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-c2a-write-retry-native-regression.json",
-      "freshCheckoutBinarySha256": "409980f18fbe1077a4198c0231df3f80943b2130fe165bc05e1d846ecae5dcd2",
+      "evidence": "x10/evidence/continuum-c2a-overlap-native-regression.json",
+      "freshCheckoutBinarySha256": "66d09eb4a07d91971f192798a27ff99e2a35705ba30789cda081e784a58ffc07",
       "earlierCheckoutBinaryIdentityClaimed": false
     },
     "previousNativeCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
@@ -123,12 +117,12 @@
     "c2aHostedCheckpoint": "x10/continuum/C2A-CHECKPOINT.md",
     "nativeCandidateCI": {
       "state": "success",
-      "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
-      "pushRun": 40020048420,
-      "pullRequestRun": 40020055770,
+      "implementationCommit": "996e997a6db359333d196d8db445580384db02ed",
+      "pushRun": 40027640039,
+      "pullRequestRun": 40027647366,
       "nativeJobIDs": [
-        120642038792,
-        120642077361
+        120667900969,
+        120667856291
       ],
       "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
     },
@@ -392,7 +386,7 @@
       "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
     },
     "c2aOverlapLocal": {
-      "state": "success-local-refusal-observation-hosted-pending",
+      "state": "success-local-and-hosted-refusal-profile",
       "flatTests": 17,
       "ordinaryActualTLSScenarios": 14,
       "handledRuntimeSignalControls": 2,
@@ -404,11 +398,56 @@
       "overlapStateAdmission": false,
       "semanticExportImport": false,
       "migration": false,
-      "implementationIdentity": "Commit containing this checkpoint; exact SHA after publication."
+      "implementationCommit": "996e997a6db359333d196d8db445580384db02ed"
+    },
+    "previousC2aWriteRetryHostedCI": {
+      "state": "success",
+      "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
+      "pushRun": 40020048397,
+      "pullRequestRun": 40020055569,
+      "researchJobIDs": [
+        120642031973,
+        120642134355
+      ],
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 27,
+      "c1Families": {
+        "syntheticOracleControls": 18,
+        "existingRuntimeChecks": 9
+      },
+      "c2aTests": 16,
+      "c2aFamilies": {
+        "ordinaryActualTLSScenarios": 13,
+        "handledRuntimeSignals": 2,
+        "nonTLSCachedSourceControl": 1
+      },
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "scope": "Same-operation actual WRITE retry completion with immutable pending/completed observation; incomplete inventory, no migration"
+    },
+    "previousC2aWriteRetryNativeHostedCI": {
+      "state": "success",
+      "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
+      "pushRun": 40020048420,
+      "pullRequestRun": 40020055770,
+      "nativeJobIDs": [
+        120642038792,
+        120642077361
+      ],
+      "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
+    },
+    "previousNativeLocalRegression": {
+      "state": "success",
+      "groups": 20,
+      "evidence": "x10/evidence/continuum-c2a-write-retry-native-regression.json",
+      "freshCheckoutBinarySha256": "409980f18fbe1077a4198c0231df3f80943b2130fe165bc05e1d846ecae5dcd2",
+      "earlierCheckoutBinaryIdentityClaimed": false
     }
   },
   "pendingVerification": [
-    "Overlap refusal implementation: canonical17=14TLS+2signals+1source, independent2 heldouts and C0/C1/native passed locally; exact new SHA research/native push and PR CI pending. Resolve first next pass.",
     "C2a remaining inventory: control/alert/shutdown and sequence/key usage admission. One lawful overlap refusal path is observed locally; full overlapping history/admission and other interruption boundaries remain unsupported.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
@@ -428,7 +467,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Lawful overlapping READ/WRITE refusal observed locally: WRITE completes first, original READ remains refused;17checks=14TLS+2signals+1source. First exact hosted CI, then control/alert/shutdown and usage gates before C2b."
+      "goal": "Unsupported overlapping READ/WRITE refusal accepted locally and hosted: original READ retained after WRITE success. Next control/alert/shutdown and sequence/key usage gates before C2b; full overlap admission remains unsupported."
     },
     {
       "id": "C3",
@@ -501,6 +540,15 @@
       "commitMessageRun": 40020055550,
       "versionBumpRun": 40020055547,
       "inheritedF5CLAFailedRun": 40020051024
+    },
+    {
+      "name": "Overlap refusal implementation format checks",
+      "state": "success",
+      "implementationCommit": "996e997a6db359333d196d8db445580384db02ed",
+      "whitespaceRun": 40027647458,
+      "commitMessageRun": 40027647281,
+      "versionBumpRun": 40027647362,
+      "inheritedF5CLAFailedRun": 40027642566
     }
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
@@ -561,28 +609,820 @@
     "runId": "continuum-overlap-20261023T211942Z",
     "baseCommit": "2760af0f4dfed38ed569ca314babfa17771139d4",
     "publicationParent": "ca30d0058e3b4043affe5b9fa6ddbd967a1808c9",
-    "result": "Canonical17/17, independent2 actualTLS heldouts, C0 core21/process7, C1 27 and native20 passed locally. WRITE completion retains READ refusal; no overlap admission or migration. Exact hosted SHA pending.",
+    "result": "Canonical17/17, independent2 actualTLS heldouts, C0 core21/process7, C1 27 and native20 passed locally. Exact996e997 research/native push and PR CI completed success. WRITE completion retains READ refusal; no overlap admission or migration.",
     "helpers": "5 temporary delegated roles; only coordinator integrates/publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
     "perFileLedger": "x10/review/continuum-c2a-overlap-ledger.json",
     "hostedVerification": {
-      "state": "pending-exact-implementation-SHA"
-    }
+      "state": "success",
+      "researchRuns": [
+        40027640168,
+        40027647320
+      ],
+      "nativeRuns": [
+        40027640039,
+        40027647366
+      ]
+    },
+    "implementationCommit": "996e997a6db359333d196d8db445580384db02ed"
   },
   "lastVerificationReceipt": {
-    "runId": "continuum-write-ci-20261023T203443Z",
-    "baseCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
-    "publicationParent": "4f768c022d291be5ac162c168e84807869185871",
-    "verifiedAtUTC": "2026-10-23T20:38:26.833906Z",
+    "runId": "continuum-overlap-ci-20261023T213447981Z",
+    "baseCommit": "996e997a6db359333d196d8db445580384db02ed",
+    "publicationParent": "a590d11a402defddcf3a463e78025cb98f40dedc",
+    "verifiedAtUTC": "2026-10-23T21:40:21.456Z",
     "files": [
       "x10/continuum/BACKGROUND.json",
       "x10/continuum/C2A-CHECKPOINT.md"
     ],
     "runtimeSourcesChanged": false,
-    "spendingUSD": 0
+    "spendingUSD": 0,
+    "exactHostedVerification": {
+      "schemaVersion": 1,
+      "implementationCommit": "996e997a6db359333d196d8db445580384db02ed",
+      "verifiedAtUTC": "2026-10-23T21:40:21.456Z",
+      "allFourCompletedSuccess": true,
+      "runs": [
+        {
+          "id": 40027640168,
+          "name": "X10 Continuum research checks",
+          "event": "push",
+          "headSha": "996e997a6db359333d196d8db445580384db02ed",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40027640168",
+          "jobs": [
+            {
+              "id": 120667722836,
+              "name": "scope",
+              "status": "completed",
+              "conclusion": "success",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Check scope fail-closed controls",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Classify exact event delta",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success"
+                }
+              ]
+            },
+            {
+              "id": 120667838222,
+              "name": "research",
+              "status": "completed",
+              "conclusion": "success",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Build dependencies for TLS interoperability and isolated source probe",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Independent record and state counterexamples",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Same TCP connection across research worker versions",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Real TLS handshake and independent record observer",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Pinned OpenSSL read-only state probe",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 40027647320,
+          "name": "X10 Continuum research checks",
+          "event": "pull_request",
+          "headSha": "996e997a6db359333d196d8db445580384db02ed",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40027647320",
+          "jobs": [
+            {
+              "id": 120667747561,
+              "name": "scope",
+              "status": "completed",
+              "conclusion": "success",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Check scope fail-closed controls",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Classify exact event delta",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success"
+                }
+              ]
+            },
+            {
+              "id": 120667827548,
+              "name": "research",
+              "status": "completed",
+              "conclusion": "success",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Build dependencies for TLS interoperability and isolated source probe",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Independent record and state counterexamples",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Same TCP connection across research worker versions",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Real TLS handshake and independent record observer",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Pinned OpenSSL read-only state probe",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 40027640039,
+          "name": "X10 native compatibility",
+          "event": "push",
+          "headSha": "996e997a6db359333d196d8db445580384db02ed",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40027640039",
+          "jobs": [
+            {
+              "id": 120667758735,
+              "name": "scope",
+              "status": "completed",
+              "conclusion": "success",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Check scope fail-closed controls",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Classify exact event delta",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success"
+                }
+              ]
+            },
+            {
+              "id": 120667900969,
+              "name": "linux",
+              "status": "completed",
+              "conclusion": "success",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Build dependencies and optional test clients",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Install pinned HTTP3 interoperability client",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Install independent HTTP3 HEAD client",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Compile native profile",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Native regressions and pinned official compatibility sample",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Verify native tenant cache contract experiment",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Verify private Unix control transport",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Build profile without control API",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Package local Linux alpha",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Checksum local Linux alpha",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Preserve JSON evidence",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Preserve local Linux alpha",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 40027647366,
+          "name": "X10 native compatibility",
+          "event": "pull_request",
+          "headSha": "996e997a6db359333d196d8db445580384db02ed",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40027647366",
+          "jobs": [
+            {
+              "id": 120667747618,
+              "name": "scope",
+              "status": "completed",
+              "conclusion": "success",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Check scope fail-closed controls",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Classify exact event delta",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success"
+                }
+              ]
+            },
+            {
+              "id": 120667856291,
+              "name": "linux",
+              "status": "completed",
+              "conclusion": "success",
+              "steps": [
+                {
+                  "name": "Set up job",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Build dependencies and optional test clients",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Install pinned HTTP3 interoperability client",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Install independent HTTP3 HEAD client",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Compile native profile",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Native regressions and pinned official compatibility sample",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Verify native tenant cache contract experiment",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Verify private Unix control transport",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Build profile without control API",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Package local Linux alpha",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Checksum local Linux alpha",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Preserve JSON evidence",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Preserve local Linux alpha",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                  "status": "completed",
+                  "conclusion": "success"
+                },
+                {
+                  "name": "Complete job",
+                  "status": "completed",
+                  "conclusion": "success"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "researchLogCounts": [
+        {
+          "jobId": 120667838222,
+          "reports": [
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-record-and-state-kernel",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "in-memory-record-and-state-only",
+              "liveTlsProcessHandover": false,
+              "counts": {
+                "tests": 21,
+                "suites": 0,
+                "pass": 21,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-real-handshake-and-record-observation",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "real-handshake-and-record-observation-only",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 27,
+                "suites": 0,
+                "pass": 27,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-pinned-openssl-state-probe",
+              "passed": true,
+              "testFiles": 1,
+              "scope": "pinned-openssl-read-only-state-observation",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 17,
+                "suites": 0,
+                "pass": 17,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            }
+          ],
+          "process": {
+            "tests": 7,
+            "pass": 7,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        },
+        {
+          "jobId": 120667827548,
+          "reports": [
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-record-and-state-kernel",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "in-memory-record-and-state-only",
+              "liveTlsProcessHandover": false,
+              "counts": {
+                "tests": 21,
+                "suites": 0,
+                "pass": 21,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-real-handshake-and-record-observation",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "real-handshake-and-record-observation-only",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 27,
+                "suites": 0,
+                "pass": 27,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-pinned-openssl-state-probe",
+              "passed": true,
+              "testFiles": 1,
+              "scope": "pinned-openssl-read-only-state-observation",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 17,
+                "suites": 0,
+                "pass": 17,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            }
+          ],
+          "process": {
+            "tests": 7,
+            "pass": 7,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        }
+      ],
+      "formatChecks": [
+        {
+          "id": 40027647458,
+          "name": "Check Whitespace",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 40027647281,
+          "name": "Check Commit Message(s)",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 40027647362,
+          "name": "Check Version Bump",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "inheritedF5CLA": {
+        "id": 40027642566,
+        "status": "completed",
+        "conclusion": "failure",
+        "agreementAccepted": false
+      },
+      "runtimeCheckoutScope": "Workflow head SHA identifies the implementation event. PR merge checkout build identities remain distinct; hosted workflow success is not an identical local binary claim.",
+      "publication": {
+        "rawRuntimeLogsSaved": false,
+        "sessionKeysSaved": false,
+        "hostPathsAndPIDsSaved": false
+      }
+    },
+    "perFileLedger": {
+      "beforeHashReference": "a590d11a402defddcf3a463e78025cb98f40dedc",
+      "entries": [
+        {
+          "path": "x10/continuum/BACKGROUND.json",
+          "beforeSha256": "cca0296ff14ac2906509090166116f8d89a2777b74e4162a818b0ad6f2483998"
+        },
+        {
+          "path": "x10/continuum/C2A-CHECKPOINT.md",
+          "beforeSha256": "c2009397090dec4e74549b29732e862ed7c3fdbc0df3bb6f5c39f730aabe33b4",
+          "afterSha256": "397365e41c83db3d443280d1cde407a3fa2ac04f6338d209a7518233478acd58"
+        }
+      ],
+      "selfDigest": "BACKGROUND after bytes are identified by Git tree/commit; no recursive digest."
+    }
   },
-  "nextConcreteTask": "First exact overlap implementation CI, then bounded actual TLS control/alert/shutdown observations and sequence/key usage admission. Preserve refusal for unsupported overlapping history; C2b semantic export/import remains evidence-gated.",
+  "nextConcreteTask": "Bounded actual TLS control/alert/shutdown observations and sequence/key usage admission. Preserve refusal for unsupported overlapping history; C2b semantic export/import remains evidence-gated.",
   "previousDevelopmentPass": {
     "runId": "continuum-write-retry-20261023T201826Z",
     "baseCommit": "7bd6e065b94b05326cae1d0dc1291fba4356fcd4",
@@ -604,5 +1444,17 @@
       ]
     },
     "implementationCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217"
+  },
+  "previousVerificationReceipt": {
+    "runId": "continuum-write-ci-20261023T203443Z",
+    "baseCommit": "ea64ec1a1ab8b7601d4fd946ce13563ec1558217",
+    "publicationParent": "4f768c022d291be5ac162c168e84807869185871",
+    "verifiedAtUTC": "2026-10-23T20:38:26.833906Z",
+    "files": [
+      "x10/continuum/BACKGROUND.json",
+      "x10/continuum/C2A-CHECKPOINT.md"
+    ],
+    "runtimeSourcesChanged": false,
+    "spendingUSD": 0
   }
 }
