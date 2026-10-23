@@ -1,6 +1,6 @@
 # NGINX X10: проверенное состояние
 
-Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, проверками дополнительных функций и генерируемыми QUIC-свойствами под санитайзерами. Последний единый проверочный прогон после реальной пересборки завершился **9/9 успешных групп**: [milestone-3 JSON](evidence/native-checks-milestone-3.json). Это development-кандидат; performance acceptance и готовность к production остаются открытыми.
+Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, реальным HTTP/3 interop и генерируемыми QUIC-проверками под санитайзерами. Последний единый локальный прогон завершился **12/12 успешных групп**: [milestone-4 JSON](evidence/native-checks-milestone-4.json). Этот этап меняет контроллер и проверяющие инструменты; native C и ранее собранный бинарник не изменены. Это development-кандидат; performance acceptance и готовность к production остаются открытыми.
 
 ## Основа и чтение исходников
 
@@ -93,7 +93,7 @@ record с неверным типом `at`; такие входы теперь �
 данных. Полный controller TAP: **33/33** — 16 прежних и 15 новых сценариев,
 плюс два parent tests. Все 15 masters recovery-набора завершились SIGQUIT exit 0.
 Это проверка гибели процесса после fsync, не симуляция отключения питания.
-`initialized_unbound` reconciliation прочитан, но отдельного crash-case пока нет.
+На этом этапе `initialized_unbound` reconciliation был прочитан без отдельного crash-case; проверки инициализации добавлены в следующем этапе ниже.
 Stale lock по-прежнему снимается только оператором после проверки процесса.
 
 | Дополнительная группа | Candidate / pristine baseline | Что реально проверено |
@@ -138,6 +138,61 @@ Manifest без новых identities требует реальной перес
 продолжает подтверждать sampled readiness; полный generation/listener fence
 не добавлен и не заявляется.
 
+## Storage failures, HTTP/3 и нативные инструменты: четвёртый этап
+
+[Storage report](evidence/control-storage-fixed.json) содержит **32 новых сценария**.
+На предыдущем контроллере воспроизведены две ошибки: caught I/O failure мог
+испортить ещё восстанавливаемую pending stage; повторный recover мог принять
+полную строку history без повторного успешного fsync. Теперь durable event и
+terminal cleanup failures сохраняются для explicit recover, который повторяет
+нужные fsync history/state/directory до удаления intent. Добавлены SIGKILL на
+четырёх границах initialization, ошибки append/fsync/rename/directory sync,
+повторного recover и terminal cleanup. Полный controller: **66/66 TAP checks**
+(63 поведенческих сценария и три parent tests). [Независимый review](review/storage-failures-review.md)
+подтверждает ограниченную crash/storage matrix; отключение питания, полная ACID
+семантика и общий traffic cutover не доказаны. Partial history и противоречия
+по-прежнему требуют ручной проверки.
+
+[HTTP/3 fixture](test/HTTP3.md): **7/7 на candidate и pristine**, настоящий UDP
+QUIC v1/TLS 1.3, ALPN `h3`, native `$http3=h3` и `HTTP/3.0`, без TCP fallback.
+Проверены точные binary GET/range/fragmented POST, шесть одновременно
+удерживаемых streams, отмена с завершением другого и нового stream в том же
+соединении, точные отказы неверного CA и hostname. Все семь UDP transports на
+каждом прогоне подтвердили закрытие; native SIGQUIT exit 0, без оставшихся
+сокетов и fixtures. [Candidate](evidence/http3-fixed.json),
+[reference](evidence/http3-reference.json), [hashed dependencies](evidence/http3-client-dependencies.json).
+Client lock — aioquic 1.3.0 и девять зависимостей для CPython 3.12/Linux x86_64.
+[Неуспешный HEAD diagnostic](evidence/http3-client-head-diagnostic.json) сохранён
+для обоих бинарников: pinned client проверяет body length без исключения HEAD.
+HEAD не входит в успешный scope; fixture не обходит клиентскую проверку и не
+объявляет это дефектом native NGINX.
+
+[QUIC frame boundaries](review/quic-frame-boundaries.md): **6579/6579 входов**
+по шести свойствам на обеих версиях, ASan/UBSan без диагностик. Проверяются
+field values, усечённые префиксы, длины и borrowing boundaries, разрешённость
+frame types в типах packet и parser-local limits. Три наблюдения о неминимальном
+frame type отделены от strict PASS. [Candidate](evidence/quic-frames-fixed.json),
+[reference](evidence/quic-frames-reference.json),
+[отдельный sensitivity control](evidence/quic-frames-negative-control.json).
+Новый production C defect не подтверждён; semantic ACK/flow/final-size state,
+полная connection state machine и 32-bit build не проверены. LSan отключён.
+
+[Нативный C HTTP/1 client](bench/NATIVE-LOAD.md) прошёл **41/41** functional,
+negative, interruption и ASan/UBSan проверок: [JSON](evidence/native-load-verification.json).
+Он проверяет один фиксированный 1024-byte response profile и поддерживает
+partial I/O, absolute deadlines, bounded concurrency и полное request accounting.
+Это ограниченный fixture client, не общий HTTP conformance tool. Сам load client
+и pristine native proxy-origin вынесены из Node hot path в
+[новый comparison driver](bench/NATIVE-COMPARE.md).
+[Независимый interop/load review](review/interop-load-review.md) отдельно
+фиксирует 9 runtime controls, 32 direct aggregate controls и 15 synthetic driver
+controls; они не выдаются за повтор полного owner suite.
+
+Единый локальный прогон **12/12** сохраняет прежние 1083 official strict PASS,
+25 SKIP, один expected TODO и ноль strict FAIL. Native source diff, binary,
+build manifest и generated inputs совпали до/после. Это прогон замороженных
+файлов рабочего дерева до публикации; hosted CI проверяется отдельно по commit.
+
 ## Производительность: измеритель и открытый результат
 
 [Driver](bench/README.md) проверяет одинаковые build profiles, SHA-256 и `-V`, точные 1024-byte ответы, ошибки, cleanup, AB/BA порядок, latency и Linux CPU/RSS. [Проверки самого driver](evidence/benchmark-verification.json) включают несовместимый профиль, SIGTERM и подмену manifest.
@@ -150,11 +205,30 @@ Manifest без новых identities требует реальной перес
 
 Эти контроли показывают существенную нестабильность измерения. Причина первого неблагоприятного результата не установлена; регрессия не исключена. Отношения не доказывают эффект C patch, который не исполняется в этих HTTP1 workloads. Node clients/upstream и общий хост ограничивают интерпретацию; наблюдение cgroup сохранено [отдельно](evidence/benchmark-observer.json). Ускорение и отсутствие регрессий не установлены. Для performance acceptance нужен более стабильный генератор/хост и дополнительные воспроизводимые workloads.
 
+После завершения functional suites и остановки всех project fixtures выполнены
+последовательные короткие замеры новым C client/native-origin driver: C16,
+четыре повтора на метку и workload, 1000 ms admission и 250 ms warmup.
+Каждый JSON содержит 16 samples, ноль request errors, совпавшие identities,
+native SIGQUIT exit 0 и пустые cleanup errors. Node используется только для
+оркестрации. Хост не выделен и не изолирован от других tenants.
+
+| Новый замер | Static, отношение средних throughput | Proxy, отношение средних throughput |
+| --- | --- | --- |
+| [A/A, один pristine SHA под обеими метками](evidence/native-benchmark-identical-control.json) | 0,996 | 1,111 |
+| [A/B, candidate / pristine](evidence/native-benchmark-comparison.json) | 1,068 | 1,028 |
+
+Расхождение одинаковых бинарников остаётся существенным, особенно для proxy.
+Это наблюдения работоспособного нового измерителя, без confidence intervals и
+статистического acceptance gate. Они не устанавливают ускорение, не снимают
+предыдущую неопределённость о регрессии и не относятся к QUIC hot path.
+Сырые latency histogram bounds, CPU/RSS front/origin/client и контекст хоста
+сохранены в JSON. Исторические Node evidence не изменены.
+
 [Независимый review](review/milestone-2-review.md) перечисляет исправленные замечания и оставшиеся ограничения. Workflow [x10-native.yml](../.github/workflows/x10-native.yml) использует read-only permissions и закреплённые actions. Для milestone commit `cba2f9c9b94d6c0947d86e6290062803f07ae507` hosted native CI действительно завершился успешно: [PR run 39895867783](https://github.com/soldabania-art/nginx-x10/actions/runs/39895867783) и [push run 39895867104](https://github.com/soldabania-art/nginx-x10/actions/runs/39895867104). Эти результаты относятся к указанному commit; оформление последующих commit messages и fork CI policy проверяются отдельно. Старый milestone сохранён в ветке `checkpoint/milestone-2-before-style`. Проверка оформления commit messages на `ebb693ea8ae0b2833550991d7e59a4ec26973da6` прошла. Унаследованный F5 CLA workflow всё ещё падает из-за отсутствующей publisher integration: default branch остаётся исходным `master`, поэтому guard на development/integration ветках пока не используется этим событием. Подробности и ссылки — в [CI.md](CI.md); это не native test failure.
 
 ## Оставшиеся границы
 
-- HTTP/3 и QUIC end-to-end, сетевые потери/миграция, полная TLS-library matrix и 32-битные сборки не проверены. Компиляция HTTP/3 с OpenSSL compatibility path этого не заменяет.
+- HTTP/3 получил описанные семь loopback interop cases. HEAD, сетевые потери/миграция, browser/client matrix, QUIC connection-state matrix, полная TLS-library matrix и 32-битные сборки не проверены.
 - Mail TLS/STARTTLS и FastCGI/SCGI/uWSGI получили описанные выше bounded fixtures. Расширенные TLS/protocol state matrices, upstream HTTP/2/multiplexing, остальные adapters/optional modules, ОС и аварийные ветки ещё требуют отдельных тестов. Проверка отказа reload охватывает синтаксис, а не все поздние side effects и ошибки инициализации.
 - Полная официальная suite, длительный fuzzing, полноценная crash matrix и стабильная performance matrix ещё не выполнены. Генерируемые свойства и короткие loopback measurements не заменяют эти работы; преимущество «10x» не установлено.
 - Публичный native gateway не развёрнут. Ранее размещённая на Vercel консоль относится к Node-прототипу; она не запускает и не подтверждает доступность native NGINX X10.

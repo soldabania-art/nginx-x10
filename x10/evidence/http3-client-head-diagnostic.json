@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "suite": "http3-client-head-diagnostic",
+  "diagnosticOnly": true,
+  "observedAt": "2026-10-23T09:20:22.100426+00:00",
+  "client": "aioquic1.3.0",
+  "clientConnectionSourceSha256": "696e9c3735de11c314b8cd1e7e1265761a9373d1bbd2dbdf66570961dac839cd",
+  "description": "HEAD response is rejected by the client H3 content-length equality check. Both native binaries give the same result. No NGINX defect or fix is inferred from this diagnostic; HEAD is outside final HTTP3 fixture scope.",
+  "candidate": {
+    "schemaVersion": 1,
+    "suite": "native-http3-interop",
+    "startedAt": "2026-10-23T09:19:00.654350+00:00",
+    "identity": {
+      "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+      "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+      "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api\n",
+      "sourceFilesSha256": {
+        "src/http/v3/ngx_http_v3_module.c": "35143d29723d05b491fe8b02a6181d4dc82b2ba215524b650d69e803704ddeee",
+        "src/http/v3/ngx_http_v3_request.c": "c9b12b01b646ecee16219ed5d801a52a864f85ed48fb1ced68e2d09ba12ed821",
+        "src/http/v3/ngx_http_v3_filter_module.c": "b0294e27cca0cb8eaf8ceb2a74da9ece61f3a71d19ebc81527e92efdf6f7629c",
+        "src/event/quic/ngx_event_quic_ssl.c": "ffd8ef9dac1580503f41b351ee68c4438fa02909a2a7ca161613aaae7002459a",
+        "src/event/quic/ngx_event_quic_openssl_compat.c": "b0468bc1d41e8b49ecf33538b09cc1ebb3113d9dae0b6d21aff7ebba48d2246d",
+        "src/event/quic/ngx_event_quic_transport.c": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a"
+      },
+      "harnessSha256": "e14253909b0a6b666482574a3e5d1ae0bd2c16ebebf1f269cbd0d19aa7655c0b",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "client": {
+        "name": "aioquic",
+        "version": "1.3.0"
+      },
+      "dependencyVersions": {
+        "aioquic": "1.3.0",
+        "cryptography": "50.0.2",
+        "pylsqpack": "0.3.24",
+        "pyopenssl": "26.4.0",
+        "service-identity": "26.1.0",
+        "certifi": "2026.10.19",
+        "cffi": "2.1.1",
+        "attrs": "26.1.0",
+        "pycparser": "3.12",
+        "typing-extensions": "4.16.0"
+      },
+      "dependencyLockSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+      "nativePid": 9,
+      "binaryUnchangedDuringTest": true
+    },
+    "tests": [
+      {
+        "name": "verified-quic-tls13-alpn-h3-exact-binary-response",
+        "status": "passed",
+        "elapsedMs": 176,
+        "detail": {
+          "streamId": 0,
+          "bytes": 65806,
+          "sha256": "fc7f966cc2bb2f2ea5f1040be9e0e60e8997c23feadad1e408a09eebf2079c49",
+          "handshake": {
+            "alpn": "h3",
+            "earlyData": false,
+            "resumed": false
+          },
+          "receivedDatagrams": 61
+        }
+      },
+      {
+        "name": "head-and-range-on-one-h3-connection",
+        "status": "failed",
+        "error": "ConnectionError: {'errorCode': <ErrorCode.H3_MESSAGE_ERROR: 270>, 'reason': 'content-length does not match data size'}"
+      }
+    ],
+    "skips": [],
+    "success": false,
+    "fixtureErrors": [],
+    "limitations": [
+      "Synthetic loopback UDP QUIC/TLS1.3/H3, not full packet-loss/migration/fuzz/load or platform matrix.",
+      "Single native process; no master/worker reload guarantee, 0-RTT, resumption, client certificates or browser interoperability.",
+      "Client package/module hashes identify this test dependency installation, not a signed attestation."
+    ],
+    "scope": {
+      "network": "loopback UDP QUIC",
+      "tls": "TLS1.3",
+      "alpn": "h3",
+      "processMode": "single-native-process",
+      "quicRetry": true
+    },
+    "error": "ConnectionError: {'errorCode': <ErrorCode.H3_MESSAGE_ERROR: 270>, 'reason': 'content-length does not match data size'}",
+    "nativeErrorLogTail": "2026/10/23 13:19:00 [notice] 9#9: using the \"epoll\" event method\n2026/10/23 13:19:00 [notice] 9#9: nginx/1.31.9\n2026/10/23 13:19:00 [notice] 9#9: built by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \n2026/10/23 13:19:00 [notice] 9#9: OS: Linux 6.18.55\n2026/10/23 13:19:00 [notice] 9#9: getrlimit(RLIMIT_NOFILE): 16384:16384\n2026/10/23 13:19:00 [warn] 9#9: control API unavailable in single process mode\n2026/10/23 13:19:00 [info] 9#9: *2 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60242\n2026/10/23 13:19:00 [info] 9#9: *10 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60242\n2026/10/23 13:19:00 [notice] 9#9: signal 3 (SIGQUIT) received from 5, shutting down\n2026/10/23 13:19:00 [info] 9#9: epoll_wait() failed (4: Interrupted system call)\n2026/10/23 13:19:00 [notice] 9#9: exit\n",
+    "sourceUnchangedDuringTest": true,
+    "unexpectedNativeErrors": [],
+    "cleanup": {
+      "nativeStopped": true,
+      "nativeExit": 0,
+      "fixturesStopped": true,
+      "openSockets": 0,
+      "temporaryRootRemoved": true,
+      "errors": []
+    },
+    "finishedAt": "2026-10-23T09:19:01.029884+00:00"
+  },
+  "reference": {
+    "schemaVersion": 1,
+    "suite": "native-http3-interop",
+    "startedAt": "2026-10-23T09:19:50.090328+00:00",
+    "identity": {
+      "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+      "binarySha256": "adf05f3088bf8ee1ed7c886e424a2d92258323dd78e036276b41e009fbaf634e",
+      "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api\n",
+      "sourceFilesSha256": {
+        "src/http/v3/ngx_http_v3_module.c": "35143d29723d05b491fe8b02a6181d4dc82b2ba215524b650d69e803704ddeee",
+        "src/http/v3/ngx_http_v3_request.c": "c9b12b01b646ecee16219ed5d801a52a864f85ed48fb1ced68e2d09ba12ed821",
+        "src/http/v3/ngx_http_v3_filter_module.c": "b0294e27cca0cb8eaf8ceb2a74da9ece61f3a71d19ebc81527e92efdf6f7629c",
+        "src/event/quic/ngx_event_quic_ssl.c": "ffd8ef9dac1580503f41b351ee68c4438fa02909a2a7ca161613aaae7002459a",
+        "src/event/quic/ngx_event_quic_openssl_compat.c": "b0468bc1d41e8b49ecf33538b09cc1ebb3113d9dae0b6d21aff7ebba48d2246d",
+        "src/event/quic/ngx_event_quic_transport.c": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a"
+      },
+      "harnessSha256": "e14253909b0a6b666482574a3e5d1ae0bd2c16ebebf1f269cbd0d19aa7655c0b",
+      "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+      "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "client": {
+        "name": "aioquic",
+        "version": "1.3.0"
+      },
+      "dependencyVersions": {
+        "aioquic": "1.3.0",
+        "cryptography": "50.0.2",
+        "pylsqpack": "0.3.24",
+        "pyopenssl": "26.4.0",
+        "service-identity": "26.1.0",
+        "certifi": "2026.10.19",
+        "cffi": "2.1.1",
+        "attrs": "26.1.0",
+        "pycparser": "3.12",
+        "typing-extensions": "4.16.0"
+      },
+      "dependencyLockSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+      "nativePid": 9,
+      "binaryUnchangedDuringTest": true
+    },
+    "tests": [
+      {
+        "name": "verified-quic-tls13-alpn-h3-exact-binary-response",
+        "status": "passed",
+        "elapsedMs": 172,
+        "detail": {
+          "streamId": 0,
+          "bytes": 65806,
+          "sha256": "fc7f966cc2bb2f2ea5f1040be9e0e60e8997c23feadad1e408a09eebf2079c49",
+          "handshake": {
+            "alpn": "h3",
+            "earlyData": false,
+            "resumed": false
+          },
+          "receivedDatagrams": 61
+        }
+      },
+      {
+        "name": "head-and-range-on-one-h3-connection",
+        "status": "failed",
+        "error": "ConnectionError: {'errorCode': <ErrorCode.H3_MESSAGE_ERROR: 270>, 'reason': 'content-length does not match data size'}"
+      }
+    ],
+    "skips": [],
+    "success": false,
+    "fixtureErrors": [],
+    "limitations": [
+      "Synthetic loopback UDP QUIC/TLS1.3/H3, not full packet-loss/migration/fuzz/load or platform matrix.",
+      "Single native process; no master/worker reload guarantee, 0-RTT, resumption, client certificates or browser interoperability.",
+      "Client package/module hashes identify this test dependency installation, not a signed attestation."
+    ],
+    "scope": {
+      "network": "loopback UDP QUIC",
+      "tls": "TLS1.3",
+      "alpn": "h3",
+      "processMode": "single-native-process",
+      "quicRetry": true
+    },
+    "error": "ConnectionError: {'errorCode': <ErrorCode.H3_MESSAGE_ERROR: 270>, 'reason': 'content-length does not match data size'}",
+    "nativeErrorLogTail": "2026/10/23 13:19:50 [notice] 9#9: using the \"epoll\" event method\n2026/10/23 13:19:50 [notice] 9#9: nginx/1.31.9\n2026/10/23 13:19:50 [notice] 9#9: built by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \n2026/10/23 13:19:50 [notice] 9#9: OS: Linux 6.18.55\n2026/10/23 13:19:50 [notice] 9#9: getrlimit(RLIMIT_NOFILE): 16384:16384\n2026/10/23 13:19:50 [warn] 9#9: control API unavailable in single process mode\n2026/10/23 13:19:50 [info] 9#9: *2 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:44161\n2026/10/23 13:19:50 [info] 9#9: *10 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:44161\n2026/10/23 13:19:50 [notice] 9#9: signal 3 (SIGQUIT) received from 5, shutting down\n2026/10/23 13:19:50 [info] 9#9: epoll_wait() failed (4: Interrupted system call)\n2026/10/23 13:19:50 [notice] 9#9: exit\n",
+    "sourceUnchangedDuringTest": true,
+    "unexpectedNativeErrors": [],
+    "cleanup": {
+      "nativeStopped": true,
+      "nativeExit": 0,
+      "fixturesStopped": true,
+      "openSockets": 0,
+      "temporaryRootRemoved": true,
+      "errors": []
+    },
+    "finishedAt": "2026-10-23T09:19:50.462441+00:00"
+  }
+}

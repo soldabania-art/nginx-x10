@@ -1,0 +1,1947 @@
+{
+  "schemaVersion": 1,
+  "suite": "independent-http3-native-load-review",
+  "observedAt": "2026-10-23T09:42:51.748Z",
+  "startCommit": "43618ecca59fe802620f810a13f083554952bd7d",
+  "scope": "Independent short CLI/cleanup controls and direct/synthetic validators. No aggregate CLI or sustained benchmark was executed by the reviewer.",
+  "draftParserObservation": {
+    "sourceSha256": "49c24f7e046e912d20cd911ab4516b2a65248735edbcfee28ae4e142b83e6201",
+    "tests": [
+      {
+        "name": "nul-in-header-name",
+        "receipt": 1,
+        "exitCode": 1,
+        "signal": null,
+        "accepted": false,
+        "expectedFailureOfProtection": false,
+        "report": {
+          "schemaVersion": 1,
+          "suite": "native-http1-load",
+          "success": false,
+          "interrupted": 0,
+          "endpoint": {
+            "host": "127.0.0.1",
+            "port": 45925,
+            "path": "/static"
+          },
+          "options": {
+            "durationMs": 50,
+            "concurrency": 1,
+            "timeoutMs": 200,
+            "maxRequests": 1
+          },
+          "counters": {
+            "admitted": 1,
+            "completed": 0,
+            "failed": 1,
+            "aborted": 0,
+            "connectionsOpened": 1,
+            "reusedRequests": 0
+          },
+          "timing": {
+            "elapsedMs": 1.190719,
+            "admissionMs": 0.00006,
+            "drainMs": 1.190659
+          },
+          "throughputRps": 0,
+          "latency": {
+            "count": 0,
+            "meanUs": 0,
+            "maxUs": 0,
+            "p50UpperUs": 0,
+            "p95UpperUs": 0,
+            "p99UpperUs": 0,
+            "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+            "histogram": [
+              {
+                "upperUs": 1,
+                "count": 0
+              },
+              {
+                "upperUs": 2,
+                "count": 0
+              },
+              {
+                "upperUs": 4,
+                "count": 0
+              },
+              {
+                "upperUs": 8,
+                "count": 0
+              },
+              {
+                "upperUs": 16,
+                "count": 0
+              },
+              {
+                "upperUs": 32,
+                "count": 0
+              },
+              {
+                "upperUs": 64,
+                "count": 0
+              },
+              {
+                "upperUs": 128,
+                "count": 0
+              },
+              {
+                "upperUs": 256,
+                "count": 0
+              },
+              {
+                "upperUs": 512,
+                "count": 0
+              },
+              {
+                "upperUs": 1024,
+                "count": 0
+              },
+              {
+                "upperUs": 2048,
+                "count": 0
+              },
+              {
+                "upperUs": 4096,
+                "count": 0
+              },
+              {
+                "upperUs": 8192,
+                "count": 0
+              },
+              {
+                "upperUs": 16384,
+                "count": 0
+              },
+              {
+                "upperUs": 32768,
+                "count": 0
+              },
+              {
+                "upperUs": 65536,
+                "count": 0
+              },
+              {
+                "upperUs": 131072,
+                "count": 0
+              },
+              {
+                "upperUs": 262144,
+                "count": 0
+              },
+              {
+                "upperUs": 524288,
+                "count": 0
+              },
+              {
+                "upperUs": 1048576,
+                "count": 0
+              },
+              {
+                "upperUs": 2097152,
+                "count": 0
+              },
+              {
+                "upperUs": 4194304,
+                "count": 0
+              },
+              {
+                "upperUs": 8388608,
+                "count": 0
+              },
+              {
+                "upperUs": 16777216,
+                "count": 0
+              },
+              {
+                "upperUs": 33554432,
+                "count": 0
+              },
+              {
+                "upperUs": 67108864,
+                "count": 0
+              },
+              {
+                "upperUs": 134217728,
+                "count": 0
+              },
+              {
+                "upperUs": 268435456,
+                "count": 0
+              },
+              {
+                "upperUs": 536870912,
+                "count": 0
+              },
+              {
+                "upperUs": 1073741824,
+                "count": 0
+              },
+              {
+                "upperUs": 2147483648,
+                "count": 0
+              }
+            ]
+          },
+          "resources": {
+            "userCpuMs": 0.42,
+            "systemCpuMs": 0,
+            "maxRssKiB": 5644
+          },
+          "cleanup": {
+            "openSockets": 0,
+            "errors": 0
+          },
+          "counterInvariant": true,
+          "requestCapReached": true,
+          "error": {
+            "reason": "invalid_header_name",
+            "errno": 0
+          }
+        },
+        "stderr": "",
+        "expectedAccepted": false
+      },
+      {
+        "name": "status-missing-required-space",
+        "receipt": 1,
+        "exitCode": 0,
+        "signal": null,
+        "accepted": true,
+        "expectedFailureOfProtection": true,
+        "report": {
+          "schemaVersion": 1,
+          "suite": "native-http1-load",
+          "success": true,
+          "interrupted": 0,
+          "endpoint": {
+            "host": "127.0.0.1",
+            "port": 38981,
+            "path": "/static"
+          },
+          "options": {
+            "durationMs": 50,
+            "concurrency": 1,
+            "timeoutMs": 200,
+            "maxRequests": 1
+          },
+          "counters": {
+            "admitted": 1,
+            "completed": 1,
+            "failed": 0,
+            "aborted": 0,
+            "connectionsOpened": 1,
+            "reusedRequests": 0
+          },
+          "timing": {
+            "elapsedMs": 0.574744,
+            "admissionMs": 0.00006,
+            "drainMs": 0.574684
+          },
+          "throughputRps": 1739.905071,
+          "latency": {
+            "count": 1,
+            "meanUs": 574.543,
+            "maxUs": 574.543,
+            "p50UpperUs": 1024,
+            "p95UpperUs": 1024,
+            "p99UpperUs": 1024,
+            "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+            "histogram": [
+              {
+                "upperUs": 1,
+                "count": 0
+              },
+              {
+                "upperUs": 2,
+                "count": 0
+              },
+              {
+                "upperUs": 4,
+                "count": 0
+              },
+              {
+                "upperUs": 8,
+                "count": 0
+              },
+              {
+                "upperUs": 16,
+                "count": 0
+              },
+              {
+                "upperUs": 32,
+                "count": 0
+              },
+              {
+                "upperUs": 64,
+                "count": 0
+              },
+              {
+                "upperUs": 128,
+                "count": 0
+              },
+              {
+                "upperUs": 256,
+                "count": 0
+              },
+              {
+                "upperUs": 512,
+                "count": 0
+              },
+              {
+                "upperUs": 1024,
+                "count": 1
+              },
+              {
+                "upperUs": 2048,
+                "count": 0
+              },
+              {
+                "upperUs": 4096,
+                "count": 0
+              },
+              {
+                "upperUs": 8192,
+                "count": 0
+              },
+              {
+                "upperUs": 16384,
+                "count": 0
+              },
+              {
+                "upperUs": 32768,
+                "count": 0
+              },
+              {
+                "upperUs": 65536,
+                "count": 0
+              },
+              {
+                "upperUs": 131072,
+                "count": 0
+              },
+              {
+                "upperUs": 262144,
+                "count": 0
+              },
+              {
+                "upperUs": 524288,
+                "count": 0
+              },
+              {
+                "upperUs": 1048576,
+                "count": 0
+              },
+              {
+                "upperUs": 2097152,
+                "count": 0
+              },
+              {
+                "upperUs": 4194304,
+                "count": 0
+              },
+              {
+                "upperUs": 8388608,
+                "count": 0
+              },
+              {
+                "upperUs": 16777216,
+                "count": 0
+              },
+              {
+                "upperUs": 33554432,
+                "count": 0
+              },
+              {
+                "upperUs": 67108864,
+                "count": 0
+              },
+              {
+                "upperUs": 134217728,
+                "count": 0
+              },
+              {
+                "upperUs": 268435456,
+                "count": 0
+              },
+              {
+                "upperUs": 536870912,
+                "count": 0
+              },
+              {
+                "upperUs": 1073741824,
+                "count": 0
+              },
+              {
+                "upperUs": 2147483648,
+                "count": 0
+              }
+            ]
+          },
+          "resources": {
+            "userCpuMs": 0.352,
+            "systemCpuMs": 0,
+            "maxRssKiB": 5572
+          },
+          "cleanup": {
+            "openSockets": 0,
+            "errors": 0
+          },
+          "counterInvariant": true,
+          "requestCapReached": true,
+          "error": null
+        },
+        "stderr": "",
+        "expectedAccepted": false
+      }
+    ],
+    "scope": "Actual short CLI controls on the retained draft C snapshot; malformed status was accepted before its fix. NUL header was already rejected."
+  },
+  "finalNativeParserCLI": {
+    "sourceSha256": "ea0c28a2a4ec24d67978b442993ca86c86f14a823a6a24e1b7116807f0795828",
+    "tests": [
+      {
+        "name": "status-missing-space",
+        "expectedSuccess": false,
+        "passed": true,
+        "exitCode": 1,
+        "requestsReceived": 1,
+        "report": {
+          "schemaVersion": 1,
+          "suite": "native-http1-load",
+          "success": false,
+          "interrupted": 0,
+          "endpoint": {
+            "host": "127.0.0.1",
+            "port": 45687,
+            "path": "/static"
+          },
+          "options": {
+            "durationMs": 1000,
+            "concurrency": 1,
+            "timeoutMs": 500,
+            "maxRequests": 1
+          },
+          "counters": {
+            "admitted": 1,
+            "completed": 0,
+            "failed": 1,
+            "aborted": 0,
+            "connectionsOpened": 1,
+            "reusedRequests": 0
+          },
+          "timing": {
+            "elapsedMs": 1.129389,
+            "admissionMs": 0.00005,
+            "drainMs": 1.129339
+          },
+          "throughputRps": 0,
+          "latency": {
+            "count": 0,
+            "meanUs": 0,
+            "maxUs": 0,
+            "p50UpperUs": 0,
+            "p95UpperUs": 0,
+            "p99UpperUs": 0,
+            "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+            "histogram": [
+              {
+                "upperUs": 1,
+                "count": 0
+              },
+              {
+                "upperUs": 2,
+                "count": 0
+              },
+              {
+                "upperUs": 4,
+                "count": 0
+              },
+              {
+                "upperUs": 8,
+                "count": 0
+              },
+              {
+                "upperUs": 16,
+                "count": 0
+              },
+              {
+                "upperUs": 32,
+                "count": 0
+              },
+              {
+                "upperUs": 64,
+                "count": 0
+              },
+              {
+                "upperUs": 128,
+                "count": 0
+              },
+              {
+                "upperUs": 256,
+                "count": 0
+              },
+              {
+                "upperUs": 512,
+                "count": 0
+              },
+              {
+                "upperUs": 1024,
+                "count": 0
+              },
+              {
+                "upperUs": 2048,
+                "count": 0
+              },
+              {
+                "upperUs": 4096,
+                "count": 0
+              },
+              {
+                "upperUs": 8192,
+                "count": 0
+              },
+              {
+                "upperUs": 16384,
+                "count": 0
+              },
+              {
+                "upperUs": 32768,
+                "count": 0
+              },
+              {
+                "upperUs": 65536,
+                "count": 0
+              },
+              {
+                "upperUs": 131072,
+                "count": 0
+              },
+              {
+                "upperUs": 262144,
+                "count": 0
+              },
+              {
+                "upperUs": 524288,
+                "count": 0
+              },
+              {
+                "upperUs": 1048576,
+                "count": 0
+              },
+              {
+                "upperUs": 2097152,
+                "count": 0
+              },
+              {
+                "upperUs": 4194304,
+                "count": 0
+              },
+              {
+                "upperUs": 8388608,
+                "count": 0
+              },
+              {
+                "upperUs": 16777216,
+                "count": 0
+              },
+              {
+                "upperUs": 33554432,
+                "count": 0
+              },
+              {
+                "upperUs": 67108864,
+                "count": 0
+              },
+              {
+                "upperUs": 134217728,
+                "count": 0
+              },
+              {
+                "upperUs": 268435456,
+                "count": 0
+              },
+              {
+                "upperUs": 536870912,
+                "count": 0
+              },
+              {
+                "upperUs": 1073741824,
+                "count": 0
+              },
+              {
+                "upperUs": 2147483648,
+                "count": 0
+              }
+            ]
+          },
+          "resources": {
+            "userCpuMs": 0.429,
+            "systemCpuMs": 0,
+            "maxRssKiB": 5616
+          },
+          "cleanup": {
+            "openSockets": 0,
+            "errors": 0
+          },
+          "counterInvariant": true,
+          "requestCapReached": true,
+          "error": {
+            "reason": "unexpected_http_status",
+            "errno": 0
+          }
+        }
+      },
+      {
+        "name": "empty-reason-with-required-space",
+        "expectedSuccess": true,
+        "passed": true,
+        "exitCode": 0,
+        "requestsReceived": 1,
+        "report": {
+          "schemaVersion": 1,
+          "suite": "native-http1-load",
+          "success": true,
+          "interrupted": 0,
+          "endpoint": {
+            "host": "127.0.0.1",
+            "port": 35617,
+            "path": "/static"
+          },
+          "options": {
+            "durationMs": 1000,
+            "concurrency": 1,
+            "timeoutMs": 500,
+            "maxRequests": 1
+          },
+          "counters": {
+            "admitted": 1,
+            "completed": 1,
+            "failed": 0,
+            "aborted": 0,
+            "connectionsOpened": 1,
+            "reusedRequests": 0
+          },
+          "timing": {
+            "elapsedMs": 0.504771,
+            "admissionMs": 0.00006,
+            "drainMs": 0.504711
+          },
+          "throughputRps": 1981.096378,
+          "latency": {
+            "count": 1,
+            "meanUs": 479.534,
+            "maxUs": 479.534,
+            "p50UpperUs": 512,
+            "p95UpperUs": 512,
+            "p99UpperUs": 512,
+            "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+            "histogram": [
+              {
+                "upperUs": 1,
+                "count": 0
+              },
+              {
+                "upperUs": 2,
+                "count": 0
+              },
+              {
+                "upperUs": 4,
+                "count": 0
+              },
+              {
+                "upperUs": 8,
+                "count": 0
+              },
+              {
+                "upperUs": 16,
+                "count": 0
+              },
+              {
+                "upperUs": 32,
+                "count": 0
+              },
+              {
+                "upperUs": 64,
+                "count": 0
+              },
+              {
+                "upperUs": 128,
+                "count": 0
+              },
+              {
+                "upperUs": 256,
+                "count": 0
+              },
+              {
+                "upperUs": 512,
+                "count": 1
+              },
+              {
+                "upperUs": 1024,
+                "count": 0
+              },
+              {
+                "upperUs": 2048,
+                "count": 0
+              },
+              {
+                "upperUs": 4096,
+                "count": 0
+              },
+              {
+                "upperUs": 8192,
+                "count": 0
+              },
+              {
+                "upperUs": 16384,
+                "count": 0
+              },
+              {
+                "upperUs": 32768,
+                "count": 0
+              },
+              {
+                "upperUs": 65536,
+                "count": 0
+              },
+              {
+                "upperUs": 131072,
+                "count": 0
+              },
+              {
+                "upperUs": 262144,
+                "count": 0
+              },
+              {
+                "upperUs": 524288,
+                "count": 0
+              },
+              {
+                "upperUs": 1048576,
+                "count": 0
+              },
+              {
+                "upperUs": 2097152,
+                "count": 0
+              },
+              {
+                "upperUs": 4194304,
+                "count": 0
+              },
+              {
+                "upperUs": 8388608,
+                "count": 0
+              },
+              {
+                "upperUs": 16777216,
+                "count": 0
+              },
+              {
+                "upperUs": 33554432,
+                "count": 0
+              },
+              {
+                "upperUs": 67108864,
+                "count": 0
+              },
+              {
+                "upperUs": 134217728,
+                "count": 0
+              },
+              {
+                "upperUs": 268435456,
+                "count": 0
+              },
+              {
+                "upperUs": 536870912,
+                "count": 0
+              },
+              {
+                "upperUs": 1073741824,
+                "count": 0
+              },
+              {
+                "upperUs": 2147483648,
+                "count": 0
+              }
+            ]
+          },
+          "resources": {
+            "userCpuMs": 0.262,
+            "systemCpuMs": 0,
+            "maxRssKiB": 5548
+          },
+          "cleanup": {
+            "openSockets": 0,
+            "errors": 0
+          },
+          "counterInvariant": true,
+          "requestCapReached": true,
+          "error": null
+        }
+      },
+      {
+        "name": "nul-header-name",
+        "expectedSuccess": false,
+        "passed": true,
+        "exitCode": 1,
+        "requestsReceived": 1,
+        "report": {
+          "schemaVersion": 1,
+          "suite": "native-http1-load",
+          "success": false,
+          "interrupted": 0,
+          "endpoint": {
+            "host": "127.0.0.1",
+            "port": 44333,
+            "path": "/static"
+          },
+          "options": {
+            "durationMs": 1000,
+            "concurrency": 1,
+            "timeoutMs": 500,
+            "maxRequests": 1
+          },
+          "counters": {
+            "admitted": 1,
+            "completed": 0,
+            "failed": 1,
+            "aborted": 0,
+            "connectionsOpened": 1,
+            "reusedRequests": 0
+          },
+          "timing": {
+            "elapsedMs": 0.398816,
+            "admissionMs": 0.00006,
+            "drainMs": 0.398756
+          },
+          "throughputRps": 0,
+          "latency": {
+            "count": 0,
+            "meanUs": 0,
+            "maxUs": 0,
+            "p50UpperUs": 0,
+            "p95UpperUs": 0,
+            "p99UpperUs": 0,
+            "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+            "histogram": [
+              {
+                "upperUs": 1,
+                "count": 0
+              },
+              {
+                "upperUs": 2,
+                "count": 0
+              },
+              {
+                "upperUs": 4,
+                "count": 0
+              },
+              {
+                "upperUs": 8,
+                "count": 0
+              },
+              {
+                "upperUs": 16,
+                "count": 0
+              },
+              {
+                "upperUs": 32,
+                "count": 0
+              },
+              {
+                "upperUs": 64,
+                "count": 0
+              },
+              {
+                "upperUs": 128,
+                "count": 0
+              },
+              {
+                "upperUs": 256,
+                "count": 0
+              },
+              {
+                "upperUs": 512,
+                "count": 0
+              },
+              {
+                "upperUs": 1024,
+                "count": 0
+              },
+              {
+                "upperUs": 2048,
+                "count": 0
+              },
+              {
+                "upperUs": 4096,
+                "count": 0
+              },
+              {
+                "upperUs": 8192,
+                "count": 0
+              },
+              {
+                "upperUs": 16384,
+                "count": 0
+              },
+              {
+                "upperUs": 32768,
+                "count": 0
+              },
+              {
+                "upperUs": 65536,
+                "count": 0
+              },
+              {
+                "upperUs": 131072,
+                "count": 0
+              },
+              {
+                "upperUs": 262144,
+                "count": 0
+              },
+              {
+                "upperUs": 524288,
+                "count": 0
+              },
+              {
+                "upperUs": 1048576,
+                "count": 0
+              },
+              {
+                "upperUs": 2097152,
+                "count": 0
+              },
+              {
+                "upperUs": 4194304,
+                "count": 0
+              },
+              {
+                "upperUs": 8388608,
+                "count": 0
+              },
+              {
+                "upperUs": 16777216,
+                "count": 0
+              },
+              {
+                "upperUs": 33554432,
+                "count": 0
+              },
+              {
+                "upperUs": 67108864,
+                "count": 0
+              },
+              {
+                "upperUs": 134217728,
+                "count": 0
+              },
+              {
+                "upperUs": 268435456,
+                "count": 0
+              },
+              {
+                "upperUs": 536870912,
+                "count": 0
+              },
+              {
+                "upperUs": 1073741824,
+                "count": 0
+              },
+              {
+                "upperUs": 2147483648,
+                "count": 0
+              }
+            ]
+          },
+          "resources": {
+            "userCpuMs": 0.242,
+            "systemCpuMs": 0,
+            "maxRssKiB": 5584
+          },
+          "cleanup": {
+            "openSockets": 0,
+            "errors": 0
+          },
+          "counterInvariant": true,
+          "requestCapReached": true,
+          "error": {
+            "reason": "invalid_header_name",
+            "errno": 0
+          }
+        }
+      },
+      {
+        "name": "close-token-list-case",
+        "expectedSuccess": true,
+        "passed": true,
+        "exitCode": 0,
+        "requestsReceived": 2,
+        "report": {
+          "schemaVersion": 1,
+          "suite": "native-http1-load",
+          "success": true,
+          "interrupted": 0,
+          "endpoint": {
+            "host": "127.0.0.1",
+            "port": 38573,
+            "path": "/static"
+          },
+          "options": {
+            "durationMs": 1000,
+            "concurrency": 1,
+            "timeoutMs": 500,
+            "maxRequests": 2
+          },
+          "counters": {
+            "admitted": 2,
+            "completed": 2,
+            "failed": 0,
+            "aborted": 0,
+            "connectionsOpened": 2,
+            "reusedRequests": 0
+          },
+          "timing": {
+            "elapsedMs": 1.40911,
+            "admissionMs": 0.391955,
+            "drainMs": 1.017155
+          },
+          "throughputRps": 1419.335609,
+          "latency": {
+            "count": 2,
+            "meanUs": 694.6705,
+            "maxUs": 1007.01,
+            "p50UpperUs": 512,
+            "p95UpperUs": 1024,
+            "p99UpperUs": 1024,
+            "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+            "histogram": [
+              {
+                "upperUs": 1,
+                "count": 0
+              },
+              {
+                "upperUs": 2,
+                "count": 0
+              },
+              {
+                "upperUs": 4,
+                "count": 0
+              },
+              {
+                "upperUs": 8,
+                "count": 0
+              },
+              {
+                "upperUs": 16,
+                "count": 0
+              },
+              {
+                "upperUs": 32,
+                "count": 0
+              },
+              {
+                "upperUs": 64,
+                "count": 0
+              },
+              {
+                "upperUs": 128,
+                "count": 0
+              },
+              {
+                "upperUs": 256,
+                "count": 0
+              },
+              {
+                "upperUs": 512,
+                "count": 1
+              },
+              {
+                "upperUs": 1024,
+                "count": 1
+              },
+              {
+                "upperUs": 2048,
+                "count": 0
+              },
+              {
+                "upperUs": 4096,
+                "count": 0
+              },
+              {
+                "upperUs": 8192,
+                "count": 0
+              },
+              {
+                "upperUs": 16384,
+                "count": 0
+              },
+              {
+                "upperUs": 32768,
+                "count": 0
+              },
+              {
+                "upperUs": 65536,
+                "count": 0
+              },
+              {
+                "upperUs": 131072,
+                "count": 0
+              },
+              {
+                "upperUs": 262144,
+                "count": 0
+              },
+              {
+                "upperUs": 524288,
+                "count": 0
+              },
+              {
+                "upperUs": 1048576,
+                "count": 0
+              },
+              {
+                "upperUs": 2097152,
+                "count": 0
+              },
+              {
+                "upperUs": 4194304,
+                "count": 0
+              },
+              {
+                "upperUs": 8388608,
+                "count": 0
+              },
+              {
+                "upperUs": 16777216,
+                "count": 0
+              },
+              {
+                "upperUs": 33554432,
+                "count": 0
+              },
+              {
+                "upperUs": 67108864,
+                "count": 0
+              },
+              {
+                "upperUs": 134217728,
+                "count": 0
+              },
+              {
+                "upperUs": 268435456,
+                "count": 0
+              },
+              {
+                "upperUs": 536870912,
+                "count": 0
+              },
+              {
+                "upperUs": 1073741824,
+                "count": 0
+              },
+              {
+                "upperUs": 2147483648,
+                "count": 0
+              }
+            ]
+          },
+          "resources": {
+            "userCpuMs": 0.246,
+            "systemCpuMs": 0,
+            "maxRssKiB": 5584
+          },
+          "cleanup": {
+            "openSockets": 0,
+            "errors": 0
+          },
+          "counterInvariant": true,
+          "requestCapReached": true,
+          "error": null
+        }
+      },
+      {
+        "name": "comma-content-length",
+        "expectedSuccess": false,
+        "passed": true,
+        "exitCode": 1,
+        "requestsReceived": 1,
+        "report": {
+          "schemaVersion": 1,
+          "suite": "native-http1-load",
+          "success": false,
+          "interrupted": 0,
+          "endpoint": {
+            "host": "127.0.0.1",
+            "port": 40849,
+            "path": "/static"
+          },
+          "options": {
+            "durationMs": 1000,
+            "concurrency": 1,
+            "timeoutMs": 500,
+            "maxRequests": 1
+          },
+          "counters": {
+            "admitted": 1,
+            "completed": 0,
+            "failed": 1,
+            "aborted": 0,
+            "connectionsOpened": 1,
+            "reusedRequests": 0
+          },
+          "timing": {
+            "elapsedMs": 3.498815,
+            "admissionMs": 0.00006,
+            "drainMs": 3.498755
+          },
+          "throughputRps": 0,
+          "latency": {
+            "count": 0,
+            "meanUs": 0,
+            "maxUs": 0,
+            "p50UpperUs": 0,
+            "p95UpperUs": 0,
+            "p99UpperUs": 0,
+            "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+            "histogram": [
+              {
+                "upperUs": 1,
+                "count": 0
+              },
+              {
+                "upperUs": 2,
+                "count": 0
+              },
+              {
+                "upperUs": 4,
+                "count": 0
+              },
+              {
+                "upperUs": 8,
+                "count": 0
+              },
+              {
+                "upperUs": 16,
+                "count": 0
+              },
+              {
+                "upperUs": 32,
+                "count": 0
+              },
+              {
+                "upperUs": 64,
+                "count": 0
+              },
+              {
+                "upperUs": 128,
+                "count": 0
+              },
+              {
+                "upperUs": 256,
+                "count": 0
+              },
+              {
+                "upperUs": 512,
+                "count": 0
+              },
+              {
+                "upperUs": 1024,
+                "count": 0
+              },
+              {
+                "upperUs": 2048,
+                "count": 0
+              },
+              {
+                "upperUs": 4096,
+                "count": 0
+              },
+              {
+                "upperUs": 8192,
+                "count": 0
+              },
+              {
+                "upperUs": 16384,
+                "count": 0
+              },
+              {
+                "upperUs": 32768,
+                "count": 0
+              },
+              {
+                "upperUs": 65536,
+                "count": 0
+              },
+              {
+                "upperUs": 131072,
+                "count": 0
+              },
+              {
+                "upperUs": 262144,
+                "count": 0
+              },
+              {
+                "upperUs": 524288,
+                "count": 0
+              },
+              {
+                "upperUs": 1048576,
+                "count": 0
+              },
+              {
+                "upperUs": 2097152,
+                "count": 0
+              },
+              {
+                "upperUs": 4194304,
+                "count": 0
+              },
+              {
+                "upperUs": 8388608,
+                "count": 0
+              },
+              {
+                "upperUs": 16777216,
+                "count": 0
+              },
+              {
+                "upperUs": 33554432,
+                "count": 0
+              },
+              {
+                "upperUs": 67108864,
+                "count": 0
+              },
+              {
+                "upperUs": 134217728,
+                "count": 0
+              },
+              {
+                "upperUs": 268435456,
+                "count": 0
+              },
+              {
+                "upperUs": 536870912,
+                "count": 0
+              },
+              {
+                "upperUs": 1073741824,
+                "count": 0
+              },
+              {
+                "upperUs": 2147483648,
+                "count": 0
+              }
+            ]
+          },
+          "resources": {
+            "userCpuMs": 0.111,
+            "systemCpuMs": 0,
+            "maxRssKiB": 5592
+          },
+          "cleanup": {
+            "openSockets": 0,
+            "errors": 0
+          },
+          "counterInvariant": true,
+          "requestCapReached": true,
+          "error": {
+            "reason": "invalid_content_length",
+            "errno": 0
+          }
+        }
+      }
+    ],
+    "passed": true
+  },
+  "nativeWrapperParentInterruption": {
+    "name": "parent-SIGTERM-escalates-TERM-ignoring-compiler",
+    "wrapperSha256": "bb3befd34886d278052f209a87220a6ee9b819833c4d1a1fe93ef50663716a71",
+    "compilerWasStarted": true,
+    "compilerIgnoredTERM": true,
+    "compilerGroupGone": true,
+    "elapsedMs": 760.78521,
+    "exitCode": 1,
+    "signal": null,
+    "reportedPassed": false,
+    "expectedFailure": true,
+    "passed": true,
+    "report": {
+      "schemaVersion": 1,
+      "suite": "native-http1-load-verification",
+      "passed": false,
+      "error": "Native client compile failed: ",
+      "interrupted": "SIGTERM"
+    },
+    "stderr": ""
+  },
+  "http3LauncherCLI": {
+    "hashes": {
+      "x10/test/http3-baseline.mjs": "bace6eeeb55af6bd412b33d3c5c33902916a48a97af28299e173cf57362b9170",
+      "x10/test/http3-baseline.py": "2b657e7719bbe68bf294133bf7808d4db39a61b35fb8890a82d2641db9b68655"
+    },
+    "tests": [
+      {
+        "name": "unusable-interpreter",
+        "exitCode": 1,
+        "signal": null,
+        "reportedSuccess": false,
+        "nativePidObserved": false,
+        "temporaryPrefixesRemaining": 0,
+        "elapsedFromSignalOrWaitMs": 65.63728800000001,
+        "cleanup": null,
+        "expectedFailure": true,
+        "passed": true,
+        "stderr": "",
+        "report": {
+          "schemaVersion": 1,
+          "suite": "native-http3-interop",
+          "success": false,
+          "tests": [],
+          "skips": [],
+          "error": "HTTP3 test client unavailable: Unexpected end of JSON input. Install the pinned lock as documented in x10/test/HTTP3.md."
+        }
+      },
+      {
+        "name": "interrupt-after-native-pid",
+        "exitCode": 1,
+        "signal": null,
+        "reportedSuccess": false,
+        "nativePidObserved": true,
+        "temporaryPrefixesRemaining": 0,
+        "elapsedFromSignalOrWaitMs": 85.574973,
+        "cleanup": {
+          "nativeStopped": true,
+          "nativeExit": 0,
+          "fixturesStopped": true,
+          "openSockets": 0,
+          "temporaryRootRemoved": true,
+          "errors": [],
+          "udpTransportsStopped": true,
+          "udpClientsCreated": 0,
+          "udpClientsClosed": 0
+        },
+        "expectedFailure": true,
+        "passed": true,
+        "stderr": "",
+        "report": {
+          "schemaVersion": 1,
+          "suite": "native-http3-interop",
+          "startedAt": "2026-10-23T09:31:42.946080+00:00",
+          "identity": {
+            "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+            "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+            "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api\n",
+            "sourceFilesSha256": {
+              "src/http/v3/ngx_http_v3_module.c": "35143d29723d05b491fe8b02a6181d4dc82b2ba215524b650d69e803704ddeee",
+              "src/http/v3/ngx_http_v3_request.c": "c9b12b01b646ecee16219ed5d801a52a864f85ed48fb1ced68e2d09ba12ed821",
+              "src/http/v3/ngx_http_v3_filter_module.c": "b0294e27cca0cb8eaf8ceb2a74da9ece61f3a71d19ebc81527e92efdf6f7629c",
+              "src/event/quic/ngx_event_quic_ssl.c": "ffd8ef9dac1580503f41b351ee68c4438fa02909a2a7ca161613aaae7002459a",
+              "src/event/quic/ngx_event_quic_openssl_compat.c": "b0468bc1d41e8b49ecf33538b09cc1ebb3113d9dae0b6d21aff7ebba48d2246d",
+              "src/event/quic/ngx_event_quic_transport.c": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a"
+            },
+            "harnessSha256": "2b657e7719bbe68bf294133bf7808d4db39a61b35fb8890a82d2641db9b68655",
+            "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+            "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+            "client": {
+              "name": "aioquic",
+              "version": "1.3.0"
+            },
+            "dependencyVersions": {
+              "aioquic": "1.3.0",
+              "attrs": "26.1.0",
+              "certifi": "2026.10.19",
+              "cffi": "2.1.1",
+              "cryptography": "50.0.2",
+              "pycparser": "3.12",
+              "pylsqpack": "0.3.24",
+              "pyOpenSSL": "26.4.0",
+              "service-identity": "26.1.0",
+              "typing_extensions": "4.16.0"
+            },
+            "clientFilesSha256": {
+              "__init__.py": "179996d3ba52c86aea0cd636121afe5290f3a41b4df85b185344066567fa3c91",
+              "asyncio/client.py": "5159d2e28bd33da386c59dbac99dbb35ee47ecf4b480596367299c5ec03dd1c9",
+              "asyncio/protocol.py": "d87759d24c3bba979d2e27e6d4ff3dcdaa1a9395280a32352c38c1d352bab936",
+              "h3/connection.py": "696e9c3735de11c314b8cd1e7e1265761a9373d1bbd2dbdf66570961dac839cd",
+              "quic/connection.py": "f6d0bd15ea563a3bd68518e3d4a6b918f4c9341048f850b27aa582f3a63fab65",
+              "tls.py": "681e81f628493f2494b1ffbf2b72346f4b69f6c4075523798ff342fbafff3208"
+            },
+            "dependencyLockSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+            "interpreter": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/http3-venv/bin/python",
+            "nativePid": 46,
+            "binaryUnchangedDuringTest": true,
+            "clientUnchangedDuringTest": true
+          },
+          "tests": [],
+          "skips": [],
+          "success": false,
+          "fixtureErrors": [],
+          "limitations": [
+            "Synthetic loopback UDP QUIC/TLS1.3/H3, not full packet-loss/migration/fuzz/load or platform matrix.",
+            "Single native process; no master/worker reload guarantee, HEAD, 0-RTT, resumption, client certificates or browser interoperability.",
+            "Client package/module hashes identify this test dependency installation, not a signed attestation."
+          ],
+          "dependencyLockSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+          "scope": {
+            "network": "loopback UDP QUIC",
+            "tls": "TLS1.3",
+            "alpn": "h3",
+            "processMode": "single-native-process",
+            "quicRetry": true
+          },
+          "interrupted": true,
+          "error": "Interrupted during native HTTP3 fixture",
+          "nativeErrorLogTail": "2026/10/23 13:31:42 [notice] 46#46: using the \"epoll\" event method\n2026/10/23 13:31:42 [notice] 46#46: nginx/1.31.9\n2026/10/23 13:31:42 [notice] 46#46: built by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \n2026/10/23 13:31:42 [notice] 46#46: OS: Linux 6.18.55\n2026/10/23 13:31:42 [notice] 46#46: getrlimit(RLIMIT_NOFILE): 16384:16384\n2026/10/23 13:31:42 [warn] 46#46: control API unavailable in single process mode\n2026/10/23 13:31:43 [notice] 46#46: signal 15 (SIGTERM) received from 30, exiting\n2026/10/23 13:31:43 [info] 46#46: epoll_wait() failed (4: Interrupted system call)\n2026/10/23 13:31:43 [notice] 46#46: exit\n",
+          "sourceUnchangedDuringTest": true,
+          "unexpectedNativeErrors": [],
+          "cleanup": {
+            "nativeStopped": true,
+            "nativeExit": 0,
+            "fixturesStopped": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true,
+            "errors": [],
+            "udpTransportsStopped": true,
+            "udpClientsCreated": 0,
+            "udpClientsClosed": 0
+          },
+          "finishedAt": "2026-10-23T09:31:43.049420+00:00"
+        }
+      }
+    ]
+  },
+  "http3UDPInterruption": {
+    "name": "H3-SIGTERM-after-native-start-and-client-creation",
+    "hashes": {
+      "x10/test/http3-baseline.mjs": "bace6eeeb55af6bd412b33d3c5c33902916a48a97af28299e173cf57362b9170",
+      "x10/test/http3-baseline.py": "2b657e7719bbe68bf294133bf7808d4db39a61b35fb8890a82d2641db9b68655"
+    },
+    "nativePidObserved": true,
+    "delayAfterPIDMs": 60,
+    "exitCode": 1,
+    "signal": null,
+    "elapsedMs": 103.417847,
+    "cleanup": {
+      "nativeStopped": true,
+      "nativeExit": 0,
+      "fixturesStopped": true,
+      "openSockets": 0,
+      "temporaryRootRemoved": true,
+      "errors": [],
+      "udpTransportsStopped": true,
+      "udpClientsCreated": 1,
+      "udpClientsClosed": 1
+    },
+    "interrupted": true,
+    "expectedFailure": true,
+    "passed": true,
+    "report": {
+      "schemaVersion": 1,
+      "suite": "native-http3-interop",
+      "startedAt": "2026-10-23T09:32:41.773943+00:00",
+      "identity": {
+        "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+        "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+        "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api\n",
+        "sourceFilesSha256": {
+          "src/http/v3/ngx_http_v3_module.c": "35143d29723d05b491fe8b02a6181d4dc82b2ba215524b650d69e803704ddeee",
+          "src/http/v3/ngx_http_v3_request.c": "c9b12b01b646ecee16219ed5d801a52a864f85ed48fb1ced68e2d09ba12ed821",
+          "src/http/v3/ngx_http_v3_filter_module.c": "b0294e27cca0cb8eaf8ceb2a74da9ece61f3a71d19ebc81527e92efdf6f7629c",
+          "src/event/quic/ngx_event_quic_ssl.c": "ffd8ef9dac1580503f41b351ee68c4438fa02909a2a7ca161613aaae7002459a",
+          "src/event/quic/ngx_event_quic_openssl_compat.c": "b0468bc1d41e8b49ecf33538b09cc1ebb3113d9dae0b6d21aff7ebba48d2246d",
+          "src/event/quic/ngx_event_quic_transport.c": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a"
+        },
+        "harnessSha256": "2b657e7719bbe68bf294133bf7808d4db39a61b35fb8890a82d2641db9b68655",
+        "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+        "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+        "client": {
+          "name": "aioquic",
+          "version": "1.3.0"
+        },
+        "dependencyVersions": {
+          "aioquic": "1.3.0",
+          "attrs": "26.1.0",
+          "certifi": "2026.10.19",
+          "cffi": "2.1.1",
+          "cryptography": "50.0.2",
+          "pycparser": "3.12",
+          "pylsqpack": "0.3.24",
+          "pyOpenSSL": "26.4.0",
+          "service-identity": "26.1.0",
+          "typing_extensions": "4.16.0"
+        },
+        "clientFilesSha256": {
+          "__init__.py": "179996d3ba52c86aea0cd636121afe5290f3a41b4df85b185344066567fa3c91",
+          "asyncio/client.py": "5159d2e28bd33da386c59dbac99dbb35ee47ecf4b480596367299c5ec03dd1c9",
+          "asyncio/protocol.py": "d87759d24c3bba979d2e27e6d4ff3dcdaa1a9395280a32352c38c1d352bab936",
+          "h3/connection.py": "696e9c3735de11c314b8cd1e7e1265761a9373d1bbd2dbdf66570961dac839cd",
+          "quic/connection.py": "f6d0bd15ea563a3bd68518e3d4a6b918f4c9341048f850b27aa582f3a63fab65",
+          "tls.py": "681e81f628493f2494b1ffbf2b72346f4b69f6c4075523798ff342fbafff3208"
+        },
+        "dependencyLockSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+        "interpreter": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/http3-venv/bin/python",
+        "nativePid": 33,
+        "binaryUnchangedDuringTest": true,
+        "clientUnchangedDuringTest": true
+      },
+      "tests": [],
+      "skips": [],
+      "success": false,
+      "fixtureErrors": [],
+      "limitations": [
+        "Synthetic loopback UDP QUIC/TLS1.3/H3, not full packet-loss/migration/fuzz/load or platform matrix.",
+        "Single native process; no master/worker reload guarantee, HEAD, 0-RTT, resumption, client certificates or browser interoperability.",
+        "Client package/module hashes identify this test dependency installation, not a signed attestation."
+      ],
+      "dependencyLockSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+      "scope": {
+        "network": "loopback UDP QUIC",
+        "tls": "TLS1.3",
+        "alpn": "h3",
+        "processMode": "single-native-process",
+        "quicRetry": true
+      },
+      "protocol": {
+        "negotiatedAlpn": "h3",
+        "nativeHttp3": "h3",
+        "nativeRequestProtocol": "HTTP/3.0",
+        "quicVersionHex": "0x1"
+      },
+      "interrupted": true,
+      "error": "Interrupted during native HTTP3 fixture",
+      "nativeErrorLogTail": "2026/10/23 13:32:41 [notice] 33#33: using the \"epoll\" event method\n2026/10/23 13:32:41 [notice] 33#33: nginx/1.31.9\n2026/10/23 13:32:41 [notice] 33#33: built by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \n2026/10/23 13:32:41 [notice] 33#33: OS: Linux 6.18.55\n2026/10/23 13:32:41 [notice] 33#33: getrlimit(RLIMIT_NOFILE): 16384:16384\n2026/10/23 13:32:41 [warn] 33#33: control API unavailable in single process mode\n2026/10/23 13:32:41 [info] 33#33: *2 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:51090\n2026/10/23 13:32:41 [notice] 33#33: signal 15 (SIGTERM) received from 17, exiting\n2026/10/23 13:32:41 [info] 33#33: epoll_wait() failed (4: Interrupted system call)\n2026/10/23 13:32:41 [notice] 33#33: exit\n2026/10/23 13:32:41 [notice] 33#33: signal 3 (SIGQUIT) received from 29, shutting down\n",
+      "sourceUnchangedDuringTest": true,
+      "unexpectedNativeErrors": [],
+      "cleanup": {
+        "nativeStopped": true,
+        "nativeExit": 0,
+        "fixturesStopped": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "errors": [],
+        "udpTransportsStopped": true,
+        "udpClientsCreated": 1,
+        "udpClientsClosed": 1
+      },
+      "finishedAt": "2026-10-23T09:32:41.957680+00:00"
+    },
+    "stderr": ""
+  },
+  "dependencyInspection": {
+    "lockSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+    "pipReportPackages": 10,
+    "downloadedWheelHashesMatchReportAndLock": true,
+    "installedVersionsMatchedReport": true,
+    "pipCheck": {
+      "exitCode": 0,
+      "output": "No broken requirements found."
+    },
+    "wheelsSha256": {
+      "attrs-26.1.0-py3-none-any.whl": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+      "pycparser-3.12-py3-none-any.whl": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e",
+      "aioquic-1.3.0-cp310-abi3-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl": "396e5f53f6ddb27713d9b5bb11d8f0f842e42857b7e671c5ae203bf618528550",
+      "cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf",
+      "typing_extensions-4.16.0-py3-none-any.whl": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+      "pyopenssl-26.4.0-py3-none-any.whl": "f0eb0cb2d581d3ad2b9c489468485e7f2ab6727d08401bcf9d824c3caddf3c1c",
+      "cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl": "9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079",
+      "certifi-2026.10.19-py3-none-any.whl": "42d35340cc5b9ba78e818ddbff0c5b1c2b779de448a340fd1b989f5fa8670e1b",
+      "service_identity-26.1.0-py3-none-any.whl": "68c32dadbb69135fb951077677e07cd7f6031020f3a8c8f47a28cda8a0742118",
+      "pylsqpack-0.3.24-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl": "6024854eb16d32803d4890fb90a73b9348c74b61c0770680aefaaa75f8456e8c"
+    }
+  },
+  "directAndSyntheticValidators": {
+    "schemaVersion": 1,
+    "scope": "Direct extraction of current jsonChecks and synthetic process-output controls for current runLoad; no aggregate CLI or benchmark executed.",
+    "aggregateSourceSha256": "21650f334056618fca4fe770982006c01dca69518286261da419ceb72d70a377",
+    "driverSourceSha256": "243a6152f6bd5d25be2180825833cd7e47b943a417c550f27fccf510000b39a2",
+    "aggregate": [
+      {
+        "kind": "http3",
+        "name": "valid-owner-record",
+        "expectedAccepted": true,
+        "accepted": true
+      },
+      {
+        "kind": "http3",
+        "name": "suite",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "ALPN",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "native-http3",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "native-protocol",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "lock-digest",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "client-changed",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "UDP-not-closed",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "UDP-count",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "UDP-zero",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "empty-cases",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "failed-case",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "skip",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "binary-hash",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "source-changed",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "http3",
+        "name": "cleanup-error",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "valid-owner-record",
+        "expectedAccepted": true,
+        "accepted": true
+      },
+      {
+        "kind": "load-client",
+        "name": "suite",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "empty-cases",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "failed-case",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "source-changed",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "native-changed",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "native-hash",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "client-hash",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "manifest-hash",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "no-ASan",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "no-UBSan",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "sanitizer-diagnostic",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "active-child",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "socket",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "retained-prefix",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "kind": "load-client",
+        "name": "cleanup-error",
+        "expectedAccepted": false,
+        "accepted": false
+      }
+    ],
+    "driver": [
+      {
+        "name": "valid",
+        "expectedAccepted": true,
+        "accepted": true
+      },
+      {
+        "name": "missing-resources",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "negative-CPU",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "invalid-RSS",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "timing-mismatch",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "negative-drain",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "counter-invariant",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "histogram-population",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "empty-histogram",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "rate-mismatch",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "request-cap",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "interrupted",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "wrong-port",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "wrong-duration",
+        "expectedAccepted": false,
+        "accepted": false
+      },
+      {
+        "name": "missing-latency-count",
+        "expectedAccepted": false,
+        "accepted": false
+      }
+    ],
+    "passed": true,
+    "driverScope": "Synthetic EventEmitter process output passed through the exact extracted runLoad function; no child process or network traffic.",
+    "driverRecheckedAt": "2026-10-23T09:42:51.747Z"
+  },
+  "passed": true,
+  "cleanup": {
+    "reviewFixturesStopped": true,
+    "reviewTemporaryPrefixesRemoved": true,
+    "noSustainedMeasurements": true
+  },
+  "limitations": [
+    "Synthetic runLoad controls exercise acceptance logic, not a real client subprocess or benchmark.",
+    "The owner-executed functional/sanitizer reports are inspected separately; they are not relabeled independent executions.",
+    "Process termination controls do not establish general power-loss or hostile same-user safety."
+  ]
+}

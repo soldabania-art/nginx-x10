@@ -136,6 +136,13 @@ operations; they are not signatures against a malicious process with the same
 UID. Atomic writes sync the file and directory. Normal commands refuse an
 unfinished event commit with `commit_pending`; reconciliation is explicit.
 
+An I/O error in event persistence or terminal pending cleanup is reported as
+`event_commit_incomplete`. The caller does not overwrite a matching pending
+stage with `ambiguous` or start another rollback merely because a durable write
+reported failure. Explicit recovery still validates the actual files; this error
+code does not claim that the original apply succeeded or that the failure left
+a recoverable intent.
+
 Existing schema-1 state, revision and history files remain supported without a
 rewrite or migration. New in-flight events gain the additional intent. An old
 history/state mismatch without such an intent remains refused; the tool does
@@ -178,9 +185,14 @@ or merely deleting the intent, it rechecks config/binary/fragment bytes, the
 bound native master identity, and fresh revision/health probes. A candidate that
 was once healthy but is unhealthy now stays unresolved. A valid unbound initial
 event can be completed after native syntax validation; it remains unbound.
-Recovery appends or replaces only the missing durable stages. It never truncates
-history. If a terminal event already completed but pending removal was
-interrupted, exact terminal record/revision relationships and fresh runtime
+Recovery appends or replaces only the missing durable stages. A complete
+history line is re-synced before state advancement even if it is already
+visible: the earlier append may have succeeded while its fsync failed. If the
+after-state is already visible, recovery syncs that file and its directory
+before removing the intent. A failure in these existing-file sync retries
+leaves history/state/intent bytes unchanged; the intent remains for inspection
+and retry. Recovery never truncates history. If a terminal event already
+completed but pending removal was interrupted, exact terminal record/revision relationships and fresh runtime
 checks permit clearing that pending record without another activation.
 Repeating recovery after completion returns `nothing_pending`.
 
@@ -213,8 +225,9 @@ Recovery covers the recorded event intent/history/state boundaries and a
 completed terminal event whose pending removal was interrupted. It does not
 claim every crash or power-loss point. Partial history writes, missing or
 malformed intents, and an old mismatch without an intent require operator
-inspection. A normal I/O error that changes pending stage to `ambiguous` after
-an event write began can also leave a contradictory intent; it stays refused.
+inspection. Reported failures in the event persistence block retain its matching pending
+transaction for inspection/retry. An already contradictory intent from an older
+controller remains refused; recovery does not infer or rewrite its old stage.
 An immutable revision created before a killed operation recorded its intent can
 remain orphaned and is never adopted merely because it exists.
 
@@ -243,3 +256,26 @@ and present falsy/array journals that must never be treated as absent. These
 are process-interruption tests after actual filesystem sync calls, not simulated
 power loss or a full storage-failure matrix. Frozen milestone-2 evidence stays
 unchanged; the additional run is recorded separately.
+
+
+The storage-failure fixture adds real initialization SIGKILL cases at synced
+intent, history, state and intent-removal boundaries. Reconciliation keeps the
+initial revision unbound; the tests then explicitly start and bind a real native
+master and apply another revision. Ordinary initialization I/O failure retains
+its cleanup behavior for the controller state and fragment. Native `-t` may
+leave an empty PID file without starting a daemon. Inspect that side effect and
+confirm no master is running before manually removing it for a new `init`;
+the controller does not automatically delete an existing PID file.
+
+[Storage evidence](../evidence/control-storage-fixed.json) adds 32 scenarios,
+including two explicitly expected prior-controller failure observations. The
+complete controller file has 66 TAP checks: 63 scenarios and three parents.
+The new evidence records two
+counterexamples against the previous controller: a rejected event's reported
+I/O failure poisoned an otherwise matching pending stage, and recovery could
+skip a failed history fsync merely because the line was visible. New terminal
+fault cases inject a single EIO before a write/sync/rename/unlink or after a real
+sync, while partial-append cases actually write and sync a strict record prefix.
+Failed history/state sync retries preserve the files and intent; successful
+retry is idempotent. These are subprocess filesystem fault injections, not
+kernel/hardware faults, complete storage-failure coverage or power-loss proof.

@@ -33,6 +33,20 @@ async function syncDirectory(directory) {
   try { await handle.sync(); } finally { await handle.close(); }
 }
 
+async function syncFile(file) {
+  const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW);
+  try { await handle.sync(); } finally { await handle.close(); }
+}
+
+async function durableEvent(operation) {
+  try { return await operation(); }
+  catch (error) {
+    if (error.code === 'event_commit_incomplete') throw error;
+    throw Object.assign(new Error(`Durable event or cleanup requires explicit recovery: ${message(error)}`),
+      { code: 'event_commit_incomplete', cause: error });
+  }
+}
+
 async function atomic(file, bytes, mode = 0o600) {
   const temporary = `${file}.tmp-${randomBytes(8).toString('hex')}`;
   const handle = await open(temporary, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, mode);
@@ -230,11 +244,13 @@ async function event(settings, current, type, details) {
   intent.sha256 = hash(JSON.stringify(intent));
   if ((await lstat(path.join(settings.state, 'history.jsonl'))).size + Buffer.byteLength(JSON.stringify(record)) + 1 > 16 * 1024 * 1024)
     fail('history_limit', 'Next event would exceed the history limit');
-  await save(commitFile(settings), intent);
-  await appendEvent(settings, record);
-  await save(path.join(settings.state, 'state.json'), after);
-  Object.assign(current, after);
-  await clearCommit(settings);
+  await durableEvent(async () => {
+    await save(commitFile(settings), intent);
+    await appendEvent(settings, record);
+    await save(path.join(settings.state, 'state.json'), after);
+    Object.assign(current, after);
+    await clearCommit(settings);
+  });
 }
 
 async function validateCommit(settings, intent, current, records, transaction) {
@@ -305,10 +321,18 @@ async function verifyConfirmed(settings, current, revision) {
 async function reconcileCommit(context) {
   const { settings, current, history, pending: transaction, commit } = context;
   const checked = await validateCommit(settings, commit, current, history, transaction);
-  if (!checked.appended) await appendEvent(settings, checked.record);
-  if (!same(current, checked.after)) await save(path.join(settings.state, 'state.json'), checked.after);
-  await clearCommit(settings);
-  return checked.record;
+  return durableEvent(async () => {
+    // Seeing a complete line does not prove that a previous fsync succeeded.
+    if (!checked.appended) await appendEvent(settings, checked.record);
+    else await syncFile(path.join(settings.state, 'history.jsonl'));
+    if (!same(current, checked.after)) await save(path.join(settings.state, 'state.json'), checked.after);
+    else {
+      await syncFile(path.join(settings.state, 'state.json'));
+      await syncDirectory(settings.state);
+    }
+    await clearCommit(settings);
+    return checked.record;
+  });
 }
 
 function terminalEvent(current, transaction, records) {
@@ -427,7 +451,12 @@ async function acknowledged(settings, revision) {
 }
 
 async function pending(settings, value) { await save(path.join(settings.state, 'pending.json'), value); }
-async function clearPending(settings) { await rm(path.join(settings.state, 'pending.json')); await syncDirectory(settings.state); }
+async function clearPending(settings) {
+  return durableEvent(async () => {
+    await rm(path.join(settings.state, 'pending.json'));
+    await syncDirectory(settings.state);
+  });
+}
 
 export async function initialize(spec, input) {
   if (process.platform !== 'linux' || uid === undefined) fail('unsupported', 'Linux is required');
@@ -528,6 +557,7 @@ async function activate(state, getInput) {
       await clearPending(settings);
       return { ok: true, outcome: 'applied', revision: revision.id, previous: old.id };
     } catch (error) {
+      if (error.code === 'event_commit_incomplete') throw error;
       // If state/history may already have committed, leave pending for explicit recovery.
       if (current.activeRevision !== old.id) throw error;
       try {
@@ -540,6 +570,7 @@ async function activate(state, getInput) {
         }
         return await rollback(settings, current, transaction, message(error));
       } catch (restoreError) {
+        if (restoreError.code === 'event_commit_incomplete') throw restoreError;
         transaction.stage = 'ambiguous'; transaction.reason = message(restoreError);
         await pending(settings, transaction).catch(() => {});
         fail('ambiguous', `Transaction requires explicit recovery/inspection: ${message(restoreError)}`);

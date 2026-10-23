@@ -32,8 +32,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            build-essential python3 git libpcre2-dev libssl-dev zlib1g-dev \
+            build-essential python3 python3-venv git libpcre2-dev libssl-dev zlib1g-dev \
             libcrypt-dev libfcgi-perl libscgi-perl libio-socket-ssl-perl
+      - name: Install pinned HTTP3 interoperability client
+        run: |
+          python3 -m venv x10/.build/http3-venv
+          x10/.build/http3-venv/bin/python -m pip install --require-hashes --only-binary=:all: \
+            -r x10/test/http3-baseline.requirements.txt
       - name: Compile native profile
         run: |
           bash x10/build.sh --jobs 2

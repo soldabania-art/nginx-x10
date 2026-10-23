@@ -503,3 +503,270 @@ include ${fragmentPath};
   }
   assert.equal(report.passed, true);
 });
+
+// Storage faults are confined to a separate subprocess. The wrapper either
+// pauses after a real sync, or injects one named EIO before/after that syscall.
+// A partial-write fault really appends and syncs a strict prefix before EIO.
+const storageWorker = `
+import fs from 'node:fs';
+import path from 'node:path';
+import { syncBuiltinESMExports } from 'node:module';
+import { pathToFileURL } from 'node:url';
+const [manager, state, operation, payloadJSON, faultJSON] = process.argv.slice(1);
+const payload = JSON.parse(payloadJSON), fault = JSON.parse(faultJSON);
+const originalOpen = fs.promises.open.bind(fs.promises), originalRename = fs.promises.rename.bind(fs.promises), originalRm = fs.promises.rm.bind(fs.promises);
+const commit = path.join(state, 'event-commit.json'), history = path.join(state, 'history.jsonl'), stateFile = path.join(state, 'state.json'), pending = path.join(state, 'pending.json');
+let lastRename, lastRemoved, lastType, stateSynced = false;
+const hits = [];
+const read = file => JSON.parse(fs.readFileSync(file, 'utf8'));
+const type = () => { if (fs.existsSync(commit)) return read(commit).record.type; return lastType; };
+const matches = () => type() === fault.type;
+const available = () => fault.repeat || hits.length === 0;
+const hit = (action, realSyncCalled = false) => {
+  hits.push({ action, realSyncCalled });
+  throw Object.assign(new Error('fixture injected EIO at ' + action), { code: 'EIO' });
+};
+const pause = async boundary => {
+  process.send({ paused: true, type: fault.type, boundary });
+  setInterval(() => {}, 1000); await new Promise(() => {});
+};
+fs.promises.rename = async (from, to) => {
+  if (fault.action === 'state-rename' && to === stateFile && matches() && available()) hit('state-rename');
+  await originalRename(from, to); lastRename = to;
+};
+fs.promises.rm = async (file, ...rest) => {
+  const eventType = type();
+  if (file === commit || file === pending) {
+    if (eventType === fault.type && available() && fault.action === (file === commit ? 'intent-unlink' : 'pending-unlink')) hit(fault.action);
+    lastRemoved = file; lastType = eventType;
+  }
+  return originalRm(file, ...rest);
+};
+fs.promises.open = async (file, ...rest) => {
+  const handle = await originalOpen(file, ...rest), sync = handle.sync.bind(handle), write = handle.writeFile.bind(handle);
+  handle.writeFile = async (...args) => {
+    if (file === history && matches() && available()) {
+      if (fault.action === 'history-write') hit('history-write');
+      if (fault.action === 'history-partial') {
+        const bytes = Buffer.from(args[0]), prefix = bytes.subarray(0, Math.max(1, Math.floor(bytes.length / 2)));
+        await write(prefix); await sync(); hit('history-partial', true);
+      }
+    }
+    return write(...args);
+  };
+  handle.sync = async () => {
+    if (matches() && available()) {
+      if (file === history && fault.action === 'history-sync') hit('history-sync');
+      if (file === stateFile && fault.action === 'state-file-sync') hit('state-file-sync');
+      if (file === state && fault.action === 'intent-directory-sync' && lastRename === commit) hit('intent-directory-sync');
+      if (file === state && fault.action === 'state-directory-sync' && (lastRename === stateFile || stateSynced)) hit('state-directory-sync');
+      if (file === state && fault.action === 'commit-directory-sync' && lastRemoved === commit) hit('commit-directory-sync');
+      if (file === state && fault.action === 'pending-directory-sync' && lastRemoved === pending) hit('pending-directory-sync');
+    }
+    await sync();
+    if (file === stateFile) stateSynced = true;
+    if (matches() && available() && file === history && fault.action === 'history-after-sync') hit('history-after-sync', true);
+    if (fault.action.startsWith('pause-') && matches()) {
+      if (file === history && fault.action === 'pause-history') await pause('history');
+      if (file === state && fault.action === 'pause-intent' && lastRename === commit) await pause('intent');
+      if (file === state && fault.action === 'pause-state' && lastRename === stateFile) await pause('state');
+      if (file === state && fault.action === 'pause-cleared' && lastRemoved === commit && !fs.existsSync(commit)) await pause('cleared');
+    }
+  };
+  return handle;
+};
+syncBuiltinESMExports();
+try {
+  const control = await import(pathToFileURL(manager).href);
+  const result = operation === 'initialize' ? await control.initialize(payload.spec, payload.input)
+    : operation === 'recover' ? await control.recover(state) : await control.apply(state, payload);
+  console.log(JSON.stringify({ result, hits })); process.exitCode = result.ok ? 0 : 1;
+} catch (error) {
+  console.log(JSON.stringify({ error: { code: error.code || 'error', message: error.message }, hits })); process.exitCode = 1;
+}
+`;
+
+test('native initialization and injected storage failure boundaries', { timeout: 120000 }, async t => {
+  const managerPath = path.join(root, 'x10/control/manager.mjs'), baselineCommit = '43618ecca59fe802620f810a13f083554952bd7d';
+  const baselineSource = (await promisify(execFile)('git', ['show', `${baselineCommit}:x10/control/manager.mjs`], { cwd: root })).stdout;
+  const report = { schemaVersion: 1, suite: 'native-control-storage-failures', startedAt: new Date().toISOString(),
+    binary, binarySha256: digest(await readFile(binary)), managerSha256: digest(await readFile(managerPath)),
+    testSha256: digest(await readFile(fileURLToPath(import.meta.url))), baseline: { commit: baselineCommit, managerSha256: digest(baselineSource) },
+    tests: [], shutdowns: [], passed: false, limitations: [
+      'SIGKILL pauses follow real sync calls; EIO is injected only by the subprocess filesystem wrapper, not by failing hardware.',
+      'Before-sync EIO omits the real sync call; after-sync EIO models an error reported after the syscall completed.',
+      'Partial append really writes and syncs a strict record prefix; recovery never truncates it.',
+      'These bounded fault classes do not certify power-loss behavior, every syscall interleaving, or concurrent hostile filesystem changes.',
+      'No automatic stale-lock deletion or master rebinding; sampled health is not an all-traffic cutover guarantee.'
+    ] };
+  let activeChild, activeWorker, backend;
+  const interrupted = () => {
+    report.interrupted = true;
+    if (activeWorker && activeWorker.exitCode === null && activeWorker.signalCode === null) activeWorker.kill('SIGTERM');
+    if (activeChild?.pid) { try { process.kill(-activeChild.pid, 'SIGTERM'); } catch (error) { if (error.code !== 'ESRCH') throw error; } }
+    backend?.closeAllConnections();
+  };
+  process.once('SIGINT', interrupted); process.once('SIGTERM', interrupted);
+  const check = async (name, fn, { uninitialized = false } = {}) => t.test(name, async () => {
+    assert.equal(report.interrupted, undefined);
+    let prefix, nativeOutput = '', shutdown, details;
+    try {
+      prefix = await mkdtemp(path.join(os.tmpdir(), 'x10-storage-')); await chmod(prefix, 0o700);
+      backend = http.createServer((req, res) => { const healthy = req.url === '/healthy'; res.writeHead(healthy ? 200 : 503); res.end(healthy ? 'healthy' : 'unhealthy'); });
+      const healthPort = await listen(backend), port = await unusedPort();
+      const state = path.join(prefix, '.x10-control'), configPath = path.join(prefix, 'nginx.conf'), fragmentPath = path.join(prefix, 'managed.conf');
+      const config = `${process.getuid() === 0 ? `user ${os.userInfo().username};` : ''}\ndaemon off; master_process on; worker_processes 1;\npid ${prefix}/nginx.pid;\nerror_log ${prefix}/error.log notice;\nevents { worker_connections 128; }\nhttp { access_log off;\ninclude ${fragmentPath};\n}\n`;
+      await writeFile(configPath, config, { mode: 0o600 });
+      const input = text => ({ serverBody: `location / { return 200 "${text}"; }`, healthURL: `http://127.0.0.1:${healthPort}/healthy` });
+      const spec = { prefix, binary, port, gateTimeoutMs: 600 };
+      const startNative = async () => {
+        activeChild = spawn(binary, ['-p', `${prefix}/`, '-c', configPath], { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
+        activeChild.stdout.on('data', data => nativeOutput += data); activeChild.stderr.on('data', data => nativeOutput += data);
+        await waitFor(async () => (await get(port)).body === 'A');
+      };
+      if (!uninitialized) { await initialize(spec, input('A')); await startNative(); await bind(state); }
+      const run = async (operation, payload, fault, { manager = managerPath, crash = false } = {}) => {
+        let output = '', errors = '', paused;
+        activeWorker = spawn(process.execPath, ['--input-type=module', '-e', storageWorker, manager, state, operation, JSON.stringify(payload), JSON.stringify(fault)], { stdio: ['ignore', 'pipe', 'pipe', 'ipc'] });
+        const worker = activeWorker;
+        worker.stdout.on('data', bytes => output += bytes); worker.stderr.on('data', bytes => errors += bytes);
+        worker.on('message', value => { paused = value; });
+        if (crash) {
+          await waitFor(() => { if (worker.exitCode !== null || worker.signalCode !== null) throw new Error(`Storage worker exited before pause: ${output} ${errors}`); return paused; });
+          assert.deepEqual(paused, { paused: true, type: fault.type, boundary: fault.action.slice(6) });
+          worker.kill('SIGKILL'); await once(worker, 'exit'); assert.equal(worker.signalCode, 'SIGKILL'); activeWorker = null;
+          if (operation !== 'initialize') {
+            await assert.rejects(status(state), { code: 'locked' });
+            await rm(path.join(state, 'lock')); // this exact killed child has exited
+          }
+          return { signal: 'SIGKILL' };
+        }
+        await waitFor(() => worker.exitCode !== null || worker.signalCode !== null, 8000);
+        assert.equal(worker.signalCode, null); assert.equal(errors, ''); activeWorker = null;
+        return { ...JSON.parse(output), exitCode: worker.exitCode };
+      };
+      const snapshot = async () => {
+        const files = [configPath, fragmentPath, ...['state.json', 'history.jsonl', 'event-commit.json', 'pending.json'].map(name => path.join(state, name))];
+        const values = {};
+        for (const file of files) { try { values[file] = await readFile(file); } catch (error) { if (error.code !== 'ENOENT') throw error; values[file] = null; } }
+        return values;
+      };
+      const baselinePath = path.join(prefix, 'baseline-manager.mjs'); await writeFile(baselinePath, baselineSource, { mode: 0o600 });
+      details = await fn({ prefix, state, port, input, spec, run, snapshot, startNative, baselinePath, configPath, fragmentPath });
+      assert.equal(await readFile(configPath, 'utf8'), config);
+    } catch (error) { t.diagnostic(nativeOutput.slice(-4096)); throw error; }
+    finally {
+      if (activeWorker && activeWorker.exitCode === null && activeWorker.signalCode === null) { activeWorker.kill('SIGKILL'); await once(activeWorker, 'exit'); }
+      activeWorker = null; shutdown = await stop(activeChild); activeChild = null;
+      report.shutdowns.push(shutdown);
+      if (backend) { backend.closeAllConnections(); await new Promise(resolve => backend.close(resolve)); backend = null; }
+      if (prefix) await rm(prefix, { recursive: true, force: true });
+    }
+    if (shutdown) { assert.equal(shutdown.exitCode, 0); assert.equal(shutdown.signal, null); }
+    report.tests.push({ name, passed: true, ...(details ? { details } : {}) });
+  });
+  try {
+    for (const boundary of ['intent', 'history', 'state', 'cleared']) {
+      await check(`unbound-initialization-${boundary}-reconciles-before-native-bind`, async ({ state, input, spec, run, startNative, port }) => {
+        await run('initialize', { spec, input: input('A') }, { type: 'initialized_unbound', action: `pause-${boundary}` }, { crash: true });
+        const result = await recover(state);
+        if (boundary === 'cleared') assert.equal(result.outcome, 'nothing_pending');
+        else { assert.equal(result.outcome, 'reconciled'); assert.equal(result.recordedOutcome, 'initialized_unbound'); }
+        const s = await status(state); assert.equal(s.binding, null); assert.equal(s.pending, null); assert.equal(s.history.entries, 1);
+        assert.equal((await history(state)).records[0].type, 'initialized_unbound');
+        assert.equal((await recover(state)).outcome, 'nothing_pending');
+        await startNative(); await bind(state); assert.equal((await status(state)).runtime.identityValid, true);
+        assert.equal((await apply(state, input('B'))).outcome, 'applied'); assert.equal((await get(port)).body, 'B');
+      }, { uninitialized: true });
+    }
+    await check('initialization-io-failure-cleans-state-with-native-test-sideeffect-explicit', async ({ state, prefix, input, spec, run, startNative }) => {
+      const fault = await run('initialize', { spec, input: input('A') }, { type: 'initialized_unbound', action: 'history-sync' });
+      assert.equal(fault.error.code, 'event_commit_incomplete'); assert.equal(fault.hits.length, 1);
+      await assert.rejects(readFile(path.join(state, 'state.json')), { code: 'ENOENT' });
+      // Native -t creates an empty PID file even without starting a daemon.
+      // The exited child and no native start are known; act as operator here.
+      assert.equal(await readFile(path.join(prefix, 'nginx.pid'), 'utf8'), '');
+      await rm(path.join(prefix, 'nginx.pid'));
+      await initialize(spec, input('A')); await startNative(); await bind(state);
+      return { injectedBeforeRealSync: fault.hits[0].realSyncCalled === false, emptyNativeTestPidPreserved: true, operatorRemovedEmptyPidBeforeRetry: true };
+    }, { uninitialized: true });
+    await check('baseline-rejected-io-failure-poisons-matching-pending-intent', async ({ state, input, run, baselinePath }) => {
+      const bad = { ...input('invalid'), serverBody: 'location / { x10_invalid_storage_directive on; }' };
+      const fault = await run('apply', bad, { type: 'rejected', action: 'history-sync' }, { manager: baselinePath });
+      assert.equal(fault.exitCode, 1); assert.equal(fault.hits.length, 1);
+      assert.equal(JSON.parse(await readFile(path.join(state, 'pending.json'), 'utf8')).stage, 'ambiguous');
+      const baseline = await import(pathToFileURL(baselinePath).href);
+      await assert.rejects(baseline.recover(state), { code: 'commit_integrity' }); await assert.rejects(recover(state), { code: 'commit_integrity' });
+      report.baseline.poisonedPending = { reproduced: true, stage: 'ambiguous', recoveryError: 'commit_integrity', expectedFailureOfRecoveryProtection: true };
+    });
+    await check('baseline-recovery-skips-unsuccessful-history-sync-retry', async ({ state, input, run, baselinePath }) => {
+      const initial = await run('apply', input('B'), { type: 'applied', action: 'history-sync' }, { manager: baselinePath });
+      assert.equal(initial.hits.length, 1); assert.equal(initial.hits[0].realSyncCalled, false);
+      const recovered = await run('recover', null, { type: 'applied', action: 'history-sync' }, { manager: baselinePath });
+      assert.equal(recovered.result.outcome, 'reconciled'); assert.equal(recovered.exitCode, 0); assert.equal(recovered.hits.length, 0);
+      report.baseline.missingSyncRetry = { reproduced: true, observedOutcome: 'reconciled', forcedSyncHits: 0, expectedFailureOfDurabilityProtection: true };
+    });
+    const actions = ['history-write', 'history-sync', 'history-after-sync', 'state-rename', 'state-directory-sync', 'intent-directory-sync', 'intent-unlink', 'commit-directory-sync', 'pending-unlink', 'pending-directory-sync'];
+    for (const type of ['rejected', 'rolled_back']) for (const action of actions) {
+      await check(`${type}-${action}-retains-recoverable-terminal-outcome`, async ({ state, input, run, port }) => {
+        const candidate = type === 'rejected' ? { ...input('invalid'), serverBody: 'location / { x10_invalid_storage_directive on; }' }
+          : { ...input('unhealthy'), healthURL: input('unhealthy').healthURL.replace('/healthy', '/unhealthy') };
+        const fault = await run('apply', candidate, { type, action });
+        assert.equal(fault.exitCode, 1); assert.equal(fault.error.code, 'event_commit_incomplete'); assert.equal(fault.hits.length, 1);
+        const stateBefore = JSON.parse(await readFile(path.join(state, 'state.json'), 'utf8'));
+        let expectedRevision = stateBefore.activeRevision;
+        try { expectedRevision = JSON.parse(await readFile(path.join(state, 'event-commit.json'), 'utf8')).after.activeRevision; }
+        catch (error) { if (error.code !== 'ENOENT') throw error; }
+        const pendingFile = path.join(state, 'pending.json');
+        if (action === 'pending-directory-sync') await assert.rejects(readFile(pendingFile), { code: 'ENOENT' });
+        else assert.equal(JSON.parse(await readFile(pendingFile, 'utf8')).stage, type === 'rejected' ? 'installed' : 'restoring');
+        const result = await recover(state);
+        if (action === 'pending-directory-sync') assert.equal(result.outcome, 'nothing_pending');
+        else { assert.equal(result.outcome, 'reconciled'); assert.equal(result.recordedOutcome, type); }
+        const records = (await history(state)).records;
+        assert.equal(records.filter(row => row.type === type).length, 1); assert.equal(records.at(-1).type, type);
+        const confirmed = await status(state);
+        assert.equal(confirmed.pending, null); assert.equal(confirmed.lastConfirmedRevision, expectedRevision); assert.equal((await get(port)).body, 'A');
+        assert.equal((await recover(state)).outcome, 'nothing_pending');
+        return { injected: fault.hits[0], recordedOutcome: type, historyOccurrences: 1, noFreshActivation: true };
+      });
+    }
+    await check('recovery-retries-full-history-sync-before-state-or-intent-change', async ({ state, input, run, snapshot }) => {
+      const initial = await run('apply', input('B'), { type: 'applied', action: 'history-sync' });
+      assert.equal(initial.hits[0].realSyncCalled, false);
+      const before = await snapshot(), blocked = await run('recover', null, { type: 'applied', action: 'history-sync' });
+      assert.equal(blocked.error.code, 'event_commit_incomplete'); assert.equal(blocked.hits.length, 1); assert.equal(blocked.hits[0].realSyncCalled, false);
+      assert.deepEqual(await snapshot(), before); assert.equal((await recover(state)).recordedOutcome, 'applied');
+      assert.equal((await history(state)).records.filter(row => row.type === 'applied').length, 1);
+      return { initial: initial.hits[0], blockedRetry: blocked.hits[0], visibleFileBytesPreserved: true };
+    });
+    for (const action of ['state-file-sync', 'state-directory-sync']) {
+      await check(`already-visible-state-${action}-must-complete-before-intent-unlink`, async ({ state, input, run, snapshot }) => {
+        await run('apply', input('B'), { type: 'applied', action: 'pause-state' }, { crash: true });
+        const before = await snapshot(), blocked = await run('recover', null, { type: 'applied', action });
+        assert.equal(blocked.error.code, 'event_commit_incomplete'); assert.equal(blocked.hits.length, 1);
+        assert.deepEqual(await snapshot(), before); assert.equal((await recover(state)).recordedOutcome, 'applied');
+        return { injected: blocked.hits[0], visibleFileBytesPreserved: true };
+      });
+    }
+    for (const operation of ['apply', 'recover']) {
+      await check(`${operation}-partial-history-prefix-is-preserved-and-refused`, async ({ state, input, run, snapshot }) => {
+        if (operation === 'recover') await run('apply', input('B'), { type: 'applied', action: 'pause-intent' }, { crash: true });
+        const historyFile = path.join(state, 'history.jsonl'), prefix = await readFile(historyFile);
+        const fault = await run(operation, operation === 'apply' ? input('B') : null, { type: 'applied', action: 'history-partial' });
+        assert.equal(fault.error.code, 'event_commit_incomplete'); assert.equal(fault.hits[0].realSyncCalled, true);
+        const bytes = await readFile(historyFile); assert.deepEqual(bytes.subarray(0, prefix.length), prefix); assert.ok(bytes.length > prefix.length); assert.notEqual(bytes.at(-1), 10);
+        const before = await snapshot(); await assert.rejects(recover(state), { code: 'history_integrity' });
+        assert.deepEqual(await snapshot(), before);
+        const validPrefixBytes = bytes.lastIndexOf(10) + 1, partialTailBytes = bytes.length - validPrefixBytes;
+        assert.ok(partialTailBytes > 0);
+        return { injected: fault.hits[0], previousHistoryBytes: prefix.length, validPrefixBytes, addedBytes: bytes.length - prefix.length, partialTailBytes, visibleFileBytesPreserved: true };
+      });
+    }
+    report.passed = report.tests.length === 32 && !report.interrupted;
+  } finally {
+    report.finishedAt = new Date().toISOString(); process.removeListener('SIGINT', interrupted); process.removeListener('SIGTERM', interrupted);
+    if (process.env.X10_CONTROL_STORAGE_EVIDENCE) await writeFile(path.resolve(process.env.X10_CONTROL_STORAGE_EVIDENCE), `${JSON.stringify(report, null, 2)}\n`, { mode: 0o600 });
+  }
+  assert.equal(report.passed, true);
+});

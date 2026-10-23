@@ -131,10 +131,11 @@ function command(file, args, { timeoutMs, env }) {
 }
 
 function jsonChecks(data, kind) {
-  if (kind === 'adapters' || kind === 'mail-tls') {
+  if (kind === 'adapters' || kind === 'mail-tls' || kind === 'http3') {
     const mailTLS = kind === 'mail-tls';
     const cleanup = data.cleanup;
-    return data.suite === (mailTLS ? 'native-mail-tls-baseline' : 'native-protocol-adapters') &&
+    const expectedSuite = { adapters: 'native-protocol-adapters', 'mail-tls': 'native-mail-tls-baseline', http3: 'native-http3-interop' }[kind];
+    return data.suite === expectedSuite &&
       (mailTLS ? data.passed === true : data.success === true) &&
       Array.isArray(data.tests) && data.tests.length > 0 &&
       data.tests.every(t => mailTLS ? t.passed === true : t.status === 'passed') &&
@@ -143,10 +144,23 @@ function jsonChecks(data, kind) {
       /^[a-f0-9]{64}$/.test(data.identity?.binarySha256 || '') &&
       cleanup?.nativeStopped === true && cleanup.fixturesStopped === true &&
       cleanup.openSockets === 0 && cleanup.temporaryRootRemoved === true &&
-      Array.isArray(cleanup.errors) && cleanup.errors.length === 0;
+      Array.isArray(cleanup.errors) && cleanup.errors.length === 0 &&
+      (kind !== 'http3' || (data.protocol?.negotiatedAlpn === 'h3' && data.protocol.nativeHttp3 === 'h3' &&
+        data.protocol.nativeRequestProtocol === 'HTTP/3.0' && /^[a-f0-9]{64}$/.test(data.dependencyLockSha256 || '') &&
+        data.identity.clientUnchangedDuringTest === true && cleanup.udpTransportsStopped === true &&
+        Number.isSafeInteger(cleanup.udpClientsCreated) && cleanup.udpClientsCreated > 0 && cleanup.udpClientsClosed === cleanup.udpClientsCreated));
   }
   if (kind === 'http') return data.success === true && Array.isArray(data.tests) && data.tests.length > 0 && data.tests.every(t => t.status === 'passed');
   if (kind === 'mail') return data.passed === true && Array.isArray(data.tests) && data.tests.length > 0 && data.tests.every(t => t.passed === true);
+  if (kind === 'load-client') return data.suite === 'native-http1-load-verification' && data.passed === true &&
+    Array.isArray(data.tests) && data.tests.length > 0 && data.tests.every(t => t.passed === true) &&
+    data.sourceUnchangedDuringTest === true && data.nativeBinaryUnchangedDuringTest === true &&
+    /^[a-f0-9]{64}$/.test(data.nativeBinarySha256 || '') &&
+    /^[a-f0-9]{64}$/.test(data.identity?.clientBinarySha256 || '') && /^[a-f0-9]{64}$/.test(data.identity?.buildManifestSha256 || '') &&
+    data.sanitizers?.enabled?.includes('address') && data.sanitizers?.enabled?.includes('undefined') && data.sanitizers.diagnostics === '' &&
+    data.cleanup?.nativeStopped === true && data.cleanup.fixtureServersClosed === true &&
+    data.cleanup.openSockets === 0 && data.cleanup.activeChildren === 0 && data.cleanup.temporaryRootRemoved === true &&
+    Array.isArray(data.cleanup.errors) && data.cleanup.errors.length === 0;
   if (kind === 'quic') return data.strict?.failed === 0 && data.strict?.caseCount > 0 && data.sourceUnchangedDuringTest === true;
   if (kind === 'generated') return data.passed === true && data.strict?.failed === 0 &&
     data.strict?.cases > 0 && data.sourceUnchangedDuringTest === true && data.compileExitCode === 0 &&
@@ -176,9 +190,12 @@ async function main() {
     { name: 'stream-mail', file: process.execPath, args: ['x10/test/stream-mail-baseline.mjs'], kind: 'mail' },
     { name: 'mail-tls-starttls', file: process.execPath, args: ['x10/test/mail-tls-baseline.mjs', '--binary', p.binary], kind: 'mail-tls' },
     { name: 'protocol-adapters', file: process.execPath, args: ['x10/test/adapters-baseline.mjs', '--binary', p.binary], kind: 'adapters' },
+    { name: 'http3-interop', file: process.execPath, args: ['x10/test/http3-baseline.mjs', '--binary', p.binary], kind: 'http3' },
     { name: 'native-features', file: process.execPath, args: ['x10/test/features-baseline.mjs', '--binary', p.binary], kind: 'http' },
     { name: 'quic-regression', file: 'bash', args: ['x10/test/runner.sh', '--source', p.source, '--objs', p.objects], kind: 'quic' },
     { name: 'quic-generated-sanitized', file: 'bash', args: ['x10/test/quic-generated.sh', '--source', p.source, '--objs', p.objects], kind: 'generated' },
+    { name: 'quic-frame-boundaries', file: 'bash', args: ['x10/test/quic-frames.sh', '--source', p.source, '--objs', p.objects], kind: 'generated', frame: true },
+    { name: 'native-load-client-verification', file: process.execPath, args: ['x10/bench/native-load.mjs', '--verify'], kind: 'load-client' },
     { name: 'managed-native-control', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/control.test.mjs'], kind: 'tap' },
   ];
   if (opts.official) suites.push({ name: 'official-nginx-tests', file: 'bash', args: ['x10/test/official-tests.sh', '--binary', p.binary], kind: 'official', timeoutMs: 600_000 });
@@ -201,9 +218,22 @@ async function main() {
       if (observedBinaryHash && observedBinaryHash !== p.binarySha256) {
         valid = false; verificationError = 'Suite result identifies different binary bytes';
       }
-      if (suite.kind === 'mail-tls' || suite.kind === 'adapters') {
+      if (suite.kind === 'mail-tls' || suite.kind === 'adapters' || suite.kind === 'http3') {
         if (typeof data.identity?.binary !== 'string' || path.resolve(data.identity.binary) !== p.binary) {
           valid = false; verificationError = 'Protocol suite result does not identify the selected binary path';
+        }
+      }
+      if (suite.kind === 'http3' && data.dependencyLockSha256 !== digest(await readFile(path.join(root, 'x10/test/http3-baseline.requirements.txt')))) {
+        valid = false; verificationError = 'HTTP3 client result identifies a different dependency lock';
+      }
+      if (suite.kind === 'load-client') {
+        if (data.nativeBinarySha256 !== p.binarySha256 || typeof data.nativeBinaryPath !== 'string' || path.resolve(data.nativeBinaryPath) !== p.binary) {
+          valid = false; verificationError = 'Load-client verification did not use the selected native binary';
+        }
+        const sourceHash = digest(await readFile(path.join(root, 'x10/bench/native-load.c')));
+        const wrapperHash = digest(await readFile(path.join(root, 'x10/bench/native-load.mjs')));
+        if (data.identity?.clientSourceSha256 !== sourceHash || data.identity?.wrapperSha256 !== wrapperHash) {
+          valid = false; verificationError = 'Load-client verification identifies different client/wrapper source';
         }
       }
       if (suite.kind === 'mail' && path.resolve(data.binary || '') !== p.binary) {
@@ -214,6 +244,9 @@ async function main() {
         if (data.sourceSha256 !== expected) { valid = false; verificationError = 'Parser result identifies different source bytes'; }
         if (data.generatedConfigSha256 !== p.generatedConfigSha256) {
           valid = false; verificationError = 'Parser result identifies different generated build headers';
+        }
+        if (suite.frame && (data.suite !== 'quic-frame-boundaries' || data.generatedFilesUnchangedDuringTest !== true || data.temporaryRootRemoved !== true)) {
+          valid = false; verificationError = 'Frame parser result lacks its required identity or cleanup checks';
         }
       }
       if (suite.kind === 'official') {

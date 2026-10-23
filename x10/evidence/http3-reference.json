@@ -1,0 +1,298 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-http3-interop",
+  "startedAt": "2026-10-23T09:30:58.289733+00:00",
+  "identity": {
+    "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+    "binarySha256": "adf05f3088bf8ee1ed7c886e424a2d92258323dd78e036276b41e009fbaf634e",
+    "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api\n",
+    "sourceFilesSha256": {
+      "src/http/v3/ngx_http_v3_module.c": "35143d29723d05b491fe8b02a6181d4dc82b2ba215524b650d69e803704ddeee",
+      "src/http/v3/ngx_http_v3_request.c": "c9b12b01b646ecee16219ed5d801a52a864f85ed48fb1ced68e2d09ba12ed821",
+      "src/http/v3/ngx_http_v3_filter_module.c": "b0294e27cca0cb8eaf8ceb2a74da9ece61f3a71d19ebc81527e92efdf6f7629c",
+      "src/event/quic/ngx_event_quic_ssl.c": "ffd8ef9dac1580503f41b351ee68c4438fa02909a2a7ca161613aaae7002459a",
+      "src/event/quic/ngx_event_quic_openssl_compat.c": "b0468bc1d41e8b49ecf33538b09cc1ebb3113d9dae0b6d21aff7ebba48d2246d",
+      "src/event/quic/ngx_event_quic_transport.c": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a"
+    },
+    "harnessSha256": "2b657e7719bbe68bf294133bf7808d4db39a61b35fb8890a82d2641db9b68655",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+    "client": {
+      "name": "aioquic",
+      "version": "1.3.0"
+    },
+    "dependencyVersions": {
+      "aioquic": "1.3.0",
+      "attrs": "26.1.0",
+      "certifi": "2026.10.19",
+      "cffi": "2.1.1",
+      "cryptography": "50.0.2",
+      "pycparser": "3.12",
+      "pylsqpack": "0.3.24",
+      "pyOpenSSL": "26.4.0",
+      "service-identity": "26.1.0",
+      "typing_extensions": "4.16.0"
+    },
+    "clientFilesSha256": {
+      "__init__.py": "179996d3ba52c86aea0cd636121afe5290f3a41b4df85b185344066567fa3c91",
+      "asyncio/client.py": "5159d2e28bd33da386c59dbac99dbb35ee47ecf4b480596367299c5ec03dd1c9",
+      "asyncio/protocol.py": "d87759d24c3bba979d2e27e6d4ff3dcdaa1a9395280a32352c38c1d352bab936",
+      "h3/connection.py": "696e9c3735de11c314b8cd1e7e1265761a9373d1bbd2dbdf66570961dac839cd",
+      "quic/connection.py": "f6d0bd15ea563a3bd68518e3d4a6b918f4c9341048f850b27aa582f3a63fab65",
+      "tls.py": "681e81f628493f2494b1ffbf2b72346f4b69f6c4075523798ff342fbafff3208"
+    },
+    "dependencyLockSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+    "interpreter": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/http3-venv/bin/python",
+    "nativePid": 40,
+    "binaryUnchangedDuringTest": true,
+    "clientUnchangedDuringTest": true
+  },
+  "tests": [
+    {
+      "name": "verified-quic-tls13-alpn-h3-exact-binary-response",
+      "status": "passed",
+      "elapsedMs": 137,
+      "detail": {
+        "streamId": 0,
+        "bytes": 65806,
+        "sha256": "fc7f966cc2bb2f2ea5f1040be9e0e60e8997c23feadad1e408a09eebf2079c49",
+        "handshake": {
+          "alpn": "h3",
+          "earlyData": false,
+          "resumed": false
+        },
+        "receivedDatagrams": 61
+      }
+    },
+    {
+      "name": "get-range-exact-bytes-and-content-range-over-h3",
+      "status": "passed",
+      "elapsedMs": 88,
+      "detail": {
+        "streamId": 0,
+        "bytes": 4096,
+        "sha256": "3f0e00d23656202694e69cca96e44ebea4b71ffdf44314f6d2e99aff5ca6c85f"
+      }
+    },
+    {
+      "name": "fragmented-h3-data-post-exact-native-backend-receipt",
+      "status": "passed",
+      "elapsedMs": 101,
+      "detail": {
+        "streamId": 0,
+        "bytes": 65806,
+        "sha256": "fc7f966cc2bb2f2ea5f1040be9e0e60e8997c23feadad1e408a09eebf2079c49",
+        "backendReceipt": {
+          "method": "POST",
+          "target": "/echo?binary=1",
+          "bytes": 65806,
+          "sha256": "fc7f966cc2bb2f2ea5f1040be9e0e60e8997c23feadad1e408a09eebf2079c49",
+          "token": "h3-post"
+        }
+      }
+    },
+    {
+      "name": "six-concurrent-h3-streams-with-real-upstream-barrier",
+      "status": "passed",
+      "elapsedMs": 90,
+      "detail": {
+        "streams": [
+          {
+            "streamId": 0,
+            "bytes": 25,
+            "sha256": "0029ebea43c4f14f5c062e6901efffc2c729a3fc40c58146b5c78a79cd41f99a"
+          },
+          {
+            "streamId": 4,
+            "bytes": 25,
+            "sha256": "1365a305f5990c9a61fc6d08657cbd11ae009ce214daf042053d65066ae4c6c8"
+          },
+          {
+            "streamId": 8,
+            "bytes": 25,
+            "sha256": "55fea318c1e2954a93487d4a75b45cd9dc6051600cc38876af7eedcb030653a7"
+          },
+          {
+            "streamId": 12,
+            "bytes": 25,
+            "sha256": "6598899e964b6d33f0533abe4356ace73ea5124dc0f7360fa29ab12fc059be22"
+          },
+          {
+            "streamId": 16,
+            "bytes": 25,
+            "sha256": "3802562c2aa32db2420d3059dc3dc24eb085cff2f9b575a400151aafbac5281a"
+          },
+          {
+            "streamId": 20,
+            "bytes": 25,
+            "sha256": "1c9205ce21c9363f203400e78db33f80b06e93e82a093b845e3c645556660188"
+          }
+        ],
+        "backendBarrierReceiptsBeforeRelease": 6,
+        "backendTargetsBeforeRelease": [
+          "/barrier/0",
+          "/barrier/1",
+          "/barrier/2",
+          "/barrier/3",
+          "/barrier/4",
+          "/barrier/5"
+        ],
+        "handshakes": [
+          {
+            "alpn": "h3",
+            "earlyData": false,
+            "resumed": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "cancel-observed-stream-closes-upstream-and-preserves-other-streams",
+      "status": "passed",
+      "elapsedMs": 95,
+      "detail": {
+        "cancelledStream": 0,
+        "receivedBeforeCancel": 5120,
+        "nativeBackendClosed": true,
+        "unrelatedStreamHeldDuringCancellation": true,
+        "survivingStream": {
+          "streamId": 4,
+          "bytes": 38,
+          "sha256": "12e3e8706269f5797f906713f501280b826f1e108b2a9f414eb9105a52446666"
+        },
+        "afterCancellation": {
+          "streamId": 8,
+          "bytes": 65806,
+          "sha256": "fc7f966cc2bb2f2ea5f1040be9e0e60e8997c23feadad1e408a09eebf2079c49"
+        },
+        "handshakes": [
+          {
+            "alpn": "h3",
+            "earlyData": false,
+            "resumed": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "unrelated-ca-rejected-by-real-quic-tls-verification",
+      "status": "passed",
+      "elapsedMs": 91,
+      "detail": {
+        "errorCode": 298,
+        "reason": "unable to get local issuer certificate"
+      }
+    },
+    {
+      "name": "wrong-hostname-rejected-by-real-quic-tls-verification",
+      "status": "passed",
+      "elapsedMs": 91,
+      "detail": {
+        "errorCode": 298,
+        "reason": "hostname 'wrong.invalid' doesn't match DNSPattern(pattern=b'localhost')"
+      }
+    }
+  ],
+  "skips": [],
+  "success": true,
+  "fixtureErrors": [],
+  "limitations": [
+    "Synthetic loopback UDP QUIC/TLS1.3/H3, not full packet-loss/migration/fuzz/load or platform matrix.",
+    "Single native process; no master/worker reload guarantee, HEAD, 0-RTT, resumption, client certificates or browser interoperability.",
+    "Client package/module hashes identify this test dependency installation, not a signed attestation."
+  ],
+  "dependencyLockSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+  "scope": {
+    "network": "loopback UDP QUIC",
+    "tls": "TLS1.3",
+    "alpn": "h3",
+    "processMode": "single-native-process",
+    "quicRetry": true
+  },
+  "protocol": {
+    "negotiatedAlpn": "h3",
+    "nativeHttp3": "h3",
+    "nativeRequestProtocol": "HTTP/3.0",
+    "quicVersionHex": "0x1"
+  },
+  "receipts": [
+    {
+      "method": "POST",
+      "target": "/echo?binary=1",
+      "bytes": 65806,
+      "sha256": "fc7f966cc2bb2f2ea5f1040be9e0e60e8997c23feadad1e408a09eebf2079c49",
+      "token": "h3-post"
+    },
+    {
+      "method": "GET",
+      "target": "/barrier/0",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "token": ""
+    },
+    {
+      "method": "GET",
+      "target": "/barrier/1",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "token": ""
+    },
+    {
+      "method": "GET",
+      "target": "/barrier/2",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "token": ""
+    },
+    {
+      "method": "GET",
+      "target": "/barrier/3",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "token": ""
+    },
+    {
+      "method": "GET",
+      "target": "/barrier/4",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "token": ""
+    },
+    {
+      "method": "GET",
+      "target": "/barrier/5",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "token": ""
+    },
+    {
+      "method": "GET",
+      "target": "/slow",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "token": ""
+    },
+    {
+      "method": "GET",
+      "target": "/survive",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "token": ""
+    }
+  ],
+  "nativeErrorLogTail": "2026/10/23 13:30:58 [notice] 40#40: using the \"epoll\" event method\n2026/10/23 13:30:58 [notice] 40#40: nginx/1.31.9\n2026/10/23 13:30:58 [notice] 40#40: built by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \n2026/10/23 13:30:58 [notice] 40#40: OS: Linux 6.18.55\n2026/10/23 13:30:58 [notice] 40#40: getrlimit(RLIMIT_NOFILE): 16384:16384\n2026/10/23 13:30:58 [warn] 40#40: control API unavailable in single process mode\n2026/10/23 13:30:58 [info] 40#40: *2 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60422\n2026/10/23 13:30:58 [info] 40#40: *10 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60422\n2026/10/23 13:30:58 [info] 40#40: *18 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60422\n2026/10/23 13:30:58 [warn] 40#40: *24 a client request body is buffered to a temporary file /tmp/x10-http3-m8kwii0s/body/0000000001, client: 127.0.0.1, server: localhost, request: \"POST /echo?binary=1 HTTP/3.0\"\n2026/10/23 13:30:58 [info] 40#40: *27 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60422\n2026/10/23 13:30:58 [info] 40#40: *46 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60422\n2026/10/23 13:30:58 [info] 40#40: *58 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60422\n2026/10/23 13:30:58 [info] 40#40: *58 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60422\n2026/10/23 13:30:58 [info] 40#40: *60 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60422\n2026/10/23 13:30:58 [info] 40#40: *60 quic fixed bit is not set while parsing quic packet, client: 127.0.0.1, server: 127.0.0.1:60422\n2026/10/23 13:30:59 [notice] 40#40: signal 3 (SIGQUIT) received from 36, shutting down\n2026/10/23 13:30:59 [info] 40#40: epoll_wait() failed (4: Interrupted system call)\n2026/10/23 13:30:59 [notice] 40#40: exit\n",
+  "sourceUnchangedDuringTest": true,
+  "unexpectedNativeErrors": [],
+  "cleanup": {
+    "nativeStopped": true,
+    "nativeExit": 0,
+    "fixturesStopped": true,
+    "openSockets": 0,
+    "temporaryRootRemoved": true,
+    "errors": [],
+    "udpTransportsStopped": true,
+    "udpClientsCreated": 7,
+    "udpClientsClosed": 7
+  },
+  "finishedAt": "2026-10-23T09:30:59.078199+00:00"
+}
