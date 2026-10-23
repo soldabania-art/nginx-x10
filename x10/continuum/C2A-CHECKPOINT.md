@@ -394,3 +394,21 @@ success. Raw close, wire=null, no overlap admission, semantic export/import,
 actual TLS-code migration or native NGINX continuation. Next control/alert/
 shutdown and sequence/key usage gates remain pending. Local evidence retains
 at-publication pending status; this exact-SHA receipt records later acceptance.
+
+## Server shutdown local checkpoint
+
+Canonical18/18 passed:15 ordinary actual-TLS cases,2 handled runtime signals,
+1 no-TLS source control. New case observes actual SSL_shutdown0/SENT1 then
+actual1/SENT|RECEIVED3, with immutable refusal pairs and cleared own retry.
+The mapping of0 to fixture WANT_READ is not an OpenSSL error classification.
+Exact echo ACK and explicit client end gate call order; full unchanged wire
+observer verifies both close_notify, FIN and final sequences including alerts.
+[Evidence](../evidence/continuum-c2a-shutdown.json) records independent heldouts,
+source/build identities, baseline no-TLS control and cleanup facts.
+
+Core21/process7, C1 27=18synthetic+9runtime and native20/20 passed locally;
+official1083 strictPASS/25SKIP/1expectedTODO/0FAIL remain separate. New exact
+implementation SHA hosted research/native CI pending;996e997 accepted earlier.
+This is normal server-first shutdown refusal only, not complete control/alert/
+EOF inventory or admission. Remaining usage gates precede C2b; no semantic
+export/import, actual TLS-code migration or native NGINX continuation.

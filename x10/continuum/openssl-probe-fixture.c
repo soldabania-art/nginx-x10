@@ -13,6 +13,9 @@
  * ssl/record/rec_layer_s3.c retains pending write progress across that retry.
  * Its doc/man3/SSL_get_error.pod also forbids other I/O-triggering operations
  * after WRITE/WANT_WRITE until the original WRITE is repeated.
+ * Its SSL_shutdown.pod distinguishes first-send return 0 from an error;
+ * SSL_get_error must not classify that 0. Repeating shutdown may finish it.
+ * No SSL_write is permitted after starting shutdown.
  */
 #define _POSIX_C_SOURCE 200809L
 #include <openssl/ssl.h>
@@ -123,6 +126,7 @@ typedef struct {
     SSL *ssl;
     int fd;
     int error;
+    int last_result;
     size_t amount;
     X10_PROBE_LEDGER ledger;
 } PEER;
@@ -149,6 +153,7 @@ static int invoke(PEER *peer, enum x10_probe_call call, void *buffer, size_t siz
         result = SSL_key_update(peer->ssl, SSL_KEY_UPDATE_NOT_REQUESTED); break;
     default: ledger->active_call = X10_CALL_NONE; return 0;
     }
+    peer->last_result = result; /* Allowlisted return observation, not state. */
     /* No intervening OpenSSL call before SSL_get_error classification. */
     if (result > 0) peer->error = SSL_ERROR_NONE;
     else if (call == X10_CALL_SHUTDOWN && result == 0)
@@ -255,7 +260,7 @@ int main(int argc, char **argv)
         "unread-plaintext", "empty-read-retry", "write-backpressure", "queued-key-update",
         "completed-key-update", "completed-read-retry", "unrelated-write-read-retry",
         "peer-key-update-pending", "peer-key-update-completed", "completed-write-retry",
-        "overlapping-read-write-retry"};
+        "overlapping-read-write-retry", "server-shutdown-lifecycle"};
     SSL_CTX *ctx = NULL;
     PEER peer;
     X10_PROBE_RESULT first, second;
@@ -272,7 +277,7 @@ int main(int argc, char **argv)
     int listener = -1, status = 1, known = 0, size = 4096;
     int quiescent, unread, partial, pressure_case, ku, empty, completed_ku, exchange;
     int completed_read, unrelated_write, completed_write, overlap, allowed_case;
-    int peer_ku, peer_ku_pending, peer_ku_completed;
+    int peer_ku, peer_ku_pending, peer_ku_completed, shutdown_lifecycle;
     int64_t deadline;
 
     memset(&peer, 0, sizeof(peer)); peer.fd = -1;
@@ -327,8 +332,9 @@ int main(int argc, char **argv)
     peer_ku_pending = !strcmp(scenario, "peer-key-update-pending");
     peer_ku_completed = !strcmp(scenario, "peer-key-update-completed");
     peer_ku = peer_ku_pending || peer_ku_completed;
+    shutdown_lifecycle = !strcmp(scenario, "server-shutdown-lifecycle");
     allowed_case = quiescent || completed_read || completed_write;
-    exchange = allowed_case || completed_ku || peer_ku_completed;
+    exchange = allowed_case || completed_ku || peer_ku_completed || shutdown_lifecycle;
     if (unread && wanted < 2) goto done;
     if ((completed_write || overlap) && wanted != MAX_APPLICATION_BYTES) goto done;
 
@@ -636,11 +642,81 @@ int main(int argc, char **argv)
         if (peer.error != SSL_ERROR_WANT_WRITE || peer.ledger.retry_call != X10_CALL_WRITE) goto done;
     }
 
+    if (shutdown_lifecycle) {
+        /* The client withholds close_notify until both sent-only snapshots.
+         * This exact-echo ACK excludes unread application data for this narrow
+         * profile; it is not a general truncation or concurrent-writer fence. */
+        failure = "shutdown_ready";
+        if (!observe(&peer, &first) || !first.allowed
+            || peer.ledger.retry_call != X10_CALL_NONE
+            || SSL_pending(peer.ssl) != 0 || SSL_has_pending(peer.ssl)) goto done;
+        printf("{\"event\":\"shutdown-ready\",\"scenario\":\"%s\","
+            "\"applicationBytesRead\":%zu,\"applicationBytesWritten\":%zu}\n",
+            scenario, total, wanted);
+        if (!step(deadline)) goto done;
+        failure = "shutdown_sent_state_not_reached";
+        /* Return 0 is successful one-way shutdown, not SSL_ERROR_WANT_READ.
+         * invoke's existing ledger convention records it as incomplete; it
+         * deliberately does not call SSL_get_error for this special return. */
+        if (invoke(&peer, X10_CALL_SHUTDOWN, NULL, 0)
+            || peer.last_result != 0 || peer.error != SSL_ERROR_WANT_READ
+            || SSL_get_shutdown(peer.ssl) != SSL_SENT_SHUTDOWN
+            || peer.ledger.last_call != X10_CALL_SHUTDOWN
+            || peer.ledger.last_outcome != X10_OUTCOME_WANT_READ
+            || peer.ledger.retry_call != X10_CALL_SHUTDOWN
+            || !observe(&peer, &first) || first.allowed
+            || !(first.reasons & X10_REASON_CONTROL)
+            || !(first.reasons & X10_REASON_RETRY)
+            || first.shutdown != SSL_SENT_SHUTDOWN || first.alert_dispatch != 0
+            || first.wbuf_left || first.wnum) goto done;
+        printf("{\"event\":\"shutdown-started\",\"scenario\":\"%s\","
+            "\"call\":%d,\"outcome\":%d,\"retryCall\":%d,"
+            "\"shutdownBits\":%d,\"rawResult\":%d}\n", scenario,
+            (int) peer.ledger.last_call, (int) peer.ledger.last_outcome,
+            (int) peer.ledger.retry_call, first.shutdown, peer.last_result);
+        emit_probe(scenario, 1, &peer, &first);
+        failure = "shutdown_sent_probe";
+        if (!observe(&peer, &second)) goto done;
+        emit_probe(scenario, 2, &peer, &second);
+        if (memcmp(&first, &second, sizeof(first))) goto done;
+        failure = "shutdown_peer_close_step";
+        if (!step(deadline)) goto done;
+        failure = "shutdown_completion";
+        /* The pin permits repeated SSL_shutdown after return 0. Only that
+         * operation follows; no application read/write or control I/O occurs. */
+        if (!complete(&peer, X10_CALL_SHUTDOWN, NULL, 0, deadline)
+            || peer.last_result != 1
+            || SSL_get_shutdown(peer.ssl) != (SSL_SENT_SHUTDOWN | SSL_RECEIVED_SHUTDOWN)
+            || peer.ledger.last_call != X10_CALL_SHUTDOWN
+            || peer.ledger.last_outcome != X10_OUTCOME_SUCCESS
+            || peer.ledger.retry_call != X10_CALL_NONE) goto done;
+        printf("{\"event\":\"shutdown-completed\",\"scenario\":\"%s\","
+            "\"call\":%d,\"outcome\":%d,\"retryCall\":%d,"
+            "\"shutdownBits\":%d,\"rawResult\":%d}\n", scenario,
+            (int) peer.ledger.last_call, (int) peer.ledger.last_outcome,
+            (int) peer.ledger.retry_call, SSL_get_shutdown(peer.ssl), peer.last_result);
+    }
+
     failure = "probe";
     if (interrupted || now_ms() >= deadline) goto done;
     if (!observe(&peer, &first)) goto done;
-    emit_probe(scenario, completed_write || overlap ? 3 : 1, &peer, &first);
-    if (exchange) {
+    emit_probe(scenario, completed_write || overlap || shutdown_lifecycle ? 3 : 1, &peer, &first);
+    if (shutdown_lifecycle) {
+        /* A fully closed session remains outside the live continuation
+         * safepoint, even after its shutdown retry is actually complete. */
+        if (first.allowed || !(first.reasons & X10_REASON_CONTROL)
+            || (first.reasons & X10_REASON_RETRY)
+            || first.shutdown != (SSL_SENT_SHUTDOWN | SSL_RECEIVED_SHUTDOWN)
+            || first.ledger_last_call != X10_CALL_SHUTDOWN
+            || first.ledger_last_outcome != X10_OUTCOME_SUCCESS
+            || first.ledger_retry_call != X10_CALL_NONE
+            || first.alert_dispatch != 0 || first.wbuf_left || first.wnum
+            || SSL_pending(peer.ssl) != 0 || SSL_has_pending(peer.ssl)) goto done;
+        if (!observe(&peer, &second)) goto done;
+        emit_probe(scenario, 4, &peer, &second);
+        if (memcmp(&first, &second, sizeof(first))) goto done;
+        printf("{\"event\":\"shutdown\",\"clean\":true,\"shutdownBits\":%d}\n", SSL_get_shutdown(peer.ssl));
+    } else if (exchange) {
         if (allowed_case && (!first.allowed || first.reasons != 0)) goto done;
         if (completed_ku && (first.allowed || !(first.reasons & X10_REASON_GENERATION)
             || first.read_generation != 0 || first.write_generation != 1

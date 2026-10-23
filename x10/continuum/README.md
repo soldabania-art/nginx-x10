@@ -350,3 +350,21 @@ Official1083 strictPASS/25SKIP/1expectedTODO/0FAIL сохраняются отд
 Новый exact SHA ожидает hosted CI; ea64ec1 принят ранее. Это проверка отказа
 для unsupported overlap: wire=null, graceful closure и admission не заявляются.
 Далее — control/alert/shutdown и sequence/key usage gates перед C2b.
+
+## Continuum C2a: lifecycle TLS shutdown
+
+Добавлен один actual-TLS server-shutdown-lifecycle: exact request/echo ACK,
+первый фактический SSL_shutdown0/SENT1, две неизменные refusal snapshots,
+затем explicit peer end и повторный SSL_shutdown1/SENT|RECEIVED3. Собственная
+retry снимается, но закрытое состояние всё равно отвергается. Нулевой return
+не является ошибкой: WANT_READ здесь только прежняя fixture-ledger convention.
+После начала shutdown нет application I/O. Wire observer проверяет оба
+close_notify, точные данные, FIN и final sequences с учётом alerts.
+
+Локально18/18=15 ordinary actual-TLS scenarios+2 runtime signals+1 no-TLS
+source control. Независимые heldouts и identities — в [evidence](../evidence/continuum-c2a-shutdown.json).
+Core21/process7, C1 27=18 synthetic+9 runtime, native20/20 прошли.
+Official1083 strictPASS/25SKIP/1expectedTODO/0FAIL учитываются отдельно.
+Exact новый SHA ожидает hosted CI;996e997 принят ранее. Полный alert/control/
+EOF/shutdown inventory и usage gates ещё не закрыты; далее эти границы доC2b.
+Semantic export/import, смена TLS code и native NGINX continuation не готовы.

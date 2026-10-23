@@ -407,3 +407,37 @@ history model. The overlap stays unsupported; no later admission is tested or
 granted. Seventeen flat checks mean14 ordinary actual-TLS cases,2 runtime
 signals and1 no-TLS source control. Control/alert/shutdown and sequence/key
 usage admission remain separate gates before semantic export/import.
+
+## Server-initiated normal shutdown refusal lifecycle
+
+`server-shutdown-lifecycle` consumes and echoes the exact bounded payload,
+then waits for Node acknowledgement before calling SSL_shutdown. Only this
+client enables allowHalfOpen; its writable side must remain open until after
+the first two immutable probes. Actual first return0 is sent/incomplete,
+not an error: SSL_get_error(0) is never called. The unchanged fixture convention
+records incomplete shutdown as WANT_READ with SHUTDOWN retry5. Raw0 is observed
+via PEER.last_result; this field does not change ledger/probe semantics.
+
+First probes retain SENT1, CONTROL and RETRY refusal bits. SENT1 alone says
+nothing about peer receipt. Only after the pair does Node explicitly end;
+bounded STEP then permits repeated SSL_shutdown until actual1, flags3 and
+retry0. No application I/O or control call follows shutdown. Final immutable
+probes still refuse: last SHUTDOWN is outside the READ/WRITE success gate and
+CONTROL remains. Observed masks are4116 then4356, the latter also retaining
+READ_RECORD256 and2 control bytes in private record metadata despite public
+pending0. This does not establish an unprocessed alert or more application
+data. No closed state is admitted for live continuation.
+
+Unchanged wire observer checks exact bytes, both close_notify and FIN. Final
+probe sequences include the alerts and match both directional finalNextSequence;
+first-phase read matches client beforeCloseNotify and write server final.
+Directional capture is not a general cross-direction timing proof; this fixture
+uses explicit gates. Counts18 mean15 ordinary TLS cases,2 runtime signals,
+1 no-TLS source control. Prior17 checks, caps and native source are preserved.
+[Evidence](../evidence/continuum-c2a-shutdown.json) keeps actual reason masks,
+identities, independent heldouts and cleanup facts separately.
+
+Other peer-first/partial/fatal alerts and EOF states, control inventory and
+sequence/key usage admission remain pending. Normal close_notify refusal does
+not establish a complete shutdown model, single-writer fence, export/import,
+actual TLS-code version change or native NGINX continuation.

@@ -18,7 +18,7 @@ const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
 const SCENARIOS = ['quiescent', 'partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update', 'completed-key-update',
-  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry'];
+  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle'];
 const SECRET_LABELS = Object.freeze({
   CLIENT_HANDSHAKE_TRAFFIC_SECRET: 'clientHandshake', SERVER_HANDSHAKE_TRAFFIC_SECRET: 'serverHandshake',
   CLIENT_TRAFFIC_SECRET_0: 'clientApplication', SERVER_TRAFFIC_SECRET_0: 'serverApplication',
@@ -358,9 +358,9 @@ function relayTo(port, sockets, signal) {
     waitClosed: () => wait(() => observed.frontClosed && observed.backClosed),
   };
 }
-function independentClient(port, ca, payload, sockets, secrets, signal) {
+function independentClient(port, ca, payload, sockets, secrets, signal, explicitShutdown = false) {
   const socket = tlsConnect({ host: '127.0.0.1', port, servername: 'continuum.test', ca, rejectUnauthorized: true,
-    minVersion: 'TLSv1.3', maxVersion: 'TLSv1.3', ciphers: 'TLS_AES_128_GCM_SHA256', ALPNProtocols: ['continuum-c1'], signal });
+    minVersion: 'TLSv1.3', maxVersion: 'TLSv1.3', ciphers: 'TLS_AES_128_GCM_SHA256', ALPNProtocols: ['continuum-c1'], signal, ...(explicitShutdown ? { allowHalfOpen: true } : {}) });
   sockets.add(socket);
   let clientRandom;
   let negotiated;
@@ -484,7 +484,7 @@ const numericFields = ['sslPending', 'packetLength', 'rbufLeft', 'rbufOffset', '
 function checkedProbe(message, scenario) {
   const keys = ['event', 'scenario', 'sample', ...decimalFields, ...sequenceFields, ...booleanFields, ...numericFields];
   assertFixture(message?.event === 'probe' && message.scenario === scenario &&
-    (['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario) ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
+    (['completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle'].includes(scenario) ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
     Object.keys(message).sort().join(',') === keys.sort().join(','), 'probe_schema');
   for (const field of decimalFields) assertFixture(typeof message[field] === 'string' && /^(0|[1-9][0-9]{0,19})$/.test(message[field]) && BigInt(message[field]) <= 0xffffffffffffffffn, 'probe_counter');
   for (const field of sequenceFields) assertFixture(typeof message[field] === 'string' && /^[0-9a-f]{16}$/.test(message[field]), 'probe_sequence');
@@ -558,6 +558,31 @@ function checkedOverlapProbe(probe, completed) {
     (BigInt(probe.reasons) & ((1n << 9n) | (1n << 10n))) !== 0n, 'overlap_write_pressure_not_observed');
 }
 
+function checkedShutdownEvent(message, event, payloadBytes) {
+  const ready = event === 'shutdown-ready';
+  const completed = event === 'shutdown-completed';
+  const keys = ready ? ['event', 'scenario', 'applicationBytesRead', 'applicationBytesWritten'] :
+    ['event', 'scenario', 'call', 'outcome', 'retryCall', 'shutdownBits', 'rawResult'];
+  assertFixture(message?.event === event && message.scenario === 'server-shutdown-lifecycle' &&
+    Object.keys(message).sort().join(',') === keys.sort().join(','), 'shutdown_event_schema');
+  if (ready) assertFixture(message.applicationBytesRead === payloadBytes &&
+    message.applicationBytesWritten === payloadBytes, 'shutdown_echo_counts');
+  // SSL_shutdown(0) means sent/incomplete. WANT_READ is only the existing
+  // fixture-ledger convention here, not an SSL_get_error(0) classification.
+  else assertFixture(message.call === 5 && message.outcome === (completed ? 1 : 2) &&
+    message.retryCall === (completed ? 0 : 5) && message.shutdownBits === (completed ? 3 : 1) &&
+    message.rawResult === (completed ? 1 : 0), 'shutdown_event_transition');
+  return structuredClone(message);
+}
+function checkedShutdownProbe(probe, completed) {
+  const reasons = BigInt(probe.reasons);
+  assertFixture(!probe.allowed && probe.shutdown === (completed ? 3 : 1) &&
+    probe.ledgerLastCall === 5 && probe.ledgerLastOutcome === (completed ? 1 : 2) &&
+    probe.ledgerRetryCall === (completed ? 0 : 5) && (reasons & 4096n) !== 0n &&
+    ((reasons & 16n) !== 0n) === !completed && probe.sslPending === 0 &&
+    probe.wbufLeft === 0 && probe.wnum === 0, 'shutdown_refusal_not_observed');
+}
+
 function checkedImmutablePair(first, second) {
   const normalized = value => { const copy = { ...value }; delete copy.sample; return copy; };
   assertFixture(second.sample === first.sample + 1 &&
@@ -582,8 +607,9 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
   const overlappingRetry = scenario === 'overlapping-read-write-retry';
   const retryScenario = retryCompleted || retryUnrelatedWrite || overlappingRetry;
   const writeRetryCompleted = scenario === 'completed-write-retry';
+  const shutdownScenario = scenario === 'server-shutdown-lifecycle';
   const allowed = scenario === 'quiescent' || retryCompleted || writeRetryCompleted;
-  const graceful = allowed || scenario === 'completed-key-update' || peerCompleted;
+  const graceful = allowed || scenario === 'completed-key-update' || peerCompleted || shutdownScenario;
   const owned = scope(25000);
   const children = new Set();
   const sockets = new Set();
@@ -608,7 +634,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     await bounded(new Promise((resolve, reject) => { relay.server.once('error', reject); relay.server.listen({ port: 0, host: '127.0.0.1', signal: owned.signal }, resolve); }), 'relay_listen', DEADLINE_MS, owned.signal);
     client = peerScenario
       ? peerClient(relay.server.address().port, cert, scenario, payloadBytes, challenge, children, secrets, owned.signal)
-      : independentClient(relay.server.address().port, cert.ca, payload, sockets, secrets, owned.signal);
+      : independentClient(relay.server.address().port, cert.ca, payload, sockets, secrets, owned.signal, shutdownScenario);
     await client.secure();
     await native.wait('ready', message => message.scenario === scenario);
     if (peerScenario) { await client.send(); }
@@ -619,7 +645,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     } else if (writeRetryCompleted) {
       client.socket.pause(); relay.pauseServerReads(); client.write();
     } else if ((graceful && !retryCompleted) || scenario === 'unread-plaintext') {
-      if (graceful) client.endOnEcho();
+      if (graceful && !shutdownScenario) client.endOnEcho();
       client.write();
     } else if (scenario === 'write-backpressure') {
       client.socket.pause(); relay.pauseServerReads();
@@ -675,7 +701,33 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       overlapRetryLifecycle = { ready, refused, repeatedRefused, completed,
         immutableRefusedProbes: true, bothReadersResumedBeforeRetry: true, clientApplicationWrites: 0 };
     }
-    const firstSample = writeRetryCompleted || overlappingRetry ? 3 : 1;
+    let shutdownLifecycle;
+    if (shutdownScenario) {
+      const ready = checkedShutdownEvent(await native.wait('shutdown-ready'), 'shutdown-ready', payloadBytes);
+      await client.receivedPayload();
+      assertFixture(client.applicationWrites() === 1 && client.receivedBytes() === payloadBytes &&
+        client.socket.allowHalfOpen === true && !client.socket.writableEnded,
+      'shutdown_peer_closed_before_initial_call');
+      await stepNative(native, owned.signal);
+      const started = checkedShutdownEvent(await native.wait('shutdown-started'), 'shutdown-started', payloadBytes);
+      const refused = checkedProbe(await native.wait('probe', message => message.sample === 1), scenario);
+      const repeatedRefused = checkedProbe(await native.wait('probe', message => message.sample === 2), scenario);
+      checkedShutdownProbe(refused, false); checkedShutdownProbe(repeatedRefused, false);
+      checkedImmutablePair(refused, repeatedRefused);
+      assertFixture(!client.socket.writableEnded && client.applicationWrites() === 1,
+        'shutdown_peer_response_not_withheld');
+      // Only after the initial immutable pair permit the peer close_notify.
+      // This half-open client option is confined to this one scenario.
+      await bounded(new Promise((resolve, reject) => client.socket.end(error =>
+        error ? reject(new ProbeFixtureError('shutdown_client_end')) : resolve())),
+      'shutdown_client_end', DEADLINE_MS, owned.signal);
+      await stepNative(native, owned.signal);
+      const completed = checkedShutdownEvent(await native.wait('shutdown-completed'), 'shutdown-completed', payloadBytes);
+      shutdownLifecycle = { ready, started, refused, repeatedRefused, completed,
+        immutableInitialProbes: true, peerCloseWithheldUntilInitialProbes: true,
+        peerExplicitEndAfterInitialProbes: true, clientApplicationWrites: 1 };
+    }
+    const firstSample = writeRetryCompleted || overlappingRetry || shutdownScenario ? 3 : 1;
     const first = checkedProbe(await native.wait('probe', message => message.sample === firstSample), scenario);
     let immutableRepeatedProbe = false;
     if (graceful || peerScenario || overlappingRetry) {
@@ -685,6 +737,10 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       if (overlappingRetry) {
         checkedOverlapProbe(first, true); checkedOverlapProbe(second, true);
         overlapRetryLifecycle.repeatedCompleted = second;
+      }
+      if (shutdownScenario) {
+        checkedShutdownProbe(first, true); checkedShutdownProbe(second, true);
+        shutdownLifecycle.repeatedCompleted = second;
       }
       if (writeRetryCompleted) {
         assertFixture(first.reasons === '0' && first.ledgerRetryCall === 0 && first.ledgerLastCall === 3 &&
@@ -734,6 +790,17 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         done.applicationBytesWritten === 65536 && done.pressureBytesCompleted === 0 && client.applicationWrites() === 0,
       'overlap_event_order_or_counts');
     }
+    if (shutdownScenario) {
+      const expected = ['ready', 'shutdown-ready', 'shutdown-started', 'probe', 'probe', 'shutdown-completed', 'probe', 'probe', 'shutdown', 'done'];
+      const shutdown = await native.wait('shutdown');
+      assertFixture(Object.keys(shutdown).sort().join(',') === 'clean,event,shutdownBits' &&
+        shutdown.clean === true && shutdown.shutdownBits === 3 &&
+        native.messages.filter(message => expected.includes(message.event)).map(message => message.event).join(',') === expected.join(',') &&
+        native.messages.filter(message => message.event === 'probe').map(message => message.sample).join(',') === '1,2,3,4' &&
+        done.applicationBytesRead === payloadBytes && done.applicationBytesWritten === payloadBytes &&
+        done.pressureBytesCompleted === 0 && client.applicationWrites() === 1,
+      'shutdown_event_order_or_counts');
+    }
     if (retryScenario) {
       const events = native.messages.map(message => message.event);
       assertFixture(events.filter(event => event === 'retry-ready').length === 1 &&
@@ -758,7 +825,17 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         expected: { clientApplication: payload, serverApplication: payload }, negotiated: client.negotiated(),
         clientFin: relay.observed.clientFin, serverFin: relay.observed.serverFin, expectedServerKeyUpdates: scenario === 'completed-key-update' || peerCompleted ? 1 : 0,
         expectedClientKeyUpdates: peerCompleted ? 1 : 0 });
-      if (peerCompleted) assertFixture(wire.directions.client.beforeCloseNotify.epoch === 1 &&
+      if (shutdownScenario) {
+        // Completed shutdown consumed each close_notify: these counters are
+        // after the alerts, unlike the pre-close snapshot in older scenarios.
+        assertFixture(first.readGeneration === '0' && first.writeGeneration === '0' &&
+          BigInt(`0x${first.readNextSequence}`) === BigInt(wire.directions.client.finalNextSequence) &&
+          BigInt(`0x${first.writeNextSequence}`) === BigInt(wire.directions.server.finalNextSequence) &&
+          BigInt(`0x${shutdownLifecycle.refused.readNextSequence}`) === BigInt(wire.directions.client.beforeCloseNotify.nextSequence) &&
+          BigInt(`0x${shutdownLifecycle.refused.writeNextSequence}`) === BigInt(wire.directions.server.finalNextSequence),
+        'shutdown_wire_probe_sequence_mismatch');
+      }
+      else if (peerCompleted) assertFixture(wire.directions.client.beforeCloseNotify.epoch === 1 &&
         wire.directions.server.beforeCloseNotify.epoch === 1 &&
         BigInt(`0x${first.readNextSequence}`) === BigInt(wire.directions.client.beforeCloseNotify.nextSequence) &&
         BigInt(`0x${first.writeNextSequence}`) === BigInt(wire.directions.server.beforeCloseNotify.nextSequence), 'peer_wire_probe_sequence_mismatch');
@@ -774,6 +851,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       ...(retryLifecycle ? { retryLifecycle } : {}), ...(peerReceived ? { peerReceived } : {}),
       ...(writeRetryLifecycle ? { writeRetryLifecycle } : {}),
       ...(overlapRetryLifecycle ? { overlapRetryLifecycle } : {}),
+      ...(shutdownLifecycle ? { shutdownLifecycle } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {
     if (owned.signal.aborted) throw owned.signal.reason;

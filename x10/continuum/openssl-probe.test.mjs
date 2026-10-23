@@ -219,6 +219,62 @@ test('an overlapping real write retry completes while the original empty read re
   assert.equal(result.migration, false);
 });
 
+test('server shutdown remains refused from sent close_notify through reciprocal completion', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'server-shutdown-lifecycle', payloadBytes: 8093 });
+  const lifecycle = result.shutdownLifecycle;
+  assert.equal(result.outcome, 'pass');
+  assert.equal(result.negotiated.authorized, true);
+  assert.equal(lifecycle.ready.applicationBytesRead, 8093);
+  assert.equal(lifecycle.ready.applicationBytesWritten, 8093);
+  // A zero raw shutdown return means sent/incomplete, not an SSL error.
+  assert.equal(lifecycle.started.rawResult, 0);
+  assert.equal(lifecycle.started.call, 5);
+  assert.equal(lifecycle.started.outcome, 2);
+  assert.equal(lifecycle.started.retryCall, 5);
+  assert.equal(lifecycle.started.shutdownBits, 1);
+  for (const probe of [lifecycle.refused, lifecycle.repeatedRefused]) {
+    assert.equal(probe.allowed, false);
+    assert.equal(probe.shutdown, 1);
+    assert.equal(probe.ledgerLastCall, 5);
+    assert.equal(probe.ledgerLastOutcome, 2);
+    assert.equal(probe.ledgerRetryCall, 5);
+    assert.ok((BigInt(probe.reasons) & 4096n) !== 0n);
+    assert.ok((BigInt(probe.reasons) & 16n) !== 0n);
+  }
+  assert.equal(lifecycle.immutableInitialProbes, true);
+  assert.equal(lifecycle.peerCloseWithheldUntilInitialProbes, true);
+  assert.equal(lifecycle.peerExplicitEndAfterInitialProbes, true);
+  assert.equal(lifecycle.clientApplicationWrites, 1);
+  assert.equal(lifecycle.completed.rawResult, 1);
+  assert.equal(lifecycle.completed.call, 5);
+  assert.equal(lifecycle.completed.outcome, 1);
+  assert.equal(lifecycle.completed.retryCall, 0);
+  assert.equal(lifecycle.completed.shutdownBits, 3);
+  for (const probe of [result.probe, lifecycle.repeatedCompleted]) {
+    assert.equal(probe.allowed, false);
+    assert.equal(probe.shutdown, 3);
+    assert.equal(probe.ledgerLastCall, 5);
+    assert.equal(probe.ledgerLastOutcome, 1);
+    assert.equal(probe.ledgerRetryCall, 0);
+    assert.ok((BigInt(probe.reasons) & 4096n) !== 0n);
+    assert.equal(BigInt(probe.reasons) & 16n, 0n);
+  }
+  assert.equal(result.immutableRepeatedProbe, true);
+  assert.equal(result.fixtureGracefulShutdown, true);
+  assert.equal(result.wire.passed, true);
+  for (const direction of ['client', 'server']) {
+    assert.equal(result.wire.directions[direction].applicationBytes, 8093);
+    assert.equal(result.wire.directions[direction].closeNotify, true);
+    assert.equal(result.wire.directions[direction].keyUpdates, 0);
+  }
+  assert.equal(BigInt('0x' + result.probe.readNextSequence), BigInt(result.wire.directions.client.finalNextSequence));
+  assert.equal(BigInt('0x' + result.probe.writeNextSequence), BigInt(result.wire.directions.server.finalNextSequence));
+  assert.equal(result.clientConnections, 1);
+  assert.equal(result.serverConnections, 1);
+  assert.equal(result.semanticExportImport, false);
+  assert.equal(result.migration, false);
+});
+
 for (const scenario of ['partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update']) {
   test(`real TLS private ${scenario} state refuses the read-only safepoint`, { timeout: 30000 }, async () => {
     const result = await runProbeScenario({ scenario });
