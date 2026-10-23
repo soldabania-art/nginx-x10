@@ -39,6 +39,11 @@ jobs:
           python3 -m venv x10/.build/http3-venv
           x10/.build/http3-venv/bin/python -m pip install --require-hashes --only-binary=:all: \
             -r x10/test/http3-baseline.requirements.txt
+      - name: Install independent HTTP3 HEAD client
+        run: |
+          python3 -m venv x10/.build/http3-head-venv
+          x10/.build/http3-head-venv/bin/python -m pip install --require-hashes --only-binary=:all: \
+            -r x10/test/http3-head.requirements.txt
       - name: Compile native profile
         run: |
           bash x10/build.sh --jobs 2

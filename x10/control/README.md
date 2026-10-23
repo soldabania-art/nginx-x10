@@ -157,6 +157,28 @@ the last identity check and `kill`. Restarting or replacing the bound master or
 binary deliberately requires operator intervention; automatic rebinding is not
 implemented.
 
+## Explicit listener diagnostics
+
+The separate [Linux listener observer](LISTENERS.md) records the specifically
+identified current native children and their ownership of the managed TCP
+listener. Capture before an apply and inspect the saved output afterward:
+
+```sh
+node x10/control/cli.mjs snapshot-listeners --state /home/alex/x10-run/.x10-control > before.json
+node x10/control/cli.mjs apply --state /home/alex/x10-run/.x10-control --file candidate.json
+node x10/control/cli.mjs inspect-listeners --state /home/alex/x10-run/.x10-control --file before.json
+```
+
+Both commands use the existing lock, bound-master identity and file guards.
+They refuse an unbound master or unresolved transaction. A successful inspection
+returns `ok:true` with `observation.state` equal to `pending` or `closed`;
+`ok:true` alone does not mean closure. Unavailable or changed identities produce
+an error. The commands send no signals and do not alter apply, rollback or
+recovery acceptance. A snapshot covers captured processes only: it cannot
+identify every old configuration generation, rule out intervening respawns,
+certify health or establish an atomic all-traffic cutover. See the observer's
+supported endpoint, namespace, resource and elapsed-budget limits.
+
 ## Recovery and boundaries
 
 All output is JSON. An applied/bound operation has `ok:true`. An apply that is
@@ -269,7 +291,7 @@ the controller does not automatically delete an existing PID file.
 
 [Storage evidence](../evidence/control-storage-fixed.json) adds 32 scenarios,
 including two explicitly expected prior-controller failure observations. The
-complete controller file has 66 TAP checks: 63 scenarios and three parents.
+milestone-4 controller file had 66 TAP checks: 63 scenarios and three parents.
 The new evidence records two
 counterexamples against the previous controller: a rejected event's reported
 I/O failure poisoned an otherwise matching pending stage, and recovery could
@@ -279,3 +301,11 @@ sync, while partial-append cases actually write and sync a strict record prefix.
 Failed history/state sync retries preserve the files and intent; successful
 retry is idempotent. These are subprocess filesystem fault injections, not
 kernel/hardware faults, complete storage-failure coverage or power-loss proof.
+
+The current file adds two explicit listener CLI cases: capture and pending
+inspection with tamper rejection, then captured-process closure after apply.
+The [listener controller record](../evidence/control-listeners-fixed.json)
+contains the first parent's 18 successful behavior scenarios, exact source
+hashes and pre/post source consistency; the complete controller now has 68 TAP
+checks including three parents. The separate observer file has its own 29 TAP
+checks. Neither count represents a number of improved native protocol features.

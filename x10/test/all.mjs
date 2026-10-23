@@ -131,10 +131,32 @@ function command(file, args, { timeoutMs, env }) {
 }
 
 function jsonChecks(data, kind) {
-  if (kind === 'adapters' || kind === 'mail-tls' || kind === 'http3') {
+  if (kind === 'handover') return data.suite === 'native-reload-listener-observation' && data.success === true &&
+    data.nativeErrorLogRead === true && Array.isArray(data.unexpectedNativeErrors) && data.unexpectedNativeErrors.length === 0 &&
+    data.interrupted === false && Array.isArray(data.tests) && data.tests.length === 7 && data.tests.every(t => t.status === 'passed') &&
+    Array.isArray(data.skips) && data.skips.length === 0 && Array.isArray(data.fixtureErrors) && data.fixtureErrors.length === 0 &&
+    data.sourceUnchangedDuringTest === true && data.identity?.binaryUnchangedDuringTest === true &&
+    data.identity.harnessUnchangedDuringTest === true && data.identity.observerUnchangedDuringTest === true &&
+    /^[a-f0-9]{64}$/.test(data.identity.binarySha256 || '') &&
+    data.observations?.observerCapture?.scope === 'captured-processes-only' &&
+    /^[a-f0-9]{64}$/.test(data.observations.observerCapture.sha256 || '') &&
+    data.observations.observerWhileStopped?.scope === 'captured-processes-only' &&
+    data.observations.observerAfterResume?.scope === 'captured-processes-only' &&
+    data.observations.observerWhileStopped?.state === 'pending' && data.observations.observerWhileStopped.closed === false &&
+    data.observations.observerWhileStopped.processes?.some(p => p.state === 'owns-listener') &&
+    data.observations.observerAfterResume?.state === 'closed' && data.observations.observerAfterResume.closed === true &&
+    data.observations.observerAfterResume.processes?.length > 0 &&
+    data.observations.observerAfterResume.processes.every(p => ['listener-absent', 'exited'].includes(p.state)) &&
+    data.observations.observerWhileStopped.snapshotSha256 === data.observations.observerCapture.sha256 &&
+    data.observations.observerAfterResume.snapshotSha256 === data.observations.observerCapture.sha256 &&
+    data.cleanup?.nativeStopped === true && data.cleanup.nativeExitCode === 0 && data.cleanup.nativeSignal === null &&
+    data.cleanup.mode === 'SIGQUIT' && data.cleanup.stoppedWorkerResumeRequested === true &&
+    data.cleanup.fixturesStopped === true && data.cleanup.openSockets === 0 && data.cleanup.temporaryRootRemoved === true &&
+    Array.isArray(data.cleanup.errors) && data.cleanup.errors.length === 0;
+  if (kind === 'adapters' || kind === 'mail-tls' || kind === 'http3' || kind === 'http3-head') {
     const mailTLS = kind === 'mail-tls';
     const cleanup = data.cleanup;
-    const expectedSuite = { adapters: 'native-protocol-adapters', 'mail-tls': 'native-mail-tls-baseline', http3: 'native-http3-interop' }[kind];
+    const expectedSuite = { adapters: 'native-protocol-adapters', 'mail-tls': 'native-mail-tls-baseline', http3: 'native-http3-interop', 'http3-head': 'native-http3-head-interop' }[kind];
     return data.suite === expectedSuite &&
       (mailTLS ? data.passed === true : data.success === true) &&
       Array.isArray(data.tests) && data.tests.length > 0 &&
@@ -148,7 +170,16 @@ function jsonChecks(data, kind) {
       (kind !== 'http3' || (data.protocol?.negotiatedAlpn === 'h3' && data.protocol.nativeHttp3 === 'h3' &&
         data.protocol.nativeRequestProtocol === 'HTTP/3.0' && /^[a-f0-9]{64}$/.test(data.dependencyLockSha256 || '') &&
         data.identity.clientUnchangedDuringTest === true && cleanup.udpTransportsStopped === true &&
-        Number.isSafeInteger(cleanup.udpClientsCreated) && cleanup.udpClientsCreated > 0 && cleanup.udpClientsClosed === cleanup.udpClientsCreated));
+        Number.isSafeInteger(cleanup.udpClientsCreated) && cleanup.udpClientsCreated > 0 && cleanup.udpClientsClosed === cleanup.udpClientsCreated)) &&
+      (kind !== 'http3-head' || (data.tests.length === 4 && data.interruptedSignal === null &&
+        Array.isArray(data.fixtureErrors) && data.fixtureErrors.length === 0 &&
+        Array.isArray(data.unexpectedNativeErrors) && data.unexpectedNativeErrors.length === 0 &&
+        data.protocol?.nativeHttp3 === 'h3' && data.protocol.nativeRequestProtocol === 'HTTP/3.0' &&
+        data.protocol.clientHttpVersion === 30 && data.protocol.requestedHttpVersion === 'V3ONLY' &&
+        data.identity.client?.name === 'curl_cffi' && data.identity.client.version === '0.16.3' && data.identity.clientUnchangedDuringTest === true &&
+        data.identity.harnessUnchangedDuringTest === true && data.identity.launcherUnchangedDuringTest === true &&
+        /^[a-f0-9]{64}$/.test(data.dependencyLockSha256 || '') && cleanup.nativeExit === 0 &&
+        cleanup.clientProcessesCompleted === 4 && cleanup.clientSocketsClosed === true));
   }
   if (kind === 'http') return data.success === true && Array.isArray(data.tests) && data.tests.length > 0 && data.tests.every(t => t.status === 'passed');
   if (kind === 'mail') return data.passed === true && Array.isArray(data.tests) && data.tests.length > 0 && data.tests.every(t => t.passed === true);
@@ -191,12 +222,15 @@ async function main() {
     { name: 'mail-tls-starttls', file: process.execPath, args: ['x10/test/mail-tls-baseline.mjs', '--binary', p.binary], kind: 'mail-tls' },
     { name: 'protocol-adapters', file: process.execPath, args: ['x10/test/adapters-baseline.mjs', '--binary', p.binary], kind: 'adapters' },
     { name: 'http3-interop', file: process.execPath, args: ['x10/test/http3-baseline.mjs', '--binary', p.binary], kind: 'http3' },
+    { name: 'http3-head-independent-client', file: process.execPath, args: ['x10/test/http3-head.mjs', '--binary', p.binary], kind: 'http3-head' },
     { name: 'native-features', file: process.execPath, args: ['x10/test/features-baseline.mjs', '--binary', p.binary], kind: 'http' },
     { name: 'quic-regression', file: 'bash', args: ['x10/test/runner.sh', '--source', p.source, '--objs', p.objects], kind: 'quic' },
     { name: 'quic-generated-sanitized', file: 'bash', args: ['x10/test/quic-generated.sh', '--source', p.source, '--objs', p.objects], kind: 'generated' },
     { name: 'quic-frame-boundaries', file: 'bash', args: ['x10/test/quic-frames.sh', '--source', p.source, '--objs', p.objects], kind: 'generated', frame: true },
     { name: 'native-load-client-verification', file: process.execPath, args: ['x10/bench/native-load.mjs', '--verify'], kind: 'load-client' },
     { name: 'managed-native-control', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/control.test.mjs'], kind: 'tap' },
+    { name: 'listener-observer-boundaries', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/listeners.test.mjs'], kind: 'tap' },
+    { name: 'reload-listener-observation', file: process.execPath, args: ['x10/test/handover-baseline.mjs', '--binary', p.binary], kind: 'handover' },
   ];
   if (opts.official) suites.push({ name: 'official-nginx-tests', file: 'bash', args: ['x10/test/official-tests.sh', '--binary', p.binary], kind: 'official', timeoutMs: 600_000 });
   for (const suite of opts.provenanceOnly ? [] : suites) {
@@ -218,13 +252,26 @@ async function main() {
       if (observedBinaryHash && observedBinaryHash !== p.binarySha256) {
         valid = false; verificationError = 'Suite result identifies different binary bytes';
       }
-      if (suite.kind === 'mail-tls' || suite.kind === 'adapters' || suite.kind === 'http3') {
+      if (['mail-tls', 'adapters', 'http3', 'http3-head', 'handover'].includes(suite.kind)) {
         if (typeof data.identity?.binary !== 'string' || path.resolve(data.identity.binary) !== p.binary) {
           valid = false; verificationError = 'Protocol suite result does not identify the selected binary path';
         }
       }
       if (suite.kind === 'http3' && data.dependencyLockSha256 !== digest(await readFile(path.join(root, 'x10/test/http3-baseline.requirements.txt')))) {
         valid = false; verificationError = 'HTTP3 client result identifies a different dependency lock';
+      }
+      if (suite.kind === 'http3-head') {
+        if (data.dependencyLockSha256 !== digest(await readFile(path.join(root, 'x10/test/http3-head.requirements.txt'))) ||
+          data.identity?.harnessSha256 !== digest(await readFile(path.join(root, 'x10/test/http3-head.py'))) ||
+          data.identity?.launcherSha256 !== digest(await readFile(path.join(root, 'x10/test/http3-head.mjs')))) {
+          valid = false; verificationError = 'Independent HTTP3 result identifies different client lock or fixture source';
+        }
+      }
+      if (suite.kind === 'handover') {
+        if (data.identity?.harnessSha256 !== digest(await readFile(path.join(root, 'x10/test/handover-baseline.mjs'))) ||
+          data.identity?.observerSha256 !== digest(await readFile(path.join(root, 'x10/control/listeners.mjs')))) {
+          valid = false; verificationError = 'Handover result identifies different fixture or observer source';
+        }
       }
       if (suite.kind === 'load-client') {
         if (data.nativeBinarySha256 !== p.binarySha256 || typeof data.nativeBinaryPath !== 'string' || path.resolve(data.nativeBinaryPath) !== p.binary) {

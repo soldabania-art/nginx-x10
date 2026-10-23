@@ -1,6 +1,6 @@
 # NGINX X10: проверенное состояние
 
-Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, реальным HTTP/3 interop и генерируемыми QUIC-проверками под санитайзерами. Последний единый локальный прогон завершился **12/12 успешных групп**: [milestone-4 JSON](evidence/native-checks-milestone-4.json). Этот этап меняет контроллер и проверяющие инструменты; native C и ранее собранный бинарник не изменены. Это development-кандидат; performance acceptance и готовность к production остаются открытыми.
+Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, реальным HTTP/3 interop и генерируемыми QUIC-проверками под санитайзерами. Последний единый локальный прогон завершился **15/15 успешных групп**: [milestone-5 JSON](evidence/native-checks-milestone-5.json). Этот этап меняет контроллер и проверяющие инструменты; native C и ранее собранный бинарник не изменены. Это development-кандидат; performance acceptance и готовность к production остаются открытыми.
 
 ## Основа и чтение исходников
 
@@ -164,8 +164,9 @@ QUIC v1/TLS 1.3, ALPN `h3`, native `$http3=h3` и `HTTP/3.0`, без TCP fallbac
 Client lock — aioquic 1.3.0 и девять зависимостей для CPython 3.12/Linux x86_64.
 [Неуспешный HEAD diagnostic](evidence/http3-client-head-diagnostic.json) сохранён
 для обоих бинарников: pinned client проверяет body length без исключения HEAD.
-HEAD не входит в успешный scope; fixture не обходит клиентскую проверку и не
-объявляет это дефектом native NGINX.
+HEAD не входит в успешный scope этого aioquic-набора; fixture не обходит
+клиентскую проверку и не объявляет это дефектом native NGINX. Отдельный
+независимый клиент добавлен в пятом этапе ниже.
 
 [QUIC frame boundaries](review/quic-frame-boundaries.md): **6579/6579 входов**
 по шести свойствам на обеих версиях, ASan/UBSan без диагностик. Проверяются
@@ -192,6 +193,73 @@ controls; они не выдаются за повтор полного owner su
 25 SKIP, один expected TODO и ноль strict FAIL. Native source diff, binary,
 build manifest и generated inputs совпали до/после. Это прогон замороженных
 файлов рабочего дерева до публикации; hosted CI проверяется отдельно по commit.
+
+## Диагностика listeners и независимый HTTP/3 HEAD: пятый этап
+
+Финальный локальный aggregate после исправления HEAD cancellation: **15/15 PASS**,
+controller **68/68 TAP**, observer **29/29 TAP**. [Полный JSON](evidence/native-checks-milestone-5.json)
+содержит совпавшие native source/binary/manifest/generated identities до/после.
+Official sample сохранил **1083 strict PASS / 25 SKIP / 1 expected TODO / 0 strict FAIL**.
+Это прогон замороженных файлов до публикации; hosted CI нового commit проверяется
+отдельно. [Controller JSON](evidence/control-listeners-fixed.json) сохраняет
+18 сценариев первого parent, CLI snapshot/inspection и pre/post source hashes.
+
+Добавлены ручные команды `snapshot-listeners` и `inspect-listeners` в
+[локальный контроллер](control/README.md). Они записывают конкретные
+идентифицированные native child processes и проверяют их владение одним
+управляемым IPv4 TCP LISTEN inode. Команды используют обычные lock, file и
+master identity guards, не посылают сигналов и не меняют apply/recover gates.
+Успешное наблюдение возвращает `ok:true`, а отдельное `observation.state`
+показывает `pending` или `closed`. Неизвестное состояние остаётся ошибкой.
+[API и ограничения](control/LISTENERS.md), [разбор native generation contract](review/handover-generation-design.md).
+
+Scope всегда `captured-processes-only`: это не complete generation fence.
+Проверяются PID/NSpid/PPid/start ticks/UID/exe, PID и network namespaces,
+до/после чтения собственных fd links. Повторные scans выявляют наблюдаемый
+churn, но не доказывают его отсутствие. Поддерживается один loopback IPv4
+LISTEN inode; wildcard, same-port TCP6, неоднозначность и недоступные данные
+отвергаются. `/proc/.../task/.../children` отсутствует в локальном kernel;
+bounded PPid scan служит явным fallback. Трёхсекундный elapsed budget
+проверяется вокруг I/O; Node не может принудительно прервать зависший kernel
+syscall. **29/29 TAP** observer controls включают границы ресурсов, PID reuse,
+ошибки доступа, ENOENT races и закрытие ресурсов при истечении budget.
+[Независимый review](review/listener-observer-review.md) отдельно выполнил
+15 native/I/O controls, прерывание после фактически наблюдённого SIGSTOP и
+36 direct aggregate-validator controls. Исходный отказ отсутствующего kernel
+child-list интерфейса сохранён в [review JSON](evidence/listener-observer-review-controls.json).
+
+[Живой handover fixture](test/HANDOVER.md) удерживает настоящий старый ответ,
+останавливает только его worker через SIGSTOP и наблюдает ответ новой ревизии,
+пока старый worker ещё владеет LISTEN fd. После SIGCONT тот же живой worker
+теряет listener, сохраняя старый поток; второй reload не мешает точному
+завершению `first:old\nlast:old\n`. Проверяется также реально отклонённый reload.
+Observer и независимые fd/inode проверки записываются раздельно. Это разделяет
+три события: новый ответ, закрытие captured listeners и завершение старого
+потока. Новая конфигурация всё ещё может обслужить запросы до health gate.
+[Candidate](evidence/handover-fixed.json) и [reference](evidence/handover-reference.json)
+прошли по **7/7** case groups. [Реальный SIGTERM control](evidence/handover-runner-verification.json)
+после SIGSTOP требует неуспеха, SIGCONT перед shutdown и отсутствия оставшихся
+процессов, sockets и prefix.
+
+[Независимый HTTP/3 HEAD fixture](test/http3-head.md): **4/4 candidate и pristine**,
+отдельный curl_cffi 0.16.3/libcurl/ngtcp2 client с четырёхпакетным hashed lock.
+Проверены точный GET размером 65 810 bytes, HEAD status/headers/representation
+Content-Length и пустое API-visible тело, точные certificate failures неверного
+CA и hostname. Обязательны `V3ONLY`, actual HTTP version 30 и native
+H3/protocol/method headers. TCP fallback и отключение проверки TLS не допускаются.
+[Candidate](evidence/http3-head-fixed.json), [reference](evidence/http3-head-reference.json),
+[dependencies](evidence/http3-head-dependencies.json). Каждый запрос идёт в
+отдельном ограниченном процессе, который закрывает Curl handle и проверяет
+отсутствие принадлежащих ему sockets. API-visible empty HEAD body не доказывает
+отсутствие DATA frames на raw wire. Старый aioquic diagnostic сохранён без изменений.
+[Независимый HEAD review](review/http3-head-review.md) выполнил семь runtime
+controls, 35 direct schema controls и четыре filesystem identity guard controls.
+При проверке исправлена отмена: Python `InterruptedError` мог поглощаться
+selector как EINTR и позволять запросам продолжиться после SIGTERM.
+Теперь отдельное исключение `FixtureInterrupted` прерывает workflow, убивает
+и reap-ит незавершённый request child, затем закрывает native process и prefix.
+[Raw review controls](evidence/http3-head-review-controls.json) сохраняют прежнее
+неверное поведение и финальную проверку реальной остановки запросов отдельно.
 
 ## Производительность: измеритель и открытый результат
 
@@ -228,7 +296,7 @@ native SIGQUIT exit 0 и пустые cleanup errors. Node использует�
 
 ## Оставшиеся границы
 
-- HTTP/3 получил описанные семь loopback interop cases. HEAD, сетевые потери/миграция, browser/client matrix, QUIC connection-state matrix, полная TLS-library matrix и 32-битные сборки не проверены.
+- HTTP/3 получил семь aioquic interop cases и четыре независимых libcurl GET/HEAD/certificate cases. Raw-wire HEAD DATA absence, сетевые потери/миграция, browser/client matrix, QUIC connection-state matrix, полная TLS-library matrix и 32-битные сборки не проверены.
 - Mail TLS/STARTTLS и FastCGI/SCGI/uWSGI получили описанные выше bounded fixtures. Расширенные TLS/protocol state matrices, upstream HTTP/2/multiplexing, остальные adapters/optional modules, ОС и аварийные ветки ещё требуют отдельных тестов. Проверка отказа reload охватывает синтаксис, а не все поздние side effects и ошибки инициализации.
 - Полная официальная suite, длительный fuzzing, полноценная crash matrix и стабильная performance matrix ещё не выполнены. Генерируемые свойства и короткие loopback measurements не заменяют эти работы; преимущество «10x» не установлено.
 - Публичный native gateway не развёрнут. Ранее размещённая на Vercel консоль относится к Node-прототипу; она не запускает и не подтверждает доступность native NGINX X10.

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
-import { initialize, bind, apply, revert, recover, status, history } from './manager.mjs';
+import { initialize, bind, apply, revert, recover, status, history, snapshotListeners, inspectListeners } from './manager.mjs';
 
 const help = `NGINX X10 local native controller (Linux, Node >=22)
 
@@ -12,6 +12,8 @@ const help = `NGINX X10 local native controller (Linux, Node >=22)
   node x10/control/cli.mjs recover --state /private/prefix/.x10-control
   node x10/control/cli.mjs status --state /private/prefix/.x10-control
   node x10/control/cli.mjs history --state /private/prefix/.x10-control
+  node x10/control/cli.mjs snapshot-listeners --state /private/prefix/.x10-control
+  node x10/control/cli.mjs inspect-listeners --state /private/prefix/.x10-control --file snapshot.json
 
 init never starts NGINX. Start the explicit native master yourself, then bind.
 All output is JSON; rejected/rolled-back/ambiguous requests have nonzero exit.
@@ -44,6 +46,13 @@ try {
       case 'recover': result = await recover(values.state); break;
       case 'status': result = await status(values.state); break;
       case 'history': result = await history(values.state); break;
+      case 'snapshot-listeners': result = await snapshotListeners(values.state); break;
+      case 'inspect-listeners': {
+        const saved = await load(values.file);
+        if (saved?.ok !== true || !saved.snapshot) throw new Error('Expected the complete JSON output from snapshot-listeners');
+        result = await inspectListeners(values.state, saved.snapshot);
+        break;
+      }
       default: throw new Error('Unknown command; use --help');
     }
     console.log(JSON.stringify(result, null, 2));

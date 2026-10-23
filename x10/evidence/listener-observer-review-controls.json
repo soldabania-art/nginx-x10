@@ -1,0 +1,427 @@
+{
+  "schemaVersion": 1,
+  "suite": "independent-listener-observer-review-controls",
+  "success": true,
+  "boundary": "Reviewer-executed short native/I-O controls and interruption, plus direct extracted-function schema controls; not an aggregate CLI run or a complete generation fence.",
+  "frozenFilesSha256": {
+    "x10/control/listeners.mjs": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+    "x10/control/manager.mjs": "65ce6e5f3ccd6099786abf0a6253309febef5bdefcfeba1849f86f2b394c83b9",
+    "x10/control/cli.mjs": "7c6227f1f48ddc68bdfdf07e5a0b26b4387f34be1bfd9e9acacadcda8b8dad76",
+    "x10/test/all.mjs": "dab3514773962ece7c14550718a81e5b35956650533edc7ca61ae25656b371fd",
+    "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612",
+    "x10/test/listeners.test.mjs": "5beedeeda6879a77ba1804f6a05d19f1e9d6bd009b4063bf87d712fd8a1b8dc0",
+    "x10/evidence/handover-fixed.json": "5f60b6252d6f09df9663ef2c4c3a6ae40488c3d6b128b505ff945d30da8afaff",
+    "x10/evidence/handover-reference.json": "723e88d600fe6726bb5d6ffa9e671979b5614102624746b07e16fa97e550c378"
+  },
+  "reviewerExecuted": {
+    "nativeAndIoControls": {
+      "schemaVersion": 1,
+      "suite": "independent-listener-observer-review",
+      "startedAt": "2026-10-23T10:09:48.336Z",
+      "tests": [
+        {
+          "name": "actual-native-capture-and-pid-namespace-mapping",
+          "passed": true,
+          "masterLocalPid": 18,
+          "masterProcPid": 32114,
+          "namespaceIdsDiffer": true,
+          "capturedProcesses": 1
+        },
+        {
+          "name": "actual-live-listener-owner-is-pending",
+          "passed": true,
+          "state": "pending"
+        },
+        {
+          "name": "accidentally-edited-snapshot-rejected",
+          "passed": true
+        },
+        {
+          "name": "hash-valid-empty-process-snapshot-rejected",
+          "passed": true
+        },
+        {
+          "name": "context-port-mismatch-rejected",
+          "passed": true
+        },
+        {
+          "name": "context-master-starttime-mismatch-rejected",
+          "passed": true
+        },
+        {
+          "name": "context-binary-mismatch-rejected",
+          "passed": true
+        },
+        {
+          "name": "actual-child-fd-directory-EACCES-is-unresolved",
+          "passed": true
+        },
+        {
+          "name": "actual-child-transient-fd-ENOENT-retries-inventory",
+          "passed": true,
+          "descriptorReads": 10
+        },
+        {
+          "name": "actual-child-persistent-fd-ENOENT-remains-unresolved",
+          "passed": true,
+          "descriptorAttempts": 3
+        },
+        {
+          "name": "hash-valid-child-starttime-change-is-unresolved",
+          "passed": true
+        },
+        {
+          "name": "actual-delayed-status-open-closes-acquired-handle",
+          "passed": true,
+          "acquiredHandleClosedByObserver": true
+        },
+        {
+          "name": "actual-delayed-fd-opendir-closes-acquired-directory",
+          "passed": true,
+          "acquiredDirectoryClosedByObserver": true
+        },
+        {
+          "name": "actual-captured-worker-release-after-reload",
+          "passed": true,
+          "state": "closed",
+          "observedProcesses": [
+            {
+              "procPid": 32115,
+              "pid": 19,
+              "state": "exited",
+              "ownedListenerFds": []
+            }
+          ]
+        },
+        {
+          "name": "stopped-master-does-not-count-as-closure",
+          "passed": true
+        }
+      ],
+      "limitations": [
+        "Reviewer short actual native fixture; not a full native protocol matrix, complete process-set proof or cutover fence."
+      ],
+      "sourceSha256": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+      "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+      "success": true,
+      "cleanup": {
+        "nativeStopped": true,
+        "nativeExitCode": 0,
+        "nativeSignal": null,
+        "temporaryRootRemoved": true
+      },
+      "sourceUnchangedDuringTest": true,
+      "binaryUnchangedDuringTest": true,
+      "childOutput": "",
+      "finishedAt": "2026-10-23T10:09:54.912Z"
+    },
+    "handoverInterruption": {
+      "suite": "independent-handover-interruption",
+      "fixtureSha256": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612",
+      "startedAt": "2026-10-23T10:12:01.029Z",
+      "observedStoppedWorker": true,
+      "elapsedAfterSignalMs": 122.39648500000001,
+      "harnessExitCode": 1,
+      "harnessSignal": null,
+      "result": {
+        "success": false,
+        "interrupted": true,
+        "stopSignal": "SIGTERM",
+        "cleanup": {
+          "nativeStopped": true,
+          "nativeExitCode": 0,
+          "nativeSignal": null,
+          "mode": "SIGQUIT",
+          "stoppedWorkerResumeRequested": true,
+          "fixturesStopped": true,
+          "openSockets": 0,
+          "temporaryRootRemoved": true,
+          "errors": []
+        }
+      },
+      "stoppedWorkerGone": true,
+      "success": true,
+      "fixtureUnchangedDuringTest": true,
+      "stderr": "Handover fixture: old worker stopped; master=33 worker=35\n",
+      "finishedAt": "2026-10-23T10:12:01.341Z"
+    },
+    "aggregateDirectControls": {
+      "suite": "independent-handover-aggregate-direct-controls",
+      "kind": "direct extracted jsonChecks function; no aggregate CLI or real subprocess",
+      "sourceSha256": "dab3514773962ece7c14550718a81e5b35956650533edc7ca61ae25656b371fd",
+      "evidenceSha256": "5f60b6252d6f09df9663ef2c4c3a6ae40488c3d6b128b505ff945d30da8afaff",
+      "controls": [
+        {
+          "name": "frozen-owner-record-accepted",
+          "expectedAccepted": true,
+          "observedAccepted": true,
+          "passed": true
+        },
+        {
+          "name": "unsuccessful-suite",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "interrupted-suite",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "wrong-case-count",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "failed-case",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "skipped-case",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "fixture-error",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "source-changed",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "binary-changed",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "harness-changed",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "observer-changed",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "invalid-binary-digest",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "native-log-not-read",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "unexpected-native-error",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "wrong-capture-scope",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "missing-capture-digest",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "all-snapshot-digests-absent",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "wrong-pending-scope",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "wrong-closed-scope",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "pending-state-closed",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "pending-boolean-closed",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "no-pending-owner",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "closed-state-pending",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "closed-boolean-false",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "closed-empty-capture-result",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "closed-retains-listener",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "snapshot-digest-mismatch",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "native-still-running",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "native-failed-exit",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "native-signal-exit",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "forced-cleanup-mode",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "stopped-worker-not-resumed",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "fixture-still-running",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "open-socket",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "temporary-root-retained",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        },
+        {
+          "name": "cleanup-error",
+          "expectedAccepted": false,
+          "observedAccepted": false,
+          "passed": true
+        }
+      ],
+      "success": true,
+      "extractedFunctionSha256": "6f21928b2300494fe86dd60cbaad2ac20c9e02f1923b02d096d43c851378ae7c"
+    }
+  },
+  "initialDraftObservation": {
+    "classification": "Expected draft integration failure, not a production NGINX defect",
+    "result": {
+      "schemaVersion": 1,
+      "suite": "independent-listener-observer-review",
+      "startedAt": "2026-10-23T10:07:10.482Z",
+      "tests": [],
+      "limitations": [
+        "Reviewer short actual native fixture; not a full native protocol matrix, complete process-set proof or cutover fence."
+      ],
+      "sourceSha256": "f17fa20e5b31854c4f64449e7b5a02ed33c61093ffc4dc10d20c2fd3b617c4f7",
+      "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+      "success": false,
+      "failure": {
+        "message": "Listener observation unresolved (ENOENT): ENOENT: no such file or directory, open '/proc/31177/task/31177/children'",
+        "stack": "Error: Listener observation unresolved (ENOENT): ENOENT: no such file or directory, open '/proc/31177/task/31177/children'\n    at fail (file:///workspace/scratch/d8c3d94bb512/nginx-x10/x10/control/listeners.mjs:25:23)\n    at observed (file:///workspace/scratch/d8c3d94bb512/nginx-x10/x10/control/listeners.mjs:204:5)\n    at async file:///workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/listener-review-native.mjs:33:82\n    at async test (file:///workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/listener-review-native.mjs:19:44)\n    at async file:///workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/listener-review-native.mjs:33:2"
+      },
+      "cleanup": {
+        "nativeStopped": true,
+        "nativeExitCode": 0,
+        "nativeSignal": null,
+        "temporaryRootRemoved": true
+      },
+      "sourceUnchangedDuringTest": true,
+      "binaryUnchangedDuringTest": true,
+      "childOutput": "nginx: [alert] could not open error log file: open() \"/tmp/x10-listener-review-ZotB1I/logs/error.log\" failed (2: No such file or directory)\n",
+      "finishedAt": "2026-10-23T10:07:10.639Z"
+    }
+  },
+  "reviewHarnesses": [
+    {
+      "name": "listener-review-native.mjs",
+      "sha256": "a2eec442c45e6b1d21f513c722581b963b81a1030cf86b5ee2c129d248854652",
+      "source": "import assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport { syncBuiltinESMExports } from 'node:module';\nimport { readFile, readlink, readdir, mkdtemp, writeFile, chmod, rm, mkdir } from 'node:fs/promises';\nimport { spawn } from 'node:child_process';\nimport { createHash } from 'node:crypto';\nimport { once } from 'node:events';\nimport http from 'node:http';\nimport net from 'node:net';\nimport os from 'node:os';\nimport path from 'node:path';\nimport { fileURLToPath } from 'node:url';\nconst root=fileURLToPath(new URL('../../',import.meta.url));\nconst binary=path.join(root,'x10/.build/objs/nginx');\nconst source=path.join(root,'x10/control/listeners.mjs');\nconst hash=v=>createHash('sha256').update(v).digest('hex');\nconst sleep=ms=>new Promise(r=>setTimeout(r,ms));\nconst report={schemaVersion:1,suite:'independent-listener-observer-review',startedAt:new Date().toISOString(),tests:[],limitations:['Reviewer short actual native fixture; not a full native protocol matrix, complete process-set proof or cutover fence.']};\nlet prefix,child,port,config;\nlet output='';\nasync function test(name,fn){const details=await fn();report.tests.push({name,passed:true,...(details||{})});}\nasync function wait(fn,ms=4000){const stop=Date.now()+ms;let last;while(Date.now()<stop){try{const x=await fn();if(x)return x;}catch(e){last=e;}await sleep(20);}throw last||new Error('deadline');}\nasync function get(){return new Promise((resolve,reject)=>{const q=http.get({host:'127.0.0.1',port,path:'/',agent:false,headers:{connection:'close'}},s=>{let body='';s.on('data',b=>body+=b);s.on('error',reject);s.on('end',()=>resolve(body));});const t=setTimeout(()=>q.destroy(new Error('request deadline')),500);q.once('close',()=>clearTimeout(t));q.once('error',reject);});}\nasync function identity(){const pid=child.pid;let procPid;for(const e of await readdir('/proc')){if(!/^\\d+$/.test(e))continue;try{const s=await readFile(`/proc/${e}/status`,'utf8');if(Number(/^NSpid:\\s+([\\d\\s]+)$/m.exec(s)?.[1].trim().split(/\\s+/).at(-1))===pid&&await readlink(`/proc/${e}/exe`)===binary){procPid=Number(e);break;}}catch{}}\n assert.ok(procPid);const stat=await readFile(`/proc/${procPid}/stat`,'utf8');const fields=stat.slice(stat.lastIndexOf(') ')+2).split(' ');const command=(await readFile(`/proc/${procPid}/cmdline`,'utf8')).split('\\0')[0];return {pid,procPid,pidNamespace:await readlink(`/proc/${procPid}/ns/pid`),startTicks:fields[19],uid:process.getuid(),executable:binary,commandSha256:hash(command)};}\nasync function stop(){if(child&&child.exitCode===null&&child.signalCode===null){child.kill('SIGQUIT');try{await wait(()=>child.exitCode!==null||child.signalCode!==null,3000);}catch{child.kill('SIGTERM');await wait(()=>child.exitCode!==null||child.signalCode!==null,1000).catch(()=>{});}}if(child){try{process.kill(-child.pid,'SIGKILL');}catch(e){if(e.code!=='ESRCH')throw e;}}}\ntry{\n report.sourceSha256=hash(await readFile(source));report.binarySha256=hash(await readFile(binary));\n const {captureTcpListeners,inspectTcpListeners}=await import(source);\n prefix=await mkdtemp(path.join(os.tmpdir(),'x10-listener-review-'));await chmod(prefix,0o700);await mkdir(path.join(prefix,'logs'));\n const n=net.createServer();n.listen(0,'127.0.0.1');await once(n,'listening');port=n.address().port;await new Promise(r=>n.close(r));\n config=path.join(prefix,'nginx.conf');const render=text=>`${process.getuid()===0?`user ${os.userInfo().username};`:''}\\ndaemon off; master_process on; worker_processes 1; pid ${prefix}/nginx.pid; error_log ${prefix}/error.log notice; events { worker_connections 128; } http { access_log off; server { listen 127.0.0.1:${port}; location / { return 200 \\\"${text}\\\"; } } }\\n`;\n await writeFile(config,render('A'),{mode:0o600});child=spawn(binary,['-p',`${prefix}/`,'-c',config],{detached:true,stdio:['ignore','pipe','pipe']});for(const p of [child.stdout,child.stderr])p.on('data',b=>output=(output+b).slice(-8192));await wait(async()=>await get()==='A');\n const master=await identity(),options={master,port,binary};let snapshot;\n await test('actual-native-capture-and-pid-namespace-mapping',async()=>{snapshot=await captureTcpListeners(options);assert.equal(snapshot.scope,'captured-processes-only');assert.ok(snapshot.processes.length>0);return {masterLocalPid:master.pid,masterProcPid:master.procPid,namespaceIdsDiffer:master.pid!==master.procPid,capturedProcesses:snapshot.processes.length};});\n await test('actual-live-listener-owner-is-pending',async()=>{const x=await inspectTcpListeners(snapshot,options);assert.equal(x.state,'pending');assert.equal(x.closed,false);return {state:x.state};});\n const resign=s=>{delete s.sha256;s.sha256=hash(JSON.stringify(s));return s;};\n await test('accidentally-edited-snapshot-rejected',async()=>{const s=structuredClone(snapshot);s.capturedAt='changed';await assert.rejects(inspectTcpListeners(s,options));});\n await test('hash-valid-empty-process-snapshot-rejected',async()=>{const s=structuredClone(snapshot);s.processes=[];resign(s);await assert.rejects(inspectTcpListeners(s,options));});\n await test('context-port-mismatch-rejected',async()=>{await assert.rejects(inspectTcpListeners(snapshot,{...options,port:port===65535?port-1:port+1}));});\n await test('context-master-starttime-mismatch-rejected',async()=>{await assert.rejects(inspectTcpListeners(snapshot,{...options,master:{...master,startTicks:String(BigInt(master.startTicks)+1n)}}));});\n await test('context-binary-mismatch-rejected',async()=>{await assert.rejects(inspectTcpListeners(snapshot,{...options,binary:'/bin/false'}));});\n const procPid=snapshot.processes.find(p=>p.ownedListenerFds.length).procPid;\n async function patch(name,replacement,fn){const original=fs.promises[name];fs.promises[name]=replacement(original);syncBuiltinESMExports();try{return await fn();}finally{fs.promises[name]=original;syncBuiltinESMExports();}}\n await test('actual-child-fd-directory-EACCES-is-unresolved',async()=>patch('opendir',original=>async(...a)=>{if(a[0]===`/proc/${procPid}/fd`)throw Object.assign(new Error('review permission control'),{code:'EACCES'});return original(...a);},async()=>{await assert.rejects(inspectTcpListeners(snapshot,options),e=>e.code==='listener_observation_unavailable'&&e.message.includes('EACCES'));}));\n await test('actual-child-transient-fd-ENOENT-retries-inventory',async()=>{let calls=0;return patch('readlink',original=>async(...a)=>{if(String(a[0]).startsWith(`/proc/${procPid}/fd/`)&&calls++===0)throw Object.assign(new Error('review one descriptor race'),{code:'ENOENT'});return original(...a);},async()=>{const r=await inspectTcpListeners(snapshot,options);assert.equal(r.state,'pending');assert.ok(calls>1);return {descriptorReads:calls};});});\n await test('actual-child-persistent-fd-ENOENT-remains-unresolved',async()=>{let calls=0;return patch('readlink',original=>async(...a)=>{if(String(a[0]).startsWith(`/proc/${procPid}/fd/`)){calls++;throw Object.assign(new Error('review exhausted descriptor race'),{code:'ENOENT'});}return original(...a);},async()=>{await assert.rejects(inspectTcpListeners(snapshot,options),e=>e.code==='listener_observation_unavailable'&&e.message.includes('ENOENT'));assert.equal(calls,3);return {descriptorAttempts:calls};});});\n await test('hash-valid-child-starttime-change-is-unresolved',async()=>{const s=structuredClone(snapshot);s.processes[0].startTicks=String(BigInt(s.processes[0].startTicks)+1n);resign(s);await assert.rejects(inspectTcpListeners(s,options),e=>e.code==='listener_observation_unavailable'&&e.message.includes('identity changed'));});\n await test('actual-delayed-status-open-closes-acquired-handle',async()=>{let handle,closed=false;await patch('open',original=>async(...a)=>{if(a[0]!==`/proc/${master.procPid}/status`)return original(...a);handle=await original(...a);const close=handle.close.bind(handle);handle.close=async()=>{closed=true;return close();};await sleep(3100);return handle;},async()=>{await assert.rejects(captureTcpListeners(options),e=>e.code==='listener_observation_unavailable'&&e.message.includes('budget'));});const observerClosed=closed;if(handle&&!closed)await handle.close();assert.equal(observerClosed,true);return {acquiredHandleClosedByObserver:observerClosed};});\n await test('actual-delayed-fd-opendir-closes-acquired-directory',async()=>{let dir,closed=false;await patch('opendir',original=>async(...a)=>{if(a[0]!==`/proc/${procPid}/fd`)return original(...a);dir=await original(...a);const close=dir.close.bind(dir);dir.close=async()=>{closed=true;return close();};await sleep(3100);return dir;},async()=>{await assert.rejects(captureTcpListeners(options),e=>e.code==='listener_observation_unavailable'&&e.message.includes('budget'));});const observerClosed=closed;if(dir&&!closed)await dir.close();assert.equal(observerClosed,true);return {acquiredDirectoryClosedByObserver:observerClosed};});\n await writeFile(config,render('B'));child.kill('SIGHUP');await wait(async()=>await get()==='B');\n await test('actual-captured-worker-release-after-reload',async()=>{const x=await wait(async()=>{const r=await inspectTcpListeners(snapshot,options);return r.closed?r:null;});assert.equal(x.state,'closed');return {state:x.state,observedProcesses:x.processes};});\n await stop();\n await test('stopped-master-does-not-count-as-closure',async()=>{await assert.rejects(inspectTcpListeners(snapshot,options));});\n report.success=true;\n}catch(e){report.success=false;report.failure={message:e.message,stack:e.stack};}\nfinally{await stop().catch(e=>report.cleanupError=e.message);if(prefix)await rm(prefix,{recursive:true,force:true});report.cleanup={nativeStopped:!child||child.exitCode!==null||child.signalCode!==null,nativeExitCode:child?.exitCode??null,nativeSignal:child?.signalCode??null,temporaryRootRemoved:true};report.sourceUnchangedDuringTest=report.sourceSha256===hash(await readFile(source));report.binaryUnchangedDuringTest=report.binarySha256===hash(await readFile(binary));report.childOutput=output;report.finishedAt=new Date().toISOString();console.log(JSON.stringify(report,null,2));if(!report.success||!report.sourceUnchangedDuringTest||!report.binaryUnchangedDuringTest||report.cleanupError)process.exitCode=1;}\n"
+    },
+    {
+      "name": "listener-review-interruption.mjs",
+      "sha256": "34d23eb4716cff2dd300e65ef63a319a44197fdb3462ca7c1ebe6b08848f6d01",
+      "source": "import {spawn} from 'node:child_process';\nimport {readFile,readdir,readlink,lstat} from 'node:fs/promises';\nimport {createHash} from 'node:crypto';\nimport path from 'node:path';\nconst fixture=path.resolve('x10/test/handover-baseline.mjs');\nconst digest=b=>createHash('sha256').update(b).digest('hex');\nconst fixtureSha256=digest(await readFile(fixture));\nlet stdout='',stderr='',child,master,worker,procPid,interrupted=false;\nconst delay=ms=>new Promise(r=>setTimeout(r,ms));\nconst report={suite:'independent-handover-interruption',fixtureSha256,startedAt:new Date().toISOString()};\nasync function wait(fn,ms){const stop=Date.now()+ms;while(Date.now()<stop){const r=await fn();if(r)return r;await delay(10);}throw new Error('review interruption deadline');}\ntry{\n child=spawn(process.execPath,[fixture],{stdio:['ignore','pipe','pipe']});\n child.stdout.on('data',b=>{stdout+=b;if(stdout.length>1024*1024)child.kill('SIGTERM');});child.stderr.on('data',b=>stderr=(stderr+b).slice(-8192));\n const match=await wait(()=>/old worker stopped; master=(\\d+) worker=(\\d+)/.exec(stderr),6000);master=Number(match[1]);worker=Number(match[2]);\n const ownNs=await readlink('/proc/self/ns/pid');\n for(const p of await readdir('/proc')){if(!/^\\d+$/.test(p))continue;try{const status=await readFile(`/proc/${p}/status`,'utf8');const local=Number(/^NSpid:\\s+([\\d\\s]+)$/m.exec(status)?.[1].trim().split(/\\s+/).at(-1));if(local===worker&&await readlink(`/proc/${p}/ns/pid`)===ownNs){procPid=Number(p);report.observedStoppedWorker=/^State:\\s+T\\b/m.test(status);break;}}catch{}}\n if(!report.observedStoppedWorker)throw new Error('worker stop independently unconfirmed');\n const start=performance.now();child.kill('SIGTERM');interrupted=true;await wait(()=>child.exitCode!==null||child.signalCode!==null,5000);report.elapsedAfterSignalMs=performance.now()-start;\n const result=JSON.parse(stdout);report.harnessExitCode=child.exitCode;report.harnessSignal=child.signalCode;report.result={success:result.success,interrupted:result.interrupted,stopSignal:result.stopSignal,cleanup:result.cleanup};\n let gone=false;try{await lstat(`/proc/${procPid}`);}catch(e){if(e.code==='ENOENT')gone=true;else throw e;}report.stoppedWorkerGone=gone;\n report.success=child.exitCode===1&&child.signalCode===null&&result.success===false&&result.interrupted===true&&result.stopSignal==='SIGTERM'&&result.cleanup?.stoppedWorkerResumeRequested===true&&result.cleanup.nativeStopped===true&&result.cleanup.fixturesStopped===true&&result.cleanup.openSockets===0&&result.cleanup.temporaryRootRemoved===true&&result.cleanup.errors.length===0&&gone;\n}catch(e){report.success=false;report.error=e.stack||e.message;}\nfinally{\n if(child&&child.exitCode===null&&child.signalCode===null){child.kill('SIGTERM');await delay(300);if(master){try{process.kill(-master,'SIGCONT');process.kill(-master,'SIGTERM');}catch{}}if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL');}\n report.fixtureUnchangedDuringTest=fixtureSha256===digest(await readFile(fixture));report.stderr=stderr;report.finishedAt=new Date().toISOString();console.log(JSON.stringify(report,null,2));if(!report.success||!report.fixtureUnchangedDuringTest)process.exitCode=1;\n}\n"
+    },
+    {
+      "name": "listener-review-validator.mjs",
+      "sha256": "5506626c53f00d72fb1d99057690d8cc537d904d248dde2f88dffb73b7e24da3",
+      "source": "import {readFile} from 'node:fs/promises';\nimport {createHash} from 'node:crypto';\nimport assert from 'node:assert/strict';\nconst source=await readFile('x10/test/all.mjs','utf8');const start=source.indexOf('function jsonChecks('),end=source.indexOf('\\nasync function main()',start);assert.ok(start>=0&&end>start);const jsonChecks=Function(`return (${source.slice(start,end)})`)();\nconst record=JSON.parse(await readFile('x10/evidence/handover-fixed.json','utf8'));\nconst controls=[];\nfunction check(name,mutate,expected=false){const x=structuredClone(record);mutate(x);let observed,error;try{observed=jsonChecks(x,'handover');}catch(e){error=e.message;}const passed=expected?observed===true:observed!==true;controls.push({name,expectedAccepted:expected,observedAccepted:observed===true,...(error?{threw:error}:{}),passed});assert.ok(passed,name);}\ncheck('frozen-owner-record-accepted',()=>{},true);\nconst mutate=[\n['unsuccessful-suite',d=>d.success=false],['interrupted-suite',d=>d.interrupted=true],['wrong-case-count',d=>d.tests.pop()],['failed-case',d=>d.tests[0].status='failed'],['skipped-case',d=>d.skips.push('review')],['fixture-error',d=>d.fixtureErrors.push('review')],['source-changed',d=>d.sourceUnchangedDuringTest=false],['binary-changed',d=>d.identity.binaryUnchangedDuringTest=false],['harness-changed',d=>d.identity.harnessUnchangedDuringTest=false],['observer-changed',d=>d.identity.observerUnchangedDuringTest=false],['invalid-binary-digest',d=>d.identity.binarySha256='invalid'],['native-log-not-read',d=>d.nativeErrorLogRead=false],['unexpected-native-error',d=>d.unexpectedNativeErrors.push('review')],['wrong-capture-scope',d=>d.observations.observerCapture.scope='complete-generation'],['missing-capture-digest',d=>delete d.observations.observerCapture.sha256],['all-snapshot-digests-absent',d=>{delete d.observations.observerCapture.sha256;delete d.observations.observerWhileStopped.snapshotSha256;delete d.observations.observerAfterResume.snapshotSha256;}],['wrong-pending-scope',d=>d.observations.observerWhileStopped.scope='complete-generation'],['wrong-closed-scope',d=>d.observations.observerAfterResume.scope='complete-generation'],['pending-state-closed',d=>d.observations.observerWhileStopped.state='closed'],['pending-boolean-closed',d=>d.observations.observerWhileStopped.closed=true],['no-pending-owner',d=>d.observations.observerWhileStopped.processes=[]],['closed-state-pending',d=>d.observations.observerAfterResume.state='pending'],['closed-boolean-false',d=>d.observations.observerAfterResume.closed=false],['closed-empty-capture-result',d=>d.observations.observerAfterResume.processes=[]],['closed-retains-listener',d=>d.observations.observerAfterResume.processes[0].state='owns-listener'],['snapshot-digest-mismatch',d=>d.observations.observerAfterResume.snapshotSha256='a'.repeat(64)],['native-still-running',d=>d.cleanup.nativeStopped=false],['native-failed-exit',d=>d.cleanup.nativeExitCode=1],['native-signal-exit',d=>d.cleanup.nativeSignal='SIGTERM'],['forced-cleanup-mode',d=>d.cleanup.mode='SIGTERM'],['stopped-worker-not-resumed',d=>d.cleanup.stoppedWorkerResumeRequested=false],['fixture-still-running',d=>d.cleanup.fixturesStopped=false],['open-socket',d=>d.cleanup.openSockets=1],['temporary-root-retained',d=>d.cleanup.temporaryRootRemoved=false],['cleanup-error',d=>d.cleanup.errors.push('review')]\n];for(const [name,fn]of mutate)check(name,fn);\nconsole.log(JSON.stringify({suite:'independent-handover-aggregate-direct-controls',kind:'direct extracted jsonChecks function; no aggregate CLI or real subprocess',sourceSha256:createHash('sha256').update(source).digest('hex'),evidenceSha256:createHash('sha256').update(await readFile('x10/evidence/handover-fixed.json')).digest('hex'),controls,success:controls.every(x=>x.passed)},null,2));\n"
+    }
+  ],
+  "limitations": [
+    "The reviewer did not run the complete 7-case paired handover fixtures or the full aggregate CLI; owner evidence is inspected separately.",
+    "Transient errno and delayed-resource controls monkeypatch Node builtins only in the reviewer test process; real proc state is not modified.",
+    "Captured process/descriptor samples do not prove every old-generation worker was found, atomic observation, application health or all-traffic cutover.",
+    "A snapshot SHA detects accidental corruption, not a hostile same-UID editor."
+  ]
+}

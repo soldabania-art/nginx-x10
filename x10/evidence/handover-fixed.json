@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-reload-listener-observation",
+  "startedAt": "2026-10-23T10:11:29.418Z",
+  "success": true,
+  "identity": {
+    "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+    "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+    "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+    "sourceCheckout": "/workspace/scratch/d8c3d94bb512/nginx-x10/",
+    "checkoutRevision": "4024ef43d1e10e4079d54651036ee2daec424e29",
+    "sourceFilesSha256": {
+      "src/os/unix/ngx_process_cycle.c": "b8811ead5647f9cfc76f3085f4f57e622e434f403de2ca7aa131d33442fdbda6",
+      "src/os/unix/ngx_process.c": "5097cec7f4a3e95c766b31692eb4e9b16fb00ffa11e5c750d7f6bc93bd9d01f5",
+      "src/core/ngx_connection.c": "56896a9af65da2f4246a47ff27c4772ad6b0e3137752c65c997ffa6675d61c11",
+      "src/core/ngx_cycle.c": "9f4474071bc95db1e0b51e4db39c12bad09be0ac126760b3643f95abe95f9ad6"
+    },
+    "harnessSha256": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612",
+    "observerSha256": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64",
+    "master": {
+      "pid": 20,
+      "procPid": 32416,
+      "parentProcPid": 32400,
+      "startTicks": "2259997",
+      "uid": 0,
+      "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+      "pidNamespace": "pid:[4026532277]",
+      "networkNamespace": "net:[4026532278]"
+    },
+    "binaryUnchangedDuringTest": true,
+    "harnessUnchangedDuringTest": true,
+    "observerUnchangedDuringTest": true
+  },
+  "tests": [
+    {
+      "name": "native-config-validation",
+      "status": "passed"
+    },
+    {
+      "name": "held-old-response-and-owned-tcp-listener",
+      "status": "passed",
+      "workerPid": 21,
+      "revision": "revision-a",
+      "firstChunk": "first:old\n"
+    },
+    {
+      "name": "new-revision-response-does-not-prove-old-listener-closure",
+      "status": "passed",
+      "freshRevision": "revision-b",
+      "stoppedWorkerStillOwnsListener": true
+    },
+    {
+      "name": "old-worker-alive-without-listener-while-response-held",
+      "status": "passed"
+    },
+    {
+      "name": "second-reload-preserves-first-generation-stream",
+      "status": "passed"
+    },
+    {
+      "name": "old-response-completes-exactly-after-listener-closure-and-two-reloads",
+      "status": "passed",
+      "bytes": 19,
+      "bodySha256": "3fde1b14477bee560e7796d98c66d43c9bcec20641f66141bb6f2b230b4b23ed"
+    },
+    {
+      "name": "rejected-reload-retains-last-valid-revision",
+      "status": "passed",
+      "freshResponses": 4
+    }
+  ],
+  "skips": [],
+  "observations": {
+    "observerCapture": {
+      "schemaVersion": 1,
+      "scope": "captured-processes-only",
+      "capturedAt": "2026-10-23T10:11:29.495Z",
+      "port": 39809,
+      "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+      "master": {
+        "pid": 20,
+        "procPid": 32416,
+        "pidNamespace": "pid:[4026532277]",
+        "startTicks": "2259997",
+        "uid": 0,
+        "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+        "commandSha256": "d91701b2ab45b2d47b9582180343f134fabba57dd514bb2467bf917a14e5c320"
+      },
+      "networkNamespace": "net:[4026532278]",
+      "listenerInode": "204376",
+      "processes": [
+        {
+          "procPid": 32417,
+          "pid": 21,
+          "parentProcPid": 32416,
+          "startTicks": "2259998",
+          "uid": 0,
+          "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+          "pidNamespace": "pid:[4026532277]",
+          "networkNamespace": "net:[4026532278]",
+          "ownedListenerFds": [
+            "5"
+          ]
+        },
+        {
+          "procPid": 32418,
+          "pid": 22,
+          "parentProcPid": 32416,
+          "startTicks": "2259998",
+          "uid": 0,
+          "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+          "pidNamespace": "pid:[4026532277]",
+          "networkNamespace": "net:[4026532278]",
+          "ownedListenerFds": [
+            "5"
+          ]
+        }
+      ],
+      "sha256": "1cbc49cd8a8df3bbcf90611746c9e9431a723343e1ed7751e2558f9efed3c724"
+    },
+    "initial": {
+      "identity": {
+        "pid": 21,
+        "procPid": 32417,
+        "parentProcPid": 32416,
+        "startTicks": "2259998",
+        "uid": 0,
+        "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+        "pidNamespace": "pid:[4026532277]",
+        "networkNamespace": "net:[4026532278]"
+      },
+      "stateBefore": "S",
+      "stateAfter": "S",
+      "managedListeningInodes": [
+        "204376"
+      ],
+      "inspectedDescriptors": 12
+    },
+    "listenerInodes": [
+      "204376"
+    ],
+    "stoppedBeforeReload": {
+      "identity": {
+        "pid": 21,
+        "procPid": 32417,
+        "parentProcPid": 32416,
+        "startTicks": "2259998",
+        "uid": 0,
+        "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+        "pidNamespace": "pid:[4026532277]",
+        "networkNamespace": "net:[4026532278]"
+      },
+      "stateBefore": "T",
+      "stateAfter": "T",
+      "managedListeningInodes": [
+        "204376"
+      ],
+      "inspectedDescriptors": 12
+    },
+    "freshBWhileOldStopped": {
+      "freshResponse": {
+        "status": 200,
+        "body": "revision-b",
+        "revision": "revision-b",
+        "workerPid": 23
+      },
+      "oldWorker": {
+        "identity": {
+          "pid": 21,
+          "procPid": 32417,
+          "parentProcPid": 32416,
+          "startTicks": "2259998",
+          "uid": 0,
+          "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+          "pidNamespace": "pid:[4026532277]",
+          "networkNamespace": "net:[4026532278]"
+        },
+        "stateBefore": "T",
+        "stateAfter": "T",
+        "managedListeningInodes": [
+          "204376"
+        ],
+        "inspectedDescriptors": 12
+      }
+    },
+    "observerWhileStopped": {
+      "scope": "captured-processes-only",
+      "state": "pending",
+      "closed": false,
+      "masterVerified": true,
+      "port": 39809,
+      "listenerInode": "204376",
+      "snapshotSha256": "1cbc49cd8a8df3bbcf90611746c9e9431a723343e1ed7751e2558f9efed3c724",
+      "observedAt": "2026-10-23T10:11:29.777Z",
+      "elapsedMs": 10,
+      "processes": [
+        {
+          "procPid": 32417,
+          "pid": 21,
+          "state": "owns-listener",
+          "ownedListenerFds": [
+            "5"
+          ]
+        },
+        {
+          "procPid": 32418,
+          "pid": 22,
+          "state": "exited",
+          "ownedListenerFds": []
+        }
+      ],
+      "limitations": [
+        "Only captured processes are observed; unobserved churn and later generations are outside this snapshot.",
+        "Listener absence is not process exit, application health, accepted-connection drain or all-traffic cutover.",
+        "Proc identities and descriptor inventories are sampled, with residual check-to-use races."
+      ]
+    },
+    "oldListenerClosedWhileResponseHeld": {
+      "identity": {
+        "pid": 21,
+        "procPid": 32417,
+        "parentProcPid": 32416,
+        "startTicks": "2259998",
+        "uid": 0,
+        "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+        "pidNamespace": "pid:[4026532277]",
+        "networkNamespace": "net:[4026532278]"
+      },
+      "stateBefore": "S",
+      "stateAfter": "S",
+      "managedListeningInodes": [],
+      "inspectedDescriptors": 12
+    },
+    "observerAfterResume": {
+      "scope": "captured-processes-only",
+      "state": "closed",
+      "closed": true,
+      "masterVerified": true,
+      "port": 39809,
+      "listenerInode": "204376",
+      "snapshotSha256": "1cbc49cd8a8df3bbcf90611746c9e9431a723343e1ed7751e2558f9efed3c724",
+      "observedAt": "2026-10-23T10:11:29.789Z",
+      "elapsedMs": 10,
+      "processes": [
+        {
+          "procPid": 32417,
+          "pid": 21,
+          "state": "listener-absent",
+          "ownedListenerFds": []
+        },
+        {
+          "procPid": 32418,
+          "pid": 22,
+          "state": "exited",
+          "ownedListenerFds": []
+        }
+      ],
+      "limitations": [
+        "Only captured processes are observed; unobserved churn and later generations are outside this snapshot.",
+        "Listener absence is not process exit, application health, accepted-connection drain or all-traffic cutover.",
+        "Proc identities and descriptor inventories are sampled, with residual check-to-use races."
+      ]
+    },
+    "secondReload": {
+      "freshResponse": {
+        "status": 200,
+        "body": "revision-c",
+        "revision": "revision-c",
+        "workerPid": 25
+      },
+      "oldResponseStillHeld": true
+    },
+    "observerAfterSecondReload": {
+      "scope": "captured-processes-only",
+      "state": "closed",
+      "closed": true,
+      "masterVerified": true,
+      "port": 39809,
+      "listenerInode": "204376",
+      "snapshotSha256": "1cbc49cd8a8df3bbcf90611746c9e9431a723343e1ed7751e2558f9efed3c724",
+      "observedAt": "2026-10-23T10:11:29.907Z",
+      "elapsedMs": 10,
+      "processes": [
+        {
+          "procPid": 32417,
+          "pid": 21,
+          "state": "listener-absent",
+          "ownedListenerFds": []
+        },
+        {
+          "procPid": 32418,
+          "pid": 22,
+          "state": "exited",
+          "ownedListenerFds": []
+        }
+      ],
+      "limitations": [
+        "Only captured processes are observed; unobserved churn and later generations are outside this snapshot.",
+        "Listener absence is not process exit, application health, accepted-connection drain or all-traffic cutover.",
+        "Proc identities and descriptor inventories are sampled, with residual check-to-use races."
+      ]
+    },
+    "rejectedReload": {
+      "actualRejectionLogged": true,
+      "responses": [
+        {
+          "status": 200,
+          "body": "revision-c",
+          "revision": "revision-c",
+          "workerPid": 26
+        },
+        {
+          "status": 200,
+          "body": "revision-c",
+          "revision": "revision-c",
+          "workerPid": 25
+        },
+        {
+          "status": 200,
+          "body": "revision-c",
+          "revision": "revision-c",
+          "workerPid": 25
+        },
+        {
+          "status": 200,
+          "body": "revision-c",
+          "revision": "revision-c",
+          "workerPid": 25
+        }
+      ]
+    }
+  },
+  "configurations": [
+    {
+      "revision": "revision-a",
+      "invalid": false,
+      "sha256": "dfb8d629c9b57e369953705ea148177f10519fbf97e9a42d1303ebf83fbee6ae",
+      "bytes": 700
+    },
+    {
+      "revision": "revision-b",
+      "invalid": false,
+      "sha256": "a2a9def4d0965496d8024bc9630510d5c33ab095f1be40fc2914d2baba6a2226",
+      "bytes": 700
+    },
+    {
+      "revision": "revision-c",
+      "invalid": false,
+      "sha256": "699536d756f1b7f1330e093e45ec667148d570c5f9dd194bb0f1c44a335c5666",
+      "bytes": 700
+    },
+    {
+      "revision": "revision-invalid",
+      "invalid": true,
+      "sha256": "53d55f4d87bc3a39c4677a0368ba01825d5223ed3c9139ca921ec46ffbdbdd43",
+      "bytes": 739
+    },
+    {
+      "revision": "revision-c",
+      "invalid": false,
+      "sha256": "699536d756f1b7f1330e093e45ec667148d570c5f9dd194bb0f1c44a335c5666",
+      "bytes": 700
+    }
+  ],
+  "fixtureErrors": [],
+  "nativeErrorLogRead": true,
+  "unexpectedNativeErrors": [],
+  "expectedNativeDiagnostics": [
+    {
+      "kind": "restricted-container-initgroups",
+      "line": "2026/10/23 14:11:29 [emerg] 21#21: initgroups(root, 0) failed (1: Operation not permitted)"
+    },
+    {
+      "kind": "restricted-container-initgroups",
+      "line": "2026/10/23 14:11:29 [emerg] 22#22: initgroups(root, 0) failed (1: Operation not permitted)"
+    },
+    {
+      "kind": "restricted-container-initgroups",
+      "line": "2026/10/23 14:11:29 [emerg] 23#23: initgroups(root, 0) failed (1: Operation not permitted)"
+    },
+    {
+      "kind": "restricted-container-initgroups",
+      "line": "2026/10/23 14:11:29 [emerg] 24#24: initgroups(root, 0) failed (1: Operation not permitted)"
+    },
+    {
+      "kind": "restricted-container-initgroups",
+      "line": "2026/10/23 14:11:29 [emerg] 25#25: initgroups(root, 0) failed (1: Operation not permitted)"
+    },
+    {
+      "kind": "restricted-container-initgroups",
+      "line": "2026/10/23 14:11:29 [emerg] 26#26: initgroups(root, 0) failed (1: Operation not permitted)"
+    },
+    {
+      "kind": "deliberate-invalid-reload",
+      "line": "2026/10/23 14:11:29 [emerg] 20#20: unknown directive \"x10_deliberately_invalid\" in /tmp/nginx-x10-handover-Nbxlmc/nginx.conf:27"
+    }
+  ],
+  "limitations": [
+    "Linux IPv4 loopback TCP only; no QUIC, UDP, reuseport, HTTP2, keepalive/pipelining or complete platform matrix.",
+    "Observes one exactly identified old worker; process-set churn and unseen respawns are not fenced.",
+    "A snapshot of descriptor absence is not all-traffic atomic cutover or a rollback of application effects.",
+    "SIGSTOP deliberately delays only a worker owned by this isolated fixture; no production process is targeted.",
+    "Local source and binary identities are recorded separately, not signed build attestations."
+  ],
+  "nativeLogTail": "2026/10/23 14:11:29 [notice] 20#20: using the \"epoll\" event method\n2026/10/23 14:11:29 [notice] 20#20: nginx/1.31.9\n2026/10/23 14:11:29 [notice] 20#20: built by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \n2026/10/23 14:11:29 [notice] 20#20: OS: Linux 6.18.55\n2026/10/23 14:11:29 [notice] 20#20: getrlimit(RLIMIT_NOFILE): 16384:16384\n2026/10/23 14:11:29 [notice] 20#20: start worker processes\n2026/10/23 14:11:29 [notice] 20#20: start worker process 21\n2026/10/23 14:11:29 [emerg] 21#21: initgroups(root, 0) failed (1: Operation not permitted)\n2026/10/23 14:11:29 [notice] 20#20: start worker process 22\n2026/10/23 14:11:29 [emerg] 22#22: initgroups(root, 0) failed (1: Operation not permitted)\n2026/10/23 14:11:29 [notice] 20#20: signal 17 (SIGCHLD) received from 21\n2026/10/23 14:11:29 [notice] 20#20: signal 1 (SIGHUP) received from 5, reconfiguring\n2026/10/23 14:11:29 [notice] 20#20: reconfiguring\n2026/10/23 14:11:29 [notice] 20#20: using the \"epoll\" event method\n2026/10/23 14:11:29 [notice] 20#20: start worker processes\n2026/10/23 14:11:29 [notice] 20#20: start worker process 23\n2026/10/23 14:11:29 [notice] 20#20: start worker process 24\n2026/10/23 14:11:29 [emerg] 23#23: initgroups(root, 0) failed (1: Operation not permitted)\n2026/10/23 14:11:29 [emerg] 24#24: initgroups(root, 0) failed (1: Operation not permitted)\n2026/10/23 14:11:29 [notice] 22#22: gracefully shutting down\n2026/10/23 14:11:29 [notice] 22#22: exiting\n2026/10/23 14:11:29 [notice] 22#22: exit\n2026/10/23 14:11:29 [notice] 20#20: signal 17 (SIGCHLD) received from 22\n2026/10/23 14:11:29 [notice] 20#20: worker process 22 exited with code 0\n2026/10/23 14:11:29 [notice] 20#20: signal 29 (SIGIO) received\n2026/10/23 14:11:29 [notice] 21#21: gracefully shutting down\n2026/10/23 14:11:29 [notice] 20#20: signal 17 (SIGCHLD) received from 21\n2026/10/23 14:11:29 [notice] 20#20: signal 1 (SIGHUP) received from 5, reconfiguring\n2026/10/23 14:11:29 [notice] 20#20: reconfiguring\n2026/10/23 14:11:29 [notice] 20#20: using the \"epoll\" event method\n2026/10/23 14:11:29 [notice] 20#20: start worker processes\n2026/10/23 14:11:29 [notice] 20#20: start worker process 25\n2026/10/23 14:11:29 [emerg] 25#25: initgroups(root, 0) failed (1: Operation not permitted)\n2026/10/23 14:11:29 [notice] 20#20: start worker process 26\n2026/10/23 14:11:29 [emerg] 26#26: initgroups(root, 0) failed (1: Operation not permitted)\n2026/10/23 14:11:29 [notice] 23#23: gracefully shutting down\n2026/10/23 14:11:29 [notice] 23#23: exiting\n2026/10/23 14:11:29 [notice] 24#24: gracefully shutting down\n2026/10/23 14:11:29 [notice] 24#24: exiting\n2026/10/23 14:11:29 [notice] 24#24: exit\n2026/10/23 14:11:29 [notice] 23#23: exit\n2026/10/23 14:11:29 [notice] 21#21: exiting\n2026/10/23 14:11:29 [notice] 21#21: exit\n2026/10/23 14:11:29 [notice] 20#20: signal 1 (SIGHUP) received from 5, reconfiguring\n2026/10/23 14:11:29 [notice] 20#20: reconfiguring\n2026/10/23 14:11:29 [emerg] 20#20: unknown directive \"x10_deliberately_invalid\" in /tmp/nginx-x10-handover-Nbxlmc/nginx.conf:27\n2026/10/23 14:11:29 [notice] 20#20: signal 17 (SIGCHLD) received from 23\n2026/10/23 14:11:29 [notice] 20#20: worker process 23 exited with code 0\n2026/10/23 14:11:29 [notice] 20#20: signal 29 (SIGIO) received\n2026/10/23 14:11:29 [notice] 20#20: signal 17 (SIGCHLD) received from 24\n2026/10/23 14:11:29 [notice] 20#20: worker process 24 exited with code 0\n2026/10/23 14:11:29 [notice] 20#20: signal 29 (SIGIO) received\n2026/10/23 14:11:29 [notice] 20#20: signal 17 (SIGCHLD) received from 21\n2026/10/23 14:11:29 [notice] 20#20: worker process 21 exited with code 0\n2026/10/23 14:11:29 [notice] 20#20: signal 29 (SIGIO) received\n2026/10/23 14:11:29 [notice] 20#20: signal 3 (SIGQUIT) received from 5, shutting down\n2026/10/23 14:11:29 [notice] 25#25: gracefully shutting down\n2026/10/23 14:11:29 [notice] 25#25: exiting\n2026/10/23 14:11:29 [notice] 26#26: gracefully shutting down\n2026/10/23 14:11:29 [notice] 25#25: exit\n2026/10/23 14:11:29 [notice] 26#26: exiting\n2026/10/23 14:11:29 [notice] 26#26: exit\n2026/10/23 14:11:30 [notice] 20#20: signal 17 (SIGCHLD) received from 25\n2026/10/23 14:11:30 [notice] 20#20: worker process 25 exited with code 0\n2026/10/23 14:11:30 [notice] 20#20: worker process 26 exited with code 0\n2026/10/23 14:11:30 [notice] 20#20: exit\n",
+  "sourceUnchangedDuringTest": true,
+  "cleanup": {
+    "nativeStopped": true,
+    "nativeExitCode": 0,
+    "nativeSignal": null,
+    "mode": "SIGQUIT",
+    "stoppedWorkerResumeRequested": true,
+    "fixturesStopped": true,
+    "openSockets": 0,
+    "temporaryRootRemoved": true,
+    "errors": []
+  },
+  "childOutputTail": "",
+  "interrupted": false,
+  "finishedAt": "2026-10-23T10:11:30.037Z"
+}

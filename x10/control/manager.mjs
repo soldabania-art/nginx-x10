@@ -7,6 +7,7 @@ import { execFile } from 'node:child_process';
 import http from 'node:http';
 import path from 'node:path';
 import { promisify } from 'node:util';
+import { captureTcpListeners, inspectTcpListeners } from './listeners.mjs';
 
 const execute = promisify(execFile);
 const uid = process.getuid?.();
@@ -634,3 +635,29 @@ export async function status(state) {
 }
 
 export async function history(state) { return lock(state, async state => ({ ok: true, records: (await load(state)).history })); }
+
+// Explicit diagnostics only. These observations do not alter apply/recovery
+// acceptance or identify a complete configuration generation.
+async function listenerDiagnostic(state, operation) {
+  return lock(state, async state => {
+    const { settings, current, pending: unresolved } = await load(state);
+    if (unresolved) fail('pending', 'Resolve the pending transaction before inspecting listeners');
+    if (!current.binding) fail('unbound', 'Bind a native master before inspecting listeners');
+    const revision = await readRevision(settings, current.activeRevision);
+    await guard(settings, current, [revision.fragmentSha256]);
+    const master = await runtime(settings, current.binding);
+    const result = await operation({ master, port: settings.port, binary: settings.binary });
+    await guard(settings, current, [revision.fragmentSha256]);
+    return result;
+  });
+}
+
+export async function snapshotListeners(state) {
+  const snapshot = await listenerDiagnostic(state, captureTcpListeners);
+  return { ok: true, snapshot };
+}
+
+export async function inspectListeners(state, snapshot) {
+  const observation = await listenerDiagnostic(state, options => inspectTcpListeners(snapshot, options));
+  return { ok: true, observation };
+}

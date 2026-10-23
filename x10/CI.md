@@ -26,8 +26,8 @@ network access; later runs reuse the verified clean checkout.
 
 The required local profile uses Linux x86_64, Node.js 22+, a C compiler with
 ASan/UBSan support, OpenSSL CLI and CPython 3.12 with `venv` support. Build-library
-requirements remain in [BUILD.md](BUILD.md). Install the separately pinned HTTP/3
-test client before invoking the aggregate; on Ubuntu 24.04 this also requires
+requirements remain in [BUILD.md](BUILD.md). Install both separately pinned HTTP/3
+test clients before invoking the aggregate; on Ubuntu 24.04 this also requires
 `python3-venv`:
 
 ```sh
@@ -36,19 +36,26 @@ x10/.build/http3-venv/bin/python -m pip install \
   --require-hashes --only-binary=:all: \
   -r x10/test/http3-baseline.requirements.txt
 x10/.build/http3-venv/bin/python -m pip check
+python3 -m venv x10/.build/http3-head-venv
+x10/.build/http3-head-venv/bin/python -m pip install \
+  --require-hashes --only-binary=:all: \
+  -r x10/test/http3-head.requirements.txt
+x10/.build/http3-head-venv/bin/python -m pip check
 bash x10/build.sh
 node x10/test/all.mjs --official
 ```
 
-The complete ten-package wheel lock targets Linux x86_64 and CPython 3.12; it
-is not a universal platform lock. Installation needs package-download access,
-but no test installs dependencies at runtime. `X10_HTTP3_PYTHON` can select an
-absolute interpreter path in an already prepared pinned environment. A missing
-client or mismatched installed version fails the required HTTP/3 group rather
-than recording a passing skip. See [HTTP3.md](test/HTTP3.md) for exact client
-identity, cleanup and coverage boundaries.
+The ten-package aioquic lock and separate four-package curl_cffi 0.16.3 lock
+target Linux x86_64 and CPython 3.12; neither is a universal platform lock.
+Installation needs package-download access, but no test installs dependencies at
+runtime. `X10_HTTP3_PYTHON` can select an
+absolute interpreter path for the aioquic environment; `X10_HTTP3_HEAD_PYTHON`
+selects the separate prepared curl_cffi environment. A missing client or
+mismatched installed version fails its required group rather than recording a
+passing skip. See [HTTP3.md](test/HTTP3.md) and [http3-head.md](test/http3-head.md)
+for exact identities, cleanup and coverage boundaries.
 
-The default aggregate runs eleven groups; `--official` adds the twelfth.
+The current default aggregate runs fourteen groups; `--official` adds the fifteenth.
 Build/source provenance is checked before and after the groups and is not
 counted as another protocol test. `--provenance-only` performs no functional
 checks.
@@ -60,16 +67,23 @@ checks.
 | `mail-tls-starttls` | Implicit TLS and upgrades with trust/hostname controls |
 | `protocol-adapters` | Real FastCGI/SCGI/uWSGI backend receipts |
 | `http3-interop` | Seven actual UDP QUIC/TLS 1.3/H3 cases; ALPN `h3`, native protocol headers and exact responses |
+| `http3-head-independent-client` | Four independent libcurl client cases: verified GET/HEAD and certificate-specific CA/hostname rejection; mandatory HTTP/3 |
 | `native-features` | Selected cache, limits, files and routing behavior |
 | `quic-regression` | Transport-parameter regression counterexamples |
 | `quic-generated-sanitized` | Generated transport-parameter properties under ASan/UBSan |
 | `quic-frame-boundaries` | 6579 generated frame-parser inputs under ASan/UBSan |
 | `native-load-client-verification` | 41 short C-client functional/sanitizer controls, including native C1/C16 smoke; no performance gate |
-| `managed-native-control` | 66 controller TAP passes, including bounded journal/storage interruption and recovery cases |
+| `managed-native-control` | Controller transactions, bounded journal/storage interruption and recovery, plus explicit listener snapshot/inspection CLI cases |
+| `listener-observer-boundaries` | Separate observer identity, namespace, snapshot-integrity, descriptor-race, I/O and resource-bound checks |
+| `reload-listener-observation` | Seven live native case groups separating new responses, captured old-listener closure and accepted-stream completion |
 | `official-nginx-tests` | The pinned upstream sample; skips and TODO remain separately counted |
 
 The saved [milestone-4 aggregate](evidence/native-checks-milestone-4.json)
-reports 12/12 successful groups and controller TAP pass 66/fail 0. Group counts,
+reports the earlier twelve-group profile: 12/12 successful groups and controller
+TAP pass 66/fail 0. The current [milestone-5 aggregate](evidence/native-checks-milestone-5.json)
+passed 15/15 groups, with controller TAP 68/68 and separate observer TAP 29/29,
+after the independent HEAD cancellation fix. Hosted results belong to their
+exact commit and are checked separately. See [STATUS.md](STATUS.md). Group counts,
 TAP assertions and generated parser inputs are different units and are not
 summed into a test or feature count. The [reference parser record](evidence/quic-frames-reference.json)
 and [candidate parser record](evidence/quic-frames-fixed.json) each report 6579
@@ -77,9 +91,17 @@ passing inputs. The corpus checks parsing, not ACK state arithmetic, stream flow
 handlers, packet protection or a network matrix. LeakSanitizer is disabled.
 
 HTTP/3 requires normal CA/hostname verification and certificate-specific negative
-results, with observed UDP transport closure. HEAD remains explicitly unverified
-because the pinned client rejected it on both binaries; the diagnostic is
-retained separately. The seven cases do not cover loss/reordering, migration,
+results, with observed UDP transport closure. The original aioquic HEAD
+diagnostic remains unchanged: that pinned client rejected HEAD on both native
+binaries. The separate curl_cffi/libcurl fixture requires `V3ONLY`, reports
+actual HTTP version 30 and native H3/protocol/method headers, and checks a
+byte-exact GET representation, HEAD status/headers with an empty API-visible
+body, plus CA/hostname-specific failures. The saved
+[candidate](evidence/http3-head-fixed.json) and
+[reference](evidence/http3-head-reference.json) reports contain four passing cases
+each; these standalone runs are separate from the current full aggregate. The
+fixture does not claim packet-level absence of HEAD DATA frames. The seven aioquic cases do not cover loss/reordering,
+migration,
 0-RTT, browser interoperability or the full QPACK/QUIC input space. The C-client
 verification checks framing, exact bodies, bounds, deadlines, accounting and
 cleanup; its short capped traffic is not evidence of throughput or latency
@@ -143,14 +165,16 @@ replace the X10 harness's trusted-CA/hostname negative controls.
 
 The X10 aggregate also runs [mail TLS/STARTTLS](test/MAIL-TLS.md),
 [FastCGI/SCGI/uWSGI adapters](test/ADAPTERS.md) and
-[actual HTTP/3](test/HTTP3.md) against the selected native
+[actual HTTP/3](test/HTTP3.md), plus an
+[independent HTTP/3 HEAD client](test/http3-head.md), against the selected native
 binary. These are separate local fixtures, not replacements or edits to the
 pinned upstream sample. Mail and adapter servers use Node builtins; HTTP/3 uses
-the pinned Python client and local asyncio backends. These fixtures do not
-need the optional Perl adapter clients. An upstream dependency skip remains a
+the pinned aioquic Python client and local asyncio backends. The independent
+HEAD fixture uses separately pinned curl_cffi/libcurl, not an aioquic parser
+patch. These fixtures do not need the optional Perl adapter clients. An upstream dependency skip remains a
 skip even when an X10 fixture checks part of that protocol.
 
-The required profile must pass all cases in these three suites without skips.
+The required profile must pass all cases in these protocol suites without skips.
 Aggregate acceptance requires the exact suite and binary identity, unchanged
 source/binary, normal case success and zero leaked sockets/processes or cleanup
 errors. Mail certificate negatives must identify trust or hostname rejection.
@@ -159,18 +183,51 @@ expected 502/504 or incomplete response.
 
 Generated config headers and module source are now checked against identities
 recorded during the real build, before any suite starts and again afterward.
-The controller's 66 TAP passes include real process interruption at known durable
+The controller fixture includes real process interruption at known durable
 journal boundaries, injected sync/partial-append errors and bounded recovery.
+Milestone 4 recorded 66 TAP passes; the current file records 68, including the
+explicit listener diagnostics through the CLI.
 Those tests do not simulate power loss, every filesystem interleaving or failing
 hardware, and do not make an all-traffic cutover guarantee. See [BUILD.md](BUILD.md), [controller boundaries](control/README.md)
 and [native handover review](review/handover-boundaries.md).
+
+## Reload and captured listener diagnostics
+
+The [live reload fixture](test/HANDOVER.md) holds an actual old-generation
+response open, stops only its identified native worker, and observes a fresh
+new-revision response while that worker still owns the TCP LISTEN descriptor.
+After SIGCONT, it requires listener absence while the worker and accepted
+response remain live, a second reload, exact stream completion and rejection of
+an invalid reload. Both the fixture's own fd/inode checks and the observer's
+captured-process report are recorded. Every cleanup path resumes stopped owned
+processes before bounded native shutdown; interruption remains failure.
+
+The optional [manual observer](control/LISTENERS.md) is exposed by
+`snapshot-listeners` and `inspect-listeners`. It uses the controller lock,
+bound-master identity and file guards, but changes no apply/recover acceptance
+and sends no signal. Inspection returns `ok:true` for a completed observation;
+`observation.state` separately indicates `pending` or `closed`. Unavailable or
+changed identity is unresolved, never a closed result. This observes only the
+captured process set; it is not a native generation API, proof about unseen
+respawns or later children, application health, complete accepted-connection
+drain, or an all-traffic atomic cutover.
+
+The observer supports a single matching IPv4 loopback TCP listener inode and
+explicit PID/network namespace checks. It refuses ambiguous endpoints,
+inaccessible procfs data, invalid snapshots and exceeded resource/elapsed
+budgets. A single inode cannot prove that every possible reuseport configuration
+is absent. Node filesystem calls cannot cancel a stalled kernel/procfs operation;
+the elapsed budget must not be described as a hard wall-clock guarantee under
+such a stall. The separate boundary tests and live fixture do not cover the full
+platform, QUIC/UDP or process-churn matrix.
 
 ## GitHub Actions
 
 [x10-native.yml](../.github/workflows/x10-native.yml) builds the Linux profile and
 runs `node x10/test/all.mjs --official`: the unified native regression entry point
 plus this pinned official sample in master mode. It installs `python3-venv`, the
-hashed HTTP/3 wheel lock and the optional Perl FCGI, SCGI and TLS clients, uses
+hashed aioquic and independent curl_cffi HTTP/3 wheel locks in separate venvs,
+and the optional Perl FCGI, SCGI and TLS clients, uses
 read-only repository permissions and pinned action revisions, and
 uploads only JSON evidence. It neither deploys a gateway nor changes billing,
 secrets or native test assertions.

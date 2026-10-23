@@ -10,7 +10,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
-import { initialize, bind, apply, revert, recover, status, history } from '../control/manager.mjs';
+import { initialize, bind, apply, revert, recover, status, history, inspectListeners } from '../control/manager.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const binary = path.resolve(process.env.X10_NGINX_BINARY || path.join(root, 'x10/.build/objs/nginx'));
@@ -46,12 +46,15 @@ async function stop(child) {
 }
 
 test('native managed fragment transactions and failure boundaries', { timeout: 45000 }, async t => {
+  const sourceFiles = ['x10/control/manager.mjs', 'x10/control/cli.mjs', 'x10/control/listeners.mjs', 'x10/test/control.test.mjs'];
+  const sourceFilesSha256 = Object.fromEntries(await Promise.all(sourceFiles.map(async file => [file, digest(await readFile(path.join(root, file)))])));
   const report = { schemaVersion: 1, suite: 'native-local-control', startedAt: new Date().toISOString(), binary, binarySha256: digest(await readFile(binary)), tests: [], limitations: [
     'Linux/local trusted-operator tool; one managed loopback HTTP server, no remote administration or general nginx.conf editing.',
     'Native -t/reload can have early filesystem/shared-resource side effects; successful sampled probes are not ACID or a proof about every worker.',
     'Same-uid adversarial filesystem mutation and the residual identity-check-to-kill PID-reuse race are outside the security boundary.',
     'Recovery test kills a real CLI during a pending transaction; stale lock removal is an explicit operator step after confirmed process exit.',
   ] };
+  report.sourceFilesSha256 = sourceFilesSha256;
   let prefix, child, backend, cliChild, childOutput = '';
   const interrupted = () => {
     report.interrupted = true;
@@ -124,10 +127,37 @@ include ${fragmentPath};
       report.runtimeIdentity = { pidNamespaceMappingVerified: true, masterMode: true };
       assert.ok(healthMethods.length >= 2); assert.ok(healthMethods.every(method => method === 'GET'));
     });
-    let applied;
+    let applied, capturedListeners;
+    await check('explicit-listener-cli-snapshot-observes-current-owner-and-refuses-tampering', async () => {
+      const command = [path.join(root, 'x10/control/cli.mjs')];
+      const captured = await promisify(execFile)(process.execPath, [...command, 'snapshot-listeners', '--state', state], { timeout: 6000 })
+        .catch(error => { throw new Error(`Listener snapshot CLI failed: ${error.stdout || error.message}`); });
+      assert.equal(captured.stderr, '');
+      const saved = JSON.parse(captured.stdout); assert.equal(saved.ok, true);
+      capturedListeners = saved.snapshot;
+      assert.equal(capturedListeners.scope, 'captured-processes-only');
+      const snapshotFile = path.join(prefix, 'listeners.json');
+      await writeFile(snapshotFile, captured.stdout, { mode: 0o600 });
+      const inspected = await promisify(execFile)(process.execPath, [...command, 'inspect-listeners', '--state', state, '--file', snapshotFile], { timeout: 6000 });
+      assert.equal(inspected.stderr, '');
+      const result = JSON.parse(inspected.stdout);
+      assert.equal(result.ok, true); assert.equal(result.observation.state, 'pending'); assert.equal(result.observation.closed, false);
+      const altered = structuredClone(capturedListeners); altered.port = altered.port === 65535 ? 65534 : altered.port + 1;
+      await assert.rejects(inspectListeners(state, altered), { code: 'listener_snapshot_invalid' });
+      report.listenerSnapshot = capturedListeners;
+    });
     await check('valid-apply-acknowledges-new-native-revision', async () => {
       applied = await apply(state, input('B')); assert.equal(applied.outcome, 'applied'); assert.notEqual(applied.revision, initial);
       await waitFor(async () => (await get(port)).body === 'B'); assert.equal((await status(state)).runtime.observedRevision, applied.revision);
+    });
+    await check('explicit-listener-inspection-observes-captured-processes-closed-after-apply', async () => {
+      assert.ok(capturedListeners, 'Pre-apply capture must succeed before inspection');
+      const observation = await waitFor(async () => {
+        const { observation } = await inspectListeners(state, capturedListeners);
+        return observation.closed ? observation : null;
+      });
+      assert.equal(observation.state, 'closed'); assert.equal(observation.scope, 'captured-processes-only');
+      report.listenerObservation = observation;
     });
     await check('invalid-native-config-is-rejected-without-runtime-switch', async () => {
       const before = await readFile(fragmentPath);
@@ -243,18 +273,20 @@ include ${fragmentPath};
       assert.equal(s.configUnchanged, true); assert.equal(s.fragmentMatchesLastConfirmed, true); assert.equal(await readFile(configPath, 'utf8'), config);
       report.history = { entries: h.records.length, chainValid: true }; report.operatorConfigUnchanged = true;
     });
-    report.passed = report.tests.length === 16 && !report.interrupted;
+    report.passed = report.tests.length === 18 && !report.interrupted;
   } finally {
     if (cliChild && cliChild.exitCode === null && cliChild.signalCode === null) { cliChild.kill('SIGKILL'); await once(cliChild, 'exit'); }
     report.shutdown = await stop(child);
     if (report.shutdown?.exitCode !== 0 || report.shutdown?.signal !== null) report.passed = false;
     if (backend) await new Promise(resolve => backend.close(resolve));
     if (prefix) await rm(prefix, { recursive: true, force: true });
+    report.sourceUnchangedDuringTest = (await Promise.all(sourceFiles.map(async file => digest(await readFile(path.join(root, file))) === sourceFilesSha256[file]))).every(Boolean);
+    report.passed &&= report.sourceUnchangedDuringTest;
     report.finishedAt = new Date().toISOString();
     process.removeListener('SIGINT', interrupted); process.removeListener('SIGTERM', interrupted);
     if (process.env.X10_CONTROL_EVIDENCE) await writeFile(path.resolve(process.env.X10_CONTROL_EVIDENCE), `${JSON.stringify(report, null, 2)}\n`, { mode: 0o600 });
     if (!report.passed) t.diagnostic(childOutput.slice(-4096));
-    if (report.tests.length === 16) assert.equal(report.passed, true, 'native process must cleanly exit');
+    if (report.tests.length === 18) assert.equal(report.passed, true, 'native process must cleanly exit');
   }
 });
 
