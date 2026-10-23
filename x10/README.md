@@ -6,6 +6,21 @@
 
 Понятный срез продукта, готового и предстоящего: [ROADMAP](ROADMAP.md). Точная матрица работ: [PLAN](PLAN.md).
 
+## Continuum: перенос продолжающегося соединения
+
+[Концепция Continuum](continuum/README.md) исследует проверяемый перенос
+протокольного состояния между версиями серверного кода с полным завершением
+старого процесса. Первый изолированный эксперимент отделяет TLS 1.3 records,
+модель состояния и ручной перенос socket между исследовательскими процессами
+от будущего OpenSSL adapter и интеграции с native NGINX. Это отдельные этапы;
+преимущество, полнота переноса и мировая новизна пока не установлены.
+
+[Порядок разработки](continuum/PLAN.md), [экономика](continuum/ECONOMICS.md)
+и [регламент помощников](continuum/OPERATIONS.md) сохраняют точку продолжения.
+Текущее владение работой и незавершённые проверки находятся в
+[BACKGROUND.json](continuum/BACKGROUND.json). Периодическое возобновление
+не означает непрерывно работающие сессии помощников.
+
 ## Исследовательский эксперимент Guard
 
 [Проверяющее ядро](proof/README.md) исполняет заданные проверки изоляции
@@ -79,7 +94,7 @@ node x10/test/all.mjs --provenance-only
 
 Последний [milestone-5 aggregate](evidence/native-checks-milestone-5.json) прошёл **15/15 групп** после исправления отмены HEAD-стенда: controller **68/68 TAP**, observer **29/29 TAP**. Hosted CI проверяется отдельно на опубликованном commit.
 
-Предыдущий [milestone-6 aggregate](evidence/native-checks-milestone-6.json) прошёл **18/18 групп** после реальной native пересборки. Финальный локальный [milestone-7 aggregate](evidence/native-checks-milestone-7.json) прошёл **20/20**, exit 0: operator-status **30/30 TAP**, alpha lifecycle **9/9**, controller **68/68**, observer **29/29**; official sample сохранил **1083 strict PASS / 25 SKIP / 1 expected TODO / 0 strict FAIL**. Новых изменений C нет, native binary SHA сохранился. [Независимый review](review/local-alpha-review.md) отдельно проверил 9 operator и 8 package controls. Новый hosted CI ещё ожидается. Отдельные обязательные Unix transport/operator-status и feature-off build gates, а также CI tar/checksum artifact описаны в [CI](CI.md). Native generation — development-возможность, без worker ACK/fence или performance claim.
+Предыдущий [milestone-6 aggregate](evidence/native-checks-milestone-6.json) прошёл **18/18 групп** после реальной native пересборки. Финальный локальный [milestone-7 aggregate](evidence/native-checks-milestone-7.json) прошёл **20/20**, exit 0: operator-status **30/30 TAP**, alpha lifecycle **9/9**, controller **68/68**, observer **29/29**; official sample сохранил **1083 strict PASS / 25 SKIP / 1 expected TODO / 0 strict FAIL**. Новых изменений C нет, native binary SHA сохранился. [Независимый review](review/local-alpha-review.md) отдельно проверил 9 operator и 8 package controls. Hosted CI commit `0b6a87e` прошёл: [run 39971890181](https://github.com/soldabania-art/nginx-x10/actions/runs/39971890181); новый Continuum checkpoint проверяется отдельно. Отдельные обязательные Unix transport/operator-status и feature-off build gates, а также CI tar/checksum artifact описаны в [CI](CI.md). Native generation — development-возможность, без worker ACK/fence или performance claim.
 
 ## Локальное управление
 

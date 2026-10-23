@@ -412,3 +412,18 @@ action pins were verified against official Git refs (`checkout` v6.0.2,
 `setup-node` v6, `upload-artifact` v6). These local results do not certify a hosted
 run or establish a performance advantage; hosted results belong to the exact
 commit identified in [STATUS.md](STATUS.md) and GitHub Actions.
+
+## Continuum research workflow
+
+`.github/workflows/x10-continuum.yml` runs the isolated research kernel on
+standard Ubuntu 24.04 / Node 22 with a 10-minute job timeout, read-only contents
+permission and pinned checkout/setup actions. It runs `node x10/continuum/check.mjs`
+then the separate process-handover TAP suite. Push/PR/manual are enabled; no cron
+is configured. This is not the native NGINX workflow or a persistent AI worker.
+
+Native workflow paths exclude the independent `x10/continuum/**` directory.
+Research paths exclude `BACKGROUND.json` and research Markdown, so lease-only
+commits do not start or cancel tests. Native source/control/tests continue to
+trigger native checks. Both outcomes must be attached to the actual changed
+implementation commit; local tests and a configured schedule do not prove a
+future hosted run.
