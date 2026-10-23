@@ -1,0 +1,51 @@
+name: X10 native compatibility
+
+on:
+  push:
+    branches: [x10-development]
+    paths: ['src/**', 'auto/**', 'conf/**', 'x10/**', '.github/workflows/x10-native.yml']
+  pull_request:
+    branches: [master, x10-development]
+    paths: ['src/**', 'auto/**', 'conf/**', 'x10/**', '.github/workflows/x10-native.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: x10-native-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - name: Build dependencies and optional test clients
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential python3 git libpcre2-dev libssl-dev zlib1g-dev \
+            libcrypt-dev libfcgi-perl libscgi-perl libio-socket-ssl-perl
+      - name: Compile native profile
+        run: |
+          bash x10/build.sh --jobs 2
+          mkdir -p x10/.build/ci-evidence
+          cp x10/.build/manifest.json x10/.build/ci-evidence/build.json
+      - name: Native regressions and pinned official compatibility sample
+        run: node x10/test/all.mjs --official > x10/.build/ci-evidence/checks.json
+      - name: Preserve JSON evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: x10-native-evidence
+          path: x10/.build/ci-evidence/*.json
+          if-no-files-found: warn
+          retention-days: 14

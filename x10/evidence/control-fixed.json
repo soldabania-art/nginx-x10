@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-local-control",
+  "startedAt": "2026-10-23T03:17:41.159Z",
+  "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+  "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+  "tests": [
+    {
+      "name": "initialization-is-unbound-and-keeps-operator-config",
+      "passed": true
+    },
+    {
+      "name": "bind-verifies-native-master-pid-namespace-and-fresh-health",
+      "passed": true
+    },
+    {
+      "name": "valid-apply-acknowledges-new-native-revision",
+      "passed": true
+    },
+    {
+      "name": "invalid-native-config-is-rejected-without-runtime-switch",
+      "passed": true
+    },
+    {
+      "name": "health-failure-rolls-back-with-a-fresh-activation-id",
+      "passed": true
+    },
+    {
+      "name": "trickle-health-cannot-hold-lock-past-bounded-gate",
+      "passed": true
+    },
+    {
+      "name": "manual-revert-reuses-content-with-a-new-revision",
+      "passed": true
+    },
+    {
+      "name": "concurrent-operator-edit-stays-untouched-and-requires-recovery",
+      "passed": true
+    },
+    {
+      "name": "exclusive-lock-is-not-auto-deleted",
+      "passed": true
+    },
+    {
+      "name": "unsafe-health-urls-and-fragment-escapes-are-rejected",
+      "passed": true
+    },
+    {
+      "name": "operator-config-mutation-refuses-signal",
+      "passed": true
+    },
+    {
+      "name": "managed-fragment-tamper-and-symlink-refuse-signal",
+      "passed": true
+    },
+    {
+      "name": "wrong-pid-file-refuses-runtime-attachment",
+      "passed": true
+    },
+    {
+      "name": "revision-and-history-tampering-are-detected",
+      "passed": true
+    },
+    {
+      "name": "killed-cli-leaves-pending-and-stale-lock-for-explicit-recovery",
+      "passed": true
+    },
+    {
+      "name": "history-chain-and-final-config-integrity",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "Linux/local trusted-operator tool; one managed loopback HTTP server, no remote administration or general nginx.conf editing.",
+    "Native -t/reload can have early filesystem/shared-resource side effects; successful sampled probes are not ACID or a proof about every worker.",
+    "Same-uid adversarial filesystem mutation and the residual identity-check-to-kill PID-reuse race are outside the security boundary.",
+    "Recovery test kills a real CLI during a pending transaction; stale lock removal is an explicit operator step after confirmed process exit."
+  ],
+  "runtimeIdentity": {
+    "pidNamespaceMappingVerified": true,
+    "masterMode": true
+  },
+  "history": {
+    "entries": 16,
+    "chainValid": true
+  },
+  "operatorConfigUnchanged": true,
+  "passed": true,
+  "shutdown": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "finishedAt": "2026-10-23T03:17:49.513Z"
+}

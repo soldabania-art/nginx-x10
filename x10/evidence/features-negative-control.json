@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "suite": "nginx-x10-native-features-baseline",
+  "startedAt": "2026-10-23T03:01:37.633Z",
+  "identity": {
+    "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+    "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+    "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+    "checkoutRevision": "c9ed4985f370d0fa444cad974000cadbb9ed7703",
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64",
+    "invokingUid": 0,
+    "binaryUnchangedDuringTest": true
+  },
+  "options": {
+    "bind": "127.0.0.1",
+    "masterProcess": false,
+    "workerProcesses": 1,
+    "processMode": "single native process retaining the invoking UID",
+    "fixtureResponseLimitBytes": 1048576,
+    "cacheLock": "off",
+    "configurationSha256": "43b0cb56371cdd0c2adebf5a0e3331e4d666873efca9c5361104325e4cefe913",
+    "fixtureAsset": {
+      "bytes": 5856,
+      "sha256": "7aa43d459b77e2e6334d0e890a1595577488b060ae82b1bba308f8792247efc0"
+    }
+  },
+  "tests": [
+    {
+      "name": "native-config-required-modules-and-syntax",
+      "status": "passed",
+      "durationMs": 11.13,
+      "configured": [
+        "static",
+        "range",
+        "not_modified",
+        "gzip",
+        "rewrite/map",
+        "auth_basic",
+        "realip",
+        "limit_req",
+        "limit_conn",
+        "proxy_cache",
+        "stub_status"
+      ]
+    },
+    {
+      "name": "static-get-exact-bytes",
+      "status": "passed",
+      "durationMs": 3.23,
+      "bytes": 5856,
+      "sha256": "7aa43d459b77e2e6334d0e890a1595577488b060ae82b1bba308f8792247efc0",
+      "etagPresent": true
+    },
+    {
+      "name": "static-head-same-length-empty-body",
+      "status": "passed",
+      "durationMs": 0.99
+    },
+    {
+      "name": "static-single-byte-range",
+      "status": "passed",
+      "durationMs": 1.36
+    },
+    {
+      "name": "conditional-etag-not-modified",
+      "status": "passed",
+      "durationMs": 0.93
+    },
+    {
+      "name": "static-unsatisfiable-range-rejected",
+      "status": "passed",
+      "durationMs": 1
+    },
+    {
+      "name": "gzip-negotiation-and-decompressed-integrity",
+      "status": "passed",
+      "durationMs": 4.03,
+      "compressedBytes": 145,
+      "uncompressedBytes": 5856
+    },
+    {
+      "name": "route-exact-protected-prefix-regex-and-fallback",
+      "status": "passed",
+      "durationMs": 4.56,
+      "branches": [
+        {
+          "target": "/pick/exact",
+          "result": "exact"
+        },
+        {
+          "target": "/pick/protected.conf",
+          "result": "prefix"
+        },
+        {
+          "target": "/pick/other.conf",
+          "result": "regex"
+        },
+        {
+          "target": "/pick/other",
+          "result": "fallback"
+        }
+      ]
+    },
+    {
+      "name": "map-request-header-and-argument",
+      "status": "passed",
+      "durationMs": 1.71
+    },
+    {
+      "name": "rewrite-last-internal-route-and-argument",
+      "status": "passed",
+      "durationMs": 0.79
+    },
+    {
+      "name": "basic-auth-missing-and-wrong-credentials-denied",
+      "status": "passed",
+      "durationMs": 2.65
+    },
+    {
+      "name": "basic-auth-synthetic-credentials-allowed",
+      "status": "passed",
+      "durationMs": 1.01
+    },
+    {
+      "name": "realip-trusted-loopback-hop",
+      "status": "passed",
+      "durationMs": 2.15
+    },
+    {
+      "name": "realip-untrusted-peer-cannot-spoof-address",
+      "status": "passed",
+      "durationMs": 1.09
+    },
+    {
+      "name": "limit-req-rejects-second-request-and-isolates-keys",
+      "status": "passed",
+      "durationMs": 2.22,
+      "statuses": [
+        200,
+        429,
+        200
+      ],
+      "rate": "1r/m"
+    },
+    {
+      "name": "limit-conn-live-stream-rejection-and-release",
+      "status": "passed",
+      "durationMs": 6.87,
+      "accepted": 2,
+      "rejectedWhileFirstActive": 1,
+      "originRequests": 2,
+      "rejectedOriginRequests": 0
+    },
+    {
+      "name": "proxy-cache-miss-then-hit-one-origin-receipt",
+      "status": "passed",
+      "durationMs": 2.06,
+      "cacheStatuses": [
+        "MISS",
+        "HIT"
+      ],
+      "originReceipts": 1
+    },
+    {
+      "name": "proxy-cache-query-key-isolation",
+      "status": "passed",
+      "durationMs": 2.87,
+      "independentKeys": 2,
+      "originReceiptsPerKey": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "proxy-cache-lock-concurrent-fill-single-origin",
+      "status": "failed",
+      "durationMs": 24.08,
+      "error": "Expected values to be strictly equal:\n\n2 !== 1\n"
+    }
+  ],
+  "fixtureErrors": [],
+  "cleanupErrors": [],
+  "limitations": [
+    "Synthetic loopback regression cases, not load tests or a complete module/platform matrix.",
+    "Cache checks cover normal 200 responses, query-string key isolation and one concurrent fill; stale/revalidation, disk failures, Vary/private responses and purge are untested.",
+    "Rate limits use isolated nonempty header keys; this does not test multiworker accounting, expiry, dry-run, bursts or distributed clients.",
+    "Real-IP checks exercise one trusted loopback hop and a rejected loopback peer, not arbitrary forwarded chains or PROXY protocol.",
+    "Single-process mode avoids privilege changes unavailable in some containers; reload/master lifecycle is covered by the separate HTTP baseline.",
+    "Binary hash/version and checkout revision are separate identities; source provenance is not cryptographically attested by this harness."
+  ],
+  "cleanup": {
+    "signal": "SIGQUIT",
+    "process": {
+      "code": 0,
+      "signal": null
+    },
+    "exited": true
+  },
+  "nativeErrorLogTail": "2026/10/22 22:01:37 [notice] 20#20: using the \"epoll\" event method\n2026/10/22 22:01:37 [notice] 20#20: nginx/1.31.9\n2026/10/22 22:01:37 [notice] 20#20: built by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \n2026/10/22 22:01:37 [notice] 20#20: OS: Linux 6.18.55\n2026/10/22 22:01:37 [notice] 20#20: getrlimit(RLIMIT_NOFILE): 16384:16384\n2026/10/22 22:01:37 [warn] 20#20: control API unavailable in single process mode\n2026/10/22 22:01:37 [error] 20#20: *16 user \"fixture\": password mismatch, client: 127.0.0.1, server: localhost, request: \"GET /protected HTTP/1.1\", host: \"127.0.0.1:36399\"\n2026/10/22 22:01:37 [error] 20#20: *21 limiting requests, excess: 1.000 by zone \"rate\", client: 127.0.0.1, server: localhost, request: \"GET /rate HTTP/1.1\", host: \"127.0.0.1:36399\"\n2026/10/22 22:01:37 [error] 20#20: *25 limiting connections by zone \"connections\", client: 127.0.0.1, server: localhost, request: \"GET /hold?id=f34ea27d-60b3-441e-9d0a-bb7c30fdda06 HTTP/1.1\", host: \"127.0.0.1:36399\"\n2026/10/22 22:01:37 [error] 20#20: *35 upstream prematurely closed connection while reading response header from upstream, client: 127.0.0.1, server: localhost, request: \"GET /cache/lock?key=f213bec3-15ea-48f2-b973-8b47a1c0685d HTTP/1.1\", upstream: \"http://127.0.0.1:35179/cache/lock?key=f213bec3-15ea-48f2-b973-8b47a1c0685d\", host: \"127.0.0.1:36399\"\n2026/10/22 22:01:37 [error] 20#20: *37 upstream prematurely closed connection while reading response header from upstream, client: 127.0.0.1, server: localhost, request: \"GET /cache/lock?key=f213bec3-15ea-48f2-b973-8b47a1c0685d HTTP/1.1\", upstream: \"http://127.0.0.1:35179/cache/lock?key=f213bec3-15ea-48f2-b973-8b47a1c0685d\", host: \"127.0.0.1:36399\"\n2026/10/22 22:01:37 [error] 20#20: *38 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost, request: \"GET /cache/lock?key=f213bec3-15ea-48f2-b973-8b47a1c0685d HTTP/1.1\", upstream: \"http://127.0.0.1:35179/cache/lock?key=f213bec3-15ea-48f2-b973-8b47a1c0685d\", host: \"127.0.0.1:36399\"\n2026/10/22 22:01:37 [error] 20#20: *39 recv() failed (104: Connection reset by peer) while reading response header from upstream, client: 127.0.0.1, server: localhost, request: \"GET /cache/lock?key=f213bec3-15ea-48f2-b973-8b47a1c0685d HTTP/1.1\", upstream: \"http://127.0.0.1:35179/cache/lock?key=f213bec3-15ea-48f2-b973-8b47a1c0685d\", host: \"127.0.0.1:36399\"\n2026/10/22 22:01:37 [notice] 20#20: signal 3 (SIGQUIT) received from 5, shutting down\n2026/10/22 22:01:37 [notice] 20#20: exit\n",
+  "unexpectedNativeErrors": [],
+  "childOutputTail": "nginx: [warn] control API unavailable in single process mode\n",
+  "finishedAt": "2026-10-23T03:01:37.860Z",
+  "summary": {
+    "passed": 18,
+    "failed": 1,
+    "skipped": 0
+  },
+  "success": false,
+  "negativeControl": {
+    "expectedFailure": true,
+    "changedFixtureOption": "proxy_cache_lock off",
+    "expectedFailedCase": "proxy-cache-lock-concurrent-fill-single-origin"
+  }
+}

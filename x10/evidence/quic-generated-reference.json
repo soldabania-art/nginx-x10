@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "suite": "quic-generated-properties",
+  "startedAt": "2026-10-23T03:00:02.746101+00:00",
+  "source": "src/event/quic/ngx_event_quic_transport.c",
+  "sourceCheckout": "nginx-reference",
+  "sourceSha256": "a0b47a7045659a52787d1a3f539cb5d63074c0ad5c7ccb9c33219755ff1dfe81",
+  "harnessSha256": "877a3b230ca886ef5cadb86d41350557e28d507e7a105ec5ae149fb5c5bd5ac5",
+  "generatedConfigSha256": "ee51980f483ec07f4dfcf4a91455c7bca5172bfd0ab0f60d08743fc69a5dd041",
+  "seed": 9000,
+  "randomCasesRequested": 256,
+  "networkUsed": false,
+  "duplicatePolicy": "excluded_unchanged",
+  "scope": "Production transport-parameter parser with only logging stubbed; no handshake or apply-time semantic checks",
+  "limitations": [
+    "Six properties generate related inputs; case count is not independent protocol coverage",
+    "Numeric-value constraints enforced by ngx_quic_apply_transport_params are outside this parser fixture",
+    "64-bit Linux generated headers; no 32-bit, TLS-library or full QUIC interoperability claim",
+    "Fixed-seed bounded generation is not exhaustive fuzzing or a security proof",
+    "LeakSanitizer is explicitly disabled; memory-leak behavior is unverified"
+  ],
+  "nginxVersion": "1.31.9",
+  "checkoutRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+  "compilerExecutable": "cc",
+  "compilerFlags": [
+    "-std=c99",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-unused-parameter",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-fsanitize=address,undefined",
+    "-fno-sanitize-recover=all",
+    "-fno-omit-frame-pointer"
+  ],
+  "sanitizers": {
+    "requested": "address,undefined",
+    "enabled": [
+      "address",
+      "undefined"
+    ],
+    "leakDetection": false,
+    "runtimeOptions": {
+      "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+      "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+    }
+  },
+  "compileExitCode": 0,
+  "compilerDiagnostics": "",
+  "executionExitCode": 1,
+  "sanitizerDiagnostics": "",
+  "failureExamples": [
+    {
+      "property": "numeric_value_consumes_declared_field",
+      "label": "one_trailing_byte",
+      "caseInProperty": 1,
+      "actualReturnCode": 0,
+      "expectedReturnCode": -1,
+      "destinationMatches": null,
+      "inputLength": 4,
+      "bytesHex": "01020000"
+    },
+    {
+      "property": "numeric_value_consumes_declared_field",
+      "label": "two_trailing_bytes",
+      "caseInProperty": 2,
+      "actualReturnCode": 0,
+      "expectedReturnCode": -1,
+      "destinationMatches": null,
+      "inputLength": 6,
+      "bytesHex": "0140030000ff"
+    },
+    {
+      "property": "unknown_full_width_ids_preserve_destination",
+      "label": "high_id_low_bits_alias",
+      "caseInProperty": 9,
+      "actualReturnCode": -1,
+      "expectedReturnCode": 0,
+      "destinationMatches": true,
+      "inputLength": 6,
+      "bytesHex": "800100014000"
+    },
+    {
+      "property": "unknown_full_width_ids_preserve_destination",
+      "label": "high_id_low_bits_alias",
+      "caseInProperty": 10,
+      "actualReturnCode": 0,
+      "expectedReturnCode": 0,
+      "destinationMatches": false,
+      "inputLength": 7,
+      "bytesHex": "8001000140011e"
+    }
+  ],
+  "properties": [
+    {
+      "name": "known_numeric_widths_and_nonminimal_encodings",
+      "cases": 4992,
+      "passed": 4992,
+      "failed": 0
+    },
+    {
+      "name": "unknown_full_width_ids_preserve_destination",
+      "cases": 444,
+      "passed": 184,
+      "failed": 260
+    },
+    {
+      "name": "unknown_opaque_values_are_not_interpreted",
+      "cases": 65,
+      "passed": 65,
+      "failed": 0
+    },
+    {
+      "name": "truncated_id_length_or_value_is_rejected",
+      "cases": 2682,
+      "passed": 2682,
+      "failed": 0
+    },
+    {
+      "name": "numeric_value_consumes_declared_field",
+      "cases": 691,
+      "passed": 11,
+      "failed": 680
+    },
+    {
+      "name": "server_only_ids_and_zero_length_option",
+      "cases": 49,
+      "passed": 49,
+      "failed": 0
+    }
+  ],
+  "strict": {
+    "cases": 8923,
+    "passed": 7983,
+    "failed": 940
+  },
+  "failureExamplesLimit": 16,
+  "failureExamplesPerPropertyLimit": 2,
+  "inputDigestFnv1a64": "d8aadff5a019c128",
+  "passed": false,
+  "sourceUnchangedDuringTest": true,
+  "finishedAt": "2026-10-23T03:00:04.743959+00:00"
+}
