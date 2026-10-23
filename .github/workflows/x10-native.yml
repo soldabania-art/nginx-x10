@@ -51,6 +51,8 @@ jobs:
           cp x10/.build/manifest.json x10/.build/ci-evidence/build.json
       - name: Native regressions and pinned official compatibility sample
         run: node x10/test/all.mjs --official > x10/.build/ci-evidence/checks.json
+      - name: Verify native tenant cache contract experiment
+        run: node --test --test-reporter=tap x10/test/proof.test.mjs | tee x10/.build/ci-evidence/guard-kernel.tap
       - name: Verify private Unix control transport
         run: |
           node x10/test/control-api-baseline.mjs --transport unix > x10/.build/ci-evidence/control-api-unix.json

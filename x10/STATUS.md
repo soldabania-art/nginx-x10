@@ -386,6 +386,42 @@ controller **68/68**, observer **29/29**. Official sample: 35 files, 32 PASS и
 включая обязательные Unix проверки, ещё ожидается; прежний успешный commit
 их не подтверждает.
 
+Hosted CI commit `6467be3bd8efcfb70050181ce2d4a031a543a933` выявил
+ошибку отрицательного alpha fixture: проверка с системным Node получила код
+отказа вне ожидаемых вариантов; конкретный код старый fixture не сохранил.
+Fixture теперь использует собственную копию native binary с другим путём и
+требует именно `build_identity`. Установка в том hosted прогоне работала;
+полный aggregate оставался failed, а Unix/package gates не запускались.
+Новый локальный [milestone-8 aggregate](evidence/native-checks-milestone-8.json)
+после поправки прошёл **20/20**, exit 0; alpha **9/9 TAP**, official sample —
+**1083 strict PASS / 25 SKIP / 1 expected TODO / 0 strict FAIL**. Hosted Unix,
+feature-off и package gates нового commit пока ожидаются.
+
+## Guard: первый исследовательский срез
+
+[Детерминированное ядро](proof/README.md) выполняет две последовательности
+запросов synthetic tenants на отдельных пустых native caches. В проверенном
+профиле ключ без tenant воспроизводит получение чужого marker; ключ с tenant
+сохраняет изоляцию и реальные cache HIT. Отключение cache отклоняется по
+отдельному требованию его эффективности. Некорректный ответ fixture является
+ошибкой проверки, а не найденной утечкой. Targeted suite прошла **8/8 TAP**,
+без skips/TODO; включает действительный SIGTERM во время живого native запроса.
+Она запускается в CI отдельным обязательным шагом, сверх aggregate из 20 групп.
+
+Это специально подготовленные конфигурации и synthetic labels, не проверка
+настоящей авторизации или произвольного клиентского nginx.conf. Интеграция LLM,
+автоматический поиск исправлений и преимущество перед существующими подходами
+ещё не реализованы/не установлены. [Исследовательский проект](review/guard-research.md)
+задаёт prior art, контрольные сравнения и критерии будущего AI-эксперимента.
+Полная совместимость, production isolation и доказательство всех запросов
+из этого результата не следуют. Native C и бинарник этого среза не менялись.
+
+[Независимый review](review/guard-kernel-review.md) отдельно прошёл семь групп,
+включая шесть отказов до запуска выбранного binary. Он не суммируется с TAP.
+[Cache dependency compiler](review/cache-dependency-research.md) — отдельная
+концепция нового ядра; её checker/native adapter, новизна и экономический эффект
+ещё не реализованы и не доказаны.
+
 ## Производительность: измеритель и открытый результат
 
 [Driver](bench/README.md) проверяет одинаковые build profiles, SHA-256 и `-V`, точные 1024-byte ответы, ошибки, cleanup, AB/BA порядок, latency и Linux CPU/RSS. [Проверки самого driver](evidence/benchmark-verification.json) включают несовместимый профиль, SIGTERM и подмену manifest.

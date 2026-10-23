@@ -1,5 +1,13 @@
 # Native compatibility checks
 
+The Guard experiment has a separate required hosted TAP step after the normal
+20-group aggregate. Its eight tests cover only generated native tenant/cache
+scenarios, ineffective fixes and interruption cleanup; they are not AI results.
+The local milestone-8 aggregate is [summarized here](evidence/native-checks-milestone-8.json).
+The prior milestone-7 hosted run failed one negative alpha fixture; it did not
+reach the Unix or package gates. The corrected fixture uses an owned native
+copy at a different path and requires the manifest-identity rejection.
+
 Milestone-6 and later files committed under `x10/evidence` are explicit public summaries,
 not raw runner records. They retain result names/counts and source/binary
 hashes; host paths, runtime process/namespace identities, raw configurations,

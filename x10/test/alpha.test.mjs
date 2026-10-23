@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { spawn, execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { once } from 'node:events';
-import { chmod, lstat, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
+import { chmod, copyFile, lstat, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
 import net from 'node:net';
 import http from 'node:http';
 import os from 'node:os';
@@ -67,7 +67,13 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
       const unsafe = await cli(source, 'install', '--prefix', path.join(link, 'new'), '--manifest', manifestFile, '--binary', binary); assert.equal(unsafe.json.code, 'unsafe_path');
       await rm(link);
       const invalid = await cli(source, 'install', '--prefix', prefix, '--port', '80', '--manifest', manifestFile, '--binary', binary); assert.equal(invalid.json.code, 'invalid_port');
-      const mismatch = await cli(source, 'install', '--prefix', prefix, '--manifest', manifestFile, '--binary', process.execPath); assert(['build_identity', 'unsafe_path'].includes(mismatch.json.code)); assert(await absent(prefix));
+      // A runner-owned copy reaches manifest identity checks on non-root hosts;
+      // the system Node executable can be owned by a different user there.
+      const wrongBinary = path.join(parent, 'mismatched-nginx'); await copyFile(binary, wrongBinary); await chmod(wrongBinary, 0o500);
+      try {
+        const mismatch = await cli(source, 'install', '--prefix', prefix, '--manifest', manifestFile, '--binary', wrongBinary);
+        assert.equal(mismatch.json.code, 'build_identity'); assert(await absent(prefix));
+      } finally { await rm(wrongBinary); }
     });
     await check('manifest-verified-new-private-install-prepares-without-listening', async () => {
       const result = await cli(source, 'install', '--prefix', prefix, '--port', String(port), '--health-port', String(healthPort), '--manifest', manifestFile, '--binary', binary);
