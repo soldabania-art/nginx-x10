@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "scope": "Observer process cgroup/proc view before and after each entire local benchmark command, not per-sample counters or attribution to a single binary",
+  "runs": [
+    {
+      "name": "identical-control",
+      "argv": [
+        "node",
+        "x10/bench/compare.mjs",
+        "--candidate",
+        "x10/.build/baseline/nginx",
+        "--candidate-manifest",
+        "x10/evidence/build-reference.json",
+        "--concurrency",
+        "16"
+      ],
+      "before": {
+        "at": "2026-10-23T03:23:59.910089+00:00",
+        "readable": {
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 12680108274\nuser_usec 7161809259\nsystem_usec 5518299015\nnice_usec 0\nnr_periods 393311\nnr_throttled 4973\nthrottled_usec 1068375926\nnr_bursts 0\nburst_usec 0\n",
+          "/sys/fs/cgroup/cpu.max": "800000 100000\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/proc/loadavg": "0.07 0.23 0.31 1/202 5\n"
+        },
+        "unavailable": {
+          "/sys/fs/cgroup/cpu.pressure": "[Errno 2] No such file or directory: '/sys/fs/cgroup/cpu.pressure'"
+        }
+      },
+      "after": {
+        "at": "2026-10-23T03:24:11.678307+00:00",
+        "readable": {
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 12697714279\nuser_usec 7175559827\nsystem_usec 5522154451\nnice_usec 0\nnr_periods 393428\nnr_throttled 4973\nthrottled_usec 1068375926\nnr_bursts 0\nburst_usec 0\n",
+          "/sys/fs/cgroup/cpu.max": "800000 100000\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/proc/loadavg": "0.22 0.26 0.32 3/201 37\n"
+        },
+        "unavailable": {
+          "/sys/fs/cgroup/cpu.pressure": "[Errno 2] No such file or directory: '/sys/fs/cgroup/cpu.pressure'"
+        }
+      },
+      "wallSeconds": 11.768466269000783,
+      "exitCode": 0
+    },
+    {
+      "name": "confirmation",
+      "argv": [
+        "node",
+        "x10/bench/compare.mjs",
+        "--concurrency",
+        "16",
+        "--repetitions",
+        "4",
+        "--duration-ms",
+        "2000"
+      ],
+      "before": {
+        "at": "2026-10-23T03:25:05.629856+00:00",
+        "readable": {
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 12701709990\nuser_usec 7175559827\nsystem_usec 5526150162\nnice_usec 0\nnr_periods 393687\nnr_throttled 4973\nthrottled_usec 1068375926\nnr_bursts 0\nburst_usec 0\n",
+          "/sys/fs/cgroup/cpu.max": "800000 100000\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/proc/loadavg": "0.08 0.21 0.30 1/201 5\n"
+        },
+        "unavailable": {
+          "/sys/fs/cgroup/cpu.pressure": "[Errno 2] No such file or directory: '/sys/fs/cgroup/cpu.pressure'"
+        }
+      },
+      "after": {
+        "at": "2026-10-23T03:25:49.825388+00:00",
+        "readable": {
+          "/sys/fs/cgroup/cpu.stat": "usage_usec 12766981556\nuser_usec 7220646722\nsystem_usec 5546334833\nnice_usec 0\nnr_periods 394129\nnr_throttled 4975\nthrottled_usec 1068419184\nnr_bursts 0\nburst_usec 0\n",
+          "/sys/fs/cgroup/cpu.max": "800000 100000\n",
+          "/proc/self/cgroup": "0::/\n",
+          "/proc/loadavg": "0.78 0.39 0.35 4/196 53\n"
+        },
+        "unavailable": {
+          "/sys/fs/cgroup/cpu.pressure": "[Errno 2] No such file or directory: '/sys/fs/cgroup/cpu.pressure'"
+        }
+      },
+      "wallSeconds": 44.19596160699439,
+      "exitCode": 0
+    }
+  ],
+  "originalResultSha256Preserved": "33833892362c4d87079a4ed43581a9e5695ab61c8f18d4da61798887489dd723"
+}

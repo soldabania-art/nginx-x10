@@ -10,3 +10,6 @@
 - Record configure flags, dependencies, compiled modules, source changes and binary identity with test evidence. Do not claim performance improvement without comparable measurements.
 - Do not commit private keys, credentials, build products or transient test prefixes. Run local fixtures on loopback with bounded child cleanup.
 - Maintain x10/PLAN.md, x10/STATUS.md and the per-file review ledger. Unverified observations are hypotheses, not vulnerability announcements or completed features.
+- Run `node x10/test/all.mjs --official` for the current native development profile. Keep build/source identity checks and explicit upstream skips/TODOs intact.
+- The local controller confirms sampled generation/health after reload. Do not describe it as blue-green isolation, an all-traffic atomic cutover, or recovery from every crash point.
+- Retain unfavorable benchmark data and identical-binary controls. The current Node loopback measurements have substantial unexplained variance and do not establish performance acceptance.

@@ -1,3 +1,16 @@
+# NGINX X10 — native development
+
+An independent NGINX Open Source fork focused on compatibility, verified
+correctness fixes and measured operational improvements. Start with
+[the X10 guide](x10/README.md), [verified status](x10/STATUS.md),
+[local native control](x10/control/README.md) and [the development plan](x10/PLAN.md).
+
+This branch is a development candidate. Full compatibility and a 10× performance
+gain have not been established. The original upstream introduction follows;
+its release guidance describes upstream NGINX, not an X10 production release.
+
+---
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/9335b488-ffcc-4157-8364-2370a0b70ad0">
   <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/3a7eeb08-1133-47f5-859c-fad4f5a6a013">

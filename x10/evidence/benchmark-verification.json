@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-benchmark-driver-acceptance",
+  "success": true,
+  "checkedAt": "2026-10-23T03:02:47.449Z",
+  "driverSha256": "3196eeaf1fc9ff07adff2a0b442a10bb7e12fa61129d094da681b44de64190b3",
+  "checks": [
+    {
+      "name": "short-positive-real-native-comparison",
+      "passed": true,
+      "samples": 8,
+      "admissionDurationMs": 100
+    },
+    {
+      "name": "incomparable-profile-rejected-before-traffic",
+      "passed": true,
+      "exitCode": 1,
+      "error": "Build profiles differ: compilerFlags"
+    },
+    {
+      "name": "sigterm-during-active-native-sample-cleans-child",
+      "passed": true,
+      "exitCode": 143,
+      "samplesStarted": 1,
+      "nativeExitCodes": [
+        0
+      ],
+      "observedNativeChildGone": true
+    },
+    {
+      "name": "manifest-byte-change-during-run-invalidates-result",
+      "passed": true,
+      "exitCode": 1,
+      "identityErrors": [
+        "baseline manifest changed"
+      ]
+    }
+  ],
+  "scope": "Bounded local smoke and rejection/cleanup acceptance; not a performance result. Temporary manifest copies only; native binaries and recorded build manifests unchanged."
+}

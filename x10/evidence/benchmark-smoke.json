@@ -1,0 +1,1001 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-nginx-local-comparison",
+  "startedAt": "2026-10-23T03:00:32.732Z",
+  "success": true,
+  "options": {
+    "baseline": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+    "candidate": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+    "baselineManifest": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-reference.json",
+    "candidateManifest": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-fixed.json",
+    "durationMs": 100,
+    "warmupMs": 50,
+    "repetitions": 2,
+    "concurrency": [
+      1
+    ]
+  },
+  "environment": {
+    "platform": "linux",
+    "release": "6.18.55",
+    "architecture": "x64",
+    "node": "v24.19.0",
+    "logicalCpus": 9,
+    "availableParallelism": 8,
+    "totalMemoryBytes": 10451435520,
+    "nativeCpuTicksPerSecond": 100,
+    "pageBytes": 4096,
+    "allowedCpuList": "0-8"
+  },
+  "methodology": {
+    "nativeConfiguration": "Identical config and prefix, daemon off, master_process off, one native process at a time",
+    "transport": "Loopback HTTP/1.1, keepalive, closed loop, one outstanding request per client lane, no pipelining",
+    "workload": "Static file sendfile on and native reverse proxy, exact 1024-byte response verified for every completed request",
+    "order": "For every workload/concurrency pair: even repetition baseline then candidate; odd repetition candidate then baseline",
+    "timing": "Warmup excluded; requests admitted until the measured deadline; all admitted requests drain; throughput denominator includes drain",
+    "latency": "Nearest-rank quantiles of successful full-response client durations within each sample; no cross-sample pooled quantiles",
+    "resources": "Linux /proc single native PID user/system ticks; RSS sampled every 25ms, not a true peak; separate Node self CPU includes both generator and upstream fixture"
+  },
+  "limitations": [
+    "Synthetic short local smoke comparison; no confidence interval, regression threshold or global speedup claim.",
+    "Closed-loop load and a single Node event loop can be the bottleneck; it drives clients and proxy upstream on the same host.",
+    "Host scheduling and other workloads are uncontrolled; balanced order reduces but does not remove noise.",
+    "Single-process master-off execution does not measure production multiworker scaling, reloads, TLS, HTTP2/3, QUIC, mail or disk-cold workloads.",
+    "Native CPU uses discrete scheduler ticks, and RSS sampling can miss peaks. Setup/warmup CPU is outside the measured interval.",
+    "The candidate QUIC parser fix is not exercised by these HTTP1 workloads. Ratios are observations, not evidence that the fix speeds these workloads up."
+  ],
+  "runs": [
+    {
+      "index": 0,
+      "binary": "baseline",
+      "workload": "static",
+      "concurrency": 1,
+      "repetition": 0,
+      "warmup": {
+        "admissionDurationMs": 50,
+        "elapsedIncludingDrainMs": 50.23943999999997,
+        "successfulResponses": 99,
+        "failedRequests": 0,
+        "attemptedRequests": 99,
+        "successfulRequestsPerSecond": 1970.5633661521715,
+        "keepaliveReusedRequests": 98,
+        "latencyMs": null,
+        "errorExamples": []
+      },
+      "traffic": {
+        "admissionDurationMs": 100,
+        "elapsedIncludingDrainMs": 100.206839,
+        "successfulResponses": 366,
+        "failedRequests": 0,
+        "attemptedRequests": 366,
+        "successfulRequestsPerSecond": 3652.445318627404,
+        "keepaliveReusedRequests": 366,
+        "latencyMs": {
+          "count": 366,
+          "p50": 0.18523699999997234,
+          "p95": 0.5743249999999875,
+          "p99": 1.210458000000017,
+          "max": 2.611891999999955
+        },
+        "errorExamples": []
+      },
+      "resources": {
+        "native": {
+          "processMode": "single_process_master_off",
+          "userCpuMs": 0,
+          "systemCpuMs": 10,
+          "counterIdentity": "Direct child matched by /proc PPid and NSpid; starttime checked throughout sampling",
+          "totalCpuMs": 10,
+          "cpuPercentOfOneLogicalCpu": 9.979358794063947,
+          "rssBytes": {
+            "first": 5709824,
+            "last": 5709824,
+            "sampledMax": 5709824,
+            "sampleCount": 6,
+            "nominalSampleIntervalMs": 25
+          },
+          "samplingErrors": []
+        },
+        "nodeDriverAndUpstream": {
+          "userCpuMs": 81.519,
+          "systemCpuMs": 23
+        },
+        "hostLoadAverage": {
+          "before": [
+            0.46,
+            0.46,
+            0.23
+          ],
+          "after": [
+            0.46,
+            0.46,
+            0.23
+          ]
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 1,
+      "binary": "candidate",
+      "workload": "static",
+      "concurrency": 1,
+      "repetition": 0,
+      "warmup": {
+        "admissionDurationMs": 50,
+        "elapsedIncludingDrainMs": 50.053686000000084,
+        "successfulResponses": 107,
+        "failedRequests": 0,
+        "attemptedRequests": 107,
+        "successfulRequestsPerSecond": 2137.7047037055336,
+        "keepaliveReusedRequests": 106,
+        "latencyMs": null,
+        "errorExamples": []
+      },
+      "traffic": {
+        "admissionDurationMs": 100,
+        "elapsedIncludingDrainMs": 100.26423900000009,
+        "successfulResponses": 410,
+        "failedRequests": 0,
+        "attemptedRequests": 410,
+        "successfulRequestsPerSecond": 4089.194752677469,
+        "keepaliveReusedRequests": 410,
+        "latencyMs": {
+          "count": 410,
+          "p50": 0.14661799999998948,
+          "p95": 0.6031150000000025,
+          "p99": 1.3446480000000065,
+          "max": 2.5403949999999895
+        },
+        "errorExamples": []
+      },
+      "resources": {
+        "native": {
+          "processMode": "single_process_master_off",
+          "userCpuMs": 0,
+          "systemCpuMs": 20,
+          "counterIdentity": "Direct child matched by /proc PPid and NSpid; starttime checked throughout sampling",
+          "totalCpuMs": 20,
+          "cpuPercentOfOneLogicalCpu": 19.94729147647546,
+          "rssBytes": {
+            "first": 5586944,
+            "last": 5586944,
+            "sampledMax": 5586944,
+            "sampleCount": 6,
+            "nominalSampleIntervalMs": 25
+          },
+          "samplingErrors": []
+        },
+        "nodeDriverAndUpstream": {
+          "userCpuMs": 92.803,
+          "systemCpuMs": 16.994
+        },
+        "hostLoadAverage": {
+          "before": [
+            0.46,
+            0.46,
+            0.23
+          ],
+          "after": [
+            0.46,
+            0.46,
+            0.23
+          ]
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 2,
+      "binary": "candidate",
+      "workload": "static",
+      "concurrency": 1,
+      "repetition": 1,
+      "warmup": {
+        "admissionDurationMs": 50,
+        "elapsedIncludingDrainMs": 50.012741000000005,
+        "successfulResponses": 295,
+        "failedRequests": 0,
+        "attemptedRequests": 295,
+        "successfulRequestsPerSecond": 5898.496945008472,
+        "keepaliveReusedRequests": 294,
+        "latencyMs": null,
+        "errorExamples": []
+      },
+      "traffic": {
+        "admissionDurationMs": 100,
+        "elapsedIncludingDrainMs": 101.38968299999999,
+        "successfulResponses": 485,
+        "failedRequests": 0,
+        "attemptedRequests": 485,
+        "successfulRequestsPerSecond": 4783.524177701592,
+        "keepaliveReusedRequests": 485,
+        "latencyMs": {
+          "count": 485,
+          "p50": 0.09992399999998725,
+          "p95": 0.47109899999998106,
+          "p99": 0.9558719999999994,
+          "max": 12.359195
+        },
+        "errorExamples": []
+      },
+      "resources": {
+        "native": {
+          "processMode": "single_process_master_off",
+          "userCpuMs": 0,
+          "systemCpuMs": 10,
+          "counterIdentity": "Direct child matched by /proc PPid and NSpid; starttime checked throughout sampling",
+          "totalCpuMs": 10,
+          "cpuPercentOfOneLogicalCpu": 9.862936448869261,
+          "rssBytes": {
+            "first": 5541888,
+            "last": 5541888,
+            "sampledMax": 5541888,
+            "sampleCount": 5,
+            "nominalSampleIntervalMs": 25
+          },
+          "samplingErrors": []
+        },
+        "nodeDriverAndUpstream": {
+          "userCpuMs": 71.475,
+          "systemCpuMs": 26.286
+        },
+        "hostLoadAverage": {
+          "before": [
+            0.46,
+            0.46,
+            0.23
+          ],
+          "after": [
+            0.46,
+            0.46,
+            0.23
+          ]
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 3,
+      "binary": "baseline",
+      "workload": "static",
+      "concurrency": 1,
+      "repetition": 1,
+      "warmup": {
+        "admissionDurationMs": 50,
+        "elapsedIncludingDrainMs": 50.33439599999997,
+        "successfulResponses": 297,
+        "failedRequests": 0,
+        "attemptedRequests": 297,
+        "successfulRequestsPerSecond": 5900.537676065492,
+        "keepaliveReusedRequests": 296,
+        "latencyMs": null,
+        "errorExamples": []
+      },
+      "traffic": {
+        "admissionDurationMs": 100,
+        "elapsedIncludingDrainMs": 100.06635099999994,
+        "successfulResponses": 621,
+        "failedRequests": 0,
+        "attemptedRequests": 621,
+        "successfulRequestsPerSecond": 6205.8823350119,
+        "keepaliveReusedRequests": 621,
+        "latencyMs": {
+          "count": 621,
+          "p50": 0.10028299999999035,
+          "p95": 0.38228400000002694,
+          "p99": 0.7867100000000846,
+          "max": 1.130049999999983
+        },
+        "errorExamples": []
+      },
+      "resources": {
+        "native": {
+          "processMode": "single_process_master_off",
+          "userCpuMs": 10,
+          "systemCpuMs": 10,
+          "counterIdentity": "Direct child matched by /proc PPid and NSpid; starttime checked throughout sampling",
+          "totalCpuMs": 20,
+          "cpuPercentOfOneLogicalCpu": 19.98673859907214,
+          "rssBytes": {
+            "first": 5632000,
+            "last": 5632000,
+            "sampledMax": 5632000,
+            "sampleCount": 6,
+            "nominalSampleIntervalMs": 25
+          },
+          "samplingErrors": []
+        },
+        "nodeDriverAndUpstream": {
+          "userCpuMs": 70.077,
+          "systemCpuMs": 18.227
+        },
+        "hostLoadAverage": {
+          "before": [
+            0.46,
+            0.46,
+            0.23
+          ],
+          "after": [
+            0.46,
+            0.46,
+            0.23
+          ]
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 4,
+      "binary": "baseline",
+      "workload": "proxy",
+      "concurrency": 1,
+      "repetition": 0,
+      "warmup": {
+        "admissionDurationMs": 50,
+        "elapsedIncludingDrainMs": 50.765677000000096,
+        "successfulResponses": 115,
+        "failedRequests": 0,
+        "attemptedRequests": 115,
+        "successfulRequestsPerSecond": 2265.3100834250627,
+        "keepaliveReusedRequests": 114,
+        "latencyMs": null,
+        "errorExamples": []
+      },
+      "traffic": {
+        "admissionDurationMs": 100,
+        "elapsedIncludingDrainMs": 100.1703379999999,
+        "successfulResponses": 304,
+        "failedRequests": 0,
+        "attemptedRequests": 304,
+        "successfulRequestsPerSecond": 3034.8305303711795,
+        "keepaliveReusedRequests": 304,
+        "latencyMs": {
+          "count": 304,
+          "p50": 0.22959700000001249,
+          "p95": 0.8202630000000681,
+          "p99": 1.313122999999905,
+          "max": 2.1264249999999265
+        },
+        "errorExamples": []
+      },
+      "resources": {
+        "native": {
+          "processMode": "single_process_master_off",
+          "userCpuMs": 10,
+          "systemCpuMs": 0,
+          "counterIdentity": "Direct child matched by /proc PPid and NSpid; starttime checked throughout sampling",
+          "totalCpuMs": 10,
+          "cpuPercentOfOneLogicalCpu": 9.98299516569467,
+          "rssBytes": {
+            "first": 5677056,
+            "last": 5677056,
+            "sampledMax": 5677056,
+            "sampleCount": 6,
+            "nominalSampleIntervalMs": 25
+          },
+          "samplingErrors": []
+        },
+        "nodeDriverAndUpstream": {
+          "userCpuMs": 93.245,
+          "systemCpuMs": 14.044
+        },
+        "hostLoadAverage": {
+          "before": [
+            0.46,
+            0.46,
+            0.23
+          ],
+          "after": [
+            0.46,
+            0.46,
+            0.23
+          ]
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 5,
+      "binary": "candidate",
+      "workload": "proxy",
+      "concurrency": 1,
+      "repetition": 0,
+      "warmup": {
+        "admissionDurationMs": 50,
+        "elapsedIncludingDrainMs": 50.79465099999993,
+        "successfulResponses": 128,
+        "failedRequests": 0,
+        "attemptedRequests": 128,
+        "successfulRequestsPerSecond": 2519.950378239633,
+        "keepaliveReusedRequests": 127,
+        "latencyMs": null,
+        "errorExamples": []
+      },
+      "traffic": {
+        "admissionDurationMs": 100,
+        "elapsedIncludingDrainMs": 100.29566099999988,
+        "successfulResponses": 244,
+        "failedRequests": 0,
+        "attemptedRequests": 244,
+        "successfulRequestsPerSecond": 2432.807138087462,
+        "keepaliveReusedRequests": 244,
+        "latencyMs": {
+          "count": 244,
+          "p50": 0.22631299999989096,
+          "p95": 1.4204360000001088,
+          "p99": 2.115613999999823,
+          "max": 2.459105000000136
+        },
+        "errorExamples": []
+      },
+      "resources": {
+        "native": {
+          "processMode": "single_process_master_off",
+          "userCpuMs": 0,
+          "systemCpuMs": 10,
+          "counterIdentity": "Direct child matched by /proc PPid and NSpid; starttime checked throughout sampling",
+          "totalCpuMs": 10,
+          "cpuPercentOfOneLogicalCpu": 9.9705210577355,
+          "rssBytes": {
+            "first": 5525504,
+            "last": 5525504,
+            "sampledMax": 5525504,
+            "sampleCount": 6,
+            "nominalSampleIntervalMs": 25
+          },
+          "samplingErrors": []
+        },
+        "nodeDriverAndUpstream": {
+          "userCpuMs": 75.991,
+          "systemCpuMs": 12.415
+        },
+        "hostLoadAverage": {
+          "before": [
+            0.46,
+            0.46,
+            0.23
+          ],
+          "after": [
+            0.46,
+            0.46,
+            0.23
+          ]
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 6,
+      "binary": "candidate",
+      "workload": "proxy",
+      "concurrency": 1,
+      "repetition": 1,
+      "warmup": {
+        "admissionDurationMs": 50,
+        "elapsedIncludingDrainMs": 50.022281999999905,
+        "successfulResponses": 147,
+        "failedRequests": 0,
+        "attemptedRequests": 147,
+        "successfulRequestsPerSecond": 2938.6904020092543,
+        "keepaliveReusedRequests": 146,
+        "latencyMs": null,
+        "errorExamples": []
+      },
+      "traffic": {
+        "admissionDurationMs": 100,
+        "elapsedIncludingDrainMs": 100.0903430000003,
+        "successfulResponses": 338,
+        "failedRequests": 0,
+        "attemptedRequests": 338,
+        "successfulRequestsPerSecond": 3376.9491628178253,
+        "keepaliveReusedRequests": 338,
+        "latencyMs": {
+          "count": 338,
+          "p50": 0.1816119999998591,
+          "p95": 0.681887000000188,
+          "p99": 1.5518549999997049,
+          "max": 3.0433389999998326
+        },
+        "errorExamples": []
+      },
+      "resources": {
+        "native": {
+          "processMode": "single_process_master_off",
+          "userCpuMs": 10,
+          "systemCpuMs": 20,
+          "counterIdentity": "Direct child matched by /proc PPid and NSpid; starttime checked throughout sampling",
+          "totalCpuMs": 30,
+          "cpuPercentOfOneLogicalCpu": 29.97292156347182,
+          "rssBytes": {
+            "first": 5701632,
+            "last": 5701632,
+            "sampledMax": 5701632,
+            "sampleCount": 6,
+            "nominalSampleIntervalMs": 25
+          },
+          "samplingErrors": []
+        },
+        "nodeDriverAndUpstream": {
+          "userCpuMs": 73.799,
+          "systemCpuMs": 2.774
+        },
+        "hostLoadAverage": {
+          "before": [
+            0.46,
+            0.46,
+            0.23
+          ],
+          "after": [
+            0.46,
+            0.46,
+            0.23
+          ]
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 7,
+      "binary": "baseline",
+      "workload": "proxy",
+      "concurrency": 1,
+      "repetition": 1,
+      "warmup": {
+        "admissionDurationMs": 50,
+        "elapsedIncludingDrainMs": 50.16841699999986,
+        "successfulResponses": 153,
+        "failedRequests": 0,
+        "attemptedRequests": 153,
+        "successfulRequestsPerSecond": 3049.7274809368696,
+        "keepaliveReusedRequests": 152,
+        "latencyMs": null,
+        "errorExamples": []
+      },
+      "traffic": {
+        "admissionDurationMs": 100,
+        "elapsedIncludingDrainMs": 100.14590099999987,
+        "successfulResponses": 393,
+        "failedRequests": 0,
+        "attemptedRequests": 393,
+        "successfulRequestsPerSecond": 3924.274444342964,
+        "keepaliveReusedRequests": 393,
+        "latencyMs": {
+          "count": 393,
+          "p50": 0.1566299999999501,
+          "p95": 0.5821970000001784,
+          "p99": 1.0192990000000464,
+          "max": 4.549833000000035
+        },
+        "errorExamples": []
+      },
+      "resources": {
+        "native": {
+          "processMode": "single_process_master_off",
+          "userCpuMs": 10,
+          "systemCpuMs": 10,
+          "counterIdentity": "Direct child matched by /proc PPid and NSpid; starttime checked throughout sampling",
+          "totalCpuMs": 20,
+          "cpuPercentOfOneLogicalCpu": 19.970862312177935,
+          "rssBytes": {
+            "first": 5578752,
+            "last": 5578752,
+            "sampledMax": 5578752,
+            "sampleCount": 6,
+            "nominalSampleIntervalMs": 25
+          },
+          "samplingErrors": []
+        },
+        "nodeDriverAndUpstream": {
+          "userCpuMs": 97.859,
+          "systemCpuMs": 17.094
+        },
+        "hostLoadAverage": {
+          "before": [
+            0.46,
+            0.46,
+            0.23
+          ],
+          "after": [
+            0.46,
+            0.46,
+            0.23
+          ]
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    }
+  ],
+  "cleanupErrors": [],
+  "identities": {
+    "baseline": {
+      "label": "baseline",
+      "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+      "sha256": "adf05f3088bf8ee1ed7c886e424a2d92258323dd78e036276b41e009fbaf634e",
+      "bytes": 8547008,
+      "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "normalizedVersion": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)\nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=<path> --prefix=<path> --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "manifest": {
+        "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-reference.json",
+        "sha256": "6e6b94fe9541d65eaa6ae61e7a1784d277d24a23bf7049cebb55abcc04fdca44",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "checkoutRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "trackedChanges": [],
+        "sourceChangesFromUpstream": [],
+        "sourceDiffSha256": null,
+        "compiler": "cc",
+        "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+        "dependencies": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        },
+        "compiledModules": [
+          "ngx_core_module",
+          "ngx_errlog_module",
+          "ngx_conf_module",
+          "ngx_openssl_module",
+          "ngx_openssl_cache_module",
+          "ngx_quic_module",
+          "ngx_quic_bpf_module",
+          "ngx_regex_module",
+          "ngx_events_module",
+          "ngx_event_core_module",
+          "ngx_epoll_module",
+          "ngx_thread_pool_module",
+          "ngx_http_module",
+          "ngx_http_core_module",
+          "ngx_http_log_module",
+          "ngx_http_upstream_module",
+          "ngx_http_v2_module",
+          "ngx_http_v3_module",
+          "ngx_http_static_module",
+          "ngx_http_gzip_static_module",
+          "ngx_http_dav_module",
+          "ngx_http_autoindex_module",
+          "ngx_http_index_module",
+          "ngx_http_mirror_module",
+          "ngx_http_try_files_module",
+          "ngx_http_auth_request_module",
+          "ngx_http_auth_basic_module",
+          "ngx_http_access_module",
+          "ngx_http_limit_conn_module",
+          "ngx_http_limit_req_module",
+          "ngx_http_realip_module",
+          "ngx_http_geo_module",
+          "ngx_http_map_module",
+          "ngx_http_split_clients_module",
+          "ngx_http_referer_module",
+          "ngx_http_rewrite_module",
+          "ngx_http_ssl_module",
+          "ngx_http_proxy_module",
+          "ngx_http_fastcgi_module",
+          "ngx_http_uwsgi_module",
+          "ngx_http_scgi_module",
+          "ngx_http_grpc_module",
+          "ngx_http_proxy_v2_module",
+          "ngx_http_tunnel_module",
+          "ngx_http_memcached_module",
+          "ngx_http_empty_gif_module",
+          "ngx_http_browser_module",
+          "ngx_http_upstream_hash_module",
+          "ngx_http_upstream_ip_hash_module",
+          "ngx_http_upstream_least_conn_module",
+          "ngx_http_upstream_least_time_module",
+          "ngx_http_upstream_random_module",
+          "ngx_http_upstream_keepalive_module",
+          "ngx_http_upstream_zone_module",
+          "ngx_http_upstream_sticky_module",
+          "ngx_http_stub_status_module",
+          "ngx_http_write_filter_module",
+          "ngx_http_header_filter_module",
+          "ngx_http_chunked_filter_module",
+          "ngx_http_v2_filter_module",
+          "ngx_http_v3_filter_module",
+          "ngx_http_range_header_filter_module",
+          "ngx_http_gzip_filter_module",
+          "ngx_http_postpone_filter_module",
+          "ngx_http_ssi_filter_module",
+          "ngx_http_charset_filter_module",
+          "ngx_http_sub_filter_module",
+          "ngx_http_addition_filter_module",
+          "ngx_http_gunzip_filter_module",
+          "ngx_http_userid_filter_module",
+          "ngx_http_headers_filter_module",
+          "ngx_http_copy_filter_module",
+          "ngx_http_range_body_filter_module",
+          "ngx_http_not_modified_filter_module",
+          "ngx_http_slice_filter_module",
+          "ngx_mail_module",
+          "ngx_mail_core_module",
+          "ngx_mail_ssl_module",
+          "ngx_mail_pop3_module",
+          "ngx_mail_imap_module",
+          "ngx_mail_smtp_module",
+          "ngx_mail_auth_http_module",
+          "ngx_mail_proxy_module",
+          "ngx_mail_realip_module",
+          "ngx_stream_module",
+          "ngx_stream_core_module",
+          "ngx_stream_log_module",
+          "ngx_stream_proxy_module",
+          "ngx_stream_upstream_module",
+          "ngx_stream_write_filter_module",
+          "ngx_stream_ssl_module",
+          "ngx_stream_limit_conn_module",
+          "ngx_stream_access_module",
+          "ngx_stream_geo_module",
+          "ngx_stream_map_module",
+          "ngx_stream_split_clients_module",
+          "ngx_stream_return_module",
+          "ngx_stream_pass_module",
+          "ngx_stream_set_module",
+          "ngx_stream_upstream_hash_module",
+          "ngx_stream_upstream_least_conn_module",
+          "ngx_stream_upstream_least_time_module",
+          "ngx_stream_upstream_random_module",
+          "ngx_stream_upstream_zone_module",
+          "ngx_stream_ssl_preread_module"
+        ]
+      }
+    },
+    "candidate": {
+      "label": "candidate",
+      "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+      "sha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+      "bytes": 8547024,
+      "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "normalizedVersion": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)\nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=<path> --prefix=<path> --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "manifest": {
+        "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-fixed.json",
+        "sha256": "59549ab01e117ebf8dfc10e1aa384b55eba5d7e0ad93ab297ffa1da5a9bf2d24",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "checkoutRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "trackedChanges": [
+          "src/event/quic/ngx_event_quic_transport.c"
+        ],
+        "sourceChangesFromUpstream": [
+          "src/event/quic/ngx_event_quic_transport.c"
+        ],
+        "sourceDiffSha256": "e39c9727a66feae3390301c0718438dc00182a28b607e6156a2b6d059f65ba64",
+        "compiler": "cc",
+        "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+        "dependencies": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        },
+        "compiledModules": [
+          "ngx_core_module",
+          "ngx_errlog_module",
+          "ngx_conf_module",
+          "ngx_openssl_module",
+          "ngx_openssl_cache_module",
+          "ngx_quic_module",
+          "ngx_quic_bpf_module",
+          "ngx_regex_module",
+          "ngx_events_module",
+          "ngx_event_core_module",
+          "ngx_epoll_module",
+          "ngx_thread_pool_module",
+          "ngx_http_module",
+          "ngx_http_core_module",
+          "ngx_http_log_module",
+          "ngx_http_upstream_module",
+          "ngx_http_v2_module",
+          "ngx_http_v3_module",
+          "ngx_http_static_module",
+          "ngx_http_gzip_static_module",
+          "ngx_http_dav_module",
+          "ngx_http_autoindex_module",
+          "ngx_http_index_module",
+          "ngx_http_mirror_module",
+          "ngx_http_try_files_module",
+          "ngx_http_auth_request_module",
+          "ngx_http_auth_basic_module",
+          "ngx_http_access_module",
+          "ngx_http_limit_conn_module",
+          "ngx_http_limit_req_module",
+          "ngx_http_realip_module",
+          "ngx_http_geo_module",
+          "ngx_http_map_module",
+          "ngx_http_split_clients_module",
+          "ngx_http_referer_module",
+          "ngx_http_rewrite_module",
+          "ngx_http_ssl_module",
+          "ngx_http_proxy_module",
+          "ngx_http_fastcgi_module",
+          "ngx_http_uwsgi_module",
+          "ngx_http_scgi_module",
+          "ngx_http_grpc_module",
+          "ngx_http_proxy_v2_module",
+          "ngx_http_tunnel_module",
+          "ngx_http_memcached_module",
+          "ngx_http_empty_gif_module",
+          "ngx_http_browser_module",
+          "ngx_http_upstream_hash_module",
+          "ngx_http_upstream_ip_hash_module",
+          "ngx_http_upstream_least_conn_module",
+          "ngx_http_upstream_least_time_module",
+          "ngx_http_upstream_random_module",
+          "ngx_http_upstream_keepalive_module",
+          "ngx_http_upstream_zone_module",
+          "ngx_http_upstream_sticky_module",
+          "ngx_http_stub_status_module",
+          "ngx_http_write_filter_module",
+          "ngx_http_header_filter_module",
+          "ngx_http_chunked_filter_module",
+          "ngx_http_v2_filter_module",
+          "ngx_http_v3_filter_module",
+          "ngx_http_range_header_filter_module",
+          "ngx_http_gzip_filter_module",
+          "ngx_http_postpone_filter_module",
+          "ngx_http_ssi_filter_module",
+          "ngx_http_charset_filter_module",
+          "ngx_http_sub_filter_module",
+          "ngx_http_addition_filter_module",
+          "ngx_http_gunzip_filter_module",
+          "ngx_http_userid_filter_module",
+          "ngx_http_headers_filter_module",
+          "ngx_http_copy_filter_module",
+          "ngx_http_range_body_filter_module",
+          "ngx_http_not_modified_filter_module",
+          "ngx_http_slice_filter_module",
+          "ngx_mail_module",
+          "ngx_mail_core_module",
+          "ngx_mail_ssl_module",
+          "ngx_mail_pop3_module",
+          "ngx_mail_imap_module",
+          "ngx_mail_smtp_module",
+          "ngx_mail_auth_http_module",
+          "ngx_mail_proxy_module",
+          "ngx_mail_realip_module",
+          "ngx_stream_module",
+          "ngx_stream_core_module",
+          "ngx_stream_log_module",
+          "ngx_stream_proxy_module",
+          "ngx_stream_upstream_module",
+          "ngx_stream_write_filter_module",
+          "ngx_stream_ssl_module",
+          "ngx_stream_limit_conn_module",
+          "ngx_stream_access_module",
+          "ngx_stream_geo_module",
+          "ngx_stream_map_module",
+          "ngx_stream_split_clients_module",
+          "ngx_stream_return_module",
+          "ngx_stream_pass_module",
+          "ngx_stream_set_module",
+          "ngx_stream_upstream_hash_module",
+          "ngx_stream_upstream_least_conn_module",
+          "ngx_stream_upstream_least_time_module",
+          "ngx_stream_upstream_random_module",
+          "ngx_stream_upstream_zone_module",
+          "ngx_stream_ssl_preread_module"
+        ]
+      }
+    }
+  },
+  "profileComparison": {
+    "comparable": true,
+    "ignoredVersionFields": [
+      "configure --builddir path",
+      "configure --prefix path"
+    ],
+    "identitiesStableAtFinish": true
+  },
+  "payload": {
+    "bytes": 1024,
+    "sha256": "98dbc1cdac192018c78932d9523bc53ef4a1ce69d516240b3772ffa5a59e85c4"
+  },
+  "nativeConfigTemplate": "user \"root\";\ndaemon off;\nmaster_process off;\npid \"<private-prefix>/nginx.pid\";\nerror_log \"<private-prefix>/error.log\" warn;\nevents { worker_connections 1024; }\nhttp {\n  access_log off;\n  default_type application/octet-stream;\n  sendfile on;\n  tcp_nopush on;\n  keepalive_timeout 30s;\n  keepalive_requests 1000000;\n  client_body_temp_path \"<private-prefix>/body-temp\";\n  proxy_temp_path \"<private-prefix>/proxy-temp\";\n  upstream fixture { server 127.0.0.1:<upstream-port>; keepalive 128; }\n  server {\n    listen 127.0.0.1:<native-port>;\n    server_name localhost;\n    location = /static { alias \"<private-prefix>/payload.bin\"; }\n    location = /proxy {\n      proxy_http_version 1.1;\n      proxy_set_header Connection \"\";\n      proxy_connect_timeout 1s;\n      proxy_read_timeout 2s;\n      proxy_pass http://fixture;\n    }\n  }\n}\n",
+  "upstreamRequestsIncludingWarmups": 1822,
+  "summary": [
+    {
+      "workload": "static",
+      "concurrency": 1,
+      "binaries": {
+        "baseline": {
+          "samples": 2,
+          "requestsPerSecond": {
+            "arithmeticMean": 4929.163826819652,
+            "min": 3652.445318627404,
+            "max": 6205.8823350119
+          },
+          "failedRequests": 0
+        },
+        "candidate": {
+          "samples": 2,
+          "requestsPerSecond": {
+            "arithmeticMean": 4436.35946518953,
+            "min": 4089.194752677469,
+            "max": 4783.524177701592
+          },
+          "failedRequests": 0
+        }
+      },
+      "candidateToBaselineMeanThroughputRatio": 0.900022726177457
+    },
+    {
+      "workload": "proxy",
+      "concurrency": 1,
+      "binaries": {
+        "baseline": {
+          "samples": 2,
+          "requestsPerSecond": {
+            "arithmeticMean": 3479.552487357072,
+            "min": 3034.8305303711795,
+            "max": 3924.274444342964
+          },
+          "failedRequests": 0
+        },
+        "candidate": {
+          "samples": 2,
+          "requestsPerSecond": {
+            "arithmeticMean": 2904.8781504526437,
+            "min": 2432.807138087462,
+            "max": 3376.9491628178253
+          },
+          "failedRequests": 0
+        }
+      },
+      "candidateToBaselineMeanThroughputRatio": 0.8348424577607312
+    }
+  ],
+  "finishedAt": "2026-10-23T03:00:35.452Z"
+}

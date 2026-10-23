@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "repository": "https://github.com/nginx/nginx-tests.git",
+  "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+  "license": {
+    "spdx": "BSD-2-Clause",
+    "file": "LICENSE",
+    "sha256": "f10bbb4e25e9626e5233ff1731851857030e871660b916498758cdbc83e34fff",
+    "vendored": false
+  },
+  "defaultTimeoutSeconds": 20,
+  "timeoutOverridesSeconds": {
+    "upstream_least_time.t": 45
+  },
+  "selectionReason": "Curated compatibility sample for the x10 Linux build; unmodified upstream tests, not the complete official suite. Optional dependency skips are reported by upstream TAP.",
+  "families": {
+    "http-core": [
+      "http_location.t",
+      "http_uri.t",
+      "http_headers_multi.t",
+      "body_chunked.t",
+      "range.t",
+      "gzip.t",
+      "rewrite.t"
+    ],
+    "http-proxy-cache": [
+      "proxy.t",
+      "proxy_chunked.t",
+      "proxy_non_idempotent.t",
+      "proxy_keepalive.t",
+      "proxy_cache.t",
+      "proxy_cache_vary.t",
+      "proxy_cache_lock.t",
+      "proxy_h2.t"
+    ],
+    "protocol-adapters": [
+      "fastcgi.t",
+      "scgi.t",
+      "uwsgi.t",
+      "grpc.t"
+    ],
+    "http2": [
+      "h2.t",
+      "h2_trailers.t"
+    ],
+    "stream": [
+      "stream_proxy.t",
+      "stream_udp_proxy.t",
+      "stream_proxy_half_close.t",
+      "stream_upstream.t"
+    ],
+    "mail": [
+      "mail_capability.t",
+      "mail_imap.t",
+      "mail_pop3.t",
+      "mail_smtp.t"
+    ],
+    "limits-balancing-access": [
+      "limit_conn.t",
+      "limit_req.t",
+      "upstream.t",
+      "upstream_least_time.t",
+      "upstream_sticky.t",
+      "realip.t"
+    ]
+  }
+}

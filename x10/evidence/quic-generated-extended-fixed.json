@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "suite": "quic-generated-properties",
+  "startedAt": "2026-10-23T03:00:02.747809+00:00",
+  "source": "src/event/quic/ngx_event_quic_transport.c",
+  "sourceCheckout": "nginx-x10",
+  "sourceSha256": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a",
+  "harnessSha256": "877a3b230ca886ef5cadb86d41350557e28d507e7a105ec5ae149fb5c5bd5ac5",
+  "generatedConfigSha256": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+  "seed": 9000,
+  "randomCasesRequested": 10000,
+  "networkUsed": false,
+  "duplicatePolicy": "excluded_unchanged",
+  "scope": "Production transport-parameter parser with only logging stubbed; no handshake or apply-time semantic checks",
+  "limitations": [
+    "Six properties generate related inputs; case count is not independent protocol coverage",
+    "Numeric-value constraints enforced by ngx_quic_apply_transport_params are outside this parser fixture",
+    "64-bit Linux generated headers; no 32-bit, TLS-library or full QUIC interoperability claim",
+    "Fixed-seed bounded generation is not exhaustive fuzzing or a security proof",
+    "LeakSanitizer is explicitly disabled; memory-leak behavior is unverified"
+  ],
+  "nginxVersion": "1.31.9",
+  "checkoutRevision": "c9ed4985f370d0fa444cad974000cadbb9ed7703",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+  "compilerExecutable": "cc",
+  "compilerFlags": [
+    "-std=c99",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-unused-parameter",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-fsanitize=address,undefined",
+    "-fno-sanitize-recover=all",
+    "-fno-omit-frame-pointer"
+  ],
+  "sanitizers": {
+    "requested": "address,undefined",
+    "enabled": [
+      "address",
+      "undefined"
+    ],
+    "leakDetection": false,
+    "runtimeOptions": {
+      "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+      "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+    }
+  },
+  "compileExitCode": 0,
+  "compilerDiagnostics": "",
+  "executionExitCode": 0,
+  "sanitizerDiagnostics": "",
+  "failureExamples": [],
+  "properties": [
+    {
+      "name": "known_numeric_widths_and_nonminimal_encodings",
+      "cases": 7428,
+      "passed": 7428,
+      "failed": 0
+    },
+    {
+      "name": "unknown_full_width_ids_preserve_destination",
+      "cases": 2880,
+      "passed": 2880,
+      "failed": 0
+    },
+    {
+      "name": "unknown_opaque_values_are_not_interpreted",
+      "cases": 65,
+      "passed": 65,
+      "failed": 0
+    },
+    {
+      "name": "truncated_id_length_or_value_is_rejected",
+      "cases": 5118,
+      "passed": 5118,
+      "failed": 0
+    },
+    {
+      "name": "numeric_value_consumes_declared_field",
+      "cases": 3127,
+      "passed": 3127,
+      "failed": 0
+    },
+    {
+      "name": "server_only_ids_and_zero_length_option",
+      "cases": 49,
+      "passed": 49,
+      "failed": 0
+    }
+  ],
+  "strict": {
+    "cases": 18667,
+    "passed": 18667,
+    "failed": 0
+  },
+  "failureExamplesLimit": 16,
+  "failureExamplesPerPropertyLimit": 2,
+  "inputDigestFnv1a64": "bb803dca27764d1e",
+  "passed": true,
+  "sourceUnchangedDuringTest": true,
+  "finishedAt": "2026-10-23T03:00:04.586815+00:00"
+}
