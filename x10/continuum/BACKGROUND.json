@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-c1-acceptance-20261023T161811Z",
-    "owner": "root-hosted-checkpoint-coordinator",
-    "baseCommit": "193afe99f338b9435082b002f2b5e21eda058449",
-    "acquiredAtUTC": "2026-10-23T16:18:11.284147+00:00",
-    "expiresAtUTC": "2026-10-23T17:03:11.284147+00:00",
-    "coordinationOnly": true
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -28,15 +21,21 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/39979729141",
-    "continuumStage": "C1 accepted locally: authenticated real TLS1.3 handshake and record observation; migration not implemented",
+    "nativeCommit": "193afe99f338b9435082b002f2b5e21eda058449",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/39985217372",
+    "continuumStage": "C1 accepted locally and hosted: real authenticated TLS1.3 handshake and record observation only",
     "continuumNativeIntegration": false,
     "continuumEvidence": "x10/evidence/continuum-c1.json",
     "nativeHostedCI": {
       "state": "success",
-      "pushRun": 39979729141,
-      "scope": "Full native workflow including official aggregate, Unix gates, feature-off build and alpha packaging"
+      "implementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
+      "pushRun": 39985217372,
+      "pullRequestRun": 39985229565,
+      "nativeJobIDs": [
+        120522642931,
+        120522641946
+      ],
+      "scope": "Official native aggregate, Guard, required Unix transports/generations/operator, feature-off build and alpha package/checksum"
     },
     "previousContinuumImplementationCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
     "previousContinuumHostedCI": {
@@ -47,22 +46,38 @@
       "processTests": 7
     },
     "continuumHostedCI": {
-      "state": "pending-implementation-publication",
-      "expectedLocalTests": 22,
-      "scope": "13 observer tests plus9 runtime cases; separate from C0/native"
+      "state": "success",
+      "implementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
+      "pushRun": 39985217846,
+      "pullRequestRun": 39985229282,
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 22,
+      "c1Skipped": 0,
+      "researchJobIDs": [
+        120522614338,
+        120522654767
+      ]
     },
-    "continuumImplementationCommit": null,
-    "implementationIdentityRule": "Set actual implementation SHA after publication; per-file hashes in C1 evidence/ledger identify this snapshot",
+    "continuumImplementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
+    "implementationIdentityRule": "Runtime acceptance is tied to implementation193afe99; coordination-only successors retain unchanged source hashes",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
       "state": "success",
       "groups": 20,
       "evidence": "x10/evidence/continuum-c1-native-regression.json"
+    },
+    "previousNativeCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
+    "previousNativeHostedCI": {
+      "state": "success",
+      "pushRun": 39979729141,
+      "scope": "Full native workflow including official aggregate, Unix gates, feature-off build and alpha packaging"
     }
   },
   "pendingVerification": [
-    "C1 implementation SHA: research hosted checks22/C0core21/process7 and native workflow results pending publication",
-    "First scheduled cloud development run not verified; latest peek has no recorded run history"
+    "C2a pinned-source read-only inventory and safe-point implementation is next; export/import remains unimplemented",
+    "Current coordination-only successors are not new runtime acceptance; current PR base divergence conservatively reruns expensive profiles",
+    "First scheduled cloud development run has not been independently verified by recorded run history"
   ],
   "nextTasks": [
     {
@@ -72,13 +87,13 @@
     },
     {
       "id": "C1",
-      "state": "accepted-local-pending-hosted",
+      "state": "accepted-local-and-hosted-narrow-profile",
       "goal": "Real authenticated TLS1.3 endpoints and strict record observer; cleanup/cancellation and fail-closed denial evidence; no migration"
     },
     {
       "id": "C2",
-      "state": "next-after-C1-hosted",
-      "goal": "C2a read-only instrumentation of pinned OpenSSL source/build: directional sequences, key generations, pending buffers and control/retry obligations with explicit safe-point rejection; C2b semantic export/import only after inventory gate"
+      "state": "next",
+      "goal": "C2a read-only instrumentation of pinned OpenSSL source/build: directional next sequences, monitored app-key generations, private input/plaintext/output and control/retry obligations; unknown state rejects. Stale wpend metadata need not be zero, and KU getter NONE is not proof of completed control work. See C2A-NOTES.md. C2b semantic export/import follows only after inventory gate."
     },
     {
       "id": "C3",
@@ -111,5 +126,39 @@
       "scope": "Separate repository integration; not a passed technical test and not accepted on the owner behalf"
     }
   ],
-  "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission."
+  "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
+  "ownerWorkWindow": {
+    "requestedAtUTC": "2026-10-23T16:16:08Z",
+    "hours": 70,
+    "reportTargetAtUTC": "2026-10-26T14:16:08Z",
+    "goal": "Maximum verified development through pinned OpenSSL state gate, semantic continuation and then opt-in native integration; preserve all existing NGINX capabilities",
+    "completionIsEvidenceGated": true,
+    "fullReleaseIsNotGuaranteedByElapsedHours": true,
+    "spendingPolicyUnchanged": true,
+    "plan": "x10/continuum/PLAN.md"
+  },
+  "ciOptimizationHostedObservation": {
+    "implementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
+    "allFourNativeAndResearchPushAndPRRuns": "success",
+    "metadataCommit": "717957a4b643c571740c2397db48a6943c54a90f",
+    "metadataPush": {
+      "nativeRun": 39985716202,
+      "researchRun": 39985716339,
+      "scopeResult": "success",
+      "native": false,
+      "research": false,
+      "expensiveJobs": "skipped"
+    },
+    "metadataPullRequest": {
+      "nativeRun": 39985722462,
+      "researchRun": 39985722432,
+      "scopeResult": "success",
+      "native": true,
+      "research": true,
+      "reason": "event_or_git_unavailable",
+      "explanation": "Current PR base0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812 is not an ancestor of previous head193afe99; intentional conservative fail-closed rerun, not proof of metadata PR skipping"
+    },
+    "shaConcurrency": "Implementation jobs completed despite newer metadata SHA"
+  },
+  "nextTaskNotes": "x10/continuum/C2A-NOTES.md"
 }

@@ -228,12 +228,13 @@ TLS-library matrix и release maintenance потребуют отдельног�
 а не объявление завершёнными всех их требований или разных TLS releases.
 Один shared worker и ручной layout adapter остаются явным ограничением.
 
-## Checkpoint C1: локально 22/22, hosted pending
+## Checkpoint C1: локально и hosted 22/22
 
 Добавлены C/OpenSSL server, Node TLS client/relay, record observer и bounded
 `node x10/continuum/handshake-check.mjs`. Финальная матрица — **13 observer
 controls + 9 runtime cases = 22**. Итоговый локальный запуск root подтверждён:
-**22/22 PASS**, exit 0. Hosted C1 ожидает публикации и отдельного CI результата.
+**22/22 PASS**, exit 0. Hosted push/PR research и native для implementation
+`193afe99` завершились success; точные references — в [CHECKPOINT](CHECKPOINT.md).
 Девять runtime cases: два положительных обмена с/без server KeyUpdate,
 пять trust/profile отказов до application bytes и два фактических interrupt
 cleanup после native listening (SIGTERM/SIGINT, child exit, private PKI removal).
@@ -246,10 +247,35 @@ cleanup после native listening (SIGTERM/SIGINT, child exit, private PKI rem
 этим checkpoint не приняты. C0 counts сохраняются отдельно.
 
 Следующий bounded task — **C2a read-only instrumentation/inventory/safepoint**
-на pinned source по [OPENSSL-STATE.md](OPENSSL-STATE.md). Только после его
+на pinned source по [OPENSSL-STATE.md](OPENSSL-STATE.md) и
+[предварительным C2a notes](C2A-NOTES.md). Только после его
 приёмки решается допустимость первого exporter/importer, направления adapter
 и переносимого профиля. Public session APIs не подменяют этот gate.
 
 Не наращивать тысячи запусков toy fixture, панель, cluster или маркетинг
 вместо проверки этого основного неизвестного. Source/binary/version changes
 и ordinary drain/reconnect baseline остаются самостоятельными обязательствами.
+
+## Окно самостоятельной разработки: 70 часов
+
+Владелец 23 октября предоставил 70 часов самостоятельной разработки с
+помощниками и сохранением в Git. Целевой срез к возвращению владельца —
+**26 октября 2026, 14:16 UTC**. Это срок отчётного checkpoint, а не заранее
+доказанная готовность полного продукта. Денежный bootstrap режим сохранён.
+
+Порядок работы в этом окне:
+
+1. Завершить hosted приёмку C1 именно на implementation SHA, сохранив отдельно
+   пропуски, inherited repository checks и результаты разных test families.
+2. Реализовать C2a в изолированной закреплённой сборке OpenSSL: read-only probe,
+   inventory и bounded safepoint с отказом при неполном/неизвестном state.
+3. После этого gate реализовать C2b semantic export/import и показать тот же
+   поток после завершения source. Проверять nonce/sequence, key generations,
+   pending bytes и unsupported states; не подменять перенос reconnect/resumption.
+4. После успешного library gate начать узкий opt-in native NGINX adapter.
+   Завершить окно независимыми отрицательными проверками, identity/evidence
+   и ясным списком того, что пока не поддержано.
+
+Каждая следующая часть зависит от доказательств предыдущей. Неудача gate
+означает исследование причины и сохранение контрпримера; она не разрешает
+сократить обязательное TLS state или объявить промышленную готовность.

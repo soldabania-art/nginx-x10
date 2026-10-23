@@ -42,8 +42,9 @@ application-layout adapter. Сам C0 не выполняет TLS `close_notify`
 [Node TLS client и relay](handshake.mjs), [record observer](handshake-oracle.mjs)
 и bounded [aggregate runner](handshake-check.mjs). Итоговая матрица содержит
 **22 проверки**: 13 observer controls и 9 runtime cases. Итоговый локальный
-запуск root подтверждён: **22/22 PASS**, exit 0. Hosted C1 ожидает публикации
-и своего CI результата.
+запуск root подтверждён: **22/22 PASS**, exit 0. Hosted push/PR C1 и native
+проверки implementation `193afe99` завершились success; точные runs и
+границы приёмки — в [CHECKPOINT](CHECKPOINT.md).
 Это отдельный набор, его counts не прибавляются к C0 как доказательство миграции.
 
 Runtime cases: два положительных обмена, без KeyUpdate и с server KeyUpdate;

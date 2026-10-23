@@ -189,6 +189,9 @@ binary. `handshake-check.mjs` удерживает raw TAP внутри проц
 очищенные counts/exit facts. Реальные secrets, captures и содержимое failed
 assertions не включаются в публичные отчёты или Git.
 
-Hosted C1 пока pending: координатор должен опубликовать implementation, проверить
-run именно для его SHA и записать подтверждённый результат в `BACKGROUND.json`.
-C0 hosted acceptance выше сохраняется и не переносится автоматически на C1.
+Hosted C1 принят на implementation `193afe99`: оба research и оба native
+push/PR workflows завершились success. Exact SHA/run IDs записаны в
+`BACKGROUND.json` и [CHECKPOINT](CHECKPOINT.md). C0 acceptance сохранён отдельно.
+Metadata push действительно пропустил дорогие jobs. В текущем PR integration
+base не является предком прежнего head, поэтому conservative guard запускает
+оба профиля и при metadata synchronize; пропуск PR здесь не заявляется.
