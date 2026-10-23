@@ -52,12 +52,12 @@ jobs:
       - name: Native regressions and pinned official compatibility sample
         run: node x10/test/all.mjs --official > x10/.build/ci-evidence/checks.json
       - name: Verify native tenant cache contract experiment
-        run: node --test --test-reporter=tap x10/test/proof.test.mjs | tee x10/.build/ci-evidence/guard-kernel.tap
+        run: node --test --test-reporter=tap x10/test/proof.test.mjs > x10/.build/ci-evidence/guard-kernel.tap
       - name: Verify private Unix control transport
         run: |
           node x10/test/control-api-baseline.mjs --transport unix > x10/.build/ci-evidence/control-api-unix.json
           node x10/test/generations.mjs --transport unix > x10/.build/ci-evidence/generations-unix.json
-          X10_STATUS_TRANSPORT=unix node --test --test-reporter=tap x10/test/operator-status.test.mjs | tee x10/.build/ci-evidence/operator-status-unix.tap
+          X10_STATUS_TRANSPORT=unix node --test --test-reporter=tap x10/test/operator-status.test.mjs > x10/.build/ci-evidence/operator-status-unix.tap
       - name: Build profile without control API
         run: bash x10/test/control-disabled.sh --output x10/.build/ci-evidence/control-disabled.json
       - name: Package local Linux alpha
