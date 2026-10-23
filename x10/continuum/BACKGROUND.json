@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "project": "NGINX X10 / Continuum",
+  "branch": "x10-development",
+  "authority": "AGENTS.md and the owner-authorized Continuum development scope",
+  "executionLease": {
+    "runId": "interactive-continuum-c0-20261023T151658Z",
+    "owner": "interactive-root-coordinator",
+    "baseCommit": "0b6a87eac9af93607f47bba874007901b8125b30",
+    "acquiredAtUTC": "2026-10-23T15:16:58.486575+00:00",
+    "expiresAtUTC": "2026-10-23T16:01:58.486575+00:00",
+    "coordinationOnly": true
+  },
+  "leasePolicy": {
+    "maximumMinutes": 45,
+    "publishRequiresLiveLease": true,
+    "branchUpdate": "nonforce with expected_sha; reread and stop on conflict",
+    "releaseInCheckpoint": true,
+    "identity": "Public runId plus exact lease-commit ancestry; no credential or bearer token in the repository"
+  },
+  "automation": {
+    "state": "pending-configuration",
+    "cadence": "hourly bounded cloud development passes; not continuous execution",
+    "id": null
+  },
+  "acceptedCheckpoint": {
+    "nativeCommit": "0b6a87eac9af93607f47bba874007901b8125b30",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/39971890181",
+    "continuumStage": "no-accepted-runtime-result",
+    "continuumNativeIntegration": false
+  },
+  "pendingVerification": [
+    "C0 complete record/state tests and independent review",
+    "C0 same-TCP process fixture positive and negative controls",
+    "Hosted CI on published implementation SHA",
+    "Configure and verify hourly assistant automation"
+  ],
+  "nextTasks": [
+    {
+      "id": "C0",
+      "state": "in-progress",
+      "goal": "Bounded TLS 1.3 record engine, strict continuation-state model, independent vectors and a same-connection child-process transfer fixture"
+    },
+    {
+      "id": "C1",
+      "state": "pending",
+      "goal": "Reproduce real handshake interoperability with an independent TLS 1.3 client and review all exported protocol obligations"
+    },
+    {
+      "id": "C2",
+      "state": "pending",
+      "goal": "Instrument a pinned OpenSSL adapter; export/import the declared complete live TLS state across two changed layouts; reject unsupported states"
+    },
+    {
+      "id": "C3",
+      "state": "pending",
+      "goal": "Integrate opt-in with native NGINX and prove old workers and old TLS code fully exit after successful continuation"
+    },
+    {
+      "id": "C4",
+      "state": "pending",
+      "goal": "Held-out third-version adapter, adverse I/O/KeyUpdate/half-close tests, cost and overhead measurements"
+    }
+  ],
+  "money": {
+    "incrementalTargetUSD": 0,
+    "planningReserveUSD": 100,
+    "reserveIsNotPurchaseAuthorization": true,
+    "newPaidInfrastructureRequired": false
+  },
+  "publication": "Public source, plans and sanitized evidence only; no credentials, real traffic secrets, host identifiers or raw runtime logs",
+  "notifications": "Brief Russian result after meaningful change, verified checkpoint or new blocker; no repeated unchanged blocker notices"
+}
