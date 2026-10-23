@@ -244,3 +244,47 @@ remaining gates are preserved in [peer evidence](../evidence/continuum-c2a-peer-
 and [native evidence](../evidence/continuum-c2a-peer-key-update-native-regression.json).
 The previous85bc255 hosted receipt remains accepted separately. New exact
 implementation SHA/run IDs are pending after publication. No new spending.
+
+## Peer-requested KeyUpdate implementation hosted CI receipt
+
+Implementation: `2fac5b5496c702d9fea6ca127128f733b993af67`.
+Both research workflows completed success:
+[push40014631224](https://github.com/soldabania-art/nginx-x10/actions/runs/40014631224)
+and [PR40014641655](https://github.com/soldabania-art/nginx-x10/actions/runs/40014641655).
+Jobs120623485610 /120623533299 confirm core21, process7, C1 tests27 and
+C2a15 with no failures/skips/cancellations/TODO. C1 is18 synthetic oracle
+controls+9 runtime checks. C2a is12 ordinary actual-TLS scenarios,2 handled
+runtime-signal controls and1 no-TLS cached-source control. Hosted uses Node22
+and the canonical command; local Node24 and heldout identities are separate.
+
+Both full native workflows completed success:
+[push40014631185](https://github.com/soldabania-art/nginx-x10/actions/runs/40014631185)
+and [PR40014641688](https://github.com/soldabania-art/nginx-x10/actions/runs/40014641688).
+Jobs120623498669 /120623548086 completed native/official aggregate, tenant
+cache/Unix gates, feature-off build, alpha package and checksum. These hosted
+step results are distinct from local20-group counts and native binary identity.
+Whitespace40014641780, commit-message40014641627 and version40014641775 also
+succeeded. Inherited F5 CLA40014636478 failed separately; no agreement accepted.
+
+Original evidence retains its at-publication pending status; this receipt
+records subsequent exact implementation acceptance. Pending1/0 and completed
+1/1 observation retain refusals, not transfer grants. Both C endpoints use
+one OpenSSL3.0.13 pin. Full state inventory, semantic export/import, actual
+TLS-code release change and native NGINX continuation remain unimplemented.
+
+Next bounded task: same-operation actual WRITE retry completion with original
+pointer, contents and length, immutable refused/completed snapshots and exact
+receipt. A proposed bounded65536-byte attempt may fit the paused relay kernel
+window and fail to reach WANT_WRITE: that must remain unsupported/state-not-reached,
+not an acceptance or silent increase of observer limits. Both paused readers
+must resume before retry. Overlap/control/shutdown/usage limits follow.
+
+This receipt changes only BACKGROUND and this checkpoint over a separate
+verified live lease, then releases it. Runtime/workflow/economic/automation
+files and spending are unchanged. Per-file receipt ledger (SHA256):
+
+- BACKGROUND before `921a29e16bf8ba241c0a3e067fba57ad8cc114ef7ba7f1e44777e808bed1ba9e`; after `88655a62678eec55c6dc76567515732e9a28f41f53e4c71ba8f5d97ac56ab0dd`.
+- C2A-CHECKPOINT before `4335a8222f11c2c9014d4fc0a904c4017daf9823602b2aec2739351c4594145e`; its result is identified by Git tree/commit to avoid recursive own digest.
+
+Only allowlisted counts, hashes and workflow/job IDs are retained; no raw
+runtime logs, host paths, process IDs, PKI or session material.
