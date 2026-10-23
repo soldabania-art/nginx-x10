@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "suite": "continuum-c0-native-regression",
+  "date": "2026-10-23",
+  "sourceBaselineCommit": "0b6a87eac9af93607f47bba874007901b8125b30",
+  "passed": true,
+  "nativeSourceChanged": false,
+  "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+  "sourceDiffSha256": "b511aad052c1abb29a514660ae01473e1bfaadb941026d70e9019c2245ddeea5",
+  "groups": [
+    {
+      "name": "http-tls-http2-reload",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "stream-mail",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "mail-tls-starttls",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "protocol-adapters",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "http3-interop",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "http3-head-independent-client",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-features",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "quic-regression",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "quic-generated-sanitized",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "quic-frame-boundaries",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-load-client-verification",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "managed-native-control",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "operator-status",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "local-alpha-lifecycle",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "listener-observer-boundaries",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "reload-listener-observation",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-control-api",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-process-generations",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-generation-boundaries",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "official-nginx-tests",
+      "passed": true,
+      "exitCode": 0
+    }
+  ],
+  "official": {
+    "files": 35,
+    "filesPassed": 32,
+    "filesSkipped": 3,
+    "filesFailed": 0,
+    "assertions": {
+      "run": 1109,
+      "passed": 1083,
+      "failed": 0,
+      "skipped": 25,
+      "todoFailed": 1,
+      "todoPassed": 0
+    }
+  },
+  "rawRecordSha256": "ef65ac3f7f37ac9d14b75c6ded18a1fb6e2a31af6790ea2ee0f0b1bb730a1cd5",
+  "limitations": [
+    "Native regression only; does not exercise Continuum record/state or process handover.",
+    "The curated official sample preserves explicit dependency skips and expected TODO.",
+    "No performance or production acceptance follows."
+  ],
+  "publication": "Allowlisted fields only; no raw host paths, PIDs, environment or runtime payloads."
+}

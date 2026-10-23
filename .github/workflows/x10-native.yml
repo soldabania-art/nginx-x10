@@ -2,11 +2,11 @@ name: X10 native compatibility
 
 on:
   push:
-    branches: [x10-development, x10-main]
-    paths: ['src/**', 'auto/**', 'conf/**', 'x10/**', '.github/workflows/x10-native.yml']
+    branches: [x10-continuum-development, x10-development, x10-main]
+    paths: ['src/**', 'auto/**', 'conf/**', 'x10/**', '!x10/continuum/**', '.github/workflows/x10-native.yml']
   pull_request:
-    branches: [master, x10-development, x10-main]
-    paths: ['src/**', 'auto/**', 'conf/**', 'x10/**', '.github/workflows/x10-native.yml']
+    branches: [master, x10-continuum-development, x10-development, x10-main]
+    paths: ['src/**', 'auto/**', 'conf/**', 'x10/**', '!x10/continuum/**', '.github/workflows/x10-native.yml']
   workflow_dispatch:
 
 permissions:

@@ -1,6 +1,6 @@
 # NGINX X10: проверенное состояние
 
-Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, реальным HTTP/3 interop и генерируемыми QUIC-проверками под санитайзерами. В седьмом этапе добавлены изолированная Linux alpha, читаемый operator status и явная проверка native поколений. Финальный локальный `--official` прогон завершился **20/20 успешных групп**, exit 0: [milestone-7 JSON](evidence/native-checks-milestone-7.json). Новый профиль содержит 19 обычных / 20 с official групп. Hosted CI нового commit ещё ожидается. Это development alpha; performance acceptance и готовность к production остаются открытыми.
+Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, реальным HTTP/3 interop и генерируемыми QUIC-проверками под санитайзерами. В седьмом этапе добавлены изолированная Linux alpha, читаемый operator status и явная проверка native поколений. Финальный локальный `--official` прогон завершился **20/20 успешных групп**, exit 0: [milestone-7 JSON](evidence/native-checks-milestone-7.json). Новый профиль содержит 19 обычных / 20 с official групп. Hosted native CI `0b6a87e` завершился успешно; новый Continuum checkpoint проверяется отдельно. Это development alpha; performance acceptance и готовность к production остаются открытыми.
 
 ## Основа и чтение исходников
 
@@ -382,9 +382,7 @@ controller **68/68**, observer **29/29**. Official sample: 35 files, 32 PASS и
 У новых operator/alpha групп нет skips, TODO или cancellations. Native C на
 этом этапе не менялся; SHA-256 бинарника остался
 `e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139`.
-Это локальный прогон замороженных файлов до публикации. Новый hosted run,
-включая обязательные Unix проверки, ещё ожидается; прежний успешный commit
-их не подтверждает.
+Это локальный прогон замороженных файлов до публикации. Hosted run `0b6a87e` позднее прошёл обязательные Unix проверки; см. уточнение ниже.
 
 Hosted CI commit `6467be3bd8efcfb70050181ce2d4a031a543a933` выявил
 ошибку отрицательного alpha fixture: проверка с системным Node получила код
@@ -394,8 +392,7 @@ Fixture теперь использует собственную копию nati
 полный aggregate оставался failed, а Unix/package gates не запускались.
 Новый локальный [milestone-8 aggregate](evidence/native-checks-milestone-8.json)
 после поправки прошёл **20/20**, exit 0; alpha **9/9 TAP**, official sample —
-**1083 strict PASS / 25 SKIP / 1 expected TODO / 0 strict FAIL**. Hosted Unix,
-feature-off и package gates нового commit пока ожидаются.
+**1083 strict PASS / 25 SKIP / 1 expected TODO / 0 strict FAIL**. Hosted Unix, feature-off и package gates позднее прошли на commit `0b6a87e`; см. уточнение ниже.
 
 ## Guard: первый исследовательский срез
 
@@ -463,3 +460,41 @@ native SIGQUIT exit 0 и пустые cleanup errors. Node использует�
 - Публичный native gateway не развёрнут. Ранее размещённая на Vercel консоль относится к Node-прототипу; она не запускает и не подтверждает доступность native NGINX X10.
 
 Следующие шаги и обязательства совместимости: [PLAN](PLAN.md). Команды сборки и локальных проверок: [README](README.md) и [BUILD](BUILD.md). Принимать следующие изменения следует по отдельным воспроизводимым baseline/candidate доказательствам.
+
+## Подтверждённый hosted checkpoint перед Continuum
+
+[Native run 39971890181](https://github.com/soldabania-art/nginx-x10/actions/runs/39971890181)
+для commit `0b6a87eac9af93607f47bba874007901b8125b30` завершился success.
+Aggregate прошёл 20/20, отдельные Guard 8/8, operator-status Unix 30/30,
+обязательные Unix API/generations, feature-off build и alpha tar/checksum —
+успешно. Hosted official sample: 1105 strict PASS, 25 SKIP, 1 expected TODO,
+0 strict FAIL. Это обновляет прежние ожидания CI, сохраняя историю отказа
+первого alpha negative fixture и последующего исправления.
+
+При разработке Continuum штатный local aggregate повторён без изменений C:
+[20/20 групп](evidence/continuum-c0-native-regression.json), прежний native
+binary SHA сохранён; official sample — 1083 strict PASS, 25 SKIP,
+1 expected TODO, 0 strict FAIL. Continuum проверяется отдельными наборами
+и не добавляет этим результатам performance или production acceptance.
+
+## Continuum C0: ограниченный record/process эксперимент
+
+[Концепция](continuum/README.md), [план](continuum/PLAN.md),
+[экономика](continuum/ECONOMICS.md) и [регламент команды](continuum/OPERATIONS.md)
+записаны в Git по поручению владельца. Часовая hosted automation включена;
+фактический следующий успешный проход ещё не наблюдался. Она заново собирает
+доступную команду по свежему Git checkpoint и кооперативному branch lease,
+а не сохраняет постоянно живые сессии помощников.
+
+[Core/process evidence](evidence/continuum-c0.json): **21/21** records/state
+и отдельно **7/7** process TAP. Клиент сохраняет одно TCP-соединение, source
+завершён до target I/O, 13 байт partial encrypted KeyUpdate перенесены,
+54 application bytes совпадают, terminal FIN/pending0 проверены.
+Независимая проверка нашла и исправила прежний false PASS при повреждённом
+или неполном ciphertext после ожидаемого payload; контрпример сохранён.
+
+Один Node binary/TLS library и shared worker с ручным v1/v2 layout adapter
+не доказывают cross-release TLS upgrade. Handshake/OpenSSL bridge/native NGINX,
+automatic adapter compiler, partial-output/backpressure/crash matrix и TLS
+close_notify ещё не реализованы. Нативная основа не менялась. Новый hosted
+результат относится только к опубликованному SHA и проверяется отдельно.
