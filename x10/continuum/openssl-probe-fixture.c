@@ -11,6 +11,8 @@
  * Its doc/man3/SSL_write.pod requires the same arguments for WANT retries
  * unless moving-write-buffer mode is enabled; contents must still match.
  * ssl/record/rec_layer_s3.c retains pending write progress across that retry.
+ * Its doc/man3/SSL_get_error.pod also forbids other I/O-triggering operations
+ * after WRITE/WANT_WRITE until the original WRITE is repeated.
  */
 #define _POSIX_C_SOURCE 200809L
 #include <openssl/ssl.h>
@@ -252,7 +254,8 @@ int main(int argc, char **argv)
     const char *scenarios[] = {"quiescent", "partial-header", "partial-body",
         "unread-plaintext", "empty-read-retry", "write-backpressure", "queued-key-update",
         "completed-key-update", "completed-read-retry", "unrelated-write-read-retry",
-        "peer-key-update-pending", "peer-key-update-completed", "completed-write-retry"};
+        "peer-key-update-pending", "peer-key-update-completed", "completed-write-retry",
+        "overlapping-read-write-retry"};
     SSL_CTX *ctx = NULL;
     PEER peer;
     X10_PROBE_RESULT first, second;
@@ -268,7 +271,7 @@ int main(int argc, char **argv)
     size_t i, wanted = 0, total = 0, pressure_total = 0, retry_size = 0;
     int listener = -1, status = 1, known = 0, size = 4096;
     int quiescent, unread, partial, pressure_case, ku, empty, completed_ku, exchange;
-    int completed_read, unrelated_write, completed_write, allowed_case;
+    int completed_read, unrelated_write, completed_write, overlap, allowed_case;
     int peer_ku, peer_ku_pending, peer_ku_completed;
     int64_t deadline;
 
@@ -320,13 +323,14 @@ int main(int argc, char **argv)
     completed_read = !strcmp(scenario, "completed-read-retry");
     unrelated_write = !strcmp(scenario, "unrelated-write-read-retry");
     completed_write = !strcmp(scenario, "completed-write-retry");
+    overlap = !strcmp(scenario, "overlapping-read-write-retry");
     peer_ku_pending = !strcmp(scenario, "peer-key-update-pending");
     peer_ku_completed = !strcmp(scenario, "peer-key-update-completed");
     peer_ku = peer_ku_pending || peer_ku_completed;
     allowed_case = quiescent || completed_read || completed_write;
     exchange = allowed_case || completed_ku || peer_ku_completed;
     if (unread && wanted < 2) goto done;
-    if (completed_write && wanted != MAX_APPLICATION_BYTES) goto done;
+    if ((completed_write || overlap) && wanted != MAX_APPLICATION_BYTES) goto done;
 
     failure = "configuration";
     ctx = SSL_CTX_new(TLS_server_method());
@@ -369,7 +373,7 @@ int main(int argc, char **argv)
     }
     if (peer.fd < 0 || !nonblocking(peer.fd)) goto done;
     close(listener); listener = -1;
-    if ((pressure_case || completed_write)
+    if ((pressure_case || completed_write || overlap)
         && setsockopt(peer.fd, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size))) goto done;
     peer.ssl = SSL_new(ctx);
     if (!peer.ssl || SSL_set_fd(peer.ssl, peer.fd) != 1) goto done;
@@ -392,11 +396,12 @@ int main(int argc, char **argv)
     if (!payload) goto done;
 
     failure = "scenario_unreached";
-    if (completed_read || unrelated_write) {
+    if (completed_read || unrelated_write || overlap) {
         /* The orchestrator withholds all application bytes until this real
          * empty read reports WANT_READ. Keep the original read arguments;
          * enum equality in the fixture ledger is not an argument fence. */
         retry_buffer = payload; retry_size = wanted;
+        if (overlap) memset(payload, 0xa5, wanted);
         if (invoke(&peer, X10_CALL_READ, retry_buffer, retry_size)
             || peer.error != SSL_ERROR_WANT_READ || peer.amount != 0
             || peer.ledger.last_call != X10_CALL_READ
@@ -429,7 +434,7 @@ int main(int argc, char **argv)
             failure = "retry_completion_step";
             if (!step(deadline)) goto done;
             failure = "scenario_unreached";
-        } else {
+        } else if (unrelated_write) {
             /* Keep the pending read buffer separate and untouched. Successful
              * unrelated output must leave the original READ retry outstanding. */
             outbound = OPENSSL_malloc(wanted);
@@ -440,6 +445,77 @@ int main(int argc, char **argv)
                 || peer.amount != wanted || peer.ledger.last_call != X10_CALL_WRITE
                 || peer.ledger.last_outcome != X10_OUTCOME_SUCCESS
                 || peer.ledger.retry_call != X10_CALL_READ) goto done;
+        } else {
+            void *write_buffer;
+            size_t write_size;
+
+            /* The first-obligation ledger cannot represent both retries.
+             * This scoped overlap is unsupported: every snapshot must refuse,
+             * including after WRITE completion. Never retry the original READ
+             * or claim that its obligation or this history has been cleared. */
+            if (retry_buffer != payload || retry_size != wanted) goto done;
+            for (i = 0; i < wanted; i++)
+                if (payload[i] != 0xa5) goto done;
+            outbound = OPENSSL_malloc(wanted);
+            if (!outbound || outbound == payload) goto done;
+            for (i = 0; i < wanted; i++)
+                outbound[i] = (unsigned char) (((i * 29 + 7) & 255) ^ challenge[i % 16]);
+            write_buffer = outbound; write_size = wanted;
+            /* Client and relay readers are paused. No larger fallback payload
+             * or synthetic retry substitutes for actual bounded WANT_WRITE. */
+            failure = "state_not_reached";
+            if (invoke(&peer, X10_CALL_WRITE, write_buffer, write_size)
+                || peer.error != SSL_ERROR_WANT_WRITE
+                || peer.ledger.last_call != X10_CALL_WRITE
+                || peer.ledger.last_outcome != X10_OUTCOME_WANT_WRITE
+                || peer.ledger.retry_call != X10_CALL_READ
+                || !observe(&peer, &first) || first.allowed
+                || !(first.reasons & X10_REASON_RETRY)
+                || !(first.reasons & X10_REASON_LEDGER)
+                || !(first.reasons & (X10_REASON_WRITE_BUFFER | X10_REASON_WRITE_CALL))
+                || !(first.wbuf_left || first.wnum)) goto done;
+            if (retry_buffer != payload || retry_size != wanted) goto done;
+            for (i = 0; i < wanted; i++)
+                if (payload[i] != 0xa5) goto done;
+            printf("{\"event\":\"overlap-retry-ready\",\"scenario\":\"%s\",\"call\":%d,"
+                "\"outcome\":%d,\"retryCall\":%d,\"applicationBytesRead\":0,"
+                "\"writeLength\":%zu,\"sameWriteArguments\":true,\"originalReadUnchanged\":true}\n",
+                scenario, (int) peer.ledger.last_call, (int) peer.ledger.last_outcome,
+                (int) peer.ledger.retry_call, write_size);
+            emit_probe(scenario, 1, &peer, &first);
+            failure = "overlap_retry_probe";
+            if (!observe(&peer, &second)) goto done;
+            emit_probe(scenario, 2, &peer, &second);
+            if (memcmp(&first, &second, sizeof(first))) goto done;
+            failure = "overlap_retry_resume_step";
+            if (!step(deadline)) goto done;
+            failure = "overlap_write_completion";
+            /* The pinned SSL_get_error contract permits only this original
+             * WRITE until completion. Polls, probes and getters do no TLS I/O.
+             * Do not advance by a failed call's reported written count. */
+            if (write_buffer != outbound || write_size != wanted
+                || retry_buffer != payload || retry_size != wanted) goto done;
+            for (i = 0; i < wanted; i++)
+                if (payload[i] != 0xa5
+                    || outbound[i] != (unsigned char) (((i * 29 + 7) & 255)
+                        ^ challenge[i % 16])) goto done;
+            if (!complete(&peer, X10_CALL_WRITE, write_buffer, write_size, deadline)
+                || peer.amount != wanted || peer.ledger.last_call != X10_CALL_WRITE
+                || peer.ledger.last_outcome != X10_OUTCOME_SUCCESS
+                || peer.ledger.retry_call != X10_CALL_READ) goto done;
+            if (write_buffer != outbound || write_size != wanted
+                || retry_buffer != payload || retry_size != wanted) goto done;
+            for (i = 0; i < wanted; i++)
+                if (payload[i] != 0xa5
+                    || outbound[i] != (unsigned char) (((i * 29 + 7) & 255)
+                        ^ challenge[i % 16])) goto done;
+            /* Immediately record WRITE completion with the READ still owed. */
+            printf("{\"event\":\"overlap-write-completed\",\"scenario\":\"%s\",\"call\":%d,"
+                "\"outcome\":%d,\"retryCall\":%d,\"applicationBytesRead\":0,"
+                "\"writeLength\":%zu,\"sameWriteArguments\":true,\"originalReadUnchanged\":true,"
+                "\"applicationBytesWritten\":%zu}\n", scenario,
+                (int) peer.ledger.last_call, (int) peer.ledger.last_outcome,
+                (int) peer.ledger.retry_call, write_size, peer.amount);
         }
     }
     if (exchange || peer_ku) {
@@ -563,7 +639,7 @@ int main(int argc, char **argv)
     failure = "probe";
     if (interrupted || now_ms() >= deadline) goto done;
     if (!observe(&peer, &first)) goto done;
-    emit_probe(scenario, completed_write ? 3 : 1, &peer, &first);
+    emit_probe(scenario, completed_write || overlap ? 3 : 1, &peer, &first);
     if (exchange) {
         if (allowed_case && (!first.allowed || first.reasons != 0)) goto done;
         if (completed_ku && (first.allowed || !(first.reasons & X10_REASON_GENERATION)
@@ -606,6 +682,25 @@ int main(int argc, char **argv)
             || first.ledger_last_outcome != X10_OUTCOME_SUCCESS
             || first.ledger_retry_call != X10_CALL_READ
             || SSL_pending(peer.ssl) != 0 || SSL_has_pending(peer.ssl))) goto done;
+        if (overlap) {
+            if (first.reasons != X10_REASON_RETRY
+                || first.ledger_last_call != X10_CALL_WRITE
+                || first.ledger_last_outcome != X10_OUTCOME_SUCCESS
+                || first.ledger_retry_call != X10_CALL_READ
+                || first.wbuf_left || first.wnum || first.rwstate != SSL_NOTHING
+                || SSL_pending(peer.ssl) != 0 || SSL_has_pending(peer.ssl)
+                || retry_buffer != payload || retry_size != wanted) goto done;
+            for (i = 0; i < wanted; i++)
+                if (payload[i] != 0xa5) goto done;
+            if (!observe(&peer, &second)) goto done;
+            emit_probe(scenario, 4, &peer, &second);
+            if (memcmp(&first, &second, sizeof(first))) goto done;
+            /* Exact plaintext receipt must be acknowledged before raw close.
+             * No READ retry, close_notify, handover or admission follows. */
+            failure = "overlap_write_receipt_step";
+            if (!step(deadline)) goto done;
+            failure = "probe";
+        }
         if (ku && !(first.reasons & X10_REASON_KEY_UPDATE)) goto done;
         if (peer_ku_pending) {
             if (first.reasons != (X10_REASON_GENERATION | X10_REASON_KEY_UPDATE)
@@ -640,7 +735,7 @@ int main(int argc, char **argv)
         "\"graceful\":%s,\"applicationBytesRead\":%zu,\"applicationBytesWritten\":%zu,"
         "\"pressureBytesCompleted\":%zu}\n", scenario, allowed_case ? "true" : "false",
         exchange ? "true" : "false", exchange || peer_ku ? total : (unread ? (size_t) 1 : (size_t) 0),
-        exchange || unrelated_write ? wanted : (size_t) 0, pressure_total);
+        exchange || unrelated_write || overlap ? wanted : (size_t) 0, pressure_total);
     status = 0;
 done:
     alarm(0);

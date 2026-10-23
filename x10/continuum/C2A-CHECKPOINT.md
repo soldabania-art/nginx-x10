@@ -354,3 +354,20 @@ are unchanged. Per-file receipt ledger (SHA256, exact leased parent):
 
 Only allowlisted counts, hashes and workflow/job IDs are retained; no raw
 runtime logs, host paths, process IDs, PKI or session material.
+
+## Unsupported overlapping retry local checkpoint
+
+Canonical17/17 passed, separating14 ordinary actual-TLS scenarios,2 handled
+runtime signals and1 no-TLS source control. New case obtains real READ/WANT_READ
+and distinct WRITE/WANT_WRITE, finishes identical original WRITE first, then
+retains READ refusal16 with empty active output. Both refused snapshot pairs
+are immutable; exact outbound65536 receipt precedes raw teardown.
+
+[Evidence](../evidence/continuum-c2a-overlap.json) preserves source/build
+identities, independent heldouts and baseline no-TLS unsupported control.
+C0 core21/process7, C1 tests27=18synthetic+9runtime and fresh native20 passed.
+Official1083 strictPASS/25SKIP/1expectedTODO/0FAIL remain separate. Prior
+ea64ec1 hosted acceptance is retained; new exact implementation CI is pending.
+Probe/ledger and native source remain unchanged. No overlap admission,
+full graceful wire verification, semantic export/import or TLS-code migration
+is implemented. Next: control/alert/shutdown and sequence/key usage inventory.

@@ -156,6 +156,69 @@ test('the same real write retry completes exact original bytes and clears its ou
   assert.equal(result.migration, false);
 });
 
+test('an overlapping real write retry completes while the original empty read retry remains refused', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'overlapping-read-write-retry', payloadBytes: 65536 });
+  const lifecycle = result.overlapRetryLifecycle;
+  assert.equal(result.outcome, 'pass');
+  assert.equal(result.negotiated.authorized, true);
+  assert.equal(result.retryLifecycle.clientApplicationWritesBeforeRetry, 0);
+  assert.equal(result.retryLifecycle.ready.call, 2);
+  assert.equal(result.retryLifecycle.ready.outcome, 2);
+  assert.equal(result.retryLifecycle.ready.retryCall, 2);
+  assert.equal(result.retryLifecycle.ready.applicationBytesRead, 0);
+  assert.equal(result.retryLifecycle.ready.sslPending, 0);
+  assert.equal(result.retryLifecycle.completed, null);
+  assert.equal(lifecycle.ready.call, 3);
+  assert.equal(lifecycle.ready.outcome, 3);
+  assert.equal(lifecycle.ready.retryCall, 2);
+  assert.equal(lifecycle.ready.applicationBytesRead, 0);
+  assert.equal(lifecycle.ready.writeLength, 65536);
+  assert.equal(lifecycle.ready.sameWriteArguments, true);
+  assert.equal(lifecycle.ready.originalReadUnchanged, true);
+  assert.equal(Object.hasOwn(lifecycle.ready, 'applicationBytesWritten'), false);
+  for (const probe of [lifecycle.refused, lifecycle.repeatedRefused]) {
+    assert.equal(probe.allowed, false);
+    assert.equal(probe.ledgerRetryCall, 2);
+    assert.equal(probe.ledgerLastCall, 3);
+    assert.equal(probe.ledgerLastOutcome, 3);
+    assert.ok(probe.wbufLeft > 0);
+    assert.ok((BigInt(probe.reasons) & 16n) !== 0n);
+    assert.ok((BigInt(probe.reasons) & (512n | 1024n)) !== 0n);
+  }
+  assert.equal(lifecycle.immutableRefusedProbes, true);
+  assert.equal(lifecycle.bothReadersResumedBeforeRetry, true);
+  assert.equal(lifecycle.completed.call, 3);
+  assert.equal(lifecycle.completed.outcome, 1);
+  assert.equal(lifecycle.completed.retryCall, 2);
+  assert.equal(lifecycle.completed.applicationBytesRead, 0);
+  assert.equal(lifecycle.completed.applicationBytesWritten, 65536);
+  assert.equal(lifecycle.completed.writeLength, 65536);
+  assert.equal(lifecycle.completed.sameWriteArguments, true);
+  assert.equal(lifecycle.completed.originalReadUnchanged, true);
+  for (const probe of [result.probe, lifecycle.repeatedCompleted]) {
+    assert.equal(probe.allowed, false);
+    assert.equal(probe.reasons, '16');
+    assert.equal(probe.ledgerRetryCall, 2);
+    assert.equal(probe.ledgerLastCall, 3);
+    assert.equal(probe.ledgerLastOutcome, 1);
+    assert.equal(probe.wbufLeft, 0);
+    assert.equal(probe.wnum, 0);
+    assert.equal(probe.rwstate, 1);
+    assert.equal(probe.sslPending, 0);
+    assert.equal(probe.sslHasPending, false);
+  }
+  assert.equal(result.immutableRepeatedProbe, true);
+  assert.equal(lifecycle.clientApplicationWrites, 0);
+  assert.equal(lifecycle.applicationBytesReceived, 65536);
+  assert.equal(lifecycle.exactOutboundPayload, true);
+  assert.equal(result.clientConnections, 1);
+  assert.equal(result.serverConnections, 1);
+  assert.equal(result.fixtureGracefulShutdown, false);
+  assert.equal(result.wire, null);
+  assert.equal(result.semanticExportImport, false);
+  assert.equal(result.migration, false);
+});
+
 for (const scenario of ['partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update']) {
   test(`real TLS private ${scenario} state refuses the read-only safepoint`, { timeout: 30000 }, async () => {
     const result = await runProbeScenario({ scenario });

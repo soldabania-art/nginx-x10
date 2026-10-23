@@ -18,7 +18,7 @@ const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
 const SCENARIOS = ['quiescent', 'partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update', 'completed-key-update',
-  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry'];
+  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry'];
 const SECRET_LABELS = Object.freeze({
   CLIENT_HANDSHAKE_TRAFFIC_SECRET: 'clientHandshake', SERVER_HANDSHAKE_TRAFFIC_SECRET: 'serverHandshake',
   CLIENT_TRAFFIC_SECRET_0: 'clientApplication', SERVER_TRAFFIC_SECRET_0: 'serverApplication',
@@ -484,7 +484,7 @@ const numericFields = ['sslPending', 'packetLength', 'rbufLeft', 'rbufOffset', '
 function checkedProbe(message, scenario) {
   const keys = ['event', 'scenario', 'sample', ...decimalFields, ...sequenceFields, ...booleanFields, ...numericFields];
   assertFixture(message?.event === 'probe' && message.scenario === scenario &&
-    (scenario === 'completed-write-retry' ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
+    (['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario) ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
     Object.keys(message).sort().join(',') === keys.sort().join(','), 'probe_schema');
   for (const field of decimalFields) assertFixture(typeof message[field] === 'string' && /^(0|[1-9][0-9]{0,19})$/.test(message[field]) && BigInt(message[field]) <= 0xffffffffffffffffn, 'probe_counter');
   for (const field of sequenceFields) assertFixture(typeof message[field] === 'string' && /^[0-9a-f]{16}$/.test(message[field]), 'probe_sequence');
@@ -536,6 +536,28 @@ function checkedWriteRetryEvent(message, event, payloadBytes) {
   return structuredClone(message);
 }
 
+function checkedOverlapEvent(message, event) {
+  const completed = event === 'overlap-write-completed';
+  const keys = ['event', 'scenario', 'call', 'outcome', 'retryCall', 'applicationBytesRead',
+    'writeLength', 'sameWriteArguments', 'originalReadUnchanged', ...(completed ? ['applicationBytesWritten'] : [])];
+  assertFixture(message?.event === event && message.scenario === 'overlapping-read-write-retry' &&
+    Object.keys(message).sort().join(',') === keys.sort().join(','), 'overlap_event_schema');
+  assertFixture(message.call === 3 && message.outcome === (completed ? 1 : 3) && message.retryCall === 2 &&
+    message.applicationBytesRead === 0 && message.writeLength === 65536 && message.sameWriteArguments === true &&
+    message.originalReadUnchanged === true && (!completed || message.applicationBytesWritten === 65536),
+  'overlap_event_transition');
+  return structuredClone(message);
+}
+function checkedOverlapProbe(probe, completed) {
+  assertFixture(!probe.allowed && probe.ledgerRetryCall === 2 && probe.ledgerLastCall === 3 &&
+    probe.ledgerLastOutcome === (completed ? 1 : 3) && probe.sslPending === 0 && !probe.sslHasPending,
+  'overlap_read_retry_not_retained');
+  if (completed) assertFixture(probe.reasons === '16' && probe.wbufLeft === 0 && probe.wnum === 0 &&
+    probe.rwstate === 1, 'overlap_write_retry_not_completed');
+  else assertFixture(probe.wbufLeft > 0 && (BigInt(probe.reasons) & (1n << 4n)) !== 0n &&
+    (BigInt(probe.reasons) & ((1n << 9n) | (1n << 10n))) !== 0n, 'overlap_write_pressure_not_observed');
+}
+
 function checkedImmutablePair(first, second) {
   const normalized = value => { const copy = { ...value }; delete copy.sample; return copy; };
   assertFixture(second.sample === first.sample + 1 &&
@@ -544,9 +566,9 @@ function checkedImmutablePair(first, second) {
 
 /** Observe only; controlled refusal cases intentionally terminate the fixture
  * without claiming clean TLS shutdown, state export, migration or ownership. */
-export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = scenario === 'completed-write-retry' ? 65536 : 257, fragmentPrefix } = {}) {
+export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = ['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario) ? 65536 : 257, fragmentPrefix } = {}) {
   assertFixture(SCENARIOS.includes(scenario) && Number.isInteger(payloadBytes) && payloadBytes >= 2 && payloadBytes <= 65536, 'scenario_options');
-  if (scenario === 'completed-write-retry') assertFixture(payloadBytes === 65536, 'write_retry_payload_size');
+  if (['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario)) assertFixture(payloadBytes === 65536, 'write_retry_payload_size');
   const prefix = fragmentPrefix ?? (scenario === 'partial-header' ? 3 : 13);
   if (scenario.startsWith('partial-')) assertFixture(Number.isInteger(prefix) &&
     (scenario === 'partial-header' ? prefix >= 1 && prefix <= 4 : prefix >= 6 && prefix < Math.min(payloadBytes, 16384) + 22), 'fragment_prefix');
@@ -557,7 +579,8 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
   const peerCompleted = scenario === 'peer-key-update-completed';
   const retryCompleted = scenario === 'completed-read-retry';
   const retryUnrelatedWrite = scenario === 'unrelated-write-read-retry';
-  const retryScenario = retryCompleted || retryUnrelatedWrite;
+  const overlappingRetry = scenario === 'overlapping-read-write-retry';
+  const retryScenario = retryCompleted || retryUnrelatedWrite || overlappingRetry;
   const writeRetryCompleted = scenario === 'completed-write-retry';
   const allowed = scenario === 'quiescent' || retryCompleted || writeRetryCompleted;
   const graceful = allowed || scenario === 'completed-key-update' || peerCompleted;
@@ -591,6 +614,8 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     if (peerScenario) { await client.send(); }
     else if (scenario.startsWith('partial-')) {
       relay.prefix(prefix); client.write(); await relay.waitPrefix();
+    } else if (overlappingRetry) {
+      client.socket.pause(); relay.pauseServerReads();
     } else if (writeRetryCompleted) {
       client.socket.pause(); relay.pauseServerReads(); client.write();
     } else if ((graceful && !retryCompleted) || scenario === 'unread-plaintext') {
@@ -633,13 +658,34 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       writeRetryLifecycle = { ready, refused, repeatedRefused, completed,
         immutableRefusedProbes: true, bothReadersResumedBeforeRetry: true, clientApplicationWrites: 1 };
     }
-    const firstSample = writeRetryCompleted ? 3 : 1;
+    let overlapRetryLifecycle;
+    if (overlappingRetry) {
+      const ready = checkedOverlapEvent(await native.wait('overlap-retry-ready'), 'overlap-retry-ready');
+      assertFixture(client.socket.isPaused() && relay.serverReadsPaused() && client.applicationWrites() === 0 &&
+        client.receivedBytes() === 0, 'overlap_readers_not_paused');
+      const refused = checkedProbe(await native.wait('probe', message => message.sample === 1), scenario);
+      const repeatedRefused = checkedProbe(await native.wait('probe', message => message.sample === 2), scenario);
+      checkedOverlapProbe(refused, false); checkedOverlapProbe(repeatedRefused, false);
+      checkedImmutablePair(refused, repeatedRefused);
+      client.socket.resume(); relay.resumeServerReads();
+      assertFixture(!client.socket.isPaused() && !relay.serverReadsPaused(), 'overlap_readers_not_resumed');
+      await stepNative(native, owned.signal);
+      const completed = checkedOverlapEvent(await native.wait('overlap-write-completed'), 'overlap-write-completed');
+      assertFixture(client.applicationWrites() === 0, 'overlap_client_application_write');
+      overlapRetryLifecycle = { ready, refused, repeatedRefused, completed,
+        immutableRefusedProbes: true, bothReadersResumedBeforeRetry: true, clientApplicationWrites: 0 };
+    }
+    const firstSample = writeRetryCompleted || overlappingRetry ? 3 : 1;
     const first = checkedProbe(await native.wait('probe', message => message.sample === firstSample), scenario);
     let immutableRepeatedProbe = false;
-    if (graceful || peerScenario) {
+    if (graceful || peerScenario || overlappingRetry) {
       const second = checkedProbe(await native.wait('probe', message => message.sample === firstSample + 1), scenario);
       assertFixture(first.allowed === allowed, 'stable_probe_changed_or_wrong_gate');
       checkedImmutablePair(first, second);
+      if (overlappingRetry) {
+        checkedOverlapProbe(first, true); checkedOverlapProbe(second, true);
+        overlapRetryLifecycle.repeatedCompleted = second;
+      }
       if (writeRetryCompleted) {
         assertFixture(first.reasons === '0' && first.ledgerRetryCall === 0 && first.ledgerLastCall === 3 &&
           first.ledgerLastOutcome === 1 && first.wbufLeft === 0 && first.wnum === 0, 'completed_write_retry_not_cleared');
@@ -658,8 +704,13 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       if (retryCompleted) assertFixture(first.ledgerRetryCall === 0 && first.ledgerLastCall === 3 &&
         first.ledgerLastOutcome === 1, 'completed_retry_not_cleared');
       else {
-        assertFixture(client.applicationWrites() === 0, 'unrelated_retry_client_write');
+        assertFixture(client.applicationWrites() === 0, overlappingRetry ? 'overlap_client_application_write' : 'unrelated_retry_client_write');
         await client.receivedPayload();
+        if (overlappingRetry) {
+          assertFixture(client.receivedBytes() === 65536 && client.applicationWrites() === 0, 'overlap_outbound_receipt');
+          overlapRetryLifecycle.applicationBytesReceived = client.receivedBytes();
+          overlapRetryLifecycle.exactOutboundPayload = true;
+        }
         await bounded(new Promise((resolve, reject) => native.child.stdin.write('STEP\n', error => error ? reject(new ProbeFixtureError('native_step')) : resolve())), 'native_step', DEADLINE_MS, owned.signal);
       }
     }
@@ -674,6 +725,14 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         events.filter(message => message.event === 'probe').map(message => message.sample).join(',') === '1,2,3,4' &&
         done.applicationBytesRead === payloadBytes && done.applicationBytesWritten === payloadBytes && done.pressureBytesCompleted === 0,
       'write_retry_event_order_or_counts');
+    }
+    if (overlappingRetry) {
+      const expected = ['ready', 'retry-ready', 'overlap-retry-ready', 'probe', 'probe', 'overlap-write-completed', 'probe', 'probe', 'done'];
+      assertFixture(native.messages.filter(message => expected.includes(message.event)).map(message => message.event).join(',') === expected.join(',') &&
+        native.messages.filter(message => message.event === 'probe').map(message => message.sample).join(',') === '1,2,3,4' &&
+        !native.messages.some(message => message.event === 'shutdown') && done.applicationBytesRead === 0 &&
+        done.applicationBytesWritten === 65536 && done.pressureBytesCompleted === 0 && client.applicationWrites() === 0,
+      'overlap_event_order_or_counts');
     }
     if (retryScenario) {
       const events = native.messages.map(message => message.event);
@@ -714,6 +773,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       fragmentPrefix: scenario.startsWith('partial-') ? prefix : null, fixtureGracefulShutdown: done.graceful,
       ...(retryLifecycle ? { retryLifecycle } : {}), ...(peerReceived ? { peerReceived } : {}),
       ...(writeRetryLifecycle ? { writeRetryLifecycle } : {}),
+      ...(overlapRetryLifecycle ? { overlapRetryLifecycle } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {
     if (owned.signal.aborted) throw owned.signal.reason;

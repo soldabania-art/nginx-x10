@@ -374,3 +374,36 @@ are recorded separately in [evidence](../evidence/continuum-c2a-write-retry.json
 Native NGINX, probe/header/patch/build and oracle bytes are unchanged. Overlaps,
 control/alert/shutdown/usage limits and other interruption boundaries remain
 pending; this read-only case does not implement export/import or migration.
+
+## Unsupported overlap: READ retained after WRITE completion
+
+`overlapping-read-write-retry` permits only65536 outbound bytes. The Node
+client sends no application payload. C obtains actual READ/WANT_READ using
+an unchanged original read buffer, then attempts a distinct full-length WRITE
+with client and relay backend readers paused. Real WRITE/WANT_WRITE and
+private pending output are mandatory; state_not_reached remains failure.
+
+The first-obligation enum retains READ rather than representing both retries.
+Samples1/2 must be identical refused observations with last WRITE/WANT_WRITE,
+READ retry and pending output. After both readers resume and bounded STEP,
+only that original WRITE is retried with identical pointer/content/full length;
+no READ/control/handshake/shutdown operation intervenes. This follows the exact
+pinned SSL_get_error contract. Original READ buffer pointer/size and0xa5
+sentinel are checked before/after WRITE; read completion is not attempted.
+
+After actual WRITE success65536, samples3/4 still refuse with reasons16,
+READ retry retained, last WRITE success, wbufLeft=wnum=0 and rwstate=SSL_NOTHING.
+Node verifies exact outbound receipt before the final STEP permits raw close.
+No SSL_shutdown is called; wire=null and graceful bidirectional closure is not
+claimed. Metadata sequences are not independently wire-validated for this case.
+The author observed pending1556/read-write next0/2/wnum16384 and completed
+16/next0/4. Pre-write progress depends on scheduling and is not a portable
+constant. Available counts/hashes and separate heldouts are preserved in
+[overlap evidence](../evidence/continuum-c2a-overlap.json).
+
+Generic invoke/probe/header/patch/build/oracle and existing limits are unchanged.
+This is new refusal coverage, not a false-acceptance fix or complete obligation
+history model. The overlap stays unsupported; no later admission is tested or
+granted. Seventeen flat checks mean14 ordinary actual-TLS cases,2 runtime
+signals and1 no-TLS source control. Control/alert/shutdown and sequence/key
+usage admission remain separate gates before semantic export/import.

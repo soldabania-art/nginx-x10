@@ -679,3 +679,19 @@ native20/20 прошли; official1083 strictPASS/25SKIP/1expectedTODO/0FAIL.
 Новый exact implementation SHA ожидает hosted CI;2fac5b5 принят ранее.
 Далее — пересекающиеся retry obligations, control/alert/shutdown и usage limits.
 Полнота inventory, semantic export/import и actual TLS-code migration не приняты.
+
+## Continuum C2a: пересечение READ/WRITE retry
+
+Добавлен actual-TLS case: READ/WANT_READ, затем отдельный WRITE/WANT_WRITE.
+После возобновления обоих readers завершается исходный WRITE65536 с теми же
+аргументами. READ остаётся незавершённым: повторные snapshots отказывают по16
+при уже пустом active output. Оригинальный READ buffer не меняется; клиент
+подтверждает точные65536 outbound bytes перед намеренным raw close.
+
+Локально17/17:14 обычных TLS scenarios,2 runtime signals,1 no-TLS source
+control; независимые heldouts учтены отдельно в [evidence](evidence/continuum-c2a-overlap.json).
+C0 core21/process7, C1 27=18 synthetic+9 runtime и native20/20 прошли.
+Official1083 strictPASS/25SKIP/1expectedTODO/0FAIL сохраняются отдельно.
+Новый exact SHA ожидает hosted CI; ea64ec1 принят ранее. Это проверка отказа
+для unsupported overlap: wire=null, graceful closure и admission не заявляются.
+Далее — control/alert/shutdown и sequence/key usage gates перед C2b.
