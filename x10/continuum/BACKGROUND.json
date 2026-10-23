@@ -3,7 +3,14 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": null,
+  "executionLease": {
+    "runId": "continuum-c1-20261023T154901Z",
+    "owner": "interactive-root-coordinator",
+    "baseCommit": "999470e643ca1b5370273125c5a3e30ec29aa5e6",
+    "acquiredAtUTC": "2026-10-23T15:49:01.573669+00:00",
+    "expiresAtUTC": "2026-10-23T16:34:01.573669+00:00",
+    "coordinationOnly": true
+  },
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -53,7 +60,7 @@
     },
     {
       "id": "C1",
-      "state": "ready",
+      "state": "in-progress",
       "goal": "Establish real TLS1.3 handshake interoperability with an independent client and study a pinned TLS backend export/import safepoint: directional sequence, KeyUpdate obligations and userspace buffers; no resumption substitution"
     },
     {
