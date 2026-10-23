@@ -338,3 +338,39 @@ controls не объявляются дополнительными actual hands
 [peer update](../evidence/continuum-c2a-peer-key-update.json). Следующие gates —
 реальный WRITE retry completion, overlaps/control/shutdown/limits. Экспорт,
 import, distinct-version change и native continuation остаются unimplemented.
+
+## Same-operation WRITE retry completion
+
+`completed-write-retry` accepts only65536 authenticated application bytes.
+Both Node client reads and relay backend reads pause before the initial C echo.
+The existing direct socket BIO and SO_SNDBUF4096 must yield a real WANT_WRITE
+with private pending output. Otherwise `state_not_reached` fails the case;
+no synthetic retry, larger payload or observer-limit increase is substituted.
+
+C emits write-retry-ready, then immutable refused samples1/2, and waits STEP.
+The runner resumes both readers before STEP. C checks the original pointer,
+full length and deterministic contents, retries the original SSL_write_ex
+until actual success, checks the contents again and emits completion before
+any later SSL operation. WRITE success clears only its matching retry.
+Allowed samples3/4 must be immutable before the peer starts close_notify.
+One client application write and one server echo are permitted. Failed API
+write may already emit a prefix; its reported written count is not used to
+advance a buffer or infer no delivery. Both moving-buffer and partial-write
+modes remain disabled. Caller checks are not a general ownership fence.
+
+Author smoke observed refusal1556, wbufLeft16406 and wnum32768, followed by
+full65536 completion, reasons0 and post sequences4/4. These pre-call progress
+values are measured facts, not fixed cross-platform invariants. After success
+wbufLeft=wnum=0 and rwstate=SSL_NOTHING; stale wpendTot/Ret or allocation/offset
+may remain and do not themselves imply a pending operation. Unchanged oracle
+requires exact data, correct sequences and both close_notify/FIN. Its limits
+remain65536 bytes per direction and262144 total captured bytes in the relay.
+
+Local16checks separate13 ordinary actual-TLS cases,2 handled runtime signals
+and1 no-TLS source control. The baseline runner rejects the new scenario before
+building; that no-TLS capability control does not demonstrate an OpenSSL defect.
+Independent actual-TLS heldouts and a private stale-WRITE-ledger sensitivity
+are recorded separately in [evidence](../evidence/continuum-c2a-write-retry.json).
+Native NGINX, probe/header/patch/build and oracle bytes are unchanged. Overlaps,
+control/alert/shutdown/usage limits and other interruption boundaries remain
+pending; this read-only case does not implement export/import or migration.

@@ -7,6 +7,10 @@
  * https://docs.openssl.org/3.0/man3/SSL_write/
  * https://docs.openssl.org/3.0/man3/SSL_shutdown/
  * https://docs.openssl.org/3.0/man3/SSL_key_update/
+ * Exact research pin: 85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c.
+ * Its doc/man3/SSL_write.pod requires the same arguments for WANT retries
+ * unless moving-write-buffer mode is enabled; contents must still match.
+ * ssl/record/rec_layer_s3.c retains pending write progress across that retry.
  */
 #define _POSIX_C_SOURCE 200809L
 #include <openssl/ssl.h>
@@ -248,7 +252,7 @@ int main(int argc, char **argv)
     const char *scenarios[] = {"quiescent", "partial-header", "partial-body",
         "unread-plaintext", "empty-read-retry", "write-backpressure", "queued-key-update",
         "completed-key-update", "completed-read-retry", "unrelated-write-read-retry",
-        "peer-key-update-pending", "peer-key-update-completed"};
+        "peer-key-update-pending", "peer-key-update-completed", "completed-write-retry"};
     SSL_CTX *ctx = NULL;
     PEER peer;
     X10_PROBE_RESULT first, second;
@@ -264,7 +268,7 @@ int main(int argc, char **argv)
     size_t i, wanted = 0, total = 0, pressure_total = 0, retry_size = 0;
     int listener = -1, status = 1, known = 0, size = 4096;
     int quiescent, unread, partial, pressure_case, ku, empty, completed_ku, exchange;
-    int completed_read, unrelated_write, allowed_case;
+    int completed_read, unrelated_write, completed_write, allowed_case;
     int peer_ku, peer_ku_pending, peer_ku_completed;
     int64_t deadline;
 
@@ -315,12 +319,14 @@ int main(int argc, char **argv)
     completed_ku = !strcmp(scenario, "completed-key-update");
     completed_read = !strcmp(scenario, "completed-read-retry");
     unrelated_write = !strcmp(scenario, "unrelated-write-read-retry");
+    completed_write = !strcmp(scenario, "completed-write-retry");
     peer_ku_pending = !strcmp(scenario, "peer-key-update-pending");
     peer_ku_completed = !strcmp(scenario, "peer-key-update-completed");
     peer_ku = peer_ku_pending || peer_ku_completed;
-    allowed_case = quiescent || completed_read;
+    allowed_case = quiescent || completed_read || completed_write;
     exchange = allowed_case || completed_ku || peer_ku_completed;
     if (unread && wanted < 2) goto done;
+    if (completed_write && wanted != MAX_APPLICATION_BYTES) goto done;
 
     failure = "configuration";
     ctx = SSL_CTX_new(TLS_server_method());
@@ -363,7 +369,8 @@ int main(int argc, char **argv)
     }
     if (peer.fd < 0 || !nonblocking(peer.fd)) goto done;
     close(listener); listener = -1;
-    if (pressure_case && setsockopt(peer.fd, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size))) goto done;
+    if ((pressure_case || completed_write)
+        && setsockopt(peer.fd, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size))) goto done;
     peer.ssl = SSL_new(ctx);
     if (!peer.ssl || SSL_set_fd(peer.ssl, peer.fd) != 1) goto done;
     peer.ledger.schema_version = 1; peer.ledger.bound_ssl = peer.ssl;
@@ -473,7 +480,60 @@ int main(int argc, char **argv)
         if (completed_ku && (!invoke(&peer, X10_CALL_CONTROL, NULL, 0)
             || !complete(&peer, X10_CALL_HANDSHAKE, NULL, 0, deadline)
             || SSL_get_key_update_type(peer.ssl) != SSL_KEY_UPDATE_NONE)) goto done;
-        if (exchange && (!complete(&peer, X10_CALL_WRITE, payload, wanted, deadline)
+        if (completed_write) {
+            /* The full authenticated request is the original echo buffer.
+             * Both downstream readers are paused before the initial STEP.
+             * One bounded 65536-byte call must create actual backpressure;
+             * a kernel that absorbs it has not reached this test state. */
+            retry_buffer = payload; retry_size = wanted;
+            failure = "state_not_reached";
+            if (invoke(&peer, X10_CALL_WRITE, retry_buffer, retry_size)
+                || peer.error != SSL_ERROR_WANT_WRITE
+                || peer.ledger.last_call != X10_CALL_WRITE
+                || peer.ledger.last_outcome != X10_OUTCOME_WANT_WRITE
+                || peer.ledger.retry_call != X10_CALL_WRITE
+                || !observe(&peer, &first) || first.allowed
+                || !(first.reasons & X10_REASON_RETRY)
+                || !(first.reasons & (X10_REASON_WRITE_BUFFER | X10_REASON_WRITE_CALL))
+                || !(first.wbuf_left || first.wnum)) goto done;
+            printf("{\"event\":\"write-retry-ready\",\"scenario\":\"%s\",\"call\":%d,"
+                "\"outcome\":%d,\"retryCall\":%d,\"applicationBytesRead\":%zu,"
+                "\"writeLength\":%zu,\"sameWriteArguments\":%s}\n",
+                scenario, (int) peer.ledger.last_call, (int) peer.ledger.last_outcome,
+                (int) peer.ledger.retry_call, total, retry_size,
+                retry_buffer == payload && retry_size == wanted ? "true" : "false");
+            emit_probe(scenario, 1, &peer, &first);
+            failure = "write_retry_probe";
+            if (!observe(&peer, &second)) goto done;
+            emit_probe(scenario, 2, &peer, &second);
+            if (memcmp(&first, &second, sizeof(first))) goto done;
+            failure = "write_retry_resume_step";
+            if (!step(deadline)) goto done;
+            failure = "write_retry_completion";
+            /* No intervening SSL operation and no buffer mutation: retry the
+             * SAME pointer, contents and FULL original length, never a tail.
+             * complete() repeats exactly these arguments on further WANTs. */
+            if (retry_buffer != payload || retry_size != wanted) goto done;
+            for (i = 0; i < wanted; i++)
+                if (payload[i] != (unsigned char) (((i * 29 + 7) & 255)
+                    ^ challenge[i % 16])) goto done;
+            if (!complete(&peer, X10_CALL_WRITE, retry_buffer, retry_size, deadline)
+                || peer.amount != wanted || peer.ledger.last_call != X10_CALL_WRITE
+                || peer.ledger.last_outcome != X10_OUTCOME_SUCCESS
+                || peer.ledger.retry_call != X10_CALL_NONE) goto done;
+            for (i = 0; i < wanted; i++)
+                if (payload[i] != (unsigned char) (((i * 29 + 7) & 255)
+                    ^ challenge[i % 16])) goto done;
+            /* Capture completion before any subsequent SSL call or shutdown. */
+            printf("{\"event\":\"write-retry-completed\",\"scenario\":\"%s\",\"call\":%d,"
+                "\"outcome\":%d,\"retryCall\":%d,\"applicationBytesRead\":%zu,"
+                "\"applicationBytesWritten\":%zu,\"writeLength\":%zu,\"sameWriteArguments\":%s}\n",
+                scenario, (int) peer.ledger.last_call, (int) peer.ledger.last_outcome,
+                (int) peer.ledger.retry_call, total, peer.amount, retry_size,
+                retry_buffer == payload && retry_size == wanted ? "true" : "false");
+        }
+        if (exchange && !completed_write
+            && (!complete(&peer, X10_CALL_WRITE, payload, wanted, deadline)
             || peer.amount != wanted)) goto done;
         if (peer_ku_completed
             && SSL_get_key_update_type(peer.ssl) != SSL_KEY_UPDATE_NONE) goto done;
@@ -503,7 +563,7 @@ int main(int argc, char **argv)
     failure = "probe";
     if (interrupted || now_ms() >= deadline) goto done;
     if (!observe(&peer, &first)) goto done;
-    emit_probe(scenario, 1, &peer, &first);
+    emit_probe(scenario, completed_write ? 3 : 1, &peer, &first);
     if (exchange) {
         if (allowed_case && (!first.allowed || first.reasons != 0)) goto done;
         if (completed_ku && (first.allowed || !(first.reasons & X10_REASON_GENERATION)
@@ -520,7 +580,7 @@ int main(int argc, char **argv)
             || first.ledger_last_outcome != X10_OUTCOME_SUCCESS
             || first.ledger_retry_call != X10_CALL_NONE)) goto done;
         if (!observe(&peer, &second)) goto done;
-        emit_probe(scenario, 2, &peer, &second);
+        emit_probe(scenario, completed_write ? 4 : 2, &peer, &second);
         if (memcmp(&first, &second, sizeof(first))) goto done;
         failure = "peer_close_notify";
         while (1) {

@@ -341,3 +341,20 @@ Hosted85bc255 принят ранее; новый exact implementation SHA ож�
 endpoint; observer не является независимым PKI/Finished verifier. Далее —
 WRITE retry completion, overlap/control/shutdown/usage limits, затем C2b.
 Semantic export/import, actual TLS-code update и native migration ещё не готовы.
+
+## Continuum C2a: завершение той же WRITE retry
+
+Новый actual-TLS case действительно получает WANT_WRITE, наблюдает две
+неизменные refusal snapshots, возобновляет оба paused readers и завершает
+исходный SSL_write_ex с тем же буфером, содержимым и полной длиной65536.
+После success retry снят; две allowed snapshots предшествуют shutdown.
+Неизменённый observer проверяет точный двунаправленный payload, sequences,
+оба close_notify и FIN. Исходный probe, лимиты и native NGINX не менялись.
+
+Локальный aggregate16/16:13 обычных TLS scenarios,2 runtime signals,1 no-TLS
+source control. Независимые heldouts и negative sensitivity учтены отдельно
+в [write evidence](../evidence/continuum-c2a-write-retry.json). C0 core21/process7, C1 27=18 synthetic+9 runtime,
+native20/20 прошли; official1083 strictPASS/25SKIP/1expectedTODO/0FAIL.
+Новый exact implementation SHA ожидает hosted CI;2fac5b5 принят ранее.
+Далее — пересекающиеся retry obligations, control/alert/shutdown и usage limits.
+Полнота inventory, semantic export/import и actual TLS-code migration не приняты.

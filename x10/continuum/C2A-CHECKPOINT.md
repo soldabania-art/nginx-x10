@@ -288,3 +288,22 @@ files and spending are unchanged. Per-file receipt ledger (SHA256):
 
 Only allowlisted counts, hashes and workflow/job IDs are retained; no raw
 runtime logs, host paths, process IDs, PKI or session material.
+
+## Same-operation WRITE retry local checkpoint
+
+Canonical16/16 passed with no failures/skips/cancellations/TODO:
+13 ordinary actual-TLS scenarios,2 handled runtime signals,1 no-TLS source
+control. New case observes real WANT_WRITE, immutable refusal pair, identical
+original-buffer/full-length retry success, cleared obligation and immutable
+allowed pair. Exact65536-byte echo, sequence and TLS close/FIN are checked.
+Original probe and all application/capture limits remain unchanged.
+
+[Write evidence](../evidence/continuum-c2a-write-retry.json) preserves exact
+source hashes, independent heldouts/sensitivity, baseline no-TLS unsupported
+control and pre-runtime review corrections. Native20/20, official1083 strict
+PASS/25SKIP/1expectedTODO/0FAIL, C0 core21/process7 and C1 tests27 passed.
+C1 remains18 synthetic oracle controls+9 runtime checks. Distinct local/hosted
+build identities must not be conflated. New exact implementation hosted CI
+is pending after publication; previous2fac5b5 acceptance remains separate.
+Next: overlaps/control/shutdown/usage inventory; no semantic export/import,
+actual TLS-code change or native continuation implemented. No new spending.

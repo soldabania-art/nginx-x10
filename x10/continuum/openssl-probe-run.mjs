@@ -18,7 +18,7 @@ const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
 const SCENARIOS = ['quiescent', 'partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update', 'completed-key-update',
-  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed'];
+  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry'];
 const SECRET_LABELS = Object.freeze({
   CLIENT_HANDSHAKE_TRAFFIC_SECRET: 'clientHandshake', SERVER_HANDSHAKE_TRAFFIC_SECRET: 'serverHandshake',
   CLIENT_TRAFFIC_SECRET_0: 'clientApplication', SERVER_TRAFFIC_SECRET_0: 'serverApplication',
@@ -353,6 +353,8 @@ function relayTo(port, sockets, signal) {
     prefix(count) { assertFixture(!gate && count > 0, 'prefix_gate_invalid'); gate = { prefix: count, forwarded: 0, withheld: 0, delivered: false }; },
     waitPrefix: () => wait(() => gate?.delivered === true),
     pauseServerReads() { assertFixture(backend !== undefined, 'relay_backend_missing'); backend.pause(); },
+    serverReadsPaused: () => backend?.isPaused() === true,
+    resumeServerReads() { assertFixture(backend?.isPaused(), 'relay_backend_not_paused'); backend.resume(); },
     waitClosed: () => wait(() => observed.frontClosed && observed.backClosed),
   };
 }
@@ -413,7 +415,7 @@ function independentClient(port, ca, payload, sockets, secrets, signal) {
   }), 'client_timeout', DEADLINE_MS, signal);
   return { socket, secure: () => wait(() => negotiated !== undefined),
     write() { applicationWrites++; socket.write(payload, error => { if (error) { failure = new ProbeFixtureError('client_write'); wake(); } }); },
-    endOnEcho() { endAfterEcho = true; }, finish: () => wait(() => closed && ended && received.equals(payload)),
+    endOnEcho() { endAfterEcho = true; if (received.equals(payload)) socket.end(); }, finish: () => wait(() => closed && ended && received.equals(payload)),
     receivedPayload: () => wait(() => received.equals(payload)), receivedBytes: () => received.length,
     applicationWrites: () => applicationWrites,
     negotiated: () => negotiated, random: () => clientRandom,
@@ -481,7 +483,8 @@ const numericFields = ['sslPending', 'packetLength', 'rbufLeft', 'rbufOffset', '
   'alertDispatch', 'shutdown', 'handshakeFragmentLength', 'initNum', 'ledgerLastCall', 'ledgerRetryCall', 'ledgerLastOutcome'];
 function checkedProbe(message, scenario) {
   const keys = ['event', 'scenario', 'sample', ...decimalFields, ...sequenceFields, ...booleanFields, ...numericFields];
-  assertFixture(message?.event === 'probe' && message.scenario === scenario && [1, 2].includes(message.sample) &&
+  assertFixture(message?.event === 'probe' && message.scenario === scenario &&
+    (scenario === 'completed-write-retry' ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
     Object.keys(message).sort().join(',') === keys.sort().join(','), 'probe_schema');
   for (const field of decimalFields) assertFixture(typeof message[field] === 'string' && /^(0|[1-9][0-9]{0,19})$/.test(message[field]) && BigInt(message[field]) <= 0xffffffffffffffffn, 'probe_counter');
   for (const field of sequenceFields) assertFixture(typeof message[field] === 'string' && /^[0-9a-f]{16}$/.test(message[field]), 'probe_sequence');
@@ -497,7 +500,7 @@ function checkRefusal(probe, scenario) {
     (reasons & (1n << 7n)) !== 0n && probe.ledgerLastOutcome === 2 && probe.ledgerRetryCall === 2, 'partial_state_not_observed');
   else if (scenario === 'unread-plaintext') assertFixture(probe.sslPending > 0 && probe.unreadRecordBytes > 0 && (reasons & (1n << 8n)) !== 0n, 'unread_state_not_observed');
   else if (scenario === 'empty-read-retry') assertFixture(probe.sslPending === 0 && probe.packetLength === 0 && (reasons & (1n << 4n)) !== 0n && probe.ledgerRetryCall === 2 && probe.ledgerLastOutcome === 2, 'empty_retry_not_observed');
-  else if (scenario === 'write-backpressure') assertFixture(probe.wbufLeft > 0 && probe.ledgerRetryCall === 3 && probe.ledgerLastOutcome === 3 && (reasons & ((1n << 9n) | (1n << 10n))) !== 0n, 'write_pressure_not_observed');
+  else if (scenario === 'write-backpressure' || scenario === 'completed-write-retry') assertFixture(probe.wbufLeft > 0 && probe.ledgerRetryCall === 3 && probe.ledgerLastOutcome === 3 && (reasons & ((1n << 9n) | (1n << 10n))) !== 0n, 'write_pressure_not_observed');
   else if (scenario === 'queued-key-update') assertFixture(probe.keyUpdate === 0 && (reasons & ((1n << 12n) | (1n << 15n))) !== 0n, 'queued_key_update_not_observed');
   else if (scenario === 'unrelated-write-read-retry') assertFixture(probe.reasons === '16' &&
     probe.sslPending === 0 && probe.sslHasPending === false && probe.ledgerRetryCall === 2 &&
@@ -520,10 +523,30 @@ function checkedRetryEvent(message, event, scenario, payloadBytes) {
   return structuredClone(message);
 }
 
+function checkedWriteRetryEvent(message, event, payloadBytes) {
+  const completed = event === 'write-retry-completed';
+  const keys = ['event', 'scenario', 'call', 'outcome', 'retryCall', 'applicationBytesRead',
+    'writeLength', 'sameWriteArguments', ...(completed ? ['applicationBytesWritten'] : [])];
+  assertFixture(message?.event === event && message.scenario === 'completed-write-retry' &&
+    Object.keys(message).sort().join(',') === keys.sort().join(','), 'write_retry_event_schema');
+  assertFixture(message.call === 3 && message.outcome === (completed ? 1 : 3) &&
+    message.retryCall === (completed ? 0 : 3) && message.applicationBytesRead === payloadBytes &&
+    (!completed || message.applicationBytesWritten === payloadBytes) && message.writeLength === payloadBytes &&
+    message.sameWriteArguments === true, 'write_retry_event_transition');
+  return structuredClone(message);
+}
+
+function checkedImmutablePair(first, second) {
+  const normalized = value => { const copy = { ...value }; delete copy.sample; return copy; };
+  assertFixture(second.sample === first.sample + 1 &&
+    JSON.stringify(normalized(first)) === JSON.stringify(normalized(second)), 'stable_probe_changed_or_wrong_gate');
+}
+
 /** Observe only; controlled refusal cases intentionally terminate the fixture
  * without claiming clean TLS shutdown, state export, migration or ownership. */
-export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 257, fragmentPrefix } = {}) {
+export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = scenario === 'completed-write-retry' ? 65536 : 257, fragmentPrefix } = {}) {
   assertFixture(SCENARIOS.includes(scenario) && Number.isInteger(payloadBytes) && payloadBytes >= 2 && payloadBytes <= 65536, 'scenario_options');
+  if (scenario === 'completed-write-retry') assertFixture(payloadBytes === 65536, 'write_retry_payload_size');
   const prefix = fragmentPrefix ?? (scenario === 'partial-header' ? 3 : 13);
   if (scenario.startsWith('partial-')) assertFixture(Number.isInteger(prefix) &&
     (scenario === 'partial-header' ? prefix >= 1 && prefix <= 4 : prefix >= 6 && prefix < Math.min(payloadBytes, 16384) + 22), 'fragment_prefix');
@@ -535,7 +558,8 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
   const retryCompleted = scenario === 'completed-read-retry';
   const retryUnrelatedWrite = scenario === 'unrelated-write-read-retry';
   const retryScenario = retryCompleted || retryUnrelatedWrite;
-  const allowed = scenario === 'quiescent' || retryCompleted;
+  const writeRetryCompleted = scenario === 'completed-write-retry';
+  const allowed = scenario === 'quiescent' || retryCompleted || writeRetryCompleted;
   const graceful = allowed || scenario === 'completed-key-update' || peerCompleted;
   const owned = scope(25000);
   const children = new Set();
@@ -567,6 +591,8 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     if (peerScenario) { await client.send(); }
     else if (scenario.startsWith('partial-')) {
       relay.prefix(prefix); client.write(); await relay.waitPrefix();
+    } else if (writeRetryCompleted) {
+      client.socket.pause(); relay.pauseServerReads(); client.write();
     } else if ((graceful && !retryCompleted) || scenario === 'unread-plaintext') {
       if (graceful) client.endOnEcho();
       client.write();
@@ -588,13 +614,37 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         await bounded(new Promise((resolve, reject) => native.child.stdin.write('STEP\n', error => error ? reject(new ProbeFixtureError('native_step')) : resolve())), 'native_step', DEADLINE_MS, owned.signal);
       }
     }
-    const first = checkedProbe(await native.wait('probe', message => message.sample === 1), scenario);
+    let writeRetryLifecycle;
+    if (writeRetryCompleted) {
+      const ready = checkedWriteRetryEvent(await native.wait('write-retry-ready'), 'write-retry-ready', payloadBytes);
+      assertFixture(client.socket.isPaused() && relay.serverReadsPaused() && client.applicationWrites() === 1 && client.receivedBytes() === 0,
+        'write_retry_readers_not_paused');
+      const refused = checkedProbe(await native.wait('probe', message => message.sample === 1), scenario);
+      const repeatedRefused = checkedProbe(await native.wait('probe', message => message.sample === 2), scenario);
+      checkRefusal(refused, scenario); checkRefusal(repeatedRefused, scenario);
+      checkedImmutablePair(refused, repeatedRefused);
+      client.socket.resume(); relay.resumeServerReads();
+      assertFixture(!client.socket.isPaused() && !relay.serverReadsPaused(), 'write_retry_readers_not_resumed');
+      await stepNative(native, owned.signal);
+      const completed = checkedWriteRetryEvent(await native.wait('write-retry-completed'), 'write-retry-completed', payloadBytes);
+      // A successful retry can emit its buffered prefix before the JSON event.
+      // The client sends the application payload once and never resends it.
+      assertFixture(client.applicationWrites() === 1, 'write_retry_duplicate_application_write');
+      writeRetryLifecycle = { ready, refused, repeatedRefused, completed,
+        immutableRefusedProbes: true, bothReadersResumedBeforeRetry: true, clientApplicationWrites: 1 };
+    }
+    const firstSample = writeRetryCompleted ? 3 : 1;
+    const first = checkedProbe(await native.wait('probe', message => message.sample === firstSample), scenario);
     let immutableRepeatedProbe = false;
     if (graceful || peerScenario) {
-      const second = checkedProbe(await native.wait('probe', message => message.sample === 2), scenario);
-      const normalized = value => { const copy = { ...value }; delete copy.sample; return copy; };
-      assertFixture(first.allowed === allowed && second.allowed === first.allowed &&
-        JSON.stringify(normalized(first)) === JSON.stringify(normalized(second)), 'stable_probe_changed_or_wrong_gate');
+      const second = checkedProbe(await native.wait('probe', message => message.sample === firstSample + 1), scenario);
+      assertFixture(first.allowed === allowed, 'stable_probe_changed_or_wrong_gate');
+      checkedImmutablePair(first, second);
+      if (writeRetryCompleted) {
+        assertFixture(first.reasons === '0' && first.ledgerRetryCall === 0 && first.ledgerLastCall === 3 &&
+          first.ledgerLastOutcome === 1 && first.wbufLeft === 0 && first.wnum === 0, 'completed_write_retry_not_cleared');
+        client.endOnEcho();
+      }
       if (scenario === 'completed-key-update') assertFixture(first.reasons === '64' &&
         first.readGeneration === '0' && first.writeGeneration === '1' && first.mutationSerial === '3' && first.keyUpdate === -1, 'completed_key_update_not_observed');
       if (peerScenario) {
@@ -617,6 +667,14 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     const done = await native.wait('done');
     const exit = await bounded(native.closed, 'native_exit', DEADLINE_MS, owned.signal);
     assertFixture(exit.code === 0 && exit.signal === null && native.validOutput() && done.scenario === scenario && done.observed === true && done.allowed === allowed && done.graceful === graceful, 'native_scenario_failed');
+    if (writeRetryCompleted) {
+      const events = native.messages;
+      const expected = ['ready', 'write-retry-ready', 'probe', 'probe', 'write-retry-completed', 'probe', 'probe', 'shutdown', 'done'];
+      assertFixture(events.filter(message => expected.includes(message.event)).map(message => message.event).join(',') === expected.join(',') &&
+        events.filter(message => message.event === 'probe').map(message => message.sample).join(',') === '1,2,3,4' &&
+        done.applicationBytesRead === payloadBytes && done.applicationBytesWritten === payloadBytes && done.pressureBytesCompleted === 0,
+      'write_retry_event_order_or_counts');
+    }
     if (retryScenario) {
       const events = native.messages.map(message => message.event);
       assertFixture(events.filter(event => event === 'retry-ready').length === 1 &&
@@ -655,6 +713,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       topology: 'two-leg-recording-relay-not-migration', clientConnections: 1, serverConnections: 1,
       fragmentPrefix: scenario.startsWith('partial-') ? prefix : null, fixtureGracefulShutdown: done.graceful,
       ...(retryLifecycle ? { retryLifecycle } : {}), ...(peerReceived ? { peerReceived } : {}),
+      ...(writeRetryLifecycle ? { writeRetryLifecycle } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {
     if (owned.signal.aborted) throw owned.signal.reason;

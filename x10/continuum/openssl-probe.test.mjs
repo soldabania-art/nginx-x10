@@ -117,6 +117,45 @@ test('a successful unrelated write preserves the outstanding real read retry', {
   assert.equal(result.migration, false);
 });
 
+test('the same real write retry completes exact original bytes and clears its outstanding obligation', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'completed-write-retry', payloadBytes: 65536 });
+  const lifecycle = result.writeRetryLifecycle;
+  assert.equal(result.outcome, 'pass');
+  assert.equal(result.negotiated.authorized, true);
+  assert.equal(lifecycle.ready.call, 3);
+  assert.equal(lifecycle.ready.outcome, 3);
+  assert.equal(lifecycle.ready.retryCall, 3);
+  assert.equal(lifecycle.ready.applicationBytesRead, 65536);
+  assert.equal(Object.hasOwn(lifecycle.ready, 'applicationBytesWritten'), false);
+  assert.equal(lifecycle.refused.allowed, false);
+  assert.equal(lifecycle.refused.ledgerRetryCall, 3);
+  assert.equal(lifecycle.refused.ledgerLastOutcome, 3);
+  assert.ok(lifecycle.refused.wbufLeft > 0);
+  assert.equal(lifecycle.immutableRefusedProbes, true);
+  assert.equal(lifecycle.bothReadersResumedBeforeRetry, true);
+  assert.equal(lifecycle.clientApplicationWrites, 1);
+  assert.equal(lifecycle.completed.call, 3);
+  assert.equal(lifecycle.completed.outcome, 1);
+  assert.equal(lifecycle.completed.retryCall, 0);
+  assert.equal(lifecycle.completed.sameWriteArguments, true);
+  assert.equal(lifecycle.completed.writeLength, 65536);
+  assert.equal(lifecycle.completed.applicationBytesRead, 65536);
+  assert.equal(lifecycle.completed.applicationBytesWritten, 65536);
+  assert.equal(result.probe.allowed, true);
+  assert.equal(result.probe.reasons, '0');
+  assert.equal(result.probe.ledgerRetryCall, 0);
+  assert.equal(result.probe.ledgerLastCall, 3);
+  assert.equal(result.probe.ledgerLastOutcome, 1);
+  assert.equal(result.immutableRepeatedProbe, true);
+  assert.equal(result.wire.passed, true);
+  for (const direction of ['client', 'server']) {
+    assert.equal(result.wire.directions[direction].closeNotify, true);
+  }
+  assert.equal(result.fixtureGracefulShutdown, true);
+  assert.equal(result.semanticExportImport, false);
+  assert.equal(result.migration, false);
+});
+
 for (const scenario of ['partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update']) {
   test(`real TLS private ${scenario} state refuses the read-only safepoint`, { timeout: 30000 }, async () => {
     const result = await runProbeScenario({ scenario });
