@@ -1,6 +1,6 @@
 # Native compatibility checks
 
-Milestone-6 files committed under `x10/evidence` are explicit public summaries,
+Milestone-6 and later files committed under `x10/evidence` are explicit public summaries,
 not raw runner records. They retain result names/counts and source/binary
 hashes; host paths, runtime process/namespace identities, raw configurations,
 certificate metadata and logs are omitted. Each summary records the hash of
@@ -62,7 +62,7 @@ mismatched installed version fails its required group rather than recording a
 passing skip. See [HTTP3.md](test/HTTP3.md) and [http3-head.md](test/http3-head.md)
 for exact identities, cleanup and coverage boundaries.
 
-The current default aggregate runs seventeen groups; `--official` adds the eighteenth.
+The current default aggregate runs nineteen groups; `--official` adds the twentieth.
 Build/source provenance is checked before and after the groups and is not
 counted as another protocol test. `--provenance-only` performs no functional
 checks.
@@ -81,6 +81,8 @@ checks.
 | `quic-frame-boundaries` | 6579 generated frame-parser inputs under ASan/UBSan |
 | `native-load-client-verification` | 41 short C-client functional/sanitizer controls, including native C1/C16 smoke; no performance gate |
 | `managed-native-control` | Controller transactions, bounded journal/storage interruption and recovery, plus explicit listener snapshot/inspection CLI cases |
+| `operator-status` | Human status, explicit generation queries tied to the bound native master and refusal of unverified endpoints |
+| `local-alpha-lifecycle` | Private installation, native run/bind/apply/revert/stop, restart with retained session history and guarded removal |
 | `listener-observer-boundaries` | Separate observer identity, namespace, snapshot-integrity, descriptor-race, I/O and resource-bound checks |
 | `reload-listener-observation` | Seven live native case groups separating new responses, captured old-listener closure and accepted-stream completion |
 | `native-control-api` | Nine existing optional control-API compatibility groups on explicit ephemeral IPv4 loopback |
@@ -93,7 +95,13 @@ reports the earlier twelve-group profile: 12/12 successful groups and controller
 TAP pass 66/fail 0. The preceding [milestone-5 aggregate](evidence/native-checks-milestone-5.json)
 passed 15/15 groups, with controller TAP 68/68 and separate observer TAP 29/29,
 after the independent HEAD cancellation fix. The new [milestone-6 aggregate](evidence/native-checks-milestone-6.json)
-passed 18/18 groups on the rebuilt native generation implementation. Hosted results belong to their
+passed 18/18 groups on the rebuilt native generation implementation. The current
+milestone-7 profile adds operator-status and local-alpha-lifecycle; its final
+[local aggregate](evidence/native-checks-milestone-7.json) passed 20/20, exit 0:
+operator-status 30/30 TAP, alpha lifecycle 9/9, controller 68/68 and observer
+29/29. Official results remain 1083 strict passes, 25 skips, one expected TODO
+and no strict failures. Native C and the binary SHA are unchanged from
+milestone 6. Hosted results belong to their
 exact commit and are checked separately. See [STATUS.md](STATUS.md). Group counts,
 TAP assertions and generated parser inputs are different units and are not
 summed into a test or feature count. The [reference parser record](evidence/quic-frames-reference.json)
@@ -232,6 +240,41 @@ the elapsed budget must not be described as a hard wall-clock guarantee under
 such a stall. The separate boundary tests and live fixture do not cover the full
 platform, QUIC/UDP or process-churn matrix.
 
+## Operator status and isolated Linux alpha
+
+`operator-status` runs the existing JSON status and the new human presentation,
+then queries native generations through an explicitly selected endpoint. The
+inspector requires the bound master's OS lifetime, PID/network namespaces and
+LISTEN inode ownership before and after its fixed GET. Native `master_pid` is
+compared with the local PID from `NSpid`; procfs paths use the distinct proc PID.
+HTTP has an absolute request deadline, header/body caps and strict schema and
+uint64-string checks. Foreign endpoints, changed ownership, contradictory
+metadata and incomplete responses fail closed. Successfully received
+`native.available:false` retains its reason and null identities; `ok:true` is a
+completed diagnostic, not readiness. Human status preserves the old JSON/exit
+semantics, including observed unbound or stale runtime, and explicitly says
+health and listener drain were not checked.
+
+`local-alpha-lifecycle` exercises installation into a new private prefix and
+the installed foreground launcher, bind, change/revert, stop, session restart,
+preserved prior history and guarded removal. Packaging uses a verified build
+manifest and copies the native binary, controllers, examples and licenses. A
+new run creates a fresh controller session seeded from verified confirmed
+content; it never silently rebinds the old controller. The default launch omits
+the native control API and clears inherited `NGINX_CTRL`. Optional API launch
+accepts only an explicit Unix socket directly inside the private installation.
+The native demo self-check is not application health. A faulted lifecycle,
+unverified process, changed files or unknown installation content requires
+operator inspection rather than automatic deletion or restart.
+
+The package still requires Linux, Node.js 22+ and compatible dynamic libraries.
+It is not a universal static binary, service manager or full upgrade/crash
+matrix. The local aggregate and package lifecycle passed. The
+[independent review](review/local-alpha-review.md) records nine operator and
+eight package controls on the frozen files. A new hosted run, including the
+required Unix gates, is pending. See [QUICKSTART.md](QUICKSTART.md) and
+[alpha/README.md](alpha/README.md).
+
 ## Native generation feature gates
 
 The native [generation endpoint](test/GENERATIONS.md) adds master-scoped
@@ -249,6 +292,7 @@ It is not counted as a Unix PASS. The hosted workflow separately requires:
 ```sh
 node x10/test/control-api-baseline.mjs --transport unix
 node x10/test/generations.mjs --transport unix
+X10_STATUS_TRANSPORT=unix node --test --test-reporter=tap x10/test/operator-status.test.mjs
 bash x10/test/control-disabled.sh --output x10/.build/control-disabled.json
 ```
 
@@ -256,7 +300,8 @@ The last check serially rebuilds the same Linux module profile without control
 API support in a separate object directory. It verifies the macro/object are
 absent and `-l` is rejected, and preserves the default build inputs/binary and
 root Makefile. No configure jobs may overlap. Its result is separate from the
-18-group aggregate. This is a Linux feature-off build, not a full OS or dynamic
+aggregate. The Unix operator gate is required separately; there is no automatic
+TCP fallback or passing skip. This is a Linux feature-off build, not a full OS or dynamic
 module ABI certification. See [build evidence](evidence/control-disabled-build.json).
 
 ## GitHub Actions
@@ -267,8 +312,21 @@ plus this pinned official sample in master mode. It installs `python3-venv`, the
 hashed aioquic and independent curl_cffi HTTP/3 wheel locks in separate venvs,
 and the optional Perl FCGI, SCGI and TLS clients, uses
 read-only repository permissions and pinned action revisions, and
-uploads only JSON evidence. It neither deploys a gateway nor changes billing,
-secrets or native test assertions.
+uploads JSON/TAP evidence. After the required checks, it packages a local Linux
+alpha with:
+
+```sh
+node x10/alpha/cli.mjs pack --output x10/.build/dist/nginx-x10-linux-alpha.tar.gz
+```
+
+The successful `nginx-x10-linux-alpha` artifact contains the `.tar.gz` and a
+SHA-256 checksum sidecar. Packaging metadata is retained as JSON in the separate
+`x10-native-evidence` artifact. The extracted `nginx-x10-alpha/` bundle installs
+with `node install.mjs install --prefix NEW_ABSOLUTE --port 8088 --health-port 8089`
+without the source checkout or a compiler; its dynamic runtime requirements
+remain. Artifacts are development snapshots, not signed releases or claims of
+cross-machine ABI compatibility. The workflow neither deploys a gateway nor
+changes billing, secrets or native test assertions.
 
 The workflow is configured for relevant changes on `x10-development` and
 `x10-main`, relevant pull requests into those branches or `master`, and manual

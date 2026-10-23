@@ -8,6 +8,7 @@ import http from 'node:http';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { captureTcpListeners, inspectTcpListeners } from './listeners.mjs';
+import { inspectNativeGenerations } from './generations.mjs';
 
 const execute = promisify(execFile);
 const uid = process.getuid?.();
@@ -659,5 +660,11 @@ export async function snapshotListeners(state) {
 
 export async function inspectListeners(state, snapshot) {
   const observation = await listenerDiagnostic(state, options => inspectTcpListeners(snapshot, options));
+  return { ok: true, observation };
+}
+
+// This explicit query is diagnostic only; it never opens a native API socket.
+export async function inspectGenerations(state, endpoint) {
+  const observation = await listenerDiagnostic(state, ({ master }) => inspectNativeGenerations(endpoint, master));
   return { ok: true, observation };
 }

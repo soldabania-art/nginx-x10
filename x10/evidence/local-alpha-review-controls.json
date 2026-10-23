@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "date": "2026-10-23",
+  "suite": "local-alpha-independent-review",
+  "passed": true,
+  "publication": {
+    "rawRecordSha256": "44dc31a7a2d174a3d693698f838c2d7a5c149f473e146f7a1cb159abe6487046",
+    "rawRecordRetainedLocally": true,
+    "note": "Publication summary only; not a raw runner record or aggregate-validator input.",
+    "omitted": [
+      "host filesystem metadata",
+      "runtime process/namespace/socket identities",
+      "configuration payloads",
+      "native and child logs",
+      "embedded raw reports and command output"
+    ]
+  },
+  "independentExecutions": {
+    "operatorTcpFlow": {
+      "suite": "local-alpha-independent-operator-flow",
+      "passed": true,
+      "tests": [
+        {
+          "name": "unbound-human-status-and-generation-query-refusal",
+          "passed": true
+        },
+        {
+          "name": "actual-cli-master-bound-current-generation-and-human-header-observation",
+          "passed": true
+        },
+        {
+          "name": "inspection-and-human-status-preserve-all-controller-files",
+          "passed": true
+        },
+        {
+          "name": "foreign-loopback-endpoint-is-refused-before-request-despite-valid-looking-reply",
+          "passed": true
+        },
+        {
+          "name": "pid-file-substitution-refuses-query-and-preserves-state",
+          "passed": true
+        },
+        {
+          "name": "changed-main-config-refuses-query-and-preserves-journal",
+          "passed": true
+        },
+        {
+          "name": "human-flag-on-apply-refuses-before-journal-write",
+          "passed": true
+        },
+        {
+          "name": "existing-apply-and-generation-two-still-serve-real-native-response",
+          "passed": true
+        },
+        {
+          "name": "stopped-master-human-status-remains-stale-and-generation-query-fails-closed",
+          "passed": true
+        }
+      ],
+      "cleanup": {
+        "nativeStopped": true,
+        "nativeExitCode": 0,
+        "nativeSignal": null,
+        "groupGone": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "fixturesStopped": true
+      },
+      "sourceFilesSha256": {
+        "x10/control/cli.mjs": "72972fd1093068d05b788a326962f641fb2871dd7fa4cabb66957fcb3b22775b",
+        "x10/control/manager.mjs": "f033c4ec66973211bad096cccdbbce63d724c02458711e3ff3a04f5227d9dc53",
+        "x10/control/generations.mjs": "dba28810084f0cbb84275cc200f5bec93150406306c6bd78b06ac2b585815789",
+        "x10/control/status-format.mjs": "522d932cbfe9ca8493a5f472207da910eb71476ed47f1148dda589a4171929f8",
+        "x10/test/operator-status.test.mjs": "0c24bce2518848d14c317b451c261f437a8209387ea9ae8a1abb3e86c560e03d"
+      },
+      "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+      "harnessSha256": "4a60924c2b193cfe34362ae45d6eea087576f26d65f6ae74cb078c65c789b99e",
+      "sourceUnchangedDuringTest": true,
+      "binaryUnchangedDuringTest": true
+    },
+    "packagedLifecycleFlow": {
+      "suite": "local-alpha-independent-package-flow",
+      "passed": true,
+      "tests": [
+        {
+          "name": "pack-extract-install-keeps-native-bytes-and-license",
+          "passed": true
+        },
+        {
+          "name": "symlink-output-and-install-parent-reject-without-target-mutation",
+          "passed": true
+        },
+        {
+          "name": "default-run-has-only-two-explicit-loopback-http-listeners-and-no-control-api",
+          "passed": true
+        },
+        {
+          "name": "installed-human-status-apply-and-fresh-revert-use-native-serving-process",
+          "passed": true
+        },
+        {
+          "name": "live-uninstall-and-foreign-pid-stop-refuse-without-signalling-sentinel",
+          "passed": true
+        },
+        {
+          "name": "guarded-graceful-stop-reaps-foreground-supervisor-and-native-group",
+          "passed": true
+        },
+        {
+          "name": "uninstall-preserves-changed-config-and-unrecognized-operator-data",
+          "passed": true
+        },
+        {
+          "name": "clean-stopped-installation-uninstalls-without-leftover-prefix",
+          "passed": true
+        }
+      ],
+      "cleanup": {
+        "supervisorStopped": true,
+        "nativeGroupGone": true,
+        "sentinelStopped": true,
+        "temporaryRootRemoved": true,
+        "normalUninstall": true
+      },
+      "sourceFilesSha256": {
+        "x10/alpha/cli.mjs": "5792054b28d36a1301392dd68c7ea360545de606d58b78df9abbeacf97e256b4",
+        "x10/alpha/runtime.mjs": "5952dfe5eb577daa3e4e8d0bf2d7b36d5f4ce53ff901814f98a1880e6dea66e2",
+        "x10/alpha/README.md": "4779fba1f6bee0b5bd111784553f37d06f592239b179ab4ba77a9b9f13c372bf",
+        "x10/alpha/NOTICE.txt": "27f28e07cead124c76c2cd290077117278c2dd61ac336d04ef3f08a48de685bc",
+        "x10/control/cli.mjs": "72972fd1093068d05b788a326962f641fb2871dd7fa4cabb66957fcb3b22775b",
+        "x10/control/manager.mjs": "f033c4ec66973211bad096cccdbbce63d724c02458711e3ff3a04f5227d9dc53",
+        "x10/control/listeners.mjs": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+        "x10/control/generations.mjs": "dba28810084f0cbb84275cc200f5bec93150406306c6bd78b06ac2b585815789",
+        "x10/control/status-format.mjs": "522d932cbfe9ca8493a5f472207da910eb71476ed47f1148dda589a4171929f8",
+        "x10/test/alpha.test.mjs": "f6cbbe5ecc597170b68650d2c02146b46d738fef4ad9a25590da215c655f6f11"
+      },
+      "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+      "harnessSha256": "71b996ac47466483c54404796f8d7e249149920b55627e78ec145385aba61915",
+      "sourceUnchangedDuringTest": true,
+      "binaryUnchangedDuringTest": true
+    }
+  },
+  "executionCounts": {
+    "operatorTcpFlow": 9,
+    "packagedLifecycleFlow": 8
+  },
+  "sourceReview": [
+    {
+      "path": "x10/control/cli.mjs",
+      "sha256": "72972fd1093068d05b788a326962f641fb2871dd7fa4cabb66957fcb3b22775b",
+      "contracts": [
+        "Additive human-status and explicit generation-query flags; cross-command flags rejected before dispatch; default JSON preserved."
+      ]
+    },
+    {
+      "path": "x10/control/manager.mjs",
+      "sha256": "f033c4ec66973211bad096cccdbbce63d724c02458711e3ff3a04f5227d9dc53",
+      "contracts": [
+        "Additive inspector reuses existing bound-master, pending, file and ephemeral lock guards before and after observation; apply/recover acceptance unchanged."
+      ]
+    },
+    {
+      "path": "x10/control/generations.mjs",
+      "sha256": "dba28810084f0cbb84275cc200f5bec93150406306c6bd78b06ac2b585815789",
+      "contracts": [
+        "Exact private Unix or explicit IPv4 loopback endpoint; owned LISTEN inode and OS lifetime before/after GET; strict schema, uint64 strings, nullable unresolved states, byte/process/procfs/HTTP limits."
+      ]
+    },
+    {
+      "path": "x10/control/status-format.mjs",
+      "sha256": "522d932cbfe9ca8493a5f472207da910eb71476ed47f1148dda589a4171929f8",
+      "contracts": [
+        "Revision-header observation labels, pending/mismatch/error actions and terminal-control escaping; health/drain explicitly unperformed."
+      ]
+    },
+    {
+      "path": "x10/alpha/cli.mjs",
+      "sha256": "5792054b28d36a1301392dd68c7ea360545de606d58b78df9abbeacf97e256b4",
+      "contracts": [
+        "Manifest/native/module/generated-input verification; allowlisted private installation and bundle; explicit supervised sessions; pre-spawn signal handlers; guarded SIGQUIT and faulted refusal; preserved changed/unknown data and quarantine removal."
+      ]
+    },
+    {
+      "path": "x10/alpha/runtime.mjs",
+      "sha256": "5952dfe5eb577daa3e4e8d0bf2d7b36d5f4ce53ff901814f98a1880e6dea66e2",
+      "contracts": [
+        "Canonical private ownership; exact prefix/config filtering; namespace/lifetime/UID/executable/pidfile resolution; read-only remaining-group check."
+      ]
+    },
+    {
+      "path": "x10/test/operator-status.test.mjs",
+      "sha256": "0c24bce2518848d14c317b451c261f437a8209387ea9ae8a1abb3e86c560e03d",
+      "contracts": [
+        "Actual native TCP inspection plus separately identified synthetic schema/HTTP/deadline controls and fixture cleanup."
+      ]
+    },
+    {
+      "path": "x10/test/alpha.test.mjs",
+      "sha256": "f6cbbe5ecc597170b68650d2c02146b46d738fef4ad9a25590da215c655f6f11",
+      "contracts": [
+        "Actual install/session/restart/bundle, startup cancellation, abnormal exit, tamper/refusal and test-owned cleanup contracts."
+      ]
+    },
+    {
+      "path": "x10/alpha/README.md",
+      "sha256": "4779fba1f6bee0b5bd111784553f37d06f592239b179ab4ba77a9b9f13c372bf",
+      "contracts": [
+        "Host-specific experimental alpha, demo-only health, explicit API opt-in, lifecycle failures, removal policy and unsigned/dynamic bundle limitations."
+      ]
+    },
+    {
+      "path": "x10/alpha/NOTICE.txt",
+      "sha256": "27f28e07cead124c76c2cd290077117278c2dd61ac336d04ef3f08a48de685bc",
+      "contracts": [
+        "NGINX upstream and MurmurHash2 notices; host libraries not bundled."
+      ]
+    }
+  ],
+  "fixturesStopped": true,
+  "limitations": [
+    "This scoped review does not certify production readiness, performance, application health, worker readiness, listener drain or atomic traffic cutover.",
+    "Independent native generation inspection used explicit TCP. Local AF_UNIX remains kernel-denied; separate hosted Unix and full aggregate results are root-owned gates.",
+    "Procfs and filesystem observations are sampled; checked I/O budgets do not cancel a stalled kernel syscall. Node lacks pidfd_send_signal, leaving a verification-to-signal race.",
+    "Ownership and unsigned hashes do not isolate a malicious same-UID actor racing private files/processes.",
+    "The independent packaged flow exercised normal SIGQUIT cleanup. Startup interruption and abnormal-master/orphan behavior were reviewed in the owner fixture, not independently replayed here.",
+    "One actual local/proc PID mapping arrangement was observed; this is not an arbitrary namespace/platform/ABI matrix.",
+    "Bundles require Node 22+, Linux procfs and compatible dynamic host libraries; binary debug/configure metadata can contain build paths. No private local bundle is published.",
+    "Power loss, every allocation/storage/signal failure and all crash/recovery races are outside this execution."
+  ]
+}

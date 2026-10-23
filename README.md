@@ -1,7 +1,8 @@
 # NGINX X10 — native development
 
 An independent NGINX Open Source fork focused on compatibility, verified
-correctness fixes and measured operational improvements. Start with
+correctness fixes and measured operational improvements. Try the
+[local Linux alpha quickstart](x10/QUICKSTART.md), then see
 [the X10 guide](x10/README.md), [verified status](x10/STATUS.md),
 [local native control](x10/control/README.md) and [the development plan](x10/PLAN.md).
 

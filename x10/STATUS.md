@@ -1,6 +1,6 @@
 # NGINX X10: проверенное состояние
 
-Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, реальным HTTP/3 interop и генерируемыми QUIC-проверками под санитайзерами. Последний единый локальный прогон завершился **18/18 успешных групп**: [milestone-6 JSON](evidence/native-checks-milestone-6.json). Этот этап добавляет native API поколений конфигурации и процессов; бинарник реально пересобран. Это development-кандидат; performance acceptance и готовность к production остаются открытыми.
+Состояние на **23 октября 2026 года**: полный native fork NGINX дополнен локальным контроллером конфигурации, закреплённой официальной выборкой тестов, реальным HTTP/3 interop и генерируемыми QUIC-проверками под санитайзерами. В седьмом этапе добавлены изолированная Linux alpha, читаемый operator status и явная проверка native поколений. Финальный локальный `--official` прогон завершился **20/20 успешных групп**, exit 0: [milestone-7 JSON](evidence/native-checks-milestone-7.json). Новый профиль содержит 19 обычных / 20 с official групп. Hosted CI нового commit ещё ожидается. Это development alpha; performance acceptance и готовность к production остаются открытыми.
 
 ## Основа и чтение исходников
 
@@ -320,6 +320,71 @@ control API и generations, затем feature-off build. Никакой пос�
 Это новая наблюдаемость native процессов, не увеличение throughput.
 [Срез продукта и этапы выпуска](ROADMAP.md) отделяет готовое от будущего:
 локальная alpha, измеренная beta и кандидат промышленного релиза.
+
+## Локальная Linux alpha и operator status: седьмой этап
+
+[Quickstart](QUICKSTART.md) описывает установку проверенного native build в новый
+личный каталог, foreground `run`, явный `bind`, применение/откат, `stop`, новый
+запуск и guarded `uninstall`. Системная установка и `sudo` не нужны. HTTP и
+комплектный self-check слушают только loopback; этот self-check проверяет демо,
+а не внешнее приложение. Обычный запрос обрабатывается native C-бинарником.
+Новый `run` создаёт отдельную сессию `runs/<session>` с последним подтверждённым
+содержимым; прежние controller histories сохраняются отдельно. Это не перенос
+старой привязки на новый master и не непрерывная история между master lifetimes.
+
+`status --human` показывает подтверждённую revision, привязку master, результат
+существующего revision-header probe, изменённые файлы и pending transaction с
+подсказками оператору. JSON и exit semantics прежнего `status` сохранены:
+`ok:true` означает успешное получение состояния, включая unbound или stale
+runtime, а не готовность приложения. Health и listener drain этой командой
+не проверяются.
+
+Новая read-only команда `inspect-generations --state PATH --control-socket PATH`
+обращается только к явно выбранному API. Для прямых локальных проверок доступен
+явный `--control-address 127.0.0.1:PORT`. До и после GET проверяются bound master
+lifetime, PID/network namespaces, ownership LISTEN inode, зарегистрированные
+файлы и бинарник. Native PID сопоставляется с PID внутри namespace master;
+путь `/proc` использует отдельный proc PID. Ответ ограничен по времени HTTP,
+размеру и числу процессов; uint64 остаются decimal strings. Достоверно полученное
+`native.available:false` сохраняет reason/null identities, а не превращается
+в readiness. Endpoint не открывается автоматически, условия apply/recover
+не изменены. Procfs guards являются выборками; checked I/O budget не может
+прервать зависший kernel syscall.
+
+Целевой TCP-набор operator status прошёл **30/30 TAP**, включая actual native
+generation 1→2, foreign endpoint без отправки HTTP, отказы схемы/размера/deadline,
+закрытие выбранного endpoint во время наблюдения и stale master. Независимый
+runtime review прошёл **9/9** отдельных контролей. [Независимый review](review/local-alpha-review.md)
+отдельно подтвердил **8/8** package controls на замороженных файлах.
+Эти проверки не складываются с aggregate в число независимых функций.
+Наблюдалось различие local/proc PID в одной
+реальной procfs-конфигурации; произвольная namespace matrix не проверена.
+
+Alpha package собирается из подтверждённого build manifest, содержит native
+бинарник, Node CLI, примеры и лицензии. Bundle допускает установку без исходного
+checkout и сборки, но требует Node.js 22+ и совместимые динамические библиотеки.
+Это не универсальный Linux binary и не Windows-порт. `stop` использует SIGQUIT
+только для установленной идентичности; abnormal exit и неизвестные файлы
+препятствуют автоматическому продолжению/удалению. Полная crash/update matrix
+упаковки ещё не проверена.
+
+Обычный alpha `run` не включает native control API. Опция `--control-socket`
+принимает новый private Unix path непосредственно внутри установки; TCP
+management listener и fallback при запуске пакета не включаются. Локальный
+kernel по-прежнему запрещает AF_UNIX; обязательный hosted gate отдельно запускает
+control API, generations и operator-status по Unix, затем feature-off build.
+CI настроен готовить tar и SHA-256 sidecar: [описание проверок](CI.md).
+
+Финальный локальный [milestone-7 aggregate](evidence/native-checks-milestone-7.json)
+прошёл **20/20**, exit 0: operator-status **30/30 TAP**, alpha lifecycle **9/9**,
+controller **68/68**, observer **29/29**. Official sample: 35 files, 32 PASS и
+3 dependency skips; **1083 strict PASS / 25 SKIP / 1 expected TODO / 0 strict FAIL**.
+У новых operator/alpha групп нет skips, TODO или cancellations. Native C на
+этом этапе не менялся; SHA-256 бинарника остался
+`e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139`.
+Это локальный прогон замороженных файлов до публикации. Новый hosted run,
+включая обязательные Unix проверки, ещё ожидается; прежний успешный commit
+их не подтверждает.
 
 ## Производительность: измеритель и открытый результат
 

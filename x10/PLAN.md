@@ -52,7 +52,7 @@ Development branch не является промышленным релизом
 
 ## Реализовано к 23 октября 2026 года
 
-Первый C patch и native baseline дополнены локальным контроллером ревизий с durable intent и storage-failure recovery, ручной captured-process listener диагностикой, native generation/birth API, профилем runner из 18 групп, generated QUIC parameter/frame checks под ASan/UBSan, реальным HTTP/3 interop и независимым HEAD client, mail TLS и FastCGI/SCGI/uWSGI fixtures, 19 feature-cases и закреплённой выборкой из 35 официальных test files. Новый benchmark driver использует C client и pristine native origin, проверяет сопоставимость сборок и сохраняет сырые результаты. Точные успешные проверки, пропуски и ограничения находятся в [STATUS](STATUS.md); это не закрывает всю матрицу выше.
+Первый C patch и native baseline дополнены локальным контроллером ревизий с durable intent и storage-failure recovery, ручной captured-process listener диагностикой, native generation/birth API, generated QUIC parameter/frame checks под ASan/UBSan, реальным HTTP/3 interop и независимым HEAD client, mail TLS и FastCGI/SCGI/uWSGI fixtures, 19 feature-cases и закреплённой выборкой из 35 официальных test files. Добавлены изолированная Linux alpha, `status --human`, read-only `inspect-generations` с привязкой endpoint к master и упаковка из подтверждённого build manifest. Текущий runner настроен на 19 обычных / 20 `--official` групп; финальный локальный [milestone-7](evidence/native-checks-milestone-7.json) прошёл 20/20, без новых изменений C и с прежним native binary SHA. Предыдущий milestone-6 прошёл 18/18. Новый benchmark driver использует C client и pristine native origin, проверяет сопоставимость сборок и сохраняет сырые результаты. Точные успешные проверки, пропуски и ограничения находятся в [STATUS](STATUS.md); это не закрывает всю матрицу выше.
 
 Ближайшие работы после этого checkpoint:
 
@@ -62,4 +62,12 @@ Development branch не является промышленным релизом
 4. Добавлять более широкие workloads, выделенный стабильный host и искать измеренные bottlenecks. Новый C client/native-origin HTTP1 benchmark пока не доказывает ускорение QUIC patch, отсутствие регрессий или масштабирование нескольких workers. Сохранять прежние неблагоприятные Node measurements рядом с новыми.
 5. После укрепления локального управления добавить удалённый API с TLS/RBAC/audit и подключение консоли; проверить размещение native-процесса, обновление и откат в выбранной инфраструктуре проекта.
 
-Сводный продуктовый порядок и критерии alpha/beta/release: [ROADMAP](ROADMAP.md). Следующая эксплуатационная задача после native generation metadata — полезный операторский status и воспроизводимая упаковка локальной alpha; стабильный performance стенд остаётся отдельной работой.
+Сводный продуктовый порядок и критерии alpha/beta/release: [ROADMAP](ROADMAP.md).
+Операторский путь локальной alpha реализован и описан в [QUICKSTART](QUICKSTART.md).
+Локальный aggregate и lifecycle пакета прошли; [независимый review](review/local-alpha-review.md)
+проверил 9 operator и 8 package controls. Следующая приёмка — отдельные
+обязательные hosted Unix gates; затем нужны установка на чистой совместимой
+машине, сценарий обновления и дополнительные отказы хранения/процессов.
+Foreground alpha с отдельными историями сессий пока не является системным
+service или переносимой промышленной поставкой. Стабильный performance стенд
+остаётся отдельной работой.

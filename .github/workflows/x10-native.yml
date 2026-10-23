@@ -55,13 +55,28 @@ jobs:
         run: |
           node x10/test/control-api-baseline.mjs --transport unix > x10/.build/ci-evidence/control-api-unix.json
           node x10/test/generations.mjs --transport unix > x10/.build/ci-evidence/generations-unix.json
+          X10_STATUS_TRANSPORT=unix node --test --test-reporter=tap x10/test/operator-status.test.mjs | tee x10/.build/ci-evidence/operator-status-unix.tap
       - name: Build profile without control API
         run: bash x10/test/control-disabled.sh --output x10/.build/ci-evidence/control-disabled.json
+      - name: Package local Linux alpha
+        run: node x10/alpha/cli.mjs pack --output x10/.build/dist/nginx-x10-linux-alpha.tar.gz > x10/.build/ci-evidence/alpha-package.json
+      - name: Checksum local Linux alpha
+        working-directory: x10/.build/dist
+        run: sha256sum nginx-x10-linux-alpha.tar.gz > nginx-x10-linux-alpha.tar.gz.sha256
       - name: Preserve JSON evidence
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: x10-native-evidence
-          path: x10/.build/ci-evidence/*.json
+          path: |
+            x10/.build/ci-evidence/*.json
+            x10/.build/ci-evidence/*.tap
           if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve local Linux alpha
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: nginx-x10-linux-alpha
+          path: x10/.build/dist/nginx-x10-linux-alpha.tar.gz*
+          if-no-files-found: error
           retention-days: 14

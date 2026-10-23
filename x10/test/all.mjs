@@ -261,7 +261,7 @@ async function main() {
   result.mode = opts.provenanceOnly ? 'provenance-only' : 'functional-checks';
   if (opts.provenanceOnly) result.limitations.push('Only source/build identity was checked; no functional suite was run.');
   const p = result.provenance;
-  const env = { X10_NGINX_BINARY: p.binary };
+  const env = { X10_NGINX_BINARY: p.binary, X10_BUILD_MANIFEST: p.manifestPath };
   const suites = [
     { name: 'http-tls-http2-reload', file: process.execPath, args: ['x10/test/http-baseline.mjs', '--binary', p.binary], kind: 'http' },
     { name: 'stream-mail', file: process.execPath, args: ['x10/test/stream-mail-baseline.mjs'], kind: 'mail' },
@@ -275,6 +275,8 @@ async function main() {
     { name: 'quic-frame-boundaries', file: 'bash', args: ['x10/test/quic-frames.sh', '--source', p.source, '--objs', p.objects], kind: 'generated', frame: true },
     { name: 'native-load-client-verification', file: process.execPath, args: ['x10/bench/native-load.mjs', '--verify'], kind: 'load-client' },
     { name: 'managed-native-control', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/control.test.mjs'], kind: 'tap' },
+    { name: 'operator-status', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/operator-status.test.mjs'], kind: 'tap', requireCompleteTAP: true },
+    { name: 'local-alpha-lifecycle', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/alpha.test.mjs'], kind: 'tap', requireCompleteTAP: true },
     { name: 'listener-observer-boundaries', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/listeners.test.mjs'], kind: 'tap' },
     { name: 'reload-listener-observation', file: process.execPath, args: ['x10/test/handover-baseline.mjs', '--binary', p.binary], kind: 'handover' },
     { name: 'native-control-api', file: process.execPath, args: ['x10/test/control-api-baseline.mjs', '--binary', p.binary, '--source', p.source, '--transport', 'tcp'], kind: 'native-control' },
@@ -292,6 +294,13 @@ async function main() {
         const pass = Number(run.stdout.match(/^# pass (\d+)\s*$/m)?.[1]);
         const fail = Number(run.stdout.match(/^# fail (\d+)\s*$/m)?.[1]);
         data = { format: 'node-test-tap', pass, fail, valid: pass > 0 && fail === 0 };
+        if (suite.requireCompleteTAP) {
+          data.total = Number(run.stdout.match(/^# tests (\d+)\s*$/m)?.[1]);
+          data.skipped = Number(run.stdout.match(/^# skipped (\d+)\s*$/m)?.[1]);
+          data.todo = Number(run.stdout.match(/^# todo (\d+)\s*$/m)?.[1]);
+          data.cancelled = Number(run.stdout.match(/^# cancelled (\d+)\s*$/m)?.[1]);
+          data.valid &&= data.total === pass && data.skipped === 0 && data.todo === 0 && data.cancelled === 0;
+        }
       } else data = JSON.parse(run.stdout);
     } catch (error) { verificationError = `Invalid result: ${error.message}`; }
     let valid = false;

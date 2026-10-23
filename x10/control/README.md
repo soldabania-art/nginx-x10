@@ -179,9 +179,41 @@ identify every old configuration generation, rule out intervening respawns,
 certify health or establish an atomic all-traffic cutover. See the observer's
 supported endpoint, namespace, resource and elapsed-budget limits.
 
+## Human status and native generation inspection
+
+The existing JSON status remains the default. For operator-readable output:
+
+```sh
+node x10/control/cli.mjs status --state /home/alex/x10-run/.x10-control --human
+```
+
+The text separates an unbound or changed master, the observed revision header,
+config/fragment differences, pending work and history. It suggests the next
+inspection or recovery command. Presentation does not change the existing JSON
+status exit semantics: an observation is not an application health or drain test.
+
+To inspect native generations, explicitly start the native master with its
+optional control endpoint (for example `-l unix:/home/alex/x10-run/control.sock`),
+then select that endpoint:
+
+```sh
+node x10/control/cli.mjs inspect-generations \
+  --state /home/alex/x10-run/.x10-control \
+  --control-socket /home/alex/x10-run/control.sock
+```
+
+The command opens no listener. It sends a bounded GET and verifies the bound
+master and registered files before and after observing its owned control socket.
+The response must have the expected master scope, process identities and exact
+decimal-string uint64 counters. A deliberately selected IPv4 loopback TCP API
+can be inspected with `--control-address 127.0.0.1:PORT`; there is no automatic
+transport fallback. Unix socket creation may be disallowed by the host kernel.
+Native `available:false` is a diagnostic state. Even `available:true` does not
+certify worker initialization, health, listener closure or accepted-stream drain.
+
 ## Recovery and boundaries
 
-All output is JSON. An applied/bound operation has `ok:true`. An apply that is
+Output is JSON unless `status --human` was requested. An applied/bound operation has `ok:true`. An apply that is
 rejected, rolled back or ambiguous has nonzero CLI status; inspect `outcome`.
 A successful durable reconciliation has `ok:true,outcome:"reconciled"` and exits
 zero: this means recovery succeeded. Its `recordedOutcome` preserves whether the

@@ -1,7 +1,9 @@
 # NGINX X10: продукт и этапы выпуска
 
-Срез на 23 октября 2026 года. База нового development-этапа:
-`8d769208cf79b8a583077ccb75be30f59e9563a1`; текущие файлы прошли локальный milestone-6 aggregate.
+Срез на 23 октября 2026 года. База седьмого development-этапа:
+`ea150e4e47ecad2c53b0b72e088977220686207a`. Предыдущий milestone-6 прошёл
+18/18 групп; новая Linux alpha прошла локальный [milestone-7 aggregate](evidence/native-checks-milestone-7.json)
+20/20, exit 0. Hosted CI нового commit ещё ожидается.
 Точные результаты и ограничения: [STATUS](STATUS.md).
 
 ## Что строим
@@ -27,9 +29,10 @@
 | Native основа | Полный fork с исходной историей и лицензией; Linux-сборка с 105 compiled modules | Наличие модуля не означает проверку каждого режима и ОС |
 | Исправления ядра | Два класса ошибок QUIC transport parameters исправлены; добавлен native API поколений конфигурации и birth ID процессов | Это не переписанные и улучшенные реализации всех протоколов |
 | Локальное управление | Ревизии fragment, native validation, apply/revert, health gate, durable journal и documented recovery | Нет удалённого admin service, полной ACID семантики или отмены выполненных запросов |
+| Операторский путь alpha | Изолированная установка, foreground run, status в JSON/тексте, явный generation inspection, stop/restart и guarded removal; локальный lifecycle 9/9 TAP | Linux и доверенный оператор; совместимая динамическая среда; hosted Unix gate и чистая машина ещё предстоят |
 | Reload | Диагностика captured listeners, native generation/birth metadata, живой старый поток через reload и текущий worker respawn | Нет полного native generation fence или мгновенного переключения всего трафика |
 | Совместимость | HTTP/TLS/HTTP2, TCP/UDP/mail, mail TLS, adapters и два независимых HTTP3-клиента проверены в указанных сценариях | Матрица клиентов, протокольных состояний, отказов и платформ остаётся неполной |
-| Проверки | 18 локальных групп прошли; controller 68 TAP, observer 29 TAP, native counter boundaries 20. Hosted CI проверяется по новому commit | Это разные единицы проверки, а не количество улучшенных функций |
+| Проверки | Milestone-7: 20/20 групп с official; operator-status 30 TAP, alpha lifecycle 9 TAP. Независимый review: 9 operator и 8 package controls | Это разные единицы проверки, а не количество улучшенных функций; hosted CI относится к точному commit |
 | Измерения | C load client, native origin, A/A и A/B, сырые CPU/RSS/latency records | Разброс одинаковых бинарников пока не позволяет принять performance result |
 
 Ранняя Vercel-консоль находится в отдельном Node-проекте. Она пока не является
@@ -39,7 +42,7 @@
 
 | Этап | Что получит пользователь | Условие завершения |
 | --- | --- | --- |
-| Локальная alpha | Установка, запуск, просмотр поколений и workers, применение/откат и понятное восстановление | Полный сценарий оператора на чистой среде; native generation API с reload/respawn checks; воспроизводимая установка и удаление |
+| Локальная alpha | Локальный путь и aggregate проверены: установка, запуск, состояние, явный просмотр поколений, применение/откат и остановка | Ещё нужны hosted Unix transport и установка на чистой совместимой среде; ограничения recovery сохранены |
 | Рабочая beta | Native сервис и подключённое защищённое управление, затем консоль | Проверенные права доступа, audit, обновление/откат; длительная нагрузка и отказы; заранее объявленные performance criteria на стабильном стенде |
 | Кандидат промышленного релиза | Версионированная поставка с поддерживаемыми профилями и эксплуатационной документацией | Build/platform matrix, soak и resource-failure checks, release artifacts/checksums, upstream/dependency update process и проверенная миграция |
 
@@ -50,15 +53,22 @@ stream/mail и filters. Для каждого изменения нужны ко
 
 ## Ближайшая разработка
 
-Добавлена native возможность: read-only сведения о поколении успешно
-установленной конфигурации и принадлежности процессов к нему в явно включённом
-control API. Проверены существующий API через явный loopback TCP, HUP/PATCH reload, отклонённый config, respawn и reuse slots. Private Unix transport остаётся отдельным обязательным hosted gate.
-Реализация собрана и прошла 10 candidate case groups, 20 native boundary checks, полный локальный профиль и feature-off build. Это development-функция; Unix transport локально запрещён kernel и проверяется отдельными обязательными CI steps.
+После native generation metadata реализованы читаемый status и изолированная
+Linux alpha: [команды оператора](QUICKSTART.md). Явный `inspect-generations`
+проверяет соответствие endpoint текущей привязке master до и после GET;
+`status --human` сохраняет существующие JSON/exit semantics и отдельно
+показывает unbound/stale/pending и расхождение revision. Пакет по умолчанию
+не открывает control API. Дополнительный Unix socket включается только явно.
+Повторный запуск создаёт новую сессию, сохраняя прежнюю историю отдельно.
 
 Generation ID показывает принадлежность процесса, а не подтверждение закрытия
 listener, здоровье приложения или завершение старых запросов. Более сильное
 подтверждение worker drain потребует отдельного native контракта.
 
-Следом — удобный операторский status и упаковка локальной alpha. Наращивать
+Локальные aggregate и package lifecycle прошли; [независимый review](review/local-alpha-review.md)
+зафиксировал отдельные operator/package controls. Ближайший шаг — проверить
+обязательный hosted Unix gate и установку на чистой совместимой
+машине. Затем нужны обновление/откат поставки и дополнительные сценарии отказов;
+упаковка не устанавливает системный service. Наращивать
 число несвязанных тестов вместо полезной функции не является целью этапа.
 Даты выпуска и проценты готовности не назначены без соответствующих проверок.
