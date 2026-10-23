@@ -107,3 +107,12 @@ observer: локально 22/22, независимо проверены отр
 бинарника. Следующий C2 начинается с read-only state inventory/safepoint в
 [закреплённом OpenSSL](continuum/OPENSSL-STATE.md); реальный semantic
 export/import и native integration остаются отдельными работами.
+
+Первый C2a observation profile реализован и локально проверен: **8/8** real
+TLS cases на изолированном pinned OpenSSL 3.0.13, metadata-only key-install
+monitor, private buffers/sequences и typed retry ledger. [C2a profile](continuum/C2A-PROFILE.md)
+отделяет narrow `allowed` от полной safepoint/transfer приёмки. Полный native
+aggregate повторён: 20/20; прежний binary SHA, upstream и LICENSE сохранены.
+Сначала проверить hosted CI exact C2a SHA, затем закрыть peer/read KeyUpdate,
+retry/control/shutdown inventory и runtime cancellation. C2b semantic capsule
+не начинается с предположения о полноте одного положительного probe.

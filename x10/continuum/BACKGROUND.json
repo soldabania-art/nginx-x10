@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-c2a-20261023T164924Z",
-    "owner": "root-c2a-coordinator",
-    "baseCommit": "a882c9505271ab49abbdd6293177f3683d72f3a4",
-    "acquiredAtUTC": "2026-10-23T16:49:24.218138+00:00",
-    "expiresAtUTC": "2026-10-23T17:34:24.218138+00:00",
-    "coordinationOnly": true
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -30,7 +23,7 @@
   "acceptedCheckpoint": {
     "nativeCommit": "193afe99f338b9435082b002f2b5e21eda058449",
     "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/39985217372",
-    "continuumStage": "C1 accepted locally and hosted: real authenticated TLS1.3 handshake and record observation only",
+    "continuumStage": "C2a narrow read-only pinned OpenSSL probe accepted locally; C1 hosted acceptance retained; full inventory/export-import remain pending",
     "continuumNativeIntegration": false,
     "continuumEvidence": "x10/evidence/continuum-c1.json",
     "nativeHostedCI": {
@@ -79,12 +72,25 @@
       "state": "success",
       "pushRun": 39979729141,
       "scope": "Full native workflow including official aggregate, Unix gates, feature-off build and alpha packaging"
+    },
+    "c2aLocal": {
+      "state": "success-narrow-observation-profile",
+      "evidence": "x10/evidence/continuum-c2a.json",
+      "tests": 8,
+      "skipped": 0,
+      "sourcePin": "85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c",
+      "fullInventoryAccepted": false,
+      "semanticExportImport": false,
+      "migration": false,
+      "hostedState": "pending-exact-publication-SHA"
     }
   },
   "pendingVerification": [
-    "C2a pinned-source read-only inventory and safe-point implementation is next; export/import remains unimplemented",
-    "Current coordination-only successors are not new runtime acceptance; current PR base divergence conservatively reruns expensive profiles",
-    "First scheduled cloud development run has not been independently verified by recorded run history"
+    "Read hosted native/research workflows for the first implementation commit introducing x10/evidence/continuum-c2a.json; only completed success is acceptance. Exact SHA/run IDs follow publication.",
+    "C2a extended inventory: peer-requested/read KeyUpdate, retry completion and unrelated success, control/alert/shutdown, sequence/key usage admission and actual TLS-runtime interruption cleanup.",
+    "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
+    "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
+    "First scheduled cloud development run has not been independently verified by recorded run history."
   ],
   "nextTasks": [
     {
@@ -99,8 +105,8 @@
     },
     {
       "id": "C2",
-      "state": "next",
-      "goal": "C2a read-only instrumentation of pinned OpenSSL source/build: directional next sequences, monitored app-key generations, private input/plaintext/output and control/retry obligations; unknown state rejects. Stale wpend metadata need not be zero, and KU getter NONE is not proof of completed control work. See C2A-NOTES.md. C2b semantic export/import follows only after inventory gate."
+      "state": "active-C2a-extended-inventory",
+      "goal": "First pinned-source read-only observation profile implemented with8 real TLS tests; accept exact hosted SHA, extend peer/read KeyUpdate, retry/control/shutdown/limits/cancellation inventory before reviewed C2b semantic export/import. Narrow allowed is not traffic grant or completeness."
     },
     {
       "id": "C3",
@@ -167,7 +173,7 @@
     },
     "shaConcurrency": "Implementation jobs completed despite newer metadata SHA"
   },
-  "nextTaskNotes": "x10/continuum/C2A-NOTES.md",
+  "nextTaskNotes": "x10/continuum/C2A-PROFILE.md",
   "commercialStrategy": {
     "state": "documented-hypotheses-not-launched-offer",
     "updatedDate": "2026-10-23",
@@ -186,5 +192,15 @@
     "commercialInfrastructurePurchased": false,
     "outreachAuthorizedByThisDocument": false,
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
+  },
+  "lastDevelopmentPass": {
+    "runId": "continuum-c2a-20261023T164924Z",
+    "baseCommit": "a882c9505271ab49abbdd6293177f3683d72f3a4",
+    "publicationParent": "941fc3ea2f58ed8df45539841ff28aaf736f5c4e",
+    "result": "Pinned OpenSSL read-only observation implemented; local8/8 plus unchanged C0/C1/native regressions; no migration.",
+    "helpers": "6 temporary roles available; no permanent sessions promised",
+    "nativeSourceChanged": false,
+    "spendingUSD": 0,
+    "perFileLedger": "x10/review/continuum-c2a-ledger.json"
   }
 }

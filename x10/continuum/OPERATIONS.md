@@ -105,7 +105,7 @@ build, использующие общий root Makefile или общие gener
 | Cloud assistant automation | Часовое расписание включено; точные ID/VEVENT и наблюдения запуска находятся в `BACKGROUND.json`. | Возобновляет ограниченную сессию по свежему Git checkpoint и подключает доступную команду. |
 | Source scope | В обоих workflows: отдельный job с timeout 5 минут, Node 22 и семью тестами classifier. | Выбирает нужный дорогостоящий профиль по точному изменению исходников; сам протоколы не проверяет. |
 | Native CI | `.github/workflows/x10-native.yml`: push/PR/manual, standard Ubuntu 24.04, основной job 20 минут. | Собирает и проверяет соответствующий native commit, когда профиль выбран. |
-| Continuum CI | `.github/workflows/x10-continuum.yml`: push/PR/manual, Node 22, standard Ubuntu 24.04, основной job 10 минут. | Проверяет C0 и реальный handshake/record-observer C1; новый hosted результат относится к точному implementation SHA. |
+| Continuum CI | `.github/workflows/x10-continuum.yml`: push/PR/manual, Node 22, standard Ubuntu 24.04, основной job 20 минут. | Проверяет C0, handshake/record-observer C1 и pinned-source read-only C2a; новый hosted результат относится к точному implementation SHA. |
 | GitHub cron | Не включён. | Постоянное выполнение тестов не предполагается. |
 
 Branch filters сохранены, workflow path filters удалены. Поэтому событие в

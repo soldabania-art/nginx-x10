@@ -527,9 +527,47 @@ bytes не закреплены. Сертификаты/traffic secrets/wire cap
 Native binary и C0 source hashes сохранены. CI classifier теперь проверяет
 delta события, пропускает дорогие jobs при metadata-only изменении и при
 неопределённости запускает проверки; SHA в concurrency сохраняет предыдущий
-implementation run. Hosted C1 ещё требует результата на опубликованном SHA.
+implementation run. Hosted C1 принят на `193afe99`; exact runs записаны в
+[checkpoint](continuum/CHECKPOINT.md).
 
 Следующий bounded task C2 — read-only instrumentation закреплённого OpenSSL:
 инвентаризация sequences, key generations, pending buffers и control obligations,
 затем проверяемый safepoint. Semantic exporter/importer разрабатывается после
 этого контракта; opaque context copying не используется.
+
+## Continuum C2a: read-only probe закреплённого OpenSSL
+
+Реализованы изолированный build OpenSSL 3.0.13 из exact source/tree, узкий
+key-install monitor, private-state probe, C fixture, независимый Node TLS client
+и очищенный aggregate. [Профиль](continuum/C2A-PROFILE.md),
+[evidence](evidence/continuum-c2a.json) и per-file ledger сохраняют identity,
+контрпримеры и ограничения. Реальные TLS cases локально прошли **8/8** без skips.
+Quiescent metadata совпадает при двух наблюдениях; directional next sequences
+сверены с wire. Partial header/body, unread plaintext, empty retry, реальный
+WANT_WRITE, queued и completed KeyUpdate отвергнуты. Completed server update
+имеет read generation 0/write 1, key-event serial 3 и getter NONE; wire oracle
+подтвердил KU/new-key records и нормальный TLS close.
+
+Публичный `SSL_pending()==0` не показывает полноту TLS obligations. Probe
+не делает SSL/BIO I/O. Typed caller ledger доверяет одному владельцу; он не
+является lock или detector конкурентных вызовов. Key-event serial не отслеживает
+все мутации SSL. Read-only `allowed` не выдаёт traffic grant, не доказывает
+полноту inventory и не подтверждает перенос. Негативные partial-I/O fixtures
+завершают transport без заявления graceful TLS closure.
+
+Нативный код сохранён. [Регрессия](evidence/continuum-c2a-native-regression.json)
+повторена: **20/20 групп**, official 1083 strict PASS / 25 SKIP /
+1 expected TODO / 0 strict FAIL; binary SHA прежний. C0: 21 core и 7 process;
+C1: 22/22. Новый hosted результат C2a остаётся pending на implementation SHA.
+
+Независимый reviewer дополнительно проверил четыре TLS cases с новыми
+размерами/фрагментацией и два отказа при подмене build identity. Семь synthetic
+monitor boundary controls учитываются отдельно от реального TLS. Исходные
+C/probe/patch bytes сохранены; в частную JS-копию добавлен доступ к harness.
+Точные root 8/8 используют неизменённый runner. Временные build/binary/PKI
+каталоги независимого прогона удалены.
+
+Следующий task — extended inventory: peer/read KeyUpdate, retry completion,
+control/alert/shutdown, usage-limit admission и actual TLS-runtime interruption.
+Semantic export/import, разные TLS code releases и native integration ещё
+не реализованы. Коммерческая модель и бюджет сохранены без новых покупок.

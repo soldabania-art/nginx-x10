@@ -1,0 +1,470 @@
+/*
+ * Isolated C2a read-only probe fixture with actual nonblocking TLS calls.  No state export, keylog, adapter, FD
+ * handover or native NGINX integration is implemented here.
+ * Public OpenSSL 3.0 API contracts reviewed: SSL_read, SSL_write,
+ * SSL_shutdown, SSL_key_update and SSL_CTX_set_alpn_select_cb.
+ * https://docs.openssl.org/3.0/man3/SSL_read/
+ * https://docs.openssl.org/3.0/man3/SSL_write/
+ * https://docs.openssl.org/3.0/man3/SSL_shutdown/
+ * https://docs.openssl.org/3.0/man3/SSL_key_update/
+ */
+#define _POSIX_C_SOURCE 200809L
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+#include <openssl/crypto.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <poll.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <signal.h>
+#include <errno.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <inttypes.h>
+#include "openssl-probe.h"
+
+#define MAX_APPLICATION_BYTES 65536U
+#define DEADLINE_MS 24000
+#define PRESSURE_LIMIT (4U * 1024U * 1024U)
+static volatile sig_atomic_t interrupted;
+static const unsigned char alpn[] = "continuum-c1";
+
+static void stop_signal(int sig) { (void) sig; interrupted = 1; }
+
+static int64_t now_ms(void)
+{
+    struct timespec ts;
+    if (clock_gettime(CLOCK_MONOTONIC, &ts) != 0) return -1;
+    return (int64_t) ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
+}
+
+static int ready(int fd, short events, int64_t deadline)
+{
+    struct pollfd pfd;
+    int rc;
+    int64_t remaining, now;
+    pfd.fd = fd; pfd.events = events; pfd.revents = 0;
+    while (!interrupted) {
+        now = now_ms();
+        if (now < 0 || (remaining = deadline - now) <= 0) return 0;
+        rc = poll(&pfd, 1, (int) remaining);
+        if (rc < 0 && errno == EINTR) continue;
+        if (rc <= 0 || (pfd.revents & (POLLERR | POLLNVAL))) return 0;
+        /* Retry SSL on HUP so close_notify is distinguished from raw EOF. */
+        return (pfd.revents & (events | POLLHUP)) != 0;
+    }
+    return 0;
+}
+
+static int nonblocking(int fd)
+{
+    int flags = fcntl(fd, F_GETFL);
+    if (flags < 0 || fcntl(fd, F_SETFL, flags | O_NONBLOCK) != 0) return 0;
+    flags = fcntl(fd, F_GETFD);
+    return flags >= 0 && fcntl(fd, F_SETFD, flags | FD_CLOEXEC) == 0;
+}
+
+static int choose_alpn(SSL *ssl, const unsigned char **out,
+    unsigned char *outlen, const unsigned char *in, unsigned int inlen,
+    void *arg)
+{
+    unsigned int at = 0, length;
+    (void) ssl; (void) arg;
+    while (at < inlen) {
+        length = in[at++];
+        if (length == 0 || length > inlen - at) return SSL_TLSEXT_ERR_ALERT_FATAL;
+        if (length == sizeof(alpn) - 1 && memcmp(in + at, alpn, length) == 0) {
+            *out = alpn; *outlen = (unsigned char) length;
+            return SSL_TLSEXT_ERR_OK;
+        }
+        at += length;
+    }
+    return SSL_TLSEXT_ERR_ALERT_FATAL;
+}
+
+static int hex_nibble(char c)
+{
+    if (c >= '0' && c <= '9') return c - '0';
+    if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+    return -1;
+}
+
+static int reject_password(char *buffer, int size, int writing, void *argument)
+{
+    (void) buffer; (void) size; (void) writing; (void) argument;
+    return 0; /* Fixture keys must not trigger interactive password prompts. */
+}
+
+static int public_version(const char *version)
+{
+    size_t i, length = strnlen(version, 128);
+    if (!length || length == 128) return 0;
+    for (i = 0; i < length; i++) {
+        unsigned char c = (unsigned char) version[i];
+        if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+              || (c >= '0' && c <= '9') || strchr(" .+-_()", c))) return 0;
+    }
+    return 1;
+}
+
+/* This typed ledger describes calls actually made by this single-threaded
+ * fixture. It is not a lock, proof of ownership or imported state. */
+typedef struct {
+    SSL *ssl;
+    int fd;
+    int error;
+    size_t amount;
+    X10_PROBE_LEDGER ledger;
+} PEER;
+
+static int invoke(PEER *peer, enum x10_probe_call call, void *buffer, size_t size)
+{
+    int result;
+    X10_PROBE_LEDGER *ledger = &peer->ledger;
+    if (interrupted || ledger->active_call != X10_CALL_NONE
+        || ledger->call_serial == UINT64_MAX) return 0;
+    ledger->call_serial++;
+    ledger->active_call = call;
+    peer->amount = 0;
+    ERR_clear_error(); errno = 0;
+    switch (call) {
+    case X10_CALL_ACCEPT: result = SSL_accept(peer->ssl); break;
+    case X10_CALL_READ:
+        result = SSL_read_ex(peer->ssl, buffer, size, &peer->amount); break;
+    case X10_CALL_WRITE:
+        result = SSL_write_ex(peer->ssl, buffer, size, &peer->amount); break;
+    case X10_CALL_HANDSHAKE: result = SSL_do_handshake(peer->ssl); break;
+    case X10_CALL_SHUTDOWN: result = SSL_shutdown(peer->ssl); break;
+    case X10_CALL_CONTROL:
+        result = SSL_key_update(peer->ssl, SSL_KEY_UPDATE_NOT_REQUESTED); break;
+    default: ledger->active_call = X10_CALL_NONE; return 0;
+    }
+    /* No intervening OpenSSL call before SSL_get_error classification. */
+    if (result > 0) peer->error = SSL_ERROR_NONE;
+    else if (call == X10_CALL_SHUTDOWN && result == 0)
+        peer->error = SSL_ERROR_WANT_READ; /* incomplete, not SSL_get_error(0) */
+    else peer->error = SSL_get_error(peer->ssl, result);
+    ledger->active_call = X10_CALL_NONE;
+    ledger->last_call = call;
+    if (peer->error == SSL_ERROR_NONE) {
+        ledger->last_outcome = X10_OUTCOME_SUCCESS;
+        if (ledger->retry_call == call) ledger->retry_call = X10_CALL_NONE;
+        return 1;
+    }
+    if (peer->error == SSL_ERROR_WANT_READ
+        || peer->error == SSL_ERROR_WANT_WRITE) {
+        ledger->last_outcome = peer->error == SSL_ERROR_WANT_READ
+            ? X10_OUTCOME_WANT_READ : X10_OUTCOME_WANT_WRITE;
+        if (ledger->retry_call == X10_CALL_NONE || ledger->retry_call == call)
+            ledger->retry_call = call;
+    } else {
+        ledger->last_outcome = X10_OUTCOME_ERROR;
+        /* A terminal error/close does not turn a prior retry into success. */
+    }
+    return 0;
+}
+
+static int complete(PEER *peer, enum x10_probe_call call, void *buffer,
+    size_t size, int64_t deadline)
+{
+    while (!interrupted && now_ms() < deadline) {
+        if (invoke(peer, call, buffer, size)) return 1;
+        if (peer->error == SSL_ERROR_WANT_READ) {
+            if (!ready(peer->fd, POLLIN, deadline)) return 0;
+        } else if (peer->error == SSL_ERROR_WANT_WRITE) {
+            if (!ready(peer->fd, POLLOUT, deadline)) return 0;
+        } else return 0;
+        /* The SAME operation/arguments are retried until it completes. */
+    }
+    return 0;
+}
+
+static int step(int64_t deadline)
+{
+    char line[5];
+    size_t at = 0;
+    ssize_t got;
+    while (at < sizeof(line)) {
+        if (!ready(STDIN_FILENO, POLLIN, deadline)) return 0;
+        got = read(STDIN_FILENO, line + at, sizeof(line) - at);
+        if (got < 0 && (errno == EINTR || errno == EAGAIN)) continue;
+        if (got <= 0) return 0;
+        at += (size_t) got;
+    }
+    return memcmp(line, "STEP\n", sizeof(line)) == 0;
+}
+
+static void emit_probe(const char *scenario, unsigned int sample, PEER *peer,
+    const X10_PROBE_RESULT *r)
+{
+    printf("{\"event\":\"probe\",\"scenario\":\"%s\",\"sample\":%u,"
+        "\"allowed\":%s,\"reasons\":\"%" PRIu64 "\",\"monitorKnown\":%s,"
+        "\"readGeneration\":\"%" PRIu64 "\",\"writeGeneration\":\"%" PRIu64 "\","
+        "\"mutationSerial\":\"%" PRIu64 "\",\"readNextSequence\":\"%s\",\"writeNextSequence\":\"%s\","
+        "\"sslPending\":%d,\"sslHasPending\":%s,"
+        "\"packetLength\":%zu,\"rbufLeft\":%zu,\"rbufOffset\":%zu,\"rbufLength\":%zu,"
+        "\"unreadRecordBytes\":%zu,\"unreadControlBytes\":%zu,"
+        "\"wbufLeft\":%zu,\"wbufOffset\":%zu,\"wbufLength\":%zu,\"wnum\":%zu,"
+        "\"staleWpendTot\":%zu,\"staleWpendRet\":%zu,\"readRecordSlots\":%u,\"writeBufferSlots\":%u,"
+        "\"rstate\":%d,\"rwstate\":%d,\"flowState\":%d,\"handshakeState\":%d,"
+        "\"inInit\":%d,\"inHandshake\":%d,\"encReadState\":%d,\"encWriteState\":%d,"
+        "\"keyUpdate\":%d,\"alertDispatch\":%d,\"shutdown\":%d,"
+        "\"handshakeFragmentLength\":%u,\"initNum\":%zu,"
+        "\"ledgerLastCall\":%d,\"ledgerRetryCall\":%d,\"ledgerLastOutcome\":%d,"
+        "\"ledgerCallSerial\":\"%" PRIu64 "\"}\n",
+        scenario, sample, r->allowed ? "true" : "false", r->reasons,
+        r->monitor_known ? "true" : "false", r->read_generation,
+        r->write_generation, r->mutation_serial, r->read_next_sequence,
+        r->write_next_sequence, SSL_pending(peer->ssl),
+        SSL_has_pending(peer->ssl) ? "true" : "false", r->packet_length,
+        r->rbuf_left, r->rbuf_offset, r->rbuf_length, r->unread_record_bytes,
+        r->unread_control_bytes, r->wbuf_left, r->wbuf_offset, r->wbuf_length,
+        r->wnum, r->stale_wpend_tot, r->stale_wpend_ret, r->read_record_slots,
+        r->write_buffer_slots, r->rstate, r->rwstate, r->flow_state,
+        r->handshake_state, r->in_init, r->in_handshake, r->enc_read_state,
+        r->enc_write_state, r->key_update, r->alert_dispatch, r->shutdown,
+        r->handshake_fragment_length, r->init_num, (int) r->ledger_last_call,
+        (int) r->ledger_retry_call, (int) r->ledger_last_outcome,
+        r->ledger_call_serial);
+}
+
+static int observe(PEER *peer, X10_PROBE_RESULT *result)
+{
+    X10_PROBE_LEDGER before = peer->ledger;
+    if (peer->ledger.active_call != X10_CALL_NONE
+        || !x10_openssl_probe(peer->ssl, &peer->ledger, result)) return 0;
+    return memcmp(&before, &peer->ledger, sizeof(before)) == 0;
+}
+
+int main(int argc, char **argv)
+{
+    const char *cert = NULL, *key = NULL, *count = NULL, *nonce = NULL;
+    const char *scenario = NULL, *failure = "arguments";
+    const char *runtime_version = OpenSSL_version(OPENSSL_VERSION);
+    const char *scenarios[] = {"quiescent", "partial-header", "partial-body",
+        "unread-plaintext", "empty-read-retry", "write-backpressure", "queued-key-update",
+        "completed-key-update"};
+    SSL_CTX *ctx = NULL;
+    PEER peer;
+    X10_PROBE_RESULT first, second;
+    struct sockaddr_in address;
+    struct sigaction action;
+    socklen_t address_len = sizeof(address);
+    unsigned char challenge[16] = {0}, *payload = NULL, trailer = 0;
+    unsigned char pressure[16384];
+    const unsigned char *selected = NULL;
+    unsigned int selected_len = 0;
+    unsigned long parsed = 0;
+    size_t i, wanted = 0, total = 0, pressure_total = 0;
+    int listener = -1, status = 1, known = 0, size = 4096;
+    int quiescent, unread, partial, pressure_case, ku, empty, completed_ku, exchange;
+    int64_t deadline;
+
+    memset(&peer, 0, sizeof(peer)); peer.fd = -1;
+    memset(pressure, 0, sizeof(pressure));
+    setvbuf(stdout, NULL, _IOLBF, 0);
+    memset(&action, 0, sizeof(action)); action.sa_handler = stop_signal;
+    sigemptyset(&action.sa_mask);
+    if (sigaction(SIGINT, &action, NULL) || sigaction(SIGTERM, &action, NULL)
+        || sigaction(SIGALRM, &action, NULL)) goto done;
+    action.sa_handler = SIG_IGN;
+    if (sigaction(SIGPIPE, &action, NULL)) goto done;
+    alarm(25);
+    for (i = 1; i < (size_t) argc; i++) {
+        const char **destination = NULL;
+        if (!strcmp(argv[i], "--cert")) destination = &cert;
+        else if (!strcmp(argv[i], "--key")) destination = &key;
+        else if (!strcmp(argv[i], "--bytes")) destination = &count;
+        else if (!strcmp(argv[i], "--challenge")) destination = &nonce;
+        else if (!strcmp(argv[i], "--scenario")) destination = &scenario;
+        if (!destination || *destination || ++i >= (size_t) argc
+            || !argv[i][0] || strlen(argv[i]) > 4096) goto done;
+        *destination = argv[i];
+    }
+    if (!cert || !key || !count || !nonce || !scenario || strlen(nonce) != 32)
+        goto done;
+    for (i = 0; i < sizeof(scenarios) / sizeof(scenarios[0]); i++)
+        if (!strcmp(scenario, scenarios[i])) known = 1;
+    if (!known) goto done;
+    for (i = 0; count[i]; i++) {
+        if (count[i] < '0' || count[i] > '9' || i > 5) goto done;
+        parsed = parsed * 10 + (unsigned long) (count[i] - '0');
+        if (parsed > MAX_APPLICATION_BYTES) goto done;
+    }
+    if (!parsed || (count[0] == '0' && count[1])) goto done;
+    wanted = (size_t) parsed;
+    for (i = 0; i < sizeof(challenge); i++) {
+        int a = hex_nibble(nonce[i * 2]), b = hex_nibble(nonce[i * 2 + 1]);
+        if (a < 0 || b < 0) goto done;
+        challenge[i] = (unsigned char) (a * 16 + b);
+    }
+    quiescent = !strcmp(scenario, "quiescent");
+    unread = !strcmp(scenario, "unread-plaintext");
+    partial = !strcmp(scenario, "partial-header") || !strcmp(scenario, "partial-body");
+    pressure_case = !strcmp(scenario, "write-backpressure");
+    ku = !strcmp(scenario, "queued-key-update");
+    empty = !strcmp(scenario, "empty-read-retry");
+    completed_ku = !strcmp(scenario, "completed-key-update");
+    exchange = quiescent || completed_ku;
+    if (unread && wanted < 2) goto done;
+
+    failure = "configuration";
+    ctx = SSL_CTX_new(TLS_server_method());
+    if (!ctx || SSL_CTX_set_min_proto_version(ctx, TLS1_3_VERSION) != 1
+        || SSL_CTX_set_max_proto_version(ctx, TLS1_3_VERSION) != 1
+        || SSL_CTX_set_ciphersuites(ctx, "TLS_AES_128_GCM_SHA256") != 1
+        || SSL_CTX_set_num_tickets(ctx, 0) != 1
+        || SSL_CTX_set_max_early_data(ctx, 0) != 1) goto done;
+    SSL_CTX_set_options(ctx, SSL_OP_NO_TICKET | SSL_OP_NO_RENEGOTIATION | SSL_OP_NO_COMPRESSION);
+    SSL_CTX_clear_options(ctx, SSL_OP_ENABLE_KTLS | SSL_OP_IGNORE_UNEXPECTED_EOF);
+    SSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, NULL);
+    SSL_CTX_set_post_handshake_auth(ctx, 0);
+    SSL_CTX_set_session_cache_mode(ctx, SSL_SESS_CACHE_OFF);
+    SSL_CTX_set_quiet_shutdown(ctx, 0); SSL_CTX_set_read_ahead(ctx, 0);
+    SSL_CTX_set_max_pipelines(ctx, 1);
+    SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
+    SSL_CTX_clear_mode(ctx, SSL_MODE_ENABLE_PARTIAL_WRITE | SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER
+        | SSL_MODE_ASYNC | SSL_MODE_RELEASE_BUFFERS);
+    SSL_CTX_set_alpn_select_cb(ctx, choose_alpn, NULL);
+    SSL_CTX_set_default_passwd_cb(ctx, reject_password);
+    if (SSL_CTX_use_certificate_chain_file(ctx, cert) != 1
+        || SSL_CTX_use_PrivateKey_file(ctx, key, SSL_FILETYPE_PEM) != 1
+        || SSL_CTX_check_private_key(ctx) != 1) goto done;
+    deadline = now_ms(); if (deadline < 0) goto done; deadline += DEADLINE_MS;
+    failure = "listen";
+    listener = socket(AF_INET, SOCK_STREAM, 0);
+    if (listener < 0 || !nonblocking(listener)) goto done;
+    memset(&address, 0, sizeof(address)); address.sin_family = AF_INET;
+    address.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+    if (bind(listener, (struct sockaddr *) &address, sizeof(address))
+        || listen(listener, 1)
+        || getsockname(listener, (struct sockaddr *) &address, &address_len)) goto done;
+    printf("{\"event\":\"listening\",\"port\":%u}\n", (unsigned int) ntohs(address.sin_port));
+    failure = "accept";
+    while (!interrupted) {
+        if (!ready(listener, POLLIN, deadline)) goto done;
+        peer.fd = accept(listener, NULL, NULL);
+        if (peer.fd >= 0) break;
+        if (errno != EINTR && errno != EAGAIN && errno != EWOULDBLOCK) goto done;
+    }
+    if (peer.fd < 0 || !nonblocking(peer.fd)) goto done;
+    close(listener); listener = -1;
+    if (pressure_case && setsockopt(peer.fd, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size))) goto done;
+    peer.ssl = SSL_new(ctx);
+    if (!peer.ssl || SSL_set_fd(peer.ssl, peer.fd) != 1) goto done;
+    peer.ledger.schema_version = 1; peer.ledger.bound_ssl = peer.ssl;
+    failure = "handshake";
+    if (!complete(&peer, X10_CALL_ACCEPT, NULL, 0, deadline)) goto done;
+    SSL_get0_alpn_selected(peer.ssl, &selected, &selected_len);
+    if (SSL_version(peer.ssl) != TLS1_3_VERSION || SSL_session_reused(peer.ssl)
+        || strcmp(SSL_get_cipher_name(peer.ssl), "TLS_AES_128_GCM_SHA256")
+        || selected_len != sizeof(alpn) - 1 || memcmp(selected, alpn, sizeof(alpn) - 1)
+        || SSL_get_early_data_status(peer.ssl) != SSL_EARLY_DATA_NOT_SENT
+        || !public_version(runtime_version) || !public_version(OPENSSL_VERSION_TEXT)) goto done;
+    printf("{\"event\":\"handshake\",\"version\":\"TLSv1.3\",\"cipher\":\"TLS_AES_128_GCM_SHA256\","
+        "\"alpn\":\"continuum-c1\",\"resumed\":false,\"opensslVersion\":\"%s\","
+        "\"opensslHeadersVersion\":\"%s\"}\n", runtime_version, OPENSSL_VERSION_TEXT);
+    printf("{\"event\":\"ready\",\"scenario\":\"%s\"}\n", scenario);
+    failure = "step";
+    if (!step(deadline)) goto done;
+    payload = OPENSSL_malloc(wanted);
+    if (!payload) goto done;
+
+    failure = "scenario_unreached";
+    if (exchange) {
+        while (total < wanted) {
+            if (!complete(&peer, X10_CALL_READ, payload + total, wanted - total, deadline)
+                || !peer.amount || peer.amount > wanted - total) goto done;
+            total += peer.amount;
+        }
+        for (i = 0; i < wanted; i++)
+            if (payload[i] != (unsigned char) (((i * 29 + 7) & 255) ^ challenge[i % 16])) goto done;
+        if (completed_ku && (!invoke(&peer, X10_CALL_CONTROL, NULL, 0)
+            || !complete(&peer, X10_CALL_HANDSHAKE, NULL, 0, deadline)
+            || SSL_get_key_update_type(peer.ssl) != SSL_KEY_UPDATE_NONE)) goto done;
+        if (!complete(&peer, X10_CALL_WRITE, payload, wanted, deadline) || peer.amount != wanted) goto done;
+    } else if (unread) {
+        if (!ready(peer.fd, POLLIN, deadline)
+            || !complete(&peer, X10_CALL_READ, payload, 1, deadline)
+            || peer.amount != 1 || SSL_pending(peer.ssl) <= 0) goto done;
+    } else if (partial || empty) {
+        if (partial && !ready(peer.fd, POLLIN, deadline)) goto done;
+        if (invoke(&peer, X10_CALL_READ, payload, wanted)
+            || peer.error != SSL_ERROR_WANT_READ || SSL_pending(peer.ssl) != 0) goto done;
+    } else if (ku) {
+        if (!invoke(&peer, X10_CALL_CONTROL, NULL, 0)
+            || SSL_get_key_update_type(peer.ssl) != SSL_KEY_UPDATE_NOT_REQUESTED) goto done;
+    } else if (pressure_case) {
+        for (i = 0; i < sizeof(pressure); i++)
+            pressure[i] = (unsigned char) (((i * 29 + 7) & 255) ^ challenge[i % 16]);
+        while (pressure_total < PRESSURE_LIMIT && !interrupted && now_ms() < deadline) {
+            if (invoke(&peer, X10_CALL_WRITE, pressure, sizeof(pressure))) {
+                if (peer.amount != sizeof(pressure)) goto done;
+                pressure_total += peer.amount;
+            } else break;
+        }
+        if (peer.error != SSL_ERROR_WANT_WRITE || peer.ledger.retry_call != X10_CALL_WRITE) goto done;
+    }
+
+    failure = "probe";
+    if (interrupted || now_ms() >= deadline) goto done;
+    if (!observe(&peer, &first)) goto done;
+    emit_probe(scenario, 1, &peer, &first);
+    if (exchange) {
+        if (quiescent && (!first.allowed || first.reasons != 0)) goto done;
+        if (completed_ku && (first.allowed || !(first.reasons & X10_REASON_GENERATION)
+            || first.read_generation != 0 || first.write_generation != 1
+            || first.mutation_serial != 3 || first.key_update != SSL_KEY_UPDATE_NONE
+            || first.ledger_last_call != X10_CALL_WRITE
+            || first.ledger_last_outcome != X10_OUTCOME_SUCCESS
+            || first.ledger_retry_call != X10_CALL_NONE)) goto done;
+        if (!observe(&peer, &second)) goto done;
+        emit_probe(scenario, 2, &peer, &second);
+        if (memcmp(&first, &second, sizeof(first))) goto done;
+        failure = "peer_close_notify";
+        while (1) {
+            if (complete(&peer, X10_CALL_READ, &trailer, 1, deadline)) {
+                failure = "application_trailer"; goto done;
+            }
+            if (peer.error != SSL_ERROR_ZERO_RETURN) goto done;
+            break;
+        }
+        failure = "shutdown";
+        if (!complete(&peer, X10_CALL_SHUTDOWN, NULL, 0, deadline)
+            || (SSL_get_shutdown(peer.ssl) & (SSL_SENT_SHUTDOWN | SSL_RECEIVED_SHUTDOWN))
+                != (SSL_SENT_SHUTDOWN | SSL_RECEIVED_SHUTDOWN)) goto done;
+        printf("{\"event\":\"shutdown\",\"clean\":true,\"shutdownBits\":%d}\n", SSL_get_shutdown(peer.ssl));
+    } else {
+        if (first.allowed || !first.reasons) goto done;
+        if (partial && (!(first.reasons & X10_REASON_READ_BUFFER)
+            || !(first.packet_length || first.rbuf_left))) goto done;
+        if (unread && (!(first.reasons & X10_REASON_READ_RECORD) || !first.unread_record_bytes)) goto done;
+        if (empty && !(first.reasons & X10_REASON_RETRY)) goto done;
+        if (ku && !(first.reasons & X10_REASON_KEY_UPDATE)) goto done;
+        if (pressure_case && (!(first.reasons & X10_REASON_RETRY)
+            || !(first.reasons & (X10_REASON_WRITE_BUFFER | X10_REASON_WRITE_CALL))
+            || !(first.wbuf_left || first.wnum))) goto done;
+    }
+    if (interrupted || now_ms() >= deadline) goto done;
+    printf("{\"event\":\"done\",\"scenario\":\"%s\",\"observed\":true,\"allowed\":%s,"
+        "\"graceful\":%s,\"applicationBytesRead\":%zu,\"applicationBytesWritten\":%zu,"
+        "\"pressureBytesCompleted\":%zu}\n", scenario, quiescent ? "true" : "false",
+        exchange ? "true" : "false", exchange ? total : (unread ? (size_t) 1 : (size_t) 0),
+        exchange ? wanted : (size_t) 0, pressure_total);
+    status = 0;
+done:
+    alarm(0);
+    if (payload) OPENSSL_clear_free(payload, wanted);
+    OPENSSL_cleanse(challenge, sizeof(challenge)); OPENSSL_cleanse(pressure, sizeof(pressure));
+    OPENSSL_cleanse(&trailer, sizeof(trailer));
+    SSL_free(peer.ssl); SSL_CTX_free(ctx);
+    if (peer.fd >= 0) close(peer.fd);
+    if (listener >= 0) close(listener);
+    ERR_clear_error();
+    if (status) printf("{\"event\":\"error\",\"code\":\"%s\"}\n", interrupted ? "cancelled" : failure);
+    return status;
+}

@@ -39,7 +39,7 @@ jobs:
     needs: scope
     if: ${{ !cancelled() && (needs.scope.result != 'success' || needs.scope.outputs.research != 'false') }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -47,13 +47,16 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
-      - name: Build dependencies for real TLS interoperability
+      - name: Build dependencies for TLS interoperability and isolated source probe
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends build-essential libssl-dev openssl
+          sudo apt-get install -y --no-install-recommends build-essential git perl make libssl-dev openssl
       - name: Independent record and state counterexamples
         run: node x10/continuum/check.mjs
       - name: Same TCP connection across research worker versions
         run: node --test --test-reporter=tap x10/continuum/process-handover.test.mjs
       - name: Real TLS handshake and independent record observer
         run: node x10/continuum/handshake-check.mjs
+      - name: Pinned OpenSSL read-only state probe
+        timeout-minutes: 12
+        run: node x10/continuum/openssl-probe-check.mjs

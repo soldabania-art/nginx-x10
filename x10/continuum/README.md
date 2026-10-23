@@ -76,7 +76,22 @@ instrumentation/inventory/safepoint pinned source; exporter/importer следу�
 только после этого gate. C1 не завершает перенос live OpenSSL state, обновление
 TLS binary или native NGINX integration.
 
-## Проверяемая гипотеза
+## C2a: read-only probe закреплённого OpenSSL
+
+Новый [C2a probe](C2A-PROFILE.md) наблюдает private state отдельной pinned-source
+сборки OpenSSL 3.0.13. Восемь реальных TLS scenarios прошли локально: quiescent,
+partial header/body, unread plaintext, empty read retry, write backpressure,
+queued и completed server KeyUpdate. Начальная quiescent metadata разрешена;
+остальные состояния отклонены. Completed KeyUpdate подтверждён wire oracle,
+а initial-generation gate отвергает его даже при getter NONE.
+
+Команда `node x10/continuum/openssl-probe-check.mjs` выдаёт очищенные counts.
+Исходники, статические библиотеки, compiler/tools и build metadata проверяются
+по identity. Это read-only observation, а не полный inventory, допуск traffic,
+semantic export/import или миграция. Следующий task расширяет inventory и
+контрпримеры перед C2b. Hosted C2a требует результата именно implementation SHA.
+
+## Проверяемая гипотеза переноса
 
 Для явно поддержанного состояния можно определить переносимое представление,
 адаптер между версиями и небольшой checker протокольных обязательств.

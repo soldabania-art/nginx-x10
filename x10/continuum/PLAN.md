@@ -246,11 +246,19 @@ cleanup после native listening (SIGTERM/SIGINT, child exit, private PKI rem
 Ни state export/import, ни distinct TLS-release upgrade, ни NGINX integration
 этим checkpoint не приняты. C0 counts сохраняются отдельно.
 
-Следующий bounded task — **C2a read-only instrumentation/inventory/safepoint**
-на pinned source по [OPENSSL-STATE.md](OPENSSL-STATE.md) и
-[предварительным C2a notes](C2A-NOTES.md). Только после его
-приёмки решается допустимость первого exporter/importer, направления adapter
-и переносимого профиля. Public session APIs не подменяют этот gate.
+Первый C2a read-only probe реализован на изолированном pinned OpenSSL source.
+[Профиль](C2A-PROFILE.md) и [evidence](../evidence/continuum-c2a.json) фиксируют
+восемь реальных TLS cases, directional sequences, монитор initial application
+keys/завершённого server KeyUpdate, private buffers и typed retry ledger.
+Это локально проверенный узкий observation profile; hosted pending до exact SHA.
+
+Следующий bounded task — закрыть **C2a extended inventory**: peer-requested
+KeyUpdate/read-key generation, завершение outstanding retry той же операцией
+и сохранение его при постороннем success, control/alert/shutdown states,
+sequence/key usage limits и TLS-runtime interruption cleanup. Сначала принять
+CI этого implementation SHA. Неизвестные состояния не получают traffic grant.
+Полнота inventory ещё не принята; решение о первом C2b exporter/importer
+принимается после review этого gate. Public session APIs его не подменяют.
 
 Не наращивать тысячи запусков toy fixture, панель, cluster или маркетинг
 вместо проверки этого основного неизвестного. Source/binary/version changes
@@ -288,8 +296,8 @@ NGINX и измеримой ценой reconnect/долгого retirement. Пр
 поддержку. $1 000/$3 000 в месяц — гипотезы для unit economics, не текущие тарифы.
 Исторический сценарий $8 000 сохранён отдельно и не используется как цена запуска.
 
-Следующий технический task остаётся C2a. Продажи или пилот не являются условием
-продолжения самостоятельной разработки. Billing, новая панель и реклама не
+Следующий технический task — C2a extended inventory. Продажи или пилот не
+являются условием продолжения самостоятельной разработки. Billing, новая панель и реклама не
 подменяют реальный TLS bridge, native/application integration и независимое
 сравнение с бесплатным drain/reconnect. Приёмка продукта должна измерить
 полный вывод старого кода, сохранение потока, pause/overhead и стоимость поддержки.
