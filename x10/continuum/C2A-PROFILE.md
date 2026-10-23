@@ -2,7 +2,10 @@
 
 Профиль замороженных build/probe/runner. Владелец runtime подтвердил локально
 **8/8 PASS**, exit 0, без skips; 81,75 секунды вместе с одним свежим build.
-Hosted результат C2a до публикации и проверки конкретного commit не принят.
+Hosted research push/PR implementation `99a017e` завершились success;
+оба подтвердили 21 core, 7 process, 22 C1 и 8 C2a без skips/failures.
+Exact runs, отдельный whitespace отказ и граница native CI — в
+[C2A-CHECKPOINT.md](C2A-CHECKPOINT.md).
 Предварительное чтение upstream контрактов и первичные ссылки сохранены в
 [C2A-NOTES.md](C2A-NOTES.md); граница публичных API — в
 [OPENSSL-STATE.md](OPENSSL-STATE.md).

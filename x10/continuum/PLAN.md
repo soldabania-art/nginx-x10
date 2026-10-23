@@ -250,13 +250,15 @@ cleanup после native listening (SIGTERM/SIGINT, child exit, private PKI rem
 [Профиль](C2A-PROFILE.md) и [evidence](../evidence/continuum-c2a.json) фиксируют
 восемь реальных TLS cases, directional sequences, монитор initial application
 keys/завершённого server KeyUpdate, private buffers и typed retry ledger.
-Это локально проверенный узкий observation profile; hosted pending до exact SHA.
+Это узкий observation profile, локально и в research push/PR `99a017e`
+проверенный без skips. Exact references и остальные CI состояния — в
+[C2A-CHECKPOINT](C2A-CHECKPOINT.md).
 
 Следующий bounded task — закрыть **C2a extended inventory**: peer-requested
 KeyUpdate/read-key generation, завершение outstanding retry той же операцией
 и сохранение его при постороннем success, control/alert/shutdown states,
-sequence/key usage limits и TLS-runtime interruption cleanup. Сначала принять
-CI этого implementation SHA. Неизвестные состояния не получают traffic grant.
+sequence/key usage limits и TLS-runtime interruption cleanup. Сначала закрыть
+оставшийся format-policy CI этого checkpoint. Неизвестные состояния не получают traffic grant.
 Полнота inventory ещё не принята; решение о первом C2b exporter/importer
 принимается после review этого gate. Public session APIs его не подменяют.
 

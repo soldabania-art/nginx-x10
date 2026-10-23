@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-c2a-verify-20261023T172020Z",
-    "owner": "root-c2a-coordinator",
-    "baseCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
-    "acquiredAtUTC": "2026-10-23T17:20:20.549Z",
-    "expiresAtUTC": "2026-10-23T18:05:20.549Z",
-    "coordinationOnly": true
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -28,21 +21,21 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "193afe99f338b9435082b002f2b5e21eda058449",
+    "nativeCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
     "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/39985217372",
-    "continuumStage": "C2a narrow read-only pinned OpenSSL probe accepted locally; C1 hosted acceptance retained; full inventory/export-import remain pending",
+    "continuumStage": "C2a narrow pinned OpenSSL read-only observation accepted locally and research hosted; full inventory/export-import pending",
     "continuumNativeIntegration": false,
     "continuumEvidence": "x10/evidence/continuum-c1.json",
     "nativeHostedCI": {
       "state": "success",
-      "implementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
-      "pushRun": 39985217372,
-      "pullRequestRun": 39985229565,
+      "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
+      "pushRun": 39994034390,
+      "pullRequestRun": 39994040738,
       "nativeJobIDs": [
-        120522642931,
-        120522641946
+        120552916731,
+        120552906412
       ],
-      "scope": "Official native aggregate, Guard, required Unix transports/generations/operator, feature-off build and alpha package/checksum"
+      "scope": "Full native workflow: official aggregate, Guard, required Unix transports/generations/operator, feature-off build and alpha package/checksum"
     },
     "previousContinuumImplementationCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
     "previousContinuumHostedCI": {
@@ -54,25 +47,27 @@
     },
     "continuumHostedCI": {
       "state": "success",
-      "implementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
-      "pushRun": 39985217846,
-      "pullRequestRun": 39985229282,
+      "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
+      "pushRun": 39994034417,
+      "pullRequestRun": 39994040940,
+      "researchJobIDs": [
+        120552885020,
+        120552928281
+      ],
       "coreTests": 21,
       "processTests": 7,
       "c1Tests": 22,
-      "c1Skipped": 0,
-      "researchJobIDs": [
-        120522614338,
-        120522654767
-      ]
+      "c2aTests": 8,
+      "skipped": 0,
+      "scope": "Read-only pinned-source observation; not full inventory, export/import or native migration"
     },
-    "continuumImplementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
-    "implementationIdentityRule": "Runtime acceptance is tied to implementation193afe99; coordination-only successors retain unchanged source hashes",
+    "continuumImplementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
+    "implementationIdentityRule": "Runtime C2a acceptance tied to implementation99a017e and exact source hashes; format-policy and coordination successors do not repeat protocol acceptance.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
       "state": "success",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-c1-native-regression.json"
+      "evidence": "x10/evidence/continuum-c2a-native-regression.json"
     },
     "previousNativeCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
     "previousNativeHostedCI": {
@@ -89,11 +84,48 @@
       "fullInventoryAccepted": false,
       "semanticExportImport": false,
       "migration": false,
-      "hostedState": "pending-exact-publication-SHA"
-    }
+      "hostedState": "research-push-and-PR-success-on-99a017e"
+    },
+    "previousC1HostedCI": {
+      "state": "success",
+      "implementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
+      "pushRun": 39985217846,
+      "pullRequestRun": 39985229282,
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 22,
+      "c1Skipped": 0,
+      "researchJobIDs": [
+        120522614338,
+        120522654767
+      ]
+    },
+    "c2aHostedCheckpoint": "x10/continuum/C2A-CHECKPOINT.md",
+    "nativeCandidateCI": {
+      "state": "success",
+      "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
+      "pushRun": 39994034390,
+      "pullRequestRun": 39994040738,
+      "nativeJobIDs": [
+        120552916731,
+        120552906412
+      ]
+    },
+    "previousC1NativeHostedCI": {
+      "state": "success",
+      "implementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
+      "pushRun": 39985217372,
+      "pullRequestRun": 39985229565,
+      "nativeJobIDs": [
+        120522642931,
+        120522641946
+      ],
+      "scope": "Official native aggregate, Guard, required Unix transports/generations/operator, feature-off build and alpha package/checksum"
+    },
+    "previousC1NativeCommit": "193afe99f338b9435082b002f2b5e21eda058449"
   },
   "pendingVerification": [
-    "Read hosted native/research workflows for the first implementation commit introducing x10/evidence/continuum-c2a.json; only completed success is acceptance. Exact SHA/run IDs follow publication.",
+    "Check Whitespace on the result commit adding exact .gitattributes path policy; original39994040750 failed5 canonical patch markers, local full-history candidate passes. Exact new SHA/run IDs follow publication.",
     "C2a extended inventory: peer-requested/read KeyUpdate, retry completion and unrelated success, control/alert/shutdown, sequence/key usage admission and actual TLS-runtime interruption cleanup.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
@@ -144,6 +176,13 @@
       "name": "F5 Contributor License Agreement",
       "state": "failed-inherited-publisher-integration",
       "scope": "Separate repository integration; not a passed technical test and not accepted on the owner behalf"
+    },
+    {
+      "name": "Check Whitespace",
+      "state": "failed-on-initial-C2a-pending-policy-success",
+      "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
+      "failedRun": 39994040750,
+      "scope": "5 canonical single-space unified-diff context markers; candidate exact-path blank-at-EOL exception passed full-history check locally; actual C/patch bytes unchanged."
     }
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
@@ -201,13 +240,11 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
-    "runId": "continuum-c2a-20261023T164924Z",
-    "baseCommit": "a882c9505271ab49abbdd6293177f3683d72f3a4",
-    "publicationParent": "941fc3ea2f58ed8df45539841ff28aaf736f5c4e",
-    "result": "Pinned OpenSSL read-only observation implemented; local8/8 plus unchanged C0/C1/native regressions; no migration.",
-    "helpers": "6 temporary roles available; no permanent sessions promised",
-    "nativeSourceChanged": false,
-    "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-ledger.json"
+    "runId": "continuum-c2a-verify-20261023T172020Z",
+    "baseCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
+    "publicationParent": "cad5a169f0b20135569a675827f23d5e1c09bb77",
+    "result": "Accepted both C2a research workflows; reproduced whitespace failure and applied narrow file/error-class attribute policy without source or patch changes.",
+    "perFileLedger": "x10/review/continuum-c2a-format-ledger.json",
+    "spendingUSD": 0
   }
 }

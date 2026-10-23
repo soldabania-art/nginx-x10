@@ -113,6 +113,8 @@ TLS cases на изолированном pinned OpenSSL 3.0.13, metadata-only k
 monitor, private buffers/sequences и typed retry ledger. [C2a profile](continuum/C2A-PROFILE.md)
 отделяет narrow `allowed` от полной safepoint/transfer приёмки. Полный native
 aggregate повторён: 20/20; прежний binary SHA, upstream и LICENSE сохранены.
-Сначала проверить hosted CI exact C2a SHA, затем закрыть peer/read KeyUpdate,
+Research push/PR exact C2a SHA `99a017e` прошли; native и format-policy
+результаты учитываются отдельно в [checkpoint](continuum/C2A-CHECKPOINT.md).
+Далее закрыть peer/read KeyUpdate,
 retry/control/shutdown inventory и runtime cancellation. C2b semantic capsule
 не начинается с предположения о полноте одного положительного probe.

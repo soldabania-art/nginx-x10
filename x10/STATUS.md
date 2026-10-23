@@ -558,7 +558,17 @@ WANT_WRITE, queued и completed KeyUpdate отвергнуты. Completed server
 Нативный код сохранён. [Регрессия](evidence/continuum-c2a-native-regression.json)
 повторена: **20/20 групп**, official 1083 strict PASS / 25 SKIP /
 1 expected TODO / 0 strict FAIL; binary SHA прежний. C0: 21 core и 7 process;
-C1: 22/22. Новый hosted результат C2a остаётся pending на implementation SHA.
+C1: 22/22. Research push/PR для implementation `99a017e` завершились success:
+21 core, 7 process, 22 C1 и 8 C2a без skips/failures в обоих runs.
+Оба native push/PR implementation также завершились success.
+Exact CI references и отдельные проверки repository — в
+[C2a checkpoint](continuum/C2A-CHECKPOINT.md).
+
+Whitespace CI первого implementation отверг пять single-space context markers
+в unified patch. Baseline воспроизведён; точный `.gitattributes` path сохраняет
+их как синтаксис diff, не меняя patch или правила C/native files. После этого
+полный PR history `git log --check` локально имеет exit 0 и пустые diagnostics.
+Hosted проверка этой metadata/policy поправки принимается отдельно.
 
 Независимый reviewer дополнительно проверил четыре TLS cases с новыми
 размерами/фрагментацией и два отказа при подмене build identity. Семь synthetic
