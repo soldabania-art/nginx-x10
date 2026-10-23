@@ -186,3 +186,42 @@ are unchanged. Full inventory, peer/read KeyUpdate, WRITE retry, control/
 shutdown/limits, export/import and actual TLS-code migration remain pending.
 New hosted acceptance must use the exact implementation SHA; prior356f993
 acceptance does not accept these tests automatically. No spending introduced.
+
+## Handled interruption implementation hosted CI receipt
+
+Implementation: `85bc255d457087cdce7768755c45b39843f015a5`.
+Both research workflows completed success:
+[push40010935810](https://github.com/soldabania-art/nginx-x10/actions/runs/40010935810)
+and [PR40010942911](https://github.com/soldabania-art/nginx-x10/actions/runs/40010942911).
+Jobs120610909369 /120610952419 confirm core21, process7, C1 tests22 and
+C2a13, with no failures/skips/cancellations/TODO. C2a13 means10 ordinary
+TLS scenarios,2 handled-runtime signal controls and1 no-TLS source control.
+Hosted uses the canonical aggregate command; local read-only TAP collection
+instrumentation is recorded separately in the original evidence.
+
+Both complete native workflows succeeded:
+[push40010935834](https://github.com/soldabania-art/nginx-x10/actions/runs/40010935834)
+and [PR40010942898](https://github.com/soldabania-art/nginx-x10/actions/runs/40010942898).
+Jobs120610916300 /120610943388 confirm native/official aggregate, tenant-cache
+and Unix gates, feature-off build, alpha package and checksum. Hosted outcomes
+are distinct from the separately identified local20-group native evidence.
+Whitespace40010942943, commit-message40010942723 and version40010942893 also
+completed success. Inherited F5 CLA40010937944 failed separately; no agreement
+was accepted on the owner's behalf.
+
+Original evidence retains its at-publication pending status and all adverse
+results; this receipt records later exact-SHA acceptance. One successful
+first-read interruption boundary is not the remaining TLS-state inventory,
+standalone CLI coverage, C directSIGINT handling or a cross-version migration.
+Next bounded task: real peer-requested KeyUpdate/read generation and response
+obligation, then remaining WRITE/control/shutdown/limits before C2b.
+
+This receipt changes only BACKGROUND and this checkpoint over its own exact
+live lease, then releases it. Runtime/economic/automation files are unchanged.
+Per-file receipt ledger (SHA256):
+
+- BACKGROUND before `e7d3f54c90f99d47bc44141a04cf0b1b9fb843e75872efaaa222a89f4894b3e8`; after `ee2418d248bb1d2921d05c35616d8167b259bd3a3d5b72419506799b5a57a090`.
+- C2A-CHECKPOINT before `d2ebddf63b543fc2074a65c380cfda1185e80fb6f3c4779bfa544a2a00d2d919`; its result is identified by Git tree/commit to avoid an own recursive digest.
+
+Only fixed facts, counts and workflow/job IDs are published here; no raw
+logs, host paths, process IDs, PKI or session material.
