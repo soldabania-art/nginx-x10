@@ -412,3 +412,27 @@ implementation SHA hosted research/native CI pending;996e997 accepted earlier.
 This is normal server-first shutdown refusal only, not complete control/alert/
 EOF inventory or admission. Remaining usage gates precede C2b; no semantic
 export/import, actual TLS-code migration or native NGINX continuation.
+
+## Exact server-shutdown hosted acceptance
+
+Implementation `1f92d82c42d0c49c82029412fd882036da4e6da8` completed success in
+research push40033951784/PR40033956592 (jobs120688803926/120688836523)
+and native push40033951855/PR40033955843 (jobs120688801151/120688817731).
+Both research logs independently confirm core21/process7/C1-27/C2a-18, zero
+failures/skips/cancellations/TODO. Eighteen C2a checks mean15 ordinary actual-TLS
+scenarios,2 handled runtime signals and1 no-TLS source control; C1 remains18
+synthetic oracle controls+9 runtime checks.
+
+Native jobs completed aggregate, tenant-cache/Unix, feature-off build and alpha
+package/checksum steps; hosted success is separate from local20/20 and official
+1083 strictPASS/25SKIP/1expectedTODO. Format checks40033955959/40033955950/
+40033955902 succeeded. F5 CLA40033954017 remains an inherited failed
+integration; no agreement was accepted for the owner.
+
+Prior996e997 overlap acceptance remains separate. This receipt accepts normal
+server-first shutdown refusal only: actual0/SENT1 to1/flags3, retrycleared but
+closed state remains refused. Completed4356 includes retained processed record
+metadata, not a claim of an unprocessed alert. Other control/alert/EOF/shutdown
+and usage gates remain pending; no export/import, TLS-code migration or native
+NGINX continuation. Local evidence retains at-publication pending status; this
+exact-SHA receipt records later hosted acceptance.
