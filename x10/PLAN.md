@@ -126,3 +126,10 @@ retry/control/shutdown inventory и runtime cancellation. C2b semantic capsule
 диагностические controls и первый отказ build hook. Далее — peer/read
 KeyUpdate, завершение write retry и остальные control/shutdown/limit obligations.
 Экспорт/import и opt-in native integration требуют своих последующих gates.
+
+Continuum дополнен отдельным handled-runtime interruption стендом: локальные
+13 checks отделяют10 обычных TLS cases,2 signals после настоящего READ и1
+no-TLS cached-source control. [Evidence](evidence/continuum-c2a-interruption.json)
+сохраняет независимые отказы при PKI debris и занятом relay listener, а также
+исходные ошибки самого стенда. Native C сохранён, свежая регрессия20/20.
+Приёмка exact hosted SHA ожидается; далее actual peer/read KeyUpdate inventory.

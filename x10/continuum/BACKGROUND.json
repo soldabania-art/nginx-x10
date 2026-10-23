@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-interrupt-20261023T185831Z",
-    "owner": "cloud-coordinator",
-    "baseCommit": "2e6fb8af405bd02177459ee4d0c57bdb123e9de9",
-    "acquiredAtUTC": "2026-10-23T18:58:31Z",
-    "expiresAtUTC": "2026-10-23T19:43:31Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -218,10 +212,32 @@
         120552906412
       ],
       "scope": "Full native workflow: official aggregate, Guard, required Unix transports/generations/operator, feature-off build and alpha package/checksum"
+    },
+    "c2aInterruptionLocal": {
+      "state": "success-local-pending-hosted",
+      "flatTests": 13,
+      "ordinaryActualTLSScenarios": 10,
+      "handledSignalRuntimeControls": 2,
+      "nonTLSCachedSourceControl": 1,
+      "evidence": "x10/evidence/continuum-c2a-interruption.json",
+      "helperSha256": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+      "testSha256": "a829c3be54c8a044d336d46e9bbf4a291c702d7bef1780aa3cc8d1b4ddc20b0e",
+      "independentExactSourceTLSHeldout": 1,
+      "independentActualTLSSensitivityControls": 2,
+      "completeInventoryAccepted": false,
+      "migration": false
+    },
+    "c2aInterruptionNativeLocal": {
+      "state": "success",
+      "groups": 20,
+      "freshCheckoutBinarySha256": "bef184f3cd60573fd9ed563ff9c62cf7800d37927716e9fd2674090a60c28cc0",
+      "earlierCheckoutBinaryIdentityClaimed": false,
+      "evidence": "x10/evidence/continuum-c2a-interruption-native-regression.json"
     }
   },
   "pendingVerification": [
-    "C2a remaining inventory: peer-requested/read KeyUpdate, same-operation WRITE retry completion, overlapping retry obligations, control/alert/shutdown, sequence/key usage admission and actual TLS-runtime interruption cleanup.",
+    "Read research/native workflows for the exact first implementation SHA introducing continuum-c2a-interruption.json; save SHA/run IDs and accept only completed success.",
+    "C2a remaining inventory: peer-requested/read KeyUpdate, same-operation WRITE retry completion, overlapping retry obligations, control/alert/shutdown and sequence/key usage admission. Handled SIGTERM/SIGINT after one application-read boundary are tested; other runtime interruption/crash boundaries remain pending.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
     "First scheduled cloud development run has not been independently verified by recorded run history."
@@ -240,7 +256,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Initial8 plus new2 actual TLS READ retry lifecycle cases accepted locally and hosted on356f993; next peer/read KeyUpdate, WRITE retry/control/shutdown/limits/cancellation inventory before C2b. Trusted caller ledger is not an argument or ownership fence."
+      "goal": "READ retry lifecycle accepted on356f993; new13 local checks separate10 TLS scenarios,2 handled runtime signals,1 cached-source control. Accept exact hosted SHA, then actual peer/read KeyUpdate before remaining WRITE/control/shutdown/usage-limit inventory and C2b."
     },
     {
       "id": "C3",
@@ -344,6 +360,29 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
+    "runId": "continuum-interrupt-20261023T185831Z",
+    "baseCommit": "2e6fb8af405bd02177459ee4d0c57bdb123e9de9",
+    "publicationParent": "eadd6801d0a02cb6a59f8a263f7b6eb892b7e342",
+    "result": "13 local checks passed:10 ordinary TLS,2 handled runtime signals,1 source-change control; independent heldout1 and actual negative sensitivities2. Native20, C0 core21/process7, C1 tests22 passed. New exact hosted CI pending.",
+    "helpers": "5 temporary delegated roles; only coordinator integrates/publishes",
+    "nativeSourceChanged": false,
+    "spendingUSD": 0,
+    "perFileLedger": "x10/review/continuum-c2a-interruption-ledger.json"
+  },
+  "lastVerificationReceipt": {
+    "runId": "continuum-retry-ci-20261023T185150Z",
+    "baseCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
+    "publicationParent": "ac46d99ff7cd84a836248232206946a79e230f7c",
+    "verifiedAtUTC": "2026-10-23T18:53:59Z",
+    "files": [
+      "x10/continuum/BACKGROUND.json",
+      "x10/continuum/C2A-CHECKPOINT.md"
+    ],
+    "runtimeSourcesChanged": false,
+    "spendingUSD": 0
+  },
+  "nextConcreteTask": "Actual peer-requested KeyUpdate: observe read generation, queued response and directional wire/sequence obligations; retain refusal of unsupported generations and no migration claim.",
+  "previousDevelopmentPass": {
     "runId": "continuum-retry-20261023T182702Z",
     "baseCommit": "3d7d74fc6d34ebb2a85d5ba76b5aeec5f32997b4",
     "publicationParent": "a438d472bd89e2a258fbc6b53ed11438c1d8f0c4",
@@ -364,17 +403,5 @@
         40006152459
       ]
     }
-  },
-  "lastVerificationReceipt": {
-    "runId": "continuum-retry-ci-20261023T185150Z",
-    "baseCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
-    "publicationParent": "ac46d99ff7cd84a836248232206946a79e230f7c",
-    "verifiedAtUTC": "2026-10-23T18:53:59Z",
-    "files": [
-      "x10/continuum/BACKGROUND.json",
-      "x10/continuum/C2A-CHECKPOINT.md"
-    ],
-    "runtimeSourcesChanged": false,
-    "spendingUSD": 0
   }
 }

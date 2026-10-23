@@ -137,8 +137,10 @@ retry и снятия своего retry уже присутствовало в 
 финальный coordinator aggregate на окончательных исходниках также прошёл
 **10/10**, exit 0, без skips/cancellations/TODO. Независимые четыре held-out
 TLS cases на точных окончательных исходниках также прошли, exit 0.
-Hosted приёмка нового implementation SHA пока не получена.
-Прежние 8/8 и hosted `99a017e` не принимают новый код автоматически.
+Hosted research push/PR и оба полных native workflows для retry implementation
+`356f993ead12a1b827a0351f38143b7b14c8d18f` завершились success; exact runs
+записаны в [C2A-CHECKPOINT](C2A-CHECKPOINT.md). Прежние 8/8 и hosted
+`99a017e` сохранены отдельно и не подменяют приёмку нового кода.
 
 Первая попытка нового набора остановилась в before hook с
 `probe_build_failed`: TLS runtime cases не выполнялись. Причина исходного
@@ -195,11 +197,83 @@ transport без утверждения о graceful TLS close или полно�
 Это отказ по caller contract fixture, а не дефект публичных getters или
 доказательство скрытого ciphertext в данном quiescent private state.
 
-Это не поддержка переноса pending read, write retry completion, peer/read
-KeyUpdate, полного control/alert/shutdown inventory или runtime cancellation.
+Эти два retry-сценария не подтверждают перенос pending read, write retry
+completion, peer/read KeyUpdate, полный control/alert/shutdown inventory
+или runtime cancellation. Последний проверяется отдельно ниже.
 Ни один новый сценарий не меняет TLS code version, I/O owner или соединение.
 Публичные evidence и hosted результат нового implementation SHA фиксирует
 координатор отдельно.
+
+### Отдельные controls: обработанное прерывание TLS runtime
+
+Десять обычных TLS scenarios остаются отдельным набором. Два дополнительных
+controls отправляют `SIGTERM` и `SIGINT` частному launcher, вызывающему
+неизменённый C2a module API, после настоящего
+TLS handshake и успешного application READ. Условия и результаты этих controls
+не считаются двумя новыми состояниями, разрешёнными probe к переносу.
+Финальный локальный aggregate прошёл 13/13: 10 обычных TLS cases, два
+handled-signal controls и один no-TLS source control. Exact hosted приёмка
+нового implementation SHA ещё ожидается. Независимо пройдены один held-out
+TLS case и два отдельных actual-TLS sensitivity controls; исходные отказы
+и ограничения сохранены в [interruption evidence](../evidence/continuum-c2a-interruption.json).
+
+Частный preload наблюдает существующее C-событие `retry-completed` в
+`completed-read-retry` и задерживает его доставку runner. C уже сообщил
+положительное число прочитанных bytes и снятый READ retry, затем ждёт
+существующий bounded STEP ACK перед echo. Контроль не добавляет публичного
+checkpoint API, не подменяет SSL calls и не изменяет C/probe/patch. Launcher
+воспроизводит CLI try/finally cleanup и фиксированный error/exit контракт;
+сам standalone CLI branch этим control напрямую не исполняется. Handshake
+и исходный WANT_READ должны быть наблюдены до выбранного checkpoint;
+готовность слушающего socket сама по себе не удовлетворяет этому условию.
+
+Условие PASS требует обработанного отказа `fixture_interrupted`, exit code
+143 для `SIGTERM` либо 130 для `SIGINT`, без успешного результата сценария.
+После выхода runner отдельно проверяются завершение идентифицированного
+C child, удаление принадлежащих запуску PKI, fixture binary и pinned-source/
+build каталогов. Relay listener должен быть доступен до сигнала, а после
+выхода — освобождать свой loopback port для нового bind. Отдельная попытка
+TCP connect к прежнему native endpoint должна получить `ECONNREFUSED`.
+У native C listener закрывается сразу после accept; его port не проверяется
+повторным bind после установленного TLS-потока. Эти наблюдения не доказывают
+отсутствие всех kernel socket states или graceful TLS closure. Проверки
+выполняются до резервной cleanup самого control: удаление тестом оставшихся
+файлов не превращает утечку runner в PASS.
+Private IPC может передавать временные paths и PID только управляющему test
+process; публичные результаты сохраняют counts/booleans и identities без
+таких значений, payload, session material или raw runtime logs.
+
+Первая авторская попытка `SIGTERM` с payload 4 097 bytes достигла нужного
+READ checkpoint, обработанного exit и удаления временных каталогов, но
+отказала на требовании повторного bind native port. Это требование control
+было некорректным для port уже принятого соединения; причина фактического
+отказа bind не установлена. Конкретный kernel state не объявляется
+подтверждённым. Требование заменено описанными выше отдельными наблюдениями
+native endpoint и relay listener; исходный отказ сохраняется в evidence,
+не объявляется дефектом production cleanup и не считается PASS.
+
+Проверяется одна объявленная application-read boundary и два обрабатываемых
+сигнала. Это не graceful TLS `close_notify`, не доказательство полного стирания
+секретов в памяти и не восстановление после `SIGKILL`, crash либо потери питания.
+Остальные interrupt boundaries, полный control/shutdown inventory, смена TLS
+code version, export/import, исключительное target I/O и native NGINX migration
+остаются самостоятельными gates. Если неизменённый runner проходит эти
+controls, результат означает новое покрытие, а не исправление доказанного
+дефекта его cleanup.
+
+Наблюдение process birth сопоставляет local PID с `NSpid`, тем же PID
+namespace и UID; numeric local PID не принимается за имя каталога `/proc`.
+Скан ограничен 10 000 entries и двумя секундами вокруг системных вызовов;
+зависший kernel syscall принудительно не прерывается. Это проверка
+принадлежащего helper child, не pidfd и не атомарный PID-reuse fence.
+
+Отдельный no-TLS control импортирует частную копию helper, изменяет её bytes
+и требует `interruption_helper_changed` до создания ресурсов или сборки.
+Load-time hash и повторные проверки ловят cooperative live edits после
+импорта; они не являются общей attestation исполняемого JavaScript.
+Набор теперь содержит 10 обычных TLS scenarios, 2 runtime signal-controls
+и этот 1 no-TLS source control; итоговые 13 проверок учитываются отдельно
+от полноты TLS inventory.
 
 Aggregate entry point — `node x10/continuum/openssl-probe-check.mjs`.
 Wrapper ограничен 650 секундами и 512 KiB суммарного child output, test process —

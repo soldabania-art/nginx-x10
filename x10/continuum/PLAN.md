@@ -306,3 +306,16 @@ NGINX и измеримой ценой reconnect/долгого retirement. Пр
 подменяют реальный TLS bridge, native/application integration и независимое
 сравнение с бесплатным drain/reconnect. Приёмка продукта должна измерить
 полный вывод старого кода, сохранение потока, pause/overhead и стоимость поддержки.
+
+## C2a: runtime interruption и source-change gate
+
+Локально пройдены13 проверок: прежние10 TLS scenarios, два handled signals
+после реального authenticated application READ и один no-TLS cached-import
+source control. [Evidence](../evidence/continuum-c2a-interruption.json)
+сохраняет независимый held-out case, два actual-TLS sensitivity refusals,
+исходные неуспехи и ограничение private launcher вместо прямого CLI branch.
+Native20/20, C0 core21/process7 и C1 tests22 пройдены отдельно. Новый exact
+hosted SHA ещё ожидается. Это покрытие одной interruption boundary; прочие
+crash/interrupt границы и полный TLS inventory не закрыты.
+Следующий ограниченный task — actual peer-requested KeyUpdate/read generation
+и response obligation, затем WRITE retry/control/shutdown/limits до C2b.

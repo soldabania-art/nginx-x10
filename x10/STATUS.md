@@ -615,3 +615,28 @@ build-hook результат сохранены в [retry evidence](evidence/co
 сохраняет 1083 strict PASS, 25 SKIP, 1 expected TODO и 0 strict FAIL.
 Peer/read KeyUpdate, write retry completion, control/shutdown/usage limits,
 TLS-runtime cancellation и semantic export/import остаются следующими работами.
+
+## Continuum C2a: прерывание runtime и идентичность helper
+
+Финальные локальные проверки —**13/13**:10 прежних TLS scenarios,2 обработанных
+SIGTERM/SIGINT после authenticated handshake и первого успешного C READ до echo,
+1 no-TLS cached-source control. [Interruption evidence](evidence/continuum-c2a-interruption.json)
+отделяет новый test helper от неизменённых production module API/C/probe/build.
+Сигнал принимает частный Node launcher; непосредственно standalone CLI branch
+и прямой C SIGINT этим не проверены. Требуются handled отказ, завершённый
+C child, удалённые собственные PKI/сборки и освобождённый relay listener до
+fallback очистки. Graceful TLS close и memory zeroization не заявляются.
+
+Независимый held-out TLS case и два намеренно неблагоприятных actual-TLS
+controls подтвердили отказ при оставшихся PKI и реально занятом relay port.
+Исправлены две ошибки нового стенда: numeric PID/proc assumption и позднее
+снятие hash, способное приписать cached module изменённым disk bytes. Private
+контрпримеры, первый неверный native-port rebind критерий, provisional10/12
+aggregate и ограничения identity сохранены; production cleanup defect не
+установлен. Хэш при импорте — cooperative edit detector, не execution attestation.
+
+Свежая native регрессия —**20/20**; official1083 strict PASS/25 SKIP/
+1 expected TODO/0FAIL,105modules. Новый checkout имеет собственный binary hash;
+совпадение с предыдущим не заявляется. C0 core21/process7, C1 tests22 пройдены.
+Hosted приёмка новых source bytes ещё ожидается. Далее — peer/read KeyUpdate,
+WRITE retry и оставшиеся control/shutdown/usage-limit состояния до export/import.

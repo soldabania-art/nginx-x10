@@ -153,3 +153,36 @@ no runtime, workflow, economic or purchase change. Per-file receipt ledger:
 
 Only allowlisted counts and workflow/job IDs are retained here; raw logs,
 host paths, process IDs and session material are excluded.
+
+## Handled TLS runtime interruption checkpoint
+
+[Interruption evidence](../evidence/continuum-c2a-interruption.json) records
+13/13 local checks:10 existing ordinary TLS scenarios,2 handled Node runtime
+signals and1 no-TLS cached-source control, with no failures/skips/TODO.
+Private launchers call unchanged C2a APIs, authenticate TLS and reach a real
+successful first READ before echo; the standalone CLI branch is not directly
+executed. SIGTERM/SIGINT require fixed failure/143-or130 exit, C-child reaping,
+PKI/fixture/pinned-build absence, native endpoint refusal and relay rebind.
+These facts precede helper fallback cleanup and do not imply graceful TLS close.
+
+The independent reviewer passed one exact-source held-out SIGINT49319 case,
+two separate actual-TLS sensitivity refusals (left PKI and a real occupied
+relay listener), three no-TLS options controls and two cached-import controls.
+A private late-hash model reaches a stub spawn after disk mutation; final
+load-time identity refuses before any build. Local PID/proc mapping now uses
+NSpid, namespace and UID; the bounded helper guard is not an atomic PID fence.
+
+Preserved adverse results include the first invalid native-port rebind gate,
+two provisional independent process-identity refusals, an unfrozen aggregate
+with10PASS/2FAIL, and one temporary reviewer CODE copy removed during final
+review cleanup. No original production cleanup defect is established.
+Exact final source hashes and identities separate final acceptance from those
+provisional runs; missing executed-source identity is not invented.
+
+Native regression passed20/20, official1083 strict PASS/25SKIP/1expectedTODO/
+0FAIL, in a fresh checkout with a separately identified binary. C0 core21/
+process7 and C1 tests22 passed. Native NGINX and C2a runtime/probe/build sources
+are unchanged. Full inventory, peer/read KeyUpdate, WRITE retry, control/
+shutdown/limits, export/import and actual TLS-code migration remain pending.
+New hosted acceptance must use the exact implementation SHA; prior356f993
+acceptance does not accept these tests automatically. No spending introduced.

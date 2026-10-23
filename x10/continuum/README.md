@@ -282,3 +282,16 @@ retirement time, peak RSS, CPU и стоимость состояния на con
 Возможный исследовательский вклад — практичный ограниченный cross-version
 state contract и проверка его обязательств для живого encrypted потока.
 Оригинальность, полнота и полезность такого вклада ещё требуют исследования.
+
+## C2a: обработанное прерывание после настоящего TLS READ
+
+[Interruption evidence](../evidence/continuum-c2a-interruption.json) отделяет
+10 обычных TLS scenarios, два SIGTERM/SIGINT runtime controls и один no-TLS
+cached-source control. Финальный локальный aggregate —13/13 без skips/failures.
+Частный launcher вызывает неизменённый module API; после authenticated
+handshake и первого успешного READ до echo проверяются handled failure,
+завершение C child и удаление собственных PKI/сборок до fallback cleanup.
+Это новое покрытие одной границы, не исправление доказанного production leak,
+не graceful close и не перенос. Независимые held-out/negative controls,
+промежуточные отказы и source identities сохранены отдельно. Hosted приёмка
+нового SHA ожидается; затем продолжается peer/read KeyUpdate inventory.
