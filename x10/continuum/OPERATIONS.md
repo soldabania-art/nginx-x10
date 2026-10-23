@@ -140,6 +140,15 @@ Public CI evidence создаётся на public runner; локальные и�
 
 Lease-only `BACKGROUND.json` и markdown внутри research каталога исключены из
 Continuum CI path filters. Native CI исключает из своего широкого `x10/**`
-самостоятельный каталог `x10/continuum/**`. Это сокращает повторные сборки при
-согласовании работы; реальные native изменения и изменения research кода
-проверяются своими workflows. Schedule не заменяет review и принятие CI.
+самостоятельный каталог `x10/continuum/**`. Это фильтрует push events. Для pull_request GitHub проверяет diff всего PR: даже
+lease-only synchronize может снова запустить или отменить PR workflow. Поэтому
+исключение metadata не является полным admission gate. Фиксировать принятый
+implementation SHA и его push run отдельно от последующих coordination-only
+HEAD; реальные native/research изменения проверяются своими workflows.
+Schedule не заменяет review и принятие CI.
+
+Принятый C0 implementation: `a1ef4af6bebfbac52447e971ead0b16e183f2c1f`.
+Native push run `39979729141` и research push/PR runs `39979729081` /
+`39979846870` завершились success. C0 остаётся synthetic record/process
+экспериментом, не переносом OpenSSL/NGINX. Первый будущий scheduled run
+на момент настройки ещё не наблюдался.

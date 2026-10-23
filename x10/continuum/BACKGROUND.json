@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "ci-checkpoint-20261023T154037Z",
-    "owner": "interactive-root-coordinator",
-    "baseCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
-    "acquiredAtUTC": "2026-10-23T15:40:37.642193+00:00",
-    "expiresAtUTC": "2026-10-23T16:10:37.642193+00:00",
-    "coordinationOnly": true
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -28,26 +21,39 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "0b6a87eac9af93607f47bba874007901b8125b30",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/39971890181",
+    "nativeCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/39979729141",
     "continuumStage": "C0 narrow synthetic record/state and same-connection process fixture",
     "continuumNativeIntegration": false,
     "continuumEvidence": "x10/evidence/continuum-c0.json",
-    "continuumHostedCI": "pending-on-publication"
+    "continuumHostedCI": {
+      "state": "success",
+      "pushRun": 39979729081,
+      "pullRequestRun": 39979846870,
+      "coreTests": 21,
+      "processTests": 7
+    },
+    "continuumImplementationCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
+    "nativeHostedCI": {
+      "state": "success",
+      "pushRun": 39979729141,
+      "scope": "Full native workflow including official aggregate, Unix gates, feature-off build and alpha packaging"
+    },
+    "nativeAndResearchSourceHashesUnchangedSinceAcceptedCommit": true
   },
   "pendingVerification": [
-    "Hosted native and Continuum CI for the implementation commit containing this checkpoint; resolve its SHA before lease-only commits",
-    "First scheduled cloud development run not yet observed"
+    "First scheduled cloud development run not yet observed",
+    "Documentation/coordination-only follow-up may start another PR native run; distinguish it from accepted implementation SHA"
   ],
   "nextTasks": [
     {
       "id": "C0",
-      "state": "accepted-local-narrow-profile",
+      "state": "accepted-local-and-hosted-narrow-profile",
       "goal": "Bounded TLS 1.3 record engine, strict continuation-state model, independent vectors and a same-connection child-process transfer fixture"
     },
     {
       "id": "C1",
-      "state": "next-after-pending-CI",
+      "state": "ready",
       "goal": "Establish real TLS1.3 handshake interoperability with an independent client and study a pinned TLS backend export/import safepoint: directional sequence, KeyUpdate obligations and userspace buffers; no resumption substitution"
     },
     {
@@ -78,5 +84,13 @@
     "previousDevelopmentBranch": "x10-development",
     "reason": "Use a correctly formatted implementation commit without rewriting the published branch history",
     "runtimeSourceUnchanged": true
-  }
+  },
+  "knownRepositoryChecks": [
+    {
+      "name": "F5 Contributor License Agreement",
+      "state": "failed-inherited-publisher-integration",
+      "scope": "Separate repository integration; not a passed technical test and not accepted on the owner behalf"
+    }
+  ],
+  "ciPathSemantics": "Push filters exclude research coordination metadata. Pull-request filters use the whole PR diff, so a lease-only synchronize event can still rerun/cancel PR workflows; do not treat the exclusion as a complete admission gate."
 }

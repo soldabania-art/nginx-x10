@@ -422,8 +422,17 @@ then the separate process-handover TAP suite. Push/PR/manual are enabled; no cro
 is configured. This is not the native NGINX workflow or a persistent AI worker.
 
 Native workflow paths exclude the independent `x10/continuum/**` directory.
-Research paths exclude `BACKGROUND.json` and research Markdown, so lease-only
-commits do not start or cancel tests. Native source/control/tests continue to
-trigger native checks. Both outcomes must be attached to the actual changed
+Research push paths exclude `BACKGROUND.json` and research Markdown. PR path
+filters examine the whole PR diff, so a lease-only synchronize can still rerun
+or cancel PR checks. The exclusion is not a complete admission gate. Record
+the accepted implementation SHA/push run independently of coordination-only
+HEAD. Native source/control/tests continue to trigger native checks. Both outcomes must be attached to the actual changed
 implementation commit; local tests and a configured schedule do not prove a
 future hosted run.
+
+The C0 implementation at `a1ef4af6bebfbac52447e971ead0b16e183f2c1f` has
+successful [native push CI](https://github.com/soldabania-art/nginx-x10/actions/runs/39979729141)
+and [research PR CI](https://github.com/soldabania-art/nginx-x10/actions/runs/39979846870).
+Research logs confirm 21 core and 7 process tests with no failures or skips.
+The inherited F5 CLA publisher check remains a separate failed integration;
+these technical outcomes do not claim that all repository checks passed.
