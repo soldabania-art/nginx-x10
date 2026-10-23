@@ -49,7 +49,7 @@ String-valued target attributes need not inherit arbitrary custom
 Actual checked-out attributes are required for the tested `git log --check`
 behavior; index fallback alone is not asserted.
 
-Hosted acceptance of the policy result itself is pending its exact new SHA.
+Hosted policy acceptance is now recorded in the CI receipt below.
 Commit-message and version-bump checks on99a017e succeeded. The inherited F5
 CLA integration still failed separately; no contract is accepted on the
 owner's behalf.
@@ -57,3 +57,31 @@ owner's behalf.
 Next: accept the format-policy hosted result, then extend C2a peer/read KeyUpdate,
 retry/control/shutdown/limits and runtime cancellation inventory. No new
 spending, infrastructure, outreach or commercial scope was introduced.
+
+## CI receipt
+
+Policy implementation: `624f70fa1b5061c5be65759eed5a45a4d56a4af7`.
+[Check Whitespace39995212454](https://github.com/soldabania-art/nginx-x10/actions/runs/39995212454),
+job120556843347, completed success. Commit-message39995212552 and
+version-bump39995212660 also completed success. The initial failure remains
+recorded above; this is a format-policy correction, not new TLS behavior.
+
+Successor research push39995200815 completed success with its expensive
+research job skipped; this is not a fresh runtime pass. Research PR39995212463
+completed success. Original exact runtime acceptance remains implementation
+99a017e and its two real research/two full native runs.
+
+Successor native push39995200740 / PR39995212470 were in_progress when this
+receipt was written. Those exact SHA/run IDs remain pending in BACKGROUND;
+unchanged runtime sources do not permit inventing their outcome. Later
+coordination-only descendants do not replace the accepted source hashes.
+
+Receipt modifies only BACKGROUND and this Markdown file, with one parent
+being the exact own live lease; no C, patch, workflow or economic change.
+Per-file receipt ledger (SHA256):
+
+- BACKGROUND before: `214d18d744b93bf9dc647dd402e5f1c0c7ca932fd2eba854872c9539b278d5c9`; after: `722c244ba9c06fd35358b3c8abf2e43bc956fe5464eab37542097bfbf6b5faab`.
+- C2A-CHECKPOINT before: `acbc0ab8c6462214994b736ddcf65d1ebc507825e9a09963f7449a74ac52d2a8`; own after digest omitted to avoid recursion; Git tree/commit identifies it.
+
+Coordinator checked exact source identity and completed workflow/job results;
+raw hosted logs, host paths, PIDs and session material are not published.

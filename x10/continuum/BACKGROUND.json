@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-c2a-receipt-20261023T172920Z",
-    "owner": "root-c2a-coordinator",
-    "baseCommit": "624f70fa1b5061c5be65759eed5a45a4d56a4af7",
-    "acquiredAtUTC": "2026-10-23T17:29:20.127Z",
-    "expiresAtUTC": "2026-10-23T17:44:20.127Z",
-    "coordinationOnly": true
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -129,10 +122,39 @@
       ],
       "scope": "Official native aggregate, Guard, required Unix transports/generations/operator, feature-off build and alpha package/checksum"
     },
-    "previousC1NativeCommit": "193afe99f338b9435082b002f2b5e21eda058449"
+    "previousC1NativeCommit": "193afe99f338b9435082b002f2b5e21eda058449",
+    "formatPolicyCI": {
+      "state": "success",
+      "implementationCommit": "624f70fa1b5061c5be65759eed5a45a4d56a4af7",
+      "whitespaceRun": 39995212454,
+      "whitespaceJobID": 120556843347,
+      "commitMessageRun": 39995212552,
+      "versionBumpRun": 39995212660,
+      "originalWhitespaceFailure": {
+        "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
+        "run": 39994040750,
+        "jobID": 120552818898,
+        "contextMarkerWarnings": 5
+      },
+      "actualCAndPatchBytesUnchanged": true
+    },
+    "formatSuccessorResearchCI": {
+      "implementationCommit": "624f70fa1b5061c5be65759eed5a45a4d56a4af7",
+      "push": {
+        "run": 39995200815,
+        "state": "success",
+        "researchJob": "skipped-no-new-runtime-acceptance"
+      },
+      "pullRequest": {
+        "run": 39995212463,
+        "state": "success",
+        "researchJobID": 120556933469
+      },
+      "originalRuntimeAcceptance": "99a017e64b33eda537ea0fc19db623984fa2dd9e"
+    }
   },
   "pendingVerification": [
-    "Check Whitespace on the result commit adding exact .gitattributes path policy; original39994040750 failed5 canonical patch markers, local full-history candidate passes. Exact new SHA/run IDs follow publication.",
+    "Unchanged-source format successor624f70fa1b5061c5be65759eed5a45a4d56a4af7 native push39995200740/PR39995212470 last observed in_progress; accept only completed success. Original full native99a017e already accepted. Coordination-only descendants are not new runtime acceptance.",
     "C2a extended inventory: peer-requested/read KeyUpdate, retry completion and unrelated success, control/alert/shutdown, sequence/key usage admission and actual TLS-runtime interruption cleanup.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
@@ -186,10 +208,11 @@
     },
     {
       "name": "Check Whitespace",
-      "state": "failed-on-initial-C2a-pending-policy-success",
-      "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
-      "failedRun": 39994040750,
-      "scope": "5 canonical single-space unified-diff context markers; candidate exact-path blank-at-EOL exception passed full-history check locally; actual C/patch bytes unchanged."
+      "state": "success-on-exact-format-policy-SHA",
+      "implementationCommit": "624f70fa1b5061c5be65759eed5a45a4d56a4af7",
+      "run": 39995212454,
+      "originalFailedRun": 39994040750,
+      "scope": "Exact patch-file blank-at-EOL exception; actual C/patch unchanged; other C attributes unspecified/default."
     }
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
@@ -247,11 +270,11 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
-    "runId": "continuum-c2a-verify-20261023T172020Z",
-    "baseCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
-    "publicationParent": "cad5a169f0b20135569a675827f23d5e1c09bb77",
-    "result": "Accepted both C2a research workflows; reproduced whitespace failure and applied narrow file/error-class attribute policy without source or patch changes.",
-    "perFileLedger": "x10/review/continuum-c2a-format-ledger.json",
+    "runId": "continuum-c2a-receipt-20261023T172920Z",
+    "baseCommit": "624f70fa1b5061c5be65759eed5a45a4d56a4af7",
+    "publicationParent": "d3cd87ed4234c48533151109677eb108bce1f062",
+    "result": "Recorded exact successful implementation research/native and patch-policy hosted runs; unchanged-source successor native runs remain pending.",
+    "perFileLedger": "x10/continuum/C2A-CHECKPOINT.md#ci-receipt",
     "spendingUSD": 0
   }
 }
