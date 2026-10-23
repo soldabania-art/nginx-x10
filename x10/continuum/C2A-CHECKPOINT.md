@@ -117,3 +117,39 @@ Hosted verification of this new retry implementation is pending its exact
 publication SHA; old runtime/metadata CI does not accept it. After that gate,
 peer/read KeyUpdate, WRITE retry completion and remaining control/shutdown/
 usage-limit/cancellation inventory precede any C2b export/import work.
+
+## Retry implementation hosted CI receipt
+
+Implementation: `356f993ead12a1b827a0351f38143b7b14c8d18f`.
+Both research workflows completed success:
+[push40006143682](https://github.com/soldabania-art/nginx-x10/actions/runs/40006143682)
+and [PR40006152124](https://github.com/soldabania-art/nginx-x10/actions/runs/40006152124).
+Jobs120594513518 /120594586195 confirm core21, process7, C1 tests22 and
+pinned-probe10, all without failures, skips, cancellations or TODO.
+
+Both full native workflows completed success:
+[push40006143712](https://github.com/soldabania-art/nginx-x10/actions/runs/40006143712)
+and [PR40006152459](https://github.com/soldabania-art/nginx-x10/actions/runs/40006152459).
+Jobs120594514554 /120594562804 include the native/official aggregate,
+tenant-cache and Unix gates, feature-off build, alpha package and checksum.
+This receipt records workflow/step outcomes; the local20-group evidence and
+its fresh-checkout binary identity remain separate from hosted artifacts.
+Whitespace40006152181, commit-message40006152137 and version40006152109
+completed success. The inherited F5 CLA integration40006147449 failed
+separately; no agreement was accepted on the owner's behalf.
+
+Frozen runtime sources and evidence remain identified by356f993; this
+metadata receipt is not a new protocol or native acceptance. The first
+local build-hook failure remains recorded with unknown underlying cause.
+Full TLS inventory, export/import, distinct TLS-code change and native
+NGINX continuation remain unimplemented. Next: peer/read KeyUpdate and
+remaining WRITE retry/control/shutdown/usage-limit/cancellation inventory.
+
+Only BACKGROUND and this checkpoint change, over the exact live lease;
+no runtime, workflow, economic or purchase change. Per-file receipt ledger:
+
+- BACKGROUND SHA256 before `ff80d462b2aaaab0da521953bae1abb4530df13c922b3846e5e85372f342d612`; after `f1afdb5f5ab522657c6cf6c1e0f6db0674ce69fe8d96d9f9fed0615179104ccb`.
+- C2A-CHECKPOINT SHA256 before `6ca88fa211b2b744501fbd1dfab06aedb7439ad782d6ee025aeacaa5941dcbd2`; its result is identified by the Git tree/commit to avoid a recursive own digest.
+
+Only allowlisted counts and workflow/job IDs are retained here; raw logs,
+host paths, process IDs and session material are excluded.

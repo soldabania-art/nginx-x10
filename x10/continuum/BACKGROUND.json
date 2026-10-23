@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-retry-ci-20261023T185150Z",
-    "owner": "cloud-coordinator",
-    "baseCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
-    "acquiredAtUTC": "2026-10-23T18:51:50Z",
-    "expiresAtUTC": "2026-10-23T19:11:50Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -27,21 +21,21 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/39994034390",
-    "continuumStage": "C2a narrow pinned OpenSSL read-only observation accepted locally and research hosted; full inventory/export-import pending",
+    "nativeCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40006143712",
+    "continuumStage": "C2a narrow pinned OpenSSL read-only observation and READ retry lifecycle accepted locally and hosted; full inventory/export-import pending",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-c2a.json",
+    "continuumEvidence": "x10/evidence/continuum-c2a-retry.json",
     "nativeHostedCI": {
       "state": "success",
-      "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
-      "pushRun": 39994034390,
-      "pullRequestRun": 39994040738,
+      "implementationCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
+      "pushRun": 40006143712,
+      "pullRequestRun": 40006152459,
       "nativeJobIDs": [
-        120552916731,
-        120552906412
+        120594514554,
+        120594562804
       ],
-      "scope": "Full native workflow: official aggregate, Guard, required Unix transports/generations/operator, feature-off build and alpha package/checksum"
+      "scope": "Full native workflows, official aggregate, tenant-cache/Unix gates, feature-off build and alpha package/checksum"
     },
     "previousContinuumImplementationCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
     "previousContinuumHostedCI": {
@@ -53,22 +47,25 @@
     },
     "continuumHostedCI": {
       "state": "success",
-      "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
-      "pushRun": 39994034417,
-      "pullRequestRun": 39994040940,
+      "implementationCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
+      "pushRun": 40006143682,
+      "pullRequestRun": 40006152124,
       "researchJobIDs": [
-        120552885020,
-        120552928281
+        120594513518,
+        120594586195
       ],
       "coreTests": 21,
       "processTests": 7,
       "c1Tests": 22,
-      "c2aTests": 8,
+      "c2aTests": 10,
       "skipped": 0,
-      "scope": "Read-only pinned-source observation; not full inventory, export/import or native migration"
+      "failed": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "scope": "Actual READ retry completion and unrelated WRITE preserving the READ obligation; no complete state inventory, export/import or TLS-code migration"
     },
-    "continuumImplementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
-    "implementationIdentityRule": "Runtime C2a acceptance tied to implementation99a017e and exact source hashes; format-policy and coordination successors do not repeat protocol acceptance.",
+    "continuumImplementationCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
+    "implementationIdentityRule": "Retry acceptance tied to implementation356f993 and exact frozen source hashes; prior99a017e acceptance retained separately. Coordination/receipt commits are not new runtime acceptance.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
       "state": "success",
@@ -109,13 +106,14 @@
     "c2aHostedCheckpoint": "x10/continuum/C2A-CHECKPOINT.md",
     "nativeCandidateCI": {
       "state": "success",
-      "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
-      "pushRun": 39994034390,
-      "pullRequestRun": 39994040738,
+      "implementationCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
+      "pushRun": 40006143712,
+      "pullRequestRun": 40006152459,
       "nativeJobIDs": [
-        120552916731,
-        120552906412
-      ]
+        120594514554,
+        120594562804
+      ],
+      "scope": "Full native workflows, official aggregate, tenant-cache/Unix gates, feature-off build and alpha package/checksum"
     },
     "previousC1NativeHostedCI": {
       "state": "success",
@@ -166,7 +164,7 @@
       "verifiedAtUTC": "2026-10-23T18:42:00.866Z"
     },
     "c2aRetryLocal": {
-      "state": "success-local-pending-hosted",
+      "state": "success-local-and-hosted-narrow-profile",
       "tests": 10,
       "skipped": 0,
       "scope": "Actual read retry completion and unrelated successful write preserving a READ obligation; existing ledger contract, no migration.",
@@ -177,7 +175,8 @@
       "diagnosticControls": 4,
       "fullInventoryAccepted": false,
       "semanticExportImport": false,
-      "nativeNginxIntegration": false
+      "nativeNginxIntegration": false,
+      "implementationCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f"
     },
     "c2aRetryNativeLocal": {
       "state": "success",
@@ -186,10 +185,36 @@
       "freshCheckoutBinarySha256": "5daf222464cf97145f82ae848123f65f7e627bfb626db0e267bfd6147134562f",
       "earlierCheckoutBinaryIdentityClaimed": false,
       "evidence": "x10/evidence/continuum-c2a-retry-native-regression.json"
+    },
+    "previousC2aHostedCI": {
+      "state": "success",
+      "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
+      "pushRun": 39994034417,
+      "pullRequestRun": 39994040940,
+      "researchJobIDs": [
+        120552885020,
+        120552928281
+      ],
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 22,
+      "c2aTests": 8,
+      "skipped": 0,
+      "scope": "Read-only pinned-source observation; not full inventory, export/import or native migration"
+    },
+    "previousC2aNativeHostedCI": {
+      "state": "success",
+      "implementationCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
+      "pushRun": 39994034390,
+      "pullRequestRun": 39994040738,
+      "nativeJobIDs": [
+        120552916731,
+        120552906412
+      ],
+      "scope": "Full native workflow: official aggregate, Guard, required Unix transports/generations/operator, feature-off build and alpha package/checksum"
     }
   },
   "pendingVerification": [
-    "Read hosted research/native workflows for the exact first implementation SHA introducing continuum-c2a-retry.json; record SHA/run IDs after publication and accept only completed success.",
     "C2a remaining inventory: peer-requested/read KeyUpdate, same-operation WRITE retry completion, overlapping retry obligations, control/alert/shutdown, sequence/key usage admission and actual TLS-runtime interruption cleanup.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
@@ -209,7 +234,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Initial8 and new2 actual TLS read-retry lifecycle cases are implemented and locally verified; accept exact hosted implementation SHA, then peer/read KeyUpdate, WRITE retry/control/shutdown/limits/cancellation inventory before C2b. Caller ledger is trusted, not an argument or ownership fence."
+      "goal": "Initial8 plus new2 actual TLS READ retry lifecycle cases accepted locally and hosted on356f993; next peer/read KeyUpdate, WRITE retry/control/shutdown/limits/cancellation inventory before C2b. Trusted caller ledger is not an argument or ownership fence."
     },
     {
       "id": "C3",
@@ -248,6 +273,14 @@
       "run": 39995212454,
       "originalFailedRun": 39994040750,
       "scope": "Exact patch-file blank-at-EOL exception; actual C/patch unchanged; other C attributes unspecified/default."
+    },
+    {
+      "name": "Retry implementation format checks",
+      "state": "success",
+      "implementationCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
+      "whitespaceRun": 40006152181,
+      "commitMessageRun": 40006152137,
+      "versionBumpRun": 40006152109
     }
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
@@ -312,6 +345,30 @@
     "helpers": "5 temporary delegated roles available; only coordinator publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-retry-ledger.json"
+    "perFileLedger": "x10/review/continuum-c2a-retry-ledger.json",
+    "implementationCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
+    "hostedVerification": {
+      "state": "success",
+      "researchRuns": [
+        40006143682,
+        40006152124
+      ],
+      "nativeRuns": [
+        40006143712,
+        40006152459
+      ]
+    }
+  },
+  "lastVerificationReceipt": {
+    "runId": "continuum-retry-ci-20261023T185150Z",
+    "baseCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f",
+    "publicationParent": "ac46d99ff7cd84a836248232206946a79e230f7c",
+    "verifiedAtUTC": "2026-10-23T18:53:59Z",
+    "files": [
+      "x10/continuum/BACKGROUND.json",
+      "x10/continuum/C2A-CHECKPOINT.md"
+    ],
+    "runtimeSourcesChanged": false,
+    "spendingUSD": 0
   }
 }
