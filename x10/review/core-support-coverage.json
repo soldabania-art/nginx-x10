@@ -1,0 +1,103 @@
+{
+  "repository": "https://github.com/nginx/nginx",
+  "commit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+  "reviewType": "source reading; no builds or runtime validation",
+  "files": [
+    {
+      "path": "src/core/ngx_resolver.c",
+      "lines": 4715,
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          4715
+        ]
+      ],
+      "role": "Event-driven A/AAAA/CNAME/PTR/SRV resolver; deduplicated pending queries, TTL cache, retry/TCP fallback, timeouts and callback ownership"
+    },
+    {
+      "path": "src/core/ngx_resolver.h",
+      "lines": 242,
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          242
+        ]
+      ],
+      "role": "Async resolver API, node/cache/waiting contexts and DNS constants"
+    },
+    {
+      "path": "src/core/ngx_inet.c",
+      "lines": 1499,
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          1499
+        ]
+      ],
+      "role": "IP/CIDR/socket/URL parsing, formatting and synchronous config-time host resolution"
+    },
+    {
+      "path": "src/core/ngx_inet.h",
+      "lines": 132,
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          132
+        ]
+      ],
+      "role": "Socket address/CIDR/URL structures and APIs"
+    },
+    {
+      "path": "src/core/ngx_string.c",
+      "lines": 2130,
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          2130
+        ]
+      ],
+      "role": "Bounded formatting, ASCII comparisons, numeric conversion guards, base64/UTF8 and context escapes"
+    },
+    {
+      "path": "src/core/ngx_string.h",
+      "lines": 239,
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          239
+        ]
+      ],
+      "role": "Length-based strings, buffer contracts, escape APIs and size macros"
+    },
+    {
+      "path": "src/core/ngx_regex.c",
+      "lines": 804,
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          804
+        ]
+      ],
+      "role": "PCRE1/2 compilation/matching, pool allocator, JIT studies and cleanup lifecycle"
+    },
+    {
+      "path": "src/core/ngx_regex.h",
+      "lines": 78,
+      "status": "full_read",
+      "readRanges": [
+        [
+          1,
+          78
+        ]
+      ],
+      "role": "Regex capture metadata, flags and PCRE API abstraction"
+    }
+  ]
+}
