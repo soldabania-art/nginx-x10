@@ -9,6 +9,7 @@ permissions: read-all
 jobs:
   f5-cla:
     name: F5 Contributor License Agreement (CLA)
+    if: github.repository == 'nginx/nginx'
     runs-on: ubuntu-24.04
     permissions:
       actions: write

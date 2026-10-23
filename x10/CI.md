@@ -81,12 +81,36 @@ runs `node x10/test/all.mjs --official`: the unified native regression entry poi
 plus this pinned official sample in master mode. It installs the optional Perl
 FCGI, SCGI and TLS clients, uses read-only repository permissions and pinned action revisions, and
 uploads only JSON evidence. It neither deploys a gateway nor changes billing,
-secrets or the original upstream workflows.
+secrets or native test assertions.
 
-The workflow is configured for relevant changes on `x10-development`, relevant
-pull requests into `master`/`x10-development`, and manual dispatch. A local pass
-or a committed workflow is not proof that GitHub Actions actually ran; billing,
-runner access or optional daemon availability can still affect a hosted run.
+The workflow is configured for relevant changes on `x10-development` and
+`x10-main`, relevant pull requests into those branches or `master`, and manual
+dispatch. A local pass or a committed workflow is not proof that GitHub Actions
+actually ran; runner access and optional daemon availability can still affect a
+specific hosted run. See [STATUS.md](STATUS.md) for observed commit/run results.
+
+## Integration and upstream mirror policy
+
+`master` is the unmodified upstream reference. Fork-owned changes, including CI
+adaptation, belong on `x10-main` and development branches. `x10-main` is the
+independent integration base; `x10-development` targets it for review. Keeping
+the original upstream reference does not require applying F5 publisher checks
+to this independent project's pull requests.
+
+The inherited F5 CLA workflow has a job-level repository guard on the integration
+base and development head: `github.repository == 'nginx/nginx'`. The F5 job still
+runs in the original publisher's repository. It is skipped in this independent
+fork without accepting an agreement, posting a CLA phrase, editing signature
+storage or provisioning publisher secrets. Native build, compatibility,
+whitespace and commit-message checks remain enabled.
+
+This guard must exist on the pull request's base branch, because
+`pull_request_target` loads that branch's workflow. A guard added only to the
+development head cannot change the inherited base workflow. The `issue_comment`
+event loads the repository's default branch instead. Use `x10-main` as the
+independent fork's default branch so it also receives the guard. If the default
+still points to the unmodified `master`, its original special F5 comment
+triggers remain present; default-branch settings must be checked separately.
 
 ## Local validation on 23 October 2026
 
@@ -126,5 +150,6 @@ did not prove its native children had finished after SIGKILL.
 
 Shell/embedded-Python syntax and YAML structure were checked locally. The three
 action pins were verified against official Git refs (`checkout` v6.0.2,
-`setup-node` v6, `upload-artifact` v6). No hosted CI execution or performance
-advantage is claimed by these local results.
+`setup-node` v6, `upload-artifact` v6). These local results do not certify a hosted
+run or establish a performance advantage; hosted results belong to the exact
+commit identified in [STATUS.md](STATUS.md) and GitHub Actions.
