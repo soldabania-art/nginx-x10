@@ -48,6 +48,13 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
+      - name: Validate release-record contract and refusal controls
+        run: |
+          mkdir -p x10/.build/ci-evidence
+          node --test --test-reporter=tap \
+            x10/release/check-release-record.test.mjs \
+            x10/release/release-record-heldout.test.mjs \
+            > x10/.build/ci-evidence/release-record.tap
       - name: Build dependencies and optional test clients
         run: |
           sudo apt-get update

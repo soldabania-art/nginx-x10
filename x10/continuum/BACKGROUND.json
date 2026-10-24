@@ -3,31 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-v1-contract-20261024T112328Z",
-    "owner": "codex-coordinator-v1-contract",
-    "baseCommit": "1cb03eaa0b9318da8ab5d1e7457fd749e854bf5f",
-    "acquiredAtUTC": "2026-10-24T11:23:28.000Z",
-    "expiresAtUTC": "2026-10-24T12:08:28.000Z",
-    "task": "G0-G1 bounded release contract, support/thresholds and release-record validation; no production deploy",
-    "allowedFiles": [
-      "x10/release/RELEASE-CONTRACT.md",
-      "x10/release/profile.json",
-      "x10/release/release-record.schema.json",
-      "x10/release/check-release-record.mjs",
-      "x10/release/check-release-record.test.mjs",
-      "x10/release/release-record-heldout.test.mjs",
-      "x10/release/README.md",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/continuum/BACKGROUND.json",
-      "x10/PLAN.md",
-      "x10/STATUS.md",
-      "x10/evidence/v1-release-contract.json",
-      "x10/review/v1-release-contract-ledger.json",
-      ".github/workflows/x10-native.yml"
-    ],
-    "renewedAtUTC": "2026-10-24T11:28:13Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1075,9 +1051,19 @@
       "FinishedValuePreservation": false,
       "semanticExportImport": false,
       "migration": false
+    },
+    "v1ContractLocal": {
+      "state": "local-definition-and-declaration-validation-only-hosted-pending",
+      "evidence": "x10/evidence/v1-release-contract.json",
+      "profile": "x10/release/profile.json",
+      "releaseContract": "x10/release/RELEASE-CONTRACT.md",
+      "runtimeAccepted": false,
+      "productionAccepted": false,
+      "resultIdentityRule": "Result commit whose single parent is publicationParent in evidence."
     }
   },
   "pendingVerification": [
+    "Verify exact resulting G1 release-contract implementation CI: native main job must execute release-record tests and existing native/Unix/feature-off/package checks. Local structural validation is not authenticated evidence, Node22 clean-host acceptance or Production V1.",
     "Held-source API metadata exact CI accepted only for bounded observations. Actual required ALPN/Finished values and restricted authentication-class state still need protected preservation and reviewed unsupported API semantics before target reconstruction.",
     "Private synthetic capture-TU ASan/UBSan8 controls passed with detect_leaks=0; LeakSanitizer detect_leaks=1 was unavailable due owned-process /proc/task access. Not a leak-detection PASS or full syscall-failure matrix.",
     "Retained copy is source-only record material, not a complete reusable semantic TLS capsule. Full semantic/API inventory and protection-syscall failure matrix remain unaccepted; original SSL/EVP heap is not covered. SIGKILL/crash explicit wipe remains unknown.",
@@ -1093,34 +1079,24 @@
   ],
   "nextTasks": [
     {
-      "id": "X10-V1",
-      "state": "active-release-priority",
-      "goal": "Execute continuation G0-G8; accept a real supported native service and published V1, not alpha alone. G9 hands the team to new AVERKRON."
+      "id": "G1-exact-CI",
+      "state": "pending-exact-resulting-implementation",
+      "goal": "Verify required new release-record test step and native compatibility jobs."
     },
     {
-      "id": "C0",
-      "state": "accepted-local-and-hosted-narrow-profile",
-      "goal": "Bounded TLS 1.3 record engine, strict continuation-state model, independent vectors and a same-connection child-process transfer fixture"
+      "id": "G2",
+      "state": "next-after-G1-verification",
+      "goal": "Real upstream/readiness and independent permanent Local Alpha package path."
     },
     {
-      "id": "C1",
-      "state": "accepted-local-and-hosted-narrow-profile",
-      "goal": "Real authenticated TLS1.3 endpoints and strict record observer; cleanup/cancellation and fail-closed denial evidence; no migration"
+      "id": "G3-G8",
+      "state": "unaccepted",
+      "goal": "Operate, update/rollback/recover, review, soak, distribute and accept bounded V1."
     },
     {
-      "id": "C2",
-      "state": "deferred-by-owner-portfolio-until-bounded-v1",
-      "goal": "Read-only held-source API metadata is exact-hosted accepted. Next preserve actual required ALPN/Finished/auth-class state under protected lifetime and review unsupported API semantics; no target reconstruction before complete first-profile state and remaining runtime gates."
-    },
-    {
-      "id": "C3",
-      "state": "pending",
-      "goal": "Integrate opt-in with native NGINX and prove old workers and old TLS code fully exit after successful continuation"
-    },
-    {
-      "id": "C4",
-      "state": "pending",
-      "goal": "Held-out third-version adapter, adverse I/O/KeyUpdate/half-close tests, cost and overhead measurements"
+      "id": "G9",
+      "state": "blocked-by-accepted-V1",
+      "goal": "Central controlled transition only after G0-G8 evidence."
     }
   ],
   "money": {
@@ -1371,7 +1347,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "Read AGENTS and the full continuation prompt, refresh central portfolio state and exact source/CI receipt, then execute G0-G1 for the bounded X10 Production V1 contract and supported profile. Complete G2 Local Alpha as an intermediate package and proceed through service/proxy/TLS, config and package rollback, recovery, independent security/runtime acceptance and permanent V1 distribution. Preserve existing Continuum evidence; do not continue semantic TLS research as the next default task before V1.",
+  "nextConcreteTask": "Verify exact resulting G1 implementation CI first: the native main job must execute the new release-record authored/heldout step and required native/Unix/feature-off/package checks; scope success is not acceptance. Then implement G2: correct the stale Quickstart to the accepted exact release, provide a real upstream with application readiness, replay the extracted bundle independently and publish a permanent versioned Local Alpha. G3-G8 service, TLS, package rollback/recovery, security, frozen soak and independent permanent V1 acceptance remain mandatory. Do not resume Continuum R&D or activate another product by default.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1578,6 +1554,38 @@
     ],
     "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
-    "publicationOnly": true
+    "publicationOnly": false,
+    "currentGate": "G1_LOCAL_CONTRACT_HOSTED_PENDING",
+    "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
+    "releaseProfilePath": "x10/release/profile.json",
+    "releaseRecordValidatorAdded": true,
+    "researchRuntimeChangedByThisPublication": false
+  },
+  "lastV1DevelopmentPass": {
+    "runId": "x10-v1-contract-20261024T112328Z",
+    "baseCommit": "1cb03eaa0b9318da8ab5d1e7457fd749e854bf5f",
+    "publicationParent": "4496cf08d46a1aa5f979f97f4208d1039116f44f",
+    "scope": "G0-G1 bounded Production V1 contract and release-record declarations",
+    "result": "Supported target/profile and prospective thresholds declared; bounded schema/checker plus independent refusal controls locally verified; required native CI step added. No service/install/soak or permanent release acceptance is claimed.",
+    "helpers": {
+      "count": 4,
+      "temporary": true,
+      "onlyCoordinatorIntegrates": true,
+      "roles": [
+        "contract/profile docs",
+        "release record implementation",
+        "independent review/heldouts",
+        "checkpoint evidence"
+      ]
+    },
+    "nativeSourceChanged": false,
+    "controllerImplementationChanged": false,
+    "localEvidence": "x10/evidence/v1-release-contract.json",
+    "perFileLedger": "x10/review/v1-release-contract-ledger.json",
+    "hostedVerification": {
+      "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
+    },
+    "newPurchases": false,
+    "productionDeployChanged": false
   }
 }

@@ -665,3 +665,26 @@ wipe/no-I/O. Далее — protected lifetime actual required values и restric
 authentication class с явным unsupported API contract. Exporter/session/
 resumption/PHA, future budget/KeyUpdate, exclusive target I/O ownership,
 distinct TLS code, actual old-code exit и native continuation остаются gates.
+
+
+## X10 Production V1: G0–G1 contract and release-record checks
+
+The bounded [release contract](release/RELEASE-CONTRACT.md) and
+[declared profile](release/profile.json) now distinguish supported V1 intent,
+ABI/threat model, service target, config versus package rollback and prospective
+60-minute normal/slow-client acceptance budgets. These are declarations before
+measurement: the current root/Node24 environment does not accept the nonroot
+Ubuntu24.04/Node22 service target. G2–G8 and permanent Production V1 remain open.
+
+The release-record schema/checker and independent refusal controls check bounded
+shape and internal source/build/artifact/evidence/gate consistency only. They do
+not authenticate evidence, run a package or authorize a release. Review fixes
+and adverse observations are retained in [evidence](evidence/v1-release-contract.json).
+A required native CI step now runs authored and held-out release-record checks;
+exact new implementation CI is pending. Prior Continuum C2a48 exact acceptance
+is preserved separately and does not accept this new validator.
+
+Next verify that exact CI, then G2: corrected pinned Quickstart, real upstream
+and application readiness, independent extracted-bundle lifecycle and permanent
+versioned Local Alpha. Alpha alone does not close V1 or activate AVERKRON. The
+full native compatibility matrix and deferred Continuum remain preserved.

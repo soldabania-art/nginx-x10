@@ -18,7 +18,7 @@
   "portfolio_stage": "ACTIVE_FOR_V1",
   "transition_target": "AVERKRON",
   "transition_requires": "All G0-G8 accepted at an exact published V1 ref, then G9 recorded; alpha alone is insufficient.",
-  "contract_status": "Bounded Production V1 target recorded by portfolio coordinator; implementation/release acceptance remains NOT_ACCEPTED.",
+  "contract_status": "G1 bounded contract and declaration validator locally recorded; exact new CI pending. No V1 runtime/release acceptance.",
   "snapshot": {
     "observed_at_utc": "2026-10-24T10:37:54Z",
     "active_branch": "x10-continuum-development",
@@ -130,7 +130,7 @@
     {
       "id": "G0",
       "name": "Fresh authority, ownership and checkpoint handoff",
-      "status": "RECHECK_REQUIRED",
+      "status": "ROUTING_RECONCILED",
       "depends_on": [],
       "outputs": [
         "Fresh central manifest SHA and source HEAD",
@@ -148,14 +148,32 @@
         "lease_commit",
         "checkpoint_ref"
       ],
-      "blocking_unknowns": [
-        "Recheck latest foreign lease and exact new API metadata CI; do not reuse prior44-case evidence as acceptance of new48-case bytes."
-      ]
+      "blocking_unknowns": [],
+      "checkpointEvidence": {
+        "sourceBase": "1cb03eaa0b9318da8ab5d1e7457fd749e854bf5f",
+        "publicationParent": "4496cf08d46a1aa5f979f97f4208d1039116f44f",
+        "researchImplementation": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
+        "researchReceipt": "52ba4143eb929fd1e8227cec33b6c9d274a268d0",
+        "evidence": "x10/evidence/v1-release-contract.json",
+        "centralAuthority": {
+          "phase": "RUNNING",
+          "transition": null,
+          "activeProject": "x10",
+          "projectStatus": "ACTIVE_FOR_V1",
+          "paths": [
+            "docs/PORTFOLIO-EXECUTION.md",
+            "docs/PORTFOLIO-STATE.json",
+            "docs/project-prompts/README.md"
+          ],
+          "privateRevisionOmitted": true
+        },
+        "privateCentralRevisionPublished": false
+      }
     },
     {
       "id": "G1",
       "name": "Record bounded Production V1 contract",
-      "status": "NOT_ACCEPTED",
+      "status": "LOCAL_CONTRACT_AND_VALIDATOR_VERIFIED_HOSTED_PENDING",
       "depends_on": [
         "G0"
       ],
@@ -174,7 +192,16 @@
         "release_contract_ref",
         "support_matrix_ref",
         "acceptance_thresholds_ref"
-      ]
+      ],
+      "checkpointEvidence": {
+        "contract": "x10/release/RELEASE-CONTRACT.md",
+        "profile": "x10/release/profile.json",
+        "schema": "x10/release/release-record.schema.json",
+        "checker": "x10/release/check-release-record.mjs",
+        "evidence": "x10/evidence/v1-release-contract.json",
+        "runtimeAcceptance": false,
+        "exactHostedAcceptance": "PENDING"
+      }
     },
     {
       "id": "G2",
@@ -513,5 +540,12 @@
     "artifactDownloadedInThisRecheck": false,
     "testedCheckoutSha": null,
     "limits": "Fresh run/job metadata and executed steps only; do not reuse bf7f9aa artifact counts/hash as the new binary identity. Not V1 acceptance."
+  },
+  "g1Checkpoint": {
+    "recordedAtUTC": "2026-10-24T11:38:00.122601Z",
+    "runId": "x10-v1-contract-20261024T112328Z",
+    "nextConcreteTask": "Verify exact resulting G1 implementation CI first: the native main job must execute the new release-record authored/heldout step and required native/Unix/feature-off/package checks; scope success is not acceptance. Then implement G2: correct the stale Quickstart to the accepted exact release, provide a real upstream with application readiness, replay the extracted bundle independently and publish a permanent versioned Local Alpha. G3-G8 service, TLS, package rollback/recovery, security, frozen soak and independent permanent V1 acceptance remain mandatory. Do not resume Continuum R&D or activate another product by default.",
+    "productionAccepted": false,
+    "fullScopePreserved": true
   }
 }
