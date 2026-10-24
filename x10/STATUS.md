@@ -1496,3 +1496,38 @@ Next verify exact resulting CI, then continue G3 verified TLS and real nonroot
 service/failure/drain/orphan gates. Automatic unit readiness, G2 permanent
 distribution/published-file replay, G4-G8 and Production V1 remain open. Full
 native compatibility and deferred Continuum scope remain preserved.
+
+
+### Exact CI: captured-process observer ESRCH compatibility
+
+Implementation `4a8ec8c0d2ecb2e14778651a581ea5f231f2a458` passed both
+actual exact native CI jobs, including the changed observer boundary suite.
+[Receipt](evidence/listener-esrch-hosted.json) keeps completed jobs, actual
+job logs, downloaded artifact digests, event/build identities, counted results,
+research runtime skips and API metadata observations separate. This receipt
+changes no runtime sources and requests no workflow or local runtime reruns.
+
+Both native jobs on observed Node22.23.3 passed20/20 aggregate groups,
+42 observer TAP tests, controller86, alpha45 and operator30. Required Unix
+control9/generations10/operator30 and feature-off4 passed separately, as did
+user-unit15/archive15/release-record35 and actual packed-archive verification.
+Official results retain1105 strict PASS,25SKIP and1expected TODO-fail, with
+zero unexpected FAIL. Research PR actually ran21core/7process/27C1/48C2a;
+push research runtime was skipped. These are separate counting units. API
+step arrays remained null/empty; actual outcomes come from complete job logs
+and digest-verified artifacts, with the metadata cause unknown.
+
+This accepts the narrow stale-proc correction and compatibility only. The
+original local19/20 failure stays retained: its failing captured process and
+exact cause remain unknown. The bounded kernel mechanism, new local20/20 and
+exact hosted success do not establish that historical interleaving, a historical
+repair or no causal relationship to wait-bind. ESRCH alone still cannot prove
+process exit; the independent double-ENOENT proof and all identity refusals stay
+mandatory. Local AF_UNIX EPERM and root/Node24 target limits are not repaired by
+hosted success. Inherited CLA failure remains separate; no agreement was accepted.
+
+Next implement and verify the bounded TLS CA/hostname application/proxy path,
+then actual nonroot user-manager startup/stop/restart and failure/drain/orphan
+gates. Automatic unit readiness, G2 permanent distribution/published-file replay,
+G4-G8 and Production V1 remain open. Full native and deferred Continuum scope
+remain preserved.

@@ -3,31 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-observer-esrch-ci-20261024T173911Z",
-    "owner": "codex-coordinator-observer-ci",
-    "baseCommit": "4a8ec8c0d2ecb2e14778651a581ea5f231f2a458",
-    "acquiredAtUTC": "2026-10-24T17:39:11.000Z",
-    "expiresAtUTC": "2026-10-24T18:08:07.000Z",
-    "task": "Read exact implementation native/research CI and preserve verified receipt or honest pending status",
-    "implementationCommit": "4a8ec8c0d2ecb2e14778651a581ea5f231f2a458",
-    "nativeRuns": [
-      40117043830,
-      40117046911
-    ],
-    "researchRuns": [
-      40117043823,
-      40117046908
-    ],
-    "allowedFiles": [
-      "x10/STATUS.md",
-      "x10/PLAN.md",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/continuum/BACKGROUND.json",
-      "x10/evidence/listener-esrch-hosted.json",
-      "x10/review/listener-esrch-hosted-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1163,17 +1139,37 @@
       "evidence": "x10/evidence/listener-esrch.json",
       "scope": "Stale-proc ESRCH handling only after independent double-ENOENT process-directory proof",
       "localAcceptance": "BOUNDED_COUNTEREXAMPLE_AND_REFUSALS_RECORDED",
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+      "exactHostedAcceptance": "SUCCESS_SCOPED_OBSERVER_ESRCH_COMPATIBILITY_ONLY",
       "historicalFailureCauseKnown": false,
       "historicalObserverFixClaimed": false,
       "serviceAccepted": false,
       "tlsAccepted": false,
       "productionAccepted": false,
-      "localCompatibilityOnly": true
+      "localCompatibilityOnly": true,
+      "implementationCommit": "4a8ec8c0d2ecb2e14778651a581ea5f231f2a458",
+      "hostedEvidence": "x10/evidence/listener-esrch-hosted.json"
+    },
+    "observerEsrchHosted": {
+      "state": "success-scoped-observer-esrch-compatibility-only",
+      "implementationCommit": "4a8ec8c0d2ecb2e14778651a581ea5f231f2a458",
+      "evidence": "x10/evidence/listener-esrch-hosted.json",
+      "nativeRuns": [
+        40117043830,
+        40117046911
+      ],
+      "researchRuns": [
+        40117043823,
+        40117046908
+      ],
+      "historicalFailureCauseKnown": false,
+      "historicalObserverFixClaimed": false,
+      "serviceAccepted": false,
+      "tlsAccepted": false,
+      "productionAccepted": false
     }
   },
   "pendingVerification": [
-    "First inspect exact resulting observer ESRCH implementation CI; actual new source SHA/runIDs must be verified. The first final wait-bind native aggregate failed19/20 with ESRCH in reload-listener-observation/inspectTcpListeners at handover-baseline.mjs314. Which captured-process observation failed and its exact cause remain unknown. The held old worker had previously been observed stopped; the fixture had not issued its own SIGCONT. ESRCH alone is not disappearance proof. Later exact hosted success, source stability and this new bounded mechanism do not prove the historical cause, a historical fix or no causal relationship to wait-bind.",
+    "G3 TLS/actual-service acceptance remains OPEN. Observer implementation 4a8ec8c0d2ecb2e14778651a581ea5f231f2a458 passed exact scoped hosted native compatibility; continue the bounded CA/hostname and actual nonroot service path. The first final wait-bind native aggregate failed19/20 with ESRCH at handover-baseline.mjs314. Which captured-process observation failed and the exact historical cause remain unknown. The old held worker had previously been observed stopped; the fixture had not yet issued its own SIGCONT. The new bounded stale-proc mechanism, local candidate20/20 and exact later CI verify scoped compatibility only. They do not prove that historical interleaving, a historical fix or no causal relationship to wait-bind.",
     "Recipe implementation 0daf4086f77e43b829c6a848d19597411fb6325d is exact-hosted verified narrowly: both required native jobs actually ran the new user-unit recipe tests and existing native/Unix/archive/feature-off checks. Generation/static checks do not accept an operated nonroot user service, startup readiness, TLS, permanent published alpha or Production V1.",
     "Readiness implementation 6abc888388b2e45c0986c3c9b043aa03324fd77e is exact-hosted verified narrowly (native20 groups, controller86, alpha40, operator30 and required Unix/feature-off/archive steps). G3 service/TLS, G2 permanent distribution/published-file replay and G4-G8 remain open; this is not Production V1.",
     "Exact G2 application upstream and expanded alpha/required Unix CI accepted narrowly for implementation eb4e2de3026edb7a59e877fff8971c8d039e8143. Local AF_UNIX EPERM remains an unresolved environment restriction, not a code fix. Permanent versioned alpha archive and independent published-file nonroot Node22 replay remain pending; G3-G8 and Production V1 are not accepted.",
@@ -1193,14 +1189,9 @@
   ],
   "nextTasks": [
     {
-      "id": "native-observer-ESRCH-exact-CI",
-      "state": "pending-exact-resulting-implementation",
-      "goal": "Verify actual resulting observer CI and preserve historical cause unknown; do not count prior hosted success as new-source acceptance."
-    },
-    {
       "id": "G3-TLS-and-real-service",
-      "state": "unaccepted",
-      "goal": "Verified TLS and actual nonroot user-manager startup/stop/restart, failure/drain/orphan acceptance; automatic unit readiness remains gated."
+      "state": "unaccepted-next-bounded-TLS-trust-path",
+      "goal": "Verified TLS CA/hostname and real application proxy, then actual nonroot user-manager startup/stop/restart/failure/drain/orphan acceptance; automatic unit readiness remains gated."
     },
     {
       "id": "G2-distribution",
@@ -1466,7 +1457,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First inspect exact resulting observer implementation CI, including actual required native jobs/artifacts and changed observer controls; do not transfer earlier wait-bind CI acceptance to new observer bytes. Preserve the historical local19/20 failure and unknown failing captured process/cause. The new bounded stale-proc counterexample is a separate established mechanism, not a recreation of that historical interleaving. Then continue G3 verified TLS CA/hostname and actual nonroot user-manager startup/stop/restart, failed-start/drain/orphan gates. Automatic unit readiness, G2 permanent release/published-file replay, G4-G8 and Production V1 remain open; full native and deferred Continuum scope is preserved.",
+  "nextConcreteTask": "Continue G3 with a bounded verified TLS application/proxy path: explicit CA and hostname checks, correct trust/hostname positive cases and wrong-CA, wrong-hostname and handshake-failure refusals; preserve the supported profile and owned fixture cleanup. In an authorized test environment, then verify actual nonroot user-manager startup, stop/restart, failed-start, drain and orphan boundaries. Automatic unit readiness remains gated. The observer ESRCH implementation is exact-hosted verified narrowly; preserve the original local19/20 historical cause unknown without an unchanged diagnosis loop. G2 permanent release/published-file nonroot Node22 replay remain blocked by available Release/asset writer capabilities; do not bypass credentials or permissions. G4-G8/Production V1 and full deferred Continuum remain open.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1671,10 +1662,10 @@
         "goal": "Held-out third-version adapter, adverse I/O/KeyUpdate/half-close tests, cost and overhead measurements"
       }
     ],
-    "runtimeCodeChangedByThisPublication": true,
+    "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G3_OBSERVER_ESRCH_LOCAL_COUNTEREXAMPLE_EXACT_CI_PENDING",
+    "currentGate": "G3_OBSERVER_ESRCH_HOSTED_VERIFIED_TLS_SERVICE_OPEN",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -1690,7 +1681,8 @@
     "g3ServiceRecipeHostedEvidence": "x10/evidence/g3-service-recipe-hosted.json",
     "g3WaitBindLocalEvidence": "x10/evidence/g3-wait-bind.json",
     "g3WaitBindHostedEvidence": "x10/evidence/g3-wait-bind-hosted.json",
-    "observerEsrchLocalEvidence": "x10/evidence/listener-esrch.json"
+    "observerEsrchLocalEvidence": "x10/evidence/listener-esrch.json",
+    "observerEsrchHostedEvidence": "x10/evidence/listener-esrch-hosted.json"
   },
   "lastV1DevelopmentPass": {
     "runId": "x10-observer-esrch-20261024T172807Z",
@@ -1707,7 +1699,11 @@
     "localEvidence": "x10/evidence/listener-esrch.json",
     "perFileLedger": "x10/review/listener-esrch-ledger.json",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
+      "state": "SUCCESS_SCOPED_OBSERVER_ESRCH_COMPATIBILITY_ONLY",
+      "implementationCommit": "4a8ec8c0d2ecb2e14778651a581ea5f231f2a458",
+      "evidence": "x10/evidence/listener-esrch-hosted.json",
+      "historicalFailureCauseKnown": false,
+      "historicalObserverFixClaimed": false
     },
     "historicalFailureCauseKnown": false,
     "historicalObserverFixClaimed": false,
@@ -1721,23 +1717,23 @@
     "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
-    "runId": "x10-g3-wait-bind-ci-20261024T164434000Z",
-    "implementationCommit": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
-    "publicationParent": "4747f065ffb2d432a273bfe63440ec2420f9f627",
-    "evidence": "x10/evidence/g3-wait-bind-hosted.json",
-    "ledger": "x10/review/g3-wait-bind-hosted-ledger.json",
-    "state": "EXACT_HOSTED_VERIFIED_SCOPED_WAIT_BIND_ONLY_LOCAL_OBSERVER_FAILURE_OPEN",
+    "runId": "x10-observer-esrch-ci-20261024T173911Z",
+    "implementationCommit": "4a8ec8c0d2ecb2e14778651a581ea5f231f2a458",
+    "publicationParent": "d7c42c2c5af868b64c2bd38c9dfbe51cb6afe18b",
+    "evidence": "x10/evidence/listener-esrch-hosted.json",
+    "ledger": "x10/review/listener-esrch-hosted-ledger.json",
+    "state": "EXACT_HOSTED_VERIFIED_SCOPED_OBSERVER_ESRCH_ONLY_HISTORICAL_CAUSE_UNKNOWN",
     "nativeRuns": [
-      40112863080,
-      40112866760
+      40117043830,
+      40117046911
     ],
     "researchRuns": [
-      40112863151,
-      40112866743
+      40117043823,
+      40117046908
     ],
     "runtimeSourcesChanged": false,
-    "completeLocalNativeAggregateAccepted": false,
-    "localObserverDiagnosisOpen": true,
+    "historicalFailureCauseKnown": false,
+    "historicalObserverFixClaimed": false,
     "serviceAccepted": false,
     "tlsAccepted": false,
     "permanentAlphaAccepted": false,
@@ -2011,6 +2007,29 @@
         40103272512
       ],
       "runtimeSourcesChanged": false,
+      "serviceAccepted": false,
+      "tlsAccepted": false,
+      "permanentAlphaAccepted": false,
+      "productionAccepted": false
+    },
+    {
+      "runId": "x10-g3-wait-bind-ci-20261024T164434000Z",
+      "implementationCommit": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+      "publicationParent": "4747f065ffb2d432a273bfe63440ec2420f9f627",
+      "evidence": "x10/evidence/g3-wait-bind-hosted.json",
+      "ledger": "x10/review/g3-wait-bind-hosted-ledger.json",
+      "state": "EXACT_HOSTED_VERIFIED_SCOPED_WAIT_BIND_ONLY_LOCAL_OBSERVER_FAILURE_OPEN",
+      "nativeRuns": [
+        40112863080,
+        40112866760
+      ],
+      "researchRuns": [
+        40112863151,
+        40112866743
+      ],
+      "runtimeSourcesChanged": false,
+      "completeLocalNativeAggregateAccepted": false,
+      "localObserverDiagnosisOpen": true,
       "serviceAccepted": false,
       "tlsAccepted": false,
       "permanentAlphaAccepted": false,
