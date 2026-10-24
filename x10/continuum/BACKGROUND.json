@@ -3,7 +3,34 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": null,
+  "executionLease": {
+    "runId": "x10-g2-upstream-ci-20261024T122234Z",
+    "owner": "codex-coordinator-g2-upstream-ci",
+    "baseCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
+    "acquiredAtUTC": "2026-10-24T12:22:34.000Z",
+    "expiresAtUTC": "2026-10-24T12:42:20.000Z",
+    "task": "Verify exact application upstream and extracted-bundle alpha40 CI plus required Unix transport",
+    "verification": {
+      "implementationCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
+      "nativeRuns": [
+        40093505536,
+        40093509133
+      ],
+      "researchRuns": [
+        40093505550,
+        40093509172
+      ]
+    },
+    "allowedFiles": [
+      "x10/STATUS.md",
+      "x10/PLAN.md",
+      "x10/continuation-2026-10-24/GATES.json",
+      "x10/continuum/BACKGROUND.json",
+      "x10/alpha/README.md",
+      "x10/evidence/g2-upstream-hosted.json",
+      "x10/review/g2-upstream-hosted-ledger.json"
+    ]
+  },
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
