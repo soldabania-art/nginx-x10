@@ -484,3 +484,28 @@ artifact digests, counts и отдельные checkout/build identities. Hosted
 1105 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL; local1083 отдельно.
 Это read-only admission policy, не future I/O budget enforcement или migration.
 Далее — review C2a readiness для первого bounded C2b semantic capsule.
+
+## Continuum: capsule metadata preflight
+
+Добавлен metadata-only checker: строгие snapshot/source-identity поля и
+точный directional budget для application/handover/closure records.
+Closure резерв обязателен; сравнение использует BigInt и не сбрасывает
+sequence. Eligibility означает только допуск к inventory review, без
+traffic grant, экспорта secrets или runtime enforcement будущего бюджета.
+
+Локально23/23 C2a:18 обычных actualTLS scenarios,2 runtime signals,
+1 noTLS source control и2 synthetic groups. Новый checker:174 authored
+controls; независимо6144 synthetic budget vectors и2 actualTLS snapshots.
+Последние получены после cleanup и не являются live-hold proof.
+Core21/process7/C1 27 и
+native20/20 прошли; official1083 strictPASS/25SKIP/1expectedTODO-fail,
+0unexpectedFAIL. Отдельные authored/independent controls и их исходные
+отказы находятся в [evidence](../evidence/continuum-capsule-preflight.json).
+
+Readiness review выявил конкретный blocker: возвращённый result.probe
+получен после cleanup соединения, это не живой удерживаемый safepoint.
+Следующий шаг — bounded C STEP после immutable probe pair и до любого
+TLS READ/control/shutdown, затем runner decision/nonce/reobservation barrier
+перед любым exporter. Остальные adapters/import/ownership/retirement
+gates остаются отдельными. [Inventory readiness](C2B-READINESS.md) фиксирует
+конкретные поля и code boundaries. Exact implementation CI pending.

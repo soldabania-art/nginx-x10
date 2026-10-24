@@ -518,3 +518,16 @@ test('synthetic uint64 metadata obeys conservative directional key usage admissi
   assert.equal(result.temporaryRemoved, true);
   assert.equal(result.migration, false);
 });
+
+// Metadata future-budget review is synthetic, not an exporter or TLS migration.
+test('synthetic capsule preflight rejects schema and directional budget violations', () => {
+  const result = checkSyntheticCapsulePreflight();
+  assert.equal(result.passed, true);
+  assert.equal(result.getterInvocations, 0);
+  assert.equal(result.proxyTrapInvocations, 0);
+  assert.equal(result.actualTLS, false);
+  assert.equal(result.semanticExportImport, false);
+  assert.equal(result.migration, false);
+});
+
+import { checkSyntheticCapsulePreflight } from './capsule-preflight.test.mjs';
