@@ -341,3 +341,31 @@ contains the first parent's 18 successful behavior scenarios, exact source
 hashes and pre/post source consistency; the complete controller now has 68 TAP
 checks including three parents. The separate observer file has its own 29 TAP
 checks. Neither count represents a number of improved native protocol features.
+
+### Sampled observation contract regression
+
+The later fixture repair preserves the controller's existing acceptance gate.
+An ordinary request immediately after `apply` or recovery is not required to
+be the candidate: old and new native workers can temporarily share a listener.
+The fixture now checks durable outcome, revision and pending state immediately,
+then waits for an HTTP 200 with the expected application body and separately
+for the exact reserved revision body/header. Those are separate fresh samples,
+not a same-worker observation or an all-traffic cutover guarantee.
+
+An explicitly synthetic loopback control scripts two successful candidate
+revision/health rounds followed by an old application response. The original
+one-shot assertion fails deterministically; bounded observation accepts only
+the later expected response. Persistent old content, non-200 content, transport
+failure, trickling responses and incorrect revision body/header/status remain
+failures. Every fixture request has an absolute one-second deadline in addition
+to its idle timeout. The observation loop has a six-second default budget;
+an in-flight request can add roughly one request deadline, plus scheduling
+and cleanup time. This is bounded fixture behavior, not a hard wall-clock SLA.
+
+The original expected-B/actual-A native result remains recorded unchanged in
+`continuum-source-capture.json`; its precise scheduling is not reconstructed.
+This repairs a fixture overclaim, not the controller or native reload behavior.
+
+The complete current file has 77 passing TAP checks: the prior 68 native
+checks plus eight synthetic scenarios and their parent. Full local official
+aggregate: 20/20 groups. Exact implementation hosted CI remains separate.

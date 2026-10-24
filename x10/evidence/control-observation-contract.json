@@ -1,0 +1,560 @@
+{
+  "schemaVersion": 1,
+  "suite": "controller-sampled-observation-contract",
+  "baseCommit": "c0e229d48c75e0adc4e7b727f8bfa52505da0ab6",
+  "leaseCommit": "73a8925b580dc81479358d74a8f9f78fb7298622",
+  "runId": "x10-control-contract-20261024T070015878Z",
+  "createdAtUTC": "2026-10-24T07:08:37.925Z",
+  "scope": {
+    "fixtureContractOverclaimRepaired": true,
+    "controllerImplementationChanged": false,
+    "nativeSourceChanged": false,
+    "nativeVerificationSourceChanged": true,
+    "historicalInterleavingProven": false,
+    "allTrafficCutoverClaim": false,
+    "continuumSourceChanged": false,
+    "productionChanged": false
+  },
+  "counterexample": {
+    "kind": "explicitly-synthetic-loopback-contract-control",
+    "nativeReloadReconstruction": false,
+    "sequence": "Two candidate revision/health rounds; next ordinary response A; original one-shot B assertion fails; bounded candidate observes A then B.",
+    "targetedTAP": {
+      "checks": 9,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0
+    },
+    "independentReviewTAP": {
+      "checks": 9,
+      "passed": 9,
+      "failed": 0
+    },
+    "negativeControls": [
+      "persistent old body",
+      "candidate body with non-200 status",
+      "transport reset",
+      "trickling response exceeding absolute request timer",
+      "candidate revision body with wrong header",
+      "candidate header with wrong body",
+      "candidate revision body/header with non-200 status"
+    ],
+    "durableInvariants": "Outcome, pending, lastConfirmedRevision and history remain immediate exact assertions; only fresh HTTP observations retry.",
+    "ordinaryBodyAndRevision": "Ordinary body and reserved revision body/header are separate fresh samples; no same-worker or atomic all-traffic claim.",
+    "bounds": "One-second absolute plus idle request timeout; six-second default observation budget can add an in-flight request plus scheduling/cleanup. Not a hard wall-clock SLA."
+  },
+  "originalAdverseObservation": {
+    "evidence": "x10/evidence/continuum-source-capture-native-regression.json",
+    "initialAggregate": {
+      "passedGroups": 17,
+      "totalGroups": 20
+    },
+    "controller": {
+      "checks": 68,
+      "passed": 66,
+      "failed": 2,
+      "test": "unbound-initialization-state-reconciles-before-native-bind",
+      "expected": "B",
+      "actual": "A"
+    },
+    "laterUnchangedSourceAggregate": {
+      "passedGroups": 20,
+      "totalGroups": 20
+    },
+    "preservedUnchanged": true,
+    "exactHistoricalSchedulingProven": false
+  },
+  "nativeRegression": {
+    "command": [
+      "node",
+      "x10/test/all.mjs",
+      "--official",
+      "--output",
+      "x10/.build/control-regression.json"
+    ],
+    "startedAt": "2026-10-24T07:04:05.927Z",
+    "finishedAt": "2026-10-24T07:07:10.527Z",
+    "success": true,
+    "groups": 20,
+    "passedGroups": 20,
+    "suites": [
+      {
+        "name": "http-tls-http2-reload",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 1051,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "stream-mail",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 162,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "mail-tls-starttls",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 1230,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "protocol-adapters",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 1342,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "http3-interop",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 957,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "http3-head-independent-client",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 839,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "native-features",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 731,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "quic-regression",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 462,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "quic-generated-sanitized",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 1040,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "quic-frame-boundaries",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 1086,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "native-load-client-verification",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 1624,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "managed-native-control",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 43223,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "result": {
+          "format": "node-test-tap",
+          "pass": 77,
+          "fail": 0,
+          "valid": true
+        }
+      },
+      {
+        "name": "operator-status",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 3411,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "local-alpha-lifecycle",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 11459,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "listener-observer-boundaries",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 6582,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "reload-listener-observation",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 728,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "native-control-api",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 509,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "native-process-generations",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 670,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "native-generation-boundaries",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 2103,
+        "timedOut": false,
+        "outputLimitExceeded": false
+      },
+      {
+        "name": "official-nginx-tests",
+        "passed": true,
+        "exitCode": 0,
+        "signal": null,
+        "elapsedMs": 105284,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "result": {
+          "files": 35,
+          "filesPassed": 32,
+          "filesSkipped": 3,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1109,
+            "passed": 1083,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        }
+      }
+    ],
+    "rawReportSha256": "158c790b5ab368a97e343dd9a14ef1957ba202a46348dadfa2be7379a7cd0b36",
+    "controllerRealScenarioGroups": {
+      "managed": 18,
+      "recovery": 15,
+      "storage": 32
+    },
+    "controllerTAP": {
+      "format": "node-test-tap",
+      "pass": 77,
+      "fail": 0,
+      "valid": true
+    },
+    "official": {
+      "files": 35,
+      "filesPassed": 32,
+      "filesSkipped": 3,
+      "filesFailed": 0,
+      "assertions": {
+        "run": 1109,
+        "passed": 1083,
+        "failed": 0,
+        "skipped": 25,
+        "todoFailed": 1,
+        "todoPassed": 0
+      }
+    }
+  },
+  "sourceIdentity": {
+    "files": {
+      "x10/test/control.test.mjs": {
+        "before": "e35f193d6056ae2b64a0f5f1b3bc27f8793f1b8e26b3c0f4abf51377d99cc7f1",
+        "after": "795cf8ac991225a74039aa05efd07dbd563f92631e3958c19b4917fde16100b8"
+      },
+      "x10/control/manager.mjs": {
+        "before": "f033c4ec66973211bad096cccdbbce63d724c02458711e3ff3a04f5227d9dc53",
+        "after": "f033c4ec66973211bad096cccdbbce63d724c02458711e3ff3a04f5227d9dc53"
+      }
+    },
+    "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+    "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+    "nativeDiffUnchangedFromBase": true,
+    "fixtureFrozenBeforeAndAfterAggregate": true
+  },
+  "build": {
+    "command": [
+      "bash",
+      "x10/build.sh",
+      "--jobs",
+      "4"
+    ],
+    "status": "built",
+    "installed": false,
+    "binary": {
+      "sha256": "16f808bbde47b725921c434ca9a3e85885a27e30645ccd61e2d99da38e5ca82b",
+      "bytes": 8553056,
+      "mode": "0755"
+    },
+    "manifestSha256": "595a89b98f9cf21835cf929c00e12d81288ac79af7a258460d66b53de808e426",
+    "compiler": "cc",
+    "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+    "configureOptions": [
+      "sh",
+      "auto/configure",
+      "--with-http_ssl_module",
+      "--with-http_v2_module",
+      "--with-http_v3_module",
+      "--with-stream",
+      "--with-stream_ssl_module",
+      "--with-stream_ssl_preread_module",
+      "--with-mail",
+      "--with-mail_ssl_module",
+      "--with-threads",
+      "--with-file-aio",
+      "--with-http_realip_module",
+      "--with-http_stub_status_module",
+      "--with-http_auth_request_module",
+      "--with-http_addition_module",
+      "--with-http_sub_module",
+      "--with-http_dav_module",
+      "--with-http_slice_module",
+      "--with-http_gunzip_module",
+      "--with-http_gzip_static_module",
+      "--with-compat",
+      "--with-control-api"
+    ],
+    "compiledModules": [
+      "ngx_core_module",
+      "ngx_errlog_module",
+      "ngx_conf_module",
+      "ngx_openssl_module",
+      "ngx_openssl_cache_module",
+      "ngx_quic_module",
+      "ngx_quic_bpf_module",
+      "ngx_regex_module",
+      "ngx_events_module",
+      "ngx_event_core_module",
+      "ngx_epoll_module",
+      "ngx_thread_pool_module",
+      "ngx_http_module",
+      "ngx_http_core_module",
+      "ngx_http_log_module",
+      "ngx_http_upstream_module",
+      "ngx_http_v2_module",
+      "ngx_http_v3_module",
+      "ngx_http_static_module",
+      "ngx_http_gzip_static_module",
+      "ngx_http_dav_module",
+      "ngx_http_autoindex_module",
+      "ngx_http_index_module",
+      "ngx_http_mirror_module",
+      "ngx_http_try_files_module",
+      "ngx_http_auth_request_module",
+      "ngx_http_auth_basic_module",
+      "ngx_http_access_module",
+      "ngx_http_limit_conn_module",
+      "ngx_http_limit_req_module",
+      "ngx_http_realip_module",
+      "ngx_http_geo_module",
+      "ngx_http_map_module",
+      "ngx_http_split_clients_module",
+      "ngx_http_referer_module",
+      "ngx_http_rewrite_module",
+      "ngx_http_ssl_module",
+      "ngx_http_proxy_module",
+      "ngx_http_fastcgi_module",
+      "ngx_http_uwsgi_module",
+      "ngx_http_scgi_module",
+      "ngx_http_grpc_module",
+      "ngx_http_proxy_v2_module",
+      "ngx_http_tunnel_module",
+      "ngx_http_memcached_module",
+      "ngx_http_empty_gif_module",
+      "ngx_http_browser_module",
+      "ngx_http_upstream_hash_module",
+      "ngx_http_upstream_ip_hash_module",
+      "ngx_http_upstream_least_conn_module",
+      "ngx_http_upstream_least_time_module",
+      "ngx_http_upstream_random_module",
+      "ngx_http_upstream_keepalive_module",
+      "ngx_http_upstream_zone_module",
+      "ngx_http_upstream_sticky_module",
+      "ngx_http_stub_status_module",
+      "ngx_http_write_filter_module",
+      "ngx_http_header_filter_module",
+      "ngx_http_chunked_filter_module",
+      "ngx_http_v2_filter_module",
+      "ngx_http_v3_filter_module",
+      "ngx_http_range_header_filter_module",
+      "ngx_http_gzip_filter_module",
+      "ngx_http_postpone_filter_module",
+      "ngx_http_ssi_filter_module",
+      "ngx_http_charset_filter_module",
+      "ngx_http_sub_filter_module",
+      "ngx_http_addition_filter_module",
+      "ngx_http_gunzip_filter_module",
+      "ngx_http_userid_filter_module",
+      "ngx_http_headers_filter_module",
+      "ngx_http_copy_filter_module",
+      "ngx_http_range_body_filter_module",
+      "ngx_http_not_modified_filter_module",
+      "ngx_http_slice_filter_module",
+      "ngx_mail_module",
+      "ngx_mail_core_module",
+      "ngx_mail_ssl_module",
+      "ngx_mail_pop3_module",
+      "ngx_mail_imap_module",
+      "ngx_mail_smtp_module",
+      "ngx_mail_auth_http_module",
+      "ngx_mail_proxy_module",
+      "ngx_mail_realip_module",
+      "ngx_stream_module",
+      "ngx_stream_core_module",
+      "ngx_stream_log_module",
+      "ngx_stream_proxy_module",
+      "ngx_stream_upstream_module",
+      "ngx_stream_write_filter_module",
+      "ngx_stream_ssl_module",
+      "ngx_stream_limit_conn_module",
+      "ngx_stream_access_module",
+      "ngx_stream_geo_module",
+      "ngx_stream_map_module",
+      "ngx_stream_split_clients_module",
+      "ngx_stream_return_module",
+      "ngx_stream_pass_module",
+      "ngx_stream_set_module",
+      "ngx_stream_upstream_hash_module",
+      "ngx_stream_upstream_least_conn_module",
+      "ngx_stream_upstream_least_time_module",
+      "ngx_stream_upstream_random_module",
+      "ngx_stream_upstream_zone_module",
+      "ngx_stream_ssl_preread_module"
+    ],
+    "generatedFiles": {
+      "ngx_auto_config.h": {
+        "sha256": "7a81ceb1eca64ff5eba02184d9e8edd7780cfc510028c2837bbc9138ef5ca989",
+        "bytes": 10123,
+        "mode": "0644"
+      },
+      "ngx_auto_headers.h": {
+        "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+        "bytes": 657,
+        "mode": "0644"
+      },
+      "ngx_modules.c": {
+        "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+        "bytes": 11820,
+        "mode": "0644"
+      }
+    },
+    "dependencies": {
+      "pcre2": "10.42",
+      "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+      "zlib": "1.3"
+    },
+    "localNode": "24.19.0",
+    "localPython": "3.12.14",
+    "hostedNode22NotYetChecked": true
+  },
+  "cleanup": {
+    "managedNative": {
+      "exitCode": 0,
+      "signal": null
+    },
+    "recoveryShutdowns": 15,
+    "storageShutdowns": 32,
+    "allNativeMastersNormalExit": true,
+    "syntheticServersClosed": true,
+    "rawEvidenceSha256": {
+      "control": "33f4ac205319e803980109f589b30636f3e9e2b5d02327b21891224f17d62d9d",
+      "recovery": "906962a396f3b1a18a4b16f387990967d410a32b2e70d87f91d790fdbf20a591",
+      "storage": "99b6e77301c1bb6404b1cbd045d70ddfbc574234e166a82f30dffbdac2840d89"
+    }
+  },
+  "review": {
+    "writer": "x10_control_diagnosis",
+    "independentReviewer": "x10_control_review",
+    "acceptedFixtureSha256": "795cf8ac991225a74039aa05efd07dbd563f92631e3958c19b4917fde16100b8",
+    "blockingIssues": [],
+    "coordinatorIntegrated": true,
+    "team": "Six temporary X10 helpers: fixture, independent review, build evidence, capsule inventory, capsule lifetime, claims audit. Only coordinator updates refs.",
+    "notPermanentExecution": true,
+    "blockingIssuesResolved": [
+      "Absolute fixture request timer and trickle negative control added.",
+      "Immediate durable state assertions moved before data-plane waits.",
+      "Short negative controls require at least one request, not scheduler-dependent multiple retries."
+    ]
+  },
+  "nextGate": {
+    "task": "Source-only reusable protected capsule lifetime with explicit established-state API allowlist; no importer.",
+    "unimplemented": [
+      "C-owned opaque lifetime and current-generation binding",
+      "cleanup acknowledgement before source release",
+      "expiry, revocation and mutation invalidation",
+      "deterministic actual-TLS abort barrier and memory-protection failure matrix"
+    ],
+    "sigkill": "Forced-kill cleanup is process cleanup; explicit capsule wipe remains unknown without native acknowledgement.",
+    "stillNotImplemented": [
+      "reusable semantic capsule",
+      "importer",
+      "exclusive target ownership",
+      "distinct TLS-code migration",
+      "native NGINX continuation",
+      "source retirement proof"
+    ]
+  },
+  "hostedCI": {
+    "state": "pending-exact-implementation-SHA",
+    "previousSourceCaptureReceiptNotAcceptanceForChangedFixture": true
+  },
+  "publicationSafety": {
+    "noProductionOrDeployment": true,
+    "noDomainDNSMailPaymentChange": true,
+    "noPaidResourcesAdded": true,
+    "reportedNewSpendingUSD": 0,
+    "noSecretsOrRawHostEvidencePublished": true
+  }
+}

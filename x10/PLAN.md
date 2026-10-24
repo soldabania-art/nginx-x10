@@ -485,3 +485,34 @@ reusable semantic capsule/exporter/importer или TLS-code migration.
 Локальный исходный controller expectedB/actualA сохранён: последующие local
 и hosted PASS не считаются его исправлением. Далее deterministic contract
 review/counterexample, затем fuller capsule API inventory/protected lifetime.
+
+
+### Controller fixture: sampled-generation observation
+
+Исправлено завышенное ожидание fixture, не controller/runtime: первый обычный
+GET после apply/recovery может ещё попасть в прежнюю native generation.
+Durable outcome/pending/revision/history проверяются немедленно; только HTTP
+наблюдения ожидаются ограниченно. Body требует HTTP200 и точное содержимое;
+reserved revision отдельно требует HTTP200, точные body и header. Это разные
+fresh samples, не same-worker или all-traffic atomic cutover.
+
+Детерминированный synthetic counterexample сохраняет отказ прежнего one-shot
+assertion после двух успешных candidate revision/health rounds; новый helper
+дожидается разрешённого A→B. Неверные body/status/revision, transport reset и
+trickle остаются отказами. Независимое ревью и synthetic9/9 прошли. Каждый
+request имеет absolute1s и idle timeout; loop budget может превыситься на
+in-flight request плюс scheduling/cleanup, не hard wall-clock SLA.
+
+[Очищенный evidence](evidence/control-observation-contract.json) и
+[per-file ledger](review/control-observation-ledger.json) сохраняют исходный
+native17/20 и controller66/68 без исправления задним числом. Точный interleaving
+прежнего сбоя не доказан; manager и native C не менялись. Exact implementation
+hosted CI — отдельная приёмка, не прежний source-capture PASS.
+
+Локальный полный aggregate20/20; controller77/77 TAP без skips/TODO.
+Official35 files:32 passed/3 skipped,1083 strictPASS/25SKIP/
+1expectedTODO-fail/0unexpectedFAIL. Source/manifest/binary guards сохранились.
+
+Следующий блок: source-only reusable protected capsule lifetime и явный API
+allowlist, без importer. Cleanup-before-release, expiry/revocation и actual-TLS
+abort barrier ещё не реализованы; SIGKILL не считается доказанным wipe.

@@ -33,8 +33,22 @@ function get(port, target = '/') {
       let body = ''; res.setEncoding('utf8'); res.on('data', chunk => body += chunk);
       res.on('error', reject); res.on('end', () => resolve({ status: res.statusCode, body, revision: res.headers['x-x10-revision'] }));
     });
+    const timer = setTimeout(() => req.destroy(new Error('Fixture absolute request deadline exceeded')), 1000);
+    req.once('close', () => clearTimeout(timer));
     req.setTimeout(1000, () => req.destroy(new Error('Fixture request timed out'))); req.on('error', reject);
   });
+}
+async function waitForBody(port, body, timeout) {
+  return waitFor(async () => {
+    const response = await get(port);
+    return response.status === 200 && response.body === body ? response : null;
+  }, timeout);
+}
+async function waitForRevision(port, revision, timeout) {
+  return waitFor(async () => {
+    const response = await get(port, '/__x10_revision');
+    return response.status === 200 && response.body === revision && response.revision === revision ? response : null;
+  }, timeout);
 }
 async function stop(child) {
   if (!child) return null;
@@ -44,6 +58,76 @@ async function stop(child) {
   try { process.kill(-child.pid, 'SIGKILL'); } catch (error) { if (error.code !== 'ESRCH') throw error; }
   return { exitCode: child.exitCode, signal: child.signalCode };
 }
+
+test('synthetic sampled-generation observation contract', { timeout: 5000 }, async t => {
+  // This scripts permitted observations, not a native reload or the exact
+  // timing of the earlier host failure. Every get() uses a fresh connection.
+  const withResponses = async (responses, fn) => {
+    const requests = []; let connections = 0;
+    const server = http.createServer((req, res) => {
+      requests.push(req.url);
+      const response = responses.length > 1 ? responses.shift() : responses[0];
+      if (response.reset) { req.socket.destroy(); return; }
+      res.writeHead(response.status, response.revision ? { 'x-x10-revision': response.revision } : {});
+      if (response.trickle) {
+        res.flushHeaders(); res.write(response.body);
+        const timer = setInterval(() => res.write('x'), 25);
+        res.once('close', () => clearInterval(timer));
+        return;
+      }
+      res.end(response.body);
+    });
+    server.on('connection', () => connections++);
+    try { await fn(await listen(server), requests, () => connections); }
+    finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+  };
+  await t.test('baseline-immediate-body-assertion-overpromises-the-sampled-gate', async () => {
+    const candidate = { status: 200, body: 'candidate-id', revision: 'candidate-id' };
+    await withResponses([candidate, { ...candidate, body: 'healthy' }, candidate, { ...candidate, body: 'healthy' },
+      { status: 200, body: 'A' }, { status: 200, body: 'A' }, { status: 200, body: 'B' }], async (port, requests, connections) => {
+      for (let round = 0; round < 2; round++) {
+        const revision = await waitForRevision(port, 'candidate-id', 1000), health = await get(port, '/__x10_health');
+        assert.equal(revision.status, 200); assert.equal(revision.body, 'candidate-id'); assert.equal(revision.revision, 'candidate-id');
+        assert.equal(health.status, 200); assert.equal(health.revision, 'candidate-id');
+      }
+      const first = await get(port);
+      assert.equal(first.body, 'A');
+      assert.throws(() => assert.equal(first.body, 'B'), { code: 'ERR_ASSERTION' });
+      const observed = await waitForBody(port, 'B', 1000);
+      assert.equal(observed.status, 200); assert.equal(observed.body, 'B');
+      assert.deepEqual(requests, ['/__x10_revision', '/__x10_health', '/__x10_revision', '/__x10_health', '/', '/', '/']);
+      assert.equal(connections(), requests.length);
+    });
+  });
+  for (const [name, response] of [['persistent-old-body', { status: 200, body: 'A' }], ['non200-candidate-body', { status: 503, body: 'B' }]]) {
+    await t.test(`${name}-cannot-satisfy-bounded-body-observation`, async () => {
+      await withResponses([response], async (port, requests) => {
+        await assert.rejects(waitForBody(port, 'B', 100), /Fixture readiness timed out/);
+        assert.ok(requests.length > 0);
+      });
+    });
+  }
+  await t.test('transport-failure-cannot-satisfy-bounded-body-observation', async () => {
+    await withResponses([{ reset: true }], async (port, requests) => {
+      await assert.rejects(waitForBody(port, 'B', 100), { code: 'ECONNRESET' });
+      assert.ok(requests.length > 0);
+    });
+  });
+  await t.test('trickle-response-cannot-extend-the-absolute-request-deadline', async () => {
+    await withResponses([{ status: 200, body: 'B', trickle: true }], async (port, requests) => {
+      await assert.rejects(waitForBody(port, 'B', 100), /Fixture absolute request deadline exceeded/);
+      assert.equal(requests.length, 1);
+    });
+  });
+  for (const response of [{ status: 200, body: 'candidate-id', revision: 'old-id' },
+    { status: 200, body: 'old-id', revision: 'candidate-id' }, { status: 503, body: 'candidate-id', revision: 'candidate-id' }]) {
+    await t.test(`revision-observation-refuses-${response.status}-${response.body}-${response.revision}`, async () => {
+      await withResponses([response], async port => {
+        await assert.rejects(waitForRevision(port, 'candidate-id', 100), /Fixture readiness timed out/);
+      });
+    });
+  }
+});
 
 test('native managed fragment transactions and failure boundaries', { timeout: 45000 }, async t => {
   const sourceFiles = ['x10/control/manager.mjs', 'x10/control/cli.mjs', 'x10/control/listeners.mjs', 'x10/test/control.test.mjs'];
@@ -148,7 +232,8 @@ include ${fragmentPath};
     });
     await check('valid-apply-acknowledges-new-native-revision', async () => {
       applied = await apply(state, input('B')); assert.equal(applied.outcome, 'applied'); assert.notEqual(applied.revision, initial);
-      await waitFor(async () => (await get(port)).body === 'B'); assert.equal((await status(state)).runtime.observedRevision, applied.revision);
+      assert.equal((await status(state)).lastConfirmedRevision, applied.revision);
+      await waitForBody(port, 'B'); await waitForRevision(port, applied.revision);
     });
     await check('explicit-listener-inspection-observes-captured-processes-closed-after-apply', async () => {
       assert.ok(capturedListeners, 'Pre-apply capture must succeed before inspection');
@@ -171,7 +256,8 @@ include ${fragmentPath};
       const result = await apply(state, { ...input('bad'), healthURL: `http://127.0.0.1:${healthPort}/unhealthy` });
       assert.equal(result.outcome, 'rolled_back'); assert.equal(result.ok, false); assert.equal(result.restoredContentFrom, applied.revision);
       assert.notEqual(result.revision, applied.revision); assert.notEqual(result.revision, result.failedRevision);
-      await waitFor(async () => (await get(port)).body === 'B'); assert.equal((await status(state)).runtime.observedRevision, result.revision);
+      assert.equal((await status(state)).lastConfirmedRevision, result.revision);
+      await waitForBody(port, 'B'); await waitForRevision(port, result.revision);
       assert.ok(healthRequests.unhealthy > badBefore, 'new health must reach unhealthy origin despite the inherited URI-keyed cache');
       applied = result;
     });
@@ -202,7 +288,7 @@ include ${fragmentPath};
       await assert.rejects(operation, { code: 'ambiguous' });
       assert.equal(await readFile(configPath, 'utf8'), manualConfig); assert.deepEqual(await readFile(fragmentPath), manualFragment);
       const s = await status(state); assert.equal(s.pending.stage, 'ambiguous'); assert.equal(s.lastConfirmedRevision, applied.revision);
-      assert.equal(s.runtime.observedRevision, s.pending.candidate); await waitFor(async () => (await get(port)).body === 'candidate-before-conflict');
+      await waitForRevision(port, s.pending.candidate); await waitForBody(port, 'candidate-before-conflict');
       await assert.rejects(apply(state, input('wrong')), { code: 'pending' });
       // Explicit operator reconciliation restores only the known settings and
       // journaled candidate bytes; recover then makes a fresh old-content activation.
@@ -438,8 +524,8 @@ include ${fragmentPath};
         const s = await status(state), records = (await history(state)).records;
         assert.equal(records.length, before + (boundary === 'intent' ? 1 : 0));
         assert.equal(records.filter(row => row.type === 'applied').length, 1);
-        assert.equal(s.pending, null); assert.equal(s.lastConfirmedRevision, result.revision); assert.equal(s.runtime.observedRevision, result.revision);
-        assert.equal((await get(port)).body, 'B');
+        assert.equal(s.pending, null); assert.equal(s.lastConfirmedRevision, result.revision);
+        await waitForBody(port, 'B'); await waitForRevision(port, result.revision);
         assert.deepEqual(await recover(state), { ok: true, outcome: 'nothing_pending' });
       });
     }
@@ -450,8 +536,9 @@ include ${fragmentPath};
     });
     await check('apply-started-history-reconciliation-restores-original-content', async ({ state, port, crash }) => {
       await crash('apply_started', 'history');
-      const result = await recover(state); assert.equal(result.outcome, 'rolled_back'); assert.equal((await get(port)).body, 'A');
-      assert.equal((await status(state)).pending, null);
+      const result = await recover(state); assert.equal(result.outcome, 'rolled_back');
+      const s = await status(state); assert.equal(s.pending, null); assert.equal(s.lastConfirmedRevision, result.revision);
+      await waitForBody(port, 'A'); await waitForRevision(port, result.revision);
     });
     await check('rejected-history-reconciliation-does-not-activate-invalid-input', async ({ state, port, input, crash, recoverCLI }) => {
       await crash('rejected', 'history', { candidate: { ...input('unused'), serverBody: 'location / { x10_nonexistent_directive on; }' } });
@@ -460,14 +547,17 @@ include ${fragmentPath};
     });
     await check('rolled-back-history-reconciliation-keeps-fresh-restoration', async ({ state, port, input, crash, recoverCLI }) => {
       await crash('rolled_back', 'history', { candidate: { ...input('bad'), healthURL: input('bad').healthURL.replace('/healthy', '/unhealthy') } });
-      const result = await recoverCLI(); assert.equal(result.ok, true); assert.equal(result.outcome, 'reconciled'); assert.equal(result.recordedOutcome, 'rolled_back'); assert.equal((await get(port)).body, 'A');
+      const result = await recoverCLI(); assert.equal(result.ok, true); assert.equal(result.outcome, 'reconciled'); assert.equal(result.recordedOutcome, 'rolled_back');
+      assert.equal((await status(state)).lastConfirmedRevision, result.revision);
+      await waitForBody(port, 'A'); await waitForRevision(port, result.revision);
     });
     await check('interrupted-recover-is-idempotent-at-history-boundary', async ({ state, port, crash }) => {
       await crash('applied', 'intent');
       await crash('applied', 'history', { operation: 'recover' });
       const result = await recover(state); assert.equal(result.recordedOutcome, 'applied');
       assert.equal((await history(state)).records.filter(row => row.type === 'applied').length, 1);
-      assert.equal((await get(port)).body, 'B');
+      assert.equal((await status(state)).lastConfirmedRevision, result.revision);
+      await waitForBody(port, 'B'); await waitForRevision(port, result.revision);
     });
     await check('reconciliation-refuses-conflicting-operator-bytes', async ({ state, configPath, config, crash }) => {
       await crash('applied', 'history');
@@ -708,7 +798,9 @@ test('native initialization and injected storage failure boundaries', { timeout:
         assert.equal((await history(state)).records[0].type, 'initialized_unbound');
         assert.equal((await recover(state)).outcome, 'nothing_pending');
         await startNative(); await bind(state); assert.equal((await status(state)).runtime.identityValid, true);
-        assert.equal((await apply(state, input('B'))).outcome, 'applied'); assert.equal((await get(port)).body, 'B');
+        const applied = await apply(state, input('B')); assert.equal(applied.outcome, 'applied');
+        assert.equal((await status(state)).lastConfirmedRevision, applied.revision);
+        await waitForBody(port, 'B'); await waitForRevision(port, applied.revision);
       }, { uninitialized: true });
     }
     await check('initialization-io-failure-cleans-state-with-native-test-sideeffect-explicit', async ({ state, prefix, input, spec, run, startNative }) => {
@@ -758,7 +850,8 @@ test('native initialization and injected storage failure boundaries', { timeout:
         const records = (await history(state)).records;
         assert.equal(records.filter(row => row.type === type).length, 1); assert.equal(records.at(-1).type, type);
         const confirmed = await status(state);
-        assert.equal(confirmed.pending, null); assert.equal(confirmed.lastConfirmedRevision, expectedRevision); assert.equal((await get(port)).body, 'A');
+        assert.equal(confirmed.pending, null); assert.equal(confirmed.lastConfirmedRevision, expectedRevision);
+        await waitForBody(port, 'A'); await waitForRevision(port, expectedRevision);
         assert.equal((await recover(state)).outcome, 'nothing_pending');
         return { injected: fault.hits[0], recordedOutcome: type, historyOccurrences: 1, noFreshActivation: true };
       });
