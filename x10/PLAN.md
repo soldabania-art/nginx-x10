@@ -862,3 +862,38 @@ manual bind remains mandatory, and an installed bounded wait helper needs its
 own acceptance. Real nonroot user-manager lifecycle, TLS, failure/drain/orphan
 cases, G2 permanent distribution/published-file replay, G4-G8 and Production V1
 remain open. Full native and deferred Continuum scope remain preserved.
+
+
+## G3 partial: installed bounded startup wait-bind
+
+The installed alpha now exposes wait-bind to observe owned startup before one
+existing controller bind. Prepared/alpha-lock startup observations release the
+alpha lock between attempts. Installation/session changes, stopped/faulted
+states, integrity, identity and health refusals do not become retry loops.
+A monotonic wait budget reserves time for the existing bind operation; late or
+cancelled in-flight binding may have committed and requires explicit inspection,
+not an assumed rollback or blind retry. Filesystem/kernel stalls are not an
+unconditional hard-timeout guarantee.
+
+[Evidence](evidence/g3-wait-bind.json) keeps authored, independent and native
+regression results as separate units, including adverse/setup outcomes, source
+identities and owned cleanup. Exact resulting implementation CI is pending.
+The first final native aggregate failed19/20: unchanged reload-listener-observation
+raised ESRCH in inspectTcpListeners at handover-baseline.mjs314. Alpha45/45 and
+controller86 passed separately; the complete native result is not PASS. Which
+captured-process observation failed and the exact cause remain unknown. The held
+old worker had been observed stopped before the observer call; the fixture had
+not yet issued its own SIGCONT. ESRCH alone does not establish disappearance.
+Source/binary/mode stability and complete owned cleanup do not prove no causal
+relationship to the helper. No unchanged rerun, out-of-scope runtime fix or
+historical observer-fix claim is made. Inspect exact CI and diagnose this
+observation before broad native acceptance.
+Native/controller code and bundle inventory are unchanged; alpha runtime changed.
+Prior readiness and recipe exact CI remain preserved separately.
+
+The generated unit still omits automatic ExecStartPost health startup; this
+installed command does not activate a service or accept a nonroot target user
+manager. Explicit operator bind or wait-bind remains necessary. G2 permanent
+release/published-file replay, verified TLS, real service failure/drain/orphan
+paths, G4-G8 and Production V1 remain open. Full native and deferred Continuum
+scope remain preserved.

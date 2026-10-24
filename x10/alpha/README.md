@@ -231,3 +231,33 @@ This is implementation compatibility, not an accepted permanent alpha release.
 A versioned permanent archive and independent nonroot Node22 replay from the
 published files remain pending. The operated service, TLS, package upgrade/
 rollback/recovery, security, frozen soak and Production V1 gates stay open.
+
+
+## Installed startup wait-bind (G3 partial)
+
+After launching an installed alpha, the operator may use:
+
+```sh
+/absolute/recorded/node /absolute/private/alpha/bin/x10 wait-bind --timeout-ms 10000
+```
+
+This installed command waits for the existing run command to finish startup.
+It releases the alpha lock between startup observations so native identity can
+be recorded, then attempts the existing controller bind once. It is not a
+retry loop for unhealthy applications, integrity failures, changed identity,
+stopped/faulted sessions or unexpected session replacement. Existing `bind`
+behavior and old installations are preserved; an old installed CLI without
+this command requires a newly verified installation.
+
+The startup budget is monotonic and bounded; it reserves time for the existing
+readiness gate before starting bind; with less than four seconds remaining it
+refuses before the attempt. Filesystem/kernel stalls are not a hard
+real-time guarantee. A deadline or cancellation arriving during bind cannot
+undo a durable controller commit: an explicit ambiguous result requires status
+and identity inspection, not a blind retry. No process is signalled by wait-bind.
+Do not interpret missing success as proof that the controller stayed unbound.
+
+The generated systemd recipe does not automatically invoke this command yet.
+Actual user-manager startup/stop/restart, readiness cancellation and failed-start
+cleanup, slow drain, TLS and published-file target acceptance remain gates.
+G3 and Production V1 are not completed by this helper.

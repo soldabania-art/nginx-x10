@@ -74,3 +74,20 @@ service was installed or activated by those recipe tests. The local user-mode
 static verifier ENXIO remains unresolved; system-mode parser success does not
 accept a user-manager deployment. Manual bind and all runtime/TLS gates above
 remain mandatory. Permanent alpha distribution and Production V1 remain open.
+
+
+## Installed wait-bind helper: compatibility before automatic startup
+
+New verified alpha installations provide `wait-bind --timeout-ms 10000`.
+Use it explicitly with the recorded Node path and installed launcher after
+starting native. It waits for startup and then performs one existing bind;
+see [alpha limits](../alpha/README.md#installed-startup-wait-bind-g3-partial).
+A timeout/cancellation during bind may leave a committed binding and must be
+inspected. Health, identity and integrity refusals are not retried.
+
+The current unit generator remains unchanged and has no ExecStartPost. The
+helper's local/CI acceptance does not accept automatic systemd startup health:
+that integration still requires actual manager cancellation/failure/cleanup and
+nonroot target tests. Keep manual startup acceptance and the existing stop and
+faulted/orphan rules until those gates are satisfied. No service is activated
+by generating a unit or by these documentation changes.

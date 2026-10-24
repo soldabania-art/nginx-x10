@@ -263,7 +263,7 @@
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "PARTIAL_READINESS_AND_RECIPE_EXACT_HOSTED_VERIFIED_RUNTIME_TLS_PENDING",
+      "status": "PARTIAL_WAIT_BIND_LOCAL_CHECKPOINT_EXACT_CI_PENDING_RUNTIME_TLS",
       "depends_on": [
         "G2"
       ],
@@ -312,6 +312,18 @@
         "productionAccepted": false,
         "implementationCommit": "0daf4086f77e43b829c6a848d19597411fb6325d",
         "hostedEvidence": "x10/evidence/g3-service-recipe-hosted.json"
+      },
+      "waitBindSubcheckpoint": {
+        "runId": "x10-g3-wait-bind-20261024T162521000Z",
+        "sourceBase": "ef11e68b8ca5209d04784f46fd5c62df768aa718",
+        "publicationParent": "970f5deeb6113a736910e1617abb2e90421e5389",
+        "evidence": "x10/evidence/g3-wait-bind.json",
+        "scope": "Installed bounded startup wait-bind command; no automatic user-unit activation",
+        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+        "serviceAccepted": false,
+        "readinessAutomated": false,
+        "tlsAccepted": false,
+        "productionAccepted": false
       }
     },
     {
@@ -664,5 +676,15 @@
     "tlsAccepted": false,
     "productionAccepted": false,
     "fullScopePreserved": true
+  },
+  "g3WaitBindCheckpoint": {
+    "runId": "x10-g3-wait-bind-20261024T162521000Z",
+    "evidence": "x10/evidence/g3-wait-bind.json",
+    "nextConcreteTask": "First inspect exact resulting installed wait-bind implementation CI and diagnose the retained native observer failure without an unchanged rerun or an out-of-scope fix. The first final native aggregate failed19/20 with ESRCH in unchanged reload-listener-observation at handover-baseline.mjs314/inspectTcpListeners; which captured-process observation failed remains unknown. The held old worker had been observed stopped before the observer call; the fixture had not yet issued its own SIGCONT. ESRCH alone does not establish actual disappearance. Changed alpha45/45 and controller86 passed separately; those positives do not turn the full native aggregate into PASS. Unchanged source/binary/mode observations do not prove that the helper had no causal relationship. After scoped verification, continue bounded G3 verified downstream/upstream TLS CA and hostname controls and real nonroot user-manager lifecycle, startup readiness, failed-start cleanup, slow-drain and faulted/orphan acceptance. The unit still has no automatic ExecStartPost health action; explicit operator bind or the installed wait-bind remains necessary. Late or cancelled in-flight binding may have committed and must be inspected rather than blindly retried. G2 permanent versioned distribution/published-file nonroot Node22 replay remain blocked by available Release/asset publication capability; do not bypass credentials or permissions. G3-G8, Production V1 and full deferred Continuum remain open.",
+    "fullScopePreserved": true,
+    "serviceAccepted": false,
+    "targetUserManagerAccepted": false,
+    "tlsAccepted": false,
+    "productionAccepted": false
   }
 }

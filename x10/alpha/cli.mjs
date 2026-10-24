@@ -408,6 +408,82 @@ async function uninstall(context, moved) {
   await rm(quarantine, { recursive: true }); return { ok: true, outcome: 'uninstalled', prefix: context.prefix, dependencyDrift: context.dependencyDrift };
 }
 
+// Startup waiting only: each observation releases the alpha lock so run can
+// finish startup. Once bind begins it is awaited exactly once, never raced or retried.
+export async function waitBind(prefix, timeoutMs = 10000) {
+  if (!Number.isInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 30000)
+    fail('invalid_wait_timeout', 'wait-bind timeout must be a canonical decimal 1..30000 milliseconds');
+  const deadline = performance.now() + timeoutMs, initial = await installed(prefix);
+  const initialLife = await lifecycle(initial);
+  if (!['prepared', 'running'].includes(initialLife.stage)) fail('wait_bind_state', 'wait-bind requires a prepared or running session; inspect stopped/faulted state');
+  let cancelled = false, bindingAttempted = false;
+  const cancel = () => { cancelled = true; };
+  const refused = (code, bindingMayHaveCommitted = false) => ({ ok: false, code, outcome: 'wait_bind_refused', bindingMayHaveCommitted,
+    error: bindingMayHaveCommitted ? 'Binding was attempted; inspect the same session and do not retry blindly' : 'Startup wait ended before binding was attempted' });
+  process.on('SIGINT', cancel); process.on('SIGTERM', cancel);
+  try {
+    process.stderr.write('wait-bind: waiting for native startup\n');
+    while (true) {
+      if (cancelled) return refused('wait_bind_cancelled');
+      if (performance.now() >= deadline) return refused('wait_bind_timeout');
+      let result;
+      try {
+        // Observing a prepared session must not repeatedly steal run's startup
+        // lock. Records are atomic; the locked running path revalidates everything.
+        const observation = await installed(prefix), observedLife = await lifecycle(observation);
+        if (!same(observation.registry, initial.registry) || !same(observation.manifest, initial.manifest))
+          fail('wait_bind_changed', 'Installation or session registry changed during startup wait');
+        if (!['prepared', 'running'].includes(observedLife.stage))
+          fail('wait_bind_state', 'Startup session stopped or faulted; inspection is required');
+        if (observedLife.stage === 'prepared' && observedLife.runtime !== null)
+          fail('runtime_identity', 'Prepared session has unexpected native identity');
+        if (observedLife.stage === 'running') result = await lock(prefix, async () => {
+          if (cancelled) return refused('wait_bind_cancelled');
+          const context = await installed(prefix);
+          if (!same(context.registry, initial.registry) || !same(context.manifest, initial.manifest))
+            fail('wait_bind_changed', 'Installation or session registry changed during startup wait');
+          const life = await lifecycle(context);
+          if (!['prepared', 'running'].includes(life.stage)) fail('wait_bind_state', 'Startup session stopped or faulted; inspection is required');
+          if (life.stage === 'prepared') {
+            if (life.runtime !== null) fail('runtime_identity', 'Prepared session has unexpected native identity');
+            return null;
+          }
+          if (!life.runtime || !await inspectMaster(path.join(prefix, 'bin/nginx'), life.prefix, life.runtime))
+            fail('runtime_identity', 'Running session lacks its exact recorded native master');
+          const { control, state } = await sessionStatus(context, life);
+          const settings = await load(path.join(state, 'settings.json'));
+          // Alpha creates a 3000 ms readiness gate. Changed gate budgets require
+          // separate acceptance rather than silently extending this helper's budget.
+          if (settings.gateTimeoutMs !== 3000) fail('wait_bind_settings', 'Unsupported readiness gate budget');
+          if (cancelled) return refused('wait_bind_cancelled');
+          if (deadline - performance.now() < 4000) return refused('wait_bind_timeout');
+          let bound;
+          try { bindingAttempted = true; bound = await control.bind(state); }
+          catch (error) {
+            if (cancelled) return refused('wait_bind_cancelled', true);
+            error.bindingMayHaveCommitted = true; throw error;
+          }
+          // A cancellation or cooperative deadline cannot undo durable bind.
+          // Keep the result explicit and wait for completion; never leave a late task.
+          if (cancelled) return refused('wait_bind_cancelled', true);
+          if (performance.now() >= deadline) return refused('wait_bind_late', true);
+          return { ...bound, outcome: 'wait_bound', session: life.session, bindingMayHaveCommitted: true };
+        });
+      } catch (error) {
+        if (bindingAttempted) { error.bindingMayHaveCommitted = true; throw error; }
+        if (error.code !== 'alpha_locked') throw error;
+      }
+      if (result) {
+        if (result.ok && cancelled) return refused('wait_bind_cancelled', true);
+        if (result.ok && performance.now() >= deadline) return refused('wait_bind_late', true);
+        return result;
+      }
+      if (cancelled) return refused('wait_bind_cancelled');
+      await delay(Math.max(0, Math.min(50, deadline - performance.now())));
+    }
+  } finally { process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel); }
+}
+
 async function proxy(context, command, values) {
   const life = await lifecycle(context), args = [path.join(context.prefix, 'lib/control/cli.mjs'), command, '--state', await controllerState(context.prefix, life.session)];
   for (const flag of ['file', 'revision', 'control-socket', 'control-address']) if (values[flag]) args.push(`--${flag}`, values[flag]);
@@ -422,20 +498,27 @@ export async function main(argv, installedPrefix = null) {
   const oldMask = process.umask(0o077);
   try {
     const { values, positionals } = parseArgs({ args: argv, allowPositionals: true, options: Object.fromEntries([
-      ...['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'output', 'file', 'revision', 'control-socket', 'control-address'].map(name => [name, { type: 'string' }]),
+      ...['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'output', 'file', 'revision', 'control-socket', 'control-address', 'timeout-ms'].map(name => [name, { type: 'string' }]),
       ['human', { type: 'boolean' }], ['help', { type: 'boolean', short: 'h' }],
     ]) });
     const [command] = positionals;
-    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 run [--control-socket PRIVATE_ABSOLUTE] | bind | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
+    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
     if (positionals.length !== 1) fail('arguments', 'Exactly one command is required; use --help');
-    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
+    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
     if (!allowed[command] || Object.keys(values).some(key => !allowed[command].includes(key))) fail('arguments', 'Unsupported command or option for this command');
+    let waitTimeout = 10000;
+    if (command === 'wait-bind' && values['timeout-ms'] !== undefined) {
+      if (!/^[1-9][0-9]{0,4}$/.test(values['timeout-ms']) || Number(values['timeout-ms']) > 30000)
+        fail('invalid_wait_timeout', 'wait-bind timeout must be a canonical decimal 1..30000 milliseconds');
+      waitTimeout = Number(values['timeout-ms']);
+    }
     let result;
     if (command === 'install' || command === 'pack') { if (installedPrefix) fail('arguments', 'Use the source checkout or extracted bundle for installation'); result = command === 'install' ? await install(values) : await pack(values); }
     else {
       if (!installedPrefix) fail('arguments', 'Use the installed PREFIX/bin/x10 launcher for lifecycle commands');
       const prefix = path.resolve(installedPrefix), allowDrift = ['stop', 'uninstall', 'info', 'status', 'history'].includes(command); await installed(prefix, allowDrift);
       if (command === 'run') result = await run(prefix, values);
+      else if (command === 'wait-bind') result = await waitBind(prefix, waitTimeout);
       else result = await lock(prefix, async moved => {
         const context = await installed(prefix, allowDrift);
         if (context.dependencyDrift.length) process.stderr.write('Recorded host libraries changed; only inspection, stop and uninstall remain available.\n');
@@ -447,7 +530,7 @@ export async function main(argv, installedPrefix = null) {
       });
     }
     if (result) { process.stdout.write(encode(result)); if (!result.ok) process.exitCode = 1; }
-  } catch (error) { if (!error.forwarded) process.stdout.write(encode({ ok: false, code: error.code || 'error', error: error.message })); process.exitCode = 1; }
+  } catch (error) { if (!error.forwarded) process.stdout.write(encode({ ok: false, code: error.code || 'error', error: error.message, ...(error.bindingMayHaveCommitted === true ? { bindingMayHaveCommitted: true } : {}) })); process.exitCode = 1; }
   finally { process.umask(oldMask); }
 }
 

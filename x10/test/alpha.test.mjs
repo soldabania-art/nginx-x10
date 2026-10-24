@@ -363,3 +363,125 @@ test('shipped loopback upstream example is immutable in extracted installs and s
     await rm(parent, { recursive: true, force: true });
   }
 });
+
+// Wait-bind fixtures use the actual independently owned alpha installation/native
+// master. Their synthetic lock/state perturbations are not a systemd deployment.
+async function waitBindFixture(t, { upstream = false } = {}) {
+  const parent = await mkdtemp(path.join(os.tmpdir(), 'x10-wait-bind-')); await chmod(parent, 0o700);
+  const prefix = path.join(parent, 'installed'), launcher = path.join(prefix, 'bin/x10');
+  const port = await unusedPort(); let healthPort; do { healthPort = await unusedPort(); } while (healthPort === port);
+  let app, upstreamPort, readyBody = 'ready\n', appRequests = 0, runChild, nativePid, output = '';
+  const children = new Set();
+  if (upstream) {
+    app = http.createServer((req, res) => { appRequests++; res.end(readyBody); });
+    app.listen(0, '127.0.0.1'); await once(app, 'listening'); upstreamPort = app.address().port;
+  }
+  const archive = path.join(parent, 'alpha.tar.gz');
+  assert.equal((await cli(source, 'pack', '--output', archive, '--manifest', manifestFile, '--binary', binary)).code, 0);
+  await execute('tar', ['-xzf', archive, '-C', parent], { timeout: 10000 });
+  const installer = path.join(parent, 'nginx-x10-alpha/install.mjs');
+  const installed = await cli(installer, 'install', '--prefix', prefix, '--port', String(port), '--health-port', String(healthPort), ...(upstream ? ['--upstream-port', String(upstreamPort)] : []));
+  assert.equal(installed.code, 0, installed.stdout);
+  const lifeFile = path.join(installed.json.sessionPrefix, 'lifecycle.json');
+  const spawnWait = (...args) => {
+    const child = spawn(process.execPath, [launcher, 'wait-bind', ...args], { stdio: ['ignore', 'pipe', 'pipe'] }); children.add(child);
+    let stdout = '', stderr = ''; child.stdout.on('data', b => stdout += b); child.stderr.on('data', b => stderr += b);
+    const done = once(child, 'exit').then(([code, signal]) => { children.delete(child); return { code, signal, stdout, stderr, json: JSON.parse(stdout) }; });
+    const ready = until(() => stderr.includes('wait-bind: waiting for native startup'));
+    return { child, done, ready };
+  };
+  const start = async () => {
+    runChild = spawn(process.execPath, [launcher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); children.add(runChild);
+    runChild.stdout.on('data', b => { output += b; const m = /"(?:pid|candidatePid)": (\d+)/.exec(output); if (m) nativePid = Number(m[1]); }); runChild.stderr.on('data', b => output += b);
+    await until(() => { if (runChild.exitCode !== null || runChild.signalCode !== null) throw new Error(output); return output.includes('"outcome": "running"'); });
+  };
+  const stop = async () => { assert.equal((await cli(launcher, 'stop')).code, 0); await until(() => runChild.exitCode !== null || runChild.signalCode !== null); assert.equal(runChild.exitCode, 0, output); children.delete(runChild); nativePid = null; };
+  t.after(async () => {
+    for (const signal of ['SIGQUIT', 'SIGTERM', 'SIGKILL']) {
+      if (nativePid) { try { process.kill(-nativePid, signal); } catch {} }
+      for (const child of children) if (child.exitCode === null && child.signalCode === null) child.kill('SIGTERM');
+      if (nativePid || children.size) await delay(75);
+    }
+    if (app) { app.closeAllConnections(); await new Promise(resolve => app.close(resolve)); }
+    await rm(parent, { recursive: true, force: true });
+  });
+  return { parent, prefix, launcher, lifeFile, installed: installed.json, start, stop, spawnWait,
+    setReadyBody: body => { readyBody = body; }, appRequests: () => appRequests };
+}
+
+test('wait-bind refuses malformed budgets before creating a lock and times out a prepared session', { timeout: 20000 }, async t => {
+  const f = await waitBindFixture(t);
+  for (const budget of ['0', '01', '-1', '1e3', '30001', ' 10000', '10000.0', 'Infinity']) {
+    const result = await cli(f.launcher, 'wait-bind', '--timeout-ms', budget);
+    assert(['invalid_wait_timeout', 'ERR_PARSE_ARGS_INVALID_OPTION_VALUE'].includes(result.json.code)); assert.equal(await absent(path.join(f.prefix, '.alpha-lock')), true);
+  }
+  const result = await cli(f.launcher, 'wait-bind', '--timeout-ms', '150');
+  assert.equal(result.code, 1); assert.equal(result.json.code, 'wait_bind_timeout'); assert.equal(result.json.bindingMayHaveCommitted, false);
+  assert.equal((await cli(f.launcher, 'status')).json.binding, null); assert.equal(await absent(path.join(f.prefix, '.alpha-lock')), true);
+});
+
+test('installed wait-bind releases a startup lock and binds exactly the observed native session', { timeout: 25000 }, async t => {
+  const f = await waitBindFixture(t);
+  const lockFile = path.join(f.prefix, '.alpha-lock'); await writeFile(lockFile, JSON.stringify({ pid: process.pid, at: new Date().toISOString() }), { mode: 0o600, flag: 'wx' });
+  const oldBind = await cli(f.launcher, 'bind'); assert.equal(oldBind.json.code, 'alpha_locked', 'Existing bind retains its immediate lock refusal');
+  const pending = f.spawnWait('--timeout-ms', '10000'); await delay(150);
+  assert.equal(pending.child.exitCode, null); await rm(lockFile);
+  await f.start();
+  const result = await pending.done; assert.equal(result.code, 0, result.stdout); assert.equal(result.json.outcome, 'wait_bound'); assert.equal(result.json.session, f.installed.session);
+  const status = await cli(f.launcher, 'status'); assert(status.json.binding); assert.equal(status.json.runtime.identityValid, true);
+  const duplicate = await cli(f.launcher, 'wait-bind'); assert.equal(duplicate.json.code, 'already_bound'); assert.equal(duplicate.json.bindingMayHaveCommitted, true);
+  await f.stop();
+  assert.equal((await cli(f.launcher, 'wait-bind')).json.code, 'wait_bind_state');
+});
+
+test('wait-bind refuses changed, faulted and cancelled prepared sessions without binding', { timeout: 25000 }, async t => {
+  const f = await waitBindFixture(t), original = await readFile(f.lifeFile);
+  try {
+    await amendRecord(f.lifeFile, v => { v.stage = 'faulted'; });
+    assert.equal((await cli(f.launcher, 'wait-bind')).json.code, 'wait_bind_state');
+  } finally { await writeFile(f.lifeFile, original); }
+  const cancelled = f.spawnWait('--timeout-ms', '10000'); await cancelled.ready; cancelled.child.kill('SIGTERM');
+  const refusal = await cancelled.done; assert.equal(refusal.code, 1); assert.equal(refusal.json.code, 'wait_bind_cancelled'); assert.equal(refusal.json.bindingMayHaveCommitted, false);
+  assert.equal(await absent(path.join(f.prefix, '.alpha-lock')), true);
+  const pending = f.spawnWait('--timeout-ms', '10000'); await pending.ready;
+  const marker = path.join(f.prefix, '.alpha-registry.json'), registryBytes = await readFile(marker);
+  try {
+    const { sha256, ...v } = JSON.parse(registryBytes); v.sessions.push('a'.repeat(32));
+    const temporary = path.join(f.prefix, 'registry-fixture.tmp');
+    await writeFile(temporary, JSON.stringify({ ...v, sha256: digest(JSON.stringify(v)) }), { mode: 0o600, flag: 'wx' });
+    const { rename } = await import('node:fs/promises'); await rename(temporary, marker);
+    const changed = await pending.done; assert.equal(changed.code, 1); assert.equal(changed.json.code, 'wait_bind_changed');
+  } finally { await writeFile(marker, registryBytes); }
+  assert.equal((await cli(f.launcher, 'status')).json.binding, null);
+});
+
+test('wait-bind makes one real readiness attempt and refuses a wrong HTTP200 body', { timeout: 25000 }, async t => {
+  const f = await waitBindFixture(t, { upstream: true }); f.setReadyBody('private-wrong-body\n'); await f.start();
+  const result = await cli(f.launcher, 'wait-bind', '--timeout-ms', '10000');
+  assert.equal(result.code, 1); assert.equal(result.json.code, 'health_gate_failed'); assert.equal(result.json.bindingMayHaveCommitted, true);
+  assert.equal(result.stdout.includes('private-wrong-body'), false); assert(f.appRequests() > 0);
+  assert.equal((await cli(f.launcher, 'status')).json.binding, null);
+  f.setReadyBody('ready\n'); assert.equal((await cli(f.launcher, 'wait-bind')).json.outcome, 'wait_bound');
+  await f.stop();
+});
+
+test('wait-bind retains possible durable binding after an injected alpha lock cleanup failure', { timeout: 25000 }, async t => {
+  const f = await waitBindFixture(t); await f.start();
+  const managerFile = path.join(f.prefix, 'lib/control/manager.mjs'), marker = path.join(f.prefix, '.alpha-install.json');
+  const managerBytes = await readFile(managerFile), markerBytes = await readFile(marker), lockFile = path.join(f.prefix, '.alpha-lock');
+  // Synthetic installed-library fault: real native bind completes, then only the
+  // fixture-owned alpha lock becomes a directory. This is not a native defect.
+  const changed = Buffer.from(managerBytes.toString().replace('export async function bind(state) {', 'async function fixtureOriginalBind(state) {') + `\nexport async function bind(state) {\n const result = await fixtureOriginalBind(state);\n const fs = await import('node:fs/promises');\n const lock = new URL('../../../.alpha-lock', 'file://' + state + '/');\n await fs.rm(lock); await fs.mkdir(lock, { mode: 0o700 });\n return result;\n}\n`);
+  try {
+    await chmod(managerFile, 0o600); await writeFile(managerFile, changed); await chmod(managerFile, 0o400);
+    await amendRecord(marker, v => { v.immutable['lib/control/manager.mjs'].sha256 = digest(changed); v.immutable['lib/control/manager.mjs'].bytes = changed.length; });
+    const result = await cli(f.launcher, 'wait-bind');
+    assert.equal(result.code, 1); assert.equal(result.json.bindingMayHaveCommitted, true);
+    assert.equal((await lstat(lockFile)).isDirectory(), true);
+  } finally {
+    await rm(lockFile, { recursive: true, force: true });
+    await chmod(managerFile, 0o600); await writeFile(managerFile, managerBytes); await chmod(managerFile, 0o400); await writeFile(marker, markerBytes);
+  }
+  const status = await cli(f.launcher, 'status'); assert(status.json.binding, 'Durable bind must not be misreported as absent after alpha cleanup failed');
+  await f.stop();
+});
