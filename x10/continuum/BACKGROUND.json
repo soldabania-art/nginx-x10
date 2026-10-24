@@ -3,23 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-api-ci-20261024T104742Z",
-    "owner": "codex-coordinator-hosted-review",
-    "baseCommit": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
-    "acquiredAtUTC": "2026-10-24T10:47:42.000Z",
-    "expiresAtUTC": "2026-10-24T11:32:42.000Z",
-    "task": "Verify exact held-source API metadata CI and record bounded hosted acceptance",
-    "allowedFiles": [
-      "x10/STATUS.md",
-      "x10/PLAN.md",
-      "x10/continuum/README.md",
-      "x10/continuum/PLAN.md",
-      "x10/continuum/BACKGROUND.json",
-      "x10/evidence/continuum-api-inventory-hosted.json",
-      "x10/review/continuum-api-inventory-hosted-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -42,36 +26,21 @@
     "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40082909976",
     "continuumStage": "Restricted source-copy cleanup/retry exact-hosted accepted on AD; new read-only held-source API metadata locally verified but pending exact hosted acceptance. No complete semantic capsule/import/migration.",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-capture-protection.json",
+    "continuumEvidence": "x10/evidence/continuum-api-inventory.json",
     "nativeHostedCI": {
-      "state": "success-exact-protected-copy-cleanup-regression",
-      "implementationCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
-      "pushRun": 40082909976,
-      "pullRequestRun": 40082913777,
+      "state": "success-exact-API-metadata-regression",
+      "implementationCommit": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
+      "pushRun": 40087194477,
+      "pullRequestRun": 40087198675,
       "nativeJobIDs": [
-        120839996231,
-        120839993221
+        120852481397,
+        120852486047
       ],
-      "scope": "Full native main jobs/steps and verified native artifacts. Hosted official1105 strictPASS/25SKIP/1expectedTODO; local1083 distinct. Native sources unchanged.",
-      "evidence": "x10/evidence/continuum-capture-protection-hosted.json"
+      "evidence": "x10/evidence/continuum-api-inventory-hosted.json",
+      "scope": "Full native main jobs and verified artifact identities; native sources and verification harness unchanged."
     },
-    "previousContinuumImplementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
+    "previousContinuumImplementationCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
     "previousContinuumHostedCI": {
-      "state": "success-retained-source-copy-lifetime-only",
-      "implementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
-      "pushRun": 40078352816,
-      "pullRequestRun": 40078356587,
-      "researchJobIDs": [
-        120826511177,
-        120826527482
-      ],
-      "coreTests": 21,
-      "processTests": 7,
-      "c1Tests": 27,
-      "c2aTests": 43,
-      "scope": "Restricted retained source record-material lifetime and cleanup acknowledgment; not semantic export/import or migration."
-    },
-    "continuumHostedCI": {
       "state": "success-source-copy-cleanup-retry-only",
       "implementationCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
       "pushRun": 40082909896,
@@ -86,7 +55,23 @@
       "c2aTests": 44,
       "evidence": "x10/evidence/continuum-capture-protection-hosted.json"
     },
-    "continuumImplementationCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
+    "continuumHostedCI": {
+      "state": "success-read-only-held-source-API-metadata-only",
+      "implementationCommit": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
+      "pushRun": 40087194488,
+      "pullRequestRun": 40087198661,
+      "researchJobIDs": [
+        120852468387,
+        120852556275
+      ],
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 27,
+      "c2aTests": 48,
+      "evidence": "x10/evidence/continuum-api-inventory-hosted.json",
+      "scope": "Same-source bounded API metadata only; no actual Finished value preservation or target reconstruction."
+    },
+    "continuumImplementationCommit": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
     "implementationIdentityRule": "Preceding AD cleanup accepted only from its actual research/native jobs and artifacts. New API metadata code has frozen hashes/local48 checks but awaits resulting implementation CI. All build/PR-merge/event-head identities stay separate.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
@@ -101,15 +86,16 @@
     },
     "previousNativeCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
     "previousNativeHostedCI": {
-      "state": "success-exact-retained-source-implementation-regression",
-      "implementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
-      "pushRun": 40078352804,
-      "pullRequestRun": 40078356557,
+      "state": "success-exact-protected-copy-cleanup-regression",
+      "implementationCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
+      "pushRun": 40082909976,
+      "pullRequestRun": 40082913777,
       "nativeJobIDs": [
-        120826528935,
-        120826520519
+        120839996231,
+        120839993221
       ],
-      "scope": "Both exact full workflows and matching evidence ZIP digests; official aggregate20/20, controller77TAP, alpha37TAP,105modules. Native/controller implementations unchanged."
+      "scope": "Full native main jobs/steps and verified native artifacts. Hosted official1105 strictPASS/25SKIP/1expectedTODO; local1083 distinct. Native sources unchanged.",
+      "evidence": "x10/evidence/continuum-capture-protection-hosted.json"
     },
     "c2aLocal": {
       "state": "success-narrow-observation-profile",
@@ -1036,7 +1022,7 @@
       "scope": "Source-only cleanup/retry; not full API state or migration."
     },
     "apiInventoryLocal": {
-      "state": "verified-local-pending-exact-hosted",
+      "state": "verified-local-and-exact-hosted-metadata-only",
       "evidence": "x10/evidence/continuum-api-inventory.json",
       "flatC2aChecks": 48,
       "newAuthoredActualTLSEnvironments": 4,
@@ -1048,10 +1034,27 @@
       "FinishedValuePreservation": false,
       "semanticExportImport": false,
       "migration": false
+    },
+    "apiInventoryHosted": {
+      "state": "success-read-only-metadata-only",
+      "implementationCommit": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
+      "evidence": "x10/evidence/continuum-api-inventory-hosted.json",
+      "researchRuns": [
+        40087194488,
+        40087198661
+      ],
+      "nativeRuns": [
+        40087194477,
+        40087198675
+      ],
+      "fullSemanticInventory": false,
+      "FinishedValuePreservation": false,
+      "semanticExportImport": false,
+      "migration": false
     }
   },
   "pendingVerification": [
-    "Verify exact resulting API metadata implementation CI (research21/7/27/48 and full native20 main jobs/artifacts). Exact AD cleanup CI receipt does not accept the new source files.",
+    "Held-source API metadata exact CI accepted only for bounded observations. Actual required ALPN/Finished values and restricted authentication-class state still need protected preservation and reviewed unsupported API semantics before target reconstruction.",
     "Private synthetic capture-TU ASan/UBSan8 controls passed with detect_leaks=0; LeakSanitizer detect_leaks=1 was unavailable due owned-process /proc/task access. Not a leak-detection PASS or full syscall-failure matrix.",
     "Retained copy is source-only record material, not a complete reusable semantic TLS capsule. Full semantic/API inventory and protection-syscall failure matrix remain unaccepted; original SSL/EVP heap is not covered. SIGKILL/crash explicit wipe remains unknown.",
     "Buffer-only keylog ingestion is bounded local hardening only. Parser-owned Buffers and delivered mutable event input are cleared; original Node/OpenSSL allocations, V8 internals, process-wide protection and total erasure are not proven.",
@@ -1078,7 +1081,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Exact CI for read-only held-source API metadata, then review/implement first-fixture protected semantic capsule fields and unsupported API contract; no target reconstruction before value/state preservation and remaining runtime gates."
+      "goal": "Read-only held-source API metadata is exact-hosted accepted. Next preserve actual required ALPN/Finished/auth-class state under protected lifetime and review unsupported API semantics; no target reconstruction before complete first-profile state and remaining runtime gates."
     },
     {
       "id": "C3",
@@ -1223,6 +1226,15 @@
       "commitMessageRun": 40078356542,
       "versionBumpRun": 40078356575,
       "inheritedF5CLAFailedRun": 40078354342
+    },
+    {
+      "name": "Held-source API metadata implementation format checks",
+      "state": "success",
+      "implementationCommit": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
+      "whitespaceRun": 40087198628,
+      "commitMessageRun": 40087198648,
+      "versionBumpRun": 40087198629,
+      "inheritedF5CLAFailedRun": 40087196070
     }
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
@@ -1310,26 +1322,27 @@
     }
   },
   "lastVerificationReceipt": {
-    "runId": "continuum-api-20261024T101550264Z",
-    "baseCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
-    "publicationParent": "bf7f9aa23f3fb714ee31fa044853c3c48fff4eb4",
-    "implementationCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
-    "verifiedAtUTC": "2026-10-24T10:19:44.998Z",
-    "evidence": "x10/evidence/continuum-capture-protection-hosted.json",
+    "runId": "continuum-api-ci-20261024T104742Z",
+    "baseCommit": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
+    "publicationParent": "66a65419a04ec5e4ff3604dec214d553a85f2a1b",
+    "implementationCommit": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
+    "verifiedAtUTC": "2026-10-24T10:53:01.077423Z",
+    "runtimeSourcesChanged": false,
+    "newRuntimeTestsExecuted": 0,
+    "evidence": "x10/evidence/continuum-api-inventory-hosted.json",
+    "perFileLedger": "x10/review/continuum-api-inventory-hosted-ledger.json",
     "researchRuns": [
-      40082909896,
-      40082913709
+      40087194488,
+      40087198661
     ],
     "nativeRuns": [
-      40082909976,
-      40082913777
+      40087194477,
+      40087198675
     ],
-    "runtimeSourcesChangedByReceipt": false,
-    "recordedAlongsideNewPendingInventoryCode": true,
-    "scope": "Exact preceding AD cleanup implementation only; does not accept new inventory code.",
-    "spendingUSD": 0
+    "spendingUSD": 0,
+    "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "Verify exact new API-metadata implementation CI first (research21/7/27/48 and native20, actual main jobs/artifacts). Then use the bounded observed API contract to review and implement fuller protected source state for actual ALPN/Finished values and the restricted authentication class, without treating lengths as value preservation. Explicitly retain unsupported exporter/session/resumption/PHA APIs and unresolved future record budget/later KeyUpdate. Target reconstruction still needs reviewed complete first-profile state, exclusive reader/writer ownership, distinct TLS code and actual old-code exit; do not start it from metadata-only results.",
+  "nextConcreteTask": "Review and implement fuller protected source state for actual required ALPN/Finished values and the restricted authentication class using the bounded observed API contract. Length equality is not value preservation. Keep exporter/session/resumption/PHA explicitly unsupported and future record budget/later KeyUpdate unresolved. Target reconstruction remains gated on reviewed complete first-profile state, exclusive reader/writer ownership, distinct TLS code and actual old-code exit.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1367,25 +1380,24 @@
     "implementationCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b"
   },
   "previousVerificationReceipt": {
-    "runId": "continuum-retained-ci-20261024T083753Z",
-    "baseCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
-    "publicationParent": "2e7e4e653b324b214daa7050ff34a502a9e7ef52",
-    "implementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
-    "verifiedAtUTC": "2026-10-24T08:42:01.153560Z",
-    "runtimeSourcesChanged": false,
-    "newRuntimeTestsExecuted": 0,
-    "evidence": "x10/evidence/continuum-retained-capsule-hosted.json",
-    "perFileLedger": "x10/review/continuum-retained-capsule-hosted-ledger.json",
+    "runId": "continuum-api-20261024T101550264Z",
+    "baseCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
+    "publicationParent": "bf7f9aa23f3fb714ee31fa044853c3c48fff4eb4",
+    "implementationCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
+    "verifiedAtUTC": "2026-10-24T10:19:44.998Z",
+    "evidence": "x10/evidence/continuum-capture-protection-hosted.json",
     "researchRuns": [
-      40078352816,
-      40078356587
+      40082909896,
+      40082913709
     ],
     "nativeRuns": [
-      40078352804,
-      40078356557
+      40082909976,
+      40082913777
     ],
-    "spendingUSD": 0,
-    "scope": "Restricted source-only retained protected record-material lifetime; no full semantic capsule, import, ownership transfer or migration."
+    "runtimeSourcesChangedByReceipt": false,
+    "recordedAlongsideNewPendingInventoryCode": true,
+    "scope": "Exact preceding AD cleanup implementation only; does not accept new inventory code.",
+    "spendingUSD": 0
   },
   "ownerWorkPolicy": {
     "maxHelperAgents": 6,
@@ -1455,5 +1467,48 @@
     "causalityProven": false,
     "sourceOrCheckerWeakened": false,
     "evidence": "x10/evidence/continuum-capture-protection.json"
-  }
+  },
+  "verificationReceiptHistory": [
+    {
+      "runId": "continuum-retained-ci-20261024T083753Z",
+      "baseCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
+      "publicationParent": "2e7e4e653b324b214daa7050ff34a502a9e7ef52",
+      "implementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
+      "verifiedAtUTC": "2026-10-24T08:42:01.153560Z",
+      "runtimeSourcesChanged": false,
+      "newRuntimeTestsExecuted": 0,
+      "evidence": "x10/evidence/continuum-retained-capsule-hosted.json",
+      "perFileLedger": "x10/review/continuum-retained-capsule-hosted-ledger.json",
+      "researchRuns": [
+        40078352816,
+        40078356587
+      ],
+      "nativeRuns": [
+        40078352804,
+        40078356557
+      ],
+      "spendingUSD": 0,
+      "scope": "Restricted source-only retained protected record-material lifetime; no full semantic capsule, import, ownership transfer or migration."
+    },
+    {
+      "runId": "continuum-api-20261024T101550264Z",
+      "baseCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
+      "publicationParent": "bf7f9aa23f3fb714ee31fa044853c3c48fff4eb4",
+      "implementationCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
+      "verifiedAtUTC": "2026-10-24T10:19:44.998Z",
+      "evidence": "x10/evidence/continuum-capture-protection-hosted.json",
+      "researchRuns": [
+        40082909896,
+        40082913709
+      ],
+      "nativeRuns": [
+        40082909976,
+        40082913777
+      ],
+      "runtimeSourcesChangedByReceipt": false,
+      "recordedAlongsideNewPendingInventoryCode": true,
+      "scope": "Exact preceding AD cleanup implementation only; does not accept new inventory code.",
+      "spendingUSD": 0
+    }
+  ]
 }

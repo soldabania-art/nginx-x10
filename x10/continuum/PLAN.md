@@ -810,3 +810,24 @@ required ALPN/Finished/auth-class state in a fuller protected source contract.
 Metadata equality is not value preservation. Exporter/session/resumption/PHA,
 future budget/KeyUpdate, exclusive owner, distinct TLS code and old-code exit
 remain explicit gates before target reconstruction or native continuation.
+
+
+### Exact CI: held-source API metadata only
+
+Implementation `c0c4e308eca839049de4b64aa2fd2493d0b8865c`: research push
+`40087194488` и PR `40087198661`, native push `40087194477` и PR
+`40087198675` завершены success, attempt1. Оба actual research jobs
+выполнили core21/process7/C1 27/C2a48 без FAIL/skip/TODO. Оба native
+artifacts:20/20 групп, controller77TAP, alpha37TAP; official1105 strictPASS,
+25SKIP,1expectedTODO-fail,0unexpectedFAIL. Local official1083 учтён отдельно.
+[Очищенная квитанция](../evidence/continuum-api-inventory-hosted.json)
+сохраняет ZIP digests, event-head/PR merge checkout identities и независимое
+static review; в receipt нет новых runtime reruns или изменений исходников.
+
+Приёмка относится к read-only metadata наблюдениям held source, не сохранению
+actual ALPN/Finished values или полному semantic capsule. Public channel-fault
+отказы, иногда после native release, сохранены: SIGKILL не доказывает explicit
+wipe/no-I/O. Далее — protected lifetime actual required values и restricted
+authentication class с явным unsupported API contract. Exporter/session/
+resumption/PHA, future budget/KeyUpdate, exclusive target I/O ownership,
+distinct TLS code, actual old-code exit и native continuation остаются gates.
