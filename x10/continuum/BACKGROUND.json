@@ -3,7 +3,34 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": null,
+  "executionLease": {
+    "runId": "x10-v1-contract-ci-20261024T114216Z",
+    "owner": "codex-coordinator-v1-contract-ci",
+    "baseCommit": "80629638e1d1c7635f76e655760c9db987ea82ea",
+    "acquiredAtUTC": "2026-10-24T11:42:16.000Z",
+    "expiresAtUTC": "2026-10-24T12:08:28.000Z",
+    "task": "Verify exact new release-record Node22 step, native compatibility and research CI",
+    "verification": {
+      "implementationCommit": "80629638e1d1c7635f76e655760c9db987ea82ea",
+      "nativeRuns": [
+        40090886680,
+        40090891044
+      ],
+      "researchRuns": [
+        40090886666,
+        40090891056
+      ]
+    },
+    "allowedFiles": [
+      "x10/STATUS.md",
+      "x10/PLAN.md",
+      "x10/continuation-2026-10-24/GATES.json",
+      "x10/continuum/BACKGROUND.json",
+      "x10/release/README.md",
+      "x10/evidence/v1-release-contract-hosted.json",
+      "x10/review/v1-release-contract-hosted-ledger.json"
+    ]
+  },
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
