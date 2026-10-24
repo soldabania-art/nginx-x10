@@ -1149,3 +1149,33 @@ Exact implementation CI нового cleanup fix pending. Результаты �
 [evidence](evidence/continuum-capture-protection.json).
 Persistent failure через final free требует terminal source exit; explicit wipe
 не гарантирован. Full semantic/API inventory, importer и migration не реализованы.
+
+
+## Continuum: наблюдение established-state API metadata
+
+Новый opt-in `inspect-api` использует прежний genuine live hold и наблюдает
+ALPN `continuum-c1`, длины local/peer Finished, роль/версию, no-client-auth class
+и присутствие non-resumed session. Два metadata snapshots, ledger и probe
+сверяются до release; original nonce/serial и трёхсекундный deadline сохранены.
+Finished bytes не копируются: non-NULL dummy/count0 получает только длины.
+Это не API-value preservation, semantic capsule, exporter/importer или migration.
+
+Локально финальный frozen C2a48/48: прежние44 +4 actualTLS environments
+(positive, native stale serial, malformed и duplicate public receipts).
+Core21/process7/C1 27 и fresh isolated native20/20 прошли; official1083
+strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL. Авторские25 synthetic
+production-probe-backed cases и independent21 прошли plain и ASan/UBSan:
+те же cases, не50/42 unique. LSan off; dependencies uninstrumented.
+Независимо4 actualTLS heldouts:2 positives, native stale nonce и unknown-field
+refusal. Все75 наблюдавшихся children закрыты,6 private roots отсутствуют.
+
+Сохранены baseline missing-action refusal и initial2/4 diagnostic: два новых
+теста ошибочно требовали normal exit при corrupted channel, где прежняя policy
+использует SIGKILL. Изменена только классификация теста; strict FAIL сохранён.
+C source мог уже release; no-I/O/explicit-wipe claim для этих fault cases нет.
+[Evidence](evidence/continuum-api-inventory.json) разделяет эти границы и identities.
+Exact CI нового metadata code pending. Прежний `ad5351f4` принят по двум actual
+research21/7/27/44 и native20 workflows/artifacts, не metadata-only success:
+[hosted receipt](evidence/continuum-capture-protection-hosted.json).
+Далее — actual values/state contract в protected capsule после exact CI,
+а не target reconstruction из одних длин и booleans.

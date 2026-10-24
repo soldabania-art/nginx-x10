@@ -39,6 +39,7 @@
 #include <inttypes.h>
 #include "openssl-probe.h"
 #include "openssl-capture.h"
+#include "openssl-api-inventory.h"
 
 #define MAX_APPLICATION_BYTES 65536U
 #define DEADLINE_MS 24000
@@ -266,6 +267,49 @@ static int hold_socket_idle(int fd)
     return result < 0 && (errno == EAGAIN || errno == EWOULDBLOCK);
 }
 
+/* This report contains metadata observations only. No raw API values, secret,
+ * certificate bytes, fingerprint or authorization crosses the control pipe. */
+static void emit_api_inventory(const char *scenario, const char nonce[33],
+    uint64_t call_serial, const X10_API_INVENTORY *r)
+{
+    printf("{\"event\":\"api-inventory\",\"scenario\":\"%s\",\"nonce\":\"%s\","
+        "\"callSerial\":\"%" PRIu64 "\",\"schemaVersion\":%u,\"allowed\":%s,"
+        "\"reasons\":\"%" PRIu64 "\",\"probeReasons\":\"%" PRIu64 "\","
+        "\"ledgerCallSerial\":\"%" PRIu64 "\",\"server\":%d,"
+        "\"protocolVersion\":%d,\"initFinished\":%d,\"alpnLength\":%zu,"
+        "\"alpnMatchesProfile\":%s,\"finishedLength\":%zu,"
+        "\"peerFinishedLength\":%zu,\"finishedLengthsMatchPrivate\":%s,"
+        "\"verifyMode\":%d,\"verifyResultOk\":%s,"
+        "\"peerCertificatePresent\":%s,\"peerChainPresent\":%s,"
+        "\"verifiedChainPresent\":%s,\"sessionPresent\":%s,"
+        "\"sessionReused\":%s,\"serverOnlyNoClientAuth\":%s,"
+        "\"gettersMatchPrivate\":%s,\"exporterPreserved\":%s,"
+        "\"sessionApiPreserved\":%s,\"resumptionPreserved\":%s,"
+        "\"postHandshakeAuthPreserved\":%s,\"futureKeyUpdatePreserved\":%s,"
+        "\"immutableRepeatedInventory\":true,\"semanticExportImport\":false,"
+        "\"migration\":false,\"nativeNginxIntegration\":false}\n",
+        scenario, nonce, call_serial, r->schema_version,
+        r->allowed ? "true" : "false", r->reasons, r->probe_reasons,
+        r->ledger_call_serial, r->server, r->protocol_version,
+        r->init_finished, r->alpn_length,
+        r->alpn_matches_profile ? "true" : "false", r->finished_length,
+        r->peer_finished_length,
+        r->finished_lengths_match_private ? "true" : "false", r->verify_mode,
+        r->verify_result_ok ? "true" : "false",
+        r->peer_certificate_present ? "true" : "false",
+        r->peer_chain_present ? "true" : "false",
+        r->verified_chain_present ? "true" : "false",
+        r->session_present ? "true" : "false",
+        r->session_reused ? "true" : "false",
+        r->server_only_no_client_auth ? "true" : "false",
+        r->getters_match_private ? "true" : "false",
+        r->exporter_preserved ? "true" : "false",
+        r->session_api_preserved ? "true" : "false",
+        r->resumption_preserved ? "true" : "false",
+        r->post_handshake_auth_preserved ? "true" : "false",
+        r->future_key_update_preserved ? "true" : "false");
+}
+
 /* A retained copy has a second, generation-bound control decision. No TLS
  * call is made while this slot is live, including on refusal/interruption.
  * The slot's tombstone stays owned until cleanup has revoked the generation. */
@@ -394,13 +438,16 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
     static const char digits[] = "0123456789abcdef";
     unsigned char random[16];
     char nonce[33], line[96], expected[96], abort_line[96], capture_line[96];
-    char retained_line[96];
+    char retained_line[96], inventory_line[96];
     X10_CAPTURE_RESULT capture;
     X10_PROBE_RESULT third, fourth;
+    X10_API_INVENTORY inventory_first, inventory_second;
+    X10_PROBE_LEDGER inventory_before;
     struct pollfd descriptors[2];
     size_t i, at = 0;
     ssize_t got;
     int rc, length, abort_length, capture_length, retained_length;
+    int inventory_length, inventory_requested = 0;
     int capture_requested = 0, retained_requested = 0;
     int64_t now, hold_deadline, remaining;
     const char *failure = "hold_decision";
@@ -425,10 +472,15 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
         nonce, initial->ledger_call_serial);
     retained_length = snprintf(retained_line, sizeof(retained_line),
         "CAPTURE_HOLD %s %" PRIu64 "\n", nonce, initial->ledger_call_serial);
+    inventory_length = snprintf(inventory_line, sizeof(inventory_line),
+        "API_INVENTORY %s %" PRIu64 "\n", nonce,
+        initial->ledger_call_serial);
     if (length <= 0 || (size_t) length >= sizeof(expected)
         || abort_length <= 0 || (size_t) abort_length >= sizeof(abort_line)
         || capture_length <= 0 || (size_t) capture_length >= sizeof(capture_line)
-        || retained_length <= 0 || (size_t) retained_length >= sizeof(retained_line))
+        || retained_length <= 0 || (size_t) retained_length >= sizeof(retained_line)
+        || inventory_length <= 0
+        || (size_t) inventory_length >= sizeof(inventory_line))
         goto refused;
     if (!hold_socket_idle(peer->fd)) {
         failure = "hold_transport_activity"; goto refused;
@@ -473,7 +525,9 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
         && memcmp(line, capture_line, at) == 0;
     retained_requested = at == (size_t) retained_length
         && memcmp(line, retained_line, at) == 0;
-    if (!capture_requested && !retained_requested
+    inventory_requested = at == (size_t) inventory_length
+        && memcmp(line, inventory_line, at) == 0;
+    if (!capture_requested && !retained_requested && !inventory_requested
         && (at != (size_t) length || memcmp(line, expected, at) != 0)) goto refused;
     /* Reject bytes/EOF already queued after the one authorized decision.
      * This is a sample of the trusted control pipe, not a writer fence. */
@@ -494,7 +548,36 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
     if (!hold_socket_idle(peer->fd)) {
         failure = "hold_transport_activity"; goto refused;
     }
-    if (retained_requested) {
+    if (inventory_requested) {
+        /* Metadata only, before any retained slot is READY. The original
+         * hold deadline, decision binding and no-I/O discipline still apply. */
+        failure = "hold_api_inventory";
+        inventory_before = peer->ledger;
+        if (!x10_openssl_api_inventory(peer->ssl, &peer->ledger,
+                &inventory_first)
+            || !inventory_first.allowed || inventory_first.reasons != 0
+            || memcmp(&inventory_before, &peer->ledger,
+                       sizeof(inventory_before)) != 0
+            || !x10_openssl_api_inventory(peer->ssl, &peer->ledger,
+                &inventory_second)
+            || memcmp(&inventory_first, &inventory_second,
+                       sizeof(inventory_first)) != 0
+            || memcmp(&inventory_before, &peer->ledger,
+                       sizeof(inventory_before)) != 0
+            || !observe(peer, &third)
+            || memcmp(initial, &third, sizeof(third)) != 0)
+            goto refused;
+        now = now_ms();
+        if (now < 0 || now >= hold_deadline) {
+            failure = "hold_timeout"; goto refused;
+        }
+        if (interrupted) goto refused;
+        if (!hold_socket_idle(peer->fd)) {
+            failure = "hold_transport_activity"; goto refused;
+        }
+        emit_api_inventory(scenario, nonce, initial->ledger_call_serial,
+            &inventory_first);
+    } else if (retained_requested) {
         failure = hold_retained_capture(peer, scenario, initial, nonce,
             hold_deadline);
         if (failure != NULL) goto refused;

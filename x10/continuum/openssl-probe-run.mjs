@@ -18,6 +18,7 @@ const SOURCE = fileURLToPath(new URL('./openssl-probe-fixture.c', import.meta.ur
 const PEER_SOURCE = fileURLToPath(new URL('./openssl-peer-client.c', import.meta.url));
 const PROBE_SOURCE = fileURLToPath(new URL('./openssl-probe.c', import.meta.url));
 const CAPTURE_SOURCE = fileURLToPath(new URL('./openssl-capture.c', import.meta.url));
+const API_INVENTORY_SOURCE = fileURLToPath(new URL('./openssl-api-inventory.c', import.meta.url));
 const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
@@ -99,6 +100,8 @@ function nativeChannel(binary, args, children, signal, privateSecrets) {
   let outputBytes = 0;
   let stderrBytes = 0;
   let failure = false;
+  let failureCode = 'native_output_invalid';
+  let apiInventoryExpected, apiInventorySeen = false;
   let closed;
   const wake = () => { for (const callback of waiters) callback(); };
   process.child.stdout.on('data', chunk => {
@@ -111,8 +114,19 @@ function nativeChannel(binary, args, children, signal, privateSecrets) {
       try {
         const value = JSON.parse(line);
         if (!value || typeof value !== 'object' || typeof value.event !== 'string' || messages.length >= 32) throw new Error();
+        if (value.event === 'api-inventory') {
+          assertFixture(apiInventoryExpected !== undefined && !apiInventorySeen,
+            'live_api_inventory_event_order');
+          checkedApiInventoryEvent(value, apiInventoryExpected.nonce,
+            apiInventoryExpected.callSerial);
+          apiInventorySeen = true;
+        }
         messages.push(value);
-      } catch { failure = true; process.child.kill('SIGKILL'); }
+      } catch (error) {
+        if (error instanceof ProbeFixtureError && ['live_api_inventory_event_schema',
+          'live_api_inventory_event_order'].includes(error.code)) failureCode = error.code;
+        failure = true; process.child.kill('SIGKILL');
+      }
     }
     wake();
   });
@@ -124,7 +138,7 @@ function nativeChannel(binary, args, children, signal, privateSecrets) {
   process.closed.then(value => { closed = value; if (pending.length) failure = true; wake(); });
   const wait = (event, predicate = () => true) => bounded(new Promise((resolve, reject) => {
     const callback = () => {
-      if (failure) { waiters.delete(callback); reject(new ProbeFixtureError('native_output_invalid')); return; }
+      if (failure) { waiters.delete(callback); reject(new ProbeFixtureError(failureCode)); return; }
       const refused = messages.find(item => item.event === 'hold-refused');
       if (refused && event !== 'hold-refused') {
         waiters.delete(callback);
@@ -138,7 +152,13 @@ function nativeChannel(binary, args, children, signal, privateSecrets) {
     };
     waiters.add(callback); callback();
   }), 'native_event_timeout', DEADLINE_MS, signal);
-  return { ...process, messages, wait, keylog, validOutput: () => !failure && pending.length === 0 && (!keylog || keylog.valid()) };
+  return { ...process, messages, wait, keylog,
+    expectApiInventory(nonce, callSerial) {
+      assertFixture(apiInventoryExpected === undefined && !apiInventorySeen,
+        'live_api_inventory_event_order');
+      apiInventoryExpected = { nonce, callSerial };
+    },
+    validOutput: () => !failure && pending.length === 0 && (!keylog || keylog.valid()) };
 }
 // Only the peer fixture inherits fd 3. NSS material stays in bounded buffers,
 // never enters the JSON channel or files, and is scrubbed during final cleanup.
@@ -253,6 +273,8 @@ let preparing;
 let running = false;
 const sourceFiles = { fixture: SOURCE, peerClient: PEER_SOURCE, probe: PROBE_SOURCE,
   capture: CAPTURE_SOURCE, captureHeader: fileURLToPath(new URL('./openssl-capture.h', import.meta.url)),
+  apiInventory: API_INVENTORY_SOURCE,
+  apiInventoryHeader: fileURLToPath(new URL('./openssl-api-inventory.h', import.meta.url)),
   header: fileURLToPath(new URL('./openssl-probe.h', import.meta.url)),
   usage: fileURLToPath(new URL('./openssl-usage.h', import.meta.url)), patch: PATCH };
 const sourceHashes = async () => Object.fromEntries(await Promise.all(Object.entries(sourceFiles).map(async ([name, path]) => [name, sha256(await readFile(path))])));
@@ -275,7 +297,7 @@ export async function prepareProbeHarness() {
       const paths = build.privatePaths;
       const include = [paths.includeDir, paths.sourceIncludeDir, paths.sourceDir, paths.buildDir];
       await command(paths.compiler ?? 'cc', ['-std=c11', '-O2', '-Wall', '-Wextra', '-Werror', '-Wno-unused-parameter',
-        ...include.flatMap(path => ['-I', path]), '-o', binary, SOURCE, PROBE_SOURCE, CAPTURE_SOURCE,
+        ...include.flatMap(path => ['-I', path]), '-o', binary, SOURCE, PROBE_SOURCE, CAPTURE_SOURCE, API_INVENTORY_SOURCE,
         paths.libssl, paths.libcrypto, '-pthread', '-ldl'], children, owned.signal);
       await chmod(binary, 0o700);
       const peerBinary = join(directory, 'openssl-peer-client');
@@ -589,7 +611,7 @@ function checkRefusal(probe, scenario) {
     probe.ledgerLastCall === 3 && probe.ledgerLastOutcome === 1, 'unrelated_write_cleared_read_retry');
 }
 
-const HOLD_REFUSALS = new Set(['hold_nonce', 'hold_timeout', 'hold_decision', 'hold_aborted', 'hold_transport_activity', 'hold_changed', 'hold_capture']);
+const HOLD_REFUSALS = new Set(['hold_nonce', 'hold_timeout', 'hold_decision', 'hold_aborted', 'hold_transport_activity', 'hold_changed', 'hold_capture', 'hold_api_inventory']);
 function checkedHoldRefusal(message) {
   assertFixture(message?.event === 'hold-refused' && message.scenario === 'quiescent-live-hold' &&
     Object.keys(message).sort().join(',') === 'code,event,scenario' && HOLD_REFUSALS.has(message.code), 'live_hold_refusal_schema');
@@ -620,12 +642,12 @@ function holdDecision(input) {
   assertFixture(keys.length === expectedKeys.length && keys.every(key => expectedKeys.includes(key)), 'live_hold_decision');
   for (const key of ['action', 'nonce', 'callSerial']) assertFixture(Object.hasOwn(descriptors[key], 'value') && descriptors[key].enumerable, 'live_hold_decision');
   const { action: { value: action }, nonce: { value: nonce }, callSerial: { value: serial } } = descriptors;
-  assertFixture(['continue', 'abort', 'capture', 'capture-held'].includes(action) && typeof nonce === 'string' && /^[0-9a-f]{32}$/.test(nonce) &&
+  assertFixture(['continue', 'abort', 'capture', 'capture-held', 'inspect-api'].includes(action) && typeof nonce === 'string' && /^[0-9a-f]{32}$/.test(nonce) &&
     typeof serial === 'string' && /^[1-9][0-9]{0,19}$/.test(serial) && BigInt(serial) <= 0xffffffffffffffffn, 'live_hold_decision');
   // Validly shaped stale values deliberately reach C's independent binding check.
   if (capture) assertFixture(Object.hasOwn(descriptors.budget, 'value') && descriptors.budget.enumerable, 'live_hold_decision');
   return { action, nonce, callSerial: serial, budget: capture ? descriptors.budget.value : undefined,
-    line: `${action === 'continue' ? 'CONTINUE' : action === 'capture-held' ? 'CAPTURE_HOLD' : capture ? 'CAPTURE' : 'ABORT'} ${nonce} ${serial}\n` };
+    line: `${action === 'continue' ? 'CONTINUE' : action === 'capture-held' ? 'CAPTURE_HOLD' : capture ? 'CAPTURE' : action === 'inspect-api' ? 'API_INVENTORY' : 'ABORT'} ${nonce} ${serial}\n` };
 }
 
 function checkedCaptureEvent(message, nonce, callSerial) {
@@ -638,6 +660,37 @@ function checkedCaptureEvent(message, nonce, callSerial) {
     && message.nonce === nonce && message.callSerial === callSerial
     && flags.every(key => message[key] === true) && message.secretBytes === 64
     && message.ivBytes === 24 && message.sequenceBytes === 16, 'live_capture_event_schema');
+  return structuredClone(message);
+}
+
+function checkedApiInventoryEvent(message, nonce, callSerial) {
+  const truth = ['allowed', 'alpnMatchesProfile', 'finishedLengthsMatchPrivate',
+    'verifyResultOk', 'sessionPresent', 'serverOnlyNoClientAuth',
+    'gettersMatchPrivate', 'immutableRepeatedInventory'];
+  const unsupported = ['peerCertificatePresent', 'peerChainPresent',
+    'verifiedChainPresent', 'sessionReused', 'exporterPreserved',
+    'sessionApiPreserved', 'resumptionPreserved', 'postHandshakeAuthPreserved',
+    'futureKeyUpdatePreserved', 'semanticExportImport', 'migration',
+    'nativeNginxIntegration'];
+  const numbers = { schemaVersion: 1, server: 1, protocolVersion: 772,
+    initFinished: 1, alpnLength: 12, finishedLength: 32,
+    peerFinishedLength: 32, verifyMode: 0 };
+  const keys = ['event', 'scenario', 'nonce', 'callSerial', 'reasons',
+    'probeReasons', 'ledgerCallSerial', ...Object.keys(numbers),
+    ...truth, ...unsupported];
+  assertFixture(message?.event === 'api-inventory'
+    && message.scenario === 'quiescent-live-hold'
+    && Object.keys(message).sort().join(',') === keys.sort().join(',')
+    && message.nonce === nonce && message.callSerial === callSerial
+    && message.ledgerCallSerial === callSerial && message.reasons === '0'
+    && message.probeReasons === '0'
+    && Object.entries(numbers).every(([key, value]) => Number.isSafeInteger(message[key])
+      && !Object.is(message[key], -0) && message[key] === value)
+    && truth.every(key => message[key] === true)
+    && unsupported.every(key => message[key] === false),
+  'live_api_inventory_event_schema');
+  // The false *Preserved flags are this experiment's unsupported contract,
+  // not evidence that the source library cannot implement those APIs.
   return structuredClone(message);
 }
 
@@ -1107,7 +1160,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       }
       immutableRepeatedProbe = true;
     } else checkRefusal(first, scenario);
-    let liveHold;
+    let liveHold, apiInventory;
     if (liveHoldScenario) {
       await client.receivedPayload();
       const ready = checkedHoldEvent(await native.wait('hold-ready'), 'hold-ready', first);
@@ -1139,6 +1192,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       if (command.action === 'capture-held') capsuleExpected = { nonce: ready.nonce, callSerial: ready.callSerial };
       await verifyHarness(owned.signal);
       assertFixture(performance.now() - holdReceivedAt < ready.deadlineMilliseconds - 100, 'live_hold_deadline');
+      if (command.action === 'inspect-api') native.expectApiInventory(ready.nonce, ready.callSerial);
       await bounded(new Promise((resolve, reject) => native.child.stdin.write(command.line, error => error ? reject(new ProbeFixtureError('live_hold_write')) : resolve())), 'live_hold_write', 500, owned.signal);
       const reobserved = checkedProbe(await native.wait('probe', message => message.sample === 3), scenario);
       const repeatedReobserved = checkedProbe(await native.wait('probe', message => message.sample === 4), scenario);
@@ -1147,6 +1201,8 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       assertFixture(JSON.stringify(normalize(first)) === JSON.stringify(normalize(reobserved)), 'live_hold_metadata_changed');
       const capture = command.action === 'capture'
         ? checkedCaptureEvent(await native.wait('capture-cleared'), ready.nonce, ready.callSerial) : undefined;
+      const inventory = command.action === 'inspect-api'
+        ? checkedApiInventoryEvent(await native.wait('api-inventory'), ready.nonce, ready.callSerial) : undefined;
       let capsule;
       if (command.action === 'capture-held') {
         const retained = checkedCapsuleEvent(await native.wait('capsule-ready'), 'capsule-ready', ready.nonce, ready.callSerial);
@@ -1182,6 +1238,8 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       }
       const released = checkedHoldEvent(await native.wait('hold-released'), 'hold-released', first, ready.nonce);
       assertFixture(client.transportIntact(), 'live_hold_peer_closed_before_release');
+      if (inventory) apiInventory = freezePublic({ ...inventory,
+        sourceHeld: false, historical: true, exportAuthority: false });
       liveHold = { nonce: ready.nonce, callSerial: ready.callSerial, deadlineMilliseconds: callbackMilliseconds,
         nativeDeadlineMilliseconds: ready.deadlineMilliseconds, ready, reobserved, repeatedReobserved, released,
         sourceAliveBeforeAndAfterCallback: true, heldDuringCallback: true, sourceHeld: false, historical: true, decision: command.action,
@@ -1209,6 +1267,19 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     const done = await native.wait('done');
     const exit = await bounded(native.closed, 'native_exit', DEADLINE_MS, owned.signal);
     assertFixture(exit.code === 0 && exit.signal === null && native.validOutput() && done.scenario === scenario && done.observed === true && done.allowed === allowed && done.graceful === graceful, 'native_scenario_failed');
+    const inventoryEvents = native.messages.filter(message => message.event === 'api-inventory');
+    if (liveHold?.decision === 'inspect-api') {
+      const inventoryAt = native.messages.indexOf(inventoryEvents[0]);
+      const fourthAt = native.messages.findIndex(message => message.event === 'probe' && message.sample === 4);
+      const releasedAt = native.messages.findIndex(message => message.event === 'hold-released');
+      assertFixture(inventoryEvents.length === 1 && fourthAt >= 0
+        && inventoryAt > fourthAt && releasedAt > inventoryAt
+        && native.messages.filter(message => message.event === 'hold-ready').length === 1
+        && native.messages.filter(message => message.event === 'hold-released').length === 1
+        && !native.messages.some(message => ['capture-cleared', 'capsule-ready',
+          'capsule-cleared', 'hold-refused'].includes(message.event)),
+      'live_api_inventory_event_order');
+    } else assertFixture(inventoryEvents.length === 0, 'live_api_inventory_event_order');
     if (writeRetryCompleted) {
       const events = native.messages;
       const expected = ['ready', 'write-retry-ready', 'probe', 'probe', 'write-retry-completed', 'probe', 'probe', 'shutdown', 'done'];
@@ -1328,6 +1399,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       ...(eofLifecycle ? { eofLifecycle } : {}),
       ...(truncationLifecycle ? { truncationLifecycle } : {}),
       ...(liveHold ? { liveHold } : {}),
+      ...(apiInventory ? { apiInventory } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {
     scenarioFailure = owned.signal.aborted ? owned.signal.reason

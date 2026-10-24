@@ -731,3 +731,21 @@ Source-only capture теперь повторяет уничтожение FAILE
 прошли; неблагоприятные попытки сохранены, exact hosted CI нового кода pending.
 Semantic/API inventory остаётся следующим gate,
 не разрешением на importer, ownership transfer или migration.
+
+
+## Bounded held-source API metadata
+
+Opt-in `inspect-api` adds a read-only observation to the existing live hold.
+The actual unchanged ALPN is `continuum-c1`; Finished getters are queried with
+nonnull dummy/count0, so only lengths are observed. The server-only/no-client-auth
+class must not be mistaken for authenticated client identity. Session presence
+and non-reuse are observations, not session API or resumption preservation.
+
+Local final core21/process7/C1 27/C2a48 and isolated native20 passed, including
+four new actual-TLS environments and separately labeled25/21 synthetic controls.
+[Evidence](../evidence/continuum-api-inventory.json) retains adverse test/setup
+results and separates early channel schema rejection from final order checks.
+Malformed channel faults may SIGKILL a source that already released: no wipe
+or native no-I/O guarantee is claimed. Exact new implementation CI is pending;
+preceding cleanup `ad5351f4` is accepted in its own [receipt](../evidence/continuum-capture-protection-hosted.json).
+No complete API-value preservation, semantic capsule, import or migration exists.

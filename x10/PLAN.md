@@ -631,3 +631,16 @@ Source-only capture теперь повторяет уничтожение FAILE
 прошли; неблагоприятные попытки сохранены, exact hosted CI нового кода pending.
 Semantic/API inventory остаётся следующим gate,
 не разрешением на importer, ownership transfer или migration.
+
+
+## Continuum: read-only established API metadata
+
+Реализован bounded `inspect-api` на прежнем held source: ALPN, Finished lengths,
+no-client-auth class и session observations без копирования значений/секретов.
+Локально C2a48, core21/process7/C1 27 и native20 прошли. Прежний `ad5351f4`
+проверен exact hosted; новый metadata код ожидает собственного CI.
+[Контракт и проверки](evidence/continuum-api-inventory.json) не закрывают
+value-preserving semantic capsule/import/ownership/retirement gates.
+Следом — reviewed fuller protected source-state contract с actual required
+ALPN/Finished/auth-class semantics, явно unsupported API и future-control
+границами, до любого target I/O.

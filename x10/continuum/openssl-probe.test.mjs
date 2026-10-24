@@ -731,3 +731,11 @@ for (const { kind, name } of retainedCapsuleCases) {
 test('synthetic production capture TU refuses protection faults and retries failed mapping cleanup', { timeout: 650000 }, async () => {
   assert.equal((await checkCaptureProtection()).passed, true);
 });
+
+import { apiInventoryCases, checkApiInventory } from './api-inventory.test.mjs';
+
+for (const { kind, name } of apiInventoryCases) {
+  test(name, { timeout: 30000 }, async () => {
+    assert.equal((await checkApiInventory({ kind })).passed, true);
+  });
+}

@@ -181,3 +181,29 @@ failure and mandatory terminal source exit. Persistent OS failure, crash or
 SIGKILL still cannot promise explicit erasure; free is best-effort, not a
 general recoverable allocator. Exact cases and identities belong in the
 [protection evidence](../evidence/continuum-capture-protection.json).
+
+
+## Separate pre-capture API metadata observation
+
+`inspect-api` is a mutually exclusive opt-in decision on the existing live
+hold, not an operation on a READY retained slot. C binds `API_INVENTORY` to
+current nonce/call serial and the original three-second deadline, reobserves
+probe/ledger, compares two fully initialized API metadata structs and a final
+probe, then emits one receipt before ordinary source release. Existing hold
+ready/released schemas and continue/capture/capture-held paths are preserved.
+The READY source API allowlist above is not expanded by this separate action.
+
+The observer reports exact existing ALPN profile/length, local/peer Finished
+lengths queried with nonnull dummy/count0, server-only/no-client-auth status
+and non-reused session presence. It copies no Finished/certificate/secret
+values and calls no exporter, session serializer, refcounting getter or TLS I/O.
+Original library API capabilities are not disabled: false `*Preserved` flags
+state only that this experiment does not preserve them. Returned JS metadata
+is frozen historical data without source-held or export authority.
+
+Equal metadata does not preserve Finished values or complete authentication,
+exporter/session/resumption/PHA/KeyUpdate/provider state. Control-channel
+schema/order failure remains a strict failure, not an erasure proof: generic
+invalid-channel policy can SIGKILL after a real source release. Tests and
+[API evidence](../evidence/continuum-api-inventory.json) keep this separate from
+native binding refusal before release. No importer or ownership transfer is added.

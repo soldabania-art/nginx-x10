@@ -247,3 +247,39 @@ resumption/authentication/ALPN semantics, fresh provider objects, future record
 budget enforcement, target ownership and distinct-code retirement remain gates.
 The source remains the original TLS implementation after successful discard;
 no importer, migrated socket or native NGINX continuation has been implemented.
+
+
+## Held-source established API metadata: bounded new observation
+
+The opt-in `inspect-api` command observes the actual held source before any
+retained capsule is READY. It emits bounded metadata only, not API values or
+an exporter. Existing source record-material bytes/lifetimes are unchanged.
+
+| API obligation | Observed by the new code | Still not preserved |
+| --- | --- | --- |
+| Negotiated ALPN | `SSL_get0_alpn_selected`, exact existing `continuum-c1`/length12, pointer/length comparison stays inside C. | An arbitrary negotiated ALPN value or target API state. |
+| Local/peer Finished | `SSL_get_finished`/`SSL_get_peer_finished` with nonnull dummy/count0; lengths32 match `s3.tmp.finish_md_len/peer_finish_md_len`. | The actual verify_data bytes, MAC verification or target getter behavior; `previous_*_finished` is not substituted. |
+| Role and establishment | Server TLS1.3, init finished, same allowed existing probe and ledger. | Every hidden SSL field, arbitrary role/profile or concurrent-use safety. |
+| Peer authentication class | `SSL_VERIFY_NONE`, verify result OK, no peer certificate/chain/verified chain: explicitly no client authentication. | Authenticated client identity or certificate/session chain semantics. Existing independent client authenticates the server separately. |
+| Session presence | Existing session pointer stays private, not reused. | Session serialization, tickets, resumption or session API preservation. |
+| Future APIs | Exporter/session/resumption/PHA/future-KeyUpdate preservation flags remain false. | Those APIs are not invoked or proved absent; directional traffic secrets do not substitute for their state. |
+
+Two equal initialized metadata structs plus a final probe/ledger observation
+are checked before receipt/release under the original nonce/serial/deadline.
+This is not a bytewise all-object immutability or transport ownership proof.
+A synthetic boundary control changes Finished bytes without changing lengths
+and intentionally gets the same metadata, preserving this limitation.
+
+Public malformed/unrequested/duplicate API receipt gates reject early; full
+ordering relative to probe4/release is checked again at actual native close.
+Corrupted public receipts can be rejected after the native source released;
+SIGKILL is not explicit cleansing or a native no-I/O proof. The genuine stale
+native nonce/serial controls are separately refused before source release.
+
+Local C2a48, authored4 and independent4 actual-TLS environments, separate25/21
+synthetic controls and native20 passed; [evidence](../evidence/continuum-api-inventory.json)
+records exact scopes and adverse diagnostics. New hosted CI remains pending.
+This does not accept a complete semantic capsule or importer. Next review must
+specify/preserve actual required values under protected lifetime and define
+unsupported API behavior, provider reconstruction, future budgets/KeyUpdate,
+exclusive I/O owner, different code and actual source exit before continuation.

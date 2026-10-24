@@ -786,3 +786,27 @@ Source-only capture теперь повторяет уничтожение FAILE
 прошли; неблагоприятные попытки сохранены, exact hosted CI нового кода pending.
 Semantic/API inventory остаётся следующим gate,
 не разрешением на importer, ownership transfer или migration.
+
+
+## Checkpoint: held-source API metadata, not preserved values
+
+The existing bounded hold now supports opt-in `inspect-api`. Same-source
+ALPN/profile, Finished lengths, no-client-auth and session observations are
+compared twice with ledger/probe checks before release. No raw Finished values,
+exporter/session material, I/O or ownership grant is produced by the observer.
+The explicitly false `*Preserved` fields describe this experiment's unsupported
+contract, not the source library's capabilities.
+
+Final local C2a48 preserves the44 prefix;4 new actual-TLS environments include
+one positive, one native stale-serial refusal and two public receipt faults.
+Independent4 heldouts and separate synthetic25/21 cases passed; sanitizer runs
+reuse those cases, do not double their count, disable LSan and leave dependency
+libraries uninstrumented. Native20 is independently scoped. [Evidence](../evidence/continuum-api-inventory.json)
+keeps the initial test-policy mismatch and baseline missing capability.
+
+First verify exact new implementation CI; preceding `ad5351f4` actual jobs and
+artifacts already passed21/7/27/44 and native20. Then review/implement actual
+required ALPN/Finished/auth-class state in a fuller protected source contract.
+Metadata equality is not value preservation. Exporter/session/resumption/PHA,
+future budget/KeyUpdate, exclusive owner, distinct TLS code and old-code exit
+remain explicit gates before target reconstruction or native continuation.
