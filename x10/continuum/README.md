@@ -599,3 +599,20 @@ Official1083 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL.
 Exact implementation CI pending. Далее сначала controller counterexample/
 contract review, затем reusable capsule inventory/lifetime; importer/migration
 не реализованы. Это защищённая дополнительная копия, не whole-process защита.
+
+
+### Exact CI: transient protected source sample
+
+Implementation `fc7161945a5855e7c650609bef33cd4a66f2e448`: research push
+`40071366794` и PR `40071371690`, native push `40071366797` и PR
+`40071371664` завершены success, attempt1. Research logs подтверждают
+21/7/27/35; оба full native workflows и artifacts сверены с точным SHA.
+Hosted official1105 strictPASS/25SKIP/1expectedTODO-fail; local1083 отдельно.
+[Очищенная квитанция](../evidence/continuum-source-capture-hosted.json) сохраняет digests, отдельные event-head/PR-merge
+checkout/build identities и counts; raw artifacts/keys/logs не публикуются.
+
+Это transient record-material sample, который очищается до release, не
+reusable semantic capsule/exporter/importer или TLS-code migration.
+Локальный исходный controller expectedB/actualA сохранён: последующие local
+и hosted PASS не считаются его исправлением. Далее deterministic contract
+review/counterexample, затем fuller capsule API inventory/protected lifetime.

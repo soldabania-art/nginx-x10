@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-capture-ci-20261024T064949962Z",
-    "owner": "codex-coordinator",
-    "baseCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
-    "acquiredAtUTC": "2026-10-24T06:49:49.962Z",
-    "expiresAtUTC": "2026-10-24T07:07:48.247Z",
-    "task": "Verify exact source capture CI artifacts and retain adverse local controller evidence"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -28,45 +21,24 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40065524846",
-    "continuumStage": "Opt-in bounded source-side C hold locally and exact hosted verified; reviewed live preflight binding and protected-RAM source capture remain gated, no exporter or migration.",
+    "nativeCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40071366797",
+    "continuumStage": "Transient protected source record-material subset locally and exact hosted checked; reusable full semantic capsule, importer, ownership and migration remain unaccepted.",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-live-hold.json",
+    "continuumEvidence": "x10/evidence/continuum-source-capture.json",
     "nativeHostedCI": {
-      "state": "success",
-      "implementationCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
-      "pushRun": 40065524846,
-      "pullRequestRun": 40065528012,
+      "state": "success-with-local-adverse-observation-preserved",
+      "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+      "pushRun": 40071366797,
+      "pullRequestRun": 40071371664,
       "nativeJobIDs": [
-        120787898442,
-        120787899956
+        120805349215,
+        120805373115
       ],
-      "scope": "Both full workflows: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum"
+      "scope": "Full exact workflows/artifacts: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum. Local controller observation is not fixed by this PASS."
     },
-    "previousContinuumImplementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
+    "previousContinuumImplementationCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
     "previousContinuumHostedCI": {
-      "state": "success-metadata-preflight-only",
-      "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
-      "pushRun": 40062408179,
-      "pullRequestRun": 40062412144,
-      "researchJobIDs": [
-        120778582481,
-        120778596335
-      ],
-      "coreTests": 21,
-      "processTests": 7,
-      "c1Tests": 27,
-      "c2aTests": 23,
-      "c2aFamilies": {
-        "ordinaryActualTLSScenarios": 18,
-        "handledRuntimeSignals": 2,
-        "nonTLSCachedSourceControl": 1,
-        "syntheticGroups": 2
-      },
-      "scope": "Strict public metadata and planned record-budget arithmetic, not a live safepoint or semantic capsule"
-    },
-    "continuumHostedCI": {
       "state": "success-source-side-fixture-hold-only",
       "implementationCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
       "pushRun": 40065524807,
@@ -89,25 +61,52 @@
       },
       "scope": "Explicit source-side C barrier/decision/reobservation. Callback live-held phase differs from returned historical result; no exporter."
     },
-    "continuumImplementationCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
-    "implementationIdentityRule": "Source-side live hold accepted only for2debcc301 and frozen files. Callback-held phase and returned historical result differ. Event head, actual PR merge checkout and local/hosted build identities remain separate; no state migration claim.",
+    "continuumHostedCI": {
+      "state": "success-transient-source-record-material-only",
+      "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+      "pushRun": 40071366794,
+      "pullRequestRun": 40071371690,
+      "researchJobIDs": [
+        120805359305,
+        120805376450
+      ],
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 27,
+      "c2aTests": 35,
+      "c2aFamilies": {
+        "flatChecks": 35,
+        "ordinaryActualTLSScenarios": 28,
+        "handledOSSignals": 2,
+        "programmaticCancellationControl": 1,
+        "nonTLSCachedSourceControl": 1,
+        "syntheticGroups": 3
+      },
+      "scope": "Protected copy is cleared before source release; no reusable semantic capsule/export/import/migration."
+    },
+    "continuumImplementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+    "implementationIdentityRule": "Transient record-material sample accepted only forfc716194 and frozen files. Copy cleared before release; metadata/ledger/subset observation is not complete-state immutability. PR actual merge checkout differs from event head. No full semantic capsule or migration.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
-      "state": "success-local",
+      "state": "success-after-real-dependency-correction-with-initial-failure-preserved",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-live-hold-native-regression.json",
-      "freshCheckoutBinarySha256": "c931c45f8d33f6021fdf1df9220be19ab05415e49cf2bbb63f631793b5e49cf5",
-      "earlierCheckoutBinaryIdentityClaimed": false
+      "initialGroupsPassed": 17,
+      "initialGroupsFailed": 3,
+      "evidence": "x10/evidence/continuum-source-capture-native-regression.json",
+      "freshCheckoutBinarySha256": "4c293562f45467b6b9297445eb56e13a57db951046ed75f5296bb45939813372",
+      "earlierCheckoutBinaryIdentityClaimed": false,
+      "controllerCauseProven": false,
+      "controllerFixImplemented": false
     },
-    "previousNativeCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
+    "previousNativeCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
     "previousNativeHostedCI": {
       "state": "success",
-      "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
-      "pushRun": 40062408165,
-      "pullRequestRun": 40062412125,
+      "implementationCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
+      "pushRun": 40065524846,
+      "pullRequestRun": 40065528012,
       "nativeJobIDs": [
-        120778583953,
-        120778602689
+        120787898442,
+        120787899956
       ],
       "scope": "Both full workflows: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum"
     },
@@ -467,8 +466,8 @@
     "previousNativeLocalRegression": {
       "state": "success-local",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-capsule-preflight-native-regression.json",
-      "freshCheckoutBinarySha256": "8bbda0ddbae730a54e64f5ad58f7a270d0c9a5798601bda5f7bd0f01377f95a9",
+      "evidence": "x10/evidence/continuum-live-hold-native-regression.json",
+      "freshCheckoutBinarySha256": "c931c45f8d33f6021fdf1df9220be19ab05415e49cf2bbb63f631793b5e49cf5",
       "earlierCheckoutBinaryIdentityClaimed": false
     },
     "c2aShutdownLocal": {
@@ -865,7 +864,7 @@
       "migration": false
     },
     "sourceCaptureLocal": {
-      "state": "local-narrow-record-material-sample-hosted-pending",
+      "state": "success-local-and-exact-hosted-transient-subset-only",
       "evidence": "x10/evidence/continuum-source-capture.json",
       "nativeEvidence": "x10/evidence/continuum-source-capture-native-regression.json",
       "flatChecks": 35,
@@ -873,13 +872,29 @@
       "fullSemanticCapsule": false,
       "reusableCapsule": false,
       "semanticExportImport": false,
+      "migration": false,
+      "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448"
+    },
+    "sourceCaptureHosted": {
+      "state": "success-transient-subset-only",
+      "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+      "evidence": "x10/evidence/continuum-source-capture-hosted.json",
+      "researchRuns": [
+        40071366794,
+        40071371690
+      ],
+      "nativeRuns": [
+        40071366797,
+        40071371664
+      ],
+      "reusableSemanticCapsule": false,
+      "semanticExportImport": false,
       "migration": false
     }
   },
   "pendingVerification": [
-    "Exact research/native CI for the implementation commit carrying this source-capture checkpoint is pending; read the published ref SHA and inspect actual completed runs, not a lease/metadata SHA.",
     "New adverse native control observation: initial local aggregate17/20, managed-native-control68 TAP checks66pass2fail at unbound-initialization-state-reconciles-before-native-bind, expectedB gotA after apply. Two other failed groups had missing pinned HTTP3 clients. After installing11 hash-verified wheels into2 fresh venvs, same native source/binary aggregate20/20. This is not a controller fix and exact timing/cause remains unproven. Prioritize deterministic counterexample/contract review without weakening identity or sampled-generation guards.",
-    "Transient record-material-only source copy passed locally; full semantic capsule inventory, supported established-state APIs and reusable protected lifetime/abort contract remain unaccepted. No exporter/importer or source retirement proof.",
+    "Transient record-material-only source copy passed locally and in exact hosted CI; full semantic capsule inventory, supported established-state APIs and reusable protected lifetime/abort contract remain unaccepted. No exporter/importer or source retirement proof.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
     "C2a remaining inventory: other control/alert/partial/EOF states remain unsupported/fail-closed. Conservative initial-key sequence usage observation is accepted; future record budget and a complete first-profile C2b readiness inventory remain unaccepted.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
@@ -900,7 +915,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Transient protected record-material-only sample locally checked. Verify exact CI and controller observation first; then fuller reusable capsule API/lifetime contract before importer."
+      "goal": "Transient protected record-material-only sample locally and exact hosted checked. Resolve controller observation first; then fuller reusable capsule API/lifetime contract before importer."
     },
     {
       "id": "C3",
@@ -1027,6 +1042,15 @@
       "commitMessageRun": 40065528001,
       "versionBumpRun": 40065527976,
       "inheritedF5CLAFailedRun": 40065525850
+    },
+    {
+      "name": "Source capture implementation format checks",
+      "state": "success",
+      "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+      "whitespaceRun": 40071371657,
+      "commitMessageRun": 40071371721,
+      "versionBumpRun": 40071371642,
+      "inheritedF5CLAFailedRun": 40071368929
     }
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
@@ -1087,7 +1111,7 @@
     "runId": "continuum-capture-20261024T062248247Z",
     "baseCommit": "2398063d474aebf0f33835d35fb8ea3543d0688b",
     "publicationParent": "59fcb96c2527a5490ec5835036747c88c9d83be5",
-    "result": "Transient protected source record-material sample; canonical35 after real profile fix, core21/process7/C127, independent4actualTLS and4096synthetic controls. Native first17/20 then20/20 after actual HTTP3 dependency setup; controller observation unresolved, not fixed. Exact hosted CI pending. No reusable capsule/import/migration.",
+    "result": "Transient protected source record-material sample; canonical35 after real profile fix, core21/process7/C127, independent4actualTLS and4096synthetic controls. Native first17/20 then20/20 after actual HTTP3 dependency setup; controller observation unresolved, not fixed. Both exact research and native workflows succeeded; original local controller observation remains pending. No reusable capsule/import/migration.",
     "helpers": "1 temporary implementation/review assistant; only coordinator integrates and publishes",
     "nativeSourceChanged": false,
     "nativeVerificationSourceChanged": false,
@@ -1095,31 +1119,39 @@
     "perFileLedger": "x10/review/continuum-source-capture-ledger.json",
     "localEvidence": "x10/evidence/continuum-source-capture.json",
     "hostedVerification": {
-      "state": "pending-exact-implementation-SHA",
-      "implementationIdentity": "Commit containing this checkpoint; obtain its actual SHA from the verified publication ref."
-    }
+      "state": "success-transient-source-subset-only",
+      "researchRuns": [
+        40071366794,
+        40071371690
+      ],
+      "nativeRuns": [
+        40071366797,
+        40071371664
+      ]
+    },
+    "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448"
   },
   "lastVerificationReceipt": {
-    "runId": "continuum-hold-ci-20261024T051616343Z",
-    "baseCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
-    "publicationParent": "e76a9bef2f2dea2501881abfdd0cffd9daae1aa3",
-    "verifiedAtUTC": "2026-10-24T05:22:42.192723Z",
-    "implementationCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
+    "runId": "continuum-capture-ci-20261024T064949962Z",
+    "baseCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+    "publicationParent": "1eb71050340d88bb76618c25636c2b37eb25e526",
+    "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+    "verifiedAtUTC": "2026-10-24T06:51:12.667735+00:00",
     "runtimeSourcesChanged": false,
-    "spendingUSD": 0,
-    "evidence": "x10/evidence/continuum-live-hold-hosted.json",
-    "perFileLedger": "x10/review/continuum-live-hold-hosted-ledger.json",
+    "evidence": "x10/evidence/continuum-source-capture-hosted.json",
+    "perFileLedger": "x10/review/continuum-source-capture-hosted-ledger.json",
     "researchRuns": [
-      40065524807,
-      40065527979
+      40071366794,
+      40071371690
     ],
     "nativeRuns": [
-      40065524846,
-      40065528012
+      40071366797,
+      40071371664
     ],
-    "scope": "Trusted source-side C hold only; no exporter or ownership fence"
+    "spendingUSD": 0,
+    "scope": "Transient source record-material-only sample; no reusable semantic capsule or migration."
   },
-  "nextConcreteTask": "Verify exact source-capture implementation CI, then resolve the new native controller expectedB/actualA observation with a deterministic baseline/candidate contract check. Do not call a later pass a fix. After mandatory verification, define fuller reusable semantic capsule/API inventory and protected lifetime/abort contract before import. Preserve genuine held labels, unsupported-state refusal, future budgets, exclusive ownership, distinct TLS code and old-code retirement gates.",
+  "nextConcreteTask": "Resolve the new native controller expectedB/actualA observation with a deterministic baseline/candidate contract check: inspect the immediate fresh get assertion after apply versus the documented sampled-generation/health guarantee; a later PASS is not a fix. Then define fuller reusable semantic capsule/API inventory and protected lifetime/abort contract before import. Preserve genuine held labels, unsupported refusals, future budget enforcement, exclusive ownership, distinct TLS code and source retirement gates.",
   "previousDevelopmentPass": {
     "runId": "continuum-hold-20261024T045603013Z",
     "baseCommit": "fc0738abd1a6a8399d16707d6c60a1ca5fbdf415",
