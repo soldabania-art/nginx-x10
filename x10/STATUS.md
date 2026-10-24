@@ -885,3 +885,18 @@ TLS READ/control/shutdown, затем runner decision/nonce/reobservation barrie
 перед любым exporter. Остальные adapters/import/ownership/retirement
 gates остаются отдельными. [Inventory readiness](continuum/C2B-READINESS.md) фиксирует
 конкретные поля и code boundaries. Exact implementation CI pending.
+
+### Exact CI: metadata capsule preflight
+
+Implementation `deecc35825a706ac8b58d728f8f8a6e35b9d0986`: research push
+`40062408179` и PR `40062412144`, native push `40062408165` и PR
+`40062412125` завершены success. Оба research logs подтверждают21/7/27/23;
+полные native workflows, включая Unix/tenant gates, feature-off и alpha
+package/checksum, прошли. [Очищенная квитанция](evidence/continuum-capsule-preflight-hosted.json) сохраняет artifact
+digests и отдельные event-head/checkout/build identities. Hosted official:
+1105 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL; local1083 отдельно.
+
+Это приёмка metadata/budget arithmetic, не живого safepoint или exporter.
+Возвращённые snapshots являются post-cleanup историей. Далее — bounded C
+STEP после immutable pair до любого TLS READ/control/shutdown и runner
+decision/nonce/reobservation barrier, с abort/cleanup перед экспортом.

@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-preflight-ci-20261024T042819768Z",
-    "owner": "codex-coordinator",
-    "baseCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
-    "acquiredAtUTC": "2026-10-24T04:28:19.768Z",
-    "expiresAtUTC": "2026-10-24T05:13:19.768Z",
-    "task": "Exact preflight implementation CI verification and sanitized receipt"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -28,44 +21,24 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40058848929",
-    "continuumStage": "C2a initial-key usage observation locally and exact hosted verified; readiness review before a first bounded C2b capsule.",
+    "nativeCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40062408165",
+    "continuumStage": "Metadata capsule preflight locally and exact hosted verified; live C quiescence/decision barrier remains blocking before C2b exporter.",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-c2a-usage.json",
+    "continuumEvidence": "x10/evidence/continuum-capsule-preflight.json",
     "nativeHostedCI": {
       "state": "success",
-      "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
-      "pushRun": 40058848929,
-      "pullRequestRun": 40058853120,
+      "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
+      "pushRun": 40062408165,
+      "pullRequestRun": 40062412125,
       "nativeJobIDs": [
-        120767775848,
-        120767781356
+        120778583953,
+        120778602689
       ],
       "scope": "Both full workflows: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum"
     },
-    "previousContinuumImplementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
+    "previousContinuumImplementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
     "previousContinuumHostedCI": {
-      "state": "success-narrow-read-only-profile",
-      "implementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
-      "pushRun": 40054592561,
-      "pullRequestRun": 40054596847,
-      "researchJobIDs": [
-        120754686135,
-        120754700987
-      ],
-      "coreTests": 21,
-      "processTests": 7,
-      "c1Tests": 27,
-      "c2aTests": 21,
-      "c2aFamilies": {
-        "ordinaryActualTLSScenarios": 18,
-        "handledRuntimeSignals": 2,
-        "nonTLSCachedSourceControl": 1
-      },
-      "scope": "Single-record truncated-body EOF refusal, explicit relay fault injector, wire:null; no migration"
-    },
-    "continuumHostedCI": {
       "state": "success-narrow-read-only-profile",
       "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
       "pushRun": 40058848933,
@@ -86,27 +59,48 @@
       },
       "scope": "Conservative current-key sequence admission; synthetic high counters, no migration"
     },
-    "continuumImplementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
-    "implementationIdentityRule": "Truncated-body refusal tied to6cee238 and frozen sources. Workflow head identifies event; actual PR merge checkout/build identities are recorded separately. No state migration, full inventory or identical local/hosted binary claim.",
+    "continuumHostedCI": {
+      "state": "success-metadata-preflight-only",
+      "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
+      "pushRun": 40062408179,
+      "pullRequestRun": 40062412144,
+      "researchJobIDs": [
+        120778582481,
+        120778596335
+      ],
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 27,
+      "c2aTests": 23,
+      "c2aFamilies": {
+        "ordinaryActualTLSScenarios": 18,
+        "handledRuntimeSignals": 2,
+        "nonTLSCachedSourceControl": 1,
+        "syntheticGroups": 2
+      },
+      "scope": "Strict public metadata and planned record-budget arithmetic, not a live safepoint or semantic capsule"
+    },
+    "continuumImplementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
+    "implementationIdentityRule": "Metadata preflight accepted only for deecc358 and frozen files. Event head identifies workflow source; actual PR merge checkout/build identities are separate. No live state migration or identical local/hosted binary claim.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
       "state": "success-local",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-c2a-usage-native-regression.json",
-      "freshCheckoutBinarySha256": "9639f8c284b9d192a240608a9e2cabfbbdbb3e32e94a8d2f88d8216d9282d957",
+      "evidence": "x10/evidence/continuum-capsule-preflight-native-regression.json",
+      "freshCheckoutBinarySha256": "8bbda0ddbae730a54e64f5ad58f7a270d0c9a5798601bda5f7bd0f01377f95a9",
       "earlierCheckoutBinaryIdentityClaimed": false
     },
-    "previousNativeCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
+    "previousNativeCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
     "previousNativeHostedCI": {
       "state": "success",
-      "implementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
-      "pushRun": 40054592543,
-      "pullRequestRun": 40054596722,
+      "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+      "pushRun": 40058848929,
+      "pullRequestRun": 40058853120,
       "nativeJobIDs": [
-        120754681488,
-        120754690512
+        120767775848,
+        120767781356
       ],
-      "scope": "Both full workflows: official aggregate, Unix/tenant gates, feature-off build and alpha package/checksum"
+      "scope": "Both full workflows: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum"
     },
     "c2aLocal": {
       "state": "success-narrow-observation-profile",
@@ -464,8 +458,8 @@
     "previousNativeLocalRegression": {
       "state": "success-local",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-c2a-truncated-body-native-regression.json",
-      "freshCheckoutBinarySha256": "d25f13315ae5e0861951ad278ee9de3153006a24353a534dfd1e78bcf5b6b612",
+      "evidence": "x10/evidence/continuum-c2a-usage-native-regression.json",
+      "freshCheckoutBinarySha256": "9639f8c284b9d192a240608a9e2cabfbbdbb3e32e94a8d2f88d8216d9282d957",
       "earlierCheckoutBinaryIdentityClaimed": false
     },
     "c2aShutdownLocal": {
@@ -727,7 +721,7 @@
       "migration": false,
       "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8"
     },
-    "previousContinuumEvidence": "x10/evidence/continuum-c2a-truncated-body.json",
+    "previousContinuumEvidence": "x10/evidence/continuum-c2a-usage.json",
     "c2aPeerCloseHosted": {
       "state": "success",
       "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
@@ -796,7 +790,7 @@
       ]
     },
     "capsulePreflightLocal": {
-      "state": "success-local-exact-hosted-pending",
+      "state": "success-local-and-exact-hosted-metadata-only",
       "evidence": "x10/evidence/continuum-capsule-preflight.json",
       "nativeEvidence": "x10/evidence/continuum-capsule-preflight-native-regression.json",
       "flatChecks": 23,
@@ -806,11 +800,27 @@
       "syntheticGroups": 2,
       "liveSafepoint": false,
       "semanticExportImport": false,
+      "migration": false,
+      "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986"
+    },
+    "capsulePreflightHosted": {
+      "state": "success-metadata-only",
+      "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
+      "evidence": "x10/evidence/continuum-capsule-preflight-hosted.json",
+      "researchRuns": [
+        40062408179,
+        40062412144
+      ],
+      "nativeRuns": [
+        40062408165,
+        40062412125
+      ],
+      "liveSafepoint": false,
+      "semanticExportImport": false,
       "migration": false
     }
   },
   "pendingVerification": [
-    "Exact research/native CI for the result commit enclosing capsule-preflight evidence is pending; record exact SHA and workflow run IDs before hosted acceptance.",
     "C2b readiness blocker: current returned result.probe is post-cleanup metadata, not a held live safepoint. Implement live quiescence hold with bounded freshness and decision barrier before exporter; budget preflight is arithmetic only.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
     "C2a remaining inventory: other control/alert/partial/EOF states remain unsupported/fail-closed. Conservative initial-key sequence usage observation is accepted; future record budget and a complete first-profile C2b readiness inventory remain unaccepted.",
@@ -832,7 +842,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Metadata budget preflight locally verified; exact CI pending. Live quiescence hold/freshness/decision barrier is next readiness blocker before first C2b exporter."
+      "goal": "Metadata budget preflight locally and exact hosted verified. Live C STEP/freshness/runner decision barrier blocks first C2b exporter; unsupported states remain refused."
     },
     {
       "id": "C3",
@@ -941,6 +951,15 @@
       "commitMessageRun": 40058853180,
       "versionBumpRun": 40058853235,
       "inheritedF5CLAFailedRun": 40058850963
+    },
+    {
+      "name": "Capsule preflight implementation format checks",
+      "state": "success",
+      "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
+      "whitespaceRun": 40062412103,
+      "commitMessageRun": 40062412124,
+      "versionBumpRun": 40062412119,
+      "inheritedF5CLAFailedRun": 40062410068
     }
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
@@ -1001,36 +1020,45 @@
     "runId": "continuum-preflight-20261024T041732553Z",
     "baseCommit": "4e75ae7b153ff0991624dcf1fdedc2d4a394425c",
     "publicationParent": "d06523574c3333b90f24fbc750b27e9d60adb6b8",
-    "result": "Metadata-only initial-profile capsule preflight and directional future-record budget accounting; canonical23/core21/process7/C127/native20 locally passed. Exact hosted pending; post-cleanup probe is not a live safepoint.",
+    "result": "Metadata-only initial-profile preflight: canonical23/core21/process7/C127/native20 locally passed; both exact research and both native workflows completed success. Historical post-cleanup snapshots are not a live safepoint; exporter remains blocked.",
     "helpers": "5 temporary delegated roles; only coordinator integrates and publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
     "perFileLedger": "x10/review/continuum-capsule-preflight-ledger.json",
     "hostedVerification": {
-      "state": "pending-exact-result-commit"
-    }
+      "state": "success-metadata-only",
+      "researchRuns": [
+        40062408179,
+        40062412144
+      ],
+      "nativeRuns": [
+        40062408165,
+        40062412125
+      ]
+    },
+    "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986"
   },
   "lastVerificationReceipt": {
-    "runId": "continuum-usage-ci-20261024T033529835Z",
-    "baseCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
-    "publicationParent": "04d5e0fb9cfd5d399e7e7a6cfbef91351eb73d85",
-    "verifiedAtUTC": "2026-10-24T03:42:34.010387Z",
-    "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+    "runId": "continuum-preflight-ci-20261024T042819768Z",
+    "baseCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
+    "publicationParent": "ffc5f1d32ab96fbca7f7cf4bc81daa4456451dc0",
+    "verifiedAtUTC": "2026-10-24T04:35:07.359172Z",
+    "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986",
     "runtimeSourcesChanged": false,
     "spendingUSD": 0,
-    "evidence": "x10/evidence/continuum-c2a-usage-hosted.json",
-    "perFileLedger": "x10/review/continuum-c2a-usage-hosted-ledger.json",
+    "evidence": "x10/evidence/continuum-capsule-preflight-hosted.json",
+    "perFileLedger": "x10/review/continuum-capsule-preflight-hosted-ledger.json",
     "researchRuns": [
-      40058848933,
-      40058853171
+      40062408179,
+      40062412144
     ],
     "nativeRuns": [
-      40058848929,
-      40058853120
+      40062408165,
+      40062412125
     ],
-    "scope": "Read-only conservative sequence usage admission; no migration"
+    "scope": "Metadata-only preflight; live C quiescence barrier absent"
   },
-  "nextConcreteTask": "First verify exact capsule-preflight implementation CI. Then implement bounded C STEP after the immutable probe pair and before any TLS READ/control/shutdown; pair it with a bounded runner decision/nonce/reobservation barrier and abort/cleanup tests before any secret exporter. Current returned probe is post-cleanup metadata, not export authority. Preserve budgets and all unsupported-state refusals; import/target I/O/old-code retirement remain separate gates.",
+  "nextConcreteTask": "Implement bounded C STEP after the quiescent immutable probe pair and before any TLS READ/control/shutdown, with bounded runner decision/nonce/reobservation and abort/cleanup tests. Current returned probe is post-cleanup metadata, not export authority. Preserve budgets and unsupported-state refusals; importer/target I/O/old-code retirement remain separate gates.",
   "previousDevelopmentPass": {
     "runId": "continuum-usage-20261024T032250401Z",
     "baseCommit": "15641e756c3dad8eec925eeff698e564b8b213c5",
