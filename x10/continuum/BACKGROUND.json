@@ -3,7 +3,26 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": null,
+  "executionLease": {
+    "runId": "x10-service-preflight-20261024T221655000Z",
+    "owner": "codex-coordinator-service-preflight",
+    "baseCommit": "1eba23e2995cfe4ef7c5acff363bf87192c0b224",
+    "acquiredAtUTC": "2026-10-24T22:16:55.000Z",
+    "expiresAtUTC": "2026-10-24T22:56:55.000Z",
+    "task": "Fail-closed read-only nonroot user-service capability preflight; no service activation",
+    "allowedFiles": [
+      "x10/service/preflight.mjs",
+      "x10/service/preflight.test.mjs",
+      "x10/service/README.md",
+      ".github/workflows/x10-native.yml",
+      "x10/STATUS.md",
+      "x10/PLAN.md",
+      "x10/continuation-2026-10-24/GATES.json",
+      "x10/continuum/BACKGROUND.json",
+      "x10/evidence/g3-service-preflight.json",
+      "x10/review/g3-service-preflight-ledger.json"
+    ]
+  },
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
