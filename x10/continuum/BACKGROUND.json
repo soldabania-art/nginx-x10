@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-stop-ci-20261024T003810143Z",
-    "owner": "cloud-coordinator",
-    "baseCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
-    "acquiredAtUTC": "2026-10-24T00:38:10.143Z",
-    "expiresAtUTC": "2026-10-24T01:08:10.143Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -27,21 +21,21 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "1f92d82c42d0c49c82029412fd882036da4e6da8",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40033951855",
-    "continuumStage": "C2a EOF research remains verified; bounded alpha proc-disappearance fix verified locally, exact implementation CI pending.",
+    "nativeCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40045814679",
+    "continuumStage": "C2a EOF research remains accepted; bounded alpha disappearance fix accepted locally and exact hosted. Remaining state/usage inventory before C2b.",
     "continuumNativeIntegration": false,
     "continuumEvidence": "x10/evidence/continuum-c2a-eof.json",
     "nativeHostedCI": {
       "state": "success",
-      "implementationCommit": "1f92d82c42d0c49c82029412fd882036da4e6da8",
-      "pushRun": 40033951855,
-      "pullRequestRun": 40033955843,
+      "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+      "pushRun": 40045814679,
+      "pullRequestRun": 40045819101,
       "nativeJobIDs": [
-        120688801151,
-        120688817731
+        120727213654,
+        120727223739
       ],
-      "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
+      "scope": "Both full native workflows, including official aggregate, tenant cache/Unix checks, feature-off build and alpha package/checksum"
     },
     "previousContinuumImplementationCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
     "previousContinuumHostedCI": {
@@ -80,7 +74,7 @@
       "scope": "Unexpected post-echo transport FIN/fatal error294 refusal research; native alpha CI investigation remains open."
     },
     "continuumImplementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-    "implementationIdentityRule": "New alpha runtime is identified by frozen runtime hash and resulting implementation Git commit. Historical d4bb2bc failure/retry retained; a modeled disappearance fix does not prove historical cause. Last full native hosted acceptance remains1f92d82 until new exact CI.",
+    "implementationIdentityRule": "Alpha runtime fix and hosted native profile are tied to95fb43b. Original d4bb2bc CI failure/retry remain preserved and exact historical cause remains unproven. Research source implementation remainsd4bb2bc; PR95fb43b rechecks unchanged probe19, push research correctly skipped.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
       "state": "success-local",
@@ -89,11 +83,17 @@
       "freshCheckoutBinarySha256": "be3d514ad74fd08a59709cad9fb246c897c93abd9bf58897c1845e3a84c865f5",
       "earlierCheckoutBinaryIdentityClaimed": false
     },
-    "previousNativeCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
+    "previousNativeCommit": "1f92d82c42d0c49c82029412fd882036da4e6da8",
     "previousNativeHostedCI": {
       "state": "success",
-      "pushRun": 39979729141,
-      "scope": "Full native workflow including official aggregate, Unix gates, feature-off build and alpha packaging"
+      "implementationCommit": "1f92d82c42d0c49c82029412fd882036da4e6da8",
+      "pushRun": 40033951855,
+      "pullRequestRun": 40033955843,
+      "nativeJobIDs": [
+        120688801151,
+        120688817731
+      ],
+      "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
     },
     "c2aLocal": {
       "state": "success-narrow-observation-profile",
@@ -122,117 +122,18 @@
     },
     "c2aHostedCheckpoint": "x10/continuum/C2A-CHECKPOINT.md",
     "nativeCandidateCI": {
-      "state": "open-alpha-stop-identity-investigation",
-      "implementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-      "pushRun": 40040045133,
-      "pullRequestRun": 40040050401,
-      "pullRequestJob": 120708803304,
-      "originalFailedPushJob": 120708800093,
-      "originalPushAttempt": 1,
-      "latestPushAttempt": {
-        "run": 40040045133,
-        "attempt": 2,
-        "headSha": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-        "status": "completed",
-        "conclusion": "success",
-        "jobId": 120711043827,
-        "steps": [
-          {
-            "name": "Set up job",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Build dependencies and optional test clients",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Install pinned HTTP3 interoperability client",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Install independent HTTP3 HEAD client",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Compile native profile",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Native regressions and pinned official compatibility sample",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Verify native tenant cache contract experiment",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Verify private Unix control transport",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Build profile without control API",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Package local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Checksum local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Preserve JSON evidence",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Preserve local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Complete job",
-            "status": "completed",
-            "conclusion": "success"
-          }
-        ]
-      },
-      "originalFailurePreserved": true,
-      "nativeSourceChanged": false,
-      "causeProven": false,
-      "fixImplemented": false
+      "state": "accepted-narrow-alpha-disappearance-fix",
+      "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+      "pushRun": 40045814679,
+      "pullRequestRun": 40045819101,
+      "nativeJobIDs": [
+        120727213654,
+        120727223739
+      ],
+      "historicalFailurePreserved": true,
+      "historicalExactCauseProven": false,
+      "fixScope": "Controlled inconsistent proc snapshot followed by exact ENOENT; no general proc/signal race guarantee",
+      "evidence": "x10/evidence/alpha-stop-hosted.json"
     },
     "previousC1NativeHostedCI": {
       "state": "success",
@@ -666,18 +567,143 @@
       "earlierCheckoutBinaryIdentityClaimed": false
     },
     "alphaStopLocal": {
-      "state": "success-local-exact-hosted-pending",
+      "state": "success-local-and-exact-hosted",
       "evidence": "x10/evidence/alpha-stop-identity.json",
       "nativeEvidence": "x10/evidence/alpha-stop-native-regression.json",
       "syntheticTests": 28,
       "independentSyntheticControls": 15,
       "nativeGroups": 20,
       "runtimeSha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51",
-      "historicalCICauseProven": false
+      "historicalCICauseProven": false,
+      "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214"
+    },
+    "previousNativeCandidateCI": {
+      "state": "open-alpha-stop-identity-investigation",
+      "implementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
+      "pushRun": 40040045133,
+      "pullRequestRun": 40040050401,
+      "pullRequestJob": 120708803304,
+      "originalFailedPushJob": 120708800093,
+      "originalPushAttempt": 1,
+      "latestPushAttempt": {
+        "run": 40040045133,
+        "attempt": 2,
+        "headSha": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
+        "status": "completed",
+        "conclusion": "success",
+        "jobId": 120711043827,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build dependencies and optional test clients",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install pinned HTTP3 interoperability client",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install independent HTTP3 HEAD client",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Compile native profile",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Native regressions and pinned official compatibility sample",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify native tenant cache contract experiment",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify private Unix control transport",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build profile without control API",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Package local Linux alpha",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checksum local Linux alpha",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Preserve JSON evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Preserve local Linux alpha",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      "originalFailurePreserved": true,
+      "nativeSourceChanged": false,
+      "causeProven": false,
+      "fixImplemented": false
+    },
+    "alphaStopHosted": {
+      "state": "success",
+      "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+      "evidence": "x10/evidence/alpha-stop-hosted.json",
+      "nativeRuns": [
+        40045814679,
+        40045819101
+      ],
+      "researchPRRun": 40045819013,
+      "researchPushSkipped": true
     }
   },
   "pendingVerification": [
-    "Priority: verify exact new alpha-stop implementation SHA native push/PR CI (including alpha lifecycle and package gates). Controlled disappearance race has baseline/candidate evidence; historical d4bb2bc attempt1 exact cause remains unproven, original failure and one diagnostic retry preserved. If failure recurs, retain adverse evidence and investigate before new inventory.",
+    "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
     "C2a remaining inventory: other control/alert/partial/EOF/shutdown and sequence/key usage admission. Normal server-first shutdown and post-echo unexpected FIN refusal observed locally; full inventory and overlap admission remain unsupported.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
@@ -697,7 +723,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Alpha disappearance fix locally verified; exact new native CI pending. Historical stop CI cause remains unproven. Then remaining C2a inventory/usage before C2b."
+      "goal": "Alpha disappearance fix95fb43b verified locally and hosted; historical exact cause unproven. Next bounded C2a alert/control/partial and sequence/key usage inventory before C2b."
     },
     {
       "id": "C3",
@@ -864,10 +890,158 @@
     "spendingUSD": 0,
     "perFileLedger": "x10/review/alpha-stop-identity-ledger.json",
     "hostedVerification": {
-      "state": "pending-exact-implementation-SHA"
-    }
+      "state": "success-narrow-alpha-candidate",
+      "nativeRuns": [
+        40045814679,
+        40045819101
+      ],
+      "researchPRRun": 40045819013,
+      "researchPushRun": 40045814644,
+      "researchPushScopeOnly": true
+    },
+    "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214"
   },
   "lastVerificationReceipt": {
+    "runId": "continuum-stop-ci-20261024T003810143Z",
+    "baseCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+    "publicationParent": "727825739c5257d46861e226a83ba924eecd8c17",
+    "verifiedAtUTC": "2026-10-24T00:44:54.090Z",
+    "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+    "runtimeSourcesChanged": false,
+    "spendingUSD": 0,
+    "evidence": "x10/evidence/alpha-stop-hosted.json",
+    "perFileLedger": "x10/review/alpha-stop-hosted-ledger.json",
+    "nativeRuns": [
+      40045814679,
+      40045819101
+    ],
+    "researchPRRun": 40045819013,
+    "researchPushSkipped": true,
+    "historicalFailureAndCauseUncertaintyPreserved": true
+  },
+  "nextConcreteTask": "Resume one bounded C2a alert/control/partial or sequence/key usage inventory case from C2A-PROFILE; first inspect any new native failure. Semantic export/import, actual TLS code-version migration and native integration remain pending.",
+  "previousDevelopmentPass": {
+    "runId": "continuum-eof-20261023T231937617Z",
+    "baseCommit": "6a24fc94fbec1f85cb73cd7abcb70d88aa3c6807",
+    "publicationParent": "69d8d564ae4199da0515e30e47280ec3d874d5de",
+    "result": "Canonical19/19, independent2 actualTLS heldouts, core21/process7, C1 27 and native20 passed locally; both exact research runs and native PR succeeded. Initial native push failed alpha lifecycle19/20. Original adverse result and one same-SHA retry retained; no stop-race fix or full native candidate acceptance.",
+    "helpers": "5 temporary delegated roles; only coordinator integrates/publishes",
+    "nativeSourceChanged": false,
+    "spendingUSD": 0,
+    "perFileLedger": "x10/review/continuum-c2a-eof-ledger.json",
+    "hostedVerification": {
+      "state": "research-success-native-investigation-pending",
+      "researchRuns": [
+        40040044905,
+        40040050370
+      ],
+      "nativePullRequestRun": 40040050401,
+      "nativePushRun": 40040045133,
+      "initialNativePushFailurePreserved": true,
+      "latestNativePush": {
+        "run": 40040045133,
+        "attempt": 2,
+        "headSha": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
+        "status": "completed",
+        "conclusion": "success",
+        "jobId": 120711043827,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build dependencies and optional test clients",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install pinned HTTP3 interoperability client",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Install independent HTTP3 HEAD client",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Compile native profile",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Native regressions and pinned official compatibility sample",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify native tenant cache contract experiment",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify private Unix control transport",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build profile without control API",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Package local Linux alpha",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Checksum local Linux alpha",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Preserve JSON evidence",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Preserve local Linux alpha",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    },
+    "implementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8"
+  },
+  "previousVerificationReceipt": {
     "runId": "continuum-eof-ci-20261023T233122995Z",
     "baseCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
     "publicationParent": "b0c7b60d332d700e0be5d6f50f41eacafc4067f1",
@@ -1464,923 +1638,6 @@
         }
       ],
       "selfDigest": "BACKGROUND after bytes identified by Git tree/commit, no recursive digest."
-    }
-  },
-  "nextConcreteTask": "First exact alpha-stop implementation CI receipt; investigate any renewed identity failure without weakening guards. If required gates pass, resume bounded C2a alert/partial/control and sequence/key usage inventory before C2b.",
-  "previousDevelopmentPass": {
-    "runId": "continuum-eof-20261023T231937617Z",
-    "baseCommit": "6a24fc94fbec1f85cb73cd7abcb70d88aa3c6807",
-    "publicationParent": "69d8d564ae4199da0515e30e47280ec3d874d5de",
-    "result": "Canonical19/19, independent2 actualTLS heldouts, core21/process7, C1 27 and native20 passed locally; both exact research runs and native PR succeeded. Initial native push failed alpha lifecycle19/20. Original adverse result and one same-SHA retry retained; no stop-race fix or full native candidate acceptance.",
-    "helpers": "5 temporary delegated roles; only coordinator integrates/publishes",
-    "nativeSourceChanged": false,
-    "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-eof-ledger.json",
-    "hostedVerification": {
-      "state": "research-success-native-investigation-pending",
-      "researchRuns": [
-        40040044905,
-        40040050370
-      ],
-      "nativePullRequestRun": 40040050401,
-      "nativePushRun": 40040045133,
-      "initialNativePushFailurePreserved": true,
-      "latestNativePush": {
-        "run": 40040045133,
-        "attempt": 2,
-        "headSha": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-        "status": "completed",
-        "conclusion": "success",
-        "jobId": 120711043827,
-        "steps": [
-          {
-            "name": "Set up job",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Build dependencies and optional test clients",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Install pinned HTTP3 interoperability client",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Install independent HTTP3 HEAD client",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Compile native profile",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Native regressions and pinned official compatibility sample",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Verify native tenant cache contract experiment",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Verify private Unix control transport",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Build profile without control API",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Package local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Checksum local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Preserve JSON evidence",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Preserve local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Complete job",
-            "status": "completed",
-            "conclusion": "success"
-          }
-        ]
-      }
-    },
-    "implementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8"
-  },
-  "previousVerificationReceipt": {
-    "runId": "continuum-shutdown-ci-20261023T223043549Z",
-    "baseCommit": "1f92d82c42d0c49c82029412fd882036da4e6da8",
-    "publicationParent": "f6823054b8edc79c210235cf9a323cf87f86819e",
-    "verifiedAtUTC": "2026-10-23T22:35:22.871Z",
-    "files": [
-      "x10/continuum/BACKGROUND.json",
-      "x10/continuum/C2A-CHECKPOINT.md"
-    ],
-    "runtimeSourcesChanged": false,
-    "spendingUSD": 0,
-    "exactHostedVerification": {
-      "schemaVersion": 1,
-      "implementationCommit": "1f92d82c42d0c49c82029412fd882036da4e6da8",
-      "verifiedAtUTC": "2026-10-23T22:35:22.871Z",
-      "allFourCompletedSuccess": true,
-      "runs": [
-        {
-          "id": 40033951784,
-          "name": "X10 Continuum research checks",
-          "event": "push",
-          "headSha": "1f92d82c42d0c49c82029412fd882036da4e6da8",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40033951784",
-          "jobs": [
-            {
-              "id": 120688738386,
-              "name": "scope",
-              "status": "completed",
-              "conclusion": "success",
-              "steps": [
-                {
-                  "name": "Set up job",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Check scope fail-closed controls",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Classify exact event delta",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Complete job",
-                  "status": "completed",
-                  "conclusion": "success"
-                }
-              ]
-            },
-            {
-              "id": 120688803926,
-              "name": "research",
-              "status": "completed",
-              "conclusion": "success",
-              "steps": [
-                {
-                  "name": "Set up job",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Build dependencies for TLS interoperability and isolated source probe",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Independent record and state counterexamples",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Same TCP connection across research worker versions",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Real TLS handshake and independent record observer",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Pinned OpenSSL read-only state probe",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Complete job",
-                  "status": "completed",
-                  "conclusion": "success"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": 40033956592,
-          "name": "X10 Continuum research checks",
-          "event": "pull_request",
-          "headSha": "1f92d82c42d0c49c82029412fd882036da4e6da8",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40033956592",
-          "jobs": [
-            {
-              "id": 120688755908,
-              "name": "scope",
-              "status": "completed",
-              "conclusion": "success",
-              "steps": [
-                {
-                  "name": "Set up job",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Check scope fail-closed controls",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Classify exact event delta",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Complete job",
-                  "status": "completed",
-                  "conclusion": "success"
-                }
-              ]
-            },
-            {
-              "id": 120688836523,
-              "name": "research",
-              "status": "completed",
-              "conclusion": "success",
-              "steps": [
-                {
-                  "name": "Set up job",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Build dependencies for TLS interoperability and isolated source probe",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Independent record and state counterexamples",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Same TCP connection across research worker versions",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Real TLS handshake and independent record observer",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Pinned OpenSSL read-only state probe",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Complete job",
-                  "status": "completed",
-                  "conclusion": "success"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": 40033951855,
-          "name": "X10 native compatibility",
-          "event": "push",
-          "headSha": "1f92d82c42d0c49c82029412fd882036da4e6da8",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40033951855",
-          "jobs": [
-            {
-              "id": 120688739243,
-              "name": "scope",
-              "status": "completed",
-              "conclusion": "success",
-              "steps": [
-                {
-                  "name": "Set up job",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Check scope fail-closed controls",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Classify exact event delta",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Complete job",
-                  "status": "completed",
-                  "conclusion": "success"
-                }
-              ]
-            },
-            {
-              "id": 120688801151,
-              "name": "linux",
-              "status": "completed",
-              "conclusion": "success",
-              "steps": [
-                {
-                  "name": "Set up job",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Build dependencies and optional test clients",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Install pinned HTTP3 interoperability client",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Install independent HTTP3 HEAD client",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Compile native profile",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Native regressions and pinned official compatibility sample",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Verify native tenant cache contract experiment",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Verify private Unix control transport",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Build profile without control API",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Package local Linux alpha",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Checksum local Linux alpha",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Preserve JSON evidence",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Preserve local Linux alpha",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Complete job",
-                  "status": "completed",
-                  "conclusion": "success"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": 40033955843,
-          "name": "X10 native compatibility",
-          "event": "pull_request",
-          "headSha": "1f92d82c42d0c49c82029412fd882036da4e6da8",
-          "status": "completed",
-          "conclusion": "success",
-          "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40033955843",
-          "jobs": [
-            {
-              "id": 120688754835,
-              "name": "scope",
-              "status": "completed",
-              "conclusion": "success",
-              "steps": [
-                {
-                  "name": "Set up job",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Check scope fail-closed controls",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Classify exact event delta",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Complete job",
-                  "status": "completed",
-                  "conclusion": "success"
-                }
-              ]
-            },
-            {
-              "id": 120688817731,
-              "name": "linux",
-              "status": "completed",
-              "conclusion": "success",
-              "steps": [
-                {
-                  "name": "Set up job",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Build dependencies and optional test clients",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Install pinned HTTP3 interoperability client",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Install independent HTTP3 HEAD client",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Compile native profile",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Native regressions and pinned official compatibility sample",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Verify native tenant cache contract experiment",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Verify private Unix control transport",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Build profile without control API",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Package local Linux alpha",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Checksum local Linux alpha",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Preserve JSON evidence",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Preserve local Linux alpha",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-                  "status": "completed",
-                  "conclusion": "success"
-                },
-                {
-                  "name": "Complete job",
-                  "status": "completed",
-                  "conclusion": "success"
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "researchLogCounts": [
-        {
-          "jobId": 120688803926,
-          "reports": [
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-record-and-state-kernel",
-              "passed": true,
-              "testFiles": 2,
-              "scope": "in-memory-record-and-state-only",
-              "liveTlsProcessHandover": false,
-              "counts": {
-                "tests": 21,
-                "suites": 0,
-                "pass": 21,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            },
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-real-handshake-and-record-observation",
-              "passed": true,
-              "testFiles": 2,
-              "scope": "real-handshake-and-record-observation-only",
-              "nativeNginxMigration": false,
-              "realSessionMigration": false,
-              "counts": {
-                "tests": 27,
-                "suites": 0,
-                "pass": 27,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            },
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-pinned-openssl-state-probe",
-              "passed": true,
-              "testFiles": 1,
-              "scope": "pinned-openssl-read-only-state-observation",
-              "nativeNginxMigration": false,
-              "realSessionMigration": false,
-              "counts": {
-                "tests": 18,
-                "suites": 0,
-                "pass": 18,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            }
-          ],
-          "process": {
-            "tests": 7,
-            "pass": 7,
-            "fail": 0,
-            "cancelled": 0,
-            "skipped": 0,
-            "todo": 0
-          }
-        },
-        {
-          "jobId": 120688836523,
-          "reports": [
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-record-and-state-kernel",
-              "passed": true,
-              "testFiles": 2,
-              "scope": "in-memory-record-and-state-only",
-              "liveTlsProcessHandover": false,
-              "counts": {
-                "tests": 21,
-                "suites": 0,
-                "pass": 21,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            },
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-real-handshake-and-record-observation",
-              "passed": true,
-              "testFiles": 2,
-              "scope": "real-handshake-and-record-observation-only",
-              "nativeNginxMigration": false,
-              "realSessionMigration": false,
-              "counts": {
-                "tests": 27,
-                "suites": 0,
-                "pass": 27,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            },
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-pinned-openssl-state-probe",
-              "passed": true,
-              "testFiles": 1,
-              "scope": "pinned-openssl-read-only-state-observation",
-              "nativeNginxMigration": false,
-              "realSessionMigration": false,
-              "counts": {
-                "tests": 18,
-                "suites": 0,
-                "pass": 18,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            }
-          ],
-          "process": {
-            "tests": 7,
-            "pass": 7,
-            "fail": 0,
-            "cancelled": 0,
-            "skipped": 0,
-            "todo": 0
-          }
-        }
-      ],
-      "formatChecks": [
-        {
-          "id": 40033955959,
-          "name": "Check Whitespace",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 40033955950,
-          "name": "Check Commit Message(s)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 40033955902,
-          "name": "Check Version Bump",
-          "status": "completed",
-          "conclusion": "success"
-        }
-      ],
-      "inheritedF5CLA": {
-        "id": 40033954017,
-        "status": "completed",
-        "conclusion": "failure",
-        "agreementAccepted": false
-      },
-      "runtimeCheckoutScope": "Workflow head SHA identifies the implementation event. PR merge checkout build identities remain distinct; hosted success is not an identical local binary claim.",
-      "publication": {
-        "rawRuntimeLogsSaved": false,
-        "sessionKeysSaved": false,
-        "hostPathsAndPIDsSaved": false
-      }
-    },
-    "perFileLedger": {
-      "beforeHashReference": "f6823054b8edc79c210235cf9a323cf87f86819e",
-      "entries": [
-        {
-          "path": "x10/continuum/BACKGROUND.json",
-          "beforeSha256": "7ced4caaed39f019e30113f2dd45504a96e3033d87ddfcc8ee5536906bccdea2"
-        },
-        {
-          "path": "x10/continuum/C2A-CHECKPOINT.md",
-          "beforeSha256": "19a2b3dbd18b481430e2505aa54968189b3c2d1c0689ea727ed5419e92fcfb6d",
-          "afterSha256": "ebfd21ca3d0bf8144904671f644a9b215ecceb25531af388a23d3301295ebf2b"
-        }
-      ],
-      "selfDigest": "BACKGROUND after bytes are identified by Git tree/commit; no recursive digest."
     }
   }
 }

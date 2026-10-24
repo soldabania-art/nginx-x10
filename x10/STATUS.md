@@ -752,3 +752,14 @@ Baseline даёт контролируемый `runtime_identity`; candidate п�
 ожидает exact-SHA CI. Далее — сначала его результаты и возможные повторные
 сбои, затем C2a alert/partial/control и sequence/key usage inventory. Атомарный
 снимок `/proc`, pidfd fencing и перенос NGINX/TLS этим изменением не реализованы.
+
+### Exact CI: alpha disappearance fix
+
+Implementation `95fb43bb2f7c5795d341e638f7b287f7dd443214`: native push
+`40045814679` и PR `40045819101` завершены success со всеми основными steps.
+Research PR `40045819013` перепроверил неизменный C2a; research push
+`40045814644` завершён success только scope, дорогой job skipped. Это
+не новая TLS-проверка в push. [Очищенная CI-квитанция](evidence/alpha-stop-hosted.json).
+Первоначальный stop-сбой `d4bb2bc` и недоказанность его точной причины
+сохранены. Далее — один ограниченный C2a state/usage case перед C2b;
+перенос TLS/NGINX и pidfd fencing не реализованы.
