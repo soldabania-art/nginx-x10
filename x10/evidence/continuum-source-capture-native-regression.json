@@ -1,0 +1,1191 @@
+{
+  "schemaVersion": 1,
+  "suite": "source-capture-native-regression",
+  "baseCommit": "2398063d474aebf0f33835d35fb8ea3543d0688b",
+  "leaseCommit": "59fcb96c2527a5490ec5835036747c88c9d83be5",
+  "build": {
+    "exitCode": 0,
+    "elapsedMs": 17060,
+    "stdoutBytes": 118678,
+    "stderrBytes": 0
+  },
+  "buildCommand": [
+    "bash",
+    "x10/build.sh",
+    "--jobs",
+    "4"
+  ],
+  "installed": false,
+  "binary": {
+    "sha256": "4c293562f45467b6b9297445eb56e13a57db951046ed75f5296bb45939813372",
+    "bytes": 8553080,
+    "mode": "0755",
+    "executable": true
+  },
+  "compiler": {
+    "command": "cc",
+    "version": "cc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+    "flags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g"
+  },
+  "configureOptions": [
+    "--with-http_ssl_module",
+    "--with-http_v2_module",
+    "--with-http_v3_module",
+    "--with-stream",
+    "--with-stream_ssl_module",
+    "--with-stream_ssl_preread_module",
+    "--with-mail",
+    "--with-mail_ssl_module",
+    "--with-threads",
+    "--with-file-aio",
+    "--with-http_realip_module",
+    "--with-http_stub_status_module",
+    "--with-http_auth_request_module",
+    "--with-http_addition_module",
+    "--with-http_sub_module",
+    "--with-http_dav_module",
+    "--with-http_slice_module",
+    "--with-http_gunzip_module",
+    "--with-http_gzip_static_module",
+    "--with-compat",
+    "--with-control-api"
+  ],
+  "compiledModules": [
+    "ngx_core_module",
+    "ngx_errlog_module",
+    "ngx_conf_module",
+    "ngx_openssl_module",
+    "ngx_openssl_cache_module",
+    "ngx_quic_module",
+    "ngx_quic_bpf_module",
+    "ngx_regex_module",
+    "ngx_events_module",
+    "ngx_event_core_module",
+    "ngx_epoll_module",
+    "ngx_thread_pool_module",
+    "ngx_http_module",
+    "ngx_http_core_module",
+    "ngx_http_log_module",
+    "ngx_http_upstream_module",
+    "ngx_http_v2_module",
+    "ngx_http_v3_module",
+    "ngx_http_static_module",
+    "ngx_http_gzip_static_module",
+    "ngx_http_dav_module",
+    "ngx_http_autoindex_module",
+    "ngx_http_index_module",
+    "ngx_http_mirror_module",
+    "ngx_http_try_files_module",
+    "ngx_http_auth_request_module",
+    "ngx_http_auth_basic_module",
+    "ngx_http_access_module",
+    "ngx_http_limit_conn_module",
+    "ngx_http_limit_req_module",
+    "ngx_http_realip_module",
+    "ngx_http_geo_module",
+    "ngx_http_map_module",
+    "ngx_http_split_clients_module",
+    "ngx_http_referer_module",
+    "ngx_http_rewrite_module",
+    "ngx_http_ssl_module",
+    "ngx_http_proxy_module",
+    "ngx_http_fastcgi_module",
+    "ngx_http_uwsgi_module",
+    "ngx_http_scgi_module",
+    "ngx_http_grpc_module",
+    "ngx_http_proxy_v2_module",
+    "ngx_http_tunnel_module",
+    "ngx_http_memcached_module",
+    "ngx_http_empty_gif_module",
+    "ngx_http_browser_module",
+    "ngx_http_upstream_hash_module",
+    "ngx_http_upstream_ip_hash_module",
+    "ngx_http_upstream_least_conn_module",
+    "ngx_http_upstream_least_time_module",
+    "ngx_http_upstream_random_module",
+    "ngx_http_upstream_keepalive_module",
+    "ngx_http_upstream_zone_module",
+    "ngx_http_upstream_sticky_module",
+    "ngx_http_stub_status_module",
+    "ngx_http_write_filter_module",
+    "ngx_http_header_filter_module",
+    "ngx_http_chunked_filter_module",
+    "ngx_http_v2_filter_module",
+    "ngx_http_v3_filter_module",
+    "ngx_http_range_header_filter_module",
+    "ngx_http_gzip_filter_module",
+    "ngx_http_postpone_filter_module",
+    "ngx_http_ssi_filter_module",
+    "ngx_http_charset_filter_module",
+    "ngx_http_sub_filter_module",
+    "ngx_http_addition_filter_module",
+    "ngx_http_gunzip_filter_module",
+    "ngx_http_userid_filter_module",
+    "ngx_http_headers_filter_module",
+    "ngx_http_copy_filter_module",
+    "ngx_http_range_body_filter_module",
+    "ngx_http_not_modified_filter_module",
+    "ngx_http_slice_filter_module",
+    "ngx_mail_module",
+    "ngx_mail_core_module",
+    "ngx_mail_ssl_module",
+    "ngx_mail_pop3_module",
+    "ngx_mail_imap_module",
+    "ngx_mail_smtp_module",
+    "ngx_mail_auth_http_module",
+    "ngx_mail_proxy_module",
+    "ngx_mail_realip_module",
+    "ngx_stream_module",
+    "ngx_stream_core_module",
+    "ngx_stream_log_module",
+    "ngx_stream_proxy_module",
+    "ngx_stream_upstream_module",
+    "ngx_stream_write_filter_module",
+    "ngx_stream_ssl_module",
+    "ngx_stream_limit_conn_module",
+    "ngx_stream_access_module",
+    "ngx_stream_geo_module",
+    "ngx_stream_map_module",
+    "ngx_stream_split_clients_module",
+    "ngx_stream_return_module",
+    "ngx_stream_pass_module",
+    "ngx_stream_set_module",
+    "ngx_stream_upstream_hash_module",
+    "ngx_stream_upstream_least_conn_module",
+    "ngx_stream_upstream_least_time_module",
+    "ngx_stream_upstream_random_module",
+    "ngx_stream_upstream_zone_module",
+    "ngx_stream_ssl_preread_module"
+  ],
+  "compiledModuleCount": 105,
+  "dependencyVersionsFromHeaders": {
+    "pcre2": "10.42",
+    "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+    "zlib": "1.3"
+  },
+  "dependencyVersionsFromPkgConfig": {},
+  "nativeFiles": 499,
+  "nativeTreeSha256": "a135cdc166ef32cf23b8b4526de84a0265eefa09b7e1853fca3c6041a4952131",
+  "nativeTreeAlgorithm": "SHA256 compact sort_keys JSON of git-ls-files ordered file/sha256/oct-mode entries",
+  "nativeSourceUnchangedVsBase": true,
+  "nativeVerificationHarnessUnchangedVsBase": true,
+  "license": {
+    "sha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c",
+    "unchangedVsBase": true
+  },
+  "runs": [
+    {
+      "exitCode": 1,
+      "elapsedMs": 205938,
+      "success": false,
+      "groups": {
+        "total": 20,
+        "passed": 17,
+        "failed": 3
+      },
+      "provenance": {
+        "manifestSha256": "ca2a668bba394e6dcfada8f45930e0a5ecbf74b13869d15c1b2ce6cd8756644f",
+        "binarySha256": "4c293562f45467b6b9297445eb56e13a57db951046ed75f5296bb45939813372",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "checkoutRevision": "59fcb96c2527a5490ec5835036747c88c9d83be5",
+        "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+        "generatedFiles": {
+          "ngx_auto_config.h": {
+            "sha256": "58317c6ad3cf05ced475ab3630a2b7efa5388f7c4fb092015a4b3d290073cdfc",
+            "bytes": 10150,
+            "mode": "0644"
+          },
+          "ngx_auto_headers.h": {
+            "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+            "bytes": 657,
+            "mode": "0644"
+          },
+          "ngx_modules.c": {
+            "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+            "bytes": 11820,
+            "mode": "0644"
+          }
+        },
+        "generatedConfigSha256": "58317c6ad3cf05ced475ab3630a2b7efa5388f7c4fb092015a4b3d290073cdfc",
+        "nginxVersion": "1.31.9",
+        "compiledModuleCount": 105
+      },
+      "suites": [
+        {
+          "name": "http-tls-http2-reload",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1699,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 11,
+            "passed": 11,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "stream-mail",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 465,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 12,
+            "passed": 12,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "mail-tls-starttls",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1522,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 15,
+            "passed": 15,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "protocol-adapters",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1357,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 21,
+            "passed": 21,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "http3-interop",
+          "passed": false,
+          "exitCode": 1,
+          "signal": null,
+          "elapsedMs": 64,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 0,
+            "passed": 0,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "http3-head-independent-client",
+          "passed": false,
+          "exitCode": 1,
+          "signal": null,
+          "elapsedMs": 58,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 0,
+            "passed": 0,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "native-features",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 761,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 19,
+            "passed": 19,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "quic-regression",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 497,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "strictCounts": {
+            "caseCount": 13
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "quic-generated-sanitized",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1175,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "cleanupFlags": {}
+        },
+        {
+          "name": "quic-frame-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1254,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "cleanupFlags": {}
+        },
+        {
+          "name": "native-load-client-verification",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 2105,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 41,
+            "passed": 41,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixtureServersClosed": true,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "managed-native-control",
+          "passed": false,
+          "exitCode": 1,
+          "signal": null,
+          "elapsedMs": 50705,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "tests": 68,
+            "pass": 66,
+            "fail": 2,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "operator-status",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 3879,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "tests": 30,
+            "pass": 30,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "local-alpha-lifecycle",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 16299,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "tests": 37,
+            "pass": 37,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "listener-observer-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 6793,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "tests": 29,
+            "pass": 29,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "reload-listener-observation",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 801,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 7,
+            "passed": 7,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "stoppedWorkerResumeRequested": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "native-control-api",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 605,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 9,
+            "passed": 9,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "native-process-generations",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 792,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 10,
+            "passed": 10,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "native-generation-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 2225,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 20,
+            "passed": 20,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "official-nginx-tests",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 112646,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 35,
+            "passed": 32,
+            "skipped": 3,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        }
+      ],
+      "official": {
+        "success": true,
+        "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+        "summary": {
+          "files": 35,
+          "filesPassed": 32,
+          "filesSkipped": 3,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1109,
+            "passed": 1083,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        },
+        "sourceUnchangedDuringTest": true,
+        "cleanupErrorCount": 0,
+        "skippedFiles": [
+          "fastcgi.t",
+          "scgi.t",
+          "uwsgi.t"
+        ],
+        "perFileExceptions": [
+          {
+            "file": "proxy_cache_vary.t",
+            "skipped": 12,
+            "todoFailed": 1,
+            "todoPassed": 0
+          },
+          {
+            "file": "grpc.t",
+            "skipped": 1,
+            "todoFailed": 0,
+            "todoPassed": 0
+          },
+          {
+            "file": "h2.t",
+            "skipped": 4,
+            "todoFailed": 0,
+            "todoPassed": 0
+          },
+          {
+            "file": "upstream.t",
+            "skipped": 1,
+            "todoFailed": 0,
+            "todoPassed": 0
+          },
+          {
+            "file": "upstream_least_time.t",
+            "skipped": 7,
+            "todoFailed": 0,
+            "todoPassed": 0
+          }
+        ],
+        "parseErrorCount": 0,
+        "bailoutCount": 0
+      },
+      "stderr": {
+        "expectedProgressLines": 20,
+        "observedProgressLines": 20,
+        "bytes": 679,
+        "unexpectedLines": 0
+      }
+    },
+    {
+      "exitCode": 0,
+      "elapsedMs": 192206,
+      "success": true,
+      "groups": {
+        "total": 20,
+        "passed": 20,
+        "failed": 0
+      },
+      "provenance": {
+        "manifestSha256": "ca2a668bba394e6dcfada8f45930e0a5ecbf74b13869d15c1b2ce6cd8756644f",
+        "binarySha256": "4c293562f45467b6b9297445eb56e13a57db951046ed75f5296bb45939813372",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "checkoutRevision": "59fcb96c2527a5490ec5835036747c88c9d83be5",
+        "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+        "generatedFiles": {
+          "ngx_auto_config.h": {
+            "sha256": "58317c6ad3cf05ced475ab3630a2b7efa5388f7c4fb092015a4b3d290073cdfc",
+            "bytes": 10150,
+            "mode": "0644"
+          },
+          "ngx_auto_headers.h": {
+            "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+            "bytes": 657,
+            "mode": "0644"
+          },
+          "ngx_modules.c": {
+            "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+            "bytes": 11820,
+            "mode": "0644"
+          }
+        },
+        "generatedConfigSha256": "58317c6ad3cf05ced475ab3630a2b7efa5388f7c4fb092015a4b3d290073cdfc",
+        "nginxVersion": "1.31.9",
+        "compiledModuleCount": 105
+      },
+      "suites": [
+        {
+          "name": "http-tls-http2-reload",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1464,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 11,
+            "passed": 11,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "stream-mail",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 437,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 12,
+            "passed": 12,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "mail-tls-starttls",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1021,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 15,
+            "passed": 15,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "protocol-adapters",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1417,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 21,
+            "passed": 21,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "http3-interop",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1066,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 7,
+            "passed": 7,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "udpTransportsStopped": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "http3-head-independent-client",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 856,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 4,
+            "passed": 4,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "clientSocketsClosed": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "native-features",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 765,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 19,
+            "passed": 19,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "quic-regression",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 529,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "strictCounts": {
+            "caseCount": 13
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "quic-generated-sanitized",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1222,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "cleanupFlags": {}
+        },
+        {
+          "name": "quic-frame-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1264,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "cleanupFlags": {}
+        },
+        {
+          "name": "native-load-client-verification",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1887,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 41,
+            "passed": 41,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixtureServersClosed": true,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "managed-native-control",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 48866,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "tests": 68,
+            "pass": 68,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "operator-status",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 3392,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "tests": 30,
+            "pass": 30,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "local-alpha-lifecycle",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 11787,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "tests": 37,
+            "pass": 37,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "listener-observer-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 6690,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "tests": 29,
+            "pass": 29,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "reload-listener-observation",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 708,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 7,
+            "passed": 7,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "stoppedWorkerResumeRequested": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "native-control-api",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 454,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 9,
+            "passed": 9,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "native-process-generations",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 668,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 10,
+            "passed": 10,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "native-generation-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 2044,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 20,
+            "passed": 20,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "official-nginx-tests",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 105467,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 35,
+            "passed": 32,
+            "skipped": 3,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        }
+      ],
+      "official": {
+        "success": true,
+        "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+        "summary": {
+          "files": 35,
+          "filesPassed": 32,
+          "filesSkipped": 3,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1109,
+            "passed": 1083,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        },
+        "sourceUnchangedDuringTest": true,
+        "cleanupErrorCount": 0,
+        "skippedFiles": [
+          "fastcgi.t",
+          "scgi.t",
+          "uwsgi.t"
+        ],
+        "perFileExceptions": [
+          {
+            "file": "proxy_cache_vary.t",
+            "skipped": 12,
+            "todoFailed": 1,
+            "todoPassed": 0
+          },
+          {
+            "file": "grpc.t",
+            "skipped": 1,
+            "todoFailed": 0,
+            "todoPassed": 0
+          },
+          {
+            "file": "h2.t",
+            "skipped": 4,
+            "todoFailed": 0,
+            "todoPassed": 0
+          },
+          {
+            "file": "upstream.t",
+            "skipped": 1,
+            "todoFailed": 0,
+            "todoPassed": 0
+          },
+          {
+            "file": "upstream_least_time.t",
+            "skipped": 7,
+            "todoFailed": 0,
+            "todoPassed": 0
+          }
+        ],
+        "parseErrorCount": 0,
+        "bailoutCount": 0
+      },
+      "stderr": {
+        "expectedProgressLines": 20,
+        "observedProgressLines": 20,
+        "bytes": 679,
+        "unexpectedLines": 0
+      }
+    }
+  ],
+  "dependencyCorrection": {
+    "offlineWheelsValidatedByLockHashes": true,
+    "packages": [
+      {
+        "package": "aioquic",
+        "version": "1.3.0",
+        "sha256": "396e5f53f6ddb27713d9b5bb11d8f0f842e42857b7e671c5ae203bf618528550"
+      },
+      {
+        "package": "attrs",
+        "version": "26.1.0",
+        "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309"
+      },
+      {
+        "package": "certifi",
+        "version": "2026.10.19",
+        "sha256": "42d35340cc5b9ba78e818ddbff0c5b1c2b779de448a340fd1b989f5fa8670e1b"
+      },
+      {
+        "package": "cffi",
+        "version": "2.1.1",
+        "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf"
+      },
+      {
+        "package": "cryptography",
+        "version": "50.0.2",
+        "sha256": "9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079"
+      },
+      {
+        "package": "pycparser",
+        "version": "3.12",
+        "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
+      },
+      {
+        "package": "pylsqpack",
+        "version": "0.3.24",
+        "sha256": "6024854eb16d32803d4890fb90a73b9348c74b61c0770680aefaaa75f8456e8c"
+      },
+      {
+        "package": "pyOpenSSL",
+        "version": "26.4.0",
+        "sha256": "f0eb0cb2d581d3ad2b9c489468485e7f2ab6727d08401bcf9d824c3caddf3c1c"
+      },
+      {
+        "package": "service-identity",
+        "version": "26.1.0",
+        "sha256": "68c32dadbb69135fb951077677e07cd7f6031020f3a8c8f47a28cda8a0742118"
+      },
+      {
+        "package": "typing_extensions",
+        "version": "4.16.0",
+        "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+      },
+      {
+        "package": "curl_cffi",
+        "version": "0.16.3",
+        "sha256": "a875a661e2f9a949be29454880bbb9553307a487c4c08819738298cf5c1622e2"
+      }
+    ],
+    "freshLocalVirtualEnvironments": 2,
+    "offlineNoIndexInstall": true,
+    "pipChecksPassed": 2,
+    "nativeSourceChanged": false,
+    "additionalPurchasesUSD": 0
+  },
+  "initialFailure": {
+    "missingPinnedHTTP3Environments": 2,
+    "managedControl": {
+      "rootFailure": "native initialization and injected storage failure boundaries",
+      "nestedFailure": "unbound-initialization-state-reconciles-before-native-bind",
+      "expectedBody": "B",
+      "actualBody": "A",
+      "tapCounts": {
+        "tests": 68,
+        "pass": 66,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "sourceChanged": false,
+      "causeProven": false,
+      "classification": "Observed response after apply; exact timing/cause unresolved. A later pass is not a fix."
+    }
+  },
+  "executionCounts": {
+    "freshNativeBuilds": 1,
+    "officialAggregates": 2,
+    "aggregateAfterDependencyCorrection": 1,
+    "nativeCodeFixes": 0,
+    "controlTestFixes": 0
+  },
+  "cleanup": {
+    "ownedNativeProcessesRemaining": 0,
+    "observedNativeProcessesRemaining": 0
+  },
+  "limitations": [
+    "Initial17/20 result remains adverse evidence; the20/20 recheck followed actual dependency installation and does not fix or explain the controller observation.",
+    "No native source, alpha, test or benchmark changed. Native aggregate build/source checks run before and after each execution.",
+    "Local official skips and expected TODO remain separate from strict PASS; this is not a complete platform/performance acceptance."
+  ],
+  "spendingUSD": 0,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "processIdentifiersPublished": false
+}

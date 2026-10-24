@@ -642,3 +642,66 @@ test('real TLS live hold cancels and cleans up after coordinator cancellation', 
   }), error => error?.code === 'fixture_interrupted');
   assert.equal(entered, true);
 });
+
+import { checkSyntheticHeldCapturePreflight } from './held-capture-preflight.test.mjs';
+
+test('synthetic held capture preflight binds the genuine pair, identity, challenge and budget', () => {
+  const result = checkSyntheticHeldCapturePreflight();
+  assert.equal(result.passed, true);
+  assert.equal(result.accepted, 19);
+  assert.equal(result.refused, 61);
+  assert.equal(result.getterInvocations, 0);
+  assert.equal(result.proxyTrapInvocations, 0);
+  assert.equal(result.actualTLS, false);
+  assert.equal(result.sourceProtection, false);
+});
+
+const captureBudget = () => ({
+  read: { applicationRecords: '0', handoverRecords: '0', closureRecords: '1' },
+  write: { applicationRecords: '0', handoverRecords: '0', closureRecords: '1' },
+});
+
+test('real held TLS source captures only its record-material subset and clears protected memory before release', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'quiescent-live-hold', payloadBytes: 19013,
+    onLiveHold: context => ({ action: 'capture', nonce: context.nonce,
+      callSerial: context.callSerial, budget: captureBudget() }) });
+  assert.equal(result.outcome, 'pass');
+  assert.equal(result.liveHold.decision, 'capture');
+  const capture = result.liveHold.capture;
+  for (const key of ['captured', 'locked', 'dontDump', 'dontFork', 'readOnly', 'sourceUnchanged', 'cleansed', 'unmapped']) assert.equal(capture[key], true);
+  assert.equal(capture.secretBytes, 64);
+  assert.equal(capture.ivBytes, 24);
+  assert.equal(capture.sequenceBytes, 16);
+  assert.equal(capture.nonce, result.liveHold.nonce);
+  assert.equal(capture.callSerial, result.probe.ledgerCallSerial);
+  assert.equal(result.liveHold.capturePreflight.code, 'held_metadata_budget_review_only');
+  assert.equal(result.liveHold.historical, true);
+  assert.equal(result.liveHold.sourceHeld, false);
+  assert.equal(result.wire.passed, true);
+  assert.equal(result.wire.directions.client.closeNotify, true);
+  assert.equal(result.wire.directions.server.closeNotify, true);
+  assert.equal(result.semanticExportImport, false);
+  assert.equal(result.migration, false);
+});
+
+test('real TLS held capture refuses a mismatched current challenge before sending CAPTURE', { timeout: 30000 }, async () => {
+  await expectLiveHoldRefusal(context => ({ action: 'capture', nonce: context.nonce === '0'.repeat(32) ? '1'.repeat(32) : '0'.repeat(32),
+    callSerial: context.callSerial, budget: captureBudget() }), 'live_capture_preflight');
+});
+
+test('real TLS held capture refuses a future budget without a closure record', { timeout: 30000 }, async () => {
+  await expectLiveHoldRefusal(context => {
+    const budget = captureBudget(); budget.write.closureRecords = '0';
+    return { action: 'capture', nonce: context.nonce, callSerial: context.callSerial, budget };
+  }, 'live_capture_preflight');
+});
+
+test('real TLS held capture rejects an executable budget without invoking its getter', { timeout: 30000 }, async () => {
+  let getters = 0;
+  await expectLiveHoldRefusal(context => {
+    const budget = captureBudget();
+    Object.defineProperty(budget.read, 'applicationRecords', { enumerable:true, get() { getters++; throw Error('controlled getter'); } });
+    return { action: 'capture', nonce: context.nonce, callSerial: context.callSerial, budget };
+  }, 'live_capture_preflight');
+  assert.equal(getters, 0);
+});

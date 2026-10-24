@@ -1,0 +1,662 @@
+{
+  "schemaVersion": 1,
+  "scope": "transient-protected-source-record-material-only",
+  "baseCommit": "2398063d474aebf0f33835d35fb8ea3543d0688b",
+  "publicationParent": "59fcb96c2527a5490ec5835036747c88c9d83be5",
+  "sourceFilesSha256": {
+    "openssl-probe-fixture.c": "3c38cdbebb85ca0746f6a4995021bb044bafec24c1a9b293e7dc7d6a85630bae",
+    "openssl-probe-run.mjs": "152884a59783ea87b7690227e566c36dd2024becc6e6e1617a968301ff00d58c",
+    "openssl-probe.test.mjs": "7c9aa59f90c0fbfe32b975e7f256ec66a2352b151f2933c1242672f897f843f2",
+    "openssl-capture.c": "771606b8fc4ebcff76d9c7191d862e4e0532e9ab8a89007ef29ba1157f0c0142",
+    "openssl-capture.h": "30bf6e677f3a4926b35589d467b70caf249876c19b8a7aed77563a3eaefdeb84",
+    "capsule-preflight.mjs": "5efdc25929a96178496753bf58b0ab5b99c6a2d9ca636e0b372360cd6a0744b5",
+    "held-capture-preflight.test.mjs": "9f39ed74c89227b3a6707f41b331917a26b95377f048d9d346990859d1487248",
+    "openssl-probe.c": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+    "openssl-probe.h": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+    "openssl-usage.h": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+    "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+    "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+    "openssl-probe-check.mjs": "45da87fdb75ee404b8403c3c80afa51c55a4b6d8713e5040ee88354c8b9d313a",
+    "openssl-peer-client.c": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+    "handshake-oracle.mjs": "adf57f5ac461aa997ca24dba516b7b05aa63e455edae03ff6e0103c6e22d5889",
+    "handshake-oracle.test.mjs": "e7479d163d2d57d7b1f9c93d2d5cec6cecaee1c67cadf781f1a8e758fd072f75",
+    "record.mjs": "124baea5d841b3036041ee46aa8992a8c348cc9ffe13e3661b391bed0927e272",
+    "openssl-interruption.mjs": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+    "capsule-preflight.test.mjs": "9c31d2a52577973c352220eae16a6a00eabf38d16b4ca2c353d3003ada0fbfc5"
+  },
+  "sourceCaptureCInitialSha256": "9a4c9f65f89f4d3fc8d3a6b03c8534df404c276b5bde7afa0a774c3a317e1010",
+  "sourceCaptureCFinalSha256": "771606b8fc4ebcff76d9c7191d862e4e0532e9ab8a89007ef29ba1157f0c0142",
+  "inventory": {
+    "readSecretBytes": 32,
+    "writeSecretBytes": 32,
+    "readIvBytes": 12,
+    "writeIvBytes": 12,
+    "readNextSequenceBytes": 8,
+    "writeNextSequenceBytes": 8,
+    "initialGenerations": [
+      0,
+      0
+    ],
+    "noPointersOrEVPObjectsCopied": true
+  },
+  "baselineCounterexample": {
+    "schemaVersion": 1,
+    "sourceCommit": "2398063d474aebf0f33835d35fb8ea3543d0688b",
+    "actualTLSCallbackEntered": true,
+    "expectedRefusal": "live_hold_decision",
+    "observedRefusal": "live_hold_decision",
+    "passed": true,
+    "identity": {
+      "schemaVersion": 1,
+      "pinnedBuild": {
+        "schemaVersion": 1,
+        "suite": "continuum-openssl-pinned-build",
+        "source": {
+          "repository": "https://github.com/openssl/openssl.git",
+          "commit": "85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c",
+          "tree": "4e48caeae2374ee4982c8e44b6a15cf4753229cb",
+          "patchedTree": "f6301918a737267208ade21de6ab162d5e82f9cb",
+          "licenseSha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+        },
+        "patch": {
+          "sha256": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+        },
+        "compiler": {
+          "command": "cc",
+          "version": "13.3.0",
+          "target": "x86_64-linux-gnu",
+          "binarySha256": "6117c52522997d2aaccb2b52b3c6bf42c0a6c5edb1d718431fed6b2fc5fec234"
+        },
+        "tools": {
+          "gitSha256": "2dae8066ef4d6a926561b4b0eaca7b458d4f5b56bb83760656e6baa7fc3e974f",
+          "perlSha256": "38d70f54fd18d614e9e6cc35c960b45f54e7b991894b8308e704ae9953c86ce4",
+          "makeSha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+        },
+        "configuration": {
+          "target": "linux-x86_64",
+          "flags": [
+            "no-shared",
+            "no-module",
+            "no-engine",
+            "no-async",
+            "no-ktls",
+            "no-tests",
+            "no-legacy",
+            "no-asm",
+            "no-comp",
+            "no-zlib",
+            "no-dso",
+            "no-autoload-config",
+            "no-fips",
+            "--prefix=/continuum-research",
+            "--openssldir=/continuum-research/config",
+            "CC={compiler}",
+            "-O2",
+            "-fno-omit-frame-pointer",
+            "-fno-ident",
+            "-ffile-prefix-map={privateRoot}=/continuum-build"
+          ],
+          "disabled": [
+            "acvp-tests",
+            "afalgeng",
+            "asan",
+            "asm",
+            "async",
+            "autoload-config",
+            "buildtest-c++",
+            "capieng",
+            "comp",
+            "crypto-mdebug",
+            "crypto-mdebug-backtrace",
+            "devcryptoeng",
+            "dso",
+            "dynamic-engine",
+            "ec_nistp_64_gcc_128",
+            "egd",
+            "engine",
+            "external-tests",
+            "fips",
+            "fips-securitychecks",
+            "fuzz-afl",
+            "fuzz-libfuzzer",
+            "ktls",
+            "legacy",
+            "loadereng",
+            "md2",
+            "module",
+            "msan",
+            "padlockeng",
+            "rc5",
+            "sctp",
+            "shared",
+            "ssl3",
+            "ssl3-method",
+            "tests",
+            "trace",
+            "ubsan",
+            "unit-test",
+            "uplink",
+            "weak-ssl-ciphers",
+            "zlib",
+            "zlib-dynamic"
+          ],
+          "sourceDateEpoch": "1706621296",
+          "configDataSha256": "3ca736d5967fd39206626e87d65d4763a385200ef2412a2baa86b51c9e18e2f5",
+          "makefileSha256": "b863b299dd7fbf61f9325ddacda2b34c72ce4a6a456fdcbc36316f3b67fd10c2",
+          "configurationHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81"
+        },
+        "provider": {
+          "active": [
+            "default"
+          ],
+          "externalModules": false,
+          "autoloadConfiguration": false
+        },
+        "artifacts": {
+          "linkage": "static-libssl-and-libcrypto",
+          "systemRuntimeStatic": false,
+          "version": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)",
+          "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+          "libcryptoSha256": "db06dc90b09db7846bd70afb8e75a7f626b124c44fa355d66784ad28437344ce",
+          "opensslSha256": "2509ddd96956522dfa23d01d74a97229ae471b24fe32348190273853625d2625"
+        }
+      },
+      "sourceSha256": {
+        "fixture": "9f42eb53d07f9bae34de37c07c8be8a1c75f457a8493a63e6b1eabe0c148eacc",
+        "peerClient": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+        "probe": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+        "header": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+        "usage": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+        "patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+      },
+      "fixtureBinarySha256": "2ed1520083c4a23c4eff6f109eec9dc527197cfb07ed1c5e4f3fe41eaaf5e23e",
+      "peerClientBinarySha256": "72d8fd158d97a79e90349a886f5d528662de3c886c260d04485137cd38da0a7d",
+      "nodeBinarySha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12",
+      "nodeVersion": "v24.19.0",
+      "nodeOpenSSLVersion": "3.5.7"
+    },
+    "scope": "baseline-does-not-support-capture-action",
+    "secretsPublished": false,
+    "rawLogsPublished": false
+  },
+  "localResearch": {
+    "canonicalInitialFailure": {
+      "exitCode": 1,
+      "elapsedMs": 236225,
+      "stderrBytes": 0,
+      "report": {
+        "schemaVersion": 1,
+        "suite": "continuum-pinned-openssl-state-probe",
+        "passed": false,
+        "testFiles": 1,
+        "scope": "pinned-openssl-read-only-state-observation",
+        "nativeNginxMigration": false,
+        "realSessionMigration": false,
+        "counts": null,
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "interrupted": false,
+        "runnerError": "tap_summary_missing_or_ambiguous"
+      }
+    },
+    "canonicalAfterProfileFix": {
+      "exitCode": 0,
+      "elapsedMs": 225815,
+      "stderrBytes": 0,
+      "report": {
+        "schemaVersion": 1,
+        "suite": "continuum-pinned-openssl-state-probe",
+        "passed": true,
+        "testFiles": 1,
+        "scope": "pinned-openssl-read-only-state-observation",
+        "nativeNginxMigration": false,
+        "realSessionMigration": false,
+        "counts": {
+          "tests": 35,
+          "suites": 0,
+          "pass": 35,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "interrupted": false,
+        "runnerError": null
+      }
+    },
+    "core": {
+      "exitCode": 0,
+      "elapsedMs": 482,
+      "stderrBytes": 0,
+      "report": {
+        "schemaVersion": 1,
+        "suite": "continuum-record-and-state-kernel",
+        "passed": true,
+        "testFiles": 2,
+        "scope": "in-memory-record-and-state-only",
+        "liveTlsProcessHandover": false,
+        "counts": {
+          "tests": 21,
+          "suites": 0,
+          "pass": 21,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "interrupted": false,
+        "runnerError": null
+      }
+    },
+    "process": {
+      "exitCode": 0,
+      "elapsedMs": 1448,
+      "stderrBytes": 0,
+      "report": null,
+      "counts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    "c1": {
+      "exitCode": 0,
+      "elapsedMs": 4477,
+      "stderrBytes": 0,
+      "report": {
+        "schemaVersion": 1,
+        "suite": "continuum-real-handshake-and-record-observation",
+        "passed": true,
+        "testFiles": 2,
+        "scope": "real-handshake-and-record-observation-only",
+        "nativeNginxMigration": false,
+        "realSessionMigration": false,
+        "counts": {
+          "tests": 27,
+          "suites": 0,
+          "pass": 27,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "interrupted": false,
+        "runnerError": null
+      }
+    },
+    "families": {
+      "flatChecks": 35,
+      "ordinaryActualTLSScenarios": 28,
+      "handledOSSignals": 2,
+      "programmaticCancellationControl": 1,
+      "nonTLSCachedSourceControl": 1,
+      "syntheticGroups": 3
+    },
+    "authoredHeldMetadataControls": {
+      "accepted": 19,
+      "refused": 61,
+      "total": 80,
+      "getterInvocations": 0,
+      "proxyTrapInvocations": 0
+    },
+    "prior30TestPrefixExact": true
+  },
+  "independent": {
+    "finalActualTLS": {
+      "schemaVersion": 1,
+      "scope": "independent-real-TLS-source-capture-and-real-OS-protection-policy",
+      "outcome": "passed",
+      "failureCode": null,
+      "cases": [
+        {
+          "case": "positive",
+          "payloadBytes": 4271,
+          "passed": true,
+          "delayedCallbackMilliseconds": 97,
+          "exactEchoAndWire": true,
+          "eventOrder": true,
+          "protectionSyscallsIndependentlyTraced": false,
+          "guardedPagesSourceReviewed": 3,
+          "secretBytes": 64,
+          "ivBytes": 24,
+          "sequenceBytes": 16,
+          "cleansingReportedAndReviewed": true,
+          "independentlyReadBackSecretMemory": false
+        },
+        {
+          "case": "positive",
+          "payloadBytes": 51013,
+          "passed": true,
+          "delayedCallbackMilliseconds": 97,
+          "exactEchoAndWire": true,
+          "eventOrder": true,
+          "protectionSyscallsIndependentlyTraced": false,
+          "guardedPagesSourceReviewed": 3,
+          "secretBytes": 64,
+          "ivBytes": 24,
+          "sequenceBytes": 16,
+          "cleansingReportedAndReviewed": true,
+          "independentlyReadBackSecretMemory": false
+        },
+        {
+          "case": "memlock-refused",
+          "payloadBytes": 4283,
+          "passed": true,
+          "actualTLSHandshakeAndEchoBeforeRefusal": true,
+          "expectedRefusal": "hold_capture",
+          "noCaptureReceipt": true,
+          "noReleaseOrTLSShutdown": true,
+          "sourceClosed": true,
+          "mechanism": "real-native-RLIMIT_MEMLOCK-zero"
+        },
+        {
+          "case": "stale-native-capture",
+          "payloadBytes": 4297,
+          "passed": true,
+          "actualTLSHandshakeAndEchoBeforeRefusal": true,
+          "expectedRefusal": "hold_decision",
+          "noCaptureReceipt": true,
+          "noReleaseOrTLSShutdown": true,
+          "sourceClosed": true,
+          "mechanism": "actual-control-pipe-CAPTURE-nonce-replaced"
+        }
+      ],
+      "actualTLSCases": 4,
+      "sourceHashes": {
+        "openssl-capture.c": "771606b8fc4ebcff76d9c7191d862e4e0532e9ab8a89007ef29ba1157f0c0142",
+        "openssl-capture.h": "30bf6e677f3a4926b35589d467b70caf249876c19b8a7aed77563a3eaefdeb84",
+        "openssl-probe-fixture.c": "3c38cdbebb85ca0746f6a4995021bb044bafec24c1a9b293e7dc7d6a85630bae",
+        "openssl-probe-run.mjs": "152884a59783ea87b7690227e566c36dd2024becc6e6e1617a968301ff00d58c",
+        "capsule-preflight.mjs": "5efdc25929a96178496753bf58b0ab5b99c6a2d9ca636e0b372360cd6a0744b5",
+        "openssl-probe.c": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+        "openssl-probe.h": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+        "openssl-usage.h": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+        "openssl-peer-client.c": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+        "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+        "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+        "openssl-interruption.mjs": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+        "handshake-oracle.mjs": "adf57f5ac461aa997ca24dba516b7b05aa63e455edae03ff6e0103c6e22d5889"
+      },
+      "sourceHashesStable": true,
+      "observedChildren": 71,
+      "remainingObservedChildren": 0,
+      "observedTemporaryRoots": 6,
+      "absentTemporaryRoots": 6,
+      "scriptSha256": "96d103bcd710ba06fc1c24e0081f46444b1091b4f1885782fb6ac848bb3f0a60",
+      "realSessionKeysPublished": false,
+      "secretHashesPublished": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "processIdentifiersPublished": false,
+      "migration": false,
+      "semanticExportImport": false
+    },
+    "initialActualTLSRefusal": {
+      "schemaVersion": 1,
+      "scope": "independent-real-TLS-source-capture-and-real-OS-protection-policy",
+      "outcome": "failed",
+      "failureCode": "hold_capture",
+      "cases": [],
+      "actualTLSCases": 0,
+      "sourceHashes": {
+        "openssl-capture.c": "9a4c9f65f89f4d3fc8d3a6b03c8534df404c276b5bde7afa0a774c3a317e1010",
+        "openssl-capture.h": "30bf6e677f3a4926b35589d467b70caf249876c19b8a7aed77563a3eaefdeb84",
+        "openssl-probe-fixture.c": "3c38cdbebb85ca0746f6a4995021bb044bafec24c1a9b293e7dc7d6a85630bae",
+        "openssl-probe-run.mjs": "152884a59783ea87b7690227e566c36dd2024becc6e6e1617a968301ff00d58c",
+        "capsule-preflight.mjs": "5efdc25929a96178496753bf58b0ab5b99c6a2d9ca636e0b372360cd6a0744b5",
+        "openssl-probe.c": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+        "openssl-probe.h": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+        "openssl-usage.h": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+        "openssl-peer-client.c": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+        "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+        "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+        "openssl-interruption.mjs": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+        "handshake-oracle.mjs": "adf57f5ac461aa997ca24dba516b7b05aa63e455edae03ff6e0103c6e22d5889"
+      },
+      "sourceHashesStable": true,
+      "observedChildren": 35,
+      "remainingObservedChildren": 0,
+      "observedTemporaryRoots": 3,
+      "absentTemporaryRoots": 3,
+      "scriptSha256": "96d103bcd710ba06fc1c24e0081f46444b1091b4f1885782fb6ac848bb3f0a60",
+      "realSessionKeysPublished": false,
+      "secretHashesPublished": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "processIdentifiersPublished": false,
+      "migration": false,
+      "semanticExportImport": false,
+      "diagnostic": "Actual first capture request refused: handshake scratch new_hash cleared; protected memory not reached",
+      "TLSOrCaptureFailureProven": true,
+      "candidateFixed": false,
+      "actualTLSAttempts": 1,
+      "completedStrictCases": 0,
+      "actualTLSCasesFieldCountsCompletedCasesOnly": true,
+      "refusalCode": "hold_capture"
+    },
+    "profileDiagnostic": {
+      "schemaVersion": 1,
+      "diagnosticOnly": true,
+      "acceptanceClaimed": false,
+      "privateCopyInstrumented": true,
+      "originalSourceEdited": false,
+      "errorCode": "hold_capture",
+      "observed": [
+        {
+          "stage": "profile",
+          "server": 1,
+          "version": 772,
+          "session": 1,
+          "cipher": 50336513,
+          "hash": 0,
+          "hashNid": -1,
+          "hashSize": -1,
+          "readContext": 1,
+          "writeContext": 1,
+          "readNid": 895,
+          "writeNid": 895,
+          "readKeyLength": 16,
+          "writeKeyLength": 16,
+          "readIvLength": 12,
+          "writeIvLength": 12,
+          "readEncrypting": 0,
+          "writeEncrypting": 1
+        }
+      ],
+      "remainingChildren": 0,
+      "scriptSha256": "d2c74be159526de719b101be4de48b06e63a664c66c4175671f4f4a0d1fbe40c"
+    },
+    "tracingUnavailableDiagnostic": {
+      "schemaVersion": 1,
+      "scope": "independent-real-TLS-source-capture-and-real-OS-protection-policy",
+      "outcome": "failed",
+      "failureCode": "native_early_exit",
+      "cases": [],
+      "actualTLSCases": 0,
+      "sourceHashes": {
+        "openssl-capture.c": "9a4c9f65f89f4d3fc8d3a6b03c8534df404c276b5bde7afa0a774c3a317e1010",
+        "openssl-capture.h": "30bf6e677f3a4926b35589d467b70caf249876c19b8a7aed77563a3eaefdeb84",
+        "openssl-probe-fixture.c": "3c38cdbebb85ca0746f6a4995021bb044bafec24c1a9b293e7dc7d6a85630bae",
+        "openssl-probe-run.mjs": "152884a59783ea87b7690227e566c36dd2024becc6e6e1617a968301ff00d58c",
+        "capsule-preflight.mjs": "5efdc25929a96178496753bf58b0ab5b99c6a2d9ca636e0b372360cd6a0744b5",
+        "openssl-probe.c": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+        "openssl-probe.h": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+        "openssl-usage.h": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+        "openssl-peer-client.c": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+        "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+        "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+        "openssl-interruption.mjs": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+        "handshake-oracle.mjs": "adf57f5ac461aa997ca24dba516b7b05aa63e455edae03ff6e0103c6e22d5889"
+      },
+      "sourceHashesStable": true,
+      "observedChildren": 31,
+      "remainingObservedChildren": 0,
+      "observedTemporaryRoots": 3,
+      "absentTemporaryRoots": 3,
+      "scriptSha256": "79182abedbc0c3ef18922e0ee28a9b6e87848b1dbaeefcf20d14115d2bf5cc28",
+      "realSessionKeysPublished": false,
+      "secretHashesPublished": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "processIdentifiersPublished": false,
+      "migration": false,
+      "semanticExportImport": false,
+      "diagnostic": "strace unavailable: harmless true probe confirms ptrace Operation not permitted",
+      "TLSOrCaptureFailureProven": false,
+      "tracingProbe": {
+        "exitCode": 1,
+        "stdoutBytes": 0,
+        "stderrBytes": 247,
+        "ptraceOperationNotPermitted": true
+      },
+      "actualTLSAttempts": 0,
+      "completedStrictCases": 0
+    },
+    "heldMetadataReview": {
+      "schemaVersion": 1,
+      "scope": "synthetic-held-binding-and-budget-review-only",
+      "cases": 4096,
+      "eligible": 342,
+      "refused": 3754,
+      "revokedProxyControls": 1,
+      "proxyTraps": 0,
+      "sourceReviewed": [
+        "capsule-preflight.mjs",
+        "openssl-probe-run.mjs"
+      ],
+      "sourceHashes": {
+        "capsule-preflight.mjs": "5efdc25929a96178496753bf58b0ab5b99c6a2d9ca636e0b372360cd6a0744b5",
+        "openssl-probe-run.mjs": "152884a59783ea87b7690227e566c36dd2024becc6e6e1617a968301ff00d58c"
+      },
+      "reviewFindings": {
+        "legacyQuiescentOnlyPreserved": true,
+        "heldProfileNeverRelabeled": true,
+        "inertStrictSchemas": true,
+        "realPairAndChallengeFromTrustedRunner": true,
+        "sourceIdentityChecksAreEqualityNotAttestation": true,
+        "futureBudgetArithmeticNotRuntimeEnforcement": true,
+        "captureNeedsMatchingNativeDecisionAndReobservation": true,
+        "noSecretBytesInCallbackOrPublicReceipt": true,
+        "historicalResultExplicit": true,
+        "noBlockingIssuesFound": true
+      },
+      "authoredMetadataConstructorReusedForUnrelatedValidFields": true,
+      "independentArithmeticAndMutations": true,
+      "actualTLSCases": 0,
+      "migration": false,
+      "scriptSha256": "19eb869cf85569d646637663f39f87fa80f4832a1b09dc64a779ef4cbfc1e3d0",
+      "currentCaptureSourceSha256": "771606b8fc4ebcff76d9c7191d862e4e0532e9ab8a89007ef29ba1157f0c0142",
+      "captureSourceReviewIndependent": false,
+      "independentReviewScope": "Root-authored JS held preflight/decision/runner integration only",
+      "digestGuardFixCause": "Original C capture profile incorrectly required cleared handshake scratch digest; coordinator-approved negotiated cipher SHA256 query replaces it"
+    },
+    "noTLSMemoryProtection": [
+      {
+        "file": "capture-memory-policy-safe.json",
+        "sha256": "2f8eb0cab39a475b0c8e756c6aa8011f2e64ef7ac56a009670f7f3aa1772120c",
+        "result": {
+          "schemaVersion": 1,
+          "scope": "standalone-no-TLS-Linux-memory-policy-smoke",
+          "actualTLSCases": 0,
+          "secretBytesCopied": 0,
+          "runtimeData": "anonymous zero-filled page only",
+          "guardedPages": 3,
+          "checks": {
+            "mmap": true,
+            "initialRW": 0,
+            "mlock": 0,
+            "MADV_DONTDUMP": 0,
+            "MADV_DONTFORK": 0,
+            "readOnly": 0,
+            "restoreRW": 0,
+            "munlock": 0,
+            "munmap": 0
+          },
+          "allErrnosZero": true,
+          "compileExitCode": 0,
+          "executionExitCode": 0,
+          "compiler": "cc -O2 -Wall -Wextra -Werror",
+          "scriptSha256": "8499127e125a670e791d622eae558b2579bcc4431b91630544d35b447af5436d",
+          "binarySha256": "d6de9d74a2de9912bc9f6ce002db514a1e6197b684eda41690394949bbe959fc",
+          "independentLiveCaptureSyscallTrace": false,
+          "secretCleansingTest": false,
+          "interpretation": "Platform accepts these protection calls in this standalone process; not proof that live capsule called them, of whole-process protection or explicit wipe. Live capture refusal/success is recorded separately."
+        }
+      }
+    ]
+  },
+  "runtimeCorrection": {
+    "observed": "Actual established source has NULL temporary new_hash; first candidate refused hold_capture.",
+    "fix": "Use negotiated SSL_CIPHER_get_handshake_digest with unchanged SHA256 NID/length, cipher and active EVP context guards.",
+    "firstFailurePreserved": true,
+    "instrumentedPrivateCopyDiagnosticOnly": true,
+    "canonicalRerunReason": "Actual C profile contract correction; no unchanged rerun to green."
+  },
+  "setupDiagnostics": [
+    {
+      "stage": "author-private-fixture-edit-script",
+      "result": "SyntaxError before fixture mutation or runtime; corrected before final compile."
+    },
+    {
+      "stage": "coordinator-document-append-script",
+      "result": "SyntaxError before four document writes; corrected; no runtime effect."
+    },
+    {
+      "stage": "independent-strace",
+      "result": "ptrace denied before TLS; separately retained; no independently traced capture protection claim."
+    }
+  ],
+  "reviews": {
+    "cImplementationAuthor": "capture_c helper",
+    "cImplementationReviewedBy": "coordinator",
+    "runnerAndPreflightAuthor": "coordinator",
+    "runnerAndPreflightReviewedBy": "capture_c helper",
+    "helperLimit": 1,
+    "nativeRegressionEvidence": "x10/evidence/continuum-source-capture-native-regression.json"
+  },
+  "executionCounts": {
+    "baselineActualTLSControl": 1,
+    "canonicalAttempts": 2,
+    "canonicalAfterCodeFix": 1,
+    "independentActualTLSFinal": 4,
+    "nativeBuilds": 1,
+    "nativeAggregates": 2
+  },
+  "limitations": [
+    "Protected mapping covers only the extra copy, not original SSL heap/compiler temporaries/Node oracle.",
+    "SourceUnchanged is sampled metadata/ledger equality plus copied subset equality; not all SSL/EVP bytes or concurrency proof.",
+    "Actual protection syscall tracing was unavailable; source guards, positive receipts, noTLS real syscall probe and real memlock-limit refusal are distinct evidence.",
+    "No independent memory readback of real traffic secrets is published or claimed; cleansing is source-reviewed with volatile entire-page zero check.",
+    "Captured material is destroyed before return/release, not a reusable semantic capsule or exporter.",
+    "Public equality/challenge checks are not attestation or an atomic transport ownership fence; future budget arithmetic is not runtime debiting.",
+    "Authentication/session/exporter/future API inventory, importer, actual TLS-code version change, source retirement and native NGINX integration remain unimplemented.",
+    "Initial native controller A/B failure remains unresolved; a later20/20 native aggregate is not a control fix."
+  ],
+  "semanticExportImport": false,
+  "migration": false,
+  "nativeNginxIntegration": false,
+  "realSessionKeysPublished": false,
+  "secretHashesPublished": false,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "processIdentifiersPublished": false,
+  "spendingUSD": 0,
+  "hostedCI": "pending-exact-implementation-commit"
+}

@@ -66,7 +66,7 @@ function decimal(value, maximum, positive, code) {
   return number;
 }
 
-function probe(input) {
+function probe(input, scenario = 'quiescent') {
   const value = record(input, [...NUMERIC, ...TEXT, ...BOOLEAN], 'probe_schema');
   for (const key of NUMERIC) {
     requireValue(typeof value[key] === 'number' && Number.isSafeInteger(value[key])
@@ -76,7 +76,7 @@ function probe(input) {
   for (const key of BOOLEAN) requireValue(typeof value[key] === 'boolean', 'probe_schema');
   for (const key of TEXT) requireValue(typeof value[key] === 'string'
     && value[key].length <= 64, 'probe_schema');
-  requireValue(value.event === 'probe' && value.scenario === 'quiescent'
+  requireValue(value.event === 'probe' && value.scenario === scenario
     && value.sample > 0, 'unsupported_profile');
   requireValue(value.allowed && value.reasons === '0' && value.monitorKnown,
     'probe_refused');
@@ -119,10 +119,52 @@ function direction(nextHex, input) {
 }
 
 function result(code, budget) {
-  const output = { schemaVersion: 1, eligibleForInventoryReview: code === 'metadata_budget_review_only',
+  const output = { schemaVersion: 1, eligibleForInventoryReview: ['metadata_budget_review_only',
+    'held_metadata_budget_review_only'].includes(code),
     code, semanticExportImport: false, migration: false };
   if (budget !== undefined) output.recordBudget = budget;
   return Object.freeze(output);
+}
+
+function hold(input, flags) {
+  const keys = ['nonce', 'callSerial', ...(flags ? ['sourceHeld', 'historical'] : [])];
+  const value = record(input, keys, 'hold_schema');
+  requireValue(typeof value.nonce === 'string' && /^[0-9a-f]{32}$/.test(value.nonce), 'hold_schema');
+  decimal(value.callSerial, (1n << 64n) - 1n, true, 'hold_schema');
+  if (flags) requireValue(value.sourceHeld === true && value.historical === false, 'historical_hold');
+  return value;
+}
+
+/** Separate held-profile metadata review. The trusted caller supplies the
+ * independently observed current C challenge and verified build identity.
+ * Equality of supplied public fields is not attestation, freshness, memory
+ * protection, exclusive ownership or permission to extract/transfer secrets.
+ * The source C barrier must independently reobserve and enforce its deadline. */
+export function checkHeldCapturePreflight(request, expectedSourceIdentity, expectedHold) {
+  try {
+    const value = record(request, ['schemaVersion', 'sourceIdentity', 'probe',
+      'repeatedProbe', 'hold', 'budget'], 'request_schema');
+    requireValue(value.schemaVersion === 1, 'request_schema');
+    const expected = identity(expectedSourceIdentity);
+    const actual = identity(value.sourceIdentity);
+    requireValue(IDENTITY.every(key => actual[key] === expected[key]), 'identity_mismatch');
+    const current = hold(expectedHold, false);
+    const observed = hold(value.hold, true);
+    requireValue(current.nonce === observed.nonce && current.callSerial === observed.callSerial,
+      'hold_binding');
+    const first = probe(value.probe, 'quiescent-live-hold');
+    const second = probe(value.repeatedProbe, 'quiescent-live-hold');
+    requireValue(first.sample === 1 && second.sample === 2
+      && [...NUMERIC, ...TEXT, ...BOOLEAN].filter(key => key !== 'sample')
+        .every(key => first[key] === second[key]), 'hold_pair');
+    requireValue(first.ledgerCallSerial === current.callSerial, 'hold_binding');
+    const budget = record(value.budget, ['read', 'write'], 'budget_schema');
+    return result('held_metadata_budget_review_only', Object.freeze({ capRecords: CAP.toString(),
+      read: direction(first.readNextSequence, budget.read),
+      write: direction(first.writeNextSequence, budget.write) }));
+  } catch (error) {
+    return result(error instanceof Refusal ? error.code : 'invalid_input');
+  }
 }
 
 /** Validate public metadata and a proposed directional record plan only.

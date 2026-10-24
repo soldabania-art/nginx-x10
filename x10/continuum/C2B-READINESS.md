@@ -177,3 +177,37 @@ digests и отдельные event-head/checkout/build identities. Hosted offic
 Далее — combined reviewed live preflight binding и первый protected-RAM
 read-only source capture после inventory/secret lifetime contract gate.
 Held scenario не переименовывается в quiescent ради старого checker.
+
+## Transient protected source sample
+
+The new [source capture contract](SOURCE-CAPTURE.md) defines a restricted
+record-material-only copy under the genuine C hold. A separate held-profile
+preflight binds the original samples1/2, current nonce/ledger and build identity;
+the old checker remains quiescent-only. C independently binds CAPTURE, reobserves
+and creates a locked, guarded, dump/fork-excluded read-only copy, then clears and
+unmaps it before release. Public evidence contains no keys or key fingerprints.
+
+This closes only the transient source-copy experiment, subject to recorded test
+results. The subset deliberately excludes session/authentication/exporter and
+future API semantics. It is not the complete reusable semantic capsule required
+for an importer. Mapping protections do not cover the original SSL heap or Node
+oracle. SourceUnchanged is a subset/probe/ledger observation, not an all-object
+immutability proof. Full inventory, reusable lifetime, target construction,
+future record enforcement, exclusive transport ownership, distinct code and
+source retirement remain unaccepted; no native NGINX migration is implemented.
+
+Локально35/35 C2a:28 ordinaryTLS,2 OS signals,1 programmatic cancel,
+1 noTLS source control и3 synthetic groups. Прежние30 tests сохранены.
+Независимо4 actualTLS:2 captures, actual mlock-limit refusal и stale CAPTURE;
+ещё4096 synthetic controls:342 eligible/3754 refused плюс revoked Proxy.
+Первый C capture отказал из-за очищенного handshake scratch; исправлен
+переходом к digest negotiated cipher с прежними SHA256/cipher guards.
+Исходные отказы и недоступный ptrace сохранены, syscall tracing не заявлен.
+Core21/process7/C1 27 прошли. Native сначала17/20:2 отсутствующих HTTP3
+clients и controller expectedB/actualA; после11 pinned wheels/2 venv —20/20.
+Последний PASS не исправляет и не объясняет controller timing observation.
+Official1083 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL.
+[Очищенный evidence](../evidence/continuum-source-capture.json) содержит source hashes, обе попытки и cleanup.
+Exact implementation CI pending. Далее сначала controller counterexample/
+contract review, затем reusable capsule inventory/lifetime; importer/migration
+не реализованы. Это защищённая дополнительная копия, не whole-process защита.

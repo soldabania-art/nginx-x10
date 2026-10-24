@@ -38,6 +38,7 @@
 #include <time.h>
 #include <inttypes.h>
 #include "openssl-probe.h"
+#include "openssl-capture.h"
 
 #define MAX_APPLICATION_BYTES 65536U
 #define DEADLINE_MS 24000
@@ -270,12 +271,13 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
 {
     static const char digits[] = "0123456789abcdef";
     unsigned char random[16];
-    char nonce[33], line[64], expected[64], abort_line[64];
+    char nonce[33], line[64], expected[64], abort_line[64], capture_line[64];
+    X10_CAPTURE_RESULT capture;
     X10_PROBE_RESULT third, fourth;
     struct pollfd descriptors[2];
     size_t i, at = 0;
     ssize_t got;
-    int rc, length, abort_length;
+    int rc, length, abort_length, capture_length, capture_requested = 0;
     int64_t now, hold_deadline, remaining;
     const char *failure = "hold_decision";
 
@@ -295,8 +297,11 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
         nonce, initial->ledger_call_serial);
     abort_length = snprintf(abort_line, sizeof(abort_line), "ABORT %s %" PRIu64 "\n",
         nonce, initial->ledger_call_serial);
+    capture_length = snprintf(capture_line, sizeof(capture_line), "CAPTURE %s %" PRIu64 "\n",
+        nonce, initial->ledger_call_serial);
     if (length <= 0 || (size_t) length >= sizeof(expected)
-        || abort_length <= 0 || (size_t) abort_length >= sizeof(abort_line)) goto refused;
+        || abort_length <= 0 || (size_t) abort_length >= sizeof(abort_line)
+        || capture_length <= 0 || (size_t) capture_length >= sizeof(capture_line)) goto refused;
     if (!hold_socket_idle(peer->fd)) {
         failure = "hold_transport_activity"; goto refused;
     }
@@ -336,7 +341,10 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
     if (at == (size_t) abort_length && memcmp(line, abort_line, at) == 0) {
         failure = "hold_aborted"; goto refused;
     }
-    if (at != (size_t) length || memcmp(line, expected, at) != 0) goto refused;
+    capture_requested = at == (size_t) capture_length
+        && memcmp(line, capture_line, at) == 0;
+    if (!capture_requested
+        && (at != (size_t) length || memcmp(line, expected, at) != 0)) goto refused;
     /* Reject bytes/EOF already queued after the one authorized decision.
      * This is a sample of the trusted control pipe, not a writer fence. */
     descriptors[0].revents = 0;
@@ -355,6 +363,24 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
     if (now < 0 || now >= hold_deadline) { failure = "hold_timeout"; goto refused; }
     if (!hold_socket_idle(peer->fd)) {
         failure = "hold_transport_activity"; goto refused;
+    }
+    if (capture_requested) {
+        failure = "hold_capture";
+        if (!x10_capture_source(peer->ssl, &peer->ledger, initial, nonce,
+            &interrupted, &capture)) goto refused;
+        now = now_ms();
+        if (now < 0 || now >= hold_deadline) { failure = "hold_timeout"; goto refused; }
+        if (interrupted) { failure = "hold_capture"; goto refused; }
+        if (!hold_socket_idle(peer->fd)) {
+            failure = "hold_transport_activity"; goto refused;
+        }
+        printf("{\"event\":\"capture-cleared\",\"scenario\":\"%s\",\"nonce\":\"%s\","
+            "\"callSerial\":\"%" PRIu64 "\",\"captured\":true,\"locked\":true,"
+            "\"dontDump\":true,\"dontFork\":true,\"readOnly\":true,"
+            "\"sourceUnchanged\":true,\"cleansed\":true,\"unmapped\":true,"
+            "\"secretBytes\":%u,\"ivBytes\":%u,\"sequenceBytes\":%u}\n",
+            scenario, nonce, initial->ledger_call_serial,
+            capture.secret_bytes, capture.iv_bytes, capture.sequence_bytes);
     }
     printf("{\"event\":\"hold-released\",\"scenario\":\"%s\",\"nonce\":\"%s\","
         "\"callSerial\":\"%" PRIu64 "\",\"unchanged\":true}\n",

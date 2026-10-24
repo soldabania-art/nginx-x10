@@ -11,10 +11,12 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { verifyHandshakeCapture } from './handshake-oracle.mjs';
 import { buildOpenSSL } from './openssl-build.mjs';
+import { checkHeldCapturePreflight } from './capsule-preflight.mjs';
 
 const SOURCE = fileURLToPath(new URL('./openssl-probe-fixture.c', import.meta.url));
 const PEER_SOURCE = fileURLToPath(new URL('./openssl-peer-client.c', import.meta.url));
 const PROBE_SOURCE = fileURLToPath(new URL('./openssl-probe.c', import.meta.url));
+const CAPTURE_SOURCE = fileURLToPath(new URL('./openssl-capture.c', import.meta.url));
 const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
@@ -237,6 +239,7 @@ let harness;
 let preparing;
 let running = false;
 const sourceFiles = { fixture: SOURCE, peerClient: PEER_SOURCE, probe: PROBE_SOURCE,
+  capture: CAPTURE_SOURCE, captureHeader: fileURLToPath(new URL('./openssl-capture.h', import.meta.url)),
   header: fileURLToPath(new URL('./openssl-probe.h', import.meta.url)),
   usage: fileURLToPath(new URL('./openssl-usage.h', import.meta.url)), patch: PATCH };
 const sourceHashes = async () => Object.fromEntries(await Promise.all(Object.entries(sourceFiles).map(async ([name, path]) => [name, sha256(await readFile(path))])));
@@ -259,7 +262,7 @@ export async function prepareProbeHarness() {
       const paths = build.privatePaths;
       const include = [paths.includeDir, paths.sourceIncludeDir, paths.sourceDir, paths.buildDir];
       await command(paths.compiler ?? 'cc', ['-std=c11', '-O2', '-Wall', '-Wextra', '-Werror', '-Wno-unused-parameter',
-        ...include.flatMap(path => ['-I', path]), '-o', binary, SOURCE, PROBE_SOURCE,
+        ...include.flatMap(path => ['-I', path]), '-o', binary, SOURCE, PROBE_SOURCE, CAPTURE_SOURCE,
         paths.libssl, paths.libcrypto, '-pthread', '-ldl'], children, owned.signal);
       await chmod(binary, 0o700);
       const peerBinary = join(directory, 'openssl-peer-client');
@@ -572,7 +575,7 @@ function checkRefusal(probe, scenario) {
     probe.ledgerLastCall === 3 && probe.ledgerLastOutcome === 1, 'unrelated_write_cleared_read_retry');
 }
 
-const HOLD_REFUSALS = new Set(['hold_nonce', 'hold_timeout', 'hold_decision', 'hold_aborted', 'hold_transport_activity', 'hold_changed']);
+const HOLD_REFUSALS = new Set(['hold_nonce', 'hold_timeout', 'hold_decision', 'hold_aborted', 'hold_transport_activity', 'hold_changed', 'hold_capture']);
 function checkedHoldRefusal(message) {
   assertFixture(message?.event === 'hold-refused' && message.scenario === 'quiescent-live-hold' &&
     Object.keys(message).sort().join(',') === 'code,event,scenario' && HOLD_REFUSALS.has(message.code), 'live_hold_refusal_schema');
@@ -595,14 +598,33 @@ function holdDecision(input) {
   assertFixture(input !== null && typeof input === 'object' && !types.isProxy(input) &&
     [Object.prototype, null].includes(Object.getPrototypeOf(input)), 'live_hold_decision');
   const keys = Reflect.ownKeys(input);
-  assertFixture(keys.length === 3 && keys.every(key => ['action', 'nonce', 'callSerial'].includes(key)), 'live_hold_decision');
   const descriptors = Object.getOwnPropertyDescriptors(input);
+  const actionDescriptor = descriptors.action;
+  assertFixture(actionDescriptor && Object.hasOwn(actionDescriptor, 'value'), 'live_hold_decision');
+  const capture = actionDescriptor.value === 'capture';
+  const expectedKeys = ['action', 'nonce', 'callSerial', ...(capture ? ['budget'] : [])];
+  assertFixture(keys.length === expectedKeys.length && keys.every(key => expectedKeys.includes(key)), 'live_hold_decision');
   for (const key of ['action', 'nonce', 'callSerial']) assertFixture(Object.hasOwn(descriptors[key], 'value') && descriptors[key].enumerable, 'live_hold_decision');
   const { action: { value: action }, nonce: { value: nonce }, callSerial: { value: serial } } = descriptors;
-  assertFixture(['continue', 'abort'].includes(action) && typeof nonce === 'string' && /^[0-9a-f]{32}$/.test(nonce) &&
+  assertFixture(['continue', 'abort', 'capture'].includes(action) && typeof nonce === 'string' && /^[0-9a-f]{32}$/.test(nonce) &&
     typeof serial === 'string' && /^[1-9][0-9]{0,19}$/.test(serial) && BigInt(serial) <= 0xffffffffffffffffn, 'live_hold_decision');
   // Validly shaped stale values deliberately reach C's independent binding check.
-  return `${action === 'continue' ? 'CONTINUE' : 'ABORT'} ${nonce} ${serial}\n`;
+  if (capture) assertFixture(Object.hasOwn(descriptors.budget, 'value') && descriptors.budget.enumerable, 'live_hold_decision');
+  return { action, nonce, callSerial: serial, budget: capture ? descriptors.budget.value : undefined,
+    line: `${action === 'continue' ? 'CONTINUE' : capture ? 'CAPTURE' : 'ABORT'} ${nonce} ${serial}\n` };
+}
+
+function checkedCaptureEvent(message, nonce, callSerial) {
+  const flags = ['captured', 'locked', 'dontDump', 'dontFork', 'readOnly',
+    'sourceUnchanged', 'cleansed', 'unmapped'];
+  const keys = ['event', 'scenario', 'nonce', 'callSerial', ...flags,
+    'secretBytes', 'ivBytes', 'sequenceBytes'];
+  assertFixture(message?.event === 'capture-cleared' && message.scenario === 'quiescent-live-hold'
+    && Object.keys(message).sort().join(',') === keys.sort().join(',')
+    && message.nonce === nonce && message.callSerial === callSerial
+    && flags.every(key => message[key] === true) && message.secretBytes === 64
+    && message.ivBytes === 24 && message.sequenceBytes === 16, 'live_capture_event_schema');
+  return structuredClone(message);
 }
 
 function checkedRetryEvent(message, event, scenario, payloadBytes) {
@@ -966,9 +988,11 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     }
     const firstSample = writeRetryCompleted || overlappingRetry || shutdownScenario || peerShutdownScenario || truncatedScenario ? 3 : 1;
     const first = checkedProbe(await native.wait('probe', message => message.sample === firstSample), scenario);
+    let heldRepeatedProbe;
     let immutableRepeatedProbe = false;
     if (graceful || peerScenario || overlappingRetry || eofScenario || truncatedScenario) {
       const second = checkedProbe(await native.wait('probe', message => message.sample === firstSample + 1), scenario);
+      if (liveHoldScenario) heldRepeatedProbe = second;
       assertFixture(first.allowed === allowed, 'stable_probe_changed_or_wrong_gate');
       checkedImmutablePair(first, second);
       if (overlappingRetry) {
@@ -1021,21 +1045,35 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       const callback = Promise.resolve().then(() => onLiveHold(context)).catch(() => { throw new ProbeFixtureError('live_hold_callback_failed'); });
       const decision = await Promise.race([bounded(callback, 'live_hold_callback_timeout', callbackMilliseconds, owned.signal), refused]);
       assertFixture(native.child.exitCode === null && !native.child.killed && client.transportIntact(), 'live_hold_source_not_alive');
-      const line = holdDecision(decision);
+      const command = holdDecision(decision);
+      let capturePreflight;
+      if (command.action === 'capture') {
+        const identity = { sourceCommit: harness.identity.pinnedBuild.source.commit,
+          probeSha256: harness.identity.sourceSha256.probe,
+          fixtureBinarySha256: harness.identity.fixtureBinarySha256 };
+        capturePreflight = checkHeldCapturePreflight({ schemaVersion: 1, sourceIdentity: identity,
+          probe: first, repeatedProbe: heldRepeatedProbe,
+          hold: { nonce: command.nonce, callSerial: command.callSerial, sourceHeld: true, historical: false },
+          budget: command.budget }, identity, { nonce: ready.nonce, callSerial: ready.callSerial });
+        assertFixture(capturePreflight.eligibleForInventoryReview, 'live_capture_preflight');
+      }
       await verifyHarness(owned.signal);
       assertFixture(performance.now() - holdReceivedAt < ready.deadlineMilliseconds - 100, 'live_hold_deadline');
-      await bounded(new Promise((resolve, reject) => native.child.stdin.write(line, error => error ? reject(new ProbeFixtureError('live_hold_write')) : resolve())), 'live_hold_write', 500, owned.signal);
+      await bounded(new Promise((resolve, reject) => native.child.stdin.write(command.line, error => error ? reject(new ProbeFixtureError('live_hold_write')) : resolve())), 'live_hold_write', 500, owned.signal);
       const reobserved = checkedProbe(await native.wait('probe', message => message.sample === 3), scenario);
       const repeatedReobserved = checkedProbe(await native.wait('probe', message => message.sample === 4), scenario);
       checkedImmutablePair(reobserved, repeatedReobserved);
       const normalize = value => { const copy = { ...value }; delete copy.sample; return copy; };
       assertFixture(JSON.stringify(normalize(first)) === JSON.stringify(normalize(reobserved)), 'live_hold_metadata_changed');
+      const capture = command.action === 'capture'
+        ? checkedCaptureEvent(await native.wait('capture-cleared'), ready.nonce, ready.callSerial) : undefined;
       const released = checkedHoldEvent(await native.wait('hold-released'), 'hold-released', first, ready.nonce);
       assertFixture(client.transportIntact(), 'live_hold_peer_closed_before_release');
       liveHold = { nonce: ready.nonce, callSerial: ready.callSerial, deadlineMilliseconds: callbackMilliseconds,
         nativeDeadlineMilliseconds: ready.deadlineMilliseconds, ready, reobserved, repeatedReobserved, released,
-        sourceAliveBeforeAndAfterCallback: true, heldDuringCallback: true, sourceHeld: false, historical: true, decision: 'continue',
+        sourceAliveBeforeAndAfterCallback: true, heldDuringCallback: true, sourceHeld: false, historical: true, decision: command.action,
         immutableBeforeRelease: true, applicationBytesRead: payloadBytes, applicationBytesWritten: payloadBytes,
+        ...(capture ? { capture, capturePreflight } : {}),
         exportAuthority: false, semanticExportImport: false, migration: false };
       client.endOnEcho();
     }
