@@ -3,26 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-g3-service-20261024T142800Z",
-    "owner": "codex-coordinator-g3-service",
-    "baseCommit": "b992b367fb53c88059075a6dec8dc5fb0f0cb066",
-    "acquiredAtUTC": "2026-10-24T14:28:00.000Z",
-    "expiresAtUTC": "2026-10-24T15:08:00.000Z",
-    "task": "G3 partial guarded systemd-user recipe generation and refusal tests; no service installation or runtime acceptance",
-    "allowedFiles": [
-      "x10/service/user-unit.mjs",
-      "x10/service/user-unit.test.mjs",
-      "x10/service/README.md",
-      ".github/workflows/x10-native.yml",
-      "x10/STATUS.md",
-      "x10/PLAN.md",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/continuum/BACKGROUND.json",
-      "x10/evidence/g3-service-recipe.json",
-      "x10/review/g3-service-recipe-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1119,6 +1100,7 @@
     }
   },
   "pendingVerification": [
+    "Verify exact resulting G3 user-unit recipe implementation CI and actual new required recipe test step. Generated/static unit controls do not accept real systemd-user lifecycle, startup readiness, TLS, a clean nonroot target or Production V1.",
     "Readiness implementation 6abc888388b2e45c0986c3c9b043aa03324fd77e is exact-hosted verified narrowly (native20 groups, controller86, alpha40, operator30 and required Unix/feature-off/archive steps). G3 service/TLS, G2 permanent distribution/published-file replay and G4-G8 remain open; this is not Production V1.",
     "Exact G2 application upstream and expanded alpha/required Unix CI accepted narrowly for implementation eb4e2de3026edb7a59e877fff8971c8d039e8143. Local AF_UNIX EPERM remains an unresolved environment restriction, not a code fix. Permanent versioned alpha archive and independent published-file nonroot Node22 replay remain pending; G3-G8 and Production V1 are not accepted.",
     "G1 contract/declaration validation is exact-hosted verified only. G2 permanent Local Alpha replay and G3-G8 nonroot target service/TLS/rollback/recovery/security/soak/Production V1 acceptance remain open.",
@@ -1137,29 +1119,29 @@
   ],
   "nextTasks": [
     {
-      "id": "G2-archive-exact-CI",
+      "id": "G3-service-recipe-exact-CI",
       "state": "pending-exact-resulting-implementation",
-      "goal": "Verify authored archive refusal tests and actual newly packed alpha in native CI."
+      "goal": "Verify actual required new recipe tests on exact implementation CI."
+    },
+    {
+      "id": "G3-service-TLS-runtime",
+      "state": "unaccepted",
+      "goal": "Implement and accept verified TLS and real nonroot user-manager lifecycle, bounded automatic readiness, drain and failure/refusal paths."
     },
     {
       "id": "G2-distribution",
       "state": "blocked-release-publication-capability",
-      "goal": "Permanent versioned release and independent published-file nonroot Node22 replay require an available authorized Release/asset writer."
+      "goal": "Permanent versioned release and independent published-file replay require available authorized Release/asset writer."
     },
     {
-      "id": "G3-independent",
-      "state": "permitted-independent-work-with-explicit-gates",
-      "goal": "Continue independent service/proxy/TLS work without claiming blocked published-file acceptance."
-    },
-    {
-      "id": "G3-G8",
+      "id": "G4-G8",
       "state": "unaccepted",
-      "goal": "Complete operated service, recovery, security, soak and final V1 evidence."
+      "goal": "Finish recovery, security, frozen soak, distribution and final V1 acceptance."
     },
     {
       "id": "G9",
       "state": "blocked-by-accepted-V1",
-      "goal": "Controlled transition only after accepted G0-G8 evidence."
+      "goal": "Controlled transition only after accepted G0-G8."
     }
   ],
   "money": {
@@ -1410,7 +1392,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "Implement the next permitted G3 TLS and systemd-user service package: explicit downstream/upstream CA and hostname controls, guarded service startup/stop/restart, failed-start cleanup, slow-drain and faulted/orphan refusals. Readiness implementation 6abc888388b2e45c0986c3c9b043aa03324fd77e is exact-hosted verified only; do not rerun it unchanged without a new question. The local UID0/Node24 and absent user manager do not accept the target service. G2 permanent versioned distribution and independent published-file nonroot Node22 replay remain blocked by available Release/asset publication capabilities; do not bypass credentials or workflow permissions. G2 remains partial, G3-G8/Production V1 unaccepted, all native features and deferred Continuum preserved. Check fresh central dispatch and acquire a new lease before further writes.",
+  "nextConcreteTask": "First verify exact resulting G3 user-unit recipe CI and its actual required test step. This generated systemd-user recipe has not installed or activated a service and Type=exec only confirms process execution, not native identity or application readiness. Manual bind after confirmed native startup remains mandatory; an installed bounded readiness wait helper requires its own implementation and acceptance before automatic health startup. Then continue permitted G3 downstream/upstream TLS CA and hostname controls and real nonroot user-manager service startup/stop/restart, failed-start, slow-drain and faulted/orphan tests. G2 permanent publication/published-file replay remain blocked by available Release/asset publication capability; do not bypass credentials or permissions. G2 remains partial, G3-G8 and Production V1 unaccepted; preserve full native and deferred Continuum scope.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1618,7 +1600,7 @@
     "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G3_SERVICE_TLS_PENDING_G2_PERMANENT_DISTRIBUTION_OPEN",
+    "currentGate": "G3_SERVICE_RECIPE_EXACT_CI_PENDING_TLS_AND_MANAGER_UNACCEPTED",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -1629,66 +1611,32 @@
     "g2ArchiveEvidence": "x10/evidence/g2-archive.json",
     "g2ArchiveHostedEvidence": "x10/evidence/g2-archive-hosted.json",
     "g3ReadinessLocalEvidence": "x10/evidence/g3-readiness.json",
-    "g3ReadinessHostedEvidence": "x10/evidence/g3-readiness-hosted.json"
+    "g3ReadinessHostedEvidence": "x10/evidence/g3-readiness-hosted.json",
+    "g3ServiceRecipeLocalEvidence": "x10/evidence/g3-service-recipe.json"
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-g3-readiness-20261024T134116049Z",
-    "baseCommit": "783de7994f0af0ea9d4d1129be28c31c57227f8d",
-    "publicationParent": "5faf99283f6eac55790a03b67c2482a378ae931c",
-    "scope": "G3 partial: explicit bounded application readiness status/body contract",
-    "result": "New application installs require exact HTTP200 ready newline; wrong-body200 bind/apply/recover refuse. Legacy canonical records and optional status-only behavior preserved. Actual archive implementation CI reconciled separately.",
+    "runId": "x10-g3-service-20261024T142800Z",
+    "baseCommit": "b992b367fb53c88059075a6dec8dc5fb0f0cb066",
+    "publicationParent": "96e0c71c652230120321109a255e2dcd2ee18feb",
+    "scope": "G3 partial: guarded systemd-user recipe generation and refusal controls",
+    "result": "Added explicit user-unit recipe generation and refusal tests. No service installed or activated; process execution is distinct from readiness. Exact new CI pending.",
     "nativeSourceChanged": false,
-    "controllerImplementationChanged": true,
-    "alphaRuntimeChanged": true,
-    "distributionVerificationChanged": false,
-    "localEvidence": "x10/evidence/g3-readiness.json",
-    "perFileLedger": "x10/review/g3-readiness-ledger.json",
-    "independentReview": "12/12 actual-function HTTP checks, no critical finding; native execution recorded by coordinator separately",
+    "controllerImplementationChanged": false,
+    "alphaRuntimeChanged": false,
+    "serviceRecipeChanged": true,
+    "localEvidence": "x10/evidence/g3-service-recipe.json",
+    "perFileLedger": "x10/review/g3-service-recipe-ledger.json",
     "hostedVerification": {
-      "state": "SUCCESS_SCOPED_READINESS_COMPATIBILITY_ONLY",
-      "implementationCommit": "6abc888388b2e45c0986c3c9b043aa03324fd77e",
-      "evidence": "x10/evidence/g3-readiness-hosted.json"
+      "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
     },
-    "permanentAlphaAccepted": false,
     "serviceAccepted": false,
     "tlsAccepted": false,
+    "targetUserManagerAccepted": false,
+    "readinessAutomated": false,
+    "permanentAlphaAccepted": false,
     "productionAccepted": false,
     "newPurchases": false,
-    "productionDeployChanged": false,
-    "localVerification": {
-      "nativeAggregateGroupsPassed": 20,
-      "nativeAggregateGroupsTotal": 20,
-      "controller": {
-        "format": "node-test-tap",
-        "pass": 86,
-        "fail": 0,
-        "valid": true
-      },
-      "alphaLifecycle": {
-        "format": "node-test-tap",
-        "pass": 40,
-        "fail": 0,
-        "valid": true,
-        "total": 40,
-        "skipped": 0,
-        "todo": 0,
-        "cancelled": 0
-      },
-      "operatorStatus": {
-        "format": "node-test-tap",
-        "pass": 30,
-        "fail": 0,
-        "valid": true,
-        "total": 30,
-        "skipped": 0,
-        "todo": 0,
-        "cancelled": 0
-      },
-      "releaseRegressionsPassed": 50,
-      "independentRawHTTPChecksPassed": 12,
-      "targetNonrootNode22Accepted": false
-    },
-    "recordedAtUTC": "2026-10-24T13:58:30.173904+00:00"
+    "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
     "runId": "x10-g3-readiness-ci-20261024T140552350Z",
@@ -1807,6 +1755,65 @@
         "historyRewritten": false,
         "subsequentMessageRule": "Require exit0 AND empty stdout AND empty stderr, with description lines at most72 characters before commit creation."
       }
+    },
+    {
+      "runId": "x10-g3-readiness-20261024T134116049Z",
+      "baseCommit": "783de7994f0af0ea9d4d1129be28c31c57227f8d",
+      "publicationParent": "5faf99283f6eac55790a03b67c2482a378ae931c",
+      "scope": "G3 partial: explicit bounded application readiness status/body contract",
+      "result": "New application installs require exact HTTP200 ready newline; wrong-body200 bind/apply/recover refuse. Legacy canonical records and optional status-only behavior preserved. Actual archive implementation CI reconciled separately.",
+      "nativeSourceChanged": false,
+      "controllerImplementationChanged": true,
+      "alphaRuntimeChanged": true,
+      "distributionVerificationChanged": false,
+      "localEvidence": "x10/evidence/g3-readiness.json",
+      "perFileLedger": "x10/review/g3-readiness-ledger.json",
+      "independentReview": "12/12 actual-function HTTP checks, no critical finding; native execution recorded by coordinator separately",
+      "hostedVerification": {
+        "state": "SUCCESS_SCOPED_READINESS_COMPATIBILITY_ONLY",
+        "implementationCommit": "6abc888388b2e45c0986c3c9b043aa03324fd77e",
+        "evidence": "x10/evidence/g3-readiness-hosted.json"
+      },
+      "permanentAlphaAccepted": false,
+      "serviceAccepted": false,
+      "tlsAccepted": false,
+      "productionAccepted": false,
+      "newPurchases": false,
+      "productionDeployChanged": false,
+      "localVerification": {
+        "nativeAggregateGroupsPassed": 20,
+        "nativeAggregateGroupsTotal": 20,
+        "controller": {
+          "format": "node-test-tap",
+          "pass": 86,
+          "fail": 0,
+          "valid": true
+        },
+        "alphaLifecycle": {
+          "format": "node-test-tap",
+          "pass": 40,
+          "fail": 0,
+          "valid": true,
+          "total": 40,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "operatorStatus": {
+          "format": "node-test-tap",
+          "pass": 30,
+          "fail": 0,
+          "valid": true,
+          "total": 30,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "releaseRegressionsPassed": 50,
+        "independentRawHTTPChecksPassed": 12,
+        "targetNonrootNode22Accepted": false
+      },
+      "recordedAtUTC": "2026-10-24T13:58:30.173904+00:00"
     }
   ],
   "v1VerificationReceiptHistory": [

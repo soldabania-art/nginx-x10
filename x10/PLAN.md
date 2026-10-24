@@ -821,3 +821,25 @@ and TLS, G4-G8 and Production V1 remain open. The next task is the bounded
 TLS/systemd-user service package, with guarded failed-start/drain/orphan behavior.
 The local AF_UNIX refusal and absent target user manager are not fixed by hosted
 Unix success. Full native and deferred Continuum scope remain preserved.
+
+
+## G3 partial: guarded systemd-user recipe
+
+A generated user-unit recipe now makes the Node executable, installed launcher,
+private control socket and process stop policy explicit. It does not install,
+enable or activate a service. Type=exec means process execution only, not native
+identity establishment or application readiness. Automatic Restart is disabled;
+forced SIGKILL and process-group cleanup are not enabled by this recipe.
+
+Independent review identified a startup-lock race in a proposed immediate
+ExecStartPost bind. That command is omitted; the operator must confirm native
+startup and perform the documented explicit bind. An installed bounded readiness
+wait helper remains a separate gate, not an untested automatic health promise.
+[Evidence](evidence/g3-service-recipe.json) separates authored and independent
+format/refusal checks, static unit validation and actual manager availability.
+Exact new implementation CI is pending. No native/controller/alpha runtime changed.
+
+The accepted readiness6abc8883 and archive783de799 CI remain preserved. G2 remains
+partial with permanent release/published-file replay open. Real nonroot user-manager
+service lifecycle, TLS trust, failure/slow-drain/orphan cases, G4-G8 and Production
+V1 remain unaccepted. Full native and deferred Continuum scope stay preserved.

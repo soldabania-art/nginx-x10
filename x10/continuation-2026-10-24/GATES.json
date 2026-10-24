@@ -298,6 +298,18 @@
         "targetServiceAccepted": false,
         "implementationCommit": "6abc888388b2e45c0986c3c9b043aa03324fd77e",
         "hostedEvidence": "x10/evidence/g3-readiness-hosted.json"
+      },
+      "serviceRecipeSubcheckpoint": {
+        "runId": "x10-g3-service-20261024T142800Z",
+        "sourceBase": "b992b367fb53c88059075a6dec8dc5fb0f0cb066",
+        "publicationParent": "96e0c71c652230120321109a255e2dcd2ee18feb",
+        "evidence": "x10/evidence/g3-service-recipe.json",
+        "scope": "Generated systemd-user process recipe only; no service activation or runtime acceptance",
+        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+        "serviceAccepted": false,
+        "readinessAutomated": false,
+        "tlsAccepted": false,
+        "productionAccepted": false
       }
     },
     {
@@ -631,5 +643,14 @@
     "fullScopePreserved": true,
     "hostedEvidence": "x10/evidence/g3-readiness-hosted.json",
     "implementationCommit": "6abc888388b2e45c0986c3c9b043aa03324fd77e"
+  },
+  "g3ServiceRecipeCheckpoint": {
+    "runId": "x10-g3-service-20261024T142800Z",
+    "evidence": "x10/evidence/g3-service-recipe.json",
+    "nextConcreteTask": "First verify exact resulting G3 user-unit recipe CI and its actual required test step. This generated systemd-user recipe has not installed or activated a service and Type=exec only confirms process execution, not native identity or application readiness. Manual bind after confirmed native startup remains mandatory; an installed bounded readiness wait helper requires its own implementation and acceptance before automatic health startup. Then continue permitted G3 downstream/upstream TLS CA and hostname controls and real nonroot user-manager service startup/stop/restart, failed-start, slow-drain and faulted/orphan tests. G2 permanent publication/published-file replay remain blocked by available Release/asset publication capability; do not bypass credentials or permissions. G2 remains partial, G3-G8 and Production V1 unaccepted; preserve full native and deferred Continuum scope.",
+    "serviceAccepted": false,
+    "targetUserManagerAccepted": false,
+    "productionAccepted": false,
+    "fullScopePreserved": true
   }
 }

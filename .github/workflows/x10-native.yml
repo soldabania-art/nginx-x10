@@ -57,6 +57,8 @@ jobs:
             > x10/.build/ci-evidence/release-record.tap
       - name: Validate alpha archive refusal controls
         run: node --test --test-reporter=tap x10/release/verify-alpha-archive.test.mjs > x10/.build/ci-evidence/alpha-archive.tap
+      - name: Validate guarded user-service recipe
+        run: node --test --test-reporter=tap x10/service/user-unit.test.mjs > x10/.build/ci-evidence/user-unit.tap
       - name: Build dependencies and optional test clients
         run: |
           sudo apt-get update
