@@ -8,6 +8,7 @@
 #include "crypto/bio/bio_local.h"
 #include "ssl/ssl_local.h"
 #include "openssl-probe.h"
+#include "openssl-usage.h"
 #include <limits.h>
 #include <string.h>
 
@@ -141,6 +142,13 @@ int x10_openssl_probe(const SSL *s, const X10_PROBE_LEDGER *ledger,
         out->reasons |= X10_REASON_GENERATION;
     x10_sequence(out->read_next_sequence, rl->read_sequence);
     x10_sequence(out->write_next_sequence, rl->write_sequence);
+    /* A conservative current-key usage observation, not future I/O budget
+     * enforcement. Initial-generation/monitor and all other guards still
+     * apply; no sequence or SSL state is changed by these comparisons. */
+    if (!x10_sequence_usage_allowed(rl->read_sequence))
+        out->reasons |= X10_REASON_READ_USAGE;
+    if (!x10_sequence_usage_allowed(rl->write_sequence))
+        out->reasons |= X10_REASON_WRITE_USAGE;
 
     out->rstate = rl->rstate;
     out->rwstate = s->rwstate;

@@ -502,3 +502,19 @@ test('truncated encrypted body retains its real read retry through fatal EOF ref
   assert.equal(result.migration, false);
   assert.equal(result.nativeNginxIntegration, false);
 });
+
+// Counter boundaries are synthetic metadata controls, distinct from the
+// authenticated ordinary TLS scenarios and handled runtime signal cases.
+test('synthetic uint64 metadata obeys conservative directional key usage admission', { timeout: 40000 }, async () => {
+  const { checkSyntheticUsageBoundaries } = await import('./openssl-usage-test.mjs');
+  const result = await checkSyntheticUsageBoundaries();
+  assert.equal(result.passed, true);
+  assert.ok(result.syntheticCounters >= 150);
+  assert.equal(result.nullControls, 1);
+  assert.equal(result.directionalReasonConstants, 2);
+  assert.equal(result.capRecordsPerDirection, '16777216');
+  assert.equal(result.maximumAdmittedNextSequence, '16777215');
+  assert.equal(result.actualNearLimitTLS, false);
+  assert.equal(result.temporaryRemoved, true);
+  assert.equal(result.migration, false);
+});

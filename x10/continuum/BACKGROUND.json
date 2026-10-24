@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-usage-20261024T032250401Z",
-    "owner": "codex-coordinator",
-    "baseCommit": "15641e756c3dad8eec925eeff698e564b8b213c5",
-    "acquiredAtUTC": "2026-10-24T03:22:50.401Z",
-    "expiresAtUTC": "2026-10-24T04:07:50.401Z",
-    "task": "Bounded quiescent directional sequence/key usage admission before C2b"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -766,9 +759,23 @@
         40054592543,
         40054596722
       ]
+    },
+    "c2aUsageLocal": {
+      "state": "success-local-exact-hosted-pending",
+      "evidence": "x10/evidence/continuum-c2a-usage.json",
+      "nativeEvidence": "x10/evidence/continuum-c2a-usage-native-regression.json",
+      "flatChecks": 22,
+      "ordinaryActualTLSScenarios": 18,
+      "signals": 2,
+      "noTLSControls": 1,
+      "syntheticPredicateTests": 1,
+      "independentActualTLSHeldouts": 2,
+      "fullInventory": false,
+      "migration": false
     }
   },
   "pendingVerification": [
+    "Exact research/native CI for the result commit enclosing the usage evidence is pending; record implementation SHA and run IDs before accepting hosted success.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
     "C2a remaining inventory: other control/alert/partial/EOF/shutdown and sequence/key usage admission. Normal server-first shutdown and post-echo unexpected FIN refusal observed locally; full inventory and overlap admission remain unsupported.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
@@ -789,7 +796,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Truncated-body21 locally+hosted accepted as narrow refusal observation; next quiescent sequence/key usage gate before C2b, remaining variants unsupported."
+      "goal": "Quiescent initial-key usage gate locally verified; exact CI pending, then C2a readiness review for a bounded C2b capsule; unknown states unsupported."
     },
     {
       "id": "C3",
@@ -946,26 +953,17 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
-    "runId": "continuum-trunc-20261024T021812255Z",
-    "baseCommit": "0d088591de17b2d8742fb1d96d1e28822771bbcf",
-    "publicationParent": "2aa0f484365bd2cb6bd68ed0741ef2956c72a211",
-    "result": "Canonical21 plus2 independent actualTLS and2 noTLS option controls, core21/process7/C127/native20 passed locally; both exact research and both native workflows completed success. Relay-injected refusal, wire:null, no migration.",
-    "helpers": "5 temporary delegated roles, only coordinator integrates/publishes",
+    "runId": "continuum-usage-20261024T032250401Z",
+    "baseCommit": "15641e756c3dad8eec925eeff698e564b8b213c5",
+    "publicationParent": "f5ead0a5414e5c3e60d0058fcf260d57bc04d653",
+    "result": "Read/write next sequence <2^24 observation policy; canonical22, independent2 actual low-counter TLS, synthetic boundaries, core21/process7/C127/native20 locally passed. Exact hosted pending; no migration.",
+    "helpers": "5 temporary delegated roles; only coordinator integrates and publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-truncated-body-ledger.json",
+    "perFileLedger": "x10/review/continuum-c2a-usage-ledger.json",
     "hostedVerification": {
-      "state": "success-narrow-profile",
-      "researchRuns": [
-        40054592561,
-        40054596847
-      ],
-      "nativeRuns": [
-        40054592543,
-        40054596722
-      ]
-    },
-    "implementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473"
+      "state": "pending-exact-result-commit"
+    }
   },
   "lastVerificationReceipt": {
     "runId": "continuum-trunc-ci-20261024T023350170Z",
@@ -987,28 +985,28 @@
     ],
     "scope": "Read-only truncated-body EOF refusal; no migration"
   },
-  "nextConcreteTask": "Next one bounded sequence/key usage admission gate for the quiescent profile before C2b. Other truncation/header/RST variants remain unsupported/fail-closed. First inspect any new native failure; historical d4bb2bc exact cause remains unproven.",
+  "nextConcreteTask": "First verify exact implementation CI for the usage gate. Then review C2a obligations against a first bounded quiescent initial-generation C2b semantic capsule; implement exporter only after that readiness gate. Preserve future record budget and all unsupported-state refusals. No more closure variants merely to defer the library-state unknown.",
   "previousDevelopmentPass": {
-    "runId": "continuum-peerclose-20261024T011655166Z",
-    "baseCommit": "dabe7b812ac24c95f752efec7508be9785b6b2c2",
-    "publicationParent": "be477b6a665f382394625b3a48a601618f2ac886",
-    "result": "Canonical20 plus2 independent actualTLS heldouts, core21/process7/C1 27 and native20 passed locally; both exact research and both native workflows completed success. Read-only closed-state refusal, no migration.",
-    "helpers": "5 temporary roles; only coordinator integrates/publishes",
+    "runId": "continuum-trunc-20261024T021812255Z",
+    "baseCommit": "0d088591de17b2d8742fb1d96d1e28822771bbcf",
+    "publicationParent": "2aa0f484365bd2cb6bd68ed0741ef2956c72a211",
+    "result": "Canonical21 plus2 independent actualTLS and2 noTLS option controls, core21/process7/C127/native20 passed locally; both exact research and both native workflows completed success. Relay-injected refusal, wire:null, no migration.",
+    "helpers": "5 temporary delegated roles, only coordinator integrates/publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-peer-close-ledger.json",
+    "perFileLedger": "x10/review/continuum-c2a-truncated-body-ledger.json",
     "hostedVerification": {
       "state": "success-narrow-profile",
       "researchRuns": [
-        40050023137,
-        40050026763
+        40054592561,
+        40054596847
       ],
       "nativeRuns": [
-        40050023101,
-        40050026739
+        40054592543,
+        40054596722
       ]
     },
-    "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8"
+    "implementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473"
   },
   "previousVerificationReceipt": {
     "runId": "continuum-peerclose-ci-20261024T013025923Z",

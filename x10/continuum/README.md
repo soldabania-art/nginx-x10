@@ -453,3 +453,22 @@ Prior20bytes, generic ledger/probe/oracle и499 native files сохранены.
 setup corrections. Exact implementation CI pending. Далее — ограниченный
 sequence/key usage gate для quiescent profile перед C2b; остальные
 truncation/RST variants unsupported. Export/import и TLS-code change не готовы.
+
+## Continuum C2a: ограниченный допуск использования ключей
+
+Probe теперь независимо отвергает read/write next sequence от `2^24`.
+Это консервативная политика наблюдения initial application-key epoch,
+а не контроль бюджета последующего I/O. Восьмибайтные counters сравниваются
+точно; прочие ledger/buffer/control/generation guards сохранены.
+
+Локально22/22:18 обычных actualTLS scenarios,2 runtime signals,1 noTLS
+source control и1 synthetic predicate test с192 counter inputs. Независимо:
+2 actualTLS low-counter heldouts,8527 pure-C synthetic vectors и отдельные
+full-probe synthetic metadata controls. Большие counters не выдаются за
+реальные TLS exchanges. Core21/process7/C1 27 и native20/20 прошли;
+official1083 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL.
+[Evidence](../evidence/continuum-c2a-usage.json) сохраняет исходные отказы setup и hashes. Exact implementation
+CI pending; прежний6cee238 принят отдельно. Полнота inventory, semantic
+export/import, runtime budget enforcement и TLS-code migration не реализованы.
+Далее — exact CI, затем review C2a readiness для первого узкого C2b capsule;
+остальные alert/EOF/partial variants остаются unsupported/fail-closed.

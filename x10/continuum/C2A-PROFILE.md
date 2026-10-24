@@ -125,7 +125,8 @@ private flags. CA/hostname проверяет Node TLS client; record observatio
 Последний случай подтверждает наблюдение завершённого key transition и отказ
 initial-generation profile, а не перенос KeyUpdate state. Negative fixtures с
 неполным I/O не объявляют graceful TLS closure; teardown проверяется отдельно.
-Probe не выдаёт traffic grant и не устанавливает usage-limit admission policy.
+Первоначальный probe не выдавал traffic grant и не устанавливал usage-limit
+admission policy; новый ограниченный policy описан в конце этого документа.
 
 ### Дополнение: lifecycle незавершённого чтения
 
@@ -517,3 +518,41 @@ Prior20bytes, generic ledger/probe/oracle и499 native files сохранены.
 setup corrections. Exact implementation CI pending. Далее — ограниченный
 sequence/key usage gate для quiescent profile перед C2b; остальные
 truncation/RST variants unsupported. Export/import и TLS-code change не готовы.
+
+## Quiescent directional sequence/key usage admission
+
+The initial `TLS_AES_128_GCM_SHA256` application-key profile now requires each
+observed next-record sequence to be strictly below `2^24`. This is a fixed,
+conservative research policy, below the approximately `2^24.5` full-size
+AES-GCM record limit in [RFC 8446 section 5.5](https://www.rfc-editor.org/rfc/rfc8446.html#section-5.5);
+it is not an exact restatement of that bound. It leaves at least one unused
+record under the chosen cap. All protected record types in that application-key epoch count,
+not just records carrying application bytes. The pinned record code advances
+sequence before EVP processing, so the value includes attempts that reached
+that increment; it is not a successful-record or plaintext-byte counter.
+Handshake Finished normally uses the separate handshake-key epoch and is not
+included by this claim.
+
+`openssl-usage.h` compares the exact eight-byte big-endian counter without
+addition, narrowing, floating-point conversion or counter reset. NULL input is
+refused. The read-only probe applies the helper independently to read and write,
+adding READ_USAGE bit16 or WRITE_USAGE bit17. Existing known/initial-generation,
+buffer, retry, control, terminal-state and transport guards remain mandatory;
+the result schema and ledger contract are unchanged. The runner hashes the new
+header with its other compile inputs before and after harness use; the reviewed
+source freeze includes 16 research files, including both new test helpers.
+
+Large counters are tested against the pure helper as synthetic metadata, not
+by sending millions of TLS records or altering counters during a claimed
+authenticated exchange. The canonical boundary test does not call the full
+probe on fabricated high-counter SSL objects. A separate independent control
+checks full-probe directional wiring using wholly synthetic SSL metadata;
+it does not perform TLS or socket I/O. Existing real-TLS scenarios exercise
+the integrated probe at ordinary observed counts. Refusal of high values does not independently detect a previous wrap,
+reset or forged epoch history. An allowed snapshot does not enforce future
+record budgets, reserve all handover/closure traffic, schedule KeyUpdate, grant
+traffic ownership or prove AEAD safety for continuation. Existing ledger and
+terminal-state guards refuse observed terminal failures; this is not a separate
+forgery-budget proof. Runtime budget preservation still needs its own C2b review; semantic export/import, actual TLS-code update
+and native NGINX migration remain unimplemented. The baseline lacks this
+new policy/helper; its capability refusal is not evidence of an OpenSSL defect.

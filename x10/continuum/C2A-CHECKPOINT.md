@@ -582,3 +582,62 @@ Implementation `6cee2384e91e9fda4251c53dbeddce9cc951f473`: research push
 прошли. [Очищенная квитанция](../evidence/continuum-c2a-truncated-body-hosted.json) сохраняет exact SHA/run IDs,
 artifact hashes и отдельные checkout identities. Это relay-injected refusal,
 wire=null; не migration/full inventory. Далее — quiescent sequence/key usage.
+
+## Quiescent sequence/key usage policy checkpoint
+
+The read-only initial-application-key profile now refuses either directional
+next sequence at or above `2^24`, with separate READ_USAGE/WRITE_USAGE reasons.
+The lower-than-RFC cap is a conservative research admission policy, not future
+I/O budget enforcement. Exact bytes are compared without arithmetic wrap or
+Number rounding. Initial-generation, terminal-state and existing obligation
+checks remain unchanged. See the [profile](C2A-PROFILE.md#quiescent-directional-sequencekey-usage-admission)
+for the counter-attempt semantics and unsupported continuation guarantees.
+
+The pure C helper passed 192 synthetic uint64 inputs against a separate BigInt
+oracle, one NULL refusal and two directional reason-constant controls. No
+near-limit TLS traffic is generated. A missing-helper baseline control stops
+before build/TLS and demonstrates absent capability, not an OpenSSL defect.
+The exact `node x10/continuum/openssl-probe-check.mjs` command passed once:
+22/22, zero failures/skips/TODO/cancellations, no timeout/output overflow or
+interruption. The families are 18 ordinary actual-TLS scenarios, 2 handled
+runtime signals, 1 no-TLS cached-source control and 1 synthetic helper test.
+The preceding 21 canonical test bodies remain byte-identical; all 16 frozen
+research source hashes remained unchanged, including the new helper/driver.
+Independent pure-helper controls passed 8527 synthetic vectors. Two independent
+actual-TLS heldouts passed with payloads 3079 and 45013 and ordinary next
+sequences 1/1 and 3/3: exact wire data, both close_notify/FIN and immutable
+repeated allowed probes. Their TLS counters were not modified. Owned temporary
+roots were removed and all 39 observed child processes closed; this cleanup
+sample is not a general process-ownership fence.
+
+A separate independent full-probe control used 13 wholly synthetic SSL
+metadata pairs with the pinned headers/static libraries and no TLS, crypto or
+socket I/O. The unchanged baseline allowed all 13; the candidate allowed 3 and
+refused 10 with exact directional reasons 65536/131072/196608. SSL metadata,
+ledger and repeated observations stayed immutable; a separate generation1
+case still refused even at sequence0. This checks policy wiring, not installed
+real keys or authenticated near-limit connections. An initial stale/pruned
+build identity assertion stopped before compilation; the corrected setup used
+an owned fresh pinned build and retains that setup diagnostic.
+
+A private prelaunch verifier initially excluded the appended block's final
+newline and falsely reported changed baseline test bytes. It stopped before
+canonical launch, build or TLS. Corrected prefix verification passed with the
+same sources; this setup correction is retained separately from test results.
+
+Core21, process7 and C1 27 passed locally. A fresh native build and the exact
+`node x10/test/all.mjs --official` aggregate passed 20/20 groups without rerun.
+Alpha TAP37 includes 28 synthetic checks and 9 original lifecycle checks,
+including parent tests. The local official sample retains 1083 strict PASS,
+25 SKIP, 1 expected TODO-fail and zero unexpected failures; 32 files pass and
+3 skip for optional dependencies. Native source and existing alpha guards are
+unchanged. One native working-directory setup correction occurred before build;
+this is retained separately, not counted as a runtime test failure.
+
+[Usage evidence](../evidence/continuum-c2a-usage.json) and the
+[native regression receipt](../evidence/continuum-c2a-usage-native-regression.json)
+retain exact source/build identities and cleanup boundaries. Exact hosted CI
+for this implementation is pending. Historical alpha failure evidence and its
+unproven exact cause remain preserved; a later success does not erase it.
+This policy does not implement semantic export/import, actual TLS-code changes
+or native NGINX migration. No new infrastructure or spending was introduced.

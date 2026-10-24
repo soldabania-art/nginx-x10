@@ -48,6 +48,8 @@ typedef struct {
 #define X10_REASON_TRANSPORT      (UINT64_C(1) << 13)
 #define X10_REASON_BOUNDS         (UINT64_C(1) << 14)
 #define X10_REASON_KEY_UPDATE     (UINT64_C(1) << 15)
+#define X10_REASON_READ_USAGE     (UINT64_C(1) << 16)
+#define X10_REASON_WRITE_USAGE    (UINT64_C(1) << 17)
 
 /* Allowlisted lengths/enums/counters only. No secret bytes, addresses or key
  * fingerprints. seq strings are empty when an input/ledger/active-call guard

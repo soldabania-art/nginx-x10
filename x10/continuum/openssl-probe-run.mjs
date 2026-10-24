@@ -226,7 +226,8 @@ let harness;
 let preparing;
 let running = false;
 const sourceFiles = { fixture: SOURCE, peerClient: PEER_SOURCE, probe: PROBE_SOURCE,
-  header: fileURLToPath(new URL('./openssl-probe.h', import.meta.url)), patch: PATCH };
+  header: fileURLToPath(new URL('./openssl-probe.h', import.meta.url)),
+  usage: fileURLToPath(new URL('./openssl-usage.h', import.meta.url)), patch: PATCH };
 const sourceHashes = async () => Object.fromEntries(await Promise.all(Object.entries(sourceFiles).map(async ([name, path]) => [name, sha256(await readFile(path))])));
 
 /** One pinned build per process. Returned value contains public identity only. */
