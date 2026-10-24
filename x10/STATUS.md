@@ -1569,3 +1569,38 @@ counted separately. Official outcomes retain 1083 strict PASS,
 nonroot Node22 target. Initial authored 5PASS/5FAIL test assertions and the
 independent chown EINVAL fixture setup are retained as diagnostic history;
 they are not product runtime fixes.
+
+
+### Exact CI: installed HTTPS-upstream trust verification
+
+Implementation `84a12537c2f102a9e3c8bcc8ba2ad1ebf59397fe` is now
+exact-hosted verified for the installed managed HTTP gateway to HTTPS
+application upstream. Both actual native jobs ran the new required installed
+TLS step; its 10 TAP results (9 nested scenarios plus one wrapper) and owned
+cleanup are separate from the 20 existing native aggregate groups.
+[Receipt](evidence/g3-tls-trust-hosted.json) records actual completed jobs,
+complete logs, downloaded ZIP digests, source/build/merge identities and the
+retained metadata observations. Earlier observer CI was not borrowed as proof.
+
+Both native jobs observed Node 22.23.3 and separately passed 20/20 native
+aggregate groups, controller 86, alpha 45, operator 30 and listener 42.
+Required Unix control 9/generations 10/operator 30, feature-off 4,
+user-unit 15/archive 15/release-record 35 and actual packed-archive checks
+also passed. Official results retain 1105 PASS/25 SKIP/1 expected TODO-fail
+and zero unexpected FAIL. Research PR actually executed 21 core/7 process/
+27 C1/48 C2a; push research runtime was skipped. Current executed job step
+arrays expose completed success; no earlier missing-step anomaly is
+inferred or copied. Inherited CLA failure remains separate and no agreement
+was accepted. These are separate counting units.
+
+The authored local initial 5 PASS /5 FAIL fixture assumptions and corrected final
+local results remain preserved in the unchanged original evidence. The old
+local 19/20 ESRCH cause also remains unknown. This receipt executes no local
+runtime tests and changes no native, alpha, controller or observer runtime.
+
+This is upstream TLS only: the frontend stays HTTP and the readiness relay
+is a test fixture. Next implement a separately supported frontend HTTPS
+certificate/listener lifecycle, then actual nonroot user-manager service and
+failure/drain/orphan acceptance. Automatic unit readiness, G2 permanent
+distribution/published-file replay, final soak, G4-G8 and Production V1 remain
+open. Full native compatibility and deferred Continuum scope are preserved.

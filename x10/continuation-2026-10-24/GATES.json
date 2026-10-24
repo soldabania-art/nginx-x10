@@ -263,7 +263,7 @@
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "PARTIAL_HTTPS_UPSTREAM_LOCAL_VERIFIED_EXACT_CI_PENDING_FRONTEND_SERVICE_OPEN",
+      "status": "PARTIAL_HTTPS_UPSTREAM_EXACT_HOSTED_VERIFIED_FRONTEND_SERVICE_OPEN",
       "depends_on": [
         "G2"
       ],
@@ -352,11 +352,13 @@
         "scope": "Installed managed HTTP frontend to authenticated HTTPS upstream with explicit CA/hostname/SNI and refusal controls",
         "evidence": "x10/evidence/g3-tls-trust.json",
         "localAcceptance": "SCOPED_LOCAL_HTTPS_UPSTREAM_VERIFICATION_ONLY",
-        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+        "exactHostedAcceptance": "SUCCESS_SCOPED_INSTALLED_HTTPS_UPSTREAM_VERIFICATION_ONLY",
         "frontendTLSAccepted": false,
         "serviceAccepted": false,
         "targetUserManagerAccepted": false,
-        "productionAccepted": false
+        "productionAccepted": false,
+        "implementationCommit": "84a12537c2f102a9e3c8bcc8ba2ad1ebf59397fe",
+        "hostedEvidence": "x10/evidence/g3-tls-trust-hosted.json"
       }
     },
     {
@@ -770,12 +772,27 @@
     "scope": "Installed managed HTTP frontend to authenticated HTTPS upstream with explicit CA/hostname/SNI and refusal controls",
     "evidence": "x10/evidence/g3-tls-trust.json",
     "localAcceptance": "SCOPED_LOCAL_HTTPS_UPSTREAM_VERIFICATION_ONLY",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+    "exactHostedAcceptance": "SUCCESS_SCOPED_INSTALLED_HTTPS_UPSTREAM_VERIFICATION_ONLY",
     "frontendTLSAccepted": false,
     "serviceAccepted": false,
     "targetUserManagerAccepted": false,
     "productionAccepted": false,
-    "nextConcreteTask": "First verify exact resulting implementation CI, including the new installed HTTPS-upstream trust step and actual alpha-tls.tap artifact with10 TAP (9 nested cases plus one wrapper), actual jobs/logs/artifacts and source/build identities. Do not borrow previous observer CI acceptance for these new test/workflow bytes. Then continue a separately supported frontend TLS path and actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan boundaries. The current package verifies HTTPS upstream CA/hostname/SNI through existing native proxy directives behind an installed managed HTTP frontend only; frontend TLS and actual service remain unaccepted. G2 permanent versioned release/published-file replay remain blocked by available Release/asset writer capabilities; do not bypass credentials or permissions. G4-G8/Production V1 and full deferred Continuum remain open.",
+    "nextConcreteTask": "Continue G3 with a separately supported frontend HTTPS configuration and certificate lifecycle contract while preserving the existing managed listen guard; use explicit CA/hostname and refusal checks. Then verify actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan boundaries in an authorized test environment. The installed HTTP-frontend to HTTPS-upstream path is exact-hosted verified narrowly; its HTTP readiness relay remains a fixture rather than an installed production health service. G2 permanent versioned release and published-file nonroot Node22 replay remain blocked by available Release/asset writer capabilities; do not bypass credentials or permissions. G4-G8/Production V1 and full deferred Continuum remain open.",
+    "fullScopePreserved": true,
+    "implementationCommit": "84a12537c2f102a9e3c8bcc8ba2ad1ebf59397fe",
+    "hostedEvidence": "x10/evidence/g3-tls-trust-hosted.json"
+  },
+  "httpsUpstreamTrustHostedCheckpoint": {
+    "state": "SUCCESS_SCOPED_INSTALLED_HTTPS_UPSTREAM_VERIFICATION_ONLY",
+    "implementationCommit": "84a12537c2f102a9e3c8bcc8ba2ad1ebf59397fe",
+    "hostedEvidence": "x10/evidence/g3-tls-trust-hosted.json",
+    "frontendTLSAccepted": false,
+    "serviceAccepted": false,
+    "targetUserManagerAccepted": false,
+    "productionAccepted": false,
+    "evidence": "x10/evidence/g3-tls-trust-hosted.json",
+    "nextConcreteTask": "Continue G3 with a separately supported frontend HTTPS configuration and certificate lifecycle contract while preserving the existing managed listen guard; use explicit CA/hostname and refusal checks. Then verify actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan boundaries in an authorized test environment. The installed HTTP-frontend to HTTPS-upstream path is exact-hosted verified narrowly; its HTTP readiness relay remains a fixture rather than an installed production health service. G2 permanent versioned release and published-file nonroot Node22 replay remain blocked by available Release/asset writer capabilities; do not bypass credentials or permissions. G4-G8/Production V1 and full deferred Continuum remain open.",
+    "runtimeSourcesChanged": false,
     "fullScopePreserved": true
   }
 }
