@@ -3,22 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-frontend-ci-20261024T212533000Z",
-    "owner": "codex-coordinator-frontend-ci",
-    "baseCommit": "fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84",
-    "acquiredAtUTC": "2026-10-24T21:25:33.000Z",
-    "expiresAtUTC": "2026-10-24T22:05:33.000Z",
-    "task": "Diagnose failed exact frontend HTTPS push CI and preserve actual verification with PR distinction",
-    "allowedFiles": [
-      "x10/STATUS.md",
-      "x10/PLAN.md",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/continuum/BACKGROUND.json",
-      "x10/evidence/g3-frontend-tls-hosted.json",
-      "x10/review/g3-frontend-tls-hosted-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1219,21 +1204,42 @@
       "runId": "x10-frontend-tls-20261024T202351Z",
       "sourceBase": "eaf3a9376f80d25d9dcaed1bbeea643151b841e9",
       "publicationParent": "ea849f2ad3aed5953ca63847f05512d4d579c355",
-      "implementationCommit": null,
+      "implementationCommit": "fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84",
       "implementationCommitLocator": "Git commit containing this record; exact SHA reconciled by subsequent hosted receipt",
       "scope": "Optional fixed loopback frontend HTTPS with external operator certificate files and installed trust/lifecycle/refusal checks",
       "evidence": "x10/evidence/g3-frontend-tls.json",
       "localAcceptance": "SCOPED_LOCAL_INSTALLED_FRONTEND_HTTPS_ONLY",
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+      "exactHostedAcceptance": "SUCCESS_SCOPED_INSTALLED_FRONTEND_HTTPS_AFTER_SINGLE_INTERRUPTED_PUSH_RETRY",
       "localFrontendTLSVerified": true,
       "frontendTLSAccepted": false,
       "serviceAccepted": false,
       "targetUserManagerAccepted": false,
-      "productionAccepted": false
+      "productionAccepted": false,
+      "hostedEvidence": "x10/evidence/g3-frontend-tls-hosted.json"
+    },
+    "frontendHttpsHosted": {
+      "state": "SUCCESS_SCOPED_INSTALLED_FRONTEND_HTTPS_AFTER_SINGLE_INTERRUPTED_PUSH_RETRY",
+      "implementationCommit": "fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84",
+      "evidence": "x10/evidence/g3-frontend-tls-hosted.json",
+      "frontendTLSAccepted": false,
+      "serviceAccepted": false,
+      "targetUserManagerAccepted": false,
+      "productionAccepted": false,
+      "initialPushFailureRetained": true,
+      "initialShutdownCauseKnown": false,
+      "specificFailedJobRerunsRequested": 1,
+      "nativeRunIds": [
+        40130546372,
+        40130549777
+      ],
+      "researchRunIds": [
+        40130546334,
+        40130549828
+      ]
     }
   },
   "pendingVerification": [
-    "First inspect exact resulting frontend HTTPS implementation CI and actual required frontend-tls step/artifact. Local tests do not accept the target nonroot Node22 operated service or Production V1. The retained wait-bind local aggregate failed19/20 with ESRCH. The failing captured-process observation and exact historical cause remain unknown. The held old worker had previously been observed stopped; the fixture had not issued its own SIGCONT. Later local or hosted compatibility does not identify that historical interleaving, repair or establish no causality.",
+    "G3 actual nonroot operated service remains OPEN. Installed frontend HTTPS implementation fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84 passed narrow exact hosted verification after one targeted retry of an interrupted push job. Original push attempt1 runner shutdown143, skipped frontend step, no artifact and unconfirmed cleanup remain recorded; underlying shutdown cause unknown. The historical local19/20 ESRCH failure remains retained. Which captured-process observation failed and its exact interleaving/cause remain unknown; later hosted compatibility does not prove a historical repair or absence of causality.",
     "G3 frontend HTTPS and actual nonroot service acceptance remain OPEN. Installed HTTPS-upstream implementation 84a12537c2f102a9e3c8bcc8ba2ad1ebf59397fe passed exact scoped hosted verification including the actual new installed TLS step. Its downstream remains HTTP and its readiness relay remains a fixture. The prior wait-bind local aggregate failed19/20 with ESRCH. The failing captured-process observation and exact historical cause remain unknown. The held old worker had previously been observed stopped; the fixture had not issued its own SIGCONT. Later candidate and hosted successes do not establish that historical interleaving, a historical repair or no causal relationship.",
     "G3 TLS/actual-service acceptance remains OPEN. Observer implementation 4a8ec8c0d2ecb2e14778651a581ea5f231f2a458 passed exact scoped hosted native compatibility; continue the bounded CA/hostname and actual nonroot service path. The first final wait-bind native aggregate failed19/20 with ESRCH at handover-baseline.mjs314. Which captured-process observation failed and the exact historical cause remain unknown. The old held worker had previously been observed stopped; the fixture had not yet issued its own SIGCONT. The new bounded stale-proc mechanism, local candidate20/20 and exact later CI verify scoped compatibility only. They do not prove that historical interleaving, a historical fix or no causal relationship to wait-bind.",
     "Recipe implementation 0daf4086f77e43b829c6a848d19597411fb6325d is exact-hosted verified narrowly: both required native jobs actually ran the new user-unit recipe tests and existing native/Unix/archive/feature-off checks. Generation/static checks do not accept an operated nonroot user service, startup readiness, TLS, permanent published alpha or Production V1.",
@@ -1255,14 +1261,9 @@
   ],
   "nextTasks": [
     {
-      "id": "G3-frontend-HTTPS-exact-CI",
-      "state": "pending-exact-resulting-implementation",
-      "goal": "Verify actual installed frontend TLS step and exact source/build/job/artifact identities; then complete actual nonroot service lifecycle/failure/drain/orphan acceptance."
-    },
-    {
       "id": "G3-TLS-and-real-service",
-      "state": "unaccepted-next-frontend-TLS-and-actual-service",
-      "goal": "Separately supported frontend HTTPS certificate/listener lifecycle and actual nonroot user-manager startup/stop/restart/failure/drain/orphan acceptance; upstream trust verified narrowly and automatic unit readiness remains gated."
+      "state": "unaccepted-next-actual-nonroot-service",
+      "goal": "Actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan boundaries; automatic readiness, permanent published-file replay and V1 remain gated."
     },
     {
       "id": "G2-distribution",
@@ -1528,7 +1529,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First verify exact resulting frontend HTTPS implementation CI, including the actual required frontend-tls.test.mjs step and its TAP artifact, source/build/job/merge identities and cleanup. Do not borrow the previous HTTPS-upstream receipt for new controller/test/workflow bytes. Then continue actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan acceptance in an authorized test environment. The HTTPS listener is opt-in IPv4 loopback only, certificate files remain externally operator-managed, and the existing controller readiness probe remains HTTP; automatic certificate renewal and TLS health are not implemented. G2 permanent versioned release and published-file nonroot Node22 replay remain blocked by available Release/asset writer capabilities; do not bypass credentials or permissions. G4-G8/Production V1 and the full deferred Continuum remain open.",
+  "nextConcreteTask": "Continue G3 actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan acceptance in an authorized test environment. Frontend HTTPS and upstream TLS have narrow installed compatibility evidence; controller readiness remains HTTP and does not automatically authenticate TLS or expiry. Retain operator-owned versioned certificate files for revert/restart; no automatic renewal. G2 permanent versioned release and published-file nonroot Node22 replay remain blocked by available Release/asset writer capability; do not bypass credentials or permissions. G4-G8/Production V1 and full deferred Continuum remain open.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1733,10 +1734,10 @@
         "goal": "Held-out third-version adapter, adverse I/O/KeyUpdate/half-close tests, cost and overhead measurements"
       }
     ],
-    "runtimeCodeChangedByThisPublication": true,
+    "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G3_FRONTEND_HTTPS_LOCAL_VERIFIED_EXACT_CI_PENDING",
+    "currentGate": "G3_FRONTEND_HTTPS_HOSTED_VERIFIED_ACTUAL_SERVICE_OPEN",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -1756,7 +1757,8 @@
     "observerEsrchHostedEvidence": "x10/evidence/listener-esrch-hosted.json",
     "httpsUpstreamTrustLocalEvidence": "x10/evidence/g3-tls-trust.json",
     "httpsUpstreamTrustHostedEvidence": "x10/evidence/g3-tls-trust-hosted.json",
-    "frontendHttpsLocalEvidence": "x10/evidence/g3-frontend-tls.json"
+    "frontendHttpsLocalEvidence": "x10/evidence/g3-frontend-tls.json",
+    "frontendHttpsHostedEvidence": "x10/evidence/g3-frontend-tls-hosted.json"
   },
   "lastV1DevelopmentPass": {
     "runId": "x10-frontend-tls-20261024T202351Z",
@@ -1775,7 +1777,16 @@
     "localEvidence": "x10/evidence/g3-frontend-tls.json",
     "perFileLedger": "x10/review/g3-frontend-tls-ledger.json",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
+      "state": "SUCCESS_SCOPED_INSTALLED_FRONTEND_HTTPS_AFTER_SINGLE_INTERRUPTED_PUSH_RETRY",
+      "implementationCommit": "fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84",
+      "evidence": "x10/evidence/g3-frontend-tls-hosted.json",
+      "frontendTLSAccepted": false,
+      "serviceAccepted": false,
+      "targetUserManagerAccepted": false,
+      "productionAccepted": false,
+      "initialPushFailureRetained": true,
+      "initialShutdownCauseKnown": false,
+      "specificFailedJobRerunsRequested": 1
     },
     "localFrontendTLSVerified": true,
     "frontendTLSAccepted": false,
@@ -1789,27 +1800,28 @@
     "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
-    "runId": "x10-tls-upstream-ci-20261024T191827000Z",
-    "implementationCommit": "84a12537c2f102a9e3c8bcc8ba2ad1ebf59397fe",
-    "publicationParent": "843d5f12532ccf7f8df9f0783d73f9561fc5bcfe",
-    "evidence": "x10/evidence/g3-tls-trust-hosted.json",
-    "ledger": "x10/review/g3-tls-trust-hosted-ledger.json",
-    "state": "EXACT_HOSTED_VERIFIED_SCOPED_INSTALLED_HTTPS_UPSTREAM_ONLY",
-    "nativeRuns": [
-      40121553664,
-      40121556718
-    ],
-    "researchRuns": [
-      40121553662,
-      40121556866
-    ],
-    "runtimeSourcesChanged": false,
+    "state": "SUCCESS_SCOPED_INSTALLED_FRONTEND_HTTPS_AFTER_SINGLE_INTERRUPTED_PUSH_RETRY",
+    "implementationCommit": "fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84",
+    "evidence": "x10/evidence/g3-frontend-tls-hosted.json",
     "frontendTLSAccepted": false,
     "serviceAccepted": false,
     "targetUserManagerAccepted": false,
-    "tlsAccepted": false,
-    "permanentAlphaAccepted": false,
-    "productionAccepted": false
+    "productionAccepted": false,
+    "initialPushFailureRetained": true,
+    "initialShutdownCauseKnown": false,
+    "specificFailedJobRerunsRequested": 1,
+    "runId": "x10-frontend-ci-20261024T212533000Z",
+    "publicationParent": "a58cefc6dc1cd72edaa38683d021d998239ffee6",
+    "ledger": "x10/review/g3-frontend-tls-hosted-ledger.json",
+    "nativeRunIds": [
+      40130546372,
+      40130549777
+    ],
+    "researchRunIds": [
+      40130546334,
+      40130549828
+    ],
+    "runtimeSourcesChanged": false
   },
   "v1DevelopmentPassHistory": [
     {
@@ -2192,6 +2204,29 @@
       "historicalFailureCauseKnown": false,
       "historicalObserverFixClaimed": false,
       "serviceAccepted": false,
+      "tlsAccepted": false,
+      "permanentAlphaAccepted": false,
+      "productionAccepted": false
+    },
+    {
+      "runId": "x10-tls-upstream-ci-20261024T191827000Z",
+      "implementationCommit": "84a12537c2f102a9e3c8bcc8ba2ad1ebf59397fe",
+      "publicationParent": "843d5f12532ccf7f8df9f0783d73f9561fc5bcfe",
+      "evidence": "x10/evidence/g3-tls-trust-hosted.json",
+      "ledger": "x10/review/g3-tls-trust-hosted-ledger.json",
+      "state": "EXACT_HOSTED_VERIFIED_SCOPED_INSTALLED_HTTPS_UPSTREAM_ONLY",
+      "nativeRuns": [
+        40121553664,
+        40121556718
+      ],
+      "researchRuns": [
+        40121553662,
+        40121556866
+      ],
+      "runtimeSourcesChanged": false,
+      "frontendTLSAccepted": false,
+      "serviceAccepted": false,
+      "targetUserManagerAccepted": false,
       "tlsAccepted": false,
       "permanentAlphaAccepted": false,
       "productionAccepted": false

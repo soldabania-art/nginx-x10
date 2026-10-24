@@ -263,7 +263,7 @@
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "PARTIAL_FRONTEND_HTTPS_LOCAL_VERIFIED_EXACT_CI_PENDING_SERVICE_OPEN",
+      "status": "PARTIAL_FRONTEND_HTTPS_EXACT_HOSTED_VERIFIED_SERVICE_OPEN",
       "depends_on": [
         "G2"
       ],
@@ -364,17 +364,18 @@
         "runId": "x10-frontend-tls-20261024T202351Z",
         "sourceBase": "eaf3a9376f80d25d9dcaed1bbeea643151b841e9",
         "publicationParent": "ea849f2ad3aed5953ca63847f05512d4d579c355",
-        "implementationCommit": null,
+        "implementationCommit": "fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84",
         "implementationCommitLocator": "Git commit containing this record; exact SHA reconciled by subsequent hosted receipt",
         "scope": "Optional fixed loopback frontend HTTPS with external operator certificate files and installed trust/lifecycle/refusal checks",
         "evidence": "x10/evidence/g3-frontend-tls.json",
         "localAcceptance": "SCOPED_LOCAL_INSTALLED_FRONTEND_HTTPS_ONLY",
-        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+        "exactHostedAcceptance": "SUCCESS_SCOPED_INSTALLED_FRONTEND_HTTPS_AFTER_SINGLE_INTERRUPTED_PUSH_RETRY",
         "localFrontendTLSVerified": true,
         "frontendTLSAccepted": false,
         "serviceAccepted": false,
         "targetUserManagerAccepted": false,
-        "productionAccepted": false
+        "productionAccepted": false,
+        "hostedEvidence": "x10/evidence/g3-frontend-tls-hosted.json"
       }
     },
     {
@@ -815,18 +816,33 @@
     "runId": "x10-frontend-tls-20261024T202351Z",
     "sourceBase": "eaf3a9376f80d25d9dcaed1bbeea643151b841e9",
     "publicationParent": "ea849f2ad3aed5953ca63847f05512d4d579c355",
-    "implementationCommit": null,
+    "implementationCommit": "fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84",
     "implementationCommitLocator": "Git commit containing this record; exact SHA reconciled by subsequent hosted receipt",
     "scope": "Optional fixed loopback frontend HTTPS with external operator certificate files and installed trust/lifecycle/refusal checks",
     "evidence": "x10/evidence/g3-frontend-tls.json",
     "localAcceptance": "SCOPED_LOCAL_INSTALLED_FRONTEND_HTTPS_ONLY",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+    "exactHostedAcceptance": "SUCCESS_SCOPED_INSTALLED_FRONTEND_HTTPS_AFTER_SINGLE_INTERRUPTED_PUSH_RETRY",
     "localFrontendTLSVerified": true,
     "frontendTLSAccepted": false,
     "serviceAccepted": false,
     "targetUserManagerAccepted": false,
     "productionAccepted": false,
-    "nextConcreteTask": "First verify exact resulting frontend HTTPS implementation CI, including the actual required frontend-tls.test.mjs step and its TAP artifact, source/build/job/merge identities and cleanup. Do not borrow the previous HTTPS-upstream receipt for new controller/test/workflow bytes. Then continue actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan acceptance in an authorized test environment. The HTTPS listener is opt-in IPv4 loopback only, certificate files remain externally operator-managed, and the existing controller readiness probe remains HTTP; automatic certificate renewal and TLS health are not implemented. G2 permanent versioned release and published-file nonroot Node22 replay remain blocked by available Release/asset writer capabilities; do not bypass credentials or permissions. G4-G8/Production V1 and the full deferred Continuum remain open.",
-    "fullScopePreserved": true
+    "nextConcreteTask": "Continue G3 actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan acceptance in an authorized test environment. Frontend HTTPS and upstream TLS have narrow installed compatibility evidence; controller readiness remains HTTP and does not automatically authenticate TLS or expiry. Retain operator-owned versioned certificate files for revert/restart; no automatic renewal. G2 permanent versioned release and published-file nonroot Node22 replay remain blocked by available Release/asset writer capability; do not bypass credentials or permissions. G4-G8/Production V1 and full deferred Continuum remain open.",
+    "fullScopePreserved": true,
+    "hostedEvidence": "x10/evidence/g3-frontend-tls-hosted.json"
+  },
+  "frontendHttpsHostedCheckpoint": {
+    "state": "SUCCESS_SCOPED_INSTALLED_FRONTEND_HTTPS_AFTER_SINGLE_INTERRUPTED_PUSH_RETRY",
+    "implementationCommit": "fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84",
+    "evidence": "x10/evidence/g3-frontend-tls-hosted.json",
+    "frontendTLSAccepted": false,
+    "serviceAccepted": false,
+    "targetUserManagerAccepted": false,
+    "productionAccepted": false,
+    "initialPushFailureRetained": true,
+    "initialShutdownCauseKnown": false,
+    "specificFailedJobRerunsRequested": 1,
+    "nextConcreteTask": "Continue G3 actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan acceptance in an authorized test environment. Frontend HTTPS and upstream TLS have narrow installed compatibility evidence; controller readiness remains HTTP and does not automatically authenticate TLS or expiry. Retain operator-owned versioned certificate files for revert/restart; no automatic renewal. G2 permanent versioned release and published-file nonroot Node22 replay remain blocked by available Release/asset writer capability; do not bypass credentials or permissions. G4-G8/Production V1 and full deferred Continuum remain open.",
+    "runtimeSourcesChanged": false
   }
 }

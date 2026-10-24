@@ -1639,3 +1639,32 @@ preserved. No frontend TLS result explains that historical failure. Next
 verify exact new CI, then complete actual nonroot service startup/stop/restart,
 failed-start, drain and orphan boundaries. G2 permanent release/published-file
 replay and G4-G8 remain open; full native and deferred Continuum are preserved.
+
+
+### Exact hosted frontend HTTPS verification
+
+Implementation `fcc7123a` now has separately verified native PR and targeted
+push-retry evidence. [Receipt](evidence/g3-frontend-tls-hosted.json) records
+the actual required frontend TLS step and digest-verified TAP artifacts:
+16/16 TAP (15 nested scenarios plus wrapper), two owned native sessions
+stopped, launcher exit, sockets0 and temporary-root removal. The old upstream
+TLS suite remains a separate10/10 TAP. Native20/20 groups, controller86,
+alpha45, operator30/listener42, required Unix9/10/30, feature-off4, recipe15,
+archive15 and release-record35 passed. Hosted official1105 strict PASS,
+25 SKIP and one expected TODO-fail remain separate counting units.
+
+Push attempt1 failed when the runner received a shutdown signal during the
+old upstream TLS step: exit143, new frontend step skipped, no evidence
+artifact and final fixture cleanup unconfirmed. Its underlying shutdown
+cause is unknown. One authorized targeted retry of that failed job used
+unchanged source. Successful PR/retry outcomes do not erase the failure,
+explain the runner shutdown or claim a product fix. Research PR actually
+executed21 core/7 process/27 C1/48 C2a; research push was scope-only.
+Inherited CLA failure remains separate, with no agreement accepted.
+
+No runtime code or local tests changed in this receipt. Original local
+source-change wrapper failure, summary-parser correction and historical
+local19/20 ESRCH uncertainty remain preserved. Next complete actual nonroot
+user-manager startup/stop/restart, failed-start, drain and orphan boundaries.
+HTTP health is not automatic TLS acceptance; renewal, permanent published
+release/replay, final soak and Production V1 remain open.
