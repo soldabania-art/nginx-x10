@@ -3,7 +3,29 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": null,
+  "executionLease": {
+    "runId": "x10-g3-readiness-20261024T134116049Z",
+    "owner": "codex-v1-readiness-coordinator",
+    "baseCommit": "783de7994f0af0ea9d4d1129be28c31c57227f8d",
+    "acquiredAtUTC": "2026-10-24T13:41:16.049Z",
+    "expiresAtUTC": "2026-10-24T14:21:16.049Z",
+    "task": "Verify exact G2 archive CI and implement explicit bounded application readiness contract for G3 preparation",
+    "allowedFiles": [
+      "x10/control/manager.mjs",
+      "x10/test/control.test.mjs",
+      "x10/alpha/cli.mjs",
+      "x10/test/alpha.test.mjs",
+      "x10/control/README.md",
+      "x10/alpha/README.md",
+      "x10/STATUS.md",
+      "x10/PLAN.md",
+      "x10/continuum/BACKGROUND.json",
+      "x10/continuation-2026-10-24/GATES.json",
+      "x10/evidence/g2-archive-hosted.json",
+      "x10/evidence/g3-readiness.json",
+      "x10/review/g3-readiness-ledger.json"
+    ]
+  },
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
