@@ -17,8 +17,8 @@
 
 Runtime alpha описан отдельно в [alpha/README](../alpha/README.md).
 Его foreground/demo self-check и CI artifact не равны service/app readiness
-или постоянному V1. Инструкция [QUICKSTART](../QUICKSTART.md) пока содержит
-исторический development ref; G2 должен исправить её на принятый exact release.
+или постоянному V1. Инструкция [QUICKSTART](../QUICKSTART.md) использует текущую development ветку
+с фиксацией exact checkout; постоянного принятого release ref пока нет.
 Здесь намеренно нет придуманной команды скачивания ещё не выпущенного пакета.
 
 Следующая полезная поставка — G2: исправленная инструкция, настоящий upstream
@@ -57,3 +57,29 @@ alpha/V1 archive и весь опубликованный operator path ещё �
 Следующий пакет — настоящий upstream/readiness и независимый extracted-bundle
 маршрут G2. Валидный JSON по-прежнему не подтверждает подлинность evidence
 и не разрешает выпуск или переход к другому продукту.
+
+
+## Проверка alpha архива до распаковки
+
+`verify-alpha-archive.mjs` проверяет ограниченный формат текущего alpha pack,
+не распаковывая и не запуская payload. Передайте SHA256 из отдельно проверенного
+источника, а не из того же недоверенного скачивания:
+
+```sh
+node x10/release/verify-alpha-archive.mjs \
+  --archive nginx-x10-linux-alpha.tar.gz --sha256 VERIFIED_SHA256
+```
+
+CLI сначала сравнивает digest сжатых bytes, затем проверяет ограниченный gzip/tar
+и точный состав bundle. Отказываются ссылки, неизвестные и повторные записи,
+небезопасные пути и несогласованные payload hashes/sizes/modes. Результат —
+проверка согласованности bytes с указанным hash, а не подпись, доверие издателю,
+безопасность программы или разрешение выполнять бинарник. Успех не подтверждает
+ABI, clean target install, service/TLS, постоянную публикацию либо Production V1.
+
+CI выполняет отдельные отрицательные проверки и проверяет фактически созданный
+alpha archive. Обычный CI artifact имеет ограниченный retention; это не постоянный
+GitHub Release. В текущем подключённом GitHub инструменте нет операции создания
+Release/загрузки release assets; публикация и независимый published-file replay
+остаются открыты. Новые credentials или расширение workflow permissions не
+создаются ради обхода этого ограничения.

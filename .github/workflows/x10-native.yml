@@ -55,6 +55,8 @@ jobs:
             x10/release/check-release-record.test.mjs \
             x10/release/release-record-heldout.test.mjs \
             > x10/.build/ci-evidence/release-record.tap
+      - name: Validate alpha archive refusal controls
+        run: node --test --test-reporter=tap x10/release/verify-alpha-archive.test.mjs > x10/.build/ci-evidence/alpha-archive.tap
       - name: Build dependencies and optional test clients
         run: |
           sudo apt-get update
@@ -92,6 +94,12 @@ jobs:
       - name: Checksum local Linux alpha
         working-directory: x10/.build/dist
         run: sha256sum nginx-x10-linux-alpha.tar.gz > nginx-x10-linux-alpha.tar.gz.sha256
+      - name: Verify packed alpha before extraction
+        run: |
+          checksum=$(sha256sum x10/.build/dist/nginx-x10-linux-alpha.tar.gz)
+          node x10/release/verify-alpha-archive.mjs \
+            --archive x10/.build/dist/nginx-x10-linux-alpha.tar.gz \
+            --sha256 "${checksum%% *}" > x10/.build/ci-evidence/alpha-archive.json
       - name: Preserve JSON evidence
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6

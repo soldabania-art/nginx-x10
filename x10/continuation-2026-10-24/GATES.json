@@ -245,6 +245,17 @@
         "hostedEvidence": "x10/evidence/g2-upstream-hosted.json",
         "permanentAlphaAccepted": false,
         "localUnixAccepted": false
+      },
+      "archiveSubcheckpoint": {
+        "runId": "x10-g2-archive-20261024T132000Z",
+        "sourceBase": "f262646748c1e90d7109140fb2df0cb579b7f42a",
+        "publicationParent": "fd55932d940768834e3a5b946d8cd8b0d79b07d4",
+        "evidence": "x10/evidence/g2-archive.json",
+        "scope": "Bounded pre-extraction archive consistency only",
+        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+        "publishedAlphaAccepted": false,
+        "productionAccepted": false,
+        "payloadExecutionPerformed": false
       }
     },
     {
@@ -583,5 +594,13 @@
     "hostedEvidence": "x10/evidence/g2-upstream-hosted.json",
     "implementationCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
     "localUnixAccepted": false
+  },
+  "g2ArchiveCheckpoint": {
+    "runId": "x10-g2-archive-20261024T132000Z",
+    "evidence": "x10/evidence/g2-archive.json",
+    "nextConcreteTask": "First verify exact resulting archive-verifier CI: authored refusal controls and the actual newly packed alpha archive must execute successfully in native jobs. Permanent versioned alpha publication and independent published-file nonroot Node22 replay remain blocked by the currently exposed connector lacking Release/asset publication operations; do not bypass credentials or workflow permissions. Continue independent permitted G3 service/proxy/TLS preparation with explicit dependency limits while that publication capability is unavailable. G2 remains partial, G3-G8 and Production V1 unaccepted, and deferred Continuum and the remaining full native scope stay preserved.",
+    "productionAccepted": false,
+    "permanentAlphaAccepted": false,
+    "fullScopePreserved": true
   }
 }

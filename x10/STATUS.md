@@ -1281,3 +1281,23 @@ Unix success is not a local permission or native-code fix. G2 remains partial:
 permanent versioned alpha distribution and independent published-file nonroot
 Node22 replay are pending. G3–G8, service/TLS, package rollback/recovery, security,
 frozen soak and Production V1 are not accepted. Deferred Continuum is preserved.
+
+
+## G2 partial: alpha archive verification before extraction
+
+A bounded checksum-first gzip/tar checker now validates the exact packaged alpha
+inventory, record and payload hashes/sizes/modes without extraction or execution.
+[Evidence](evidence/g2-archive.json) separates authored and independent controls
+from the required CI check of an actual newly packed native archive. Exact new
+implementation CI is pending; the earlier application-upstream eb4e2de3 hosted
+acceptance is preserved separately. No native/controller/alpha runtime changed.
+
+A matching checksum establishes consistency with the supplied hash, not publisher
+authenticity, binary safety, target ABI or permission to run it. G2 remains partial:
+the current connector exposes no Release/asset publication mutation operation,
+so permanent versioned distribution and published-file nonroot Node22 replay
+remain blocked. Continue independent permitted G3 preparation with dependency
+limits; do not bypass credentials/permissions or switch products. G3-G8 and
+Production V1 remain unaccepted, with full native and deferred Continuum scope
+preserved. The receipt also retains the coordinator's lease-message validation
+protocol failure; exit0 with diagnostics was incorrectly allowed to publish.

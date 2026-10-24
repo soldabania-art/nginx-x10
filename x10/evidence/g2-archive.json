@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-g2-archive-20261024T132000Z",
+  "baseCommit": "f262646748c1e90d7109140fb2df0cb579b7f42a",
+  "publicationParent": "fd55932d940768834e3a5b946d8cd8b0d79b07d4",
+  "recordedAtUTC": "2026-10-24T13:24:34.431534Z",
+  "scope": "Bounded pre-extraction alpha archive byte consistency only",
+  "sourceFilesSha256": {
+    "x10/release/verify-alpha-archive.mjs": "ee13c2d7e710db6da1016c1b6c3f9c60c009d71b23a8e32d09c2a01fe4f5720a",
+    "x10/release/verify-alpha-archive.test.mjs": "a4d4c88bb43581a44aa845c8d047108719c9d663890d6508db87759f9b2aae35",
+    "x10/release/README.md": "d27623330846ac0cd79410b2eaedc0fc7b0909cba4995fa5ac1ca8b00a9a550b",
+    ".github/workflows/x10-native.yml": "0551ef09063e8376fdc2b5dacf0a61b5f0789e30670ce0b4539bcf77a948b924"
+  },
+  "reports": {
+    "author": {
+      "schemaVersion": 1,
+      "baseCommit": "f262646748c1e90d7109140fb2df0cb579b7f42a",
+      "leaseCommit": "fd55932d940768834e3a5b946d8cd8b0d79b07d4",
+      "scope": "authored synthetic archive format and CLI refusal tests only",
+      "runtime": {
+        "nodeVersion": "24.22.1",
+        "targetNode22Accepted": false
+      },
+      "commands": [
+        "node --check x10/release/verify-alpha-archive.mjs",
+        "node --test x10/release/verify-alpha-archive.test.mjs",
+        "git diff --check"
+      ],
+      "results": {
+        "tests": 15,
+        "pass": 15,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "exitCode": 0
+      },
+      "initialFailedTestRuns": [],
+      "sourceSha256": {
+        "x10/release/verify-alpha-archive.mjs": "ee13c2d7e710db6da1016c1b6c3f9c60c009d71b23a8e32d09c2a01fe4f5720a",
+        "x10/release/verify-alpha-archive.test.mjs": "a4d4c88bb43581a44aa845c8d047108719c9d663890d6508db87759f9b2aae35"
+      },
+      "limits": {
+        "compressedBytes": 33554432,
+        "decompressedBytes": 67108864,
+        "manifestBytes": 262144,
+        "payloadFiles": 13,
+        "directories": 5
+      },
+      "checks": [
+        "matching checksum required before gzip decompression",
+        "strict bounded USTAR or GNU short-name inventory",
+        "header checksums numeric fields paths types mode payload hashes and bundle record selfhash",
+        "duplicate unknown traversal absolute paths and symlink hardlink special extended records refuse",
+        "truncation absent terminator and trailing nonzero data refuse",
+        "bounded nofollow regular file input and sanitized errors",
+        "CLI invocation symlink executes validation rather than silent success"
+      ],
+      "temporaryFixturesRemoved": true,
+      "payloadExtracted": false,
+      "payloadExecuted": false,
+      "nativeCodeChanged": false,
+      "evidenceAuthenticated": false,
+      "permanentReleaseAccepted": false,
+      "productionAccepted": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "unverifiedRuntimeVersionMentionCorrected": "An unverified version was corrected in coordinator message to actual v24.22.1; no runtime failure or hidden rerun occurred."
+    },
+    "review": {
+      "schemaVersion": 1,
+      "scope": "Independent synthetic GNU-tar archive format and CLI refusal controls only",
+      "tests": 28,
+      "passed": 28,
+      "failed": 0,
+      "checks": [
+        "actual GNU tar synthetic inventory accepted without execution",
+        "GNU tar mutation refused: traversal",
+        "GNU tar mutation refused: hardlink",
+        "GNU tar mutation refused: symlink",
+        "GNU tar mutation refused: fifo",
+        "GNU tar mutation refused: pax",
+        "GNU tar mutation refused: extra",
+        "GNU tar mutation refused: setuid",
+        "GNU tar mutation refused: base256size",
+        "GNU tar mutation refused: payload",
+        "GNU tar mutation refused: headerchecksum",
+        "GNU tar mutation refused: trailing",
+        "GNU tar mutation refused: truncated",
+        "GNU tar mutation refused: duplicate",
+        "bad compressed checksum refuses before invalid gzip",
+        "matched invalid gzip refuses with fixed code",
+        "compressed input length refused",
+        "decompression expansion exceeds bound refused",
+        "CLI valid fixture accepts with explicit limitations",
+        "CLI malformed argument shape 19",
+        "CLI malformed argument shape 20",
+        "CLI malformed argument shape 21",
+        "CLI malformed argument shape 22",
+        "CLI malformed argument shape 23",
+        "CLI archive symlink refused",
+        "CLI script symlink still executes check and rejects wrong checksum",
+        "CLI FIFO refused without blocking",
+        "CLI directory refused"
+      ],
+      "sourceSha256": {
+        "x10/release/verify-alpha-archive.mjs": "ee13c2d7e710db6da1016c1b6c3f9c60c009d71b23a8e32d09c2a01fe4f5720a",
+        "x10/release/verify-alpha-archive.test.mjs": "a4d4c88bb43581a44aa845c8d047108719c9d663890d6508db87759f9b2aae35"
+      },
+      "gnuTarVersion": "tar (GNU tar) 1.35",
+      "archivePayloadExecuted": false,
+      "archiveExtracted": false,
+      "temporaryRootRemoved": true,
+      "actualPublishedPackageAccepted": false,
+      "targetRuntimeAccepted": false,
+      "productionAccepted": false,
+      "blockingFindings": [],
+      "staticReview": [
+        "Compressed checksum checked before decompression",
+        "Strict expected inventory prevents traversal, duplicate, link, device, prefix and extension extraction ambiguity",
+        "Tar and compressed read lengths bounded; regular/no-follow/nonblocking input handle and changed-file stat guards",
+        "Manifest and payload hashes/modes checked; only safe identity fields emitted",
+        "No child execution or extraction in verifier; GNU fixture deliberately has synthetic non-executable payload content"
+      ],
+      "limitations": [
+        "Synthetic tar mutations are not a native build or independent published-file clean installation",
+        "Checksums supplied by caller are not signature/authenticity evidence",
+        "No GitHub release/tag/upload write tool exposed; no permission expansion or release attempted"
+      ],
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "actualHostedPackedArchive": {
+        "sourceCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
+        "workflowRunId": 40093505536,
+        "artifactId": 12559812140,
+        "artifactName": "nginx-x10-linux-alpha",
+        "artifactZipBytes": 3894549,
+        "githubZipDigest": "sha256:ef3dbff1c748f7c3f57bf27039f90fb66c3ff9302a810cba0c1272ad3f9cee80",
+        "downloadedZipSha256": "ef3dbff1c748f7c3f57bf27039f90fb66c3ff9302a810cba0c1272ad3f9cee80",
+        "zipDigestMatched": true,
+        "archiveChecksumFileMatched": true,
+        "verifierExitCode": 0,
+        "verifierResult": {
+          "valid": true,
+          "code": "archive_consistent",
+          "archiveSha256": "6921b5f0b92868a8d7a02a7b8d179743862d3717b6f06bb9f627ced533ef615e",
+          "archiveBytes": 3970167,
+          "tarBytes": 8734720,
+          "payloadFiles": 13,
+          "directories": 5,
+          "bundleManifestSha256": "7a906ed6bdce438c292c286946a81907f1f929d06ebe527234c33923709fe881",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
+          "upstreamCommit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "machine": "x86_64",
+          "scope": "pre-extraction-consistency-only",
+          "evidenceAuthenticated": false,
+          "payloadExecuted": false,
+          "extracted": false,
+          "productionAccepted": false
+        },
+        "artifactExpiresAtUTC": "2026-11-07T12:25:28Z",
+        "permanentDistribution": false,
+        "archiveExtracted": false,
+        "payloadExecuted": false,
+        "cases": 1,
+        "passed": 1
+      },
+      "actualDownloadFilesRemoved": true
+    },
+    "root": {
+      "nodeVersion": "24.22.1",
+      "archiveTests": {
+        "tests": 15,
+        "pass": 15,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "existingReleaseRecordTests": 35,
+      "coreTests": 21,
+      "syntheticProcessTests": 7,
+      "nativeRuntimeChanged": false,
+      "nativeOfficialVerification": "pending-exact-CI",
+      "localUnixRestrictionBypassAttempted": false,
+      "rawLogsPublished": false,
+      "releasePublished": false,
+      "targetReplayAccepted": false,
+      "proceduralAdverseObservation": {
+        "leaseCommit": "fd55932d940768834e3a5b946d8cd8b0d79b07d4",
+        "messageCheckerExitCode": 0,
+        "diagnosticsEmpty": false,
+        "diagnosticCount": 3,
+        "cause": "Message lacked body; coordinator did not stop after nonempty Perl warnings before creating lease commit.",
+        "historyRewritten": false,
+        "prevention": "All subsequent commit creation requires explicit assertions for exit0 AND empty stdout AND empty stderr AND line lengths."
+      }
+    }
+  },
+  "protocolFailure": {
+    "commit": "fd55932d940768834e3a5b946d8cd8b0d79b07d4",
+    "stage": "lease-acquisition",
+    "messageCheckerExitCode": 0,
+    "diagnosticsEmpty": false,
+    "diagnosticCount": 3,
+    "observation": "The lease message omitted a body. The Perl checker emitted three uninitialized-body warnings despite exit0. The coordinator failed to block commit creation/publication on nonempty diagnostics.",
+    "protocolViolation": true,
+    "historyRewritten": false,
+    "subsequentMessageRule": "Require exit0 AND empty stdout AND empty stderr, with description lines at most72 characters before commit creation."
+  },
+  "hostedVerification": {
+    "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+    "runIds": []
+  },
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "alphaRuntimeChanged": false,
+  "archivePayloadExecutedByVerifier": false,
+  "evidenceAuthenticated": false,
+  "permanentAlphaAccepted": false,
+  "cleanTargetReplayAccepted": false,
+  "serviceAccepted": false,
+  "soakAccepted": false,
+  "productionAccepted": false,
+  "nextConcreteTask": "First verify exact resulting archive-verifier CI: authored refusal controls and the actual newly packed alpha archive must execute successfully in native jobs. Permanent versioned alpha publication and independent published-file nonroot Node22 replay remain blocked by the currently exposed connector lacking Release/asset publication operations; do not bypass credentials or workflow permissions. Continue independent permitted G3 service/proxy/TLS preparation with explicit dependency limits while that publication capability is unavailable. G2 remains partial, G3-G8 and Production V1 unaccepted, and deferred Continuum and the remaining full native scope stay preserved.",
+  "limitations": [
+    "Authored test cases, independent counterexamples and CI checks are different units.",
+    "Synthetic/GNU-tar data do not prove acceptance of a real native package.",
+    "The actual newly packed native archive must pass the new required CI step.",
+    "Checksum consistency is not authenticity or a signature.",
+    "The available connector lacks Release/asset publication writer operations; no permissions or credentials are bypassed.",
+    "No permanent alpha, published-file target replay, G3-G8 or Production V1 acceptance is claimed."
+  ],
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "realSessionKeysPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "newPurchases": false
+}

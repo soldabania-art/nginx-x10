@@ -3,26 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-g2-archive-20261024T132000Z",
-    "owner": "codex-coordinator-g2-archive",
-    "baseCommit": "f262646748c1e90d7109140fb2df0cb579b7f42a",
-    "acquiredAtUTC": "2026-10-24T13:19:00.000Z",
-    "expiresAtUTC": "2026-10-24T13:59:00.000Z",
-    "task": "Bounded pre-extraction alpha archive verification for G2 distribution; no release or target-runtime acceptance",
-    "allowedFiles": [
-      "x10/release/verify-alpha-archive.mjs",
-      "x10/release/verify-alpha-archive.test.mjs",
-      "x10/release/README.md",
-      ".github/workflows/x10-native.yml",
-      "x10/STATUS.md",
-      "x10/PLAN.md",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/continuum/BACKGROUND.json",
-      "x10/evidence/g2-archive.json",
-      "x10/review/g2-archive-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1119,6 +1100,7 @@
     }
   },
   "pendingVerification": [
+    "Verify exact resulting G2 archive-verifier implementation CI: both refusal tests and verification of the actual packed alpha must run. Local synthetic/GNU-tar controls do not accept a real native package, published release, nonroot target profile or Production V1.",
     "Exact G2 application upstream and expanded alpha/required Unix CI accepted narrowly for implementation eb4e2de3026edb7a59e877fff8971c8d039e8143. Local AF_UNIX EPERM remains an unresolved environment restriction, not a code fix. Permanent versioned alpha archive and independent published-file nonroot Node22 replay remain pending; G3-G8 and Production V1 are not accepted.",
     "G1 contract/declaration validation is exact-hosted verified only. G2 permanent Local Alpha replay and G3-G8 nonroot target service/TLS/rollback/recovery/security/soak/Production V1 acceptance remain open.",
     "Held-source API metadata exact CI accepted only for bounded observations. Actual required ALPN/Finished values and restricted authentication-class state still need protected preservation and reviewed unsupported API semantics before target reconstruction.",
@@ -1136,14 +1118,24 @@
   ],
   "nextTasks": [
     {
+      "id": "G2-archive-exact-CI",
+      "state": "pending-exact-resulting-implementation",
+      "goal": "Verify authored archive refusal tests and actual newly packed alpha in native CI."
+    },
+    {
       "id": "G2-distribution",
-      "state": "pending-permanent-published-alpha-and-replay",
-      "goal": "Publish exact permanent alpha and independently replay published-file nonroot Node22 path."
+      "state": "blocked-release-publication-capability",
+      "goal": "Permanent versioned release and independent published-file nonroot Node22 replay require an available authorized Release/asset writer."
+    },
+    {
+      "id": "G3-independent",
+      "state": "permitted-independent-work-with-explicit-gates",
+      "goal": "Continue independent service/proxy/TLS work without claiming blocked published-file acceptance."
     },
     {
       "id": "G3-G8",
       "state": "unaccepted",
-      "goal": "Operated service/TLS, package recovery/rollback, security, soak and final V1."
+      "goal": "Complete operated service, recovery, security, soak and final V1 evidence."
     },
     {
       "id": "G9",
@@ -1399,7 +1391,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "Complete remaining G2 distribution: publish a permanent versioned Local Alpha archive with exact source/build/archive/payload identities and checksums, then independently replay the published-file nonroot Node22 operator path. The application upstream/extracted-bundle implementation is exact-hosted verified only. Preserve local AF_UNIX EPERM as an unresolved environment observation; hosted Unix success is separate, not a local permission fix. G3-G8 service/TLS, config/package rollback/recovery, security, frozen60minute soak and Production V1 remain open. Do not resume deferred Continuum or activate another product by default.",
+  "nextConcreteTask": "First verify exact resulting archive-verifier CI: authored refusal controls and the actual newly packed alpha archive must execute successfully in native jobs. Permanent versioned alpha publication and independent published-file nonroot Node22 replay remain blocked by the currently exposed connector lacking Release/asset publication operations; do not bypass credentials or workflow permissions. Continue independent permitted G3 service/proxy/TLS preparation with explicit dependency limits while that publication capability is unavailable. G2 remains partial, G3-G8 and Production V1 unaccepted, and deferred Continuum and the remaining full native scope stay preserved.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1604,49 +1596,49 @@
         "goal": "Held-out third-version adapter, adverse I/O/KeyUpdate/half-close tests, cost and overhead measurements"
       }
     ],
-    "runtimeCodeChangedByThisPublication": true,
+    "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G2_DISTRIBUTION_AND_PUBLISHED_REPLAY_PENDING",
+    "currentGate": "G2_ARCHIVE_EXACT_CI_AND_PERMANENT_DISTRIBUTION_PENDING",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
     "researchRuntimeChangedByThisPublication": false,
     "g1HostedEvidence": "x10/evidence/v1-release-contract-hosted.json",
     "g2UpstreamLocalEvidence": "x10/evidence/g2-upstream.json",
-    "g2UpstreamHostedEvidence": "x10/evidence/g2-upstream-hosted.json"
+    "g2UpstreamHostedEvidence": "x10/evidence/g2-upstream-hosted.json",
+    "g2ArchiveEvidence": "x10/evidence/g2-archive.json"
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-g2-upstream-20261024T115720Z",
-    "baseCommit": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
-    "publicationParent": "3c3a7e78911ba0f15d30746cadf278abd8c3a8ff",
-    "scope": "G2 partial: explicit application upstream, example and installed-bundle checks",
-    "result": "Optional loopback application proxy seed and shipped bounded example implemented; default demo preserved. Changed HTTP/bundle checks and independent review recorded separately; local Unix acceptance is blocked by socket EPERM. New exact CI and permanent published alpha/clean target replay remain pending.",
-    "helpers": {
-      "count": 6,
-      "temporary": true,
-      "onlyCoordinatorIntegrates": true,
-      "roles": [
-        "alpha CLI/example implementation",
-        "alpha regression tests",
-        "native build/regression",
-        "independent security/heldouts",
-        "operator documentation",
-        "checkpoint evidence"
-      ]
-    },
+    "runId": "x10-g2-archive-20261024T132000Z",
+    "baseCommit": "f262646748c1e90d7109140fb2df0cb579b7f42a",
+    "publicationParent": "fd55932d940768834e3a5b946d8cd8b0d79b07d4",
+    "scope": "G2 partial: bounded alpha archive consistency before extraction",
+    "result": "Added checksum-first bounded gzip/tar/inventory and payload verification, independent controls and actual packed-archive CI checks. No extraction or payload execution by verifier; exact new CI pending.",
     "nativeSourceChanged": false,
     "controllerImplementationChanged": false,
-    "alphaRuntimeChanged": true,
-    "alphaVerificationChanged": true,
-    "localUnixAccepted": false,
-    "localEvidence": "x10/evidence/g2-upstream.json",
-    "perFileLedger": "x10/review/g2-upstream-ledger.json",
+    "alphaRuntimeChanged": false,
+    "distributionVerificationChanged": true,
+    "localEvidence": "x10/evidence/g2-archive.json",
+    "perFileLedger": "x10/review/g2-archive-ledger.json",
     "hostedVerification": {
       "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
     },
+    "permanentAlphaAccepted": false,
+    "productionAccepted": false,
     "newPurchases": false,
-    "productionDeployChanged": false
+    "productionDeployChanged": false,
+    "proceduralFailure": {
+      "commit": "fd55932d940768834e3a5b946d8cd8b0d79b07d4",
+      "stage": "lease-acquisition",
+      "messageCheckerExitCode": 0,
+      "diagnosticsEmpty": false,
+      "diagnosticCount": 3,
+      "observation": "The lease message omitted a body. The Perl checker emitted three uninitialized-body warnings despite exit0. The coordinator failed to block commit creation/publication on nonempty diagnostics.",
+      "protocolViolation": true,
+      "historyRewritten": false,
+      "subsequentMessageRule": "Require exit0 AND empty stdout AND empty stderr, with description lines at most72 characters before commit creation."
+    }
   },
   "lastV1VerificationReceipt": {
     "runId": "x10-g2-upstream-ci-20261024T122234Z",
@@ -1680,6 +1672,38 @@
       "controllerImplementationChanged": false,
       "localEvidence": "x10/evidence/v1-release-contract.json",
       "perFileLedger": "x10/review/v1-release-contract-ledger.json",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
+    },
+    {
+      "runId": "x10-g2-upstream-20261024T115720Z",
+      "baseCommit": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
+      "publicationParent": "3c3a7e78911ba0f15d30746cadf278abd8c3a8ff",
+      "scope": "G2 partial: explicit application upstream, example and installed-bundle checks",
+      "result": "Optional loopback application proxy seed and shipped bounded example implemented; default demo preserved. Changed HTTP/bundle checks and independent review recorded separately; local Unix acceptance is blocked by socket EPERM. New exact CI and permanent published alpha/clean target replay remain pending.",
+      "helpers": {
+        "count": 6,
+        "temporary": true,
+        "onlyCoordinatorIntegrates": true,
+        "roles": [
+          "alpha CLI/example implementation",
+          "alpha regression tests",
+          "native build/regression",
+          "independent security/heldouts",
+          "operator documentation",
+          "checkpoint evidence"
+        ]
+      },
+      "nativeSourceChanged": false,
+      "controllerImplementationChanged": false,
+      "alphaRuntimeChanged": true,
+      "alphaVerificationChanged": true,
+      "localUnixAccepted": false,
+      "localEvidence": "x10/evidence/g2-upstream.json",
+      "perFileLedger": "x10/review/g2-upstream-ledger.json",
       "hostedVerification": {
         "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
       },
