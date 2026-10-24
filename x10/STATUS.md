@@ -1334,3 +1334,25 @@ Release checks50 and independent HTTP-function checks12 are separate units.
 Earlier failed preparation/bookkeeping runs are retained in the evidence.
 Exact resulting hosted CI is pending; these UID0/Node24 fixtures are not target
 service, TLS or Production V1 acceptance.
+
+
+### Exact CI: explicit readiness status/body
+
+Implementation `6abc888388b2e45c0986c3c9b043aa03324fd77e` passed both actual
+native push and PR jobs on Node22. Both downloaded evidence ZIPs matched their
+GitHub digests: native20/20 groups, controller86 TAP, alpha40 TAP, operator30 TAP,
+required private Unix and feature-off checks, and actual pack/archive verification.
+Official35files:34passed/1dependency skip;1105strict PASS,25SKIP,
+1expected TODO-fail and0unexpected FAIL. These are separate counting units.
+
+[Hosted receipt](evidence/g3-readiness-hosted.json) preserves event versus actual
+PR merge build, archive/binary identities and the earlier local failures.
+Unchanged research push runtime was skipped; PR research steps actually ran.
+The inherited F5 CLA publisher failure remains separate and unhidden.
+
+This accepts only implementation compatibility for the explicit readiness
+contract. G2 permanent release and independent published-file replay, G3 service
+and TLS, G4-G8 and Production V1 remain open. The next task is the bounded
+TLS/systemd-user service package, with guarded failed-start/drain/orphan behavior.
+The local AF_UNIX refusal and absent target user manager are not fixed by hosted
+Unix success. Full native and deferred Continuum scope remain preserved.

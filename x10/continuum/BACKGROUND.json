@@ -3,22 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-g3-readiness-ci-20261024T140552350Z",
-    "owner": "codex-readiness-hosted-review",
-    "baseCommit": "6abc888388b2e45c0986c3c9b043aa03324fd77e",
-    "acquiredAtUTC": "2026-10-24T14:05:52.350Z",
-    "expiresAtUTC": "2026-10-24T14:25:52.350Z",
-    "task": "Verify exact readiness CI and publish sanitized scoped hosted receipt",
-    "allowedFiles": [
-      "x10/continuum/BACKGROUND.json",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/STATUS.md",
-      "x10/PLAN.md",
-      "x10/evidence/g3-readiness-hosted.json",
-      "x10/review/g3-readiness-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1115,7 +1100,7 @@
     }
   },
   "pendingVerification": [
-    "Verify exact resulting G3 readiness implementation CI. Local wrong-body200 baseline/candidate and independent raw-byte checks do not accept nonroot Node22 service/TLS, permanent alpha or Production V1. Preserve failed initial aggregate19/20 (missing historical trees) and supplemental85/86 (fixture-count bookkeeping); final frozen verification is separate.",
+    "Readiness implementation 6abc888388b2e45c0986c3c9b043aa03324fd77e is exact-hosted verified narrowly (native20 groups, controller86, alpha40, operator30 and required Unix/feature-off/archive steps). G3 service/TLS, G2 permanent distribution/published-file replay and G4-G8 remain open; this is not Production V1.",
     "Exact G2 application upstream and expanded alpha/required Unix CI accepted narrowly for implementation eb4e2de3026edb7a59e877fff8971c8d039e8143. Local AF_UNIX EPERM remains an unresolved environment restriction, not a code fix. Permanent versioned alpha archive and independent published-file nonroot Node22 replay remain pending; G3-G8 and Production V1 are not accepted.",
     "G1 contract/declaration validation is exact-hosted verified only. G2 permanent Local Alpha replay and G3-G8 nonroot target service/TLS/rollback/recovery/security/soak/Production V1 acceptance remain open.",
     "Held-source API metadata exact CI accepted only for bounded observations. Actual required ALPN/Finished values and restricted authentication-class state still need protected preservation and reviewed unsupported API semantics before target reconstruction.",
@@ -1406,7 +1391,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First verify exact resulting G3 readiness implementation CI: controller explicit status/body refusals, durable recovery, legacy compatibility, expanded extracted-bundle alpha, native aggregate, required Unix and feature-off checks must actually run. Then implement the next permitted G3 TLS and systemd-user service package with explicit CA/hostname controls, guarded startup/stop/restart, failed-start and orphan/drain refusals. The current local UID0/Node24 and absent user manager do not accept the target service. G2 permanent versioned distribution and independent published-file nonroot Node22 replay remain blocked by available Release/asset publication capabilities; do not bypass credentials or workflow permissions. G2 stays partial and G3-G8/Production V1 stay unaccepted; preserve all native capabilities and deferred Continuum.",
+  "nextConcreteTask": "Implement the next permitted G3 TLS and systemd-user service package: explicit downstream/upstream CA and hostname controls, guarded service startup/stop/restart, failed-start cleanup, slow-drain and faulted/orphan refusals. Readiness implementation 6abc888388b2e45c0986c3c9b043aa03324fd77e is exact-hosted verified only; do not rerun it unchanged without a new question. The local UID0/Node24 and absent user manager do not accept the target service. G2 permanent versioned distribution and independent published-file nonroot Node22 replay remain blocked by available Release/asset publication capabilities; do not bypass credentials or workflow permissions. G2 remains partial, G3-G8/Production V1 unaccepted, all native features and deferred Continuum preserved. Check fresh central dispatch and acquire a new lease before further writes.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1614,7 +1599,7 @@
     "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G3_READINESS_EXACT_CI_PENDING_G2_DISTRIBUTION_OPEN",
+    "currentGate": "G3_SERVICE_TLS_PENDING_G2_PERMANENT_DISTRIBUTION_OPEN",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -1624,7 +1609,8 @@
     "g2UpstreamHostedEvidence": "x10/evidence/g2-upstream-hosted.json",
     "g2ArchiveEvidence": "x10/evidence/g2-archive.json",
     "g2ArchiveHostedEvidence": "x10/evidence/g2-archive-hosted.json",
-    "g3ReadinessLocalEvidence": "x10/evidence/g3-readiness.json"
+    "g3ReadinessLocalEvidence": "x10/evidence/g3-readiness.json",
+    "g3ReadinessHostedEvidence": "x10/evidence/g3-readiness-hosted.json"
   },
   "lastV1DevelopmentPass": {
     "runId": "x10-g3-readiness-20261024T134116049Z",
@@ -1640,7 +1626,9 @@
     "perFileLedger": "x10/review/g3-readiness-ledger.json",
     "independentReview": "12/12 actual-function HTTP checks, no critical finding; native execution recorded by coordinator separately",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
+      "state": "SUCCESS_SCOPED_READINESS_COMPATIBILITY_ONLY",
+      "implementationCommit": "6abc888388b2e45c0986c3c9b043aa03324fd77e",
+      "evidence": "x10/evidence/g3-readiness-hosted.json"
     },
     "permanentAlphaAccepted": false,
     "serviceAccepted": false,
@@ -1684,13 +1672,30 @@
     "recordedAtUTC": "2026-10-24T13:58:30.173904+00:00"
   },
   "lastV1VerificationReceipt": {
-    "runId": "x10-g2-upstream-ci-20261024T122234Z",
-    "implementationCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
-    "publicationParent": "18f72b0cb278931c781d3afb61dc520678f193a2",
-    "evidence": "x10/evidence/g2-upstream-hosted.json",
-    "ledger": "x10/review/g2-upstream-hosted-ledger.json",
-    "runtimeSourcesChanged": false,
+    "runId": "x10-g3-readiness-ci-20261024T140552350Z",
+    "implementationCommit": "6abc888388b2e45c0986c3c9b043aa03324fd77e",
+    "publicationParent": "3acd5bfd6a9fb07ccc4a071e2dc23b338caaf65c",
+    "evidence": "x10/evidence/g3-readiness-hosted.json",
+    "state": "EXACT_HOSTED_VERIFIED_SCOPED_READINESS_ONLY",
+    "nativeRuns": [
+      {
+        "runId": 40100506937,
+        "jobId": 120891549724,
+        "event": "push",
+        "buildCheckout": "6abc888388b2e45c0986c3c9b043aa03324fd77e",
+        "conclusion": "success"
+      },
+      {
+        "runId": 40100510796,
+        "jobId": 120891576501,
+        "event": "pr",
+        "buildCheckout": "a1f91211bf06a4d86090a166352cc6c186f25e68",
+        "conclusion": "success"
+      }
+    ],
     "permanentAlphaAccepted": false,
+    "serviceAccepted": false,
+    "tlsAccepted": false,
     "productionAccepted": false
   },
   "v1DevelopmentPassHistory": [
@@ -1793,6 +1798,16 @@
       "evidence": "x10/evidence/v1-release-contract-hosted.json",
       "ledger": "x10/review/v1-release-contract-hosted-ledger.json",
       "runtimeSourceChanged": false,
+      "productionAccepted": false
+    },
+    {
+      "runId": "x10-g2-upstream-ci-20261024T122234Z",
+      "implementationCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
+      "publicationParent": "18f72b0cb278931c781d3afb61dc520678f193a2",
+      "evidence": "x10/evidence/g2-upstream-hosted.json",
+      "ledger": "x10/review/g2-upstream-hosted-ledger.json",
+      "runtimeSourcesChanged": false,
+      "permanentAlphaAccepted": false,
       "productionAccepted": false
     }
   ]
