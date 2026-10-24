@@ -1241,3 +1241,27 @@ DECLARED_NOT_ACCEPTED. G2 permanent Local Alpha and G3–G8 proxy/TLS/service,
 package rollback/recovery, security, frozen60minute soak and independent
 Production V1 acceptance remain open. Next G2 implements a real application
 upstream/readiness and independently replayed, permanently published package.
+
+
+## G2 partial: explicit application upstream and extracted package checks
+
+The local alpha now has an explicit opt-in loopback application-upstream mode,
+with a separately launched bounded example application included in the checked
+package. The default native demo stays unchanged. Application `/ready` status
+is distinguished from native self-check and from full business readiness;
+configuration alone does not establish that an application is healthy.
+
+Local changed HTTP/extracted-bundle controls and independent review are recorded
+separately from complete native/Unix acceptance in [evidence](evidence/g2-upstream.json). The
+current root/Node24 environment does not accept the declared nonroot Node22
+target. Local AF_UNIX stream/seqpacket socket creation returned EPERM; actual
+Unix acceptance is blocked. Prechecks and successful HTTP controls are not Unix
+runtime PASS. The full aggregate and supplemental Unix outcomes are recorded separately, including refusals.
+The Quickstart uses the active development ref and records its exact
+checkout; it does not invent a permanent release or accepted download URL.
+
+G2 remains partial: first verify exact new implementation CI, then publish and
+independently replay an accepted permanent versioned Local Alpha. G3–G8 service,
+TLS, config/package rollback/recovery, security, frozen60minute soak and
+Production V1 remain open. The full native matrix and deferred Continuum are
+preserved. No other product is activated by this subcheckpoint.

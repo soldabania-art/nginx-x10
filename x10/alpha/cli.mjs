@@ -12,7 +12,7 @@ import { canonical, digest, exists, fail, inspectMaster, remainingNativeGroup, o
 
 const execute = promisify(execFile), root = fileURLToPath(new URL('../../', import.meta.url));
 const controlNames = ['cli.mjs', 'manager.mjs', 'listeners.mjs', 'generations.mjs', 'status-format.mjs'];
-const alphaNames = ['cli.mjs', 'runtime.mjs'];
+const alphaNames = ['cli.mjs', 'runtime.mjs', 'upstream-example.mjs'];
 const id = () => randomBytes(16).toString('hex');
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const encode = value => `${JSON.stringify(value, null, 2)}\n`;
@@ -131,6 +131,10 @@ function config(prefix, healthPort) {
   return `${user}daemon off;\nmaster_process on;\nworker_processes 1;\npid ${prefix}/nginx.pid;\nerror_log ${prefix}/logs/error.log notice;\nevents { worker_connections 256; }\nhttp {\n access_log off;\n client_body_temp_path ${prefix}/temp/client;\n proxy_temp_path ${prefix}/temp/proxy;\n fastcgi_temp_path ${prefix}/temp/fastcgi;\n uwsgi_temp_path ${prefix}/temp/uwsgi;\n scgi_temp_path ${prefix}/temp/scgi;\n server { listen 127.0.0.1:${healthPort}; server_name localhost;\n  location = /__x10_demo_self_check { return 200 "native demo self-check\\n"; }\n }\ninclude ${prefix}/managed.conf;\n}\n`;
 }
 const demo = healthPort => ({ serverBody: 'location = / { return 200 "NGINX X10 local alpha\\n"; }', healthURL: `http://127.0.0.1:${healthPort}/__x10_demo_self_check` });
+const application = upstreamPort => ({
+  serverBody: `client_max_body_size 16m;\nlocation / { proxy_pass http://127.0.0.1:${upstreamPort}; proxy_http_version 1.1; proxy_next_upstream off; }`,
+  healthURL: `http://127.0.0.1:${upstreamPort}/ready`,
+});
 
 async function createSession(prefix, manifest, seed) {
   const session = id(), target = path.join(prefix, 'runs', session); await mkdir(target, { mode: 0o700 });
@@ -152,6 +156,16 @@ export async function install(values) {
   if (await exists(prefix)) fail('already_exists', 'Install prefix must not exist');
   const port = Number(values.port ?? 9080), healthPort = Number(values['health-port'] ?? 9081);
   if (![port, healthPort].every(p => Number.isInteger(p) && p >= 1024 && p <= 65535) || port === healthPort) fail('invalid_port', 'Distinct unprivileged ports 1024..65535 are required');
+  let upstreamPort = null;
+  if (values['upstream-port'] !== undefined) {
+    const value = values['upstream-port'];
+    if (typeof value !== 'string' || !/^[1-9][0-9]{3,4}$/.test(value)
+        || Number(value) < 1024 || Number(value) > 65535
+        || [port, healthPort].includes(Number(value)))
+      fail('invalid_upstream_port', 'Upstream requires a distinct unprivileged decimal loopback port 1024..65535');
+    upstreamPort = Number(value);
+  }
+  const seed = upstreamPort === null ? demo(healthPort) : application(upstreamPort);
   const bundled = await exists(path.join(root, 'bundle.json'));
   if (bundled && (values.manifest || values.binary)) fail('arguments', 'Bundle installation uses its own checked payload; omit --manifest/--binary');
   const built = bundled ? await bundleBuild() : await sourceBuild(values.manifest || process.env.X10_BUILD_MANIFEST || path.join(root, 'x10/.build/manifest.json'), values.binary || process.env.X10_NGINX_BINARY);
@@ -174,7 +188,9 @@ export async function install(values) {
       await writeFile(path.join(prefix, item.relative), item.bytes, { mode: item.mode, flag: 'wx' });
       immutable[item.relative] = { sha256: digest(item.bytes), bytes: item.bytes.length, mode: item.mode.toString(8).padStart(4, '0') };
     }
-    const candidate = { ...demo(healthPort), serverBody: 'location = / { return 200 "NGINX X10 updated local alpha\\n"; }' };
+    const candidate = upstreamPort === null
+      ? { ...demo(healthPort), serverBody: 'location = / { return 200 "NGINX X10 updated local alpha\\n"; }' }
+      : { ...seed, serverBody: `${seed.serverBody}\nadd_header X-X10-Example "application-b" always;` };
     await writeFile(path.join(prefix, 'examples/candidate-b.json'), encode(candidate), { mode: 0o400 });
     immutable['examples/candidate-b.json'] = { sha256: digest(encode(candidate)), bytes: Buffer.byteLength(encode(candidate)), mode: '0400' };
     const stat = await owned(prefix, true, true), manifest = { schemaVersion: 1, kind: 'nginx-x10-local-alpha', installationId: id(), prefix,
@@ -183,9 +199,11 @@ export async function install(values) {
       sourceDiffSha256: built.build.sourceDiffSha256, compiledModules: built.build.compiledModules, dependencyVersionsFromHeaders: built.build.dependencyVersionsFromHeaders,
       dependencies: built.dependencies, runtimeNote: 'Dynamically linked host-specific local build, not a static or reproducible-build attestation.',
       nodeRuntime: { version: process.version, executable: await realpath(process.execPath), sha256: digest(await readFile(process.execPath)) },
-      healthNote: 'Native demo self-check only; application health is not established.' };
+      healthNote: upstreamPort === null
+        ? 'Native demo self-check only; application health is not established.'
+        : 'Configured application readiness via loopback HTTP /ready; installation has not checked application health or readiness body.' };
     await saveRecord(path.join(prefix, '.alpha-install.json'), manifest);
-    const prepared = await createSession(prefix, manifest, demo(healthPort));
+    const prepared = await createSession(prefix, manifest, seed);
     await saveRecord(path.join(prefix, '.alpha-registry.json'), { schemaVersion: 1, installationId: manifest.installationId, current: prepared.session, sessions: [prepared.session] });
     return { ok: true, outcome: 'installed', prefix, launcher: path.join(prefix, 'bin/x10'), session: prepared.session, sessionPrefix: prepared.lifecycle.prefix, revision: prepared.initial.revision, port, healthPort, controlApiEnabled: false, healthNote: manifest.healthNote };
   } catch (error) { error.message += `; incomplete private prefix preserved for inspection: ${prefix}`; throw error; }
@@ -402,13 +420,13 @@ export async function main(argv, installedPrefix = null) {
   const oldMask = process.umask(0o077);
   try {
     const { values, positionals } = parseArgs({ args: argv, allowPositionals: true, options: Object.fromEntries([
-      ...['prefix', 'port', 'health-port', 'manifest', 'binary', 'output', 'file', 'revision', 'control-socket', 'control-address'].map(name => [name, { type: 'string' }]),
+      ...['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'output', 'file', 'revision', 'control-socket', 'control-address'].map(name => [name, { type: 'string' }]),
       ['human', { type: 'boolean' }], ['help', { type: 'boolean', short: 'h' }],
     ]) });
     const [command] = positionals;
-    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 run [--control-socket PRIVATE_ABSOLUTE] | bind | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
+    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 run [--control-socket PRIVATE_ABSOLUTE] | bind | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
     if (positionals.length !== 1) fail('arguments', 'Exactly one command is required; use --help');
-    const allowed = { install: ['prefix', 'port', 'health-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
+    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
     if (!allowed[command] || Object.keys(values).some(key => !allowed[command].includes(key))) fail('arguments', 'Unsupported command or option for this command');
     let result;
     if (command === 'install' || command === 'pack') { if (installedPrefix) fail('arguments', 'Use the source checkout or extracted bundle for installation'); result = command === 'install' ? await install(values) : await pack(values); }

@@ -208,7 +208,7 @@
     {
       "id": "G2",
       "name": "Complete and publish Local Alpha",
-      "status": "ENGINEERING_VERIFIED_RELEASE_PENDING",
+      "status": "APPLICATION_HTTP_SCOPED_LOCAL_VERIFIED_UNIX_BLOCKED_HOSTED_AND_RELEASE_PENDING",
       "depends_on": [
         "G1"
       ],
@@ -230,7 +230,18 @@
         "alpha_artifact_sha256",
         "clean_install_report",
         "operator_flow_report"
-      ]
+      ],
+      "upstreamSubcheckpoint": {
+        "runId": "x10-g2-upstream-20261024T115720Z",
+        "sourceBase": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
+        "publicationParent": "3c3a7e78911ba0f15d30746cadf278abd8c3a8ff",
+        "evidence": "x10/evidence/g2-upstream.json",
+        "scope": "Opt-in local application upstream and extracted-bundle regression only",
+        "exactHostedAcceptance": "PENDING_NEW_IMPLEMENTATION",
+        "publishedAlphaAccepted": false,
+        "productionAccepted": false,
+        "cleanTargetNode22NonrootAccepted": false
+      }
     },
     {
       "id": "G3",
@@ -556,5 +567,14 @@
       "productionAccepted": false,
       "researchPushRuntime": "SKIPPED_NOT_NEW_RUNTIME_ACCEPTANCE"
     }
+  },
+  "g2UpstreamCheckpoint": {
+    "recordedAtUTC": "2026-10-24T12:16:27.945906Z",
+    "runId": "x10-g2-upstream-20261024T115720Z",
+    "evidence": "x10/evidence/g2-upstream.json",
+    "nextConcreteTask": "Verify exact resulting G2 application-upstream implementation CI first: native main jobs must execute the expanded alpha/extracted-bundle tests and existing official/Unix/feature-off/package checks. Then complete G2 distribution: an accepted versioned permanent alpha archive with exact checksums/provenance and independent published-file nonroot Node22 replay. Keep G3-G8 service/TLS, config and package rollback/recovery, security, frozen60minute soak and Production V1 acceptance open. Do not resume deferred Continuum or activate another product by default.",
+    "productionAccepted": false,
+    "permanentAlphaAccepted": false,
+    "fullScopePreserved": true
   }
 }

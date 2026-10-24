@@ -209,3 +209,143 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
     await rm(parent, { recursive: true, force: true });
   }
 });
+
+// G2 opt-in upstream controls. The original demo lifecycle above stays intact.
+async function upstreamTransfer(port, route = '/', { method = 'GET', body = null, limit = 9 * 1024 * 1024 } = {}) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => req.destroy(new Error('upstream request deadline')), 5000);
+    const req = http.request({ host: '127.0.0.1', port, path: route, method, agent: false,
+      headers: body ? { 'Content-Length': body.length, 'Content-Type': 'application/octet-stream' } : {} }, res => {
+      const chunks = []; let bytes = 0;
+      res.on('data', chunk => { bytes += chunk.length; if (bytes > limit) req.destroy(new Error('upstream response limit')); else chunks.push(chunk); });
+      res.on('error', reject);
+      res.on('end', () => { clearTimeout(timer); resolve({ status: res.statusCode, body: Buffer.concat(chunks), headers: res.headers }); });
+    });
+    req.setTimeout(1500, () => req.destroy(new Error('upstream request idle timeout')));
+    req.once('error', error => { clearTimeout(timer); reject(error); });
+    req.end(body);
+  });
+}
+async function upstreamPorts(upstreamPort) {
+  let port, healthPort;
+  do { port = await unusedPort(); } while (port === upstreamPort);
+  do { healthPort = await unusedPort(); } while (healthPort === port || healthPort === upstreamPort);
+  return { port, healthPort };
+}
+
+test('application upstream port syntax and collisions refuse before creating a prefix', { timeout: 20000 }, async () => {
+  const parent = await mkdtemp(path.join(os.tmpdir(), 'x10-alpha-upstream-port-')); await chmod(parent, 0o700);
+  const prefix = path.join(parent, 'install');
+  try {
+    for (const value of ['0', '80', '65536', '09090', '9090.0', '9e3', ' 9090', '9090;return', '9080', '9081']) {
+      const result = await cli(source, 'install', '--prefix', prefix, '--port', '9080', '--health-port', '9081', '--upstream-port', value,
+        '--manifest', manifestFile, '--binary', binary);
+      assert.equal(result.code, 1); assert.equal(result.json.ok, false); assert.equal(result.json.code, 'invalid_upstream_port');
+      assert.equal(await absent(prefix), true, 'invalid optional upstream created installation data');
+    }
+  } finally { await rm(parent, { recursive: true, force: true }); }
+});
+
+test('extracted bundle proxies an independent app and preserves application readiness across config and sessions', { timeout: 65000 }, async () => {
+  const parent = await mkdtemp(path.join(os.tmpdir(), 'x10-alpha-upstream-')); await chmod(parent, 0o700);
+  let ready = false, appRequests = 0, echoRequests = 0, runChild, output = '', nativePid;
+  const groups = new Set(), children = new Set();
+  const app = http.createServer((req, res) => {
+    appRequests++; res.setHeader('X-App-Marker', 'independent-upstream');
+    if (req.url === '/ready' || req.url === '/not-ready') { res.writeHead(ready && req.url === '/ready' ? 200 : 503); res.end(ready ? 'ready\n' : 'not ready\n'); return; }
+    if (req.method === 'POST' && req.url === '/echo') {
+      echoRequests++;
+      const chunks = []; let bytes = 0;
+      req.on('data', chunk => { bytes += chunk.length; if (bytes > 1024 * 1024) req.destroy(); else chunks.push(chunk); });
+      req.on('end', () => { res.writeHead(200); res.end(Buffer.concat(chunks)); }); return;
+    }
+    res.writeHead(200); res.end('independent application\n');
+  });
+  app.requestTimeout = 3000; app.headersTimeout = 3000; app.keepAliveTimeout = 500;
+  app.listen(0, '127.0.0.1'); await once(app, 'listening');
+  const upstreamPort = app.address().port, { port, healthPort } = await upstreamPorts(upstreamPort);
+  const prefix = path.join(parent, 'installed'), launcher = path.join(prefix, 'bin/x10');
+  const emergency = () => { for (const pid of groups) { try { process.kill(-pid, 'SIGTERM'); } catch {} } for (const child of children) if (child.exitCode === null && child.signalCode === null) child.kill('SIGTERM'); };
+  process.once('SIGINT', emergency); process.once('SIGTERM', emergency);
+  const start = async () => {
+    output = ''; runChild = spawn(process.execPath, [launcher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); children.add(runChild);
+    runChild.stdout.on('data', chunk => { output += chunk; const match = /"(?:pid|candidatePid)": (\d+)/.exec(output); if (match) { nativePid = Number(match[1]); groups.add(nativePid); } });
+    runChild.stderr.on('data', chunk => output += chunk);
+    await until(() => { if (runChild.exitCode !== null || runChild.signalCode !== null) throw new Error(output); return output.includes('"outcome": "running"'); });
+    const info = await cli(launcher, 'info'); assert.equal(info.code, 0, info.stdout); return info.json;
+  };
+  const stop = async () => {
+    const result = await cli(launcher, 'stop'); assert.equal(result.code, 0, result.stdout);
+    await until(() => runChild.exitCode !== null || runChild.signalCode !== null); assert.equal(runChild.exitCode, 0, output);
+    children.delete(runChild); groups.delete(nativePid);
+  };
+  try {
+    const archive = path.join(parent, 'alpha.tar.gz');
+    const packed = await cli(source, 'pack', '--output', archive, '--manifest', manifestFile, '--binary', binary); assert.equal(packed.code, 0, packed.stdout);
+    await execute('tar', ['-xzf', archive, '-C', parent], { timeout: 10000 });
+    const bundle = path.join(parent, 'nginx-x10-alpha'), installer = path.join(bundle, 'install.mjs');
+    assert.equal(await absent(path.join(bundle, 'x10/.build')), true);
+    const installed = await cli(installer, 'install', '--prefix', prefix, '--port', String(port), '--health-port', String(healthPort), '--upstream-port', String(upstreamPort));
+    assert.equal(installed.code, 0, installed.stdout); assert.match(installed.json.healthNote, /application readiness/);
+    const first = await start();
+    assert.equal((await request(healthPort, '/__x10_demo_self_check')).status, 200);
+    assert.equal((await request(port, '/__x10_health')).status, 503, 'native demo must not stand in for application readiness');
+    const denied = await cli(launcher, 'bind'); assert.equal(denied.code, 1); assert.equal(denied.json.code, 'health_gate_failed');
+    assert.equal((await cli(launcher, 'status')).json.binding, null);
+    ready = true; const bound = await cli(launcher, 'bind'); assert.equal(bound.code, 0, bound.stdout);
+    const initialRevision = bound.json.revision;
+    const response = await upstreamTransfer(port); assert.equal(response.status, 200); assert.equal(response.body.toString(), 'independent application\n'); assert.equal(response.headers['x-app-marker'], 'independent-upstream');
+    const payload = Buffer.alloc(65551); for (let i = 0; i < payload.length; i++) payload[i] = (i * 37) & 255;
+    const echoed = await upstreamTransfer(port, '/echo', { method: 'POST', body: payload }); assert.equal(echoed.status, 200); assert.deepEqual(echoed.body, payload);
+    assert.equal((await request(port, '/__x10_health')).status, 200);
+    const applied = await cli(launcher, 'apply', '--file', path.join(prefix, 'examples/candidate-b.json')); assert.equal(applied.code, 0, applied.stdout);
+    await until(async () => (await request(port)).headers['x-x10-example'] === 'application-b');
+    assert.equal((await cli(launcher, 'revert', '--revision', initialRevision)).code, 0);
+    await until(async () => (await request(port)).headers['x-x10-example'] === undefined);
+    assert.equal((await cli(launcher, 'apply', '--file', path.join(prefix, 'examples/candidate-b.json'))).code, 0);
+    await until(async () => (await request(port)).headers['x-x10-example'] === 'application-b');
+    const seed = JSON.parse(await readFile(path.join(prefix, 'examples/candidate-b.json'), 'utf8'));
+    const unhealthy = path.join(parent, 'unhealthy.json'); await writeFile(unhealthy, JSON.stringify({ ...seed, healthURL: `http://127.0.0.1:${upstreamPort}/not-ready` }), { mode: 0o600 });
+    const rolled = await cli(launcher, 'apply', '--file', unhealthy); assert.equal(rolled.code, 1); assert.equal(rolled.json.outcome, 'rolled_back'); assert.match(rolled.json.reason, /^No fresh acknowledged healthy revision .*health=503\//);
+    await until(async () => (await request(port)).headers['x-x10-example'] === 'application-b');
+    assert.equal((await cli(launcher, 'recover')).code, 0);
+    await stop(); await assert.rejects(request(port));
+    const restarted = await start(); assert.notEqual(restarted.session, first.session);
+    assert.equal((await cli(launcher, 'bind')).code, 0);
+    const afterRestart = await upstreamTransfer(port, '/echo', { method: 'POST', body: payload }); assert.deepEqual(afterRestart.body, payload);
+    assert.equal(afterRestart.headers['x-x10-example'], 'application-b'); assert(appRequests > 0); assert.equal(echoRequests, 2, 'POST bodies must not be replayed by gateway operations');
+    await stop(); assert.equal((await cli(launcher, 'uninstall')).code, 0); assert.equal(await absent(prefix), true);
+    assert.equal(groups.size, 0); assert.equal(children.size, 0);
+  } finally {
+    process.removeListener('SIGINT', emergency); process.removeListener('SIGTERM', emergency);
+    for (const signal of ['SIGQUIT', 'SIGTERM', 'SIGKILL']) { for (const pid of groups) { try { process.kill(-pid, signal); } catch {} } for (const child of children) if (child.exitCode === null && child.signalCode === null) { try { child.kill('SIGTERM'); } catch {} } if (groups.size || children.size) await delay(75); }
+    app.closeAllConnections(); await new Promise(resolve => app.close(resolve)); await rm(parent, { recursive: true, force: true });
+  }
+});
+
+test('shipped loopback upstream example is immutable in extracted installs and serves bounded echo and stream', { timeout: 40000 }, async () => {
+  const parent = await mkdtemp(path.join(os.tmpdir(), 'x10-alpha-upstream-example-')); await chmod(parent, 0o700);
+  let child, output = '';
+  try {
+    const archive = path.join(parent, 'alpha.tar.gz'); assert.equal((await cli(source, 'pack', '--output', archive, '--manifest', manifestFile, '--binary', binary)).code, 0);
+    await execute('tar', ['-xzf', archive, '-C', parent], { timeout: 10000 });
+    const bundle = path.join(parent, 'nginx-x10-alpha'), prefix = path.join(parent, 'installed'), launcher = path.join(prefix, 'bin/x10');
+    const upstreamPort = await unusedPort(), { port, healthPort } = await upstreamPorts(upstreamPort);
+    const result = await cli(path.join(bundle, 'install.mjs'), 'install', '--prefix', prefix, '--port', String(port), '--health-port', String(healthPort), '--upstream-port', String(upstreamPort)); assert.equal(result.code, 0, result.stdout);
+    const example = path.join(prefix, 'lib/alpha/upstream-example.mjs'); assert.equal((await lstat(example)).mode & 0o777, 0o400);
+    const bytes = await readFile(example); await chmod(example, 0o600);
+    try { await writeFile(example, Buffer.concat([bytes, Buffer.from('\n// changed\n')])); assert.equal((await cli(launcher, 'info')).json.code, 'alpha_integrity'); }
+    finally { await writeFile(example, bytes); await chmod(example, 0o400); }
+    child = spawn(process.execPath, [example, '--port', String(upstreamPort)], { stdio: ['ignore', 'pipe', 'pipe'] });
+    child.stdout.on('data', chunk => output += chunk); child.stderr.on('data', chunk => output += chunk);
+    await until(async () => { if (child.exitCode !== null || child.signalCode !== null) throw new Error(output); try { return (await request(upstreamPort, '/ready')).status === 200; } catch { return false; } });
+    assert.equal((await request(upstreamPort)).body, 'NGINX X10 upstream example\n');
+    const payload = Buffer.from([0, 1, 2, 255, 128, 0, 31]); const echoed = await upstreamTransfer(upstreamPort, '/echo', { method: 'POST', body: payload }); assert.deepEqual(echoed.body, payload);
+    const streamed = await upstreamTransfer(upstreamPort, '/stream'); assert.equal(streamed.status, 200); assert.equal(streamed.body.length, 8 * 1024 * 1024); assert.equal(digest(streamed.body), digest(Buffer.alloc(8 * 1024 * 1024, 0x78)));
+    child.kill('SIGTERM'); await until(() => child.exitCode !== null || child.signalCode !== null); assert.equal(child.exitCode, 0, output);
+    assert.equal((await cli(launcher, 'uninstall')).code, 0); assert.equal(await absent(prefix), true);
+  } finally {
+    if (child && child.exitCode === null && child.signalCode === null) { child.kill('SIGTERM'); await until(() => child.exitCode !== null || child.signalCode !== null, 3000).catch(() => child.kill('SIGKILL')); }
+    await rm(parent, { recursive: true, force: true });
+  }
+});

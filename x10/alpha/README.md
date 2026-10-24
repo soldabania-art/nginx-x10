@@ -55,6 +55,80 @@ it does not establish health of an upstream application. `status` uses JSON by
 default; `--human` labels its revision-header observations and unperformed
 health/drain checks. See the controller documentation for gate/recovery limits.
 
+## Optional loopback application upstream
+
+A new installation can explicitly select an HTTP application instead of the
+native demo response:
+Stop any earlier installation using the same ports before starting this one.
+
+```sh
+x10_app_prefix="$HOME/nginx-x10-app"
+node x10/alpha/cli.mjs install --prefix "$x10_app_prefix" --port 8088 --health-port 8089 --upstream-port 9090
+```
+
+The three ports must be distinct decimal unprivileged ports, 1024..65535.
+`--upstream-port` always means `127.0.0.1`; it does not accept a hostname,
+URL, credentials or a remote administration endpoint. Omit it to preserve the
+existing demo mode. Installation prepares configuration and records its inputs;
+`installed` does not mean that an application exists or has passed a health gate.
+
+For an operator-owned application listening on that port, provide an idempotent
+`GET /ready` endpoint. The managed `/` location proxies HTTP/1.1 to it with
+`proxy_next_upstream off`; this example does not automatically retry requests.
+Application readiness is sampled through the managed native listener at
+`http://127.0.0.1:8088/__x10_health`. Bind/apply gates require HTTP 200 and the
+current revision header. They do not compare the readiness response body or
+prove database/business readiness. The separate native demo self-check on port
+8089 remains available and can return 200 while the application is unavailable.
+`status` observes runtime/revision state; it does not continuously recheck
+application readiness. Use an explicit current request when needed.
+
+An optional example application is included in the verified immutable helper
+inventory. In one terminal, after installation:
+
+```sh
+x10_app_prefix="$HOME/nginx-x10-app"
+node "$x10_app_prefix/lib/alpha/upstream-example.mjs" --port 9090
+```
+
+Wait for `outcome: upstream_example_listening`. The example listens only on
+IPv4 loopback. `GET /ready` returns `ready` plus newline; `GET /` returns
+`NGINX X10 upstream example` plus newline. `POST /echo` echoes at most 16 MiB
+with at most four active echo requests; `GET /stream` produces 8 MiB with
+backpressure. These are bounded example routes, not an authenticated application,
+a supervisor or an accepted Production V1 service.
+
+In a second terminal, keep the native foreground launcher running:
+
+```sh
+x10_app_prefix="$HOME/nginx-x10-app"
+"$x10_app_prefix/bin/x10" run
+```
+
+After its verified `running` event, use a third terminal:
+
+```sh
+x10_app_prefix="$HOME/nginx-x10-app"
+"$x10_app_prefix/bin/x10" bind
+curl --fail --show-error http://127.0.0.1:8088/__x10_health
+curl --fail --show-error http://127.0.0.1:8088/
+printf 'payload\n' | curl --fail --show-error --data-binary @- http://127.0.0.1:8088/echo
+"$x10_app_prefix/bin/x10" apply --file "$x10_app_prefix/examples/candidate-b.json"
+"$x10_app_prefix/bin/x10" history
+```
+
+In application mode, `candidate-b.json` keeps the same upstream and readiness
+URL and adds `X-X10-Example: application-b`; it does not replace the proxy with
+a demo response. Revert using a real recorded revision ID. Restart preserves
+only the checked last-confirmed input and still needs an explicit new bind;
+it does not transfer a live connection or guarantee continued app readiness.
+
+Stop native through `bin/x10 stop`, wait for its foreground launcher to exit,
+and stop the example in its own terminal with Ctrl-C before uninstalling.
+The example handles its own sockets with bounded shutdown; it never reaps
+unrelated processes. The existing same-UID, ABI, state, unknown-file and
+uninstall restrictions below still apply.
+
 A verified stop permits another `run`. Each run uses a new `runs/<session-id>`
 private directory and controller state. Only a hash-verified last-confirmed
 input is transferred. Bind explicitly to the new master. Old configurations,
@@ -113,16 +187,26 @@ node x10/alpha/cli.mjs pack --output x10/.build/dist/nginx-x10-linux-alpha.tar.g
 # On a compatible Linux host, in an existing private directory:
 tar -xzf nginx-x10-linux-alpha.tar.gz
 node nginx-x10-alpha/install.mjs install --prefix "$HOME/nginx-x10-alpha" --port 8088 --health-port 8089
+# Or choose an absent application-mode prefix and a separate app port:
+node nginx-x10-alpha/install.mjs install --prefix "$HOME/nginx-x10-app" --port 8088 --health-port 8089 --upstream-port 9090
 ```
 
 An extracted bundle verifies its own allowlisted payload and needs no original
-git checkout or build tree. It contains native binary, exact CLI helpers,
+git checkout or build tree. An application-mode install can run the shipped
+`lib/alpha/upstream-example.mjs` exactly as above; the original checkout is not
+needed. It contains native binary, exact CLI helpers,
 LICENSE/NOTICE and an allowlisted provenance record, without live configuration,
 state, PID, namespace or logs. It still requires Node and compatible host dynamic
 libraries; it is not a universal portable/static package. Checksums are unsigned
 consistency records. Binary debug/configure metadata can contain build paths.
 Local bundles stay ignored; published CI artifacts must come from the public
 hosted runner checkout, not this private workspace.
+
+There is no accepted permanent versioned alpha download in these instructions
+yet. A locally packed archive or expiring CI artifact is not a permanent release.
+Use the exact checked candidate that contains `--upstream-port` and the new
+example; earlier bundles must not be assumed to contain them. G2 distribution
+and independent replay from a published archive remain separate acceptance gates.
 
 Run `node --test --test-reporter=tap x10/test/alpha.test.mjs` for actual native
 installation/lifecycle/restart, tamper, refusal and bundle extraction checks.

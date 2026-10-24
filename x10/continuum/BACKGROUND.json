@@ -3,27 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-g2-upstream-20261024T115720Z",
-    "owner": "codex-coordinator-g2-upstream",
-    "baseCommit": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
-    "acquiredAtUTC": "2026-10-24T11:57:20.000Z",
-    "expiresAtUTC": "2026-10-24T12:42:20.000Z",
-    "task": "G2 opt-in application upstream seed, shipped loopback example and extracted-bundle regressions; no permanent release acceptance",
-    "allowedFiles": [
-      "x10/alpha/cli.mjs",
-      "x10/alpha/upstream-example.mjs",
-      "x10/alpha/README.md",
-      "x10/test/alpha.test.mjs",
-      "x10/QUICKSTART.md",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/continuum/BACKGROUND.json",
-      "x10/PLAN.md",
-      "x10/STATUS.md",
-      "x10/evidence/g2-upstream.json",
-      "x10/review/g2-upstream-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1091,9 +1071,20 @@
       "researchPRRuntimeChecked": true,
       "targetRuntimeAccepted": false,
       "productionAccepted": false
+    },
+    "g2UpstreamLocal": {
+      "state": "local-scoped-HTTP-application-only-Unix-blocked-exact-hosted-pending",
+      "evidence": "x10/evidence/g2-upstream.json",
+      "defaultDemoPreserved": true,
+      "runtimeProfileAccepted": false,
+      "localUnixAccepted": false,
+      "permanentAlphaAccepted": false,
+      "productionAccepted": false,
+      "resultIdentityRule": "Result commit whose single parent is publicationParent in evidence."
     }
   },
   "pendingVerification": [
+    "Verify exact resulting application-upstream G2 implementation CI: native main jobs must execute the expanded alpha/extracted-bundle regressions and existing official/Unix/feature-off/package checks. Local AF_UNIX stream/seqpacket creation returned EPERM and actual Unix acceptance is blocked; do not bypass this host restriction or count prechecks as Unix runtime cases. Local root/Node24 is not clean Node22/nonroot target acceptance; permanent published alpha and independent published-file replay remain open.",
     "G1 contract/declaration validation is exact-hosted verified only. G2 permanent Local Alpha replay and G3-G8 nonroot target service/TLS/rollback/recovery/security/soak/Production V1 acceptance remain open.",
     "Held-source API metadata exact CI accepted only for bounded observations. Actual required ALPN/Finished values and restricted authentication-class state still need protected preservation and reviewed unsupported API semantics before target reconstruction.",
     "Private synthetic capture-TU ASan/UBSan8 controls passed with detect_leaks=0; LeakSanitizer detect_leaks=1 was unavailable due owned-process /proc/task access. Not a leak-detection PASS or full syscall-failure matrix.",
@@ -1110,9 +1101,14 @@
   ],
   "nextTasks": [
     {
-      "id": "G2",
-      "state": "next-implementation-package",
-      "goal": "Real upstream/readiness and independent permanent Local Alpha package path."
+      "id": "G2-exact-CI",
+      "state": "pending-exact-resulting-implementation",
+      "goal": "Verify expanded alpha/extracted-bundle tests and native compatibility."
+    },
+    {
+      "id": "G2-distribution",
+      "state": "pending-permanent-published-alpha-and-replay",
+      "goal": "Versioned permanent alpha and independent clean Node22/nonroot published-file replay."
     },
     {
       "id": "G3-G8",
@@ -1122,7 +1118,7 @@
     {
       "id": "G9",
       "state": "blocked-by-accepted-V1",
-      "goal": "Central controlled transition only after G0-G8 evidence."
+      "goal": "Controlled portfolio transition only after accepted G0-G8 evidence."
     }
   ],
   "money": {
@@ -1373,7 +1369,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "Implement G2 Local Alpha: correct the stale Quickstart to an accepted exact release, add a real upstream with application readiness, independently replay the extracted bundle and publish a permanent versioned alpha archive. Keep G3-G8 operated service/proxy/TLS, config and package rollback/recovery, security, frozen60minute soak and independent permanent Production V1 acceptance open. Alpha does not activate another product; Continuum R&D remains preserved and deferred under the current V1 priority.",
+  "nextConcreteTask": "Verify exact resulting G2 application-upstream implementation CI first: native main jobs must execute the expanded alpha/extracted-bundle tests and existing official/Unix/feature-off/package checks. Then complete G2 distribution: an accepted versioned permanent alpha archive with exact checksums/provenance and independent published-file nonroot Node22 replay. Keep G3-G8 service/TLS, config and package rollback/recovery, security, frozen60minute soak and Production V1 acceptance open. Do not resume deferred Continuum or activate another product by default.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1578,37 +1574,43 @@
         "goal": "Held-out third-version adapter, adverse I/O/KeyUpdate/half-close tests, cost and overhead measurements"
       }
     ],
-    "runtimeCodeChangedByThisPublication": false,
+    "runtimeCodeChangedByThisPublication": true,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G2_NEXT_NOT_RELEASED",
+    "currentGate": "G2_APPLICATION_LOCAL_HOSTED_AND_DISTRIBUTION_PENDING",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
     "researchRuntimeChangedByThisPublication": false,
-    "g1HostedEvidence": "x10/evidence/v1-release-contract-hosted.json"
+    "g1HostedEvidence": "x10/evidence/v1-release-contract-hosted.json",
+    "g2UpstreamLocalEvidence": "x10/evidence/g2-upstream.json"
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-v1-contract-20261024T112328Z",
-    "baseCommit": "1cb03eaa0b9318da8ab5d1e7457fd749e854bf5f",
-    "publicationParent": "4496cf08d46a1aa5f979f97f4208d1039116f44f",
-    "scope": "G0-G1 bounded Production V1 contract and release-record declarations",
-    "result": "Supported target/profile and prospective thresholds declared; bounded schema/checker plus independent refusal controls locally verified; required native CI step added. No service/install/soak or permanent release acceptance is claimed.",
+    "runId": "x10-g2-upstream-20261024T115720Z",
+    "baseCommit": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
+    "publicationParent": "3c3a7e78911ba0f15d30746cadf278abd8c3a8ff",
+    "scope": "G2 partial: explicit application upstream, example and installed-bundle checks",
+    "result": "Optional loopback application proxy seed and shipped bounded example implemented; default demo preserved. Changed HTTP/bundle checks and independent review recorded separately; local Unix acceptance is blocked by socket EPERM. New exact CI and permanent published alpha/clean target replay remain pending.",
     "helpers": {
-      "count": 4,
+      "count": 6,
       "temporary": true,
       "onlyCoordinatorIntegrates": true,
       "roles": [
-        "contract/profile docs",
-        "release record implementation",
-        "independent review/heldouts",
+        "alpha CLI/example implementation",
+        "alpha regression tests",
+        "native build/regression",
+        "independent security/heldouts",
+        "operator documentation",
         "checkpoint evidence"
       ]
     },
     "nativeSourceChanged": false,
     "controllerImplementationChanged": false,
-    "localEvidence": "x10/evidence/v1-release-contract.json",
-    "perFileLedger": "x10/review/v1-release-contract-ledger.json",
+    "alphaRuntimeChanged": true,
+    "alphaVerificationChanged": true,
+    "localUnixAccepted": false,
+    "localEvidence": "x10/evidence/g2-upstream.json",
+    "perFileLedger": "x10/review/g2-upstream-ledger.json",
     "hostedVerification": {
       "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
     },
@@ -1623,5 +1625,34 @@
     "ledger": "x10/review/v1-release-contract-hosted-ledger.json",
     "runtimeSourceChanged": false,
     "productionAccepted": false
-  }
+  },
+  "v1DevelopmentPassHistory": [
+    {
+      "runId": "x10-v1-contract-20261024T112328Z",
+      "baseCommit": "1cb03eaa0b9318da8ab5d1e7457fd749e854bf5f",
+      "publicationParent": "4496cf08d46a1aa5f979f97f4208d1039116f44f",
+      "scope": "G0-G1 bounded Production V1 contract and release-record declarations",
+      "result": "Supported target/profile and prospective thresholds declared; bounded schema/checker plus independent refusal controls locally verified; required native CI step added. No service/install/soak or permanent release acceptance is claimed.",
+      "helpers": {
+        "count": 4,
+        "temporary": true,
+        "onlyCoordinatorIntegrates": true,
+        "roles": [
+          "contract/profile docs",
+          "release record implementation",
+          "independent review/heldouts",
+          "checkpoint evidence"
+        ]
+      },
+      "nativeSourceChanged": false,
+      "controllerImplementationChanged": false,
+      "localEvidence": "x10/evidence/v1-release-contract.json",
+      "perFileLedger": "x10/review/v1-release-contract-ledger.json",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
+    }
+  ]
 }
