@@ -84,6 +84,8 @@ jobs:
         run: node x10/test/all.mjs --official > x10/.build/ci-evidence/checks.json
       - name: Verify installed HTTPS upstream trust and hostname
         run: node --test --test-reporter=tap x10/test/alpha-tls.test.mjs > x10/.build/ci-evidence/alpha-tls.tap
+      - name: Verify managed frontend HTTPS and certificate lifecycle
+        run: node --test --test-reporter=tap x10/test/frontend-tls.test.mjs > x10/.build/ci-evidence/frontend-tls.tap
       - name: Verify native tenant cache contract experiment
         run: node --test --test-reporter=tap x10/test/proof.test.mjs > x10/.build/ci-evidence/guard-kernel.tap
       - name: Verify private Unix control transport

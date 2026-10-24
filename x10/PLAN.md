@@ -1069,3 +1069,38 @@ certificate/listener lifecycle, then actual nonroot user-manager service and
 failure/drain/orphan acceptance. Automatic unit readiness, G2 permanent
 distribution/published-file replay, final soak, G4-G8 and Production V1 remain
 open. Full native compatibility and deferred Continuum scope are preserved.
+
+
+## Explicit managed loopback frontend HTTPS
+
+An optional candidate `https` object now requests a fixed IPv4-loopback TLS
+listener alongside the existing HTTP management/readiness listener. It names
+an unprivileged port and operator-owned certificate/key files; arbitrary
+`listen` and `include` directives remain rejected. Legacy inputs without
+`https` retain their canonical representation and rendered HTTP fragment.
+Native `-t` checks certificate configuration before reload. Existing readiness
+is still HTTP and does not automatically authenticate a frontend TLS session.
+
+[Evidence](evidence/g3-frontend-tls.json) records actual installed trust,
+certificate lifecycle/refusal checks, independent review and fresh native
+compatibility. The final authored suite passed 15 nested
+scenarios (16 TAP including its wrapper); independent review
+passed 56/56 separate controls with zero blocking
+findings. One fresh native build and the final official aggregate passed
+20/20 groups. Official results retain 1083
+strict PASS, 25 SKIP and 1 expected
+TODO-fail, with 0 unexpected FAIL. Counts use separate units.
+
+The new mandatory CI step runs `frontend-tls.test.mjs`; exact resulting
+implementation CI remains pending. Earlier HTTPS-upstream evidence does not
+verify these new controller/test/workflow bytes. Local root/Node24 tests do
+not accept the supported nonroot Node22 service profile. Operator certificate
+files remain external, versioned and retained for revert/restart; config
+rollback cannot recreate a removed or changed certificate. Automatic TLS
+health, renewal, user-service lifecycle and final Production V1 remain open.
+
+The historical local19/20 ESRCH failure and unknown process/interleaving are
+preserved. No frontend TLS result explains that historical failure. Next
+verify exact new CI, then complete actual nonroot service startup/stop/restart,
+failed-start, drain and orphan boundaries. G2 permanent release/published-file
+replay and G4-G8 remain open; full native and deferred Continuum are preserved.

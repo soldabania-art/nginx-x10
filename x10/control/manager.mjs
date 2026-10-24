@@ -85,8 +85,59 @@ async function lock(state, operation) {
   } finally { await handle.close(); await rm(file); await syncDirectory(state); }
 }
 
+function httpsInput(value) {
+  const keys = ['port', 'certificate', 'certificateKey'];
+  if (!value || typeof value !== 'object' || Array.isArray(value)
+      || ![Object.prototype, null].includes(Object.getPrototypeOf(value))
+      || Object.keys(value).length !== keys.length || keys.some(k => !Object.hasOwn(value, k))
+      || !Number.isInteger(value.port) || value.port < 1024 || value.port > 65535)
+    fail('invalid_https', 'HTTPS requires exactly port 1024..65535, certificate and certificateKey');
+  for (const file of [value.certificate, value.certificateKey]) {
+    if (!safePath(file) || /[^A-Za-z0-9_./+-]/.test(file) || file.length > 4096 || path.normalize(file) !== file || file.endsWith('/'))
+      fail('invalid_https', 'HTTPS certificate paths must be simple canonical absolute file paths');
+  }
+  if (value.certificate === value.certificateKey)
+    fail('invalid_https', 'HTTPS certificate and private key must use distinct files');
+  return { port: value.port, certificate: value.certificate, certificateKey: value.certificateKey };
+}
+
+async function verifyHttps(settings, input) {
+  if (!Object.hasOwn(input, 'https')) return;
+  const tls = httpsInput(input.https);
+  if (tls.port === settings.port || tls.port === Number(new URL(input.healthURL).port))
+    fail('invalid_https', 'HTTPS port must differ from the HTTP listener and health backend');
+  // Paths are operator-owned versioned references, not secret copies or pinned
+  // certificate identities. The trusted operator must retain old versions for
+  // revert/restart and must not race replacement with native validation/reload.
+  for (const [file, secret] of [[tls.certificate, false], [tls.certificateKey, true]]) {
+    try {
+      let directory = path.dirname(file), levels = 0;
+      const parent = await owned(directory, true, true);
+      if ((parent.mode & 0o7777) !== 0o700) fail('unsafe_https_file', 'HTTPS parent directory must have mode 0700');
+      // A private leaf does not protect against another UID replacing a
+      // writable ancestor. Root/operator-owned sticky temporary roots are OK.
+      while (true) {
+        if (++levels > 128) fail('unsafe_https_file', 'HTTPS path exceeds the ancestor inspection bound');
+        const ancestor = await lstat(directory);
+        if (!ancestor.isDirectory() || ![0, uid].includes(ancestor.uid)
+            || ((ancestor.mode & 0o022) !== 0 && !(ancestor.mode & 0o1000)))
+          fail('unsafe_https_file', 'HTTPS path has an unsafe ancestor');
+        if (directory === '/') break;
+        directory = path.dirname(directory);
+      }
+      const s = await lstat(file), mode = s.mode & 0o7777;
+      if (await realpath(file) !== file || !s.isFile() || s.uid !== uid
+          || s.size < 1 || s.size > 256 * 1024
+          || !(secret ? [0o400, 0o600] : [0o400, 0o600, 0o644]).includes(mode))
+        fail('unsafe_https_file', 'Unsafe HTTPS certificate or key file');
+    } catch {
+      fail('unsafe_https_file', 'HTTPS requires owned bounded regular files in private canonical directories and safe file modes');
+    }
+  }
+}
+
 function candidate(value) {
-  if (!value || typeof value !== 'object' || Object.keys(value).some(k => !['serverBody', 'healthURL', 'healthExpectedStatus', 'healthExpectedBody'].includes(k)))
+  if (!value || typeof value !== 'object' || Object.keys(value).some(k => !['serverBody', 'healthURL', 'healthExpectedStatus', 'healthExpectedBody', 'https'].includes(k)))
     fail('invalid_candidate', 'Candidate contains unsupported fields');
   if (typeof value.serverBody !== 'string' || Buffer.byteLength(value.serverBody) > 1024 * 1024)
     fail('invalid_candidate', 'serverBody must be a string of at most 1 MiB');
@@ -132,12 +183,14 @@ function candidate(value) {
   // existing hashes must not gain absent/defaulted readiness properties.
   const input = { serverBody: value.serverBody, healthURL: value.healthURL };
   if (explicitStatus) { input.healthExpectedStatus = value.healthExpectedStatus; input.healthExpectedBody = value.healthExpectedBody; }
+  if (Object.hasOwn(value, 'https')) input.https = httpsInput(value.https);
   return input;
 }
 
 function render(settings, revision) {
   return `# Managed by NGINX X10; revision ${revision.id}\nserver {\n`
     + `listen 127.0.0.1:${settings.port};\nserver_name localhost;\n`
+    + (revision.input.https ? `listen 127.0.0.1:${revision.input.https.port} ssl;\nssl_protocols TLSv1.2 TLSv1.3;\nssl_certificate \"${revision.input.https.certificate}\";\nssl_certificate_key \"${revision.input.https.certificateKey}\";\n` : '')
     + `location = /__x10_revision { add_header X-X10-Revision "${revision.id}" always; return 200 "${revision.id}"; }\n`
     + `location = /__x10_health { proxy_pass "${revision.input.healthURL}"; proxy_method GET; proxy_pass_request_body off; proxy_pass_request_headers off; proxy_set_header Host $proxy_host; proxy_set_header Connection close; proxy_set_header Content-Length ""; proxy_cache off; proxy_store off; proxy_buffering off; proxy_ignore_client_abort off; proxy_connect_timeout 1s; proxy_send_timeout 1s; proxy_read_timeout 1s; proxy_next_upstream off; proxy_intercept_errors off; proxy_hide_header X-X10-Revision; add_header X-X10-Revision "${revision.id}" always; }\n`
     + `${revision.input.serverBody}\n}\n`;
@@ -146,6 +199,7 @@ function render(settings, revision) {
 async function makeRevision(settings, input, parent, sourceRevision = null) {
   const revision = { schemaVersion: 1, id: randomBytes(16).toString('hex'), createdAt: now(), parent, sourceRevision, input: candidate(input) };
   if (Number(new URL(revision.input.healthURL).port) === settings.port) fail('invalid_health_url', 'Health backend must use a different loopback port from the managed server');
+  await verifyHttps(settings, revision.input);
   revision.inputSha256 = hash(JSON.stringify(revision.input));
   revision.fragmentSha256 = hash(render(settings, revision));
   revision.recordSha256 = hash(JSON.stringify(revision));
@@ -328,7 +382,7 @@ async function verifyConfirmed(settings, current, revision) {
   if (current.binding) {
     await acknowledged(settings, revision);
     await guard(settings, current, [revision.fragmentSha256]);
-  } else await nativeTest(settings);
+  } else await nativeTest(settings, revision);
 }
 
 async function reconcileCommit(context) {
@@ -371,8 +425,12 @@ async function guard(settings, current, allowFragments) {
   if (current.binding) await runtime(settings, current.binding);
 }
 
-async function nativeTest(settings) {
-  try { await execute(settings.binary, ['-p', `${settings.prefix}/`, '-c', settings.config, '-t'], { timeout: 5000, maxBuffer: 256 * 1024 }); }
+async function nativeTest(settings, revision) {
+  try {
+    await verifyHttps(settings, revision.input);
+    await execute(settings.binary, ['-p', `${settings.prefix}/`, '-c', settings.config, '-t'], { timeout: 5000, maxBuffer: 256 * 1024 });
+    await verifyHttps(settings, revision.input);
+  }
   catch (error) { fail('native_config_rejected', message(error.stderr || error)); }
 }
 
@@ -447,6 +505,7 @@ function request(settings, target, bodyLimitBytes = 64 * 1024) {
 }
 
 async function acknowledged(settings, revision) {
+  await verifyHttps(settings, revision.input);
   const deadline = Date.now() + settings.gateTimeoutMs;
   const explicit = Object.hasOwn(revision.input, 'healthExpectedStatus');
   const expectedStatus = explicit ? revision.input.healthExpectedStatus : 200;
@@ -458,7 +517,7 @@ async function acknowledged(settings, revision) {
       const health = await request(settings, '/__x10_health', explicit ? 4096 : 64 * 1024);
       if (probe.status === 200 && probe.body === revision.id && probe.revision === revision.id && health.status === expectedStatus
           && health.revision === revision.id && (!explicit || health.bodyBytes.equals(expectedBody))) {
-        if (++consecutive === 2) return;
+        if (++consecutive === 2) { await verifyHttps(settings, revision.input); return; }
       } else { consecutive = 0; last = `revision=${probe.revision}, health=${health.status}/${health.revision}`; }
     } catch (error) { consecutive = 0; last = message(error); }
     await delay(40);
@@ -500,7 +559,7 @@ export async function initialize(spec, input) {
     await save(path.join(state, 'settings.json'), settings);
     const revision = await makeRevision(settings, input, null);
     await atomic(settings.fragment, render(settings, revision));
-    await nativeTest(settings);
+    await nativeTest(settings, revision);
     const current = { schemaVersion: 1, activeRevision: revision.id, previousRevision: null, binding: null, historyHead: null };
     await save(path.join(state, 'state.json'), current);
     await event(settings, current, 'initialized_unbound', { revision: revision.id });
@@ -536,8 +595,9 @@ async function rollback(settings, current, transaction, reason) {
   transaction.stage = 'restoring'; transaction.rollbackRevision = restored.id; transaction.reason = reason;
   await pending(settings, transaction);
   await atomic(settings.fragment, render(settings, restored));
-  await nativeTest(settings);
+  await nativeTest(settings, restored);
   await guard(settings, current, [restored.fragmentSha256]);
+  await verifyHttps(settings, restored.input);
   await signal(settings, current); await acknowledged(settings, restored);
   await guard(settings, current, [restored.fragmentSha256]);
   current.previousRevision = old.id; current.activeRevision = restored.id;
@@ -562,9 +622,10 @@ async function activate(state, getInput) {
     try {
       await atomic(settings.fragment, render(settings, revision));
       transaction.stage = 'installed'; await pending(settings, transaction);
-      await nativeTest(settings);
+      await nativeTest(settings, revision);
       await guard(settings, current, [revision.fragmentSha256]);
       transaction.stage = 'reload_requested'; await pending(settings, transaction);
+      await verifyHttps(settings, revision.input);
       await signal(settings, current); signalled = true;
       await acknowledged(settings, revision);
       await guard(settings, current, [revision.fragmentSha256]);

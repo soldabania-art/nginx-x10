@@ -309,3 +309,37 @@ This profile verifies upstream TLS only. It does not enable incoming HTTPS,
 change the managed `listen` guard, operate a user service, authenticate a
 permanent published release, or accept Production V1. Exact CI and supported
 nonroot service/deployment acceptance are recorded separately.
+
+### Optional managed incoming HTTPS
+
+A newly verified bundle containing the frontend TLS extension can add
+`https: { "port": 8443, "certificate": "/absolute/private/certs/v1/server.crt",
+"certificateKey": "/absolute/private/certs/v1/server.key" }` to an operator
+candidate. Apply it through the installed `bin/x10 apply --file` command after
+startup and bind. This adds an IPv4 loopback HTTPS listener to the managed
+server and retains its existing HTTP listener. It does not change arbitrary
+`listen` permission in `serverBody`, enable a public listener, or make an old
+installed bundle gain new code. See the [controller contract](../control/README.md#optional-frontend-https)
+for the exact file/port guards and certificate lifecycle.
+
+Keep operator-owned versioned certificate/key files outside the installation;
+their immediate directory must have mode 0700 and their key mode 0400 or 0600.
+Choose the TLS port distinct from every configured listener, including the
+demo health server and application. Retain earlier certificate versions for
+revert/restart/recovery; uninstall never owns these external files. Rotation
+uses a new candidate with new versioned paths, followed by an authenticated
+HTTPS client check with an explicit CA and expected DNS name. There is no
+automatic certificate issuance, renewal, external-file rollback or expiry
+monitoring. Same-UID concurrent changes remain outside the protected boundary.
+
+The HTTP health gate checks its declared readiness endpoint; it does not
+authenticate the frontend HTTPS endpoint. Separately test HTTPS after apply,
+rotation, revert and restart. Restart transfers the confirmed candidate into
+a new session and still requires explicit bind. Old native connections can
+drain after a change; successful apply does not mean instantaneous TLS listener
+revocation or completed old-worker exit. Status is not a continuous TLS check.
+
+`node --test --test-reporter=tap x10/test/frontend-tls.test.mjs` exercises the
+installed/extracted loopback path. A local source-present test remains distinct
+from independent nonroot Node22 acceptance from a permanent published package.
+The actual user service, permanent release and Production V1 gates remain open.

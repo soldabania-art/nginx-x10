@@ -6,7 +6,8 @@ Node 22 builtins, Linux `/proc`, native `-t`, SIGHUP and local HTTP probes. It
 does not start NGINX, expose an administration API, install anything globally or
 edit the operator's `nginx.conf`.
 
-It is intentionally constrained: one loopback HTTP listener, one private prefix,
+It is intentionally constrained: one loopback HTTP listener, an optional explicit
+loopback HTTPS listener on the same managed server, one private prefix,
 one self-contained `serverBody`, and one explicitly selected loopback health
 backend. Arbitrary native configuration elsewhere remains available to the
 operator, outside this fragment boundary. This is not yet a remote control
@@ -120,6 +121,77 @@ Every activation, including a revert or rollback, receives a new unpredictable
 revision ID. Revert reuses a stored revision's input, not its old runtime ID.
 `init` leaves an unbound desired revision; `bind` confirms the explicitly
 started native master and its readiness before enabling changes.
+
+## Optional frontend HTTPS
+
+A candidate can explicitly add a second, IPv4 loopback TLS listener while
+keeping the existing HTTP listener and HTTP revision/readiness probes:
+
+```json
+{
+  "serverBody": "location / { proxy_pass http://127.0.0.1:9000; proxy_next_upstream off; }",
+  "healthURL": "http://127.0.0.1:9000/ready",
+  "healthExpectedStatus": 200,
+  "healthExpectedBody": "ready\n",
+  "https": {
+    "port": 8443,
+    "certificate": "/home/alex/x10-certs/v1/server.crt",
+    "certificateKey": "/home/alex/x10-certs/v1/server.key"
+  }
+}
+```
+
+`https` is optional and accepts exactly these three fields. The controller
+renders `listen 127.0.0.1:8443 ssl`, the certificate references and TLSv1.2/
+TLSv1.3. The existing `listen`/`include` containment guard still applies to
+`serverBody`. Absent `https` preserves legacy revision inputs and fragments.
+The TLS port must be an integer from 1024 through 65535, distinct from the
+managed HTTP port and health backend port. The operator must also choose a port
+distinct from every other configured listener, including the alpha demo health
+server. This controller does not inventory arbitrary surrounding server blocks.
+
+Use versioned certificate files in a separate operator-owned private directory,
+outside the alpha installation. Each immediate containing directory must be
+owned by the current UID with mode exactly 0700. Every ancestor must be a
+directory owned by root or the current UID; group/other writes require the
+sticky bit. The walk is bounded to 128 levels. Files must be owned regular
+files of 1..256 KiB; the private key must have mode 0400 or 0600. Certificate
+files must have mode 0400, 0600 or 0644 and use a distinct path from the key.
+Paths must be simple, canonical, absolute ASCII paths of at most 4096 characters
+without symlink aliases; spaces and escaped path syntax are
+unsupported. Native `-t` validates the actual certificate/key pair. Node does
+not copy the private key into revision records or the installation inventory.
+Never put private keys or raw TLS diagnostics in Git or public evidence.
+
+Apply a new candidate with new versioned certificate paths for rotation. Keep
+the previous files available for revert, recovery and restart. Removing
+`https` requests a new HTTP-only revision; old connections can drain under the
+previous native generation. This is no immediate revocation or all-worker drain
+guarantee. A revert creates a fresh revision using the old input and files.
+The installation neither issues nor renews certificates and does not edit,
+delete or restore their external files. In-place replacement is outside the
+versioned-file operating procedure; path records do not freeze file contents
+or protect against a malicious same-UID operator or check-to-use races.
+
+After every apply, rotation, revert or restart, separately authenticate the
+HTTPS endpoint with an explicit trusted CA and expected DNS name. For example:
+
+```sh
+curl --fail --cacert /home/alex/x10-certs/ca.crt \
+  --resolve localhost:8443:127.0.0.1 https://localhost:8443/
+```
+
+The built-in HTTP health gate does not perform this TLS handshake, check client
+trust, expiry or hostname, or continuously certify the HTTPS listener. Status
+and successful apply alone are not TLS acceptance. Loopback binding remains;
+this feature does not expose public administration, configure firewall/DNS,
+activate a supervisor or accept the Production V1 service profile.
+
+The installed/extracted lifecycle and client refusal checks run separately:
+
+```sh
+node --test --test-reporter=tap x10/test/frontend-tls.test.mjs
+```
 
 ## What apply confirms
 
