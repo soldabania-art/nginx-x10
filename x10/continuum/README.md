@@ -472,3 +472,15 @@ CI pending; прежний6cee238 принят отдельно. Полнота 
 export/import, runtime budget enforcement и TLS-code migration не реализованы.
 Далее — exact CI, затем review C2a readiness для первого узкого C2b capsule;
 остальные alert/EOF/partial variants остаются unsupported/fail-closed.
+
+### Exact CI: directional record key usage
+
+Implementation `b05ee33160b218854da4cac5710125b90e5ee8ac`: research push
+`40058848933` и PR `40058853171`, native push `40058848929` и PR
+`40058853120` завершены success. Оба research logs подтверждают21/7/27/22;
+полные native workflows, включая Unix/tenant gates, feature-off и alpha
+package/checksum, прошли. Очищенная [квитанция](../evidence/continuum-c2a-usage-hosted.json) сохраняет
+artifact digests, counts и отдельные checkout/build identities. Hosted official:
+1105 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL; local1083 отдельно.
+Это read-only admission policy, не future I/O budget enforcement или migration.
+Далее — review C2a readiness для первого bounded C2b semantic capsule.

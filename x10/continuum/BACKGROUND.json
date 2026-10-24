@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-usage-ci-20261024T033529835Z",
-    "owner": "codex-coordinator",
-    "baseCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
-    "acquiredAtUTC": "2026-10-24T03:35:29.835Z",
-    "expiresAtUTC": "2026-10-24T04:20:29.835Z",
-    "task": "Verify exact implementation research/native CI and preserve sanitized receipt"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -28,44 +21,24 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40054592543",
-    "continuumStage": "C2a truncated-body EOF locally and exact hosted verified; next bounded quiescent sequence/key usage gate before C2b.",
+    "nativeCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40058848929",
+    "continuumStage": "C2a initial-key usage observation locally and exact hosted verified; readiness review before a first bounded C2b capsule.",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-c2a-truncated-body.json",
+    "continuumEvidence": "x10/evidence/continuum-c2a-usage.json",
     "nativeHostedCI": {
       "state": "success",
-      "implementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
-      "pushRun": 40054592543,
-      "pullRequestRun": 40054596722,
+      "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+      "pushRun": 40058848929,
+      "pullRequestRun": 40058853120,
       "nativeJobIDs": [
-        120754681488,
-        120754690512
+        120767775848,
+        120767781356
       ],
-      "scope": "Both full workflows: official aggregate, Unix/tenant gates, feature-off build and alpha package/checksum"
+      "scope": "Both full workflows: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum"
     },
-    "previousContinuumImplementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
+    "previousContinuumImplementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
     "previousContinuumHostedCI": {
-      "state": "success-narrow-read-only-profile",
-      "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
-      "pushRun": 40050023137,
-      "pullRequestRun": 40050026763,
-      "researchJobIDs": [
-        120740463551,
-        120740494100
-      ],
-      "coreTests": 21,
-      "processTests": 7,
-      "c1Tests": 27,
-      "c2aTests": 20,
-      "c2aFamilies": {
-        "ordinaryActualTLSScenarios": 17,
-        "handledRuntimeSignals": 2,
-        "nonTLSCachedSourceControl": 1
-      },
-      "scope": "Peer-first close_notify refusal, no semantic export/import or migration"
-    },
-    "continuumHostedCI": {
       "state": "success-narrow-read-only-profile",
       "implementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
       "pushRun": 40054592561,
@@ -85,27 +58,48 @@
       },
       "scope": "Single-record truncated-body EOF refusal, explicit relay fault injector, wire:null; no migration"
     },
-    "continuumImplementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
+    "continuumHostedCI": {
+      "state": "success-narrow-read-only-profile",
+      "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+      "pushRun": 40058848933,
+      "pullRequestRun": 40058853171,
+      "researchJobIDs": [
+        120767779299,
+        120767792880
+      ],
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 27,
+      "c2aTests": 22,
+      "c2aFamilies": {
+        "ordinaryActualTLSScenarios": 18,
+        "handledRuntimeSignals": 2,
+        "nonTLSCachedSourceControl": 1,
+        "syntheticPredicateTest": 1
+      },
+      "scope": "Conservative current-key sequence admission; synthetic high counters, no migration"
+    },
+    "continuumImplementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
     "implementationIdentityRule": "Truncated-body refusal tied to6cee238 and frozen sources. Workflow head identifies event; actual PR merge checkout/build identities are recorded separately. No state migration, full inventory or identical local/hosted binary claim.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
       "state": "success-local",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-c2a-truncated-body-native-regression.json",
-      "freshCheckoutBinarySha256": "d25f13315ae5e0861951ad278ee9de3153006a24353a534dfd1e78bcf5b6b612",
+      "evidence": "x10/evidence/continuum-c2a-usage-native-regression.json",
+      "freshCheckoutBinarySha256": "9639f8c284b9d192a240608a9e2cabfbbdbb3e32e94a8d2f88d8216d9282d957",
       "earlierCheckoutBinaryIdentityClaimed": false
     },
-    "previousNativeCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
+    "previousNativeCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
     "previousNativeHostedCI": {
       "state": "success",
-      "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
-      "pushRun": 40050023101,
-      "pullRequestRun": 40050026739,
+      "implementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
+      "pushRun": 40054592543,
+      "pullRequestRun": 40054596722,
       "nativeJobIDs": [
-        120740470955,
-        120740488040
+        120754681488,
+        120754690512
       ],
-      "scope": "Both full native workflows: official aggregate, Unix/tenant gates, feature-off build and alpha package/checksum"
+      "scope": "Both full workflows: official aggregate, Unix/tenant gates, feature-off build and alpha package/checksum"
     },
     "c2aLocal": {
       "state": "success-narrow-observation-profile",
@@ -463,8 +457,8 @@
     "previousNativeLocalRegression": {
       "state": "success-local",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-c2a-peer-close-native-regression.json",
-      "freshCheckoutBinarySha256": "8fb676678efa606dafa2f3d3c5d1f30c2a1bfd1b2f313681d1883334f4591d49",
+      "evidence": "x10/evidence/continuum-c2a-truncated-body-native-regression.json",
+      "freshCheckoutBinarySha256": "d25f13315ae5e0861951ad278ee9de3153006a24353a534dfd1e78bcf5b6b612",
       "earlierCheckoutBinaryIdentityClaimed": false
     },
     "c2aShutdownLocal": {
@@ -726,7 +720,7 @@
       "migration": false,
       "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8"
     },
-    "previousContinuumEvidence": "x10/evidence/continuum-c2a-peer-close.json",
+    "previousContinuumEvidence": "x10/evidence/continuum-c2a-truncated-body.json",
     "c2aPeerCloseHosted": {
       "state": "success",
       "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
@@ -768,7 +762,7 @@
       ]
     },
     "c2aUsageLocal": {
-      "state": "success-local-exact-hosted-pending",
+      "state": "success-local-and-exact-hosted-narrow-profile",
       "evidence": "x10/evidence/continuum-c2a-usage.json",
       "nativeEvidence": "x10/evidence/continuum-c2a-usage-native-regression.json",
       "flatChecks": 22,
@@ -778,13 +772,26 @@
       "syntheticPredicateTests": 1,
       "independentActualTLSHeldouts": 2,
       "fullInventory": false,
-      "migration": false
+      "migration": false,
+      "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac"
+    },
+    "c2aUsageHosted": {
+      "state": "success",
+      "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+      "evidence": "x10/evidence/continuum-c2a-usage-hosted.json",
+      "researchRuns": [
+        40058848933,
+        40058853171
+      ],
+      "nativeRuns": [
+        40058848929,
+        40058853120
+      ]
     }
   },
   "pendingVerification": [
-    "Exact research/native CI for the result commit enclosing the usage evidence is pending; record implementation SHA and run IDs before accepting hosted success.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
-    "C2a remaining inventory: other control/alert/partial/EOF/shutdown and sequence/key usage admission. Normal server-first shutdown and post-echo unexpected FIN refusal observed locally; full inventory and overlap admission remain unsupported.",
+    "C2a remaining inventory: other control/alert/partial/EOF states remain unsupported/fail-closed. Conservative initial-key sequence usage observation is accepted; future record budget and a complete first-profile C2b readiness inventory remain unaccepted.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
     "First scheduled cloud development run has not been independently verified by recorded run history."
@@ -803,7 +810,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Quiescent initial-key usage gate locally verified; exact CI pending, then C2a readiness review for a bounded C2b capsule; unknown states unsupported."
+      "goal": "Quiescent initial-key usage gate locally and exact hosted verified; review C2a readiness for first bounded C2b capsule. Unknown states unsupported."
     },
     {
       "id": "C3",
@@ -903,6 +910,15 @@
       "commitMessageRun": 40040050390,
       "versionBumpRun": 40040050408,
       "inheritedF5CLAFailedRun": 40040047294
+    },
+    {
+      "name": "Directional usage implementation format checks",
+      "state": "success",
+      "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+      "whitespaceRun": 40058853173,
+      "commitMessageRun": 40058853180,
+      "versionBumpRun": 40058853235,
+      "inheritedF5CLAFailedRun": 40058850963
     }
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
@@ -963,36 +979,45 @@
     "runId": "continuum-usage-20261024T032250401Z",
     "baseCommit": "15641e756c3dad8eec925eeff698e564b8b213c5",
     "publicationParent": "f5ead0a5414e5c3e60d0058fcf260d57bc04d653",
-    "result": "Read/write next sequence <2^24 observation policy; canonical22, independent2 actual low-counter TLS, synthetic boundaries, core21/process7/C127/native20 locally passed. Exact hosted pending; no migration.",
+    "result": "Conservative directional next<2^24 policy: canonical22, independent2 actual low-counter TLS plus synthetic boundaries, core21/process7/C127/native20 locally passed; both exact research and both native workflows completed success. No future I/O budget enforcement or migration.",
     "helpers": "5 temporary delegated roles; only coordinator integrates and publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
     "perFileLedger": "x10/review/continuum-c2a-usage-ledger.json",
     "hostedVerification": {
-      "state": "pending-exact-result-commit"
-    }
+      "state": "success-narrow-profile",
+      "researchRuns": [
+        40058848933,
+        40058853171
+      ],
+      "nativeRuns": [
+        40058848929,
+        40058853120
+      ]
+    },
+    "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac"
   },
   "lastVerificationReceipt": {
-    "runId": "continuum-trunc-ci-20261024T023350170Z",
-    "baseCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
-    "publicationParent": "06a5457fb0311927ec7ea6aef7d9436fbbe655a3",
-    "verifiedAtUTC": "2026-10-24T02:38:58.211Z",
-    "implementationCommit": "6cee2384e91e9fda4251c53dbeddce9cc951f473",
+    "runId": "continuum-usage-ci-20261024T033529835Z",
+    "baseCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+    "publicationParent": "04d5e0fb9cfd5d399e7e7a6cfbef91351eb73d85",
+    "verifiedAtUTC": "2026-10-24T03:42:34.010387Z",
+    "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
     "runtimeSourcesChanged": false,
     "spendingUSD": 0,
-    "evidence": "x10/evidence/continuum-c2a-truncated-body-hosted.json",
-    "perFileLedger": "x10/review/continuum-c2a-truncated-body-hosted-ledger.json",
+    "evidence": "x10/evidence/continuum-c2a-usage-hosted.json",
+    "perFileLedger": "x10/review/continuum-c2a-usage-hosted-ledger.json",
     "researchRuns": [
-      40054592561,
-      40054596847
+      40058848933,
+      40058853171
     ],
     "nativeRuns": [
-      40054592543,
-      40054596722
+      40058848929,
+      40058853120
     ],
-    "scope": "Read-only truncated-body EOF refusal; no migration"
+    "scope": "Read-only conservative sequence usage admission; no migration"
   },
-  "nextConcreteTask": "First verify exact implementation CI for the usage gate. Then review C2a obligations against a first bounded quiescent initial-generation C2b semantic capsule; implement exporter only after that readiness gate. Preserve future record budget and all unsupported-state refusals. No more closure variants merely to defer the library-state unknown.",
+  "nextConcreteTask": "Review C2a obligations against the first bounded quiescent initial-generation C2b semantic capsule, preserving future directional record budget; implement exporter only after that readiness gate. No import/target I/O before separate verification and ownership/old-code-retirement gates. Other closure variants remain unsupported; do not expand them merely to defer the library-state unknown.",
   "previousDevelopmentPass": {
     "runId": "continuum-trunc-20261024T021812255Z",
     "baseCommit": "0d088591de17b2d8742fb1d96d1e28822771bbcf",
