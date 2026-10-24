@@ -93,7 +93,9 @@ async function identity(procPid, budget, allowGone = false) {
       executable: await budget.link(`${base}/exe`), pidNamespace: await budget.link(`${base}/ns/pid`),
       networkNamespace: await budget.link(`${base}/ns/net`) };
   } catch (error) {
-    if (allowGone && error.code === 'ENOENT' && await gone(procPid, budget)) return null;
+    // An already opened proc file can report ESRCH after process exit.
+    // Neither errno proves exit: require two independent ENOENT lookups.
+    if (allowGone && ['ENOENT', 'ESRCH'].includes(error.code) && await gone(procPid, budget)) return null;
     throw error;
   }
 }
@@ -278,7 +280,7 @@ export async function inspectTcpListeners(snapshot, input) {
       let ownedListenerFds;
       try { ownedListenerFds = await descriptors(captured.procPid, snapshot.listenerInode, budget); }
       catch (error) {
-        if (error.code === 'ENOENT' && await gone(captured.procPid, budget)) {
+        if (['ENOENT', 'ESRCH'].includes(error.code) && await gone(captured.procPid, budget)) {
           processes.push({ procPid: captured.procPid, pid: captured.pid, state: 'exited', ownedListenerFds: [] }); continue;
         }
         throw error;

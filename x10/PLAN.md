@@ -921,3 +921,43 @@ no unchanged expensive aggregate rerun substitutes for diagnosis.
 Automatic unit readiness, real nonroot service/TLS, failure/drain/orphan paths,
 G2 permanent distribution/published-file replay, G4-G8 and Production V1 remain
 open. Full native and deferred Continuum scope remain preserved.
+
+
+## Bounded observer correction: stale proc reads and ESRCH
+
+A newly controlled process-exit boundary established a stale `/proc` read
+mechanism separately from the retained wait-bind native19/20 failure. The
+captured-process observer now accepts ESRCH as an exit candidate only when
+two independent directory lookups specifically confirm ENOENT. ESRCH alone,
+a present or reused PID, inaccessible identity and uncertain lookups cannot
+become listener closure. Existing sampled-identity and captured-process-only
+limitations remain; this is not an OS-level generation fence.
+
+[Evidence](evidence/listener-esrch.json) records the unchanged-baseline
+counterexample, frozen candidate/refusal controls, independent review and
+fresh native regression as separate outcomes and counting units. Exact new
+implementation CI is pending; earlier wait-bind CI does not verify these bytes.
+
+The frozen authored observer suite passed41 nested cases plus one wrapper
+(42 TAP), including13 new cases and the preserved28 earlier cases. Independent
+review checked14 distinct synthetic scenarios on baseline/candidate and one
+actual-kernel Node/shared-TCP observer scenario, not native NGINX. One fresh
+build and one changed-candidate official aggregate passed20/20 native groups;
+controller86, alpha45 and operator30 TAP remain separate counts. Official
+results retain1083 strict PASS,25SKIP and1expected TODO-fail, with no unexpected
+FAIL. Existing local AF_UNIX EPERM and feature-off evidence were not rerun or
+relabelled as new PASS. These root/Node24 checks do not accept the declared
+nonroot Node22 target.
+
+The original native19/20 ESRCH failure stays retained. Its failing captured
+process and exact cause remain unknown. The held old worker had previously
+been observed stopped, and the fixture had not issued its own SIGCONT. This
+new mechanism does not prove that historical interleaving, a historical repair
+or no causal relationship to wait-bind. No unchanged expensive aggregate was
+rerun merely to relabel that failure. Native C, alpha runtime and service unit
+are unchanged; only the optional observer and its tests changed.
+
+Next verify exact resulting CI, then continue G3 verified TLS and real nonroot
+service/failure/drain/orphan gates. Automatic unit readiness, G2 permanent
+distribution/published-file replay, G4-G8 and Production V1 remain open. Full
+native compatibility and deferred Continuum scope remain preserved.

@@ -35,6 +35,13 @@ test('captured listener observation: identities, races, refusal and resource cle
     if (fault?.kind === 'child-churn' && file === `/proc/${masterProc}/task/${masterProc}/children` && ++fault.reads === 2)
       await writeFile(map(file), `${childProc} 31002 `);
     const handle = trackedHandle(await original.open(map(file), ...args));
+    if (fault?.kind === 'read-esrch' && file === `/proc/${fault.target || childProc}/${fault.file || 'status'}`) {
+      handle.read = async () => {
+        fault.reads = (fault.reads || 0) + 1;
+        if (fault.remove) await rm(map(`/proc/${fault.target || childProc}`), { recursive: true });
+        throw error('ESRCH');
+      };
+    }
     if (fault?.kind === 'open-budget' && !fault.triggered) { fault.triggered = true; await pause(3050); }
     return handle;
   };
@@ -47,6 +54,11 @@ test('captured listener observation: identities, races, refusal and resource cle
   };
   fs.promises.readlink = async (file, ...args) => {
     if (file === `/proc/${childProc}/fd/7`) {
+      if (fault?.kind === 'fd-esrch') {
+        fault.reads = (fault.reads || 0) + 1;
+        if (fault.remove) await rm(map(`/proc/${childProc}`), { recursive: true });
+        throw error('ESRCH');
+      }
       if (fault?.kind === 'fd-denied') throw error('EACCES');
       if (fault?.kind === 'fd-absent-always') throw error('ENOENT');
       if (fault?.kind === 'fd-absent-once' && !fault.triggered) { fault.triggered = true; throw error('ENOENT'); }
@@ -54,7 +66,14 @@ test('captured listener observation: identities, races, refusal and resource cle
     }
     return original.readlink(map(file), ...args);
   };
-  fs.promises.lstat = (file, ...args) => original.lstat(map(file), ...args);
+  fs.promises.lstat = async (file, ...args) => {
+    if (fault && ['read-esrch', 'fd-esrch'].includes(fault.kind) && file === `/proc/${childProc}`) {
+      fault.lookups = (fault.lookups || 0) + 1;
+      if (fault.reappear && fault.lookups === 2) await proc(childProc, 1101, masterProc, '201', 'nginx: worker process');
+      if (fault.lookupErrorAt === fault.lookups) throw error(fault.lookupError);
+    }
+    return original.lstat(map(file), ...args);
+  };
   syncBuiltinESMExports();
   const { captureTcpListeners, inspectTcpListeners } = await import(sourcePath.href);
   const header = '  sl  local_address rem_address st tx_queue rx_queue tr tm->when retrnsmt uid timeout inode\n';
@@ -105,6 +124,69 @@ test('captured listener observation: identities, races, refusal and resource cle
     await check('missing status while process directory exists cannot become exited', async () => { const s = await captureTcpListeners(options); fault = { kind: 'status-absent' }; await unavailable(() => inspectTcpListeners(s, options)); });
     await check('one descriptor ENOENT race is retried as full inventory', async () => { const s = await captureTcpListeners(options); fault = { kind: 'fd-absent-once' }; assert.equal((await inspectTcpListeners(s, options)).closed, false); assert.equal(fault.triggered, true); });
     await check('persistent descriptor ENOENT stays unresolved', async () => { const s = await captureTcpListeners(options); fault = { kind: 'fd-absent-always' }; await unavailable(() => inspectTcpListeners(s, options)); });
+    // A proc file opened while alive can return ESRCH at read time after exit.
+    // The injected read below is separate from the independent directory proof.
+    await check('post-open status ESRCH plus two absent directories reports exited', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'read-esrch', remove: true };
+      const r = await inspectTcpListeners(s, options);
+      assert.equal(r.processes[0].state, 'exited'); assert.equal(r.closed, true);
+      assert.equal(fault.reads, 1); assert.equal(fault.lookups, 2);
+    });
+    await check('post-open stat ESRCH plus two absent directories reports exited', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'read-esrch', file: 'stat', remove: true };
+      assert.equal((await inspectTcpListeners(s, options)).processes[0].state, 'exited');
+      assert.equal(fault.reads, 1); assert.equal(fault.lookups, 2);
+    });
+    await check('post-open status ESRCH with present directory stays unresolved', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'read-esrch' };
+      await unavailable(() => inspectTcpListeners(s, options)); assert.equal(fault.lookups, 1);
+    });
+    await check('post-open stat ESRCH with present directory stays unresolved', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'read-esrch', file: 'stat' };
+      await unavailable(() => inspectTcpListeners(s, options)); assert.equal(fault.lookups, 1);
+    });
+    await check('post-open ESRCH with reappearing process directory stays unresolved', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'read-esrch', remove: true, reappear: true };
+      await unavailable(() => inspectTcpListeners(s, options)); assert.equal(fault.lookups, 2);
+    });
+    await check('post-open ESRCH with denied absence lookup stays unresolved', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'read-esrch', remove: true, lookupErrorAt: 1, lookupError: 'EACCES' };
+      await unavailable(() => inspectTcpListeners(s, options)); assert.equal(fault.lookups, 1);
+    });
+    await check('post-open ESRCH with second lookup ESRCH cannot prove exit', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'read-esrch', remove: true, lookupErrorAt: 2, lookupError: 'ESRCH' };
+      await unavailable(() => inspectTcpListeners(s, options)); assert.equal(fault.lookups, 2);
+    });
+    await check('descriptor ESRCH plus two absent directories reports exited', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'fd-esrch', remove: true };
+      assert.equal((await inspectTcpListeners(s, options)).processes[0].state, 'exited');
+      assert.equal(fault.reads, 1); assert.equal(fault.lookups, 2);
+    });
+    await check('descriptor ESRCH with present process is not retried or called absent', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'fd-esrch' };
+      await unavailable(() => inspectTcpListeners(s, options)); assert.equal(fault.reads, 1); assert.equal(fault.lookups, 1);
+    });
+    await check('descriptor ESRCH with reappearing process directory stays unresolved', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'fd-esrch', remove: true, reappear: true };
+      await unavailable(() => inspectTcpListeners(s, options)); assert.equal(fault.lookups, 2);
+    });
+    await check('capture does not accept post-open child ESRCH as an exit proof', async () => {
+      fault = { kind: 'read-esrch', remove: true };
+      await unavailable(() => captureTcpListeners(options)); assert.equal(fault.reads, 1); assert.equal(fault.lookups || 0, 0);
+    });
+    await check('master post-open ESRCH remains unresolved without exit classification', async () => {
+      const s = await captureTcpListeners(options); fault = { kind: 'read-esrch', target: masterProc, remove: true };
+      await unavailable(() => inspectTcpListeners(s, options)); assert.equal(fault.reads, 1); assert.equal(fault.lookups || 0, 0);
+    });
+    await check('one confirmed exited process cannot hide another captured listener owner', async () => {
+      await proc(31002, 1102, masterProc, '300', 'nginx: worker process');
+      await writeFile(`${root}/${masterProc}/task/${masterProc}/children`, `${childProc} 31002 `);
+      const s = await captureTcpListeners(options); fault = { kind: 'read-esrch', remove: true };
+      const r = await inspectTcpListeners(s, options);
+      assert.equal(r.state, 'pending'); assert.equal(r.closed, false);
+      assert.equal(r.processes[0].state, 'exited'); assert.equal(r.processes[1].state, 'owns-listener');
+      assert.equal(fault.lookups, 2);
+    });
     await check('identity change during descriptor scan stays unresolved', async () => { const s = await captureTcpListeners(options); fault = { kind: 'identity-during-fd' }; await unavailable(() => inspectTcpListeners(s, options)); });
     await check('snapshot tampering is refused before proc inspection', async () => { const s = await captureTcpListeners(options); s.port++; await invalid(() => inspectTcpListeners(s, options)); });
     await check('hash-valid empty captured process set is refused', async () => { const s = await captureTcpListeners(options); s.processes = []; await invalid(() => inspectTcpListeners(signed(s), options)); });
