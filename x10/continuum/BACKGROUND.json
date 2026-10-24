@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-keylog-ci-20261024T073502372Z",
-    "owner": "codex-coordinator",
-    "baseCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
-    "acquiredAtUTC": "2026-10-24T07:35:02.372Z",
-    "expiresAtUTC": "2026-10-24T08:04:50.477Z",
-    "task": "Exact keylog implementation CI verification receipt"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -29,47 +22,24 @@
     "scheduleRecordAuthority": "Owner-supplied current schedule; no automation mutation performed in this development pass."
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40071366797",
-    "continuumStage": "Transient protected source record-material subset locally and exact hosted checked; reusable full semantic capsule, importer, ownership and migration remain unaccepted.",
+    "nativeCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40074320788",
+    "continuumStage": "Bounded buffer-only C2a Node keylog ingestion locally and exact hosted verified; explicit delivered-input/parser-owned Buffer lifetime only. No whole-process erasure, reusable semantic capsule or migration.",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-source-capture.json",
+    "continuumEvidence": "x10/evidence/continuum-keylog-buffer.json",
     "nativeHostedCI": {
-      "state": "success-with-local-adverse-observation-preserved",
-      "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
-      "pushRun": 40071366797,
-      "pullRequestRun": 40071371664,
+      "state": "success-exact-keylog-implementation-regression",
+      "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+      "pushRun": 40074320788,
+      "pullRequestRun": 40074324454,
       "nativeJobIDs": [
-        120805349215,
-        120805373115
+        120814372738,
+        120814394137
       ],
-      "scope": "Full exact workflows/artifacts: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum. Local controller observation is not fixed by this PASS."
+      "scope": "Both full exact workflows and matching native artifacts: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum. Native/controller implementations unchanged."
     },
-    "previousContinuumImplementationCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
+    "previousContinuumImplementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
     "previousContinuumHostedCI": {
-      "state": "success-source-side-fixture-hold-only",
-      "implementationCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
-      "pushRun": 40065524807,
-      "pullRequestRun": 40065527979,
-      "researchJobIDs": [
-        120787883750,
-        120787893414
-      ],
-      "coreTests": 21,
-      "processTests": 7,
-      "c1Tests": 27,
-      "c2aTests": 30,
-      "c2aFamilies": {
-        "flatChecks": 30,
-        "ordinaryActualTLSScenarios": 24,
-        "handledOSSignals": 2,
-        "programmaticCancellationControl": 1,
-        "nonTLSCachedSourceControl": 1,
-        "syntheticGroups": 2
-      },
-      "scope": "Explicit source-side C barrier/decision/reobservation. Callback live-held phase differs from returned historical result; no exporter."
-    },
-    "continuumHostedCI": {
       "state": "success-transient-source-record-material-only",
       "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
       "pushRun": 40071366794,
@@ -92,31 +62,53 @@
       },
       "scope": "Protected copy is cleared before source release; no reusable semantic capsule/export/import/migration."
     },
-    "continuumImplementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
-    "implementationIdentityRule": "Transient record-material sample accepted only forfc716194 and frozen files. Copy cleared before release; metadata/ledger/subset observation is not complete-state immutability. PR actual merge checkout differs from event head. No full semantic capsule or migration.",
+    "continuumHostedCI": {
+      "state": "success-bounded-keylog-buffer-lifetime-only",
+      "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+      "pushRun": 40074320805,
+      "pullRequestRun": 40074324467,
+      "researchJobIDs": [
+        120814380819,
+        120814393966
+      ],
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 27,
+      "c2aTests": 36,
+      "c2aFamilies": {
+        "flatChecks": 36,
+        "ordinaryActualTLSScenarios": 28,
+        "handledOSSignals": 2,
+        "programmaticCancellationControl": 1,
+        "nonTLSCachedSourceControl": 1,
+        "syntheticGroups": 4
+      },
+      "scope": "Bounded input/decoded-Buffer wiping in C2a runner; no full erasure or semantic export/import."
+    },
+    "continuumImplementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+    "implementationIdentityRule": "Keylog Buffer-lifetime hardening accepted only for787f5f69 and frozen files. Mutable delivered input and parser-owned buffers are not all Node/OpenSSL allocations. Event head and actual PR merge/build checkout remain separate; no migration claim.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
-      "state": "success-after-real-dependency-correction-with-initial-failure-preserved",
+      "state": "success-local-keylog-regression",
       "groups": 20,
-      "initialGroupsPassed": 17,
-      "initialGroupsFailed": 3,
-      "evidence": "x10/evidence/continuum-source-capture-native-regression.json",
-      "freshCheckoutBinarySha256": "4c293562f45467b6b9297445eb56e13a57db951046ed75f5296bb45939813372",
+      "controllerTAP": 77,
+      "evidence": "x10/evidence/continuum-keylog-buffer.json",
+      "freshCheckoutBinarySha256": "91b9e5673e159e320ef8494158dd7f6d745a4666c5ad3e868b2e74fbe8aeac0a",
       "earlierCheckoutBinaryIdentityClaimed": false,
-      "controllerCauseProven": false,
-      "controllerFixImplemented": false
+      "nativeAndControllerRuntimeChanged": false,
+      "historicalControllerInterleavingProven": false
     },
-    "previousNativeCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
+    "previousNativeCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
     "previousNativeHostedCI": {
-      "state": "success",
-      "implementationCommit": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
-      "pushRun": 40065524846,
-      "pullRequestRun": 40065528012,
+      "state": "success-with-local-adverse-observation-preserved",
+      "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+      "pushRun": 40071366797,
+      "pullRequestRun": 40071371664,
       "nativeJobIDs": [
-        120787898442,
-        120787899956
+        120805349215,
+        120805373115
       ],
-      "scope": "Both full workflows: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum"
+      "scope": "Full exact workflows/artifacts: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum. Local controller observation is not fixed by this PASS."
     },
     "c2aLocal": {
       "state": "success-narrow-observation-profile",
@@ -472,11 +464,15 @@
       "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
     },
     "previousNativeLocalRegression": {
-      "state": "success-local",
+      "state": "success-after-real-dependency-correction-with-initial-failure-preserved",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-live-hold-native-regression.json",
-      "freshCheckoutBinarySha256": "c931c45f8d33f6021fdf1df9220be19ab05415e49cf2bbb63f631793b5e49cf5",
-      "earlierCheckoutBinaryIdentityClaimed": false
+      "initialGroupsPassed": 17,
+      "initialGroupsFailed": 3,
+      "evidence": "x10/evidence/continuum-source-capture-native-regression.json",
+      "freshCheckoutBinarySha256": "4c293562f45467b6b9297445eb56e13a57db951046ed75f5296bb45939813372",
+      "earlierCheckoutBinaryIdentityClaimed": false,
+      "controllerCauseProven": false,
+      "controllerFixImplemented": false
     },
     "c2aShutdownLocal": {
       "state": "success-local-and-hosted-refusal-profile",
@@ -900,9 +896,10 @@
       "migration": false
     },
     "keylogBufferLocal": {
-      "state": "local-reviewed-hosted-pending",
+      "state": "success-local-and-exact-hosted-bounded-lifetime-only",
       "evidence": "x10/evidence/continuum-keylog-buffer.json",
-      "scope": "Mutable keylog event and parser-owned Buffer lifetime only; no full erasure or migration."
+      "scope": "Mutable keylog event and parser-owned Buffer lifetime only; no full erasure or migration.",
+      "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8"
     },
     "controllerFixtureHosted": {
       "state": "success-exact-fixture-only",
@@ -918,10 +915,26 @@
       ],
       "nativeRuntimeChanged": false,
       "historicalInterleavingProven": false
+    },
+    "keylogBufferHosted": {
+      "state": "success-bounded-lifetime-only",
+      "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+      "evidence": "x10/evidence/continuum-keylog-buffer-hosted.json",
+      "researchRuns": [
+        40074320805,
+        40074324467
+      ],
+      "nativeRuns": [
+        40074320788,
+        40074324454
+      ],
+      "wholeProcessErasureClaimed": false,
+      "reusableSemanticCapsule": false,
+      "semanticExportImport": false,
+      "migration": false
     }
   },
   "pendingVerification": [
-    "Exact research/native CI for the implementation commit carrying this keylog Buffer-lifetime checkpoint remains pending; obtain its verified publication SHA, not the lease or older controller/source-capture receipt.",
     "Buffer-only keylog ingestion is bounded local hardening only. Parser-owned Buffers and delivered mutable event input are cleared; original Node/OpenSSL allocations, V8 internals, process-wide protection and total erasure are not proven.",
     "Transient record-material-only source copy passed locally and in exact hosted CI; full semantic capsule inventory, supported established-state APIs and reusable protected lifetime/abort contract remain unaccepted. No exporter/importer or source retirement proof.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
@@ -944,7 +957,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Bounded keylog Buffer lifetime hardened locally; exact implementation CI then source-only reusable protected capsule lifetime/API allowlist, no importer."
+      "goal": "Bounded keylog Buffer lifetime locally and exact hosted verified; next source-only reusable protected lifetime/API allowlist before importer."
     },
     {
       "id": "C3",
@@ -1142,7 +1155,7 @@
     "runId": "continuum-keylog-20261024T071950477Z",
     "baseCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
     "publicationParent": "01a0ec49b73cc1f2003564930c5f79d990696247",
-    "result": "C2a Node keylog ingestion uses bounded wipeable Buffers. Exact synthetic baseline input-wipe defect reproduced; unit50 and independent lifetime11 passed; actualTLS2/10eventBuffers zero observed; core21/process7/C127/C2a36/native20/controller77 local checks passed. Prior475 native CI verified; research push skipped runtime and PR actual21/7/27/35. Exact new implementation CI pending. No whole-process wipe/reusable capsule/import/migration.",
+    "result": "C2a Node keylog ingestion uses bounded wipeable Buffers. Exact synthetic baseline input-wipe defect reproduced; unit50 and independent lifetime11 passed; actualTLS2/10eventBuffers zero observed; core21/process7/C127/C2a36/native20/controller77 local checks passed. Prior475 native CI verified; research push skipped runtime and PR actual21/7/27/35. Both exact research/native workflows completed success; counts and artifact identities verified. No whole-process wipe/reusable capsule/import/migration.",
     "helpers": {
       "count": 5,
       "temporary": true,
@@ -1162,30 +1175,39 @@
     "perFileLedger": "x10/review/continuum-keylog-buffer-ledger.json",
     "localEvidence": "x10/evidence/continuum-keylog-buffer.json",
     "hostedVerification": {
-      "state": "pending-exact-implementation-SHA"
-    }
+      "state": "success-bounded-buffer-lifetime-only",
+      "researchRuns": [
+        40074320805,
+        40074324467
+      ],
+      "nativeRuns": [
+        40074320788,
+        40074324454
+      ]
+    },
+    "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8"
   },
   "lastVerificationReceipt": {
-    "runId": "continuum-capture-ci-20261024T064949962Z",
-    "baseCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
-    "publicationParent": "1eb71050340d88bb76618c25636c2b37eb25e526",
-    "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
-    "verifiedAtUTC": "2026-10-24T06:51:12.667735+00:00",
+    "runId": "continuum-keylog-ci-20261024T073502372Z",
+    "baseCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+    "publicationParent": "6b93655191bb56dfcc7df1a8bbe308ad524b6276",
+    "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+    "verifiedAtUTC": "2026-10-24T07:35:55.844823+00:00",
     "runtimeSourcesChanged": false,
-    "evidence": "x10/evidence/continuum-source-capture-hosted.json",
-    "perFileLedger": "x10/review/continuum-source-capture-hosted-ledger.json",
+    "evidence": "x10/evidence/continuum-keylog-buffer-hosted.json",
+    "perFileLedger": "x10/review/continuum-keylog-buffer-hosted-ledger.json",
     "researchRuns": [
-      40071366794,
-      40071371690
+      40074320805,
+      40074324467
     ],
     "nativeRuns": [
-      40071366797,
-      40071371664
+      40074320788,
+      40074324454
     ],
     "spendingUSD": 0,
-    "scope": "Transient source record-material-only sample; no reusable semantic capsule or migration."
+    "scope": "C2a delivered-input/parser-owned Buffer lifetime only; no full erasure, reusable capsule or migration."
   },
-  "nextConcreteTask": "Verify exact keylog-ingestion implementation CI, then source-only reusable protected capsule lifetime and explicit established-state API allowlist before any importer: C-owned generation-bound handle, current held source, expiry/revocation and cleanup acknowledgement before release. Add SIGTERM after an actually filled capsule and late-after-timeout authority refusal controls. Preserve existing supported-state refusals, exact budgets, ownership, distinct TLS-code and old-code retirement gates.",
+  "nextConcreteTask": "Source-only reusable protected capsule lifetime and explicit established-state API allowlist before any importer: C-owned protected copy while source held, generation-bound opaque handle, expiry/revocation and cleanup acknowledgement before release. Add SIGTERM after an actually filled capsule with wipe-before-free and no later TLS I/O, and late callback after timeout unable to capture/continue/reacquire authority. Existing abort/stale/C-timeout/duplicate/peer-close controls remain covered; do not relabel them as missing. Full semantic inventory, exclusive ownership, distinct TLS code and actual old-code exit remain separate gates.",
   "previousDevelopmentPass": {
     "runId": "x10-control-contract-20261024T070015878Z",
     "baseCommit": "c0e229d48c75e0adc4e7b727f8bfa52505da0ab6",

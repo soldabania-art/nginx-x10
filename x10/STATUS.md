@@ -1058,3 +1058,23 @@ code stop26.10.2026 19:17:36UTC (23:17 Europe/Samara). Прежние70 часо
 expiry/revocation и cleanup-before-release; importer/migration не реализованы.
 
 [Очищенный evidence](evidence/continuum-keylog-buffer.json) сохраняет точные проверки и границы.
+
+
+### Exact CI: bounded keylog Buffer lifetime
+
+Implementation `787f5f69e1f793b1b34e6d9b0acaa74381e059b8`: research push
+`40074320805` и PR `40074324467`, native push `40074320788` и PR
+`40074324454` завершены success, attempt1. Actual research logs:21/7/27/36;
+оба native artifacts:20/20 групп, controller77TAP, alpha37TAP (28 synthetic
+плюс9 original entries с parents), official1105 strictPASS/25SKIP/
+1expectedTODO-fail/0unexpectedFAIL. Local official1083 учтён отдельно.
+[Очищенная квитанция](evidence/continuum-keylog-buffer-hosted.json) сохраняет ZIP digests и отдельные event-head,
+PR merge checkout/build identities; source runtime files в receipt не менялись.
+
+Это Buffer-lifetime hardening только C2a runner, не full-process erasure,
+reusable semantic capsule, importer или migration. Следующий gate — C-owned
+protected lifetime/opaque generation-bound handle, expiry/revocation и
+cleanup acknowledgement before release; SIGTERM после реально заполненной
+копии и late-after-timeout authority refusal требуют отдельных controls.
+Полный semantic/API inventory, exclusive reader/writer ownership, distinct
+TLS code и actual old-code exit остаются отдельными условиями приёмки.
