@@ -276,3 +276,13 @@ actualTLS heldouts2. Core21/process7/C1 27 и native20/20 прошли. Native
 beforeguard smoke — в [evidence](evidence/continuum-c2a-peer-close.json). Exact implementation CI pending.
 Далее — truncated/partial closure и sequence/key usage gates перед C2b.
 Export/import, actual TLS-code change и native NGINX migration не реализованы.
+
+### Exact CI: peer-first closure
+
+Implementation `2ca7892a7e1f448a98679da59e57e9a0023da2e8`: research push
+`40050023137` и PR `40050026763`, native push `40050023101` и PR
+`40050026739` завершены success. Оба research logs подтверждают21/7/27/20;
+все основные native steps, включая feature-off и alpha package/checksum,
+прошли. [Очищенная квитанция](evidence/continuum-c2a-peer-close-hosted.json) сохраняет exact SHA/run IDs,
+границы и отдельные checkout identities. Это read-only refusal observation,
+не state migration. Далее — truncated/partial closure и sequence/key usage.

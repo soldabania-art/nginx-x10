@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-peerclose-ci-20261024T013025923Z",
-    "owner": "cloud-coordinator",
-    "baseCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
-    "acquiredAtUTC": "2026-10-24T01:30:25.923Z",
-    "expiresAtUTC": "2026-10-24T02:00:25.923Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -27,31 +21,24 @@
     "lastRunVerified": false
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40045814679",
-    "continuumStage": "C2a peer-first closure locally verified; exact implementation hosted CI pending, remaining state/usage inventory before C2b.",
+    "nativeCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40050023101",
+    "continuumStage": "C2a peer-first closure locally and exact hosted verified; remaining state/usage inventory before C2b.",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-c2a-eof.json",
+    "continuumEvidence": "x10/evidence/continuum-c2a-peer-close.json",
     "nativeHostedCI": {
       "state": "success",
-      "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
-      "pushRun": 40045814679,
-      "pullRequestRun": 40045819101,
+      "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
+      "pushRun": 40050023101,
+      "pullRequestRun": 40050026739,
       "nativeJobIDs": [
-        120727213654,
-        120727223739
+        120740470955,
+        120740488040
       ],
-      "scope": "Both full native workflows, including official aggregate, tenant cache/Unix checks, feature-off build and alpha package/checksum"
+      "scope": "Both full native workflows: official aggregate, Unix/tenant gates, feature-off build and alpha package/checksum"
     },
-    "previousContinuumImplementationCommit": "a1ef4af6bebfbac52447e971ead0b16e183f2c1f",
+    "previousContinuumImplementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
     "previousContinuumHostedCI": {
-      "state": "success",
-      "pushRun": 39979729081,
-      "pullRequestRun": 39979846870,
-      "coreTests": 21,
-      "processTests": 7
-    },
-    "continuumHostedCI": {
       "state": "success-research-only-native-candidate-pending",
       "implementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
       "pushRun": 40040044905,
@@ -79,27 +66,47 @@
       "todo": 0,
       "scope": "Unexpected post-echo transport FIN/fatal error294 refusal research; native alpha CI investigation remains open."
     },
-    "continuumImplementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-    "implementationIdentityRule": "Alpha runtime fix and hosted native profile are tied to95fb43b. Original d4bb2bc CI failure/retry remain preserved and exact historical cause remains unproven. Research source implementation remainsd4bb2bc; PR95fb43b rechecks unchanged probe19, push research correctly skipped.",
+    "continuumHostedCI": {
+      "state": "success-narrow-read-only-profile",
+      "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
+      "pushRun": 40050023137,
+      "pullRequestRun": 40050026763,
+      "researchJobIDs": [
+        120740463551,
+        120740494100
+      ],
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 27,
+      "c2aTests": 20,
+      "c2aFamilies": {
+        "ordinaryActualTLSScenarios": 17,
+        "handledRuntimeSignals": 2,
+        "nonTLSCachedSourceControl": 1
+      },
+      "scope": "Peer-first close_notify refusal, no semantic export/import or migration"
+    },
+    "continuumImplementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
+    "implementationIdentityRule": "Peer-first closure tied to2ca7892 and frozen sources. CI workflow head identifies event SHA; PR merge checkout/build identity is distinct. No migration/full state acceptance or identical local/hosted binary claim.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
       "state": "success-local",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-c2a-eof-native-regression.json",
-      "freshCheckoutBinarySha256": "be3d514ad74fd08a59709cad9fb246c897c93abd9bf58897c1845e3a84c865f5",
+      "evidence": "x10/evidence/continuum-c2a-peer-close-native-regression.json",
+      "freshCheckoutBinarySha256": "8fb676678efa606dafa2f3d3c5d1f30c2a1bfd1b2f313681d1883334f4591d49",
       "earlierCheckoutBinaryIdentityClaimed": false
     },
-    "previousNativeCommit": "1f92d82c42d0c49c82029412fd882036da4e6da8",
+    "previousNativeCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
     "previousNativeHostedCI": {
       "state": "success",
-      "implementationCommit": "1f92d82c42d0c49c82029412fd882036da4e6da8",
-      "pushRun": 40033951855,
-      "pullRequestRun": 40033955843,
+      "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+      "pushRun": 40045814679,
+      "pullRequestRun": 40045819101,
       "nativeJobIDs": [
-        120688801151,
-        120688817731
+        120727213654,
+        120727223739
       ],
-      "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
+      "scope": "Both full native workflows, including official aggregate, tenant cache/Unix checks, feature-off build and alpha package/checksum"
     },
     "c2aLocal": {
       "state": "success-narrow-observation-profile",
@@ -455,10 +462,10 @@
       "scope": "Full native workflows: native/official aggregate, tenant cache/Unix gates, feature-off build and alpha package/checksum"
     },
     "previousNativeLocalRegression": {
-      "state": "success",
+      "state": "success-local",
       "groups": 20,
-      "evidence": "x10/evidence/continuum-c2a-write-retry-native-regression.json",
-      "freshCheckoutBinarySha256": "409980f18fbe1077a4198c0231df3f80943b2130fe165bc05e1d846ecae5dcd2",
+      "evidence": "x10/evidence/continuum-c2a-eof-native-regression.json",
+      "freshCheckoutBinarySha256": "be3d514ad74fd08a59709cad9fb246c897c93abd9bf58897c1845e3a84c865f5",
       "earlierCheckoutBinaryIdentityClaimed": false
     },
     "c2aShutdownLocal": {
@@ -708,7 +715,7 @@
       "researchPushSkipped": true
     },
     "c2aPeerCloseLocal": {
-      "state": "success-local-exact-hosted-pending",
+      "state": "success-local-and-exact-hosted-narrow-profile",
       "evidence": "x10/evidence/continuum-c2a-peer-close.json",
       "nativeEvidence": "x10/evidence/continuum-c2a-peer-close-native-regression.json",
       "flatChecks": 20,
@@ -717,11 +724,25 @@
       "noTLSControls": 1,
       "independentActualTLSHeldouts": 2,
       "fullInventory": false,
-      "migration": false
+      "migration": false,
+      "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8"
+    },
+    "previousContinuumEvidence": "x10/evidence/continuum-c2a-eof.json",
+    "c2aPeerCloseHosted": {
+      "state": "success",
+      "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
+      "evidence": "x10/evidence/continuum-c2a-peer-close-hosted.json",
+      "researchRuns": [
+        40050023137,
+        40050026763
+      ],
+      "nativeRuns": [
+        40050023101,
+        40050026739
+      ]
     }
   },
   "pendingVerification": [
-    "Priority: read exact new peer-first close implementation CI; save SHA/run IDs, retain any failure. Local20=17TLS+2signals+1source, independent2TLS, core21/process7/C1 27/native20 passed; no full inventory or migration acceptance.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
     "C2a remaining inventory: other control/alert/partial/EOF/shutdown and sequence/key usage admission. Normal server-first shutdown and post-echo unexpected FIN refusal observed locally; full inventory and overlap admission remain unsupported.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
@@ -742,7 +763,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Verify exact peer-first-close CI, then remaining truncated/partial/control and sequence/key usage admission before C2b."
+      "goal": "Peer-first close20 locally+hosted accepted as refusal observation; remaining truncated/partial/control and sequence/key usage inventory before C2b."
     },
     {
       "id": "C3",
@@ -902,34 +923,45 @@
     "runId": "continuum-peerclose-20261024T011655166Z",
     "baseCommit": "dabe7b812ac24c95f752efec7508be9785b6b2c2",
     "publicationParent": "be477b6a665f382394625b3a48a601618f2ac886",
-    "result": "Peer-first close local20 plus2 independent actualTLS heldouts; core21/process7/C1 27/native20. Exact CI pending; closed-state refusal only, no migration.",
+    "result": "Canonical20 plus2 independent actualTLS heldouts, core21/process7/C1 27 and native20 passed locally; both exact research and both native workflows completed success. Read-only closed-state refusal, no migration.",
     "helpers": "5 temporary roles; only coordinator integrates/publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
     "perFileLedger": "x10/review/continuum-c2a-peer-close-ledger.json",
     "hostedVerification": {
-      "state": "pending-exact-implementation-SHA"
-    }
+      "state": "success-narrow-profile",
+      "researchRuns": [
+        40050023137,
+        40050026763
+      ],
+      "nativeRuns": [
+        40050023101,
+        40050026739
+      ]
+    },
+    "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8"
   },
   "lastVerificationReceipt": {
-    "runId": "continuum-stop-ci-20261024T003810143Z",
-    "baseCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
-    "publicationParent": "727825739c5257d46861e226a83ba924eecd8c17",
-    "verifiedAtUTC": "2026-10-24T00:44:54.090Z",
-    "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+    "runId": "continuum-peerclose-ci-20261024T013025923Z",
+    "baseCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
+    "publicationParent": "776c8152b5d931e0e38eac3d631e4106f99e8ef9",
+    "verifiedAtUTC": "2026-10-24T01:36:00.354Z",
+    "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
     "runtimeSourcesChanged": false,
     "spendingUSD": 0,
-    "evidence": "x10/evidence/alpha-stop-hosted.json",
-    "perFileLedger": "x10/review/alpha-stop-hosted-ledger.json",
-    "nativeRuns": [
-      40045814679,
-      40045819101
+    "evidence": "x10/evidence/continuum-c2a-peer-close-hosted.json",
+    "perFileLedger": "x10/review/continuum-c2a-peer-close-hosted-ledger.json",
+    "researchRuns": [
+      40050023137,
+      40050026763
     ],
-    "researchPRRun": 40045819013,
-    "researchPushSkipped": true,
-    "historicalFailureAndCauseUncertaintyPreserved": true
+    "nativeRuns": [
+      40050023101,
+      40050026739
+    ],
+    "scope": "Read-only peer-first closure refusal; no migration"
   },
-  "nextConcreteTask": "First exact peer-first-close implementation CI; then one bounded truncated/partial TLS closure or sequence/key usage gate before C2b. Investigate any new native failure without weakening guards.",
+  "nextConcreteTask": "Next one bounded truncated/partial TLS closure or sequence/key usage gate from C2A-PROFILE before C2b. First investigate any new native failure without weakening guards; historical d4bb2bc cause remains unproven.",
   "previousDevelopmentPass": {
     "runId": "continuum-stop-20261024T002456401Z",
     "baseCommit": "1b9c55ffc2dd074da415a2b8a69f0c42e4ac95e4",
@@ -953,602 +985,21 @@
     "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214"
   },
   "previousVerificationReceipt": {
-    "runId": "continuum-eof-ci-20261023T233122995Z",
-    "baseCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-    "publicationParent": "b0c7b60d332d700e0be5d6f50f41eacafc4067f1",
-    "verifiedAtUTC": "2026-10-23T23:44:05.757Z",
-    "files": [
-      "x10/continuum/BACKGROUND.json",
-      "x10/continuum/C2A-CHECKPOINT.md"
-    ],
+    "runId": "continuum-stop-ci-20261024T003810143Z",
+    "baseCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+    "publicationParent": "727825739c5257d46861e226a83ba924eecd8c17",
+    "verifiedAtUTC": "2026-10-24T00:44:54.090Z",
+    "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
     "runtimeSourcesChanged": false,
     "spendingUSD": 0,
-    "exactHostedVerification": {
-      "schemaVersion": 1,
-      "implementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-      "verifiedAtUTC": "2026-10-23T23:44:05.757Z",
-      "researchCompletedSuccess": true,
-      "nativePullRequestCompletedSuccess": true,
-      "overallNativeCandidateAccepted": false,
-      "nativeStopRaceFixed": false,
-      "initialWorkflowResults": [
-        {
-          "id": 40040044905,
-          "name": "X10 Continuum research checks",
-          "event": "push",
-          "headSha": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-          "status": "completed",
-          "conclusion": "success",
-          "attempt": 1
-        },
-        {
-          "id": 40040050370,
-          "name": "X10 Continuum research checks",
-          "event": "pull_request",
-          "headSha": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-          "status": "completed",
-          "conclusion": "success",
-          "attempt": 1
-        },
-        {
-          "id": 40040045133,
-          "name": "X10 native compatibility",
-          "event": "push",
-          "headSha": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-          "status": "completed",
-          "conclusion": "failure",
-          "attempt": 1
-        },
-        {
-          "id": 40040050401,
-          "name": "X10 native compatibility",
-          "event": "pull_request",
-          "headSha": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-          "status": "completed",
-          "conclusion": "success",
-          "attempt": 1
-        }
-      ],
-      "researchLogCounts": [
-        {
-          "jobId": 120708789647,
-          "reports": [
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-record-and-state-kernel",
-              "passed": true,
-              "testFiles": 2,
-              "scope": "in-memory-record-and-state-only",
-              "liveTlsProcessHandover": false,
-              "counts": {
-                "tests": 21,
-                "suites": 0,
-                "pass": 21,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            },
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-real-handshake-and-record-observation",
-              "passed": true,
-              "testFiles": 2,
-              "scope": "real-handshake-and-record-observation-only",
-              "nativeNginxMigration": false,
-              "realSessionMigration": false,
-              "counts": {
-                "tests": 27,
-                "suites": 0,
-                "pass": 27,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            },
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-pinned-openssl-state-probe",
-              "passed": true,
-              "testFiles": 1,
-              "scope": "pinned-openssl-read-only-state-observation",
-              "nativeNginxMigration": false,
-              "realSessionMigration": false,
-              "counts": {
-                "tests": 19,
-                "suites": 0,
-                "pass": 19,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            }
-          ],
-          "process": {
-            "tests": 7,
-            "pass": 7,
-            "fail": 0,
-            "cancelled": 0,
-            "skipped": 0,
-            "todo": 0
-          }
-        },
-        {
-          "jobId": 120708801705,
-          "reports": [
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-record-and-state-kernel",
-              "passed": true,
-              "testFiles": 2,
-              "scope": "in-memory-record-and-state-only",
-              "liveTlsProcessHandover": false,
-              "counts": {
-                "tests": 21,
-                "suites": 0,
-                "pass": 21,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            },
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-real-handshake-and-record-observation",
-              "passed": true,
-              "testFiles": 2,
-              "scope": "real-handshake-and-record-observation-only",
-              "nativeNginxMigration": false,
-              "realSessionMigration": false,
-              "counts": {
-                "tests": 27,
-                "suites": 0,
-                "pass": 27,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            },
-            {
-              "schemaVersion": 1,
-              "suite": "continuum-pinned-openssl-state-probe",
-              "passed": true,
-              "testFiles": 1,
-              "scope": "pinned-openssl-read-only-state-observation",
-              "nativeNginxMigration": false,
-              "realSessionMigration": false,
-              "counts": {
-                "tests": 19,
-                "suites": 0,
-                "pass": 19,
-                "fail": 0,
-                "cancelled": 0,
-                "skipped": 0,
-                "todo": 0
-              },
-              "exitCode": 0,
-              "signal": null,
-              "timedOut": false,
-              "outputLimitExceeded": false,
-              "interrupted": false,
-              "runnerError": null
-            }
-          ],
-          "process": {
-            "tests": 7,
-            "pass": 7,
-            "fail": 0,
-            "cancelled": 0,
-            "skipped": 0,
-            "todo": 0
-          }
-        }
-      ],
-      "nativePullRequest": {
-        "run": 40040050401,
-        "job": 120708803304,
-        "steps": [
-          {
-            "name": "Set up job",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Build dependencies and optional test clients",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Install pinned HTTP3 interoperability client",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Install independent HTTP3 HEAD client",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Compile native profile",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Native regressions and pinned official compatibility sample",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Verify native tenant cache contract experiment",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Verify private Unix control transport",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Build profile without control API",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Package local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Checksum local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Preserve JSON evidence",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Preserve local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Complete job",
-            "status": "completed",
-            "conclusion": "success"
-          }
-        ]
-      },
-      "originalNativePushAdverse": {
-        "schemaVersion": 1,
-        "implementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-        "workflowRun": 40040045133,
-        "attempt": 1,
-        "job": 120708800093,
-        "artifact": 12538224312,
-        "artifactArchiveSha256": "f3f512ad89a2c530c04b943302bd0caf861d1c793cd40ba1b88314e7b2481a44",
-        "aggregateGroups": {
-          "expected": 20,
-          "executed": 20,
-          "passed": 19,
-          "failed": 1
-        },
-        "failedSuite": {
-          "name": "local-alpha-lifecycle",
-          "exitCode": 1,
-          "timedOut": false,
-          "counts": {
-            "format": "node-test-tap",
-            "pass": 6,
-            "fail": 3,
-            "valid": false,
-            "total": 9,
-            "skipped": 0,
-            "todo": 0,
-            "cancelled": 0
-          },
-          "observedControlCode": "runtime_identity",
-          "observedControlMeaning": "Exact alpha native master identity was refused during stop after library drift.",
-          "relatedSubtestFailures": [
-            "immutable-tamper-refused-and-library-drift-does-not-block-exact-stop",
-            "uninstall-preserves-extra-and-symlink-data-then-cleans-known-stopped-install"
-          ]
-        },
-        "interpretation": "Root cause not established; local aggregate and separate native PR passed. No native source change in EOF implementation. Preserve original failure even if later retry succeeds.",
-        "rawLogsPublished": false,
-        "hostPathsOrPIDsPublished": false
-      },
-      "readOnlyNativeDiagnosis": {
-        "schemaVersion": 1,
-        "scope": "Read-only diagnosis of initial native push CI failure",
-        "nativePushRun": 40040045133,
-        "initialFailedJob": 120708800093,
-        "observed": {
-          "group": "local-alpha-lifecycle",
-          "tap": {
-            "total": 9,
-            "passed": 6,
-            "failed": 3,
-            "skipped": 0,
-            "todo": 0,
-            "cancelled": 0
-          },
-          "firstFailingSubtest": "immutable-tamper-refused-and-library-drift-does-not-block-exact-stop",
-          "code": "runtime_identity",
-          "message": "Process is not this owned alpha native master",
-          "failureSite": "The test stop helper expected the stop CLI to exit successfully.",
-          "failureAccounting": "Two nested subtests and their enclosing parent fail. The later uninstall failure follows the unsuccessful stop; three independent defects are not established.",
-          "localNativeGroupsPassed": 20,
-          "exactNativePullRequestRunReportedSuccess": 40040050401
-        },
-        "affectedCodePaths": [
-          {
-            "file": "x10/alpha/runtime.mjs",
-            "functions": [
-              "findMasters",
-              "procIdentity",
-              "inspectMaster"
-            ],
-            "fact": "The initial master-title filter and subsequent status/stat/executable/namespace/cmdline reads are separate observations. The identity guard rejects zombie/dead state or mismatched fields; discovery tolerates ENOENT and ESRCH only."
-          },
-          {
-            "file": "x10/alpha/cli.mjs",
-            "functions": [
-              "stop",
-              "stopped"
-            ],
-            "fact": "Stop verifies identity, sends SIGQUIT, then polls inspectMaster while the master exits. Stopped-state confirmation also inspects runtime identity and remaining native group membership."
-          },
-          {
-            "file": "x10/test/alpha.test.mjs",
-            "functions": [
-              "stop helper",
-              "immutable-tamper-refused-and-library-drift-does-not-block-exact-stop"
-            ],
-            "fact": "The control changes a recorded dependency hash, not a host library. The stop assertion fails before the later uninstall checks."
-          }
-        ],
-        "inference": {
-          "hypothesis": "A known master may exit or become a zombie between discovery and the full identity read during graceful-stop polling, producing runtime_identity instead of ordinary stopped-state observation.",
-          "proven": false,
-          "missingEvidence": "No per-field process-identity snapshot or exact syscall ordering was retained at the CI failure.",
-          "alphaSourcesUnchangedVsBase": "6a24fc94fbec1f85cb73cd7abcb70d88aa3c6807",
-          "notEstablished": [
-            "A deterministic alpha implementation defect",
-            "A defect caused by the new TLS EOF scenario",
-            "A successful rerun as a fix or disproof of the hypothesis"
-          ]
-        },
-        "nextBoundedTask": {
-          "test": "Add a private deterministic observation seam for discovery followed by matching-master exit, zombie transition, disappearance, and foreign/reused identity. Preserve an actual bounded graceful-stop case and child cleanup.",
-          "fixRecommendation": "Separate signal authorization from post-signal exit observation. Handle only positively matched terminal transitions with bounded rereads and remaining-group confirmation; keep ambiguous identity refused. Review the concrete fix against counterexamples before broad acceptance.",
-          "defensesToPreserve": [
-            "No blanket swallowing of runtime_identity",
-            "No signalling an unknown or reused PID",
-            "Exact executable, UID, namespace, command, prefix, start-time and PID-file checks",
-            "Foreign-process and modified-PID-file refusal",
-            "No forced production kill or orphan cleanup",
-            "No retry that turns unresolved native group membership into stopped"
-          ]
-        },
-        "reviewActions": {
-          "sourceEdits": false,
-          "buildsRun": 0,
-          "testsRun": 0,
-          "rerunsRequestedByReviewer": 0
-        },
-        "publication": {
-          "rawLogsIncluded": false,
-          "hostPathsAndPIDsIncluded": false,
-          "sessionKeysIncluded": false
-        },
-        "originalFailureMustBeRetained": true,
-        "nativeStopRaceRemainsPending": true
-      },
-      "latestNativePush": {
-        "run": 40040045133,
-        "attempt": 2,
-        "headSha": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-        "status": "completed",
-        "conclusion": "success",
-        "jobId": 120711043827,
-        "steps": [
-          {
-            "name": "Set up job",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Build dependencies and optional test clients",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Install pinned HTTP3 interoperability client",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Install independent HTTP3 HEAD client",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Compile native profile",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Native regressions and pinned official compatibility sample",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Verify native tenant cache contract experiment",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Verify private Unix control transport",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Build profile without control API",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Package local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Checksum local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Preserve JSON evidence",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Preserve local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Complete job",
-            "status": "completed",
-            "conclusion": "success"
-          }
-        ]
-      },
-      "rerunCount": 1,
-      "formatChecks": [
-        {
-          "id": 40040050377,
-          "name": "Check Whitespace",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 40040050390,
-          "name": "Check Commit Message(s)",
-          "status": "completed",
-          "conclusion": "success"
-        },
-        {
-          "id": 40040050408,
-          "name": "Check Version Bump",
-          "status": "completed",
-          "conclusion": "success"
-        }
-      ],
-      "inheritedF5CLA": {
-        "run": 40040047294,
-        "status": "completed",
-        "conclusion": "failure",
-        "agreementAccepted": false
-      },
-      "runtimeCheckoutScope": "Workflow head SHA identifies the implementation event; PR merge checkout/build identities remain distinct. Local binary equality is not claimed.",
-      "publication": {
-        "rawLogsSaved": false,
-        "hostPathsAndPIDsSaved": false,
-        "sessionKeysSaved": false
-      }
-    },
-    "perFileLedger": {
-      "beforeHashReference": "b0c7b60d332d700e0be5d6f50f41eacafc4067f1",
-      "entries": [
-        {
-          "path": "x10/continuum/BACKGROUND.json",
-          "beforeSha256": "821bdacae3b1c653d6585ccdfe43ac6e45621e1cdbfccde4fae9131ed1700cbc"
-        },
-        {
-          "path": "x10/continuum/C2A-CHECKPOINT.md",
-          "beforeSha256": "05a41084e0d25cf04fbe23f17b842296a63a45262e3db8229f0c59802f8adfe6",
-          "afterSha256": "b0e0e323cd4847f86959a34f73223a3da0ef2add9e9e561f36eba784a235309c"
-        }
-      ],
-      "selfDigest": "BACKGROUND after bytes identified by Git tree/commit, no recursive digest."
-    }
+    "evidence": "x10/evidence/alpha-stop-hosted.json",
+    "perFileLedger": "x10/review/alpha-stop-hosted-ledger.json",
+    "nativeRuns": [
+      40045814679,
+      40045819101
+    ],
+    "researchPRRun": 40045819013,
+    "researchPushSkipped": true,
+    "historicalFailureAndCauseUncertaintyPreserved": true
   }
 }
