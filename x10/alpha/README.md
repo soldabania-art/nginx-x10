@@ -210,3 +210,17 @@ and independent replay from a published archive remain separate acceptance gates
 
 Run `node --test --test-reporter=tap x10/test/alpha.test.mjs` for actual native
 installation/lifecycle/restart, tamper, refusal and bundle extraction checks.
+
+
+## Exact hosted application-upstream checks
+
+Implementation `eb4e2de3` passed the expanded alpha40/extracted-bundle path and
+required native/Unix checks in exact hosted CI. [Receipt](../evidence/g2-upstream-hosted.json)
+records actual artifacts, source/build identities, skips and limitations.
+Local AF_UNIX creation was refused with EPERM; hosted success does not resolve
+or bypass that local environment restriction.
+
+This is implementation compatibility, not an accepted permanent alpha release.
+A versioned permanent archive and independent nonroot Node22 replay from the
+published files remain pending. The operated service, TLS, package upgrade/
+rollback/recovery, security, frozen soak and Production V1 gates stay open.

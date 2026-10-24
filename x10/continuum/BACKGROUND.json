@@ -3,34 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-g2-upstream-ci-20261024T122234Z",
-    "owner": "codex-coordinator-g2-upstream-ci",
-    "baseCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
-    "acquiredAtUTC": "2026-10-24T12:22:34.000Z",
-    "expiresAtUTC": "2026-10-24T12:42:20.000Z",
-    "task": "Verify exact application upstream and extracted-bundle alpha40 CI plus required Unix transport",
-    "verification": {
-      "implementationCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
-      "nativeRuns": [
-        40093505536,
-        40093509133
-      ],
-      "researchRuns": [
-        40093505550,
-        40093509172
-      ]
-    },
-    "allowedFiles": [
-      "x10/STATUS.md",
-      "x10/PLAN.md",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/continuum/BACKGROUND.json",
-      "x10/alpha/README.md",
-      "x10/evidence/g2-upstream-hosted.json",
-      "x10/review/g2-upstream-hosted-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1108,10 +1081,26 @@
       "permanentAlphaAccepted": false,
       "productionAccepted": false,
       "resultIdentityRule": "Result commit whose single parent is publicationParent in evidence."
+    },
+    "g2UpstreamHosted": {
+      "state": "success-scoped-application-alpha-and-required-hosted-unix-only",
+      "implementationCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
+      "evidence": "x10/evidence/g2-upstream-hosted.json",
+      "nativeRuns": [
+        40093505536,
+        40093509133
+      ],
+      "researchRuns": [
+        40093505550,
+        40093509172
+      ],
+      "permanentAlphaAccepted": false,
+      "productionAccepted": false,
+      "localUnixAccepted": false
     }
   },
   "pendingVerification": [
-    "Verify exact resulting application-upstream G2 implementation CI: native main jobs must execute the expanded alpha/extracted-bundle regressions and existing official/Unix/feature-off/package checks. Local AF_UNIX stream/seqpacket creation returned EPERM and actual Unix acceptance is blocked; do not bypass this host restriction or count prechecks as Unix runtime cases. Local root/Node24 is not clean Node22/nonroot target acceptance; permanent published alpha and independent published-file replay remain open.",
+    "Exact G2 application upstream and expanded alpha/required Unix CI accepted narrowly for implementation eb4e2de3026edb7a59e877fff8971c8d039e8143. Local AF_UNIX EPERM remains an unresolved environment restriction, not a code fix. Permanent versioned alpha archive and independent published-file nonroot Node22 replay remain pending; G3-G8 and Production V1 are not accepted.",
     "G1 contract/declaration validation is exact-hosted verified only. G2 permanent Local Alpha replay and G3-G8 nonroot target service/TLS/rollback/recovery/security/soak/Production V1 acceptance remain open.",
     "Held-source API metadata exact CI accepted only for bounded observations. Actual required ALPN/Finished values and restricted authentication-class state still need protected preservation and reviewed unsupported API semantics before target reconstruction.",
     "Private synthetic capture-TU ASan/UBSan8 controls passed with detect_leaks=0; LeakSanitizer detect_leaks=1 was unavailable due owned-process /proc/task access. Not a leak-detection PASS or full syscall-failure matrix.",
@@ -1128,24 +1117,19 @@
   ],
   "nextTasks": [
     {
-      "id": "G2-exact-CI",
-      "state": "pending-exact-resulting-implementation",
-      "goal": "Verify expanded alpha/extracted-bundle tests and native compatibility."
-    },
-    {
       "id": "G2-distribution",
       "state": "pending-permanent-published-alpha-and-replay",
-      "goal": "Versioned permanent alpha and independent clean Node22/nonroot published-file replay."
+      "goal": "Publish exact permanent alpha and independently replay published-file nonroot Node22 path."
     },
     {
       "id": "G3-G8",
       "state": "unaccepted",
-      "goal": "Operate, update/rollback/recover, review, soak, distribute and accept bounded V1."
+      "goal": "Operated service/TLS, package recovery/rollback, security, soak and final V1."
     },
     {
       "id": "G9",
       "state": "blocked-by-accepted-V1",
-      "goal": "Controlled portfolio transition only after accepted G0-G8 evidence."
+      "goal": "Controlled transition only after accepted G0-G8 evidence."
     }
   ],
   "money": {
@@ -1396,7 +1380,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "Verify exact resulting G2 application-upstream implementation CI first: native main jobs must execute the expanded alpha/extracted-bundle tests and existing official/Unix/feature-off/package checks. Then complete G2 distribution: an accepted versioned permanent alpha archive with exact checksums/provenance and independent published-file nonroot Node22 replay. Keep G3-G8 service/TLS, config and package rollback/recovery, security, frozen60minute soak and Production V1 acceptance open. Do not resume deferred Continuum or activate another product by default.",
+  "nextConcreteTask": "Complete remaining G2 distribution: publish a permanent versioned Local Alpha archive with exact source/build/archive/payload identities and checksums, then independently replay the published-file nonroot Node22 operator path. The application upstream/extracted-bundle implementation is exact-hosted verified only. Preserve local AF_UNIX EPERM as an unresolved environment observation; hosted Unix success is separate, not a local permission fix. G3-G8 service/TLS, config/package rollback/recovery, security, frozen60minute soak and Production V1 remain open. Do not resume deferred Continuum or activate another product by default.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1604,13 +1588,14 @@
     "runtimeCodeChangedByThisPublication": true,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G2_APPLICATION_LOCAL_HOSTED_AND_DISTRIBUTION_PENDING",
+    "currentGate": "G2_DISTRIBUTION_AND_PUBLISHED_REPLAY_PENDING",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
     "researchRuntimeChangedByThisPublication": false,
     "g1HostedEvidence": "x10/evidence/v1-release-contract-hosted.json",
-    "g2UpstreamLocalEvidence": "x10/evidence/g2-upstream.json"
+    "g2UpstreamLocalEvidence": "x10/evidence/g2-upstream.json",
+    "g2UpstreamHostedEvidence": "x10/evidence/g2-upstream-hosted.json"
   },
   "lastV1DevelopmentPass": {
     "runId": "x10-g2-upstream-20261024T115720Z",
@@ -1645,12 +1630,13 @@
     "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
-    "runId": "x10-v1-contract-ci-20261024T114216Z",
-    "implementationCommit": "80629638e1d1c7635f76e655760c9db987ea82ea",
-    "publicationParent": "b209f12330b05ddce00941bf51e386c79e18434a",
-    "evidence": "x10/evidence/v1-release-contract-hosted.json",
-    "ledger": "x10/review/v1-release-contract-hosted-ledger.json",
-    "runtimeSourceChanged": false,
+    "runId": "x10-g2-upstream-ci-20261024T122234Z",
+    "implementationCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
+    "publicationParent": "18f72b0cb278931c781d3afb61dc520678f193a2",
+    "evidence": "x10/evidence/g2-upstream-hosted.json",
+    "ledger": "x10/review/g2-upstream-hosted-ledger.json",
+    "runtimeSourcesChanged": false,
+    "permanentAlphaAccepted": false,
     "productionAccepted": false
   },
   "v1DevelopmentPassHistory": [
@@ -1680,6 +1666,17 @@
       },
       "newPurchases": false,
       "productionDeployChanged": false
+    }
+  ],
+  "v1VerificationReceiptHistory": [
+    {
+      "runId": "x10-v1-contract-ci-20261024T114216Z",
+      "implementationCommit": "80629638e1d1c7635f76e655760c9db987ea82ea",
+      "publicationParent": "b209f12330b05ddce00941bf51e386c79e18434a",
+      "evidence": "x10/evidence/v1-release-contract-hosted.json",
+      "ledger": "x10/review/v1-release-contract-hosted-ledger.json",
+      "runtimeSourceChanged": false,
+      "productionAccepted": false
     }
   ]
 }

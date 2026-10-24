@@ -208,7 +208,7 @@
     {
       "id": "G2",
       "name": "Complete and publish Local Alpha",
-      "status": "APPLICATION_HTTP_SCOPED_LOCAL_VERIFIED_UNIX_BLOCKED_HOSTED_AND_RELEASE_PENDING",
+      "status": "APPLICATION_UPSTREAM_EXACT_HOSTED_VERIFIED_PERMANENT_RELEASE_PENDING",
       "depends_on": [
         "G1"
       ],
@@ -237,10 +237,14 @@
         "publicationParent": "3c3a7e78911ba0f15d30746cadf278abd8c3a8ff",
         "evidence": "x10/evidence/g2-upstream.json",
         "scope": "Opt-in local application upstream and extracted-bundle regression only",
-        "exactHostedAcceptance": "PENDING_NEW_IMPLEMENTATION",
+        "exactHostedAcceptance": "SUCCESS_SCOPED_APPLICATION_ALPHA_AND_REQUIRED_UNIX",
         "publishedAlphaAccepted": false,
         "productionAccepted": false,
-        "cleanTargetNode22NonrootAccepted": false
+        "cleanTargetNode22NonrootAccepted": false,
+        "implementationCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
+        "hostedEvidence": "x10/evidence/g2-upstream-hosted.json",
+        "permanentAlphaAccepted": false,
+        "localUnixAccepted": false
       }
     },
     {
@@ -572,9 +576,12 @@
     "recordedAtUTC": "2026-10-24T12:16:27.945906Z",
     "runId": "x10-g2-upstream-20261024T115720Z",
     "evidence": "x10/evidence/g2-upstream.json",
-    "nextConcreteTask": "Verify exact resulting G2 application-upstream implementation CI first: native main jobs must execute the expanded alpha/extracted-bundle tests and existing official/Unix/feature-off/package checks. Then complete G2 distribution: an accepted versioned permanent alpha archive with exact checksums/provenance and independent published-file nonroot Node22 replay. Keep G3-G8 service/TLS, config and package rollback/recovery, security, frozen60minute soak and Production V1 acceptance open. Do not resume deferred Continuum or activate another product by default.",
+    "nextConcreteTask": "Complete remaining G2 distribution: publish a permanent versioned Local Alpha archive with exact source/build/archive/payload identities and checksums, then independently replay the published-file nonroot Node22 operator path. The application upstream/extracted-bundle implementation is exact-hosted verified only. Preserve local AF_UNIX EPERM as an unresolved environment observation; hosted Unix success is separate, not a local permission fix. G3-G8 service/TLS, config/package rollback/recovery, security, frozen60minute soak and Production V1 remain open. Do not resume deferred Continuum or activate another product by default.",
     "productionAccepted": false,
     "permanentAlphaAccepted": false,
-    "fullScopePreserved": true
+    "fullScopePreserved": true,
+    "hostedEvidence": "x10/evidence/g2-upstream-hosted.json",
+    "implementationCommit": "eb4e2de3026edb7a59e877fff8971c8d039e8143",
+    "localUnixAccepted": false
   }
 }

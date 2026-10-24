@@ -730,3 +730,19 @@ independently replay an accepted permanent versioned Local Alpha. G3–G8 servic
 TLS, config/package rollback/recovery, security, frozen60minute soak and
 Production V1 remain open. The full native matrix and deferred Continuum are
 preserved. No other product is activated by this subcheckpoint.
+
+
+### Exact CI: G2 application upstream and extracted bundle
+
+Implementation `eb4e2de3026edb7a59e877fff8971c8d039e8143` is exact-hosted
+verified for the opt-in application-upstream and expanded alpha40 checks. Both
+actual native runs executed required Unix checks and native20 aggregate groups;
+actual artifacts and ZIP digests were verified. [Receipt](evidence/g2-upstream-hosted.json)
+keeps exact jobs, event/build identities, counts and research runtime skips
+separate. No runtime sources changed in this receipt.
+
+Local AF_UNIX socket EPERM remains an unresolved environment observation; hosted
+Unix success is not a local permission or native-code fix. G2 remains partial:
+permanent versioned alpha distribution and independent published-file nonroot
+Node22 replay are pending. G3–G8, service/TLS, package rollback/recovery, security,
+frozen soak and Production V1 are not accepted. Deferred Continuum is preserved.
