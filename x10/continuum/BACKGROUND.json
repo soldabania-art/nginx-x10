@@ -3,25 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-preflight-ci-20261024T231800000Z",
-    "owner": "codex-coordinator-preflight-ci",
-    "baseCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
-    "acquiredAtUTC": "2026-10-24T23:18:00.000Z",
-    "expiresAtUTC": "2026-10-25T00:03:22.000Z",
-    "task": "Diagnose exact preflight CI failure and fix candidate-unbound TLS readiness fixture with counterexample",
-    "allowedFiles": [
-      "x10/STATUS.md",
-      "x10/PLAN.md",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/continuum/BACKGROUND.json",
-      "x10/evidence/g3-service-preflight-hosted.json",
-      "x10/review/g3-service-preflight-hosted-ledger.json",
-      "x10/test/alpha-tls.test.mjs",
-      "x10/evidence/g3-tls-relay-binding.json",
-      "x10/review/g3-tls-relay-binding-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1259,22 +1241,71 @@
       "runId": "x10-service-preflight-20261024T221655000Z",
       "sourceBase": "1eba23e2995cfe4ef7c5acff363bf87192c0b224",
       "publicationParent": "e2ee98f3760d18425e7162d98779d09caf9093a2",
-      "implementationCommit": null,
+      "implementationCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
       "implementationCommitLocator": "Git commit containing this record; exact SHA reconciled by a subsequent hosted receipt",
       "scope": "Fail-closed read-only nonroot user-manager capability preflight; no service activation or lifecycle acceptance",
       "evidence": "x10/evidence/g3-service-preflight.json",
       "localAcceptance": "SCOPED_LOCAL_READONLY_PREFLIGHT_CONTROLS_ONLY",
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+      "exactHostedAcceptance": "PREFLIGHT_EXACT_HOSTED_VERIFIED_NATIVE_PR_TLS_REFUSAL_FAILURE_OPEN",
       "preflightCodeLocallyVerified": true,
       "liveManagerAccepted": false,
       "serviceActivated": false,
       "serviceAccepted": false,
       "targetUserManagerAccepted": false,
+      "productionAccepted": false,
+      "hostedEvidence": "x10/evidence/g3-service-preflight-hosted.json",
+      "readonlyNonrootManagerPrerequisitesObserved": true,
+      "nativePRFailureOpen": true,
+      "fullImplementationCIAccepted": false
+    },
+    "servicePreflightHosted": {
+      "state": "PREFLIGHT_EXACT_HOSTED_VERIFIED_NATIVE_PR_TLS_REFUSAL_FAILURE_OPEN",
+      "implementationCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+      "evidence": "x10/evidence/g3-service-preflight-hosted.json",
+      "preflightContractExactHostedVerified": true,
+      "readonlyNonrootManagerPrerequisitesObserved": true,
+      "liveServiceAccepted": false,
+      "serviceAccepted": false,
+      "targetUserManagerAccepted": false,
+      "productionAccepted": false,
+      "fullImplementationCIAccepted": false,
+      "nativePRFailureOpen": true,
+      "nativePRFailureRunId": 40138541844,
+      "nativePRFailureJobId": 121005216512,
+      "nativePRFailureCauseKnown": false,
+      "jobRerunsRequested": 0,
+      "nativeRunIds": [
+        40138539074,
+        40138541844
+      ],
+      "researchRunIds": [
+        40138539059,
+        40138541873
+      ]
+    },
+    "tlsRelayBindingLocal": {
+      "runId": "x10-preflight-ci-20261024T231800000Z",
+      "sourceBase": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+      "publicationParent": "b81d01a1721580827faf2655422d9da521a9521f",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Git commit containing this fixture change; exact SHA recorded by subsequent hosted receipt",
+      "scope": "Fixture-only per-input TLS relay route binding; no controller or native runtime change",
+      "localEvidence": "x10/evidence/g3-tls-relay-binding.json",
+      "localAcceptance": "CANDIDATE_BOUND_TLS_RELAY_LOCAL_VERIFIED_EXACT_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_FIXTURE_IMPLEMENTATION",
+      "fixtureSourceSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+      "localFixtureBindingVerified": true,
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "historicalCICauseKnown": false,
+      "historicalCIInterleavingReproduced": false,
+      "serviceAccepted": false,
       "productionAccepted": false
     }
   },
   "pendingVerification": [
-    "First verify exact resulting service preflight implementation CI and its actual required test step/artifact. Successful synthetic manager properties do not establish an available real user-manager or service. Actual root CLI refuses before manager execution. The historical local19/20 ESRCH failure remains retained; the captured-process observation and exact historical cause/interleaving remain unknown. The frontend HTTPS initial push runner shutdown143, skipped frontend step, absent artifact and unconfirmed final cleanup remain retained separately from its successful bounded retry; underlying shutdown cause is unknown.",
+    "First verify exact resulting candidate-bound upstream TLS relay fixture implementation CI. Local installed TLS and native compatibility do not accept the resulting source in hosted CI. Original9e63 wrong-CA PR apply exit0 failure is retained; a deterministic allowed old-route readiness mechanism is demonstrated, but exact failed CI scheduling/cause is not reconstructed. No controller/native product fix or service acceptance is claimed.",
+    "OPEN exact native PR wrong-CA refusal failure: source 9e63d3c1a28fd42cfbb25d952fea599bc5e69eab, run40138541844/job121005216512 observed applyCLI exit0 where1 was expected. Full native CI is not accepted. Diagnose/reproduce/fix before actual service acceptance; no transient cause or historical interleaving established. Preflight42TAP passed in both jobs and real nonroot readonly manager prerequisites were observed, not service activation. Prior frontend HTTPS push shutdown143, skipped frontend step, absent artifact and unconfirmed final cleanup remain retained; underlying shutdown cause remains unknown. Historical local19/20 ESRCH observation and exact interleaving/cause remain unknown. No current preflight result explains or repairs these earlier events.",
     "G3 actual nonroot operated service remains OPEN. Installed frontend HTTPS implementation fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84 passed narrow exact hosted verification after one targeted retry of an interrupted push job. Original push attempt1 runner shutdown143, skipped frontend step, no artifact and unconfirmed cleanup remain recorded; underlying shutdown cause unknown. The historical local19/20 ESRCH failure remains retained. Which captured-process observation failed and its exact interleaving/cause remain unknown; later hosted compatibility does not prove a historical repair or absence of causality.",
     "G3 frontend HTTPS and actual nonroot service acceptance remain OPEN. Installed HTTPS-upstream implementation 84a12537c2f102a9e3c8bcc8ba2ad1ebf59397fe passed exact scoped hosted verification including the actual new installed TLS step. Its downstream remains HTTP and its readiness relay remains a fixture. The prior wait-bind local aggregate failed19/20 with ESRCH. The failing captured-process observation and exact historical cause remain unknown. The held old worker had previously been observed stopped; the fixture had not issued its own SIGCONT. Later candidate and hosted successes do not establish that historical interleaving, a historical repair or no causal relationship.",
     "G3 TLS/actual-service acceptance remains OPEN. Observer implementation 4a8ec8c0d2ecb2e14778651a581ea5f231f2a458 passed exact scoped hosted native compatibility; continue the bounded CA/hostname and actual nonroot service path. The first final wait-bind native aggregate failed19/20 with ESRCH at handover-baseline.mjs314. Which captured-process observation failed and the exact historical cause remain unknown. The old held worker had previously been observed stopped; the fixture had not yet issued its own SIGCONT. The new bounded stale-proc mechanism, local candidate20/20 and exact later CI verify scoped compatibility only. They do not prove that historical interleaving, a historical fix or no causal relationship to wait-bind.",
@@ -1297,9 +1328,14 @@
   ],
   "nextTasks": [
     {
-      "id": "G3-service-preflight-exact-CI",
-      "state": "pending-exact-resulting-implementation",
-      "goal": "Verify actual service-preflight test step, exact source/build/job/artifact identities, then real nonroot manager and service lifecycle/failure/drain/orphan acceptance."
+      "id": "G3-TLS-relay-binding-exact-CI",
+      "state": "pending-exact-resulting-fixture-implementation",
+      "goal": "Verify actual installed upstream TLS candidate-route binding and all required exact CI; then implement actual nonroot user-service lifecycle on a fresh host after its own prerequisite check."
+    },
+    {
+      "id": "G3-HTTPS-upstream-wrong-CA-regression",
+      "state": "candidate-fixture-fix-locally-verified-exact-CI-pending",
+      "goal": "Reproduce and correct candidate/relay wrong-CA refusal behavior; preserve exact failed native PR and verify resulting implementation before real service acceptance."
     },
     {
       "id": "G3-TLS-and-real-service",
@@ -1570,7 +1606,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First verify exact resulting service preflight implementation CI and the actual required preflight test step/TAP artifact with exact source/build/job/merge identities. Inspect the sanitized actual CLI host observation separately from synthetic positive fixtures; a structured prerequisite refusal is not live-manager or service acceptance. Synthetic manager-property controls do not establish a live user-manager or service. Then use an authorized compatible nonroot operator environment to pass the real read-only preflight and verify actual user-manager startup/stop/restart, failed-start, drain and orphan boundaries. Do not enable linger, change users/security, install a manager or bypass missing credentials to manufacture acceptance. Controller readiness remains HTTP rather than automatic TLS authentication; operator certificate versions remain external. G2 permanent versioned release/published-file replay, G4-G8/Production V1 and full deferred Continuum remain open.",
+  "nextConcreteTask": "First verify exact resulting candidate-bound TLS relay fixture implementation CI, including actual upstream TLS, frontend TLS, service-preflight, native/Unix/feature-off and package steps, TAP artifacts, checkout/job/merge identities and cleanup. Local candidate verification does not accept the new source in hosted CI. Retain the original9e63 native PR wrong-CA apply-exit0 failure and deterministic borrowed-old-route counterexample; the exact historical CI interleaving/cause remains unproven and no controller/native product fix is claimed. Do not rerun blindly or borrow earlier green results. After exact candidate CI is accepted, verify actual nonroot user-manager service startup/stop/restart, failed-start, drain and orphan behavior on a fresh authorized test host after a fresh readonly preflight. Old completed CI jobs observed actual nonroot manager prerequisites on Node22.23.3; their ephemeral sessions are not guaranteed to persist. G2 permanent versioned distribution/published-file replay, G4-G8/Production V1 and full deferred Continuum remain open.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1775,10 +1811,10 @@
         "goal": "Held-out third-version adapter, adverse I/O/KeyUpdate/half-close tests, cost and overhead measurements"
       }
     ],
-    "runtimeCodeChangedByThisPublication": true,
+    "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G3_READONLY_SERVICE_PREFLIGHT_LOCAL_VERIFIED_EXACT_CI_PENDING",
+    "currentGate": "G3_TLS_RELAY_BINDING_LOCAL_VERIFIED_EXACT_CI_PENDING_SERVICE_OPEN",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -1800,60 +1836,72 @@
     "httpsUpstreamTrustHostedEvidence": "x10/evidence/g3-tls-trust-hosted.json",
     "frontendHttpsLocalEvidence": "x10/evidence/g3-frontend-tls.json",
     "frontendHttpsHostedEvidence": "x10/evidence/g3-frontend-tls-hosted.json",
-    "servicePreflightLocalEvidence": "x10/evidence/g3-service-preflight.json"
+    "servicePreflightLocalEvidence": "x10/evidence/g3-service-preflight.json",
+    "servicePreflightHostedEvidence": "x10/evidence/g3-service-preflight-hosted.json",
+    "tlsRelayBindingLocalEvidence": "x10/evidence/g3-tls-relay-binding.json",
+    "verificationFixtureChangedByThisPublication": true
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-service-preflight-20261024T221655000Z",
-    "baseCommit": "1eba23e2995cfe4ef7c5acff363bf87192c0b224",
-    "publicationParent": "e2ee98f3760d18425e7162d98779d09caf9093a2",
-    "scope": "Fail-closed read-only nonroot user-manager capability preflight; no service activation or lifecycle acceptance",
-    "result": "Implemented bounded read-only nonroot user-manager capability preflight. Exit0 alone cannot accept misleading stub output. Actual local refusal and synthetic positive/negative contracts, independent review and fresh native compatibility are recorded separately. Exact resulting CI and actual service acceptance remain pending.",
+    "runId": "x10-preflight-ci-20261024T231800000Z",
+    "sourceBase": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+    "publicationParent": "b81d01a1721580827faf2655422d9da521a9521f",
+    "implementationCommit": null,
+    "implementationCommitLocator": "Git commit containing this fixture change; exact SHA recorded by subsequent hosted receipt",
+    "scope": "Fixture-only per-input TLS relay route binding; no controller or native runtime change",
+    "localEvidence": "x10/evidence/g3-tls-relay-binding.json",
+    "localAcceptance": "CANDIDATE_BOUND_TLS_RELAY_LOCAL_VERIFIED_EXACT_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_FIXTURE_IMPLEMENTATION",
+    "fixtureSourceSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+    "localFixtureBindingVerified": true,
+    "nativeRuntimeChanged": false,
+    "controllerRuntimeChanged": false,
+    "historicalCICauseKnown": false,
+    "historicalCIInterleavingReproduced": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "baseCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+    "result": "Bound upstream TLS readiness relay to the candidate input marker. Preserved actual failed source CI and deterministic borrowed-old-route counterexample. Final local fixture and native compatibility reports are separate; exact resulting fixture CI remains pending.",
     "nativeSourceChanged": false,
     "controllerImplementationChanged": false,
     "alphaRuntimeChanged": false,
     "observerImplementationChanged": false,
     "bundleInventoryChanged": false,
     "serviceRecipeChanged": false,
-    "servicePreflightImplementationChanged": true,
     "verificationChanged": true,
-    "workflowVerificationStepAdded": true,
-    "localEvidence": "x10/evidence/g3-service-preflight.json",
-    "perFileLedger": "x10/review/g3-service-preflight-ledger.json",
+    "tlsReadinessFixtureChanged": true,
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION"
+      "state": "PENDING_EXACT_RESULTING_FIXTURE_IMPLEMENTATION"
     },
-    "preflightCodeLocallyVerified": true,
-    "liveManagerAccepted": false,
-    "serviceActivated": false,
-    "serviceAccepted": false,
-    "targetUserManagerAccepted": false,
-    "readinessAutomated": false,
-    "permanentAlphaAccepted": false,
-    "productionAccepted": false,
+    "perFileLedger": "x10/review/g3-tls-relay-binding-ledger.json",
     "newPurchases": false,
     "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
-    "state": "SUCCESS_SCOPED_INSTALLED_FRONTEND_HTTPS_AFTER_SINGLE_INTERRUPTED_PUSH_RETRY",
-    "implementationCommit": "fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84",
-    "evidence": "x10/evidence/g3-frontend-tls-hosted.json",
-    "frontendTLSAccepted": false,
+    "state": "PREFLIGHT_EXACT_HOSTED_VERIFIED_NATIVE_PR_TLS_REFUSAL_FAILURE_OPEN",
+    "implementationCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+    "evidence": "x10/evidence/g3-service-preflight-hosted.json",
+    "preflightContractExactHostedVerified": true,
+    "readonlyNonrootManagerPrerequisitesObserved": true,
+    "liveServiceAccepted": false,
     "serviceAccepted": false,
     "targetUserManagerAccepted": false,
     "productionAccepted": false,
-    "initialPushFailureRetained": true,
-    "initialShutdownCauseKnown": false,
-    "specificFailedJobRerunsRequested": 1,
-    "runId": "x10-frontend-ci-20261024T212533000Z",
-    "publicationParent": "a58cefc6dc1cd72edaa38683d021d998239ffee6",
-    "ledger": "x10/review/g3-frontend-tls-hosted-ledger.json",
+    "fullImplementationCIAccepted": false,
+    "nativePRFailureOpen": true,
+    "nativePRFailureRunId": 40138541844,
+    "nativePRFailureJobId": 121005216512,
+    "nativePRFailureCauseKnown": false,
+    "jobRerunsRequested": 0,
+    "runId": "x10-preflight-ci-20261024T231800000Z",
+    "publicationParent": "b81d01a1721580827faf2655422d9da521a9521f",
+    "ledger": "x10/review/g3-service-preflight-hosted-ledger.json",
     "nativeRunIds": [
-      40130546372,
-      40130549777
+      40138539074,
+      40138541844
     ],
     "researchRunIds": [
-      40130546334,
-      40130549828
+      40138539059,
+      40138541873
     ],
     "runtimeSourcesChanged": false
   },
@@ -2165,6 +2213,51 @@
       "productionAccepted": false,
       "newPurchases": false,
       "productionDeployChanged": false
+    },
+    {
+      "runId": "x10-service-preflight-20261024T221655000Z",
+      "baseCommit": "1eba23e2995cfe4ef7c5acff363bf87192c0b224",
+      "publicationParent": "e2ee98f3760d18425e7162d98779d09caf9093a2",
+      "scope": "Fail-closed read-only nonroot user-manager capability preflight; no service activation or lifecycle acceptance",
+      "result": "Implemented bounded read-only nonroot user-manager capability preflight. Exit0 alone cannot accept misleading stub output. Actual local refusal and synthetic positive/negative contracts, independent review and fresh native compatibility are recorded separately. Exact resulting CI and actual service acceptance remain pending.",
+      "nativeSourceChanged": false,
+      "controllerImplementationChanged": false,
+      "alphaRuntimeChanged": false,
+      "observerImplementationChanged": false,
+      "bundleInventoryChanged": false,
+      "serviceRecipeChanged": false,
+      "servicePreflightImplementationChanged": true,
+      "verificationChanged": true,
+      "workflowVerificationStepAdded": true,
+      "localEvidence": "x10/evidence/g3-service-preflight.json",
+      "perFileLedger": "x10/review/g3-service-preflight-ledger.json",
+      "hostedVerification": {
+        "state": "PREFLIGHT_EXACT_HOSTED_VERIFIED_NATIVE_PR_TLS_REFUSAL_FAILURE_OPEN",
+        "implementationCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+        "evidence": "x10/evidence/g3-service-preflight-hosted.json",
+        "preflightContractExactHostedVerified": true,
+        "readonlyNonrootManagerPrerequisitesObserved": true,
+        "liveServiceAccepted": false,
+        "serviceAccepted": false,
+        "targetUserManagerAccepted": false,
+        "productionAccepted": false,
+        "fullImplementationCIAccepted": false,
+        "nativePRFailureOpen": true,
+        "nativePRFailureRunId": 40138541844,
+        "nativePRFailureJobId": 121005216512,
+        "nativePRFailureCauseKnown": false,
+        "jobRerunsRequested": 0
+      },
+      "preflightCodeLocallyVerified": true,
+      "liveManagerAccepted": false,
+      "serviceActivated": false,
+      "serviceAccepted": false,
+      "targetUserManagerAccepted": false,
+      "readinessAutomated": false,
+      "permanentAlphaAccepted": false,
+      "productionAccepted": false,
+      "newPurchases": false,
+      "productionDeployChanged": false
     }
   ],
   "v1VerificationReceiptHistory": [
@@ -2303,6 +2396,46 @@
       "tlsAccepted": false,
       "permanentAlphaAccepted": false,
       "productionAccepted": false
+    },
+    {
+      "state": "SUCCESS_SCOPED_INSTALLED_FRONTEND_HTTPS_AFTER_SINGLE_INTERRUPTED_PUSH_RETRY",
+      "implementationCommit": "fcc7123ad49acfcfb0215aa9bc7c892f0fdf3b84",
+      "evidence": "x10/evidence/g3-frontend-tls-hosted.json",
+      "frontendTLSAccepted": false,
+      "serviceAccepted": false,
+      "targetUserManagerAccepted": false,
+      "productionAccepted": false,
+      "initialPushFailureRetained": true,
+      "initialShutdownCauseKnown": false,
+      "specificFailedJobRerunsRequested": 1,
+      "runId": "x10-frontend-ci-20261024T212533000Z",
+      "publicationParent": "a58cefc6dc1cd72edaa38683d021d998239ffee6",
+      "ledger": "x10/review/g3-frontend-tls-hosted-ledger.json",
+      "nativeRunIds": [
+        40130546372,
+        40130549777
+      ],
+      "researchRunIds": [
+        40130546334,
+        40130549828
+      ],
+      "runtimeSourcesChanged": false
     }
-  ]
+  ],
+  "currentNativeCIFailure": {
+    "implementationCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+    "runId": 40138541844,
+    "jobId": 121005216512,
+    "step": "Verify installed HTTPS upstream trust and hostname",
+    "case": "wrong-ca refuses native TLS readiness and rolls back to known good",
+    "expectedApplyCLIExitCode": 1,
+    "actualApplyCLIExitCode": 0,
+    "causeKnown": false,
+    "historicalInterleavingReproduced": false,
+    "blindRetryRequested": false,
+    "evidence": "x10/evidence/g3-service-preflight-hosted.json",
+    "blocksFullNativeCIAcceptance": true,
+    "candidateLocalFixEvidence": "x10/evidence/g3-tls-relay-binding.json",
+    "candidateVerification": "LOCAL_ONLY_EXACT_NEW_CI_PENDING"
+  }
 }

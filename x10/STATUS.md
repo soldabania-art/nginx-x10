@@ -1698,3 +1698,55 @@ Production V1 remain open. Prior frontend HTTPS hosted evidence, its
 shutdown143 failure and historical local19/20 ESRCH uncertainty are retained;
 this prerequisite does not explain their causes. Full native and deferred
 Continuum scope remains preserved.
+
+
+### Exact hosted preflight and unresolved TLS refusal
+
+Implementation `9e63d3c1` passed42/42 preflight TAP in both exact native
+jobs on Node22.23.3. [Receipt](evidence/g3-service-preflight-hosted.json)
+records real readonly CLI observations: nonroot:true, managerAvailable:true,
+probeExecuted:true, reason:null, with service/V1 acceptance false. These
+are actual prerequisite observations, distinct from synthetic positives;
+no unit was installed or activated. A future ephemeral test host must be
+checked again immediately before service work.
+
+Native push40138539074 passed20/20 groups, upstream10TAP, frontend16TAP
+and required Unix/feature-off/package checks. Native PR40138541844 passed
+20/20 aggregate groups but FAILED the upstream wrong-CA case: expected
+apply CLI exit1, actual0. Its fail-fast TAP contains6tests/4PASS/2FAIL
+including wrapper. Native502 was observed at least once and owned cleanup
+was confirmed. The new frontend step and later Unix/feature-off/package
+steps were skipped. This is not the previous runner shutdown143. Its
+underlying controller/native/fixture sampling cause is not established;
+there was no blind retry, no product fix and no full native CI acceptance.
+
+Research PR actually executed21core/7process/27C1/48C2a; research push
+was scope-only. CLA failure is separate. Original local preflight hook
+setup failure and prior TLS receipts, shutdown143/cleanup uncertainty
+and historical local19/20 ESRCH uncertainty remain retained unchanged.
+
+Next reproduce and correct the wrong-CA refusal failure with bounded
+counterexample/candidate evidence and exact new CI before advancing real
+nonroot service startup/stop/restart, failed-start, drain and orphan tests.
+No runtime code changed in this receipt. Permanent distribution/replay,
+package rollback, soak, Production V1 and full deferred Continuum remain open.
+
+
+### Candidate-bound upstream TLS relay fixture
+
+The upstream TLS readiness fixture now binds each input to its own route
+marker and health URL. An old known-good route cannot satisfy another
+input merely by returning HTTP200. Restored inputs retain their own binding
+so rollback can pass under its fresh revision. Native trust/hostname
+verification and explicit correctly bound TLS-refusal observations remain
+required. Controller/native runtime code is unchanged.
+
+[Local evidence](evidence/g3-tls-relay-binding.json) preserves the original
+failed PR, a deterministic borrowed-old-route counterexample, candidate
+controls and final installed TLS verification: 18/18 TAP. One fresh
+native build and official aggregate passed 20/20 groups.
+These counts have separate units; they do not reconstruct the exact
+historical CI interleaving or establish a product runtime vulnerability.
+Exact resulting fixture implementation CI is pending. Next verify that
+source and all required profiles, then proceed to actual nonroot service
+lifecycle on a freshly checked authorized host. Service/V1 remain open.

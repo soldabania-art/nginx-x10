@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn, execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { randomBytes } from 'node:crypto';
 import { once } from 'node:events';
 import { chmod, mkdtemp, readFile, writeFile, rm, lstat } from 'node:fs/promises';
 import http from 'node:http';
@@ -38,9 +39,39 @@ function transfer(port, route = '/', { secure = false, ca, servername = 'localho
       res.on('data', b => { bytes += b.length; if (bytes > 1024 * 1024) res.destroy(new Error('response bound')); else chunks.push(b); });
       res.on('error', reject); res.on('end', () => resolve({ status: res.statusCode, body: Buffer.concat(chunks), headers: res.headers }));
     });
+    const absolute = setTimeout(() => req.destroy(new Error('absolute request deadline')), 2500);
+    req.once('close', () => clearTimeout(absolute));
     req.setTimeout(2500, () => req.destroy(new Error('request deadline'))); req.on('error', reject); req.end(body);
   });
 }
+// This is fixture route binding, not authentication or an all-worker fence.
+// A health URL retains its input tag across rollback; there is no global expected tag.
+function routeReadiness(result, expectedTag) {
+  if (!/^[a-f0-9]{32}$/.test(expectedTag) || result.headers['x-x10-tls-probe'] !== expectedTag)
+    return { status: 503, body: Buffer.from('route not ready\n') };
+  return { status: result.status, body: result.body };
+}
+
+test('synthetic readiness relay input-binding counterexamples', async t => {
+  const oldTag = 'a'.repeat(32), nextTag = 'b'.repeat(32);
+  const result = (status, tag) => ({ status, body: Buffer.from(status === 200 ? 'ready\n' : 'TLS refused\n'), headers: tag === undefined ? {} : { 'x-x10-tls-probe': tag } });
+  await t.test('unchanged unbound relay accepts old-route ready bytes', () => {
+    const old = result(200, oldTag);
+    assert.equal(({ status: old.status, body: old.body }).status, 200);
+    assert.equal(old.body.toString(), 'ready\n');
+  });
+  await t.test('candidate input refuses old-route ready bytes', () => assert.equal(routeReadiness(result(200, oldTag), nextTag).status, 503));
+  await t.test('matching input retains scripted matching-route readiness', () => assert.deepEqual(routeReadiness(result(200, nextTag), nextTag), { status: 200, body: Buffer.from('ready\n') }));
+  await t.test('matching input preserves scripted TLS refusal status502', () => assert.equal(routeReadiness(result(502, nextTag), nextTag).status, 502));
+  await t.test('missing and duplicate marker cannot supply readiness', () => {
+    for (const tag of [undefined, `${oldTag}, ${nextTag}`]) assert.equal(routeReadiness(result(200, tag), nextTag).status, 503);
+  });
+  await t.test('malformed or absent input tag is refused', () => {
+    for (const tag of ['', 'x'.repeat(32), oldTag + '0']) assert.equal(routeReadiness(result(200, tag), tag).status, 503);
+  });
+  await t.test('restored old input keeps its own working health tag', () => assert.equal(routeReadiness(result(200, oldTag), oldTag).status, 200));
+});
+
 async function certificates(dir) {
   const ca = path.join(dir, 'ca.crt'), caKey = path.join(dir, 'ca.key'), key = path.join(dir, 'server.key'), cert = path.join(dir, 'server.crt');
   await command('openssl', ['req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-sha256', '-days', '1', '-subj', '/CN=X10 TLS Fixture CA', '-addext', 'basicConstraints=critical,CA:TRUE', '-keyout', caKey, '-out', ca]);
@@ -58,6 +89,7 @@ test('extracted native alpha authenticates HTTPS upstream and rolls back rejecte
   const parent = await mkdtemp(path.join(os.tmpdir(), 'x10-tls-')); await chmod(parent, 0o700);
   const prefix = path.join(parent, 'install'), launcher = path.join(prefix, 'bin/x10'), sockets = new Set();
   let child, nativePid, nativeIdentity, sessionPrefix, nativeConfirmedStopped = false, spawnError, output = '', gatewayPort, app, readiness, appPort, readyPort, interrupted = false, echoRequests = 0, relay502 = 0;
+  const relay502ByTag = new Map();
   const emergency = () => { interrupted = true; if (child?.exitCode === null && child.signalCode === null) child.kill('SIGTERM'); };
   process.once('SIGINT', emergency); process.once('SIGTERM', emergency);
   const track = server => server.on('connection', socket => { sockets.add(socket); socket.once('close', () => sockets.delete(socket)); });
@@ -70,6 +102,7 @@ test('extracted native alpha authenticates HTTPS upstream and rolls back rejecte
     const pki = await certificates(parent), ca = await readFile(pki.ca), wrongCA = await readFile(pki.wrongCA);
     app = https.createServer({ key: await readFile(pki.key), cert: await readFile(pki.cert), minVersion: 'TLSv1.2' }, (req, res) => {
       res.setHeader('X-TLS-App', 'authenticated-origin');
+      res.setHeader('X-X10-TLS-Probe', 'untrusted-origin-marker');
       if (req.url === '/ready') { res.end('ready\n'); return; }
       if (req.method === 'POST' && req.url === '/echo') {
         echoRequests++; const chunks = []; let bytes = 0;
@@ -82,10 +115,17 @@ test('extracted native alpha authenticates HTTPS upstream and rolls back rejecte
     track(app); app.on('tlsClientError', () => {}); app.requestTimeout = 4000; app.headersTimeout = 4000;
     appPort = await listen(app);
     readiness = http.createServer(async (req, res) => {
-      if (req.url !== '/tls-probe') { res.end('ready\n'); return; }
-      // Probe a regular managed application route, never __x10_health: no cycle.
-      try { const result = await transfer(gatewayPort, '/ready'); if (result.status === 502) relay502++; res.writeHead(result.status); res.end(result.body); }
-      catch { res.writeHead(503); res.end('not ready\n'); }
+      if (req.url === '/ready' || req.url === '/') { res.end('ready\n'); return; }
+      const requested = /^\/tls-probe\/([a-f0-9]{32})$/.exec(req.url);
+      if (!requested) { res.writeHead(503); res.end('route not ready\n'); return; }
+      // Probe a regular managed route, never __x10_health: no recursive cycle.
+      // Its native marker must belong to this immutable input's health URL.
+      try {
+        const observed = await transfer(gatewayPort, '/ready');
+        const result = routeReadiness(observed, requested[1]);
+        if (result.status === 502) { relay502++; relay502ByTag.set(requested[1], (relay502ByTag.get(requested[1]) || 0) + 1); }
+        res.writeHead(result.status); res.end(result.body);
+      } catch { res.writeHead(503); res.end('not ready\n'); }
     });
     readiness.on('clientError', (_e, socket) => socket.destroy()); track(readiness); readiness.requestTimeout = 4000; readiness.headersTimeout = 4000;
     readyPort = await listen(readiness);
@@ -108,17 +148,22 @@ test('extracted native alpha authenticates HTTPS upstream and rolls back rejecte
       nativeIdentity = JSON.parse(await readFile(path.join(sessionPrefix, 'lifecycle.json'))).runtime; assert(nativeIdentity);
       assert.equal((await cli(launcher, 'wait-bind', '--timeout-ms', '10000')).code, 0);
     });
-    const candidate = (trusted = pki.ca, name = 'localhost', target = appPort) => ({
-      serverBody: `location / { proxy_pass https://127.0.0.1:${target}; proxy_http_version 1.1; proxy_next_upstream off; proxy_ssl_verify on; proxy_ssl_verify_depth 2; proxy_ssl_trusted_certificate "${trusted}"; proxy_ssl_server_name on; proxy_ssl_name ${name}; }`,
-      healthURL: `http://127.0.0.1:${readyPort}/tls-probe`, healthExpectedStatus: 200, healthExpectedBody: 'ready\n'
-    });
+    const candidate = (trusted = pki.ca, name = 'localhost', target = appPort) => {
+      const tag = randomBytes(16).toString('hex'); // Public fixture identity, never TLS key material.
+      return {
+        serverBody: `location / { proxy_pass https://127.0.0.1:${target}; proxy_http_version 1.1; proxy_next_upstream off; proxy_ssl_verify on; proxy_ssl_verify_depth 2; proxy_ssl_trusted_certificate "${trusted}"; proxy_ssl_server_name on; proxy_ssl_name ${name}; proxy_hide_header X-X10-TLS-Probe; add_header X-X10-TLS-Probe "${tag}" always; }`,
+        healthURL: `http://127.0.0.1:${readyPort}/tls-probe/${tag}`, healthExpectedStatus: 200, healthExpectedBody: 'ready\n'
+      };
+    };
     async function apply(value, name) { const file = path.join(parent, `${name}.json`); await writeFile(file, JSON.stringify(value), { mode: 0o600 }); return cli(launcher, 'apply', '--file', file); }
     let goodRevision;
     await check('explicit trusted CA and hostname enable the installed native HTTPS proxy', async () => {
       const direct = await transfer(appPort, '/', { secure: true, ca }); assert.equal(direct.status, 200); assert.equal(direct.body.toString(), 'verified HTTPS application\n');
-      const result = await apply(candidate(), 'good'); assert.equal(result.code, 0); goodRevision = result.json.revision;
+      const good = candidate(), goodTag = new URL(good.healthURL).pathname.split('/').at(-1);
+      const result = await apply(good, 'good'); assert.equal(result.code, 0); goodRevision = result.json.revision;
       const response = await until(async () => { const response = await transfer(gatewayPort); return response.body.toString() === 'verified HTTPS application\n' && response; });
       assert.equal(response.headers['x-tls-app'], 'authenticated-origin');
+      assert.equal(response.headers['x-x10-tls-probe'], goodTag, 'native marker must replace the origin marker');
     });
     await check('verified native HTTPS proxy preserves POST bytes and streamed bytes', async () => {
       const payload = Buffer.alloc(65551); for (let i = 0; i < payload.length; i++) payload[i] = (i * 37) & 255;
@@ -127,8 +172,9 @@ test('extracted native alpha authenticates HTTPS upstream and rolls back rejecte
     });
     for (const [name, value] of [['wrong-ca', candidate(pki.wrongCA)], ['wrong-hostname', candidate(pki.ca, 'wrong.invalid')], ['plaintext-peer', candidate(pki.ca, 'localhost', readyPort)]]) {
       await check(`${name} refuses native TLS readiness and rolls back to known good`, async () => {
-        const before502 = relay502, result = await apply(value, name); assert.equal(result.code, 1); assert.equal(result.json.outcome, 'rolled_back');
-        assert.match(result.json.reason, /health=502\//); assert(relay502 > before502, 'actual native TLS proxy refusal must reach the readiness relay');
+        const tag = new URL(value.healthURL).pathname.split('/').at(-1), before502 = relay502ByTag.get(tag) || 0;
+        const result = await apply(value, name); assert.equal(result.code, 1); assert.equal(result.json.outcome, 'rolled_back');
+        assert.match(result.json.reason, /health=(502|503)\//); assert((relay502ByTag.get(tag) || 0) > before502, 'actual native TLS502 for this candidate must reach its bound readiness relay');
         assert.equal(result.json.restoredContentFrom, goodRevision);
         await until(async () => (await transfer(gatewayPort)).body.toString() === 'verified HTTPS application\n');
         assert.equal((await cli(launcher, 'status')).json.lastConfirmedRevision, result.json.revision);
@@ -179,6 +225,6 @@ test('extracted native alpha authenticates HTTPS upstream and rolls back rejecte
     try { await until(() => sockets.size === 0, 3000); } catch { cleanupErrors.push('owned-sockets-not-closed'); }
     if (!cleanupErrors.length) await rm(parent, { recursive: true, force: true });
     assert.equal(cleanupErrors.length, 0, 'TLS fixture cleanup incomplete; private prefix preserved');
-    console.log(JSON.stringify({ suite: 'alpha-tls-owned-cleanup', nativeStopped: nativeConfirmedStopped, launcherExited: !child || child.exitCode !== null || child.signalCode !== null, openSockets: sockets.size, temporaryRootRemoved: true, relay502Observations: relay502, applicationPostRequests: echoRequests }));
+    console.log(JSON.stringify({ suite: 'alpha-tls-owned-cleanup', nativeStopped: nativeConfirmedStopped, launcherExited: !child || child.exitCode !== null || child.signalCode !== null, openSockets: sockets.size, temporaryRootRemoved: true, relay502Observations: relay502, candidateTagsWithMatched502: relay502ByTag.size, applicationPostRequests: echoRequests }));
   }
 });
