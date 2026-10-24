@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "task": "protected-source-copy-failure-cleanup",
+  "runId": "continuum-protection-20261024T090855094Z",
+  "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
+  "publicationParent": "3bb3bd63b36febb5aa693a227a980d6773fa1865",
+  "beforeHashComparison": "Immutable baseCommit; current leased parent differs only in BACKGROUND lease. Result atomically releases lease.",
+  "scope": "Restricted research cleanup fix and supporting verification; no native runtime, controller, importer or migration.",
+  "files": [
+    {
+      "file": "x10/PLAN.md",
+      "beforeSha256": "dc2586f08d80c07a738dd631777fc38a90edd13794c1cde1f381047888c4d69b",
+      "afterSha256": "01b6efafa3ea3dd9af2cc2a81b2af218ab00e24f665baee7c71372cda5cbb5d9",
+      "bytes": 58711,
+      "gitBlob": "f035420f5e5f69a06e7cfe518e77abd2671184fa",
+      "author": "coordinator",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Sanitized checkpoint/evidence; no product-readiness expansion"
+    },
+    {
+      "file": "x10/STATUS.md",
+      "beforeSha256": "a3e3adb6a7ed409d04246b73ab77a10baef9d77e3661a33d5b211de59c02c8fd",
+      "afterSha256": "99ae16dedfb329bd04b8cf7fd88c00153dda06e02b302c59241e89f2a24213e6",
+      "bytes": 111992,
+      "gitBlob": "f960a0248d9dc646f64afc2c838ded93e286e21f",
+      "author": "coordinator",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Sanitized checkpoint/evidence; no product-readiness expansion"
+    },
+    {
+      "file": "x10/continuum/BACKGROUND.json",
+      "beforeSha256": "e1f5e55f1aeb72173e1c93fb65ae5d3608fec99deb08b72576416578500bac3a",
+      "afterSha256": "f80de5d7d890ee6ce3bbdb50345a64abd1980f0c898654833c3b3778b3655045",
+      "bytes": 58725,
+      "gitBlob": "d1e2ee0c8c6695e24cb9c3bf068f3345e44703f8",
+      "author": "coordinator",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Sanitized checkpoint/evidence; no product-readiness expansion"
+    },
+    {
+      "file": "x10/continuum/PLAN.md",
+      "beforeSha256": "08730e0adff7d3124d4bd3483a03fc09f55fa8927417d84958e8d93224869ada",
+      "afterSha256": "4ee5efe27ec1eaca06b45bf9a983916a3e92c96426931c28c0f4bc85b5f5d3c4",
+      "bytes": 62912,
+      "gitBlob": "58af0f52d2c07cdf421a86ee760d84e52fe687c9",
+      "author": "coordinator",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Sanitized checkpoint/evidence; no product-readiness expansion"
+    },
+    {
+      "file": "x10/continuum/README.md",
+      "beforeSha256": "650f9346963b01fde0bd72021913f344fb84ec2c37104180e50ef91d2fd74cc4",
+      "afterSha256": "7d2ab0f7ab450aae0c7fe01a66d7a54222e16872648fd1e9835e02cfb567282f",
+      "bytes": 62257,
+      "gitBlob": "9712ee805df19fc30fa966abd80878fbb4db2cc9",
+      "author": "coordinator",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Sanitized checkpoint/evidence; no product-readiness expansion"
+    },
+    {
+      "file": "x10/continuum/SOURCE-CAPTURE.md",
+      "beforeSha256": "2de2943ae3c459e4a5302a7449a3bd34ecb11069053b15902b9babcde56c72a0",
+      "afterSha256": "064cb6735a5e597c8a2a000ac19365f2422cd75ba5de4c9cf5361a140d638e79",
+      "bytes": 11539,
+      "gitBlob": "5c19d4e08af7331a77fc18df7639ba760395eb04",
+      "author": "coordinator",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Sanitized checkpoint/evidence; no product-readiness expansion"
+    },
+    {
+      "file": "x10/continuum/capture-protection-test.c",
+      "beforeSha256": null,
+      "afterSha256": "ed4c6b6986e39998c4a1cf6838f2a52a1106fa13e1eb241607d2dfa0bd3f3f0d",
+      "bytes": 15771,
+      "gitBlob": "b0f717bfc95847a0f1571622d08b4932c8e01f83",
+      "author": "protection_harness",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Research production TU or synthetic fault harness; not native NGINX path"
+    },
+    {
+      "file": "x10/continuum/capture-protection.test.mjs",
+      "beforeSha256": null,
+      "afterSha256": "ecc1d7a3e6fc05a8ba0f206d0c920b80de5566c05b933c0e7e9d92c7a9ba4ffd",
+      "bytes": 5003,
+      "gitBlob": "6a30813f7ce8c6775d43a7901ae423fa9a2f010a",
+      "author": "protection_harness",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Bounded test-only wrapper/registration"
+    },
+    {
+      "file": "x10/continuum/openssl-capture.c",
+      "beforeSha256": "dbcbc2633434d94da3afbe5958dbc07b55db357437dc509090e64e799d170f40",
+      "afterSha256": "f1d91edae25df96a8ee115ae710fdb8b7324d94332e4e58607376d79f45840e6",
+      "bytes": 15088,
+      "gitBlob": "0a785baa74f588bbdd0a8199cecadde4bef40b97",
+      "author": "protection_runtime",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Research production TU or synthetic fault harness; not native NGINX path"
+    },
+    {
+      "file": "x10/continuum/openssl-capture.h",
+      "beforeSha256": "7c95196dce028356890b3bfca31ec97bbd22f1d9d93d3c9e947fa6e8642d3870",
+      "afterSha256": "c0a5e8538471d3bb715414eb6239cdeb5163af37365e546c8c2ea969f614e8a4",
+      "bytes": 3291,
+      "gitBlob": "6c46d52131924a94c547c1c9c08df3d234f50437",
+      "author": "protection_runtime",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Research production TU or synthetic fault harness; not native NGINX path"
+    },
+    {
+      "file": "x10/continuum/openssl-probe.test.mjs",
+      "beforeSha256": "f2da0586c764e9cbb2516a53160a1d96150857b375a259d4149e490eef8a327e",
+      "afterSha256": "458aaee4fcd4c2be4b9cbfffc67f5c7244866291cb4c92b602e398d7e3d658da",
+      "bytes": 38172,
+      "gitBlob": "09f1707d59c311ced3172173edc1613376dda959",
+      "author": "protection_harness",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Bounded test-only wrapper/registration"
+    },
+    {
+      "file": "x10/evidence/continuum-capture-protection.json",
+      "beforeSha256": null,
+      "afterSha256": "b7508e7ce0fa3a3d84e280461ba5c110f41c5c2432211d25faa1840378006cfc",
+      "bytes": 40416,
+      "gitBlob": "a4913f6322f4f702d517c4901875040b606d79c6",
+      "author": "coordinator",
+      "reviewer": "protection_review and coordinator integration",
+      "scope": "Sanitized checkpoint/evidence; no product-readiness expansion"
+    }
+  ],
+  "selfExcludedToAvoidCircularDigest": true,
+  "finalClaimsAudit": "passed: independent source/evidence/hash/scope audit; root changes only this non-circular audit field after confirmation",
+  "checks": {
+    "counterexamples": "unchanged author2/2FAIL, exact authored matrix baseline failure and independent baseline refusal",
+    "finalResearch": "core21/process7/C127/C2a44; original43prefix plus one synthetic18case group",
+    "native": "fresh isolated20/20; three adverseworkspace12/12/13 of20 retained",
+    "independent": "five synthetic cleanup cases plus2 actualTLS fresh-build heldouts",
+    "commitMessageChecker": "empty diagnostics required and observed before commit creation",
+    "hosted": "pending resulting implementation SHA"
+  },
+  "money": {
+    "newPurchasesUSD": 0
+  }
+}

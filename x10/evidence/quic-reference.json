@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "caseCount": 13,
+  "strictResults": [
+    {
+      "name": "valid_idle",
+      "contract": "valid control",
+      "classification": "control",
+      "actual": {
+        "returnCode": 0,
+        "idleTimeout": 30,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": 0,
+        "idleTimeout": 30,
+        "disableActiveMigration": 0
+      },
+      "matchesExpected": true,
+      "bytesHex": "01011e"
+    },
+    {
+      "name": "valid_nonminimal_2byte_varint",
+      "contract": "RFC16 legal nonminimal encoding",
+      "classification": "control",
+      "actual": {
+        "returnCode": 0,
+        "idleTimeout": 30,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": 0,
+        "idleTimeout": 30,
+        "disableActiveMigration": 0
+      },
+      "matchesExpected": true,
+      "bytesHex": "0102401e"
+    },
+    {
+      "name": "valid_nonminimal_4byte_varint",
+      "contract": "RFC16 legal nonminimal encoding",
+      "classification": "control",
+      "actual": {
+        "returnCode": 0,
+        "idleTimeout": 30,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": 0,
+        "idleTimeout": 30,
+        "disableActiveMigration": 0
+      },
+      "matchesExpected": true,
+      "bytesHex": "01048000001e"
+    },
+    {
+      "name": "valid_disable_migration",
+      "contract": "valid zero-length control",
+      "classification": "control",
+      "actual": {
+        "returnCode": 0,
+        "idleTimeout": 777,
+        "disableActiveMigration": 1
+      },
+      "expected": {
+        "returnCode": 0,
+        "idleTimeout": 777,
+        "disableActiveMigration": 1
+      },
+      "matchesExpected": true,
+      "bytesHex": "0c00"
+    },
+    {
+      "name": "unknown_small_id",
+      "contract": "RFC7.4.2 MUST ignore unknown parameter",
+      "classification": "control",
+      "actual": {
+        "returnCode": 0,
+        "idleTimeout": 777,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": 0,
+        "idleTimeout": 777,
+        "disableActiveMigration": 0
+      },
+      "matchesExpected": true,
+      "bytesHex": "1b02ffff"
+    },
+    {
+      "name": "unknown_id_65537_alias_idle",
+      "contract": "RFC7.4.2 MUST ignore unknown parameter",
+      "classification": "regression",
+      "actual": {
+        "returnCode": 0,
+        "idleTimeout": 30,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": 0,
+        "idleTimeout": 777,
+        "disableActiveMigration": 0
+      },
+      "matchesExpected": false,
+      "bytesHex": "80010001011e"
+    },
+    {
+      "name": "unknown_id_65548_alias_disable",
+      "contract": "RFC7.4.2 MUST ignore unknown parameter",
+      "classification": "regression",
+      "actual": {
+        "returnCode": -1,
+        "idleTimeout": 777,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": 0,
+        "idleTimeout": 777,
+        "disableActiveMigration": 0
+      },
+      "matchesExpected": false,
+      "bytesHex": "8001000c0100"
+    },
+    {
+      "name": "integer_declared_length_has_trailing_byte",
+      "contract": "RFC18.1/18.2 integer field",
+      "classification": "regression",
+      "actual": {
+        "returnCode": 0,
+        "idleTimeout": 30,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": -1,
+        "idleTimeout": null,
+        "disableActiveMigration": null
+      },
+      "matchesExpected": false,
+      "bytesHex": "01021e00"
+    },
+    {
+      "name": "truncated_varint",
+      "contract": "invalid control",
+      "classification": "control",
+      "actual": {
+        "returnCode": -1,
+        "idleTimeout": 777,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": -1,
+        "idleTimeout": null,
+        "disableActiveMigration": null
+      },
+      "matchesExpected": true,
+      "bytesHex": "010140"
+    },
+    {
+      "name": "length_beyond_input",
+      "contract": "invalid control",
+      "classification": "control",
+      "actual": {
+        "returnCode": -1,
+        "idleTimeout": 777,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": -1,
+        "idleTimeout": null,
+        "disableActiveMigration": null
+      },
+      "matchesExpected": true,
+      "bytesHex": "01021e"
+    },
+    {
+      "name": "forbidden_server_only_parameter",
+      "contract": "invalid client parameter control",
+      "classification": "control",
+      "actual": {
+        "returnCode": -1,
+        "idleTimeout": 777,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": -1,
+        "idleTimeout": null,
+        "disableActiveMigration": null
+      },
+      "matchesExpected": true,
+      "bytesHex": "0000"
+    }
+  ],
+  "strict": {
+    "caseCount": 11,
+    "passed": 8,
+    "failed": 3,
+    "controlFailures": 0
+  },
+  "policyObservations": [
+    {
+      "name": "duplicate_known_idle",
+      "contract": "RFC7.4 SHOULD reject duplicate; policy deferred",
+      "classification": "policyObservation",
+      "actual": {
+        "returnCode": 0,
+        "idleTimeout": 31,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": -1,
+        "idleTimeout": null,
+        "disableActiveMigration": null
+      },
+      "matchesExpected": false,
+      "bytesHex": "01011e01011f"
+    },
+    {
+      "name": "duplicate_identical_idle",
+      "contract": "RFC7.4 SHOULD reject duplicate; policy deferred",
+      "classification": "policyObservation",
+      "actual": {
+        "returnCode": 0,
+        "idleTimeout": 30,
+        "disableActiveMigration": 0
+      },
+      "expected": {
+        "returnCode": -1,
+        "idleTimeout": null,
+        "disableActiveMigration": null
+      },
+      "matchesExpected": false,
+      "bytesHex": "01011e01011e"
+    }
+  ],
+  "policyStatus": "Duplicate rejection is RFC9000 section7.4 SHOULD; enforcement deferred, observations do not fail strict.",
+  "source": "src/event/quic/ngx_event_quic_transport.c",
+  "sourceCheckout": "nginx-reference",
+  "nginxVersion": "1.31.9",
+  "generatedConfigSha256": "ee51980f483ec07f4dfcf4a91455c7bca5172bfd0ab0f60d08743fc69a5dd041",
+  "sourceSha256": "a0b47a7045659a52787d1a3f539cb5d63074c0ad5c7ccb9c33219755ff1dfe81",
+  "sourceUnchangedDuringTest": true,
+  "strictExitCode": 1,
+  "networkUsed": false
+}

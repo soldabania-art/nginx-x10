@@ -1,0 +1,802 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "stage",
+    "version",
+    "profile",
+    "source",
+    "build",
+    "artifact",
+    "evidence",
+    "gates"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "x10-release-record"
+    },
+    "stage": {
+      "enum": [
+        "alpha",
+        "candidate",
+        "v1"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(-(alpha|rc)\\.[1-9][0-9]*)?$"
+    },
+    "profile": {
+      "const": "ubuntu-24.04-x86_64-node22-v1"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "commit",
+        "upstreamCommit",
+        "nativeDiffSha256",
+        "tree"
+      ],
+      "properties": {
+        "repository": {
+          "const": "soldabania-art/nginx-x10"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "upstreamCommit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "const": "148c75678cd4171338c31d4ed4c02411736d5fe9"
+        },
+        "nativeDiffSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "tree": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eventHead",
+        "checkoutCommit",
+        "prMergeCommit",
+        "binarySha256",
+        "manifestSha256",
+        "configurationSha256",
+        "nodeVersion",
+        "nodeExecutableSha256",
+        "os",
+        "osVersion",
+        "arch",
+        "dependencies",
+        "ci"
+      ],
+      "properties": {
+        "eventHead": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "checkoutCommit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "prMergeCommit": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "binarySha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "manifestSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "configurationSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "nodeVersion": {
+          "type": "string",
+          "pattern": "^22\\.[0-9]+\\.[0-9]+$"
+        },
+        "nodeExecutableSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "os": {
+          "const": "ubuntu"
+        },
+        "osVersion": {
+          "const": "24.04"
+        },
+        "arch": {
+          "const": "x86_64"
+        },
+        "dependencies": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "glibc",
+            "pcre2",
+            "openssl",
+            "zlib",
+            "libcrypt"
+          ],
+          "properties": {
+            "glibc": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "version",
+                "sha256"
+              ],
+              "properties": {
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            },
+            "pcre2": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "version",
+                "sha256"
+              ],
+              "properties": {
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            },
+            "openssl": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "version",
+                "sha256"
+              ],
+              "properties": {
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            },
+            "zlib": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "version",
+                "sha256"
+              ],
+              "properties": {
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            },
+            "libcrypt": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "version",
+                "sha256"
+              ],
+              "properties": {
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            }
+          }
+        },
+        "ci": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "workflow",
+              "runId",
+              "jobId",
+              "attempt",
+              "eventHead",
+              "checkoutCommit",
+              "conclusion",
+              "executedSteps"
+            ],
+            "properties": {
+              "workflow": {
+                "const": "X10 native compatibility"
+              },
+              "runId": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "jobId": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "attempt": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "eventHead": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              "checkoutCommit": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$"
+              },
+              "conclusion": {
+                "enum": [
+                  "success",
+                  "failure",
+                  "skipped",
+                  "cancelled"
+                ]
+              },
+              "executedSteps": {
+                "type": "array",
+                "minItems": 7,
+                "maxItems": 32,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "name",
+                    "conclusion"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "conclusion": {
+                      "enum": [
+                        "success",
+                        "failure",
+                        "skipped",
+                        "cancelled"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "archiveSha256",
+        "payloadManifestSha256",
+        "checksumAlgorithm",
+        "checksumIsSignature",
+        "permanent",
+        "expiresAtUTC"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "maxLength": 1024,
+          "pattern": "^https://github\\.com/soldabania-art/nginx-x10/(blob/[0-9a-f]{40}/[A-Za-z0-9_./-]+|actions/runs/[0-9]+|releases/download/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)$"
+        },
+        "archiveSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "payloadManifestSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "checksumAlgorithm": {
+          "const": "SHA256"
+        },
+        "checksumIsSignature": {
+          "const": false
+        },
+        "permanent": {
+          "type": "boolean"
+        },
+        "expiresAtUTC": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      },
+      "minItems": 1,
+      "maxItems": 64
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "G0",
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "G5",
+        "G6",
+        "G7",
+        "G8"
+      ],
+      "properties": {
+        "G0": {
+          "$ref": "#/$defs/gate"
+        },
+        "G1": {
+          "$ref": "#/$defs/gate"
+        },
+        "G2": {
+          "$ref": "#/$defs/gate"
+        },
+        "G3": {
+          "$ref": "#/$defs/gate"
+        },
+        "G4": {
+          "$ref": "#/$defs/gate"
+        },
+        "G5": {
+          "$ref": "#/$defs/gate"
+        },
+        "G6": {
+          "$ref": "#/$defs/gate"
+        },
+        "G7": {
+          "$ref": "#/$defs/gate"
+        },
+        "G8": {
+          "$ref": "#/$defs/gate"
+        }
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/soldabania-art/nginx-x10/blob/x10-continuum-development/x10/release/release-record.schema.json",
+  "title": "X10 declared release record shape; not independent evidence verification",
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "sourceCommit",
+        "url",
+        "sha256",
+        "outcome",
+        "skippedAssertions",
+        "expectedTodoFailures",
+        "unexpectedFailures",
+        "durationSeconds"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{0,47}$"
+        },
+        "kind": {
+          "enum": [
+            "authority",
+            "contract",
+            "alpha-install",
+            "service",
+            "rollback",
+            "security",
+            "soak",
+            "distribution",
+            "independent"
+          ]
+        },
+        "sourceCommit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "url": {
+          "type": "string",
+          "maxLength": 1024,
+          "pattern": "^https://github\\.com/soldabania-art/nginx-x10/(blob/[0-9a-f]{40}/[A-Za-z0-9_./-]+|actions/runs/[0-9]+|releases/download/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "outcome": {
+          "enum": [
+            "passed",
+            "failed",
+            "blocked",
+            "not-run"
+          ]
+        },
+        "skippedAssertions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "expectedTodoFailures": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "unexpectedFailures": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "durationSeconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 604800
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "evidenceIds"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending",
+            "blocked",
+            "accepted"
+          ]
+        },
+        "evidenceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,47}$"
+          },
+          "minItems": 0,
+          "maxItems": 64,
+          "uniqueItems": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "accepted"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidenceIds": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "alpha"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "version": {
+            "pattern": "-alpha\\.[1-9][0-9]*$"
+          },
+          "artifact": {
+            "properties": {
+              "permanent": {
+                "const": true
+              },
+              "expiresAtUTC": {
+                "type": "null"
+              },
+              "url": {
+                "pattern": "^https://github\\.com/soldabania-art/nginx-x10/releases/download/"
+              }
+            }
+          },
+          "gates": {
+            "properties": {
+              "G0": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G1": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G2": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G3": {
+                "properties": {
+                  "status": {
+                    "const": "pending"
+                  }
+                }
+              },
+              "G4": {
+                "properties": {
+                  "status": {
+                    "const": "pending"
+                  }
+                }
+              },
+              "G5": {
+                "properties": {
+                  "status": {
+                    "const": "pending"
+                  }
+                }
+              },
+              "G6": {
+                "properties": {
+                  "status": {
+                    "const": "pending"
+                  }
+                }
+              },
+              "G7": {
+                "properties": {
+                  "status": {
+                    "const": "pending"
+                  }
+                }
+              },
+              "G8": {
+                "properties": {
+                  "status": {
+                    "const": "pending"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "candidate"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "version": {
+            "pattern": "-rc\\.[1-9][0-9]*$"
+          },
+          "artifact": {},
+          "gates": {
+            "properties": {
+              "G0": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G1": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G2": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G8": {
+                "properties": {
+                  "status": {
+                    "const": "pending"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "stage": {
+            "const": "v1"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "version": {
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+          },
+          "artifact": {
+            "properties": {
+              "permanent": {
+                "const": true
+              },
+              "expiresAtUTC": {
+                "type": "null"
+              },
+              "url": {
+                "pattern": "^https://github\\.com/soldabania-art/nginx-x10/releases/download/"
+              }
+            }
+          },
+          "gates": {
+            "properties": {
+              "G0": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G1": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G2": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G3": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G4": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G5": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G6": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G7": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              },
+              "G8": {
+                "properties": {
+                  "status": {
+                    "const": "accepted"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$comment": "Necessary shape constraints only. check-release-record.mjs additionally checks source/build identities, evidence ID references, gate ordering/kinds and minimum soak duration. Neither authenticates evidence or grants production acceptance. Required CI declaration uses actual named native steps; run/job/attempt/steps are not authenticated by this checker. Prior failed attempts belong in separately retained evidence."
+}

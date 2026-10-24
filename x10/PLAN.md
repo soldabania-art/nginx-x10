@@ -1,0 +1,748 @@
+# План развития ENGINE X10 на базе NGINX
+
+Решение владельца от 22 октября 2026 года: взять NGINX за основу, сохранить всё существующее и улучшать каждую область. Полный исходный NGINX Open Source остаётся в дереве. Коммерческие и сторонние продукты не считаются автоматически включёнными или проверенными.
+
+## Обязательные условия
+
+1. Не сокращать совместимость ради удобства панели. Полный native nginx.conf остаётся допустимым; управляемые X10 fragments отделяются от конфигурации оператора.
+2. Сохранять native event model, memory pools, buffer ownership, request/subrequest lifetime, multiworker shared state, reload generations и platform abstractions.
+3. Сначала воспроизвести недостаток на закреплённой исходной версии. Затем сделать небольшой patch и проверить исправление, допустимые входы и соседние сценарии.
+4. Сравнивать одинаковые версии зависимостей, configure flags, оборудование и нагрузку. Записывать ошибки, throughput, p50/p95/p99, CPU, RSS и особенности потоков.
+5. При ухудшении другого существенного показателя явно записать компромисс. Выигрыш в одном сценарии не распространять на весь NGINX.
+6. Не делать обязательным LLM, облако или консоль для прохождения обычного запроса. Управление и наблюдаемость отделять от сетевого hot path.
+7. Сохранять upstream sync и обновления исправлений. Держать изменения reviewable, не переименовывать все C symbols ради бренда.
+
+## Матрица работ
+
+Ни одна строка ниже не означает уже полученное преимущество. Это обязательства по сохранению и направления экспериментов.
+
+| Область | Сохраняем | Улучшение для проверки | Доказательство |
+| --- | --- | --- | --- |
+| Процессы и reload | Master/workers, old/new generations, inherited sockets | Понятная проверка, применение и восстановление конфигурации | Незавершённые запросы, ошибки parse/init/resource, новый worker, отсутствие ложного ACID обещания |
+| Events и ОС | epoll/kqueue/poll/select, posted events, timers, partial I/O | Диагностика event-loop stalls и исчерпания ресурсов | Linux/BSD/Windows matrix, slow clients, FD reuse, p99 и CPU |
+| Память и буферы | Pools/slabs, shadow chains, recycled buffers, direct I/O | Измеряемые границы памяти и объяснение pressure | RSS, allocation counts, backpressure, abort/AIO cleanup |
+| HTTP/1 | Parsing, body framing, keepalive, chunking, CONNECT | Дополнительные regression/fuzz tests и точные ошибки | CL/TE, split input, smuggling regressions, ранние ответы |
+| HTTP/2 и HTTP/3 | Stream state, HPACK/QPACK, flow control, reset/drain | Interop, устойчивость к malformed inputs и диагностика | Нативные клиенты, stream cancellation, limits, differential wire cases |
+| QUIC/TLS | Handshake/session/key lifetime, congestion/loss/migration | Малые исправления по воспроизводимым контрпримерам | Parser regression, interop, TLS validation, сетевые потери; не одна компиляция |
+| Upstream | RR/weights/hash/random/least_conn/least_time/sticky, zones и DNS | Прозрачное состояние peers, drain, health policy | max_conns/fails, DNS generation/refcount, distribution, topology changes |
+| Проксирование | HTTP1/2 upstream, streaming, retries, trailers и upgrade | Безопасная настройка и профиль для конкретных приложений | POST replay, buffering, early response, disconnect, HTTP2 reuse |
+| Кэш | Cache keys, Vary, locks, stale/revalidation, manager/loader | Объяснение hit/miss и настройка без утечек | Stampede, персональные ответы, disk full, purge policy, cache-key fixtures |
+| FastCGI/SCGI/uWSGI/gRPC/memcached | Все adapters и их framing/ownership | Наблюдаемость и protocol-specific hardening | Настоящие fixtures каждого протокола, truncation и retries |
+| Static/media/filters | sendfile, ranges, gzip, charset, SSI, MP4, image, XSLT | Подсказки по cost и opt-in оптимизации | Файлы/диапазоны/encoding, optional dependencies, byte-equivalent results |
+| Rewrite/routing | Locations, regex, maps, geo, variables, internal redirects | Объяснение выбранного маршрута и валидация | Precedence, captures, phase reentry, subrequests, limits циклов |
+| Доступ и ограничения | Native auth/access/realip, limit_req/limit_conn zones | Безопасный мастер настройки и измеримые policies | Multiworker accounting, trusted proxies, dry-run, expiry/cleanup |
+| TCP/UDP | Stream routing, proxy protocol, half-close, TLS preread | Удобное управление без HTTP-предположений | Binary payload, datagrams, session lifetime, timeout и half-close |
+| Почта | SMTP/IMAP/POP3, STARTTLS, auth_http и login handshake | Диагностика авторизации и предсказуемые отказы | Протокольные fixtures, denies/successes, tunnel, TLS/STARTTLS matrix |
+| DNS и файлы | Native resolver TTL/retention/retry, open-file cache | Наблюдаемость причин отказов и состояния | DNS UDP/TCP/SRV/CNAME, changing records, inode/symlink races |
+| Управление | nginx -t/-T, сигналы, optional native control API | Ограниченный локальный agent с защищённым удалённым API | Доступ к socket, секреты config dump, roles/audit, concurrent revisions |
+| Сборка и модули | Configure probes, module order, version/ABI guards | Профили и manifest, диагностируемые несовместимости | Compiler/dependency matrix, dynamic modules, reproducible inputs |
+
+## Порядок реализации
+
+1. **Основа:** fork, upstream pin, чтение кода и регистр возможностей; baseline build и native regression fixtures. Первый parser patch проверяется отдельно.
+2. **Совместимость:** добавить официальный nginx-tests с закреплённой ревизией, protocol clients и CI matrix. Не отмечать optional modules или HTTP3 как runtime-checked по наличию в бинарнике.
+3. **Эксплуатация:** управляемые configuration fragments, native -t, revisions, ограниченное применение и health gate. Сначала loopback/Unix socket; TLS/RBAC/audit для удалённого доступа. Учитывать возможные ранние side effects native reload.
+4. **Наблюдаемость:** понятные причины route/cache/limit/peer decisions и bounded metrics. Измерять влияние сбора на hot path.
+5. **Производительность:** выбрать воспроизводимые workloads и сравнить native upstream и X10. Оптимизировать подтверждённые bottlenecks по одному.
+6. **Расширение:** закрывать матрицу каждой области тестами и измерениями, переносить доказанные улучшения в stable line с обновлениями upstream.
+
+## Выпуск
+
+Development branch не является промышленным релизом. Для выпуска нужны соответствующие тесты, матрица сборок, сценарий обновления/отката, запись отличий и известных ограничений. Публичный хост NGINX X10 ещё не развёрнут. Vercel может размещать консоль, но не подменяет постоянно работающий native процесс.
+
+## Реализовано к 23 октября 2026 года
+
+Первый C patch и native baseline дополнены локальным контроллером ревизий с durable intent и storage-failure recovery, ручной captured-process listener диагностикой, native generation/birth API, generated QUIC parameter/frame checks под ASan/UBSan, реальным HTTP/3 interop и независимым HEAD client, mail TLS и FastCGI/SCGI/uWSGI fixtures, 19 feature-cases и закреплённой выборкой из 35 официальных test files. Добавлены изолированная Linux alpha, `status --human`, read-only `inspect-generations` с привязкой endpoint к master и упаковка из подтверждённого build manifest. Текущий runner настроен на 19 обычных / 20 `--official` групп; финальный локальный [milestone-7](evidence/native-checks-milestone-7.json) прошёл 20/20, без новых изменений C и с прежним native binary SHA. Предыдущий milestone-6 прошёл 18/18. Новый benchmark driver использует C client и pristine native origin, проверяет сопоставимость сборок и сохраняет сырые результаты. Точные успешные проверки, пропуски и ограничения находятся в [STATUS](STATUS.md); это не закрывает всю матрицу выше.
+
+Ближайшие работы после этого checkpoint:
+
+1. Следовать [native generation design](review/handover-generation-design.md): ручной observer теперь проверяет закрытие listeners только у captured processes, а live fixture разделяет новые ответы, listener closure и старые потоки. Добавлены native master generation и process birth identities с HUP/PATCH/respawn/slot checks. Полный listener-close ACK/fence и реальный binary upgrade остаются отдельными проверками. Apply пока подтверждает наблюдаемое новое поколение и health; кандидат уже может обслуживать трафик во время проверки.
+2. Расширять уже проверенные initialization SIGKILL и storage-failure boundaries: filesystem/power-loss поведение, дополнительные отказы и операционное восстановление. Intent/history/state recovery действует только при точном валидном intent и подтверждённом runtime; старое несогласованное состояние без intent, partial records и противоречия остаются для ручной проверки.
+3. Расширять FastCGI/SCGI/uWSGI и mail TLS/STARTTLS fixtures: дополнительные framing/state/error ветки, многопоточность и TLS-library matrix. После семи aioquic и четырёх независимых libcurl cases добавить raw-wire HEAD проверки, loss/migration, browser/client matrix и connection-state проверки ACK/flow/final size. Добавить 32-bit и другие ОС. Полный upstream suite и длительный fuzzing остаются отдельными работами; self-contained fixtures не отменяют upstream dependency skips.
+4. Добавлять более широкие workloads, выделенный стабильный host и искать измеренные bottlenecks. Новый C client/native-origin HTTP1 benchmark пока не доказывает ускорение QUIC patch, отсутствие регрессий или масштабирование нескольких workers. Сохранять прежние неблагоприятные Node measurements рядом с новыми.
+5. После укрепления локального управления добавить удалённый API с TLS/RBAC/audit и подключение консоли; проверить размещение native-процесса, обновление и откат в выбранной инфраструктуре проекта.
+
+Сводный продуктовый порядок и критерии alpha/beta/release: [ROADMAP](ROADMAP.md).
+Операторский путь локальной alpha реализован и описан в [QUICKSTART](QUICKSTART.md).
+Локальный aggregate и lifecycle пакета прошли; [независимый review](review/local-alpha-review.md)
+проверил 9 operator и 8 package controls. Следующая приёмка — отдельные
+обязательные hosted Unix gates; затем нужны установка на чистой совместимой
+машине, сценарий обновления и дополнительные отказы хранения/процессов.
+Foreground alpha с отдельными историями сессий пока не является системным
+service или переносимой промышленной поставкой. Стабильный performance стенд
+остаётся отдельной работой.
+
+Новый [R&D-план Guard](review/guard-research.md) исследует поиск контрпримеров
+и проверку исправлений конфигурации. Его первый tenant/cache kernel работает
+на заданных synthetic сценариях. LLM и сравнение на held-out конфигурациях
+остаются следующими этапами. Сам kernel служит инструментом экспериментов;
+это не утверждение о технологической новизне или AI discovery.
+
+Для отдельного [cache dependency compiler](review/cache-dependency-research.md)
+сначала нужны закрытая семантика response IR, независимый checker, правила
+auth/version failures и корректный baseline. Реализация и её экономический
+эффект пока не установлены.
+
+## Новый исследовательский приоритет: Continuum
+
+Решение владельца от 23 октября 2026 года: сохранить в Git концепцию, экономику
+и порядок самостоятельной разработки, подключать помощников и возобновлять
+работу периодически. Следуем [Continuum PLAN](continuum/PLAN.md): независимые
+record vectors и ограниченный IR/checker, реальный same-connection process
+fixture, затем handshake interoperability, OpenSSL state bridge и native
+NGINX integration. Полный исходный NGINX и прежние отрицательные результаты
+сохраняются. Cache/Guard эксперименты остаются вспомогательными и не считаются
+новым изобретением по одному наличию реализации.
+
+Денежная цель первого этапа — использовать имеющиеся ресурсы; резерв $100
+является плановым ограничением, а не гарантией стоимости завершения или
+поручением автоматически покупать услуги. Коммерческий масштаб и затраты
+на поддержку рассматриваются отдельно в [ECONOMICS](continuum/ECONOMICS.md).
+
+Срез C1 добавил настоящий authenticated TLS 1.3 handshake и bounded wire
+observer: локально 22/22, независимо проверены отрицательные wire/trust и
+прерывание с живым TLS. [Evidence](evidence/continuum-c1.json) сохраняет
+контрпримеры, source hashes и границы проверки. Это двухсоединительный relay,
+а не миграция. C0 и полный native aggregate повторены без изменения native
+бинарника. Следующий C2 начинается с read-only state inventory/safepoint в
+[закреплённом OpenSSL](continuum/OPENSSL-STATE.md); реальный semantic
+export/import и native integration остаются отдельными работами.
+
+Первый C2a observation profile реализован и локально проверен: **8/8** real
+TLS cases на изолированном pinned OpenSSL 3.0.13, metadata-only key-install
+monitor, private buffers/sequences и typed retry ledger. [C2a profile](continuum/C2A-PROFILE.md)
+отделяет narrow `allowed` от полной safepoint/transfer приёмки. Полный native
+aggregate повторён: 20/20; прежний binary SHA, upstream и LICENSE сохранены.
+Research push/PR exact C2a SHA `99a017e` прошли; native и format-policy
+результаты учитываются отдельно в [checkpoint](continuum/C2A-CHECKPOINT.md).
+Далее закрыть peer/read KeyUpdate,
+retry/control/shutdown inventory и runtime cancellation. C2b semantic capsule
+не начинается с предположения о полноте одного положительного probe.
+
+Текущий bounded срез добавляет реальные `completed-read-retry` и
+`unrelated-write-read-retry`: завершение исходного READ до echo и сохранение
+его retry при постороннем WRITE success. [Retry evidence](evidence/continuum-c2a-retry.json)
+отделяет coverage baseline, 10-case aggregate, независимые held-out cases,
+диагностические controls и первый отказ build hook. Далее — peer/read
+KeyUpdate, завершение write retry и остальные control/shutdown/limit obligations.
+Экспорт/import и opt-in native integration требуют своих последующих gates.
+
+Continuum дополнен отдельным handled-runtime interruption стендом: локальные
+13 checks отделяют10 обычных TLS cases,2 signals после настоящего READ и1
+no-TLS cached-source control. [Evidence](evidence/continuum-c2a-interruption.json)
+сохраняет независимые отказы при PKI debris и занятом relay listener, а также
+исходные ошибки самого стенда. Native C сохранён, свежая регрессия20/20.
+Приёмка exact hosted SHA ожидается; далее actual peer/read KeyUpdate inventory.
+
+## Continuum C2a: входящий KeyUpdate
+
+Добавлены два настоящих TLS scenarios с C-клиентом на той же закреплённой
+OpenSSL3.0.13: REQUESTED update, READ generation и ожидающий ответ до WRITE;
+затем реальный echo WRITE отправляет queued response без повторного запроса.
+Probe неизменён: pending1/0 отказывает по32832, completed1/1 по64, повторное
+наблюдение не меняет state. Epoch-relative sequences сверены до close_notify.
+
+Финальный локальный aggregate —15/15:12 обычных TLS scenarios,2 handled
+runtime signals,1 no-TLS source control. Независимо пройдены4 held-out cases.
+C0 core21/process7, C1 **27=18 synthetic oracle controls+9 runtime checks**,
+native20/20 пройдены. Official1083 strict PASS/25SKIP/1expectedTODO/0FAIL.
+[Peer evidence](evidence/continuum-c2a-peer-key-update.json) сохраняет hashes, build identities и ограничения.
+Hosted85bc255 принят ранее; новый exact implementation SHA ожидает своей CI.
+
+Оба C endpoint используют одну OpenSSL3.0.13; две relay TCP legs не являются
+перенесённым соединением. Pending case закрывается raw; completed проверяет
+точные данные, оба close_notify и FIN. PKI/hostname и Finished проверяет C
+endpoint; observer не является независимым PKI/Finished verifier. Далее —
+WRITE retry completion, overlap/control/shutdown/usage limits, затем C2b.
+Semantic export/import, actual TLS-code update и native migration ещё не готовы.
+
+## Continuum C2a: завершение той же WRITE retry
+
+Новый actual-TLS case действительно получает WANT_WRITE, наблюдает две
+неизменные refusal snapshots, возобновляет оба paused readers и завершает
+исходный SSL_write_ex с тем же буфером, содержимым и полной длиной65536.
+После success retry снят; две allowed snapshots предшествуют shutdown.
+Неизменённый observer проверяет точный двунаправленный payload, sequences,
+оба close_notify и FIN. Исходный probe, лимиты и native NGINX не менялись.
+
+Локальный aggregate16/16:13 обычных TLS scenarios,2 runtime signals,1 no-TLS
+source control. Независимые heldouts и negative sensitivity учтены отдельно
+в [write evidence](evidence/continuum-c2a-write-retry.json). C0 core21/process7, C1 27=18 synthetic+9 runtime,
+native20/20 прошли; official1083 strictPASS/25SKIP/1expectedTODO/0FAIL.
+Новый exact implementation SHA ожидает hosted CI;2fac5b5 принят ранее.
+Далее — пересекающиеся retry obligations, control/alert/shutdown и usage limits.
+Полнота inventory, semantic export/import и actual TLS-code migration не приняты.
+
+## Continuum C2a: пересечение READ/WRITE retry
+
+Добавлен actual-TLS case: READ/WANT_READ, затем отдельный WRITE/WANT_WRITE.
+После возобновления обоих readers завершается исходный WRITE65536 с теми же
+аргументами. READ остаётся незавершённым: повторные snapshots отказывают по16
+при уже пустом active output. Оригинальный READ buffer не меняется; клиент
+подтверждает точные65536 outbound bytes перед намеренным raw close.
+
+Локально17/17:14 обычных TLS scenarios,2 runtime signals,1 no-TLS source
+control; независимые heldouts учтены отдельно в [evidence](evidence/continuum-c2a-overlap.json).
+C0 core21/process7, C1 27=18 synthetic+9 runtime и native20/20 прошли.
+Official1083 strictPASS/25SKIP/1expectedTODO/0FAIL сохраняются отдельно.
+Новый exact SHA ожидает hosted CI; ea64ec1 принят ранее. Это проверка отказа
+для unsupported overlap: wire=null, graceful closure и admission не заявляются.
+Далее — control/alert/shutdown и sequence/key usage gates перед C2b.
+
+## Continuum C2a: lifecycle TLS shutdown
+
+Добавлен один actual-TLS server-shutdown-lifecycle: exact request/echo ACK,
+первый фактический SSL_shutdown0/SENT1, две неизменные refusal snapshots,
+затем explicit peer end и повторный SSL_shutdown1/SENT|RECEIVED3. Собственная
+retry снимается, но закрытое состояние всё равно отвергается. Нулевой return
+не является ошибкой: WANT_READ здесь только прежняя fixture-ledger convention.
+После начала shutdown нет application I/O. Wire observer проверяет оба
+close_notify, точные данные, FIN и final sequences с учётом alerts.
+
+Локально18/18=15 ordinary actual-TLS scenarios+2 runtime signals+1 no-TLS
+source control. Независимые heldouts и identities — в [evidence](evidence/continuum-c2a-shutdown.json).
+Core21/process7, C1 27=18 synthetic+9 runtime, native20/20 прошли.
+Official1083 strictPASS/25SKIP/1expectedTODO/0FAIL учитываются отдельно.
+Exact новый SHA ожидает hosted CI;996e997 принят ранее. Полный alert/control/
+EOF/shutdown inventory и usage gates ещё не закрыты; далее эти границы доC2b.
+Semantic export/import, смена TLS code и native NGINX continuation не готовы.
+
+## Continuum C2a: unexpected transport EOF
+
+Добавлен один actual-TLS case после exact request/echo ACK: клиент уничтожает
+transport без TLS end/close_notify. Требуются фактический relay FIN и C READ
+raw0/SSL_ERROR_SSL1/first-error reason294. RST, retry или clean close не PASS.
+Две неизменные metadata snapshots отказывают; после fatal error нет TLS I/O
+или SSL_shutdown. IGNORE_UNEXPECTED_EOF/quiet shutdown не включаются.
+wire=null: full wire, server FIN и graceful closure этим case не заявляются.
+
+Локально19/19=16 ordinary actual-TLS scenarios+2 runtime signals+1 no-TLS
+source control. Независимые heldouts/cleanup/identities — в [evidence](evidence/continuum-c2a-eof.json).
+Core21/process7, C1 27=18 synthetic+9 runtime и native20/20 прошли;
+official1083 strictPASS/25SKIP/1expectedTODO/0FAIL учитываются отдельно.
+Exact новый SHA ожидает hosted CI;1f92d82 принят ранее. Другие alert/partial/
+EOF/control states и usage gates остаются перед C2b. Semantic export/import,
+смена TLS code и native NGINX continuation ещё не реализованы.
+
+## Alpha: исчезновение процесса во время проверки идентичности
+
+Исправлен контролируемый race чтения `/proc`: после `runtime_identity`
+в `findMasters` выполняется одна немедленная проверка той же записи. Только
+`ENOENT` позволяет пропустить исчезнувшего кандидата; отдельная проверка
+записанного PID остаётся. Существующие Z/X, чужие/повторно использованные
+PID и ошибки доступа не считаются подтверждённым завершением. CLI stop,
+проверки перед сигналом и все 499 native source files не изменены.
+
+Baseline даёт контролируемый `runtime_identity`; candidate проходит 28/28
+синтетических тестов, независимые controls — 15/15. Native aggregate: 20/20
+групп, включая реальный alpha lifecycle; official: 1083 strict PASS, 25 SKIP,
+1 ожидаемый TODO, 0 FAIL. Core21/process7 также прошли. Counts synthetic
+и настоящего lifecycle учитываются отдельно; исходники и identities — в
+[evidence](evidence/alpha-stop-identity.json).
+
+Первоначальный сбой CI `d4bb2bc` сохранён: причина его точного interleaving
+не доказана, повтор на том же SHA не был исправлением. Новый implementation
+ожидает exact-SHA CI. Далее — сначала его результаты и возможные повторные
+сбои, затем C2a alert/partial/control и sequence/key usage inventory. Атомарный
+снимок `/proc`, pidfd fencing и перенос NGINX/TLS этим изменением не реализованы.
+
+### Exact CI: alpha disappearance fix
+
+Implementation `95fb43bb2f7c5795d341e638f7b287f7dd443214`: native push
+`40045814679` и PR `40045819101` завершены success со всеми основными steps.
+Research PR `40045819013` перепроверил неизменный C2a; research push
+`40045814644` завершён success только scope, дорогой job skipped. Это
+не новая TLS-проверка в push. [Очищенная CI-квитанция](evidence/alpha-stop-hosted.json).
+Первоначальный stop-сбой `d4bb2bc` и недоказанность его точной причины
+сохранены. Далее — один ограниченный C2a state/usage case перед C2b;
+перенос TLS/NGINX и pidfd fencing не реализованы.
+
+## Continuum C2a: peer-first close_notify
+
+Добавлен один actual-TLS case: после exact echo клиент явно завершает TLS.
+Сервер обязан получить реальный READ raw0/ZERO_RETURN6/received2; это
+чистый close_notify, не fatal SSL_ERROR_SSL. Прежний coarse ledger хранит
+ERROR4; он не менялся. Две immutable snapshots запрещают перенос. Только
+после STEP разрешён SSL_shutdown: actual1/flags3 и ещё две refusal snapshots.
+IGNORE_UNEXPECTED_EOF/quiet shutdown выключены. Отказ4356 включает сохранённые
+2 control bytes; это не доказательство непроцессированного alert.
+
+Неизменный wire oracle проверяет exact data, оба close_notify/FIN и final
+sequences. Relay FIN/end callback не объявляется remote delivery или
+гарантированной TCP segmentation. Один READ с WANT_READ/fatal EOF не PASS.
+Локально20/20=17 ordinary actualTLS+2signals+1noTLS control; независимые
+actualTLS heldouts2. Core21/process7/C1 27 и native20/20 прошли. Native
+исходники499 и alpha guards сохранены. Counts/identities/cleanup и initial
+beforeguard smoke — в [evidence](evidence/continuum-c2a-peer-close.json). Exact implementation CI pending.
+Далее — truncated/partial closure и sequence/key usage gates перед C2b.
+Export/import, actual TLS-code change и native NGINX migration не реализованы.
+
+### Exact CI: peer-first closure
+
+Implementation `2ca7892a7e1f448a98679da59e57e9a0023da2e8`: research push
+`40050023137` и PR `40050026763`, native push `40050023101` и PR
+`40050026739` завершены success. Оба research logs подтверждают21/7/27/20;
+все основные native steps, включая feature-off и alpha package/checksum,
+прошли. [Очищенная квитанция](evidence/continuum-c2a-peer-close-hosted.json) сохраняет exact SHA/run IDs,
+границы и отдельные checkout identities. Это read-only refusal observation,
+не state migration. Далее — truncated/partial closure и sequence/key usage.
+
+## Continuum C2a: truncated record body EOF
+
+Добавлен один actualTLS case: authenticated handshake, одна ciphertext record
+от Nodeclient, relay передаёт только body prefix и удерживает хвост. Первый
+реальный READ даёт WANT_READ с partialbuffer и две immutable refusal snapshots.
+Затем relay отбрасывает хвост и делает FIN только backendTCPleg. Повторяется
+тот же READ с прежними buffer/length/sentinel: raw0/SSL_ERROR_SSL1/reason294,
+plaintext0; ещё две refused snapshots. После fatal возврата только metadata
+и cleanup, без TLS I/O/shutdown. RetryREAD остаётся bookkeeping, не разрешением
+повтора после fatal. IGNORE_UNEXPECTED_EOF/quiet shutdown выключены.
+
+Relay проверяет exact ciphertext record size и tail counts; только новый
+case ограничен payload<=16384. Клиент остаётся жив, backend reads paused
+изолируют fatalalert/RSTrace без подавления ошибок. Усечённый record сервером
+не аутентифицирован. wire=null: fullwire/gracefulclosure/serverFIN не заявлены;
+sequence metadata не wirevalidated. Это relay faultinjection, не прямой
+обрыв клиентского соединения и не migration.
+
+Локально21/21=18ordinaryTLS+2signals+1source; независимые actualTLS heldouts2,
+ещё2 noTLS optioncontrols отдельно. Core21/process7/C127 и native20/20 прошли.
+Prior20bytes, generic ledger/probe/oracle и499 native files сохранены.
+[Очищенные evidence](evidence/continuum-c2a-truncated-body.json) сохраняют identities/cleanup/границы и
+setup corrections. Exact implementation CI pending. Далее — ограниченный
+sequence/key usage gate для quiescent profile перед C2b; остальные
+truncation/RST variants unsupported. Export/import и TLS-code change не готовы.
+
+### Exact CI: truncated body EOF
+
+Implementation `6cee2384e91e9fda4251c53dbeddce9cc951f473`: research push
+`40054592561` и PR `40054596847`, native push `40054592543` и PR
+`40054596722` завершены success. Оба research logs подтверждают21/7/27/21;
+все основные native steps, включая feature-off и alpha package/checksum,
+прошли. [Очищенная квитанция](evidence/continuum-c2a-truncated-body-hosted.json) сохраняет exact SHA/run IDs,
+artifact hashes и отдельные checkout identities. Это relay-injected refusal,
+wire=null; не migration/full inventory. Далее — quiescent sequence/key usage.
+
+## Continuum C2a: ограниченный допуск использования ключей
+
+Probe теперь независимо отвергает read/write next sequence от `2^24`.
+Это консервативная политика наблюдения initial application-key epoch,
+а не контроль бюджета последующего I/O. Восьмибайтные counters сравниваются
+точно; прочие ledger/buffer/control/generation guards сохранены.
+
+Локально22/22:18 обычных actualTLS scenarios,2 runtime signals,1 noTLS
+source control и1 synthetic predicate test с192 counter inputs. Независимо:
+2 actualTLS low-counter heldouts,8527 pure-C synthetic vectors и отдельные
+full-probe synthetic metadata controls. Большие counters не выдаются за
+реальные TLS exchanges. Core21/process7/C1 27 и native20/20 прошли;
+official1083 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL.
+[Evidence](evidence/continuum-c2a-usage.json) сохраняет исходные отказы setup и hashes. Exact implementation
+CI pending; прежний6cee238 принят отдельно. Полнота inventory, semantic
+export/import, runtime budget enforcement и TLS-code migration не реализованы.
+Далее — exact CI, затем review C2a readiness для первого узкого C2b capsule;
+остальные alert/EOF/partial variants остаются unsupported/fail-closed.
+
+### Exact CI: directional record key usage
+
+Implementation `b05ee33160b218854da4cac5710125b90e5ee8ac`: research push
+`40058848933` и PR `40058853171`, native push `40058848929` и PR
+`40058853120` завершены success. Оба research logs подтверждают21/7/27/22;
+полные native workflows, включая Unix/tenant gates, feature-off и alpha
+package/checksum, прошли. Очищенная [квитанция](evidence/continuum-c2a-usage-hosted.json) сохраняет
+artifact digests, counts и отдельные checkout/build identities. Hosted official:
+1105 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL; local1083 отдельно.
+Это read-only admission policy, не future I/O budget enforcement или migration.
+Далее — review C2a readiness для первого bounded C2b semantic capsule.
+
+## Continuum: capsule metadata preflight
+
+Добавлен metadata-only checker: строгие snapshot/source-identity поля и
+точный directional budget для application/handover/closure records.
+Closure резерв обязателен; сравнение использует BigInt и не сбрасывает
+sequence. Eligibility означает только допуск к inventory review, без
+traffic grant, экспорта secrets или runtime enforcement будущего бюджета.
+
+Локально23/23 C2a:18 обычных actualTLS scenarios,2 runtime signals,
+1 noTLS source control и2 synthetic groups. Новый checker:174 authored
+controls; независимо6144 synthetic budget vectors и2 actualTLS snapshots.
+Последние получены после cleanup и не являются live-hold proof.
+Core21/process7/C1 27 и
+native20/20 прошли; official1083 strictPASS/25SKIP/1expectedTODO-fail,
+0unexpectedFAIL. Отдельные authored/independent controls и их исходные
+отказы находятся в [evidence](evidence/continuum-capsule-preflight.json).
+
+Readiness review выявил конкретный blocker: возвращённый result.probe
+получен после cleanup соединения, это не живой удерживаемый safepoint.
+Следующий шаг — bounded C STEP после immutable probe pair и до любого
+TLS READ/control/shutdown, затем runner decision/nonce/reobservation barrier
+перед любым exporter. Остальные adapters/import/ownership/retirement
+gates остаются отдельными. [Inventory readiness](continuum/C2B-READINESS.md) фиксирует
+конкретные поля и code boundaries. Exact implementation CI pending.
+
+### Exact CI: metadata capsule preflight
+
+Implementation `deecc35825a706ac8b58d728f8f8a6e35b9d0986`: research push
+`40062408179` и PR `40062412144`, native push `40062408165` и PR
+`40062412125` завершены success. Оба research logs подтверждают21/7/27/23;
+полные native workflows, включая Unix/tenant gates, feature-off и alpha
+package/checksum, прошли. [Очищенная квитанция](evidence/continuum-capsule-preflight-hosted.json) сохраняет artifact
+digests и отдельные event-head/checkout/build identities. Hosted official:
+1105 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL; local1083 отдельно.
+
+Это приёмка metadata/budget arithmetic, не живого safepoint или exporter.
+Возвращённые snapshots являются post-cleanup историей. Далее — bounded C
+STEP после immutable pair до любого TLS READ/control/shutdown и runner
+decision/nonce/reobservation barrier, с abort/cleanup перед экспортом.
+
+## Continuum: bounded live C hold
+
+Новый opt-in `quiescent-live-hold` после настоящего TLS exchange получает
+immutable probe pair и явно ждёт решения в C до следующего TLS I/O.
+Bounded callback runner видит только metadata/identity и свежий challenge.
+Продолжение требует корректного решения и неизменной повторной metadata;
+abort/timeout/наблюдённая активность peer ведут к cleanup без TLS shutdown.
+Старые scenarios и native NGINX сохранены.
+
+Локально30/30 C2a:24 ordinaryTLS,2 OS signals,1 programmatic cancel,
+1 noTLS source control и2 synthetic groups; прежние23 tests сохранены.
+Независимо9 actualTLS cases:2 delayed continue и7 refusal controls,
+включая отдельные C timeout/duplicate-control fault injections и peer close.
+Исходный author smoke с ранним runner считается только diagnostic:
+его3 PASS не приписаны final bytes; final fresh3 author cases прошли.
+Pre-runtime deadline/schema corrections отделены от runtime failures.
+Counts, cleanup и hashes записаны в [evidence](evidence/continuum-live-hold.json). Core21/process7/C1 27 и native20/20 прошли;
+official1083 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL.
+Exact implementation CI pending. Наблюдение socket activity является
+выборочным, не transport/ownership fence; caller ledger доверяет одному
+владельцу. Result после возврата остаётся историей, live phase доступна
+только внутри bounded callback.
+
+Это source-side fixture barrier, не exporter/importer или migration.
+Metadata preflight пока принимает только прежний `quiescent`: новый
+snapshot нельзя переименовать ради admission. Далее — явно reviewed
+held-profile admission и контракт protected-RAM source capsule capture;
+секреты/cleansing, future budget, target ownership и retirement требуют
+отдельной проверки. [Readiness](continuum/C2B-READINESS.md) сохраняет эти границы.
+
+### Exact CI: bounded source-side C hold
+
+Implementation `2debcc30101a72b1e5b08b22dd2ac9b0d040c401`: research push
+`40065524807` и PR `40065527979`, native push `40065524846` и PR
+`40065528012` завершены success. Оба research logs подтверждают21/7/27/30;
+полные native workflows, включая Unix/tenant gates, feature-off и alpha
+package/checksum, прошли. [Очищенная квитанция](evidence/continuum-live-hold-hosted.json) сохраняет artifact
+digests и отдельные event-head/checkout/build identities. Hosted official:
+1105 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL; local1083 отдельно.
+
+Принят узкий opt-in source fixture hold: только bounded callback видит
+удерживаемый source; returned result после cleanup является историей.
+Это не exporter/importer, transport/ownership fence или migration.
+Далее — combined reviewed live preflight binding и первый protected-RAM
+read-only source capture после inventory/secret lifetime contract gate.
+Held scenario не переименовывается в quiescent ради старого checker.
+
+
+## Continuum: transient protected source record material
+
+Добавлен opt-in CAPTURE внутри настоящего source C hold: отдельный held-profile
+preflight связывает immutable pair, текущий nonce/serial и identity без
+переименования scenario. C копирует только directional application secrets,
+IV и next sequence в guarded mlock/DONTDUMP/DONTFORK страницу, переводит её
+в read-only, сверяет subset/probe/ledger и очищает/unmap до release. Native
+NGINX и прежние scenarios сохранены. Полный semantic capsule/API inventory,
+reusable lifetime, importer, ownership и migration остаются отдельными gates.
+[Контракт и ограничения](continuum/SOURCE-CAPTURE.md) не распространяют защиту копии на исходный SSL heap.
+
+Локально35/35 C2a:28 ordinaryTLS,2 OS signals,1 programmatic cancel,
+1 noTLS source control и3 synthetic groups. Прежние30 tests сохранены.
+Независимо4 actualTLS:2 captures, actual mlock-limit refusal и stale CAPTURE;
+ещё4096 synthetic controls:342 eligible/3754 refused плюс revoked Proxy.
+Первый C capture отказал из-за очищенного handshake scratch; исправлен
+переходом к digest negotiated cipher с прежними SHA256/cipher guards.
+Исходные отказы и недоступный ptrace сохранены, syscall tracing не заявлен.
+Core21/process7/C1 27 прошли. Native сначала17/20:2 отсутствующих HTTP3
+clients и controller expectedB/actualA; после11 pinned wheels/2 venv —20/20.
+Последний PASS не исправляет и не объясняет controller timing observation.
+Official1083 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL.
+[Очищенный evidence](evidence/continuum-source-capture.json) содержит source hashes, обе попытки и cleanup.
+Exact implementation CI pending. Далее сначала controller counterexample/
+contract review, затем reusable capsule inventory/lifetime; importer/migration
+не реализованы. Это защищённая дополнительная копия, не whole-process защита.
+
+
+### Exact CI: transient protected source sample
+
+Implementation `fc7161945a5855e7c650609bef33cd4a66f2e448`: research push
+`40071366794` и PR `40071371690`, native push `40071366797` и PR
+`40071371664` завершены success, attempt1. Research logs подтверждают
+21/7/27/35; оба full native workflows и artifacts сверены с точным SHA.
+Hosted official1105 strictPASS/25SKIP/1expectedTODO-fail; local1083 отдельно.
+[Очищенная квитанция](evidence/continuum-source-capture-hosted.json) сохраняет digests, отдельные event-head/PR-merge
+checkout/build identities и counts; raw artifacts/keys/logs не публикуются.
+
+Это transient record-material sample, который очищается до release, не
+reusable semantic capsule/exporter/importer или TLS-code migration.
+Локальный исходный controller expectedB/actualA сохранён: последующие local
+и hosted PASS не считаются его исправлением. Далее deterministic contract
+review/counterexample, затем fuller capsule API inventory/protected lifetime.
+
+
+### Controller fixture: sampled-generation observation
+
+Исправлено завышенное ожидание fixture, не controller/runtime: первый обычный
+GET после apply/recovery может ещё попасть в прежнюю native generation.
+Durable outcome/pending/revision/history проверяются немедленно; только HTTP
+наблюдения ожидаются ограниченно. Body требует HTTP200 и точное содержимое;
+reserved revision отдельно требует HTTP200, точные body и header. Это разные
+fresh samples, не same-worker или all-traffic atomic cutover.
+
+Детерминированный synthetic counterexample сохраняет отказ прежнего one-shot
+assertion после двух успешных candidate revision/health rounds; новый helper
+дожидается разрешённого A→B. Неверные body/status/revision, transport reset и
+trickle остаются отказами. Независимое ревью и synthetic9/9 прошли. Каждый
+request имеет absolute1s и idle timeout; loop budget может превыситься на
+in-flight request плюс scheduling/cleanup, не hard wall-clock SLA.
+
+[Очищенный evidence](evidence/control-observation-contract.json) и
+[per-file ledger](review/control-observation-ledger.json) сохраняют исходный
+native17/20 и controller66/68 без исправления задним числом. Точный interleaving
+прежнего сбоя не доказан; manager и native C не менялись. Exact implementation
+hosted CI — отдельная приёмка, не прежний source-capture PASS.
+
+Локальный полный aggregate20/20; controller77/77 TAP без skips/TODO.
+Official35 files:32 passed/3 skipped,1083 strictPASS/25SKIP/
+1expectedTODO-fail/0unexpectedFAIL. Source/manifest/binary guards сохранились.
+
+Следующий блок: source-only reusable protected capsule lifetime и явный API
+allowlist, без importer. Cleanup-before-release, expiry/revocation и actual-TLS
+abort barrier ещё не реализованы; SIGKILL не считается доказанным wipe.
+
+
+## Continuum: bounded buffer-only keylog ingestion
+В C2a Node keylog handler секреты и random больше не переводятся в
+неизменяемые JS strings. Bounded parser разбирает NSS line из Buffer;
+только public label становится строкой. Input event Buffer очищается при
+успехе и отказе; decoded temporaries очищаются при ошибке/отсутствии передачи
+владения. Exact framing допускает один optional LF, без trim/CRLF/padding.
+Это явная очистка доставленного Buffer и parser-owned копий, не всех
+Node/OpenSSL/V8 allocations или всей памяти процесса.
+
+Synthetic baseline выполняет exact historical handler и сохраняет
+неочищенный input как воспроизведённый дефект. Новый unit:14 accept/36 refuse,
+2 partially decoded allocations очищены; independent lifetime review:
+11 synthetic controls/16 временных Buffers. Эти случаи не TLS handover.
+Два настоящих TLS heldouts прошли: quiescent и transient capture;10/10
+доставленных keylog Buffers наблюдались нулевыми после synchronous handler.
+Все43 наблюдавшихся child завершены,4/4 temporary roots отсутствуют.
+
+Локально core21/process7/C1 27/C2a36, предыдущий35-test prefix сохранён.
+Native --official20/20 и controller77/77;499 native inputs, LICENSE и
+verification harness неизменны. Official1083 strictPASS/25SKIP/
+1expectedTODO-fail/0unexpectedFAIL. Exact CI нового implementation pending.
+Для прежнего47515734 оба native workflow/artifacts успешны; research push
+runtime skipped, PR фактически выполнил21/7/27/35. Исторический expectedB/
+actualA не переписан; исправлялся fixture contract, не controller/runtime.
+
+Текущее прямое поручение —60 часов с24.10.2026 07:17:36UTC;
+code stop26.10.2026 19:17:36UTC (23:17 Europe/Samara). Прежние70 часов
+сохранены только в истории. После code stop — остановка собственных fixtures,
+чтение результатов и итоговый отчёт без изменений кода.
+Следующий gate: source-only reusable protected lifetime/API allowlist,
+expiry/revocation и cleanup-before-release; importer/migration не реализованы.
+
+[Очищенный evidence](evidence/continuum-keylog-buffer.json) сохраняет точные проверки и границы.
+
+
+### Exact CI: bounded keylog Buffer lifetime
+
+Implementation `787f5f69e1f793b1b34e6d9b0acaa74381e059b8`: research push
+`40074320805` и PR `40074324467`, native push `40074320788` и PR
+`40074324454` завершены success, attempt1. Actual research logs:21/7/27/36;
+оба native artifacts:20/20 групп, controller77TAP, alpha37TAP (28 synthetic
+плюс9 original entries с parents), official1105 strictPASS/25SKIP/
+1expectedTODO-fail/0unexpectedFAIL. Local official1083 учтён отдельно.
+[Очищенная квитанция](evidence/continuum-keylog-buffer-hosted.json) сохраняет ZIP digests и отдельные event-head,
+PR merge checkout/build identities; source runtime files в receipt не менялись.
+
+Это Buffer-lifetime hardening только C2a runner, не full-process erasure,
+reusable semantic capsule, importer или migration. Следующий gate — C-owned
+protected lifetime/opaque generation-bound handle, expiry/revocation и
+cleanup acknowledgement before release; SIGTERM после реально заполненной
+копии и late-after-timeout authority refusal требуют отдельных controls.
+Полный semantic/API inventory, exclusive reader/writer ownership, distinct
+TLS code и actual old-code exit остаются отдельными условиями приёмки.
+
+
+## Continuum: retained protected source-copy lifetime
+
+Opt-in `capture-held` сохраняет защищённую read-only копию record-material
+между C-вызовами. Opaque C-slot связывает generation, исходные SSL/ledger,
+nonce/serial и прежний monotonic deadline; terminal slot не открывается снова.
+READY → DISCARD/ABORT → CLEARED подтверждает уничтожение до release либо
+отказа. Истечение срока и SIGTERM после реально заполненной копии очищают
+её без дальнейшего TLS I/O; поздний JS callback не восстанавливает authority.
+SIGKILL остаётся explicit-wipe-unknown. Старый transient CAPTURE сохранён.
+
+Локально финальный C2a43/43: прежние36 плюс7 actualTLS controls, из них
+6 ordinary и1 SIGTERM-after-filled. Независимо5 actualTLS heldouts и11
+synthetic cleanup-ACK controls прошли. Core21/process7/C1 27 и native20/20,
+controller77/77; official1083 strictPASS/25SKIP/1expectedTODO-fail/0FAIL.
+Первый42-case PASS — diagnostic: после его старта дополнены тестовые assertions
+и native-expiry case; для final bytes выполнен отдельный43-case прогон.
+
+[Evidence](evidence/continuum-retained-capsule.json) сохраняет identities, baseline refusal,
+независимые controls, cleanup и различие JS-timeout/native expiry. Это только
+retained source record-material subset, не полный semantic capsule, importer,
+ownership transfer или migration. Защита исходного SSL heap и полный syscall
+fault matrix не заявлены. [Контракт](continuum/SOURCE-CAPTURE.md) задаёт source API allowlist
+во время READY. Exact implementation CI pending. Далее — его приёмка, полный
+узкий established-state API/inventory и оставшиеся protection-failure gates
+до target reconstruction/import; distinct TLS code и old-code exit отдельно.
+
+
+### Exact CI: retained protected source-copy lifetime
+
+Implementation `f2f9684abf59064ec10c39ad1195b6d075b990a5`: research push
+`40078352816` и PR `40078356587`, native push `40078352804` и PR
+`40078356557` завершены success, attempt1. Оба actual research jobs
+выполнили core21/process7/C1 27/C2a43 без FAIL/skip/TODO. Оба native
+artifacts:20/20 групп, controller77TAP, alpha37TAP; official1105 strictPASS,
+25SKIP,1expectedTODO-fail,0unexpectedFAIL. Local official1083 учтён отдельно.
+[Очищенная квитанция](evidence/continuum-retained-capsule-hosted.json)
+содержит проверенные ZIP digests, отдельные event-head/PR merge checkout
+identities и независимое static review без новых runtime reruns.
+
+Это приёмка restricted retained source record-material lifetime/cleanup,
+не полного semantic capsule, importer или migration. Полный established-state
+semantic/API inventory и protection-syscall failure matrix остаются следующими
+gates. LSan unavailable не считается PASS; SIGKILL/crash wipe неизвестен.
+Exclusive ownership, distinct TLS code, actual old-code exit и native NGINX
+continuation по-прежнему не реализованы. Runtime sources в receipt не менялись.
+
+
+## Continuum: защита памяти при отказах
+
+Source-only capture теперь повторяет уничтожение FAILED mapping без
+восстановления authority и не снимает lock с неочищенных copied bytes.
+[Контракт](continuum/SOURCE-CAPTURE.md) и
+[проверки](evidence/continuum-capture-protection.json)
+отделяют synthetic production-TU fault controls от настоящих TLS exchanges.
+Локально C2a44,18 synthetic fault cases, independent2 actualTLS и native20
+прошли; неблагоприятные попытки сохранены, exact hosted CI нового кода pending.
+Semantic/API inventory остаётся следующим gate,
+не разрешением на importer, ownership transfer или migration.
+
+
+## Continuum: read-only established API metadata
+
+Реализован bounded `inspect-api` на прежнем held source: ALPN, Finished lengths,
+no-client-auth class и session observations без копирования значений/секретов.
+Локально C2a48, core21/process7/C1 27 и native20 прошли. Прежний `ad5351f4`
+проверен exact hosted; новый metadata код ожидает собственного CI.
+[Контракт и проверки](evidence/continuum-api-inventory.json) не закрывают
+value-preserving semantic capsule/import/ownership/retirement gates.
+Следом — reviewed fuller protected source-state contract с actual required
+ALPN/Finished/auth-class semantics, явно unsupported API и future-control
+границами, до любого target I/O.
+
+
+### Exact CI: held-source API metadata only
+
+Implementation `c0c4e308eca839049de4b64aa2fd2493d0b8865c`: research push
+`40087194488` и PR `40087198661`, native push `40087194477` и PR
+`40087198675` завершены success, attempt1. Оба actual research jobs
+выполнили core21/process7/C1 27/C2a48 без FAIL/skip/TODO. Оба native
+artifacts:20/20 групп, controller77TAP, alpha37TAP; official1105 strictPASS,
+25SKIP,1expectedTODO-fail,0unexpectedFAIL. Local official1083 учтён отдельно.
+[Очищенная квитанция](evidence/continuum-api-inventory-hosted.json)
+сохраняет ZIP digests, event-head/PR merge checkout identities и независимое
+static review; в receipt нет новых runtime reruns или изменений исходников.
+
+Приёмка относится к read-only metadata наблюдениям held source, не сохранению
+actual ALPN/Finished values или полному semantic capsule. Public channel-fault
+отказы, иногда после native release, сохранены: SIGKILL не доказывает explicit
+wipe/no-I/O. Далее — protected lifetime actual required values и restricted
+authentication class с явным unsupported API contract. Exporter/session/
+resumption/PHA, future budget/KeyUpdate, exclusive target I/O ownership,
+distinct TLS code, actual old-code exit и native continuation остаются gates.
+
+
+## X10 Production V1: G0–G1 contract and release-record checks
+
+The bounded [release contract](release/RELEASE-CONTRACT.md) and
+[declared profile](release/profile.json) now distinguish supported V1 intent,
+ABI/threat model, service target, config versus package rollback and prospective
+60-minute normal/slow-client acceptance budgets. These are declarations before
+measurement: the current root/Node24 environment does not accept the nonroot
+Ubuntu24.04/Node22 service target. G2–G8 and permanent Production V1 remain open.
+
+The release-record schema/checker and independent refusal controls check bounded
+shape and internal source/build/artifact/evidence/gate consistency only. They do
+not authenticate evidence, run a package or authorize a release. Review fixes
+and adverse observations are retained in [evidence](evidence/v1-release-contract.json).
+A required native CI step now runs authored and held-out release-record checks;
+exact new implementation CI is pending. Prior Continuum C2a48 exact acceptance
+is preserved separately and does not accept this new validator.
+
+Next verify that exact CI, then G2: corrected pinned Quickstart, real upstream
+and application readiness, independent extracted-bundle lifecycle and permanent
+versioned Local Alpha. Alpha alone does not close V1 or activate AVERKRON. The
+full native compatibility matrix and deferred Continuum remain preserved.
+
+
+### Exact CI: G1 contract and release-record declarations
+
+Implementation `80629638e1d1c7635f76e655760c9db987ea82ea` passed both
+required native CI runs. Each actually executed35 authored/held-out release-record
+checks on Node22 and20 native aggregate groups. Actual native artifacts and
+ZIP digests were checked; counts and checkout/event identities are separate in
+[evidence](evidence/v1-release-contract-hosted.json). Research push runtime was
+SKIPPED (scope-only success), not a new48-case acceptance; PR research actually
+executed21core/7process/27C1/48C2a. No runtime sources changed in this receipt.
+
+This verifies G1 definitions and structural declaration checks, not evidence
+authenticity or target service/runtime acceptance. Profile remains
+DECLARED_NOT_ACCEPTED. G2 permanent Local Alpha and G3–G8 proxy/TLS/service,
+package rollback/recovery, security, frozen60minute soak and independent
+Production V1 acceptance remain open. Next G2 implements a real application
+upstream/readiness and independently replayed, permanently published package.
+
+
+## G2 partial: explicit application upstream and extracted package checks
+
+The local alpha now has an explicit opt-in loopback application-upstream mode,
+with a separately launched bounded example application included in the checked
+package. The default native demo stays unchanged. Application `/ready` status
+is distinguished from native self-check and from full business readiness;
+configuration alone does not establish that an application is healthy.
+
+Local changed HTTP/extracted-bundle controls and independent review are recorded
+separately from complete native/Unix acceptance in [evidence](evidence/g2-upstream.json). The
+current root/Node24 environment does not accept the declared nonroot Node22
+target. Local AF_UNIX stream/seqpacket socket creation returned EPERM; actual
+Unix acceptance is blocked. Prechecks and successful HTTP controls are not Unix
+runtime PASS. The full aggregate and supplemental Unix outcomes are recorded separately, including refusals.
+The Quickstart uses the active development ref and records its exact
+checkout; it does not invent a permanent release or accepted download URL.
+
+G2 remains partial: first verify exact new implementation CI, then publish and
+independently replay an accepted permanent versioned Local Alpha. G3–G8 service,
+TLS, config/package rollback/recovery, security, frozen60minute soak and
+Production V1 remain open. The full native matrix and deferred Continuum are
+preserved. No other product is activated by this subcheckpoint.
+
+
+### Exact CI: G2 application upstream and extracted bundle
+
+Implementation `eb4e2de3026edb7a59e877fff8971c8d039e8143` is exact-hosted
+verified for the opt-in application-upstream and expanded alpha40 checks. Both
+actual native runs executed required Unix checks and native20 aggregate groups;
+actual artifacts and ZIP digests were verified. [Receipt](evidence/g2-upstream-hosted.json)
+keeps exact jobs, event/build identities, counts and research runtime skips
+separate. No runtime sources changed in this receipt.
+
+Local AF_UNIX socket EPERM remains an unresolved environment observation; hosted
+Unix success is not a local permission or native-code fix. G2 remains partial:
+permanent versioned alpha distribution and independent published-file nonroot
+Node22 replay are pending. G3–G8, service/TLS, package rollback/recovery, security,
+frozen soak and Production V1 are not accepted. Deferred Continuum is preserved.

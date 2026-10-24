@@ -1,0 +1,111 @@
+name: X10 native compatibility
+
+on:
+  push:
+    branches: [x10-continuum-development, x10-development, x10-main]
+  pull_request:
+    branches: [master, x10-continuum-development, x10-development, x10-main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: x10-native-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  scope:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      native: ${{ steps.changed.outputs.native }}
+      research: ${{ steps.changed.outputs.research }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - name: Check scope fail-closed controls
+        run: node --test .github/scripts/x10-change-scope.test.mjs
+      - name: Classify exact event delta
+        id: changed
+        run: node .github/scripts/x10-change-scope.mjs
+
+  linux:
+    needs: scope
+    if: ${{ !cancelled() && (needs.scope.result != 'success' || needs.scope.outputs.native != 'false') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - name: Validate release-record contract and refusal controls
+        run: |
+          mkdir -p x10/.build/ci-evidence
+          node --test --test-reporter=tap \
+            x10/release/check-release-record.test.mjs \
+            x10/release/release-record-heldout.test.mjs \
+            > x10/.build/ci-evidence/release-record.tap
+      - name: Build dependencies and optional test clients
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential python3 python3-venv git libpcre2-dev libssl-dev zlib1g-dev \
+            libcrypt-dev libfcgi-perl libscgi-perl libio-socket-ssl-perl
+      - name: Install pinned HTTP3 interoperability client
+        run: |
+          python3 -m venv x10/.build/http3-venv
+          x10/.build/http3-venv/bin/python -m pip install --require-hashes --only-binary=:all: \
+            -r x10/test/http3-baseline.requirements.txt
+      - name: Install independent HTTP3 HEAD client
+        run: |
+          python3 -m venv x10/.build/http3-head-venv
+          x10/.build/http3-head-venv/bin/python -m pip install --require-hashes --only-binary=:all: \
+            -r x10/test/http3-head.requirements.txt
+      - name: Compile native profile
+        run: |
+          bash x10/build.sh --jobs 2
+          mkdir -p x10/.build/ci-evidence
+          cp x10/.build/manifest.json x10/.build/ci-evidence/build.json
+      - name: Native regressions and pinned official compatibility sample
+        run: node x10/test/all.mjs --official > x10/.build/ci-evidence/checks.json
+      - name: Verify native tenant cache contract experiment
+        run: node --test --test-reporter=tap x10/test/proof.test.mjs > x10/.build/ci-evidence/guard-kernel.tap
+      - name: Verify private Unix control transport
+        run: |
+          node x10/test/control-api-baseline.mjs --transport unix > x10/.build/ci-evidence/control-api-unix.json
+          node x10/test/generations.mjs --transport unix > x10/.build/ci-evidence/generations-unix.json
+          X10_STATUS_TRANSPORT=unix node --test --test-reporter=tap x10/test/operator-status.test.mjs > x10/.build/ci-evidence/operator-status-unix.tap
+      - name: Build profile without control API
+        run: bash x10/test/control-disabled.sh --output x10/.build/ci-evidence/control-disabled.json
+      - name: Package local Linux alpha
+        run: node x10/alpha/cli.mjs pack --output x10/.build/dist/nginx-x10-linux-alpha.tar.gz > x10/.build/ci-evidence/alpha-package.json
+      - name: Checksum local Linux alpha
+        working-directory: x10/.build/dist
+        run: sha256sum nginx-x10-linux-alpha.tar.gz > nginx-x10-linux-alpha.tar.gz.sha256
+      - name: Preserve JSON evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: x10-native-evidence
+          path: |
+            x10/.build/ci-evidence/*.json
+            x10/.build/ci-evidence/*.tap
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Preserve local Linux alpha
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: nginx-x10-linux-alpha
+          path: x10/.build/dist/nginx-x10-linux-alpha.tar.gz*
+          if-no-files-found: error
+          retention-days: 14

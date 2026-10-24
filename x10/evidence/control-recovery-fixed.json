@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-control-event-recovery",
+  "startedAt": "2026-10-23T08:56:06.425Z",
+  "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+  "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+  "managerSha256": "751641de1b47f14fae4667da75ebc22fba5d0204f0d50394b3c6cf982d062c42",
+  "testSha256": "9a89bfba5b2407c2c59862d9e8bf4cec8c1bdf423318b57743aab4376d93e906",
+  "baseline": {
+    "commit": "29746068bfca299b85062e981df250aa3e12abb8",
+    "managerSha256": "38794fa7e046fdf3d30f963d852810902179c6ce09fedc289611c234e9ff2e6e",
+    "reproduced": true,
+    "outcome": "history_integrity"
+  },
+  "tests": [
+    {
+      "name": "baseline-terminal-history-state-window-is-reproduced",
+      "passed": true
+    },
+    {
+      "name": "applied-intent-recovers-without-duplicate-history",
+      "passed": true
+    },
+    {
+      "name": "applied-history-recovers-without-duplicate-history",
+      "passed": true
+    },
+    {
+      "name": "applied-state-recovers-without-duplicate-history",
+      "passed": true
+    },
+    {
+      "name": "applied-cleared-recovers-without-duplicate-history",
+      "passed": true
+    },
+    {
+      "name": "bound-history-reconciliation-retains-verified-master-binding",
+      "passed": true
+    },
+    {
+      "name": "apply-started-history-reconciliation-restores-original-content",
+      "passed": true
+    },
+    {
+      "name": "rejected-history-reconciliation-does-not-activate-invalid-input",
+      "passed": true
+    },
+    {
+      "name": "rolled-back-history-reconciliation-keeps-fresh-restoration",
+      "passed": true
+    },
+    {
+      "name": "interrupted-recover-is-idempotent-at-history-boundary",
+      "passed": true
+    },
+    {
+      "name": "reconciliation-refuses-conflicting-operator-bytes",
+      "passed": true
+    },
+    {
+      "name": "reconciliation-refuses-stale-binding-and-unhealthy-runtime",
+      "passed": true
+    },
+    {
+      "name": "reconciliation-refuses-partial-history-and-invalid-event-transition",
+      "passed": true
+    },
+    {
+      "name": "before-append-invalid-record-shape-preserves-all-durable-bytes",
+      "passed": true
+    },
+    {
+      "name": "present-falsy-or-array-journals-are-corruption-not-absence",
+      "passed": true
+    }
+  ],
+  "shutdowns": [
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    }
+  ],
+  "passed": true,
+  "limitations": [
+    "Actual process SIGKILL after synced filesystem boundaries; not a disk/power-loss simulation.",
+    "No automatic stale-lock deletion. The exact killed fixture process has exited before test operator lock removal.",
+    "Only a valid event-commit intent and exact canonical history/state boundaries can be reconciled; arbitrary old mismatches and partial lines fail closed.",
+    "Fresh sampled revision/health and master identity are rechecked; this does not prove atomic all-traffic handover or undo requests."
+  ],
+  "finishedAt": "2026-10-23T08:56:17.082Z"
+}

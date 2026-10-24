@@ -1,0 +1,1158 @@
+{
+  "schemaVersion": 1,
+  "suite": "g2-partial-application-upstream-and-extracted-bundle",
+  "runId": "x10-g2-upstream-20261024T115720Z",
+  "baseCommit": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
+  "publicationParent": "3c3a7e78911ba0f15d30746cadf278abd8c3a8ff",
+  "verifiedAtUTC": "2026-10-24T12:16:28.006859Z",
+  "scope": "G2 local partial operator/application path only; not accepted published alpha or V1",
+  "reports": {
+    "implementation": {
+      "schemaVersion": 1,
+      "scope": "optional-loopback-example-and-CLI-source-only",
+      "exampleActualHTTPControls": 4,
+      "exampleArgumentRefusals": 9,
+      "ownedChildStopped": true,
+      "stderrBytes": 0,
+      "sourceBeforeSha256": {
+        "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+        "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c"
+      },
+      "sourceAfterSha256": {
+        "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+        "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c"
+      },
+      "baselineCapability": "Exact prior CLI has no upstream-port option; no historical vulnerability or native baseline regression claimed.",
+      "defaultDemoPreserved": true,
+      "runtimeBuildRerun": false,
+      "productionAccepted": false,
+      "permanentAlphaReleased": false,
+      "nativeProxyAcceptanceFromThisSmoke": false,
+      "limitations": [
+        "This smoke starts the Node loopback application only, not installed native proxy. Authored/independent extracted-bundle/native controls are separate.",
+        "Readiness is example process responsiveness; no application database/business readiness, expected-body validation or production service acceptance.",
+        "Request/header/socket idle timers follow Node policies and are not hard-wall guarantees."
+      ],
+      "baselineActualCLI": {
+        "sourceCommit": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
+        "filesSha256": {
+          "cli.mjs": "5792054b28d36a1301392dd68c7ea360545de606d58b78df9abbeacf97e256b4",
+          "runtime.mjs": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51"
+        },
+        "operation": "install with explicit upstream-port",
+        "exitCode": 1,
+        "code": "ERR_PARSE_ARGS_UNKNOWN_OPTION",
+        "prefixCreated": false,
+        "stderrBytes": 0,
+        "privateCopyRemoved": true,
+        "scope": "Missing opt-in capability, not a historical vulnerability or native protocol failure."
+      }
+    },
+    "nativeRegression": {
+      "schemaVersion": 1,
+      "suite": "g2-upstream-fresh-native-local-regression",
+      "runId": "x10-g2-upstream-20261024T115720Z",
+      "baseCommit": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
+      "buildCheckoutCommit": "3c3a7e78911ba0f15d30746cadf278abd8c3a8ff",
+      "scope": "Local root/Node24 default native compatibility and shipped-alpha HTTP application subset; supplemental Unix capability failure remains separate. Not clean Node22 target, permanent alpha or Production V1 acceptance.",
+      "environment": {
+        "platform": "linux",
+        "architecture": "x86_64",
+        "nodeMajor": 24,
+        "operatorUIDClass": "root",
+        "targetNode22NonrootAccepted": false
+      },
+      "build": {
+        "status": "built",
+        "manifestSha256": "8eb7e1fc8ccc1dfc9172998e6c508e83da1aef75fe93703b58875fe9cee7455e",
+        "binarySha256": "7460da3d66aa72966febdf91365a95a251565510bb8cbef96589104931959cc8",
+        "mode": "0o755",
+        "executable": true,
+        "compiledModules": 105,
+        "checkoutRevision": "3c3a7e78911ba0f15d30746cadf278abd8c3a8ff",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+        "generatedFiles": {
+          "ngx_auto_config.h": {
+            "sha256": "4f60b0ea8649890579db47f2bc75c0be771203016e612bc977c4d14d72535c15",
+            "bytes": 10135,
+            "mode": "0644"
+          },
+          "ngx_auto_headers.h": {
+            "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+            "bytes": 657,
+            "mode": "0644"
+          },
+          "ngx_modules.c": {
+            "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+            "bytes": 11820,
+            "mode": "0644"
+          }
+        },
+        "dependencyVersionsFromHeaders": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        }
+      },
+      "buildExecution": {
+        "exitCode": 0,
+        "elapsedMs": 26836
+      },
+      "dependencies": {
+        "wheelBytesVerified": 11,
+        "freshVirtualEnvironments": 2,
+        "pipCheckPasses": 2,
+        "commandsExitCodes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "newPurchases": false,
+        "elapsedMs": 5412
+      },
+      "aggregate": {
+        "command": "node x10/test/all.mjs --official",
+        "runs": 1,
+        "exitCode": 0,
+        "elapsedMs": 201895,
+        "timedOut": false,
+        "groupsPassed": 20,
+        "groupsTotal": 20,
+        "groups": [
+          {
+            "name": "http-tls-http2-reload",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 1076,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "stream-mail",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 170,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "mail-tls-starttls",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 1223,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "protocol-adapters",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 1406,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "http3-interop",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 1010,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "http3-head-independent-client",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 901,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "native-features",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 744,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "quic-regression",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 510,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "quic-generated-sanitized",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 1138,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "quic-frame-boundaries",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 1074,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "native-load-client-verification",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 1655,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "managed-native-control",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 45525,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "operator-status",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 3632,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "local-alpha-lifecycle",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 25763,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "listener-observer-boundaries",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 6570,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "reload-listener-observation",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 729,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "native-control-api",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 502,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "native-process-generations",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 733,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "native-generation-boundaries",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 2039,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "official-nginx-tests",
+            "passed": true,
+            "exitCode": 0,
+            "signal": null,
+            "elapsedMs": 105273,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          }
+        ],
+        "controller": {
+          "pass": 77,
+          "fail": 0
+        },
+        "operator": {
+          "pass": 30,
+          "fail": 0,
+          "total": 30,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "alpha": {
+          "pass": 40,
+          "fail": 0,
+          "total": 40,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "newAlphaCaseNames": [
+          "application upstream port syntax and collisions refuse before creating a prefix",
+          "extracted bundle proxies an independent app and preserves application readiness across config and sessions",
+          "shipped loopback upstream example is immutable in extracted installs and serves bounded echo and stream"
+        ],
+        "unitsAreNotAdditive": true,
+        "reportedCleanupContracts": [
+          {
+            "suite": "mail-tls-starttls",
+            "reportedCleanupFacts": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errorCount": 0,
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "protocol-adapters",
+            "reportedCleanupFacts": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errorCount": 0,
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "http3-interop",
+            "reportedCleanupFacts": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errorCount": 0,
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "http3-head-independent-client",
+            "reportedCleanupFacts": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errorCount": 0,
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "quic-regression",
+            "reportedCleanupFacts": {
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "quic-generated-sanitized",
+            "reportedCleanupFacts": {
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "quic-frame-boundaries",
+            "reportedCleanupFacts": {
+              "temporaryRootRemoved": true,
+              "generatedFilesUnchangedDuringTest": true,
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "native-load-client-verification",
+            "reportedCleanupFacts": {
+              "nativeStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errorCount": 0,
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "reload-listener-observation",
+            "reportedCleanupFacts": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errorCount": 0,
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "native-control-api",
+            "reportedCleanupFacts": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errorCount": 0,
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "native-process-generations",
+            "reportedCleanupFacts": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errorCount": 0,
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "native-generation-boundaries",
+            "reportedCleanupFacts": {
+              "temporaryRootRemoved": true,
+              "generatedFilesUnchangedDuringTest": true,
+              "sourceUnchangedDuringTest": true
+            }
+          },
+          {
+            "suite": "official-nginx-tests",
+            "reportedCleanupFacts": {
+              "sourceUnchangedDuringTest": true
+            }
+          }
+        ]
+      },
+      "official": {
+        "pinnedRevision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+        "freshCheckout": true,
+        "summary": {
+          "files": 35,
+          "filesPassed": 32,
+          "filesSkipped": 3,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1109,
+            "passed": 1083,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        },
+        "skippedFileNames": [
+          "fastcgi.t",
+          "scgi.t",
+          "uwsgi.t"
+        ],
+        "parseErrors": 0,
+        "cleanupErrorCount": 0,
+        "sourceUnchangedDuringTest": true,
+        "bailoutCount": 0
+      },
+      "featureOff": {
+        "command": "bash x10/test/control-disabled.sh",
+        "runs": 1,
+        "exitCode": 0,
+        "success": true,
+        "passedChecks": 4,
+        "sourceUnchangedDuringTest": true,
+        "defaultBuildUnchangedDuringTest": true,
+        "harnessUnchangedDuringTest": true,
+        "cleanup": {
+          "activeChild": false,
+          "temporaryRootRemoved": true,
+          "rootMakefileRestored": true
+        },
+        "cleanupErrorCount": 0
+      },
+      "supplementalUnix": {
+        "state": "failed-local-environment-af-unix-socket-creation-denied",
+        "commands": [
+          {
+            "name": "control-unix",
+            "exitCode": 1,
+            "timedOut": false,
+            "elapsedMs": 5478,
+            "success": false,
+            "errno": 1,
+            "diagnostic": "native Unix socket creation refused: Operation not permitted",
+            "cleanup": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true
+            },
+            "sourceUnchanged": true,
+            "completedPreSocketChecks": 2,
+            "actualUnixControlCases": 0,
+            "preSocketCheckNames": [
+              "native-profile-and-configuration-validation",
+              "control-api-is-not-opened-without-explicit-listen-option"
+            ]
+          },
+          {
+            "name": "generations-unix",
+            "exitCode": 1,
+            "timedOut": false,
+            "elapsedMs": 5379,
+            "success": false,
+            "errno": 1,
+            "diagnostic": "native Unix socket creation refused: Operation not permitted",
+            "cleanup": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true
+            },
+            "sourceUnchanged": true,
+            "completedPreSocketChecks": 2,
+            "actualUnixControlCases": 0,
+            "preSocketCheckNames": [
+              "native-profile-and-configuration-validation",
+              "control-api-is-not-opened-without-explicit-listen-option"
+            ]
+          },
+          {
+            "name": "operator-unix",
+            "exitCode": 1,
+            "timedOut": false,
+            "elapsedMs": 6534,
+            "tapCounts": {
+              "tests": 21,
+              "pass": 20,
+              "fail": 1,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            }
+          }
+        ],
+        "noPermissionBypassAttempted": true,
+        "unchangedBinary": true
+      },
+      "socketCapability": {
+        "scope": "fresh-own-empty-socket-create-close-only-no-bind-or-permission-change",
+        "facts": [
+          {
+            "class": "unix-stream",
+            "createdAndClosed": false,
+            "errno": 1
+          },
+          {
+            "class": "unix-seqpacket",
+            "createdAndClosed": false,
+            "errno": 1
+          },
+          {
+            "class": "inet-stream",
+            "createdAndClosed": true
+          }
+        ]
+      },
+      "frozenRuntimeSourcesSha256": {
+        "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+        "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+        "x10/test/alpha.test.mjs": "c9f66892e2f8c871f0bf9458ed47d785095bf5316f1c9bca5ef62e16cdf8c170"
+      },
+      "identityVerification": {
+        "nativeAndLicenseTrackedRows": 500,
+        "nativeMapUnchanged": true,
+        "nativeMapSha256": "4fbe9e93f1ec58fd4f922208eaf30204b78c31a58c75eb83cb230cac306937b4",
+        "nativeSourceDiffUnchanged": true,
+        "nativeHarnessTrackedFiles": 39,
+        "runtimeHarnessUnchangedDuringRun": true,
+        "buildManifestUnchangedDuringRun": true,
+        "binaryAndModeUnchangedDuringRun": true,
+        "generatedInputsUnchangedDuringRun": true,
+        "licenseSha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c"
+      },
+      "newPurchases": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "processIdentifiersPublished": false,
+      "realSessionKeysPublished": false,
+      "localBinaryPublished": false,
+      "limitations": [
+        "Native20/20 default TCP-profile success does not erase failed supplemental Unix checks. AF_UNIX creation failed locally with errno1 and no permission bypass or local retry was attempted.",
+        "Local UID0/Node24 is not the declared Ubuntu24.04 Node22 nonroot operated-service target. Exact implementation CI and supplemental Unix acceptance must be checked separately.",
+        "Feature-off4 controls are a separate build/profile check, not four extra protocol acceptance cases.",
+        "Alpha40 is TAP counting including existing nested/synthetic controls and three new authored cases, not40 independent clean installations.",
+        "Official local1083 strictPASS/25SKIP/1expectedTODO-fail excludes unavailable optional clients; these skips are not passes.",
+        "Existing native mode-drift and controller interleaving historical causes remain unproven. No native code was changed or performance improvement measured here.",
+        "No permanent published archive, final service, package upgrade/rollback or V1 soak acceptance is claimed."
+      ]
+    },
+    "localUnixChecks": {
+      "state": "failed-local-environment-af-unix-socket-creation-denied",
+      "commands": [
+        {
+          "name": "control-unix",
+          "exitCode": 1,
+          "timedOut": false,
+          "elapsedMs": 5478,
+          "success": false,
+          "errno": 1,
+          "diagnostic": "native Unix socket creation refused: Operation not permitted",
+          "cleanup": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true
+          },
+          "sourceUnchanged": true,
+          "completedPreSocketChecks": 2,
+          "actualUnixControlCases": 0,
+          "preSocketCheckNames": [
+            "native-profile-and-configuration-validation",
+            "control-api-is-not-opened-without-explicit-listen-option"
+          ]
+        },
+        {
+          "name": "generations-unix",
+          "exitCode": 1,
+          "timedOut": false,
+          "elapsedMs": 5379,
+          "success": false,
+          "errno": 1,
+          "diagnostic": "native Unix socket creation refused: Operation not permitted",
+          "cleanup": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true
+          },
+          "sourceUnchanged": true,
+          "completedPreSocketChecks": 2,
+          "actualUnixControlCases": 0,
+          "preSocketCheckNames": [
+            "native-profile-and-configuration-validation",
+            "control-api-is-not-opened-without-explicit-listen-option"
+          ]
+        },
+        {
+          "name": "operator-unix",
+          "exitCode": 1,
+          "timedOut": false,
+          "elapsedMs": 6534,
+          "tapCounts": {
+            "tests": 21,
+            "pass": 20,
+            "fail": 1,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        }
+      ],
+      "noPermissionBypassAttempted": true,
+      "unchangedBinary": true
+    },
+    "localSocketCapability": {
+      "scope": "fresh-own-empty-socket-create-close-only-no-bind-or-permission-change",
+      "facts": [
+        {
+          "class": "unix-stream",
+          "createdAndClosed": false,
+          "errno": 1
+        },
+        {
+          "class": "unix-seqpacket",
+          "createdAndClosed": false,
+          "errno": 1
+        },
+        {
+          "class": "inet-stream",
+          "createdAndClosed": true
+        }
+      ]
+    },
+    "independentReview": {
+      "schemaVersion": 1,
+      "suite": "independent-G2-opt-in-upstream-review",
+      "reviewedAtUTC": "2026-10-24T12:12:14.962826Z",
+      "baseCommit": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
+      "publicationParent": "3c3a7e78911ba0f15d30746cadf278abd8c3a8ff",
+      "scope": "Local alpha opt-in application seed, shipped example and installed-bundle behavior only",
+      "independentOfImplementationAuthor": true,
+      "sourceFilesSha256": {
+        "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+        "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+        "x10/test/alpha.test.mjs": "c9f66892e2f8c871f0bf9458ed47d785095bf5316f1c9bca5ef62e16cdf8c170"
+      },
+      "runtimeFilesSha256": {
+        "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+        "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c"
+      },
+      "staticChecks": [
+        "Optional upstream absent preserves original native demo seed and healthNote.",
+        "Optional upstream accepts only decimal unprivileged IPv4 loopback port and rejects managed/selfcheck port collision before creating prefix.",
+        "Application seed uses fixed /ready and proxy_next_upstream off; no implicit upstream replay.",
+        "Install/run do not claim application health; bind/apply sample HTTP200 separately from native selfcheck.",
+        "Application candidate-b retains the real proxy/readiness seed and adds only an explicit example response header.",
+        "Confirmed input persists through normal revision/session handling; no new automatic master adoption introduced.",
+        "New example participates in exact bundle and installed immutable allowlists, modes and hashes.",
+        "Existing unknown-file/symlink/uninstall/identity/dependency guards are unchanged.",
+        "Example binds127.0.0.1 only, accepts strict port/help flags and adds no mutating readiness administration endpoint.",
+        "Example echo has16MiB and4-active bounds; stream is finite8MiB with backpressure and bounded connection/header policies.",
+        "Handled example shutdown destroys only its own sockets after bounded grace and removes own signal handlers.",
+        "Node example is an explicitly launched application, not native request path replacement or a production service supervisor."
+      ],
+      "staticCheckCount": 12,
+      "heldouts": {
+        "actualNativeInstalledBundleScenarios": 1,
+        "actualInstalledExampleScenarios": 1,
+        "syntheticCLIInputControls": 12,
+        "nativeScenario": {
+          "schemaVersion": 1,
+          "scope": "independent-G2-local-alpha-heldouts-only",
+          "actualNativeScenarios": 1,
+          "cliInputControls": 12,
+          "productionAccepted": false,
+          "targetNonrootNode22Accepted": false,
+          "newPurchases": false,
+          "rawLogsPublished": false,
+          "hostPathsPublished": false,
+          "processIdentifiersPublished": false,
+          "redirectReadinessRefused": true,
+          "nativeDemoStill200": true,
+          "redirectNotFollowed": true,
+          "echoBytes": 2053,
+          "echoDigestMatched": true,
+          "singlePostObserved": true,
+          "shippedExampleTamperRefused": true,
+          "extractedBundleInstall": true,
+          "sourceCheckoutNotRequiredByBundle": true,
+          "nativeStoppedAndUninstalled": true,
+          "cleanup": {
+            "ownLauncherClosed": true,
+            "ownApplicationClosed": true,
+            "privateRootAbsent": true
+          },
+          "sourceBeforeSha256": {
+            "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+            "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+            "x10/test/alpha.test.mjs": "87d9e0b1df129a0171a491c0c3f3f291e0a684e063616770edb6e3f57e0ea5cb"
+          },
+          "sourceAfterSha256": {
+            "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+            "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+            "x10/test/alpha.test.mjs": "87d9e0b1df129a0171a491c0c3f3f291e0a684e063616770edb6e3f57e0ea5cb"
+          },
+          "sourceUnchanged": true,
+          "binarySha256": "7460da3d66aa72966febdf91365a95a251565510bb8cbef96589104931959cc8",
+          "manifestSha256": "8eb7e1fc8ccc1dfc9172998e6c508e83da1aef75fe93703b58875fe9cee7455e",
+          "passed": true
+        },
+        "exampleScenario": {
+          "schemaVersion": 1,
+          "scope": "independent-installed-example-boundaries-only",
+          "actualNativeScenarios": 0,
+          "actualExampleScenarios": 1,
+          "productionAccepted": false,
+          "targetNonrootNode22Accepted": false,
+          "rawLogsPublished": false,
+          "hostPathsPublished": false,
+          "processIdentifiersPublished": false,
+          "oversizedEchoBytes": 16777217,
+          "bodyLimitRefused": true,
+          "readyAfterRefusal": true,
+          "handledSIGTERMWithPausedStream": true,
+          "ownedShutdownObservedUnderMs": 5000,
+          "elapsedObservedMs": 2018,
+          "installedExampleHashMatched": true,
+          "preparedPrefixUninstalled": true,
+          "cleanup": {
+            "ownedExampleClosed": true,
+            "privateRootAbsent": true
+          },
+          "sourceBeforeSha256": {
+            "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+            "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c"
+          },
+          "sourceAfterSha256": {
+            "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+            "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c"
+          },
+          "sourceUnchanged": true,
+          "passed": true
+        }
+      },
+      "canonicalTestObservation": {
+        "duringNativeHeldoutSha256": "87d9e0b1df129a0171a491c0c3f3f291e0a684e063616770edb6e3f57e0ea5cb",
+        "finalStaticReviewSha256": "c9f66892e2f8c871f0bf9458ed47d785095bf5316f1c9bca5ef62e16cdf8c170",
+        "testOnlyCorrectionObserved": true,
+        "canonicalTestsExecutedByTheseHeldouts": false,
+        "scope": "Actual CLI/example bytes remained unchanged. Author separately corrected rolled-back reason assertion from literal health_gate_failed to the existing descriptive message containing health=503. Final focused3/3 and full native aggregate belong to their own evidence, not these independent scenarios."
+      },
+      "blockingFindings": [],
+      "reviewCorrections": [
+        {
+          "subject": "Fixture ephemeral port reuse",
+          "state": "already corrected by test author",
+          "finding": "Independent review noted that a closed chosen example port could be reselected as managed port. Test author confirmed retry-until-distinct managed/health selection before final frozen run. No production implementation defect or extra runtime acceptance claimed."
+        }
+      ],
+      "privateVerifierCorrection": "Final report initially overconstrained every observed file to current hash, including the canonical test file not executed by these private heldouts. It stopped on its later test-only assertion correction. Corrected report comparison restricts runtime acceptance to unchanged CLI/example bytes and records both observed canonical-test hashes; no runtime rerun or false final-test acceptance.",
+      "limitations": [
+        "Current local execution is root/Node24, not accepted nonroot Node22 target deployment.",
+        "Application readiness is HTTP200 from the explicitly selected /ready path; it does not verify expected body, downstream dependencies or all business routes. Native status does not itself perform a live application health request.",
+        "The separate example process is operator-owned and is not supervised or implicitly stopped by native X10; the actual test closes its own process/socket resources.",
+        "Finite body/stream bounds and handled signal cleanup are narrow example controls, not a60minute soak, resource-isolation proof, production SLA or kernel hard-deadline guarantee.",
+        "Existing same-UID trust, PID verification-to-signal race, dynamic ABI/host identity and all G3-G8 constraints remain.",
+        "No permanent release, published clean-user replay, TLS/production service or Continuum migration acceptance is established here."
+      ],
+      "nativeSourceChangedByReviewer": false,
+      "publicSourceChangedByReviewer": false,
+      "runtimeRerunsBeyondTheseIndependentHeldouts": 0,
+      "newPurchases": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "processIdentifiersPublished": false,
+      "realSessionKeysPublished": false
+    },
+    "coordinator": {
+      "schemaVersion": 1,
+      "authority": {
+        "phase": "RUNNING",
+        "transition": null,
+        "activeProject": "x10",
+        "projectStatus": "ACTIVE_FOR_V1",
+        "privateCoordinatorRevisionOmitted": true
+      },
+      "capability": {
+        "nodeMajor": 24,
+        "uidClass": "root",
+        "targetNode22NonrootAccepted": false
+      },
+      "regressions": {
+        "core": {
+          "counts": {
+            "tests": 21,
+            "suites": 0,
+            "pass": 21,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "exitCode": 0,
+          "stderrBytes": 0,
+          "scope": "unchanged research or declaration-checker regression only"
+        },
+        "process": {
+          "counts": {
+            "tests": 7,
+            "pass": 7,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "exitCode": 0,
+          "stderrBytes": 0,
+          "scope": "unchanged research or declaration-checker regression only"
+        },
+        "release": {
+          "counts": {
+            "tests": 35,
+            "pass": 35,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "exitCode": 0,
+          "stderrBytes": 0,
+          "scope": "unchanged research or declaration-checker regression only"
+        }
+      },
+      "newPurchases": false,
+      "permanentReleaseAccepted": false,
+      "productionAccepted": false,
+      "allRequiredLocalChecksAttempted": true,
+      "allChangedUpstreamChecksPassed": true,
+      "localUnixAccepted": false,
+      "localDefaultAggregatePassed": true,
+      "nativeAggregateGroups": {
+        "pass": 20,
+        "total": 20
+      },
+      "alphaTAP": {
+        "pass": 40,
+        "total": 40
+      },
+      "sourceFilesSha256": {
+        "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+        "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+        "x10/test/alpha.test.mjs": "c9f66892e2f8c871f0bf9458ed47d785095bf5316f1c9bca5ef62e16cdf8c170",
+        "x10/alpha/README.md": "911c6af7d27a654288656f3caddab61960080a2fa3fce55e932801690685dd10",
+        "x10/QUICKSTART.md": "99ab095e71217a7f20fe3e499649bbaf54f2cb99c019f3a566e8b188483e2f41"
+      },
+      "finalReportHashes": {
+        "g2-cli-safe.json": "c4e3417c16bf26c53cea22bc5f863cb66ae12c80a29c09c36e63c86f07fa5543",
+        "g2-native-safe.json": "770f237e7cc09fa7f0c22d2361dd43ba731cbaf620941166700f84669c0c6bc7",
+        "g2-review-safe.json": "68bb7132e3714a926fe8aae2f2146a23054fb7281f60e18c1d6d044616a9e945",
+        "g2-test-author-safe.json": "f15ffce6114fa0876b8c45aea465b8a2e8fc7526818cc405d666909cee459aa5",
+        "g2-test-focused-safe.json": "977c9f301b95692d0487c64a14f5cd9186c530174b18087480f75e3e079c944b"
+      },
+      "localUnixBlocker": "AF_UNIX stream/seqpacket socket creation errno1; actual Unix acceptance failed, not bypassed or retried."
+    },
+    "baselineMissingCapability": {
+      "schemaVersion": 1,
+      "scope": "baseline-missing-opt-in-application-upstream-capability",
+      "baselineCommit": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
+      "baselineCliSha256": "5792054b28d36a1301392dd68c7ea360545de606d58b78df9abbeacf97e256b4",
+      "exitCode": 1,
+      "code": "ERR_PARSE_ARGS_UNKNOWN_OPTION",
+      "prefixCreated": false,
+      "nativeExecuted": false,
+      "securityDefectClaimed": false,
+      "rawLogsPublished": false
+    },
+    "authoredRegressionDefinition": {
+      "schemaVersion": 1,
+      "scope": "authored-G2-opt-in-upstream-tests",
+      "testFile": "x10/test/alpha.test.mjs",
+      "originalTestPrefixRetained": true,
+      "baselineTestSha256": "0eccb4738616f81b32661051c2a1fd93217d9d3853974c021ae427397a1b9cce",
+      "candidateTestSha256": "c9f66892e2f8c871f0bf9458ed47d785095bf5316f1c9bca5ef62e16cdf8c170",
+      "newTopLevelCases": 3,
+      "expectedCanonicalTAPTests": 40,
+      "baselineMissingCapability": {
+        "schemaVersion": 1,
+        "scope": "baseline-missing-opt-in-application-upstream-capability",
+        "baselineCommit": "ee52e5d32233e484585c4cde0ffb4e42e94f448c",
+        "baselineCliSha256": "5792054b28d36a1301392dd68c7ea360545de606d58b78df9abbeacf97e256b4",
+        "exitCode": 1,
+        "code": "ERR_PARSE_ARGS_UNKNOWN_OPTION",
+        "prefixCreated": false,
+        "nativeExecuted": false,
+        "securityDefectClaimed": false,
+        "rawLogsPublished": false
+      },
+      "initialFocusedDiagnostic": {
+        "schemaVersion": 1,
+        "scope": "focused-new3-alpha-upstream-controls-only",
+        "command": "node --test --test-reporter=tap --test-name-pattern=application upstream port|extracted bundle proxies|shipped loopback upstream x10/test/alpha.test.mjs",
+        "exitCode": 1,
+        "counts": {
+          "tests": 3,
+          "pass": 2,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "sourceBeforeSha256": {
+          "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+          "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+          "x10/test/alpha.test.mjs": "87d9e0b1df129a0171a491c0c3f3f291e0a684e063616770edb6e3f57e0ea5cb"
+        },
+        "sourceAfterSha256": {
+          "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+          "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+          "x10/test/alpha.test.mjs": "87d9e0b1df129a0171a491c0c3f3f291e0a684e063616770edb6e3f57e0ea5cb"
+        },
+        "sourceStable": true,
+        "stderrBytes": 0,
+        "canonicalSuiteAcceptance": false,
+        "productionV1Accepted": false,
+        "rawLogsPublished": false
+      },
+      "finalFocused": {
+        "schemaVersion": 1,
+        "scope": "focused-new3-alpha-upstream-controls-only",
+        "command": "node --test --test-reporter=tap --test-name-pattern=application upstream port|extracted bundle proxies|shipped loopback upstream x10/test/alpha.test.mjs",
+        "exitCode": 0,
+        "counts": {
+          "tests": 3,
+          "pass": 3,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "sourceBeforeSha256": {
+          "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+          "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+          "x10/test/alpha.test.mjs": "c9f66892e2f8c871f0bf9458ed47d785095bf5316f1c9bca5ef62e16cdf8c170"
+        },
+        "sourceAfterSha256": {
+          "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+          "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+          "x10/test/alpha.test.mjs": "c9f66892e2f8c871f0bf9458ed47d785095bf5316f1c9bca5ef62e16cdf8c170"
+        },
+        "sourceStable": true,
+        "stderrBytes": 0,
+        "canonicalSuiteAcceptance": false,
+        "productionV1Accepted": false,
+        "rawLogsPublished": false,
+        "priorFailure": "Initial2pass1fail preserved; test expected rollback reason code but existing contract emits descriptive error.message. Assertion corrected to observed health503 failure, no runtime change."
+      },
+      "correction": "Unhealthy apply correctly rolled_back. Existing rollback reason carries error.message; test previously demanded literal health_gate_failed. Only that assertion changed to require observed health503 failure. No runtime correction was made for this diagnostic.",
+      "covered": [
+        "Strict decimal upstream port and managed/health collisions refuse before prefix creation",
+        "Extracted bundle outside build tree proxies actual independent loopback application GET and exact65551byte POST",
+        "Actual managed app-health503 refuses bind while separate native demo self-check remains200; ready200 permits bind",
+        "Actual apply/revert/unhealthy-candidate rollback/recover and fresh-session restart preserve app seed and do not replay POST",
+        "Shipped example module installed immutable, tamper refused, explicit example GET/echo/8MiBstream and graceful cleanup"
+      ],
+      "units": [
+        "Focused3 top-level cases are separate from pending canonical40 TAP and native20 aggregate",
+        "Shipped-example stream observed directly on example app, not claimed as native8MiBproxy/TLS acceptance"
+      ],
+      "nativeBuildExecutedByAuthor": false,
+      "fullNativeAggregateExecutedByAuthor": false,
+      "canonicalAcceptance": "PENDING_NATIVE_HELPER_FINAL_RUN",
+      "productionV1Accepted": false,
+      "nodeMajor": 24,
+      "targetNode22CleanHostAccepted": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "processIdentifiersPublished": false
+    },
+    "finalFocusedRegression": {
+      "schemaVersion": 1,
+      "scope": "focused-new3-alpha-upstream-controls-only",
+      "command": "node --test --test-reporter=tap --test-name-pattern=application upstream port|extracted bundle proxies|shipped loopback upstream x10/test/alpha.test.mjs",
+      "exitCode": 0,
+      "counts": {
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "sourceBeforeSha256": {
+        "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+        "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+        "x10/test/alpha.test.mjs": "c9f66892e2f8c871f0bf9458ed47d785095bf5316f1c9bca5ef62e16cdf8c170"
+      },
+      "sourceAfterSha256": {
+        "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+        "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+        "x10/test/alpha.test.mjs": "c9f66892e2f8c871f0bf9458ed47d785095bf5316f1c9bca5ef62e16cdf8c170"
+      },
+      "sourceStable": true,
+      "stderrBytes": 0,
+      "canonicalSuiteAcceptance": false,
+      "productionV1Accepted": false,
+      "rawLogsPublished": false,
+      "priorFailure": "Initial2pass1fail preserved; test expected rollback reason code but existing contract emits descriptive error.message. Assertion corrected to observed health503 failure, no runtime change."
+    },
+    "initialFocusedDiagnostic": {
+      "schemaVersion": 1,
+      "scope": "focused-new3-alpha-upstream-controls-only",
+      "command": "node --test --test-reporter=tap --test-name-pattern=application upstream port|extracted bundle proxies|shipped loopback upstream x10/test/alpha.test.mjs",
+      "exitCode": 1,
+      "counts": {
+        "tests": 3,
+        "pass": 2,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "sourceBeforeSha256": {
+        "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+        "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+        "x10/test/alpha.test.mjs": "87d9e0b1df129a0171a491c0c3f3f291e0a684e063616770edb6e3f57e0ea5cb"
+      },
+      "sourceAfterSha256": {
+        "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+        "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+        "x10/test/alpha.test.mjs": "87d9e0b1df129a0171a491c0c3f3f291e0a684e063616770edb6e3f57e0ea5cb"
+      },
+      "sourceStable": true,
+      "stderrBytes": 0,
+      "canonicalSuiteAcceptance": false,
+      "productionV1Accepted": false,
+      "rawLogsPublished": false,
+      "diagnosticExplanation": "One authored assertion expected a literal health_gate_failed rollback reason, but the existing controller correctly returned rolled_back with descriptive No fresh acknowledged healthy revision ... health=503/... text. The assertion was corrected to the existing descriptive reason; no controller/runtime fix is claimed. Final frozen rerun remains separate."
+    }
+  },
+  "sourceFilesSha256": {
+    "x10/alpha/cli.mjs": "3ba47872e5036c696ae0315414c8a021f37f49acaece881df1cbbca1f95de607",
+    "x10/alpha/upstream-example.mjs": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c",
+    "x10/test/alpha.test.mjs": "c9f66892e2f8c871f0bf9458ed47d785095bf5316f1c9bca5ef62e16cdf8c170",
+    "x10/alpha/README.md": "911c6af7d27a654288656f3caddab61960080a2fa3fce55e932801690685dd10",
+    "x10/QUICKSTART.md": "99ab095e71217a7f20fe3e499649bbaf54f2cb99c019f3a566e8b188483e2f41"
+  },
+  "nativeCompatibility": {
+    "sourceChanged": false,
+    "controllerChanged": false,
+    "alphaRuntimeChanged": true,
+    "alphaTestFixtureChanged": true,
+    "trackedTreeRows": 500,
+    "trackedTreeListingSha256": "b1f38f66a31b672a3b1b7b39e262f3fccc896165befa7774d28099c258465da2",
+    "buildCheckoutRule": "The actual local build checkout is the lease SHA recorded by its manifest, not the later publication result.",
+    "exactNewHostedAcceptance": "PENDING",
+    "localUnixAccepted": false,
+    "localUnixBlocker": "AF_UNIX stream/seqpacket socket EPERM; prechecks are not runtime cases"
+  },
+  "acceptance": {
+    "G2": "HTTP_SCOPED_LOCAL_VERIFIED_UNIX_BLOCKED_EXACT_CI_AND_PERMANENT_RELEASE_PENDING",
+    "cleanTargetNode22NonrootAccepted": false,
+    "localUnixAccepted": false,
+    "permanentAlphaAccepted": false,
+    "serviceAccepted": false,
+    "soakAccepted": false,
+    "productionAccepted": false,
+    "otherProductActivated": false
+  },
+  "nextConcreteTask": "Verify exact resulting G2 application-upstream implementation CI first: native main jobs must execute the expanded alpha/extracted-bundle tests and existing official/Unix/feature-off/package checks. Then complete G2 distribution: an accepted versioned permanent alpha archive with exact checksums/provenance and independent published-file nonroot Node22 replay. Keep G3-G8 service/TLS, config and package rollback/recovery, security, frozen60minute soak and Production V1 acceptance open. Do not resume deferred Continuum or activate another product by default.",
+  "limitations": [
+    "Opt-in application readiness observes the configured bounded HTTP readiness route; installation alone does not prove health or business dependencies.",
+    "The default native demo remains a demo and is not silently described as application readiness.",
+    "Local extracted-bundle execution is separate from an independent clean nonroot Node22 replay of a permanent published package.",
+    "The baseline missing option records absent capability, not a historical security vulnerability.",
+    "Full native aggregate groups, alpha TAP entries, independent heldouts and compiled module count are different units, not additive tests.",
+    "Exact implementation CI is pending; previous G1 CI does not accept changed alpha runtime bytes.",
+    "Local AF_UNIX stream/seqpacket creation is blocked by EPERM; no bypass or repeated unchanged attempt is performed. Actual Unix cases were not accepted; full native/Unix adverse counts remain in the reports.",
+    "Permanent alpha, operator service/TLS, package rollback/recovery, security, frozen soak and Production V1 remain unaccepted.",
+    "Prior adverse observations, mode drift, expected skips/TODO and unresolved Continuum scope remain preserved.",
+    "Private coordinator exact revision and internal budget/price hypotheses are omitted from public evidence."
+  ],
+  "publication": {
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "realSessionKeysPublished": false,
+    "privateCoordinatorRevisionPublished": false,
+    "newPurchases": false,
+    "productionDeployChanged": false
+  }
+}

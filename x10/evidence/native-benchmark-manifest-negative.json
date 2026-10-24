@@ -1,0 +1,4260 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-nginx-c-client-comparison",
+  "startedAt": "2026-10-23T09:37:11.051Z",
+  "success": false,
+  "options": {
+    "baseline": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+    "candidate": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+    "baselineManifest": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-reference.json",
+    "candidateManifest": "/tmp/x10-native-driver-controls-KlcVqF/changing.json",
+    "client": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+    "clientManifest": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/build.json",
+    "durationMs": 100,
+    "warmupMs": 50,
+    "repetitions": 2,
+    "concurrency": [
+      1
+    ]
+  },
+  "environment": {
+    "platform": "linux",
+    "release": "6.18.55",
+    "architecture": "x64",
+    "node": "v24.19.0",
+    "logicalCpus": 9,
+    "availableParallelism": 8,
+    "totalMemoryBytes": 10451439616,
+    "nativeCpuTicksPerSecond": 100,
+    "pageBytes": 4096,
+    "allowedCpuList": "0-8"
+  },
+  "methodology": {
+    "nativeConfiguration": "One native front at a time plus a fixed pristine native origin; daemon off and master_process off for both",
+    "transport": "Loopback HTTP/1.1, keepalive, closed loop, one outstanding request per client lane, no pipelining",
+    "workload": "Static file sendfile on and native reverse proxy, exact 1024-byte response verified for every completed request",
+    "order": "For every workload/concurrency pair: even repetition baseline then candidate; odd repetition candidate then baseline",
+    "timing": "A separate C-client warmup primes native caches/pools; measured client uses fresh connections and drains admitted requests; throughput denominator includes connection setup and drain",
+    "latency": "C-client full-response durations; log2-microsecond histogram quantile upper bounds, no cross-sample pooled quantiles",
+    "resources": "Linux /proc front/origin CPU ticks; RSS sampled every25ms, not true peak; C client self CPU/maxRSS; separate Node orchestration CPU"
+  },
+  "limitations": [
+    "Synthetic short local smoke comparison; no confidence interval, regression threshold or global speedup claim.",
+    "C client, native front and native origin still share a host and can limit each other; no open-loop or remote generator.",
+    "Host scheduling and other workloads are uncontrolled; balanced order reduces but does not remove noise.",
+    "Single-process master-off execution does not measure production multiworker scaling, reloads, TLS, HTTP2/3, QUIC, mail or disk-cold workloads.",
+    "Native CPU uses discrete scheduler ticks; its snapshot window includes client process creation/exit around traffic. RSS sampling can miss peaks; C maxRSS is process-lifetime high water.",
+    "The candidate QUIC parser fix is not exercised by these HTTP1 workloads. Ratios are observations, not evidence that the fix speeds these workloads up."
+  ],
+  "runs": [
+    {
+      "index": 0,
+      "binary": "baseline",
+      "workload": "static",
+      "concurrency": 1,
+      "repetition": 0,
+      "warmup": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/static"
+        },
+        "options": {
+          "durationMs": 50,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 1437,
+          "completed": 1437,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 1436
+        },
+        "timing": {
+          "elapsedMs": 50.037155,
+          "admissionMs": 50,
+          "drainMs": 0.037155
+        },
+        "throughputRps": 28718.659164,
+        "latency": {
+          "count": 1437,
+          "meanUs": 34.741757,
+          "maxUs": 3113.842,
+          "p50UpperUs": 32,
+          "p95UpperUs": 64,
+          "p99UpperUs": 256,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 1283
+            },
+            {
+              "upperUs": 64,
+              "count": 95
+            },
+            {
+              "upperUs": 128,
+              "count": 44
+            },
+            {
+              "upperUs": 256,
+              "count": 10
+            },
+            {
+              "upperUs": 512,
+              "count": 1
+            },
+            {
+              "upperUs": 1024,
+              "count": 1
+            },
+            {
+              "upperUs": 2048,
+              "count": 2
+            },
+            {
+              "upperUs": 4096,
+              "count": 1
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 7.773,
+          "systemCpuMs": 14.115,
+          "maxRssKiB": 14200
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/static",
+          "--duration-ms",
+          "50",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "traffic": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/static"
+        },
+        "options": {
+          "durationMs": 100,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 2714,
+          "completed": 2714,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 2713
+        },
+        "timing": {
+          "elapsedMs": 100.101531,
+          "admissionMs": 100,
+          "drainMs": 0.101531
+        },
+        "throughputRps": 27112.472436,
+        "latency": {
+          "count": 2714,
+          "meanUs": 36.791084,
+          "maxUs": 214.124,
+          "p50UpperUs": 64,
+          "p95UpperUs": 64,
+          "p99UpperUs": 128,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 0
+            },
+            {
+              "upperUs": 64,
+              "count": 2674
+            },
+            {
+              "upperUs": 128,
+              "count": 38
+            },
+            {
+              "upperUs": 256,
+              "count": 2
+            },
+            {
+              "upperUs": 512,
+              "count": 0
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 12.576,
+          "systemCpuMs": 28.328,
+          "maxRssKiB": 14224
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/static",
+          "--duration-ms",
+          "100",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "resources": {
+        "samplingErrors": [],
+        "hostLoadAverage": {
+          "before": [
+            0.14,
+            0.15,
+            0.14
+          ],
+          "after": [
+            0.14,
+            0.15,
+            0.14
+          ]
+        },
+        "nodeOrchestrator": {
+          "userCpuMs": 5.636,
+          "systemCpuMs": 0.905
+        },
+        "client": {
+          "userCpuMs": 12.576,
+          "systemCpuMs": 28.328,
+          "maxRssKiB": 14224
+        },
+        "front": {
+          "userCpuMs": 20,
+          "systemCpuMs": 30,
+          "totalCpuMs": 50,
+          "rssBytes": {
+            "first": 5529600,
+            "last": 5529600,
+            "sampledMax": 5529600,
+            "samples": 6
+          }
+        },
+        "origin": {
+          "userCpuMs": 0,
+          "systemCpuMs": 0,
+          "totalCpuMs": 0,
+          "rssBytes": {
+            "first": 5525504,
+            "last": 5525504,
+            "sampledMax": 5525504,
+            "samples": 6
+          }
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 1,
+      "binary": "candidate",
+      "workload": "static",
+      "concurrency": 1,
+      "repetition": 0,
+      "warmup": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/static"
+        },
+        "options": {
+          "durationMs": 50,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 1458,
+          "completed": 1458,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 1457
+        },
+        "timing": {
+          "elapsedMs": 50.053415,
+          "admissionMs": 50,
+          "drainMs": 0.053415
+        },
+        "throughputRps": 29128.881616,
+        "latency": {
+          "count": 1458,
+          "meanUs": 34.246747,
+          "maxUs": 369.653,
+          "p50UpperUs": 32,
+          "p95UpperUs": 64,
+          "p99UpperUs": 128,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 734
+            },
+            {
+              "upperUs": 64,
+              "count": 660
+            },
+            {
+              "upperUs": 128,
+              "count": 52
+            },
+            {
+              "upperUs": 256,
+              "count": 11
+            },
+            {
+              "upperUs": 512,
+              "count": 1
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 8.286,
+          "systemCpuMs": 12.507,
+          "maxRssKiB": 30840
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/static",
+          "--duration-ms",
+          "50",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "traffic": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/static"
+        },
+        "options": {
+          "durationMs": 100,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 3070,
+          "completed": 3070,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 3069
+        },
+        "timing": {
+          "elapsedMs": 100.054272,
+          "admissionMs": 100,
+          "drainMs": 0.054272
+        },
+        "throughputRps": 30683.347534,
+        "latency": {
+          "count": 3070,
+          "meanUs": 32.501422,
+          "maxUs": 973.359,
+          "p50UpperUs": 32,
+          "p95UpperUs": 64,
+          "p99UpperUs": 128,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 1753
+            },
+            {
+              "upperUs": 64,
+              "count": 1224
+            },
+            {
+              "upperUs": 128,
+              "count": 74
+            },
+            {
+              "upperUs": 256,
+              "count": 15
+            },
+            {
+              "upperUs": 512,
+              "count": 3
+            },
+            {
+              "upperUs": 1024,
+              "count": 1
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 6.252,
+          "systemCpuMs": 34.491,
+          "maxRssKiB": 14284
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/static",
+          "--duration-ms",
+          "100",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "resources": {
+        "samplingErrors": [],
+        "hostLoadAverage": {
+          "before": [
+            0.14,
+            0.15,
+            0.14
+          ],
+          "after": [
+            0.14,
+            0.15,
+            0.14
+          ]
+        },
+        "nodeOrchestrator": {
+          "userCpuMs": 5.064,
+          "systemCpuMs": 0.608
+        },
+        "client": {
+          "userCpuMs": 6.252,
+          "systemCpuMs": 34.491,
+          "maxRssKiB": 14284
+        },
+        "front": {
+          "userCpuMs": 0,
+          "systemCpuMs": 50,
+          "totalCpuMs": 50,
+          "rssBytes": {
+            "first": 5562368,
+            "last": 5562368,
+            "sampledMax": 5562368,
+            "samples": 6
+          }
+        },
+        "origin": {
+          "userCpuMs": 0,
+          "systemCpuMs": 0,
+          "totalCpuMs": 0,
+          "rssBytes": {
+            "first": 5525504,
+            "last": 5525504,
+            "sampledMax": 5525504,
+            "samples": 6
+          }
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 2,
+      "binary": "candidate",
+      "workload": "static",
+      "concurrency": 1,
+      "repetition": 1,
+      "warmup": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/static"
+        },
+        "options": {
+          "durationMs": 50,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 1733,
+          "completed": 1733,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 1732
+        },
+        "timing": {
+          "elapsedMs": 50.065317,
+          "admissionMs": 50,
+          "drainMs": 0.065317
+        },
+        "throughputRps": 34614.781327,
+        "latency": {
+          "count": 1733,
+          "meanUs": 28.794769,
+          "maxUs": 640.981,
+          "p50UpperUs": 32,
+          "p95UpperUs": 64,
+          "p99UpperUs": 128,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 1595
+            },
+            {
+              "upperUs": 64,
+              "count": 90
+            },
+            {
+              "upperUs": 128,
+              "count": 39
+            },
+            {
+              "upperUs": 256,
+              "count": 6
+            },
+            {
+              "upperUs": 512,
+              "count": 2
+            },
+            {
+              "upperUs": 1024,
+              "count": 1
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 0,
+          "systemCpuMs": 21.527,
+          "maxRssKiB": 14288
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/static",
+          "--duration-ms",
+          "50",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "traffic": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/static"
+        },
+        "options": {
+          "durationMs": 100,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 3305,
+          "completed": 3305,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 3304
+        },
+        "timing": {
+          "elapsedMs": 100.052821,
+          "admissionMs": 100,
+          "drainMs": 0.052821
+        },
+        "throughputRps": 33032.551876,
+        "latency": {
+          "count": 3305,
+          "meanUs": 30.206899,
+          "maxUs": 306.761,
+          "p50UpperUs": 32,
+          "p95UpperUs": 64,
+          "p99UpperUs": 128,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 2413
+            },
+            {
+              "upperUs": 64,
+              "count": 808
+            },
+            {
+              "upperUs": 128,
+              "count": 73
+            },
+            {
+              "upperUs": 256,
+              "count": 10
+            },
+            {
+              "upperUs": 512,
+              "count": 1
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 15.588,
+          "systemCpuMs": 24.923,
+          "maxRssKiB": 14304
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/static",
+          "--duration-ms",
+          "100",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "resources": {
+        "samplingErrors": [],
+        "hostLoadAverage": {
+          "before": [
+            0.14,
+            0.15,
+            0.14
+          ],
+          "after": [
+            0.14,
+            0.15,
+            0.14
+          ]
+        },
+        "nodeOrchestrator": {
+          "userCpuMs": 2.025,
+          "systemCpuMs": 2.905
+        },
+        "client": {
+          "userCpuMs": 15.588,
+          "systemCpuMs": 24.923,
+          "maxRssKiB": 14304
+        },
+        "front": {
+          "userCpuMs": 10,
+          "systemCpuMs": 40,
+          "totalCpuMs": 50,
+          "rssBytes": {
+            "first": 5562368,
+            "last": 5562368,
+            "sampledMax": 5562368,
+            "samples": 6
+          }
+        },
+        "origin": {
+          "userCpuMs": 0,
+          "systemCpuMs": 0,
+          "totalCpuMs": 0,
+          "rssBytes": {
+            "first": 5525504,
+            "last": 5525504,
+            "sampledMax": 5525504,
+            "samples": 6
+          }
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 3,
+      "binary": "baseline",
+      "workload": "static",
+      "concurrency": 1,
+      "repetition": 1,
+      "warmup": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/static"
+        },
+        "options": {
+          "durationMs": 50,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 1730,
+          "completed": 1730,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 1729
+        },
+        "timing": {
+          "elapsedMs": 50.053065,
+          "admissionMs": 50,
+          "drainMs": 0.053065
+        },
+        "throughputRps": 34563.317951,
+        "latency": {
+          "count": 1730,
+          "meanUs": 28.859714,
+          "maxUs": 265.249,
+          "p50UpperUs": 32,
+          "p95UpperUs": 64,
+          "p99UpperUs": 128,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 1584
+            },
+            {
+              "upperUs": 64,
+              "count": 79
+            },
+            {
+              "upperUs": 128,
+              "count": 58
+            },
+            {
+              "upperUs": 256,
+              "count": 6
+            },
+            {
+              "upperUs": 512,
+              "count": 3
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 2.767,
+          "systemCpuMs": 18.556,
+          "maxRssKiB": 14348
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/static",
+          "--duration-ms",
+          "50",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "traffic": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/static"
+        },
+        "options": {
+          "durationMs": 100,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 3374,
+          "completed": 3374,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 3373
+        },
+        "timing": {
+          "elapsedMs": 100.049425,
+          "admissionMs": 100,
+          "drainMs": 0.049425
+        },
+        "throughputRps": 33723.332243,
+        "latency": {
+          "count": 3374,
+          "meanUs": 29.589365,
+          "maxUs": 339.959,
+          "p50UpperUs": 32,
+          "p95UpperUs": 64,
+          "p99UpperUs": 128,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 3050
+            },
+            {
+              "upperUs": 64,
+              "count": 192
+            },
+            {
+              "upperUs": 128,
+              "count": 109
+            },
+            {
+              "upperUs": 256,
+              "count": 16
+            },
+            {
+              "upperUs": 512,
+              "count": 7
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 7.375,
+          "systemCpuMs": 32.968,
+          "maxRssKiB": 14360
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/static",
+          "--duration-ms",
+          "100",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "resources": {
+        "samplingErrors": [],
+        "hostLoadAverage": {
+          "before": [
+            0.14,
+            0.15,
+            0.14
+          ],
+          "after": [
+            0.14,
+            0.15,
+            0.14
+          ]
+        },
+        "nodeOrchestrator": {
+          "userCpuMs": 2.925,
+          "systemCpuMs": 1.792
+        },
+        "client": {
+          "userCpuMs": 7.375,
+          "systemCpuMs": 32.968,
+          "maxRssKiB": 14360
+        },
+        "front": {
+          "userCpuMs": 0,
+          "systemCpuMs": 50,
+          "totalCpuMs": 50,
+          "rssBytes": {
+            "first": 5652480,
+            "last": 5652480,
+            "sampledMax": 5652480,
+            "samples": 6
+          }
+        },
+        "origin": {
+          "userCpuMs": 0,
+          "systemCpuMs": 0,
+          "totalCpuMs": 0,
+          "rssBytes": {
+            "first": 5525504,
+            "last": 5525504,
+            "sampledMax": 5525504,
+            "samples": 6
+          }
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 4,
+      "binary": "baseline",
+      "workload": "proxy",
+      "concurrency": 1,
+      "repetition": 0,
+      "warmup": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/proxy"
+        },
+        "options": {
+          "durationMs": 50,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 797,
+          "completed": 797,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 796
+        },
+        "timing": {
+          "elapsedMs": 50.032259,
+          "admissionMs": 50,
+          "drainMs": 0.032259
+        },
+        "throughputRps": 15929.722462,
+        "latency": {
+          "count": 797,
+          "meanUs": 62.678154,
+          "maxUs": 1950.399,
+          "p50UpperUs": 64,
+          "p95UpperUs": 128,
+          "p99UpperUs": 256,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 0
+            },
+            {
+              "upperUs": 64,
+              "count": 652
+            },
+            {
+              "upperUs": 128,
+              "count": 128
+            },
+            {
+              "upperUs": 256,
+              "count": 11
+            },
+            {
+              "upperUs": 512,
+              "count": 5
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 1
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 0,
+          "systemCpuMs": 11.305,
+          "maxRssKiB": 30928
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/proxy",
+          "--duration-ms",
+          "50",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "traffic": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/proxy"
+        },
+        "options": {
+          "durationMs": 100,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 1667,
+          "completed": 1667,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 1666
+        },
+        "timing": {
+          "elapsedMs": 100.094356,
+          "admissionMs": 100,
+          "drainMs": 0.094356
+        },
+        "throughputRps": 16654.285682,
+        "latency": {
+          "count": 1667,
+          "meanUs": 59.966961,
+          "maxUs": 1104.702,
+          "p50UpperUs": 64,
+          "p95UpperUs": 128,
+          "p99UpperUs": 256,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 0
+            },
+            {
+              "upperUs": 64,
+              "count": 1444
+            },
+            {
+              "upperUs": 128,
+              "count": 186
+            },
+            {
+              "upperUs": 256,
+              "count": 30
+            },
+            {
+              "upperUs": 512,
+              "count": 6
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 1
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 2.801,
+          "systemCpuMs": 19.982,
+          "maxRssKiB": 14368
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/proxy",
+          "--duration-ms",
+          "100",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "resources": {
+        "samplingErrors": [],
+        "hostLoadAverage": {
+          "before": [
+            0.14,
+            0.15,
+            0.14
+          ],
+          "after": [
+            0.14,
+            0.15,
+            0.14
+          ]
+        },
+        "nodeOrchestrator": {
+          "userCpuMs": 5.175,
+          "systemCpuMs": 0.592
+        },
+        "client": {
+          "userCpuMs": 2.801,
+          "systemCpuMs": 19.982,
+          "maxRssKiB": 14368
+        },
+        "front": {
+          "userCpuMs": 0,
+          "systemCpuMs": 30,
+          "totalCpuMs": 30,
+          "rssBytes": {
+            "first": 5541888,
+            "last": 5541888,
+            "sampledMax": 5541888,
+            "samples": 6
+          }
+        },
+        "origin": {
+          "userCpuMs": 0,
+          "systemCpuMs": 30,
+          "totalCpuMs": 30,
+          "rssBytes": {
+            "first": 5525504,
+            "last": 5525504,
+            "sampledMax": 5525504,
+            "samples": 6
+          }
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 5,
+      "binary": "candidate",
+      "workload": "proxy",
+      "concurrency": 1,
+      "repetition": 0,
+      "warmup": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/proxy"
+        },
+        "options": {
+          "durationMs": 50,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 840,
+          "completed": 840,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 839
+        },
+        "timing": {
+          "elapsedMs": 50.056263,
+          "admissionMs": 50,
+          "drainMs": 0.056263
+        },
+        "throughputRps": 16781.11688,
+        "latency": {
+          "count": 840,
+          "meanUs": 59.4932,
+          "maxUs": 504.641,
+          "p50UpperUs": 64,
+          "p95UpperUs": 128,
+          "p99UpperUs": 256,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 0
+            },
+            {
+              "upperUs": 64,
+              "count": 667
+            },
+            {
+              "upperUs": 128,
+              "count": 143
+            },
+            {
+              "upperUs": 256,
+              "count": 26
+            },
+            {
+              "upperUs": 512,
+              "count": 4
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 4.849,
+          "systemCpuMs": 5.824,
+          "maxRssKiB": 14408
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/proxy",
+          "--duration-ms",
+          "50",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "traffic": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/proxy"
+        },
+        "options": {
+          "durationMs": 100,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 1692,
+          "completed": 1692,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 1691
+        },
+        "timing": {
+          "elapsedMs": 100.049921,
+          "admissionMs": 100,
+          "drainMs": 0.049921
+        },
+        "throughputRps": 16911.557581,
+        "latency": {
+          "count": 1692,
+          "meanUs": 59.053546,
+          "maxUs": 471.462,
+          "p50UpperUs": 64,
+          "p95UpperUs": 128,
+          "p99UpperUs": 256,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 0
+            },
+            {
+              "upperUs": 64,
+              "count": 1452
+            },
+            {
+              "upperUs": 128,
+              "count": 193
+            },
+            {
+              "upperUs": 256,
+              "count": 36
+            },
+            {
+              "upperUs": 512,
+              "count": 11
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 4.478,
+          "systemCpuMs": 16.538,
+          "maxRssKiB": 14408
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/proxy",
+          "--duration-ms",
+          "100",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "resources": {
+        "samplingErrors": [],
+        "hostLoadAverage": {
+          "before": [
+            0.14,
+            0.15,
+            0.14
+          ],
+          "after": [
+            0.14,
+            0.15,
+            0.14
+          ]
+        },
+        "nodeOrchestrator": {
+          "userCpuMs": 1.691,
+          "systemCpuMs": 2.67
+        },
+        "client": {
+          "userCpuMs": 4.478,
+          "systemCpuMs": 16.538,
+          "maxRssKiB": 14408
+        },
+        "front": {
+          "userCpuMs": 10,
+          "systemCpuMs": 30,
+          "totalCpuMs": 40,
+          "rssBytes": {
+            "first": 5525504,
+            "last": 5525504,
+            "sampledMax": 5525504,
+            "samples": 6
+          }
+        },
+        "origin": {
+          "userCpuMs": 0,
+          "systemCpuMs": 30,
+          "totalCpuMs": 30,
+          "rssBytes": {
+            "first": 5525504,
+            "last": 5525504,
+            "sampledMax": 5525504,
+            "samples": 6
+          }
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 6,
+      "binary": "candidate",
+      "workload": "proxy",
+      "concurrency": 1,
+      "repetition": 1,
+      "warmup": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/proxy"
+        },
+        "options": {
+          "durationMs": 50,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 716,
+          "completed": 716,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 715
+        },
+        "timing": {
+          "elapsedMs": 50.034222,
+          "admissionMs": 50,
+          "drainMs": 0.034222
+        },
+        "throughputRps": 14310.205523,
+        "latency": {
+          "count": 716,
+          "meanUs": 69.786004,
+          "maxUs": 3368.837,
+          "p50UpperUs": 64,
+          "p95UpperUs": 128,
+          "p99UpperUs": 256,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 0
+            },
+            {
+              "upperUs": 64,
+              "count": 567
+            },
+            {
+              "upperUs": 128,
+              "count": 129
+            },
+            {
+              "upperUs": 256,
+              "count": 15
+            },
+            {
+              "upperUs": 512,
+              "count": 4
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 1
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 0,
+          "systemCpuMs": 8.856,
+          "maxRssKiB": 31080
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/proxy",
+          "--duration-ms",
+          "50",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "traffic": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/proxy"
+        },
+        "options": {
+          "durationMs": 100,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 1508,
+          "completed": 1508,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 1507
+        },
+        "timing": {
+          "elapsedMs": 100.035349,
+          "admissionMs": 100,
+          "drainMs": 0.035349
+        },
+        "throughputRps": 15074.671254,
+        "latency": {
+          "count": 1508,
+          "meanUs": 66.264147,
+          "maxUs": 2246.039,
+          "p50UpperUs": 64,
+          "p95UpperUs": 128,
+          "p99UpperUs": 256,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 0
+            },
+            {
+              "upperUs": 64,
+              "count": 863
+            },
+            {
+              "upperUs": 128,
+              "count": 603
+            },
+            {
+              "upperUs": 256,
+              "count": 32
+            },
+            {
+              "upperUs": 512,
+              "count": 5
+            },
+            {
+              "upperUs": 1024,
+              "count": 4
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 1
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 7.953,
+          "systemCpuMs": 13.211,
+          "maxRssKiB": 31080
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/proxy",
+          "--duration-ms",
+          "100",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "resources": {
+        "samplingErrors": [],
+        "hostLoadAverage": {
+          "before": [
+            0.14,
+            0.15,
+            0.14
+          ],
+          "after": [
+            0.14,
+            0.15,
+            0.14
+          ]
+        },
+        "nodeOrchestrator": {
+          "userCpuMs": 5.552,
+          "systemCpuMs": 0.827
+        },
+        "client": {
+          "userCpuMs": 7.953,
+          "systemCpuMs": 13.211,
+          "maxRssKiB": 31080
+        },
+        "front": {
+          "userCpuMs": 20,
+          "systemCpuMs": 30,
+          "totalCpuMs": 50,
+          "rssBytes": {
+            "first": 5632000,
+            "last": 5632000,
+            "sampledMax": 5632000,
+            "samples": 6
+          }
+        },
+        "origin": {
+          "userCpuMs": 10,
+          "systemCpuMs": 20,
+          "totalCpuMs": 30,
+          "rssBytes": {
+            "first": 5525504,
+            "last": 5525504,
+            "sampledMax": 5525504,
+            "samples": 6
+          }
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    },
+    {
+      "index": 7,
+      "binary": "baseline",
+      "workload": "proxy",
+      "concurrency": 1,
+      "repetition": 1,
+      "warmup": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/proxy"
+        },
+        "options": {
+          "durationMs": 50,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 703,
+          "completed": 703,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 702
+        },
+        "timing": {
+          "elapsedMs": 50.049476,
+          "admissionMs": 50,
+          "drainMs": 0.049476
+        },
+        "throughputRps": 14046.101102,
+        "latency": {
+          "count": 703,
+          "meanUs": 71.088367,
+          "maxUs": 399.938,
+          "p50UpperUs": 64,
+          "p95UpperUs": 128,
+          "p99UpperUs": 256,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 0
+            },
+            {
+              "upperUs": 64,
+              "count": 463
+            },
+            {
+              "upperUs": 128,
+              "count": 221
+            },
+            {
+              "upperUs": 256,
+              "count": 14
+            },
+            {
+              "upperUs": 512,
+              "count": 5
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 0,
+          "systemCpuMs": 9.395,
+          "maxRssKiB": 39428
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/proxy",
+          "--duration-ms",
+          "50",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "traffic": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": true,
+        "interrupted": 0,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38313,
+          "path": "/proxy"
+        },
+        "options": {
+          "durationMs": 100,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 1832,
+          "completed": 1832,
+          "failed": 0,
+          "aborted": 0,
+          "connectionsOpened": 1,
+          "reusedRequests": 1831
+        },
+        "timing": {
+          "elapsedMs": 100.085222,
+          "admissionMs": 100,
+          "drainMs": 0.085222
+        },
+        "throughputRps": 18304.400624,
+        "latency": {
+          "count": 1832,
+          "meanUs": 54.55893,
+          "maxUs": 599.501,
+          "p50UpperUs": 64,
+          "p95UpperUs": 128,
+          "p99UpperUs": 256,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 0
+            },
+            {
+              "upperUs": 64,
+              "count": 1600
+            },
+            {
+              "upperUs": 128,
+              "count": 195
+            },
+            {
+              "upperUs": 256,
+              "count": 30
+            },
+            {
+              "upperUs": 512,
+              "count": 6
+            },
+            {
+              "upperUs": 1024,
+              "count": 1
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 10.495,
+          "systemCpuMs": 12.156,
+          "maxRssKiB": 39444
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": null,
+        "exit": {
+          "code": 0,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38313",
+          "--path",
+          "/proxy",
+          "--duration-ms",
+          "100",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "resources": {
+        "samplingErrors": [],
+        "hostLoadAverage": {
+          "before": [
+            0.14,
+            0.15,
+            0.14
+          ],
+          "after": [
+            0.14,
+            0.15,
+            0.14
+          ]
+        },
+        "nodeOrchestrator": {
+          "userCpuMs": 0.502,
+          "systemCpuMs": 4.442
+        },
+        "client": {
+          "userCpuMs": 10.495,
+          "systemCpuMs": 12.156,
+          "maxRssKiB": 39444
+        },
+        "front": {
+          "userCpuMs": 10,
+          "systemCpuMs": 30,
+          "totalCpuMs": 40,
+          "rssBytes": {
+            "first": 5554176,
+            "last": 5554176,
+            "sampledMax": 5554176,
+            "samples": 6
+          }
+        },
+        "origin": {
+          "userCpuMs": 10,
+          "systemCpuMs": 20,
+          "totalCpuMs": 30,
+          "rssBytes": {
+            "first": 5525504,
+            "last": 5525504,
+            "sampledMax": 5525504,
+            "samples": 6
+          }
+        }
+      },
+      "success": true,
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    }
+  ],
+  "cleanupErrors": [],
+  "identities": {
+    "baseline": {
+      "label": "baseline",
+      "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+      "sha256": "adf05f3088bf8ee1ed7c886e424a2d92258323dd78e036276b41e009fbaf634e",
+      "bytes": 8547008,
+      "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "normalizedVersion": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)\nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=<path> --prefix=<path> --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "manifest": {
+        "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-reference.json",
+        "sha256": "6e6b94fe9541d65eaa6ae61e7a1784d277d24a23bf7049cebb55abcc04fdca44",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "checkoutRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "trackedChanges": [],
+        "sourceChangesFromUpstream": [],
+        "sourceDiffSha256": null,
+        "compiler": "cc",
+        "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+        "dependencies": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        },
+        "compiledModules": [
+          "ngx_core_module",
+          "ngx_errlog_module",
+          "ngx_conf_module",
+          "ngx_openssl_module",
+          "ngx_openssl_cache_module",
+          "ngx_quic_module",
+          "ngx_quic_bpf_module",
+          "ngx_regex_module",
+          "ngx_events_module",
+          "ngx_event_core_module",
+          "ngx_epoll_module",
+          "ngx_thread_pool_module",
+          "ngx_http_module",
+          "ngx_http_core_module",
+          "ngx_http_log_module",
+          "ngx_http_upstream_module",
+          "ngx_http_v2_module",
+          "ngx_http_v3_module",
+          "ngx_http_static_module",
+          "ngx_http_gzip_static_module",
+          "ngx_http_dav_module",
+          "ngx_http_autoindex_module",
+          "ngx_http_index_module",
+          "ngx_http_mirror_module",
+          "ngx_http_try_files_module",
+          "ngx_http_auth_request_module",
+          "ngx_http_auth_basic_module",
+          "ngx_http_access_module",
+          "ngx_http_limit_conn_module",
+          "ngx_http_limit_req_module",
+          "ngx_http_realip_module",
+          "ngx_http_geo_module",
+          "ngx_http_map_module",
+          "ngx_http_split_clients_module",
+          "ngx_http_referer_module",
+          "ngx_http_rewrite_module",
+          "ngx_http_ssl_module",
+          "ngx_http_proxy_module",
+          "ngx_http_fastcgi_module",
+          "ngx_http_uwsgi_module",
+          "ngx_http_scgi_module",
+          "ngx_http_grpc_module",
+          "ngx_http_proxy_v2_module",
+          "ngx_http_tunnel_module",
+          "ngx_http_memcached_module",
+          "ngx_http_empty_gif_module",
+          "ngx_http_browser_module",
+          "ngx_http_upstream_hash_module",
+          "ngx_http_upstream_ip_hash_module",
+          "ngx_http_upstream_least_conn_module",
+          "ngx_http_upstream_least_time_module",
+          "ngx_http_upstream_random_module",
+          "ngx_http_upstream_keepalive_module",
+          "ngx_http_upstream_zone_module",
+          "ngx_http_upstream_sticky_module",
+          "ngx_http_stub_status_module",
+          "ngx_http_write_filter_module",
+          "ngx_http_header_filter_module",
+          "ngx_http_chunked_filter_module",
+          "ngx_http_v2_filter_module",
+          "ngx_http_v3_filter_module",
+          "ngx_http_range_header_filter_module",
+          "ngx_http_gzip_filter_module",
+          "ngx_http_postpone_filter_module",
+          "ngx_http_ssi_filter_module",
+          "ngx_http_charset_filter_module",
+          "ngx_http_sub_filter_module",
+          "ngx_http_addition_filter_module",
+          "ngx_http_gunzip_filter_module",
+          "ngx_http_userid_filter_module",
+          "ngx_http_headers_filter_module",
+          "ngx_http_copy_filter_module",
+          "ngx_http_range_body_filter_module",
+          "ngx_http_not_modified_filter_module",
+          "ngx_http_slice_filter_module",
+          "ngx_mail_module",
+          "ngx_mail_core_module",
+          "ngx_mail_ssl_module",
+          "ngx_mail_pop3_module",
+          "ngx_mail_imap_module",
+          "ngx_mail_smtp_module",
+          "ngx_mail_auth_http_module",
+          "ngx_mail_proxy_module",
+          "ngx_mail_realip_module",
+          "ngx_stream_module",
+          "ngx_stream_core_module",
+          "ngx_stream_log_module",
+          "ngx_stream_proxy_module",
+          "ngx_stream_upstream_module",
+          "ngx_stream_write_filter_module",
+          "ngx_stream_ssl_module",
+          "ngx_stream_limit_conn_module",
+          "ngx_stream_access_module",
+          "ngx_stream_geo_module",
+          "ngx_stream_map_module",
+          "ngx_stream_split_clients_module",
+          "ngx_stream_return_module",
+          "ngx_stream_pass_module",
+          "ngx_stream_set_module",
+          "ngx_stream_upstream_hash_module",
+          "ngx_stream_upstream_least_conn_module",
+          "ngx_stream_upstream_least_time_module",
+          "ngx_stream_upstream_random_module",
+          "ngx_stream_upstream_zone_module",
+          "ngx_stream_ssl_preread_module"
+        ]
+      }
+    },
+    "candidate": {
+      "label": "candidate",
+      "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+      "sha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+      "bytes": 8547024,
+      "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "normalizedVersion": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)\nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=<path> --prefix=<path> --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "manifest": {
+        "path": "/tmp/x10-native-driver-controls-KlcVqF/changing.json",
+        "sha256": "307d46f3e3bba02c601c61a192d58d74d66ee8e8728e164b30309059bc804a64",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "checkoutRevision": "29746068bfca299b85062e981df250aa3e12abb8",
+        "trackedChanges": [
+          "x10/BUILD.md",
+          "x10/CI.md",
+          "x10/PLAN.md",
+          "x10/README.md",
+          "x10/build.sh",
+          "x10/control/README.md",
+          "x10/control/manager.mjs",
+          "x10/test/all.mjs",
+          "x10/test/control.test.mjs"
+        ],
+        "sourceChangesFromUpstream": [
+          "src/event/quic/ngx_event_quic_transport.c"
+        ],
+        "sourceDiffSha256": "e39c9727a66feae3390301c0718438dc00182a28b607e6156a2b6d059f65ba64",
+        "compiler": "cc",
+        "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+        "dependencies": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        },
+        "compiledModules": [
+          "ngx_core_module",
+          "ngx_errlog_module",
+          "ngx_conf_module",
+          "ngx_openssl_module",
+          "ngx_openssl_cache_module",
+          "ngx_quic_module",
+          "ngx_quic_bpf_module",
+          "ngx_regex_module",
+          "ngx_events_module",
+          "ngx_event_core_module",
+          "ngx_epoll_module",
+          "ngx_thread_pool_module",
+          "ngx_http_module",
+          "ngx_http_core_module",
+          "ngx_http_log_module",
+          "ngx_http_upstream_module",
+          "ngx_http_v2_module",
+          "ngx_http_v3_module",
+          "ngx_http_static_module",
+          "ngx_http_gzip_static_module",
+          "ngx_http_dav_module",
+          "ngx_http_autoindex_module",
+          "ngx_http_index_module",
+          "ngx_http_mirror_module",
+          "ngx_http_try_files_module",
+          "ngx_http_auth_request_module",
+          "ngx_http_auth_basic_module",
+          "ngx_http_access_module",
+          "ngx_http_limit_conn_module",
+          "ngx_http_limit_req_module",
+          "ngx_http_realip_module",
+          "ngx_http_geo_module",
+          "ngx_http_map_module",
+          "ngx_http_split_clients_module",
+          "ngx_http_referer_module",
+          "ngx_http_rewrite_module",
+          "ngx_http_ssl_module",
+          "ngx_http_proxy_module",
+          "ngx_http_fastcgi_module",
+          "ngx_http_uwsgi_module",
+          "ngx_http_scgi_module",
+          "ngx_http_grpc_module",
+          "ngx_http_proxy_v2_module",
+          "ngx_http_tunnel_module",
+          "ngx_http_memcached_module",
+          "ngx_http_empty_gif_module",
+          "ngx_http_browser_module",
+          "ngx_http_upstream_hash_module",
+          "ngx_http_upstream_ip_hash_module",
+          "ngx_http_upstream_least_conn_module",
+          "ngx_http_upstream_least_time_module",
+          "ngx_http_upstream_random_module",
+          "ngx_http_upstream_keepalive_module",
+          "ngx_http_upstream_zone_module",
+          "ngx_http_upstream_sticky_module",
+          "ngx_http_stub_status_module",
+          "ngx_http_write_filter_module",
+          "ngx_http_header_filter_module",
+          "ngx_http_chunked_filter_module",
+          "ngx_http_v2_filter_module",
+          "ngx_http_v3_filter_module",
+          "ngx_http_range_header_filter_module",
+          "ngx_http_gzip_filter_module",
+          "ngx_http_postpone_filter_module",
+          "ngx_http_ssi_filter_module",
+          "ngx_http_charset_filter_module",
+          "ngx_http_sub_filter_module",
+          "ngx_http_addition_filter_module",
+          "ngx_http_gunzip_filter_module",
+          "ngx_http_userid_filter_module",
+          "ngx_http_headers_filter_module",
+          "ngx_http_copy_filter_module",
+          "ngx_http_range_body_filter_module",
+          "ngx_http_not_modified_filter_module",
+          "ngx_http_slice_filter_module",
+          "ngx_mail_module",
+          "ngx_mail_core_module",
+          "ngx_mail_ssl_module",
+          "ngx_mail_pop3_module",
+          "ngx_mail_imap_module",
+          "ngx_mail_smtp_module",
+          "ngx_mail_auth_http_module",
+          "ngx_mail_proxy_module",
+          "ngx_mail_realip_module",
+          "ngx_stream_module",
+          "ngx_stream_core_module",
+          "ngx_stream_log_module",
+          "ngx_stream_proxy_module",
+          "ngx_stream_upstream_module",
+          "ngx_stream_write_filter_module",
+          "ngx_stream_ssl_module",
+          "ngx_stream_limit_conn_module",
+          "ngx_stream_access_module",
+          "ngx_stream_geo_module",
+          "ngx_stream_map_module",
+          "ngx_stream_split_clients_module",
+          "ngx_stream_return_module",
+          "ngx_stream_pass_module",
+          "ngx_stream_set_module",
+          "ngx_stream_upstream_hash_module",
+          "ngx_stream_upstream_least_conn_module",
+          "ngx_stream_upstream_least_time_module",
+          "ngx_stream_upstream_random_module",
+          "ngx_stream_upstream_zone_module",
+          "ngx_stream_ssl_preread_module"
+        ]
+      }
+    }
+  },
+  "clientIdentity": {
+    "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+    "sha256": "97482bfa8ca73c8992bbef6efc549c8d6370dd2841ff58164d39fedd82ac06bb",
+    "sourceSha256": "ea0c28a2a4ec24d67978b442993ca86c86f14a823a6a24e1b7116807f0795828",
+    "manifestPath": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/build.json",
+    "manifestSha256": "e92ddc42074672de256e73976ea1bdb140e26183390bd6630ec5868404756224",
+    "compiler": {
+      "command": "cc",
+      "versionOutput": "cc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+    },
+    "compilerArguments": [
+      "-O2",
+      "-std=c11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/bench/native-load.c",
+      "-o",
+      "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load.tmp-14"
+    ]
+  },
+  "originIdentity": {
+    "label": "baseline",
+    "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+    "sha256": "adf05f3088bf8ee1ed7c886e424a2d92258323dd78e036276b41e009fbaf634e",
+    "bytes": 8547008,
+    "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+    "normalizedVersion": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)\nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=<path> --prefix=<path> --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+    "manifest": {
+      "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-reference.json",
+      "sha256": "6e6b94fe9541d65eaa6ae61e7a1784d277d24a23bf7049cebb55abcc04fdca44",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "checkoutRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "trackedChanges": [],
+      "sourceChangesFromUpstream": [],
+      "sourceDiffSha256": null,
+      "compiler": "cc",
+      "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+      "dependencies": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "compiledModules": [
+        "ngx_core_module",
+        "ngx_errlog_module",
+        "ngx_conf_module",
+        "ngx_openssl_module",
+        "ngx_openssl_cache_module",
+        "ngx_quic_module",
+        "ngx_quic_bpf_module",
+        "ngx_regex_module",
+        "ngx_events_module",
+        "ngx_event_core_module",
+        "ngx_epoll_module",
+        "ngx_thread_pool_module",
+        "ngx_http_module",
+        "ngx_http_core_module",
+        "ngx_http_log_module",
+        "ngx_http_upstream_module",
+        "ngx_http_v2_module",
+        "ngx_http_v3_module",
+        "ngx_http_static_module",
+        "ngx_http_gzip_static_module",
+        "ngx_http_dav_module",
+        "ngx_http_autoindex_module",
+        "ngx_http_index_module",
+        "ngx_http_mirror_module",
+        "ngx_http_try_files_module",
+        "ngx_http_auth_request_module",
+        "ngx_http_auth_basic_module",
+        "ngx_http_access_module",
+        "ngx_http_limit_conn_module",
+        "ngx_http_limit_req_module",
+        "ngx_http_realip_module",
+        "ngx_http_geo_module",
+        "ngx_http_map_module",
+        "ngx_http_split_clients_module",
+        "ngx_http_referer_module",
+        "ngx_http_rewrite_module",
+        "ngx_http_ssl_module",
+        "ngx_http_proxy_module",
+        "ngx_http_fastcgi_module",
+        "ngx_http_uwsgi_module",
+        "ngx_http_scgi_module",
+        "ngx_http_grpc_module",
+        "ngx_http_proxy_v2_module",
+        "ngx_http_tunnel_module",
+        "ngx_http_memcached_module",
+        "ngx_http_empty_gif_module",
+        "ngx_http_browser_module",
+        "ngx_http_upstream_hash_module",
+        "ngx_http_upstream_ip_hash_module",
+        "ngx_http_upstream_least_conn_module",
+        "ngx_http_upstream_least_time_module",
+        "ngx_http_upstream_random_module",
+        "ngx_http_upstream_keepalive_module",
+        "ngx_http_upstream_zone_module",
+        "ngx_http_upstream_sticky_module",
+        "ngx_http_stub_status_module",
+        "ngx_http_write_filter_module",
+        "ngx_http_header_filter_module",
+        "ngx_http_chunked_filter_module",
+        "ngx_http_v2_filter_module",
+        "ngx_http_v3_filter_module",
+        "ngx_http_range_header_filter_module",
+        "ngx_http_gzip_filter_module",
+        "ngx_http_postpone_filter_module",
+        "ngx_http_ssi_filter_module",
+        "ngx_http_charset_filter_module",
+        "ngx_http_sub_filter_module",
+        "ngx_http_addition_filter_module",
+        "ngx_http_gunzip_filter_module",
+        "ngx_http_userid_filter_module",
+        "ngx_http_headers_filter_module",
+        "ngx_http_copy_filter_module",
+        "ngx_http_range_body_filter_module",
+        "ngx_http_not_modified_filter_module",
+        "ngx_http_slice_filter_module",
+        "ngx_mail_module",
+        "ngx_mail_core_module",
+        "ngx_mail_ssl_module",
+        "ngx_mail_pop3_module",
+        "ngx_mail_imap_module",
+        "ngx_mail_smtp_module",
+        "ngx_mail_auth_http_module",
+        "ngx_mail_proxy_module",
+        "ngx_mail_realip_module",
+        "ngx_stream_module",
+        "ngx_stream_core_module",
+        "ngx_stream_log_module",
+        "ngx_stream_proxy_module",
+        "ngx_stream_upstream_module",
+        "ngx_stream_write_filter_module",
+        "ngx_stream_ssl_module",
+        "ngx_stream_limit_conn_module",
+        "ngx_stream_access_module",
+        "ngx_stream_geo_module",
+        "ngx_stream_map_module",
+        "ngx_stream_split_clients_module",
+        "ngx_stream_return_module",
+        "ngx_stream_pass_module",
+        "ngx_stream_set_module",
+        "ngx_stream_upstream_hash_module",
+        "ngx_stream_upstream_least_conn_module",
+        "ngx_stream_upstream_least_time_module",
+        "ngx_stream_upstream_random_module",
+        "ngx_stream_upstream_zone_module",
+        "ngx_stream_ssl_preread_module"
+      ]
+    }
+  },
+  "profileComparison": {
+    "comparable": true,
+    "ignoredVersionFields": [
+      "configure --builddir path",
+      "configure --prefix path"
+    ],
+    "identitiesStableAtFinish": false
+  },
+  "payload": {
+    "bytes": 1024,
+    "sha256": "98dbc1cdac192018c78932d9523bc53ef4a1ce69d516240b3772ffa5a59e85c4"
+  },
+  "nativeConfigTemplate": "user \"root\";\ndaemon off;\nmaster_process off;\npid \"<private-prefix>/nginx.pid\";\nerror_log \"<private-prefix>/error.log\" warn;\nevents { worker_connections 1024; }\nhttp {\n  access_log off;\n  default_type application/octet-stream;\n  sendfile on;\n  tcp_nopush on;\n  keepalive_timeout 30s;\n  keepalive_requests 1000000;\n  client_body_temp_path \"<private-prefix>/body-temp\";\n  proxy_temp_path \"<private-prefix>/proxy-temp\";\n  upstream fixture { server 127.0.0.1:<origin-port>; keepalive 128; }\n  server {\n    listen 127.0.0.1:<front-port>;\n    server_name localhost;\n    location = /static { alias \"<private-prefix>/payload.bin\"; }\n    location = /proxy {\n      proxy_http_version 1.1;\n      proxy_set_header Connection \"\";\n      proxy_connect_timeout 1s;\n      proxy_read_timeout 2s;\n      proxy_pass http://fixture/static;\n    }\n  }\n}\n",
+  "summary": [
+    {
+      "workload": "static",
+      "concurrency": 1,
+      "binaries": {
+        "baseline": {
+          "samples": 2,
+          "requestsPerSecond": {
+            "arithmeticMean": 30417.902339499997,
+            "min": 27112.472436,
+            "max": 33723.332243
+          },
+          "failedRequests": 0
+        },
+        "candidate": {
+          "samples": 2,
+          "requestsPerSecond": {
+            "arithmeticMean": 31857.949705,
+            "min": 30683.347534,
+            "max": 33032.551876
+          },
+          "failedRequests": 0
+        }
+      },
+      "candidateToBaselineMeanThroughputRatio": 1.0473420997091567
+    },
+    {
+      "workload": "proxy",
+      "concurrency": 1,
+      "binaries": {
+        "baseline": {
+          "samples": 2,
+          "requestsPerSecond": {
+            "arithmeticMean": 17479.343153,
+            "min": 16654.285682,
+            "max": 18304.400624
+          },
+          "failedRequests": 0
+        },
+        "candidate": {
+          "samples": 2,
+          "requestsPerSecond": {
+            "arithmeticMean": 15993.1144175,
+            "min": 15074.671254,
+            "max": 16911.557581
+          },
+          "failedRequests": 0
+        }
+      },
+      "candidateToBaselineMeanThroughputRatio": 0.9149722777057033
+    }
+  ],
+  "originCleanup": {
+    "signal": "SIGQUIT",
+    "result": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "identityErrors": [
+    "candidate manifest changed"
+  ],
+  "finishedAt": "2026-10-23T09:37:13.302Z"
+}

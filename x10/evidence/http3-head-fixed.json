@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-http3-head-interop",
+  "startedAt": "2026-10-23T10:14:07.992063+00:00",
+  "success": true,
+  "tests": [
+    {
+      "name": "independent-verified-h3-get-exact-representation",
+      "status": "passed",
+      "elapsedMs": 123,
+      "detail": {
+        "method": "GET",
+        "requestedHttpVersion": "V3ONLY",
+        "verifyPeer": true,
+        "verifyHost": 2,
+        "bodyBytes": 65810,
+        "clientVersion": "libcurl/8.21.0-IMPERSONATE BoringSSL zlib/1.3.1 brotli/1.2.0 zstd/1.5.7 libidn2/2.3.7 nghttp2/1.63.0 ngtcp2/1.20.0 nghttp3/1.15.0",
+        "curlCode": 0,
+        "status": 200,
+        "httpVersion": 30,
+        "sslVerifyResult": 0,
+        "primaryIp": "127.0.0.1",
+        "primaryPort": 51155,
+        "bodySha256": "e09c8a957eb16f118329bb8e05b9670c5f105553687d5206d7041e717552423b",
+        "rawHeaders": "HTTP/3 200 \r\nserver: nginx/1.31.9\r\ndate: Fri, 23 Oct 2026 10:14:08 GMT\r\ncontent-type: text/plain\r\ncontent-length: 65810\r\nlast-modified: Fri, 23 Oct 2026 10:14:08 GMT\r\netag: \"6adb3370-10112\"\r\nx-native-http3: h3\r\nx-native-protocol: HTTP/3.0\r\nx-native-method: GET\r\naccept-ranges: bytes\r\n\r\n",
+        "socketCountBeforeHandleClose": 1,
+        "socketCountAfterHandleClose": 0
+      }
+    },
+    {
+      "name": "independent-verified-h3-head-status-headers-empty-api-body",
+      "status": "passed",
+      "elapsedMs": 118,
+      "detail": {
+        "method": "HEAD",
+        "requestedHttpVersion": "V3ONLY",
+        "verifyPeer": true,
+        "verifyHost": 2,
+        "bodyBytes": 0,
+        "clientVersion": "libcurl/8.21.0-IMPERSONATE BoringSSL zlib/1.3.1 brotli/1.2.0 zstd/1.5.7 libidn2/2.3.7 nghttp2/1.63.0 ngtcp2/1.20.0 nghttp3/1.15.0",
+        "curlCode": 0,
+        "status": 200,
+        "httpVersion": 30,
+        "sslVerifyResult": 0,
+        "primaryIp": "127.0.0.1",
+        "primaryPort": 51155,
+        "bodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rawHeaders": "HTTP/3 200 \r\nserver: nginx/1.31.9\r\ndate: Fri, 23 Oct 2026 10:14:08 GMT\r\ncontent-type: text/plain\r\ncontent-length: 65810\r\nlast-modified: Fri, 23 Oct 2026 10:14:08 GMT\r\netag: \"6adb3370-10112\"\r\nx-native-http3: h3\r\nx-native-protocol: HTTP/3.0\r\nx-native-method: HEAD\r\naccept-ranges: bytes\r\n\r\n",
+        "socketCountBeforeHandleClose": 1,
+        "socketCountAfterHandleClose": 0
+      }
+    },
+    {
+      "name": "independent-h3-head-wrong-ca-rejected",
+      "status": "passed",
+      "elapsedMs": 105,
+      "detail": {
+        "method": "HEAD",
+        "requestedHttpVersion": "V3ONLY",
+        "verifyPeer": true,
+        "verifyHost": 2,
+        "bodyBytes": 0,
+        "clientVersion": "libcurl/8.21.0-IMPERSONATE BoringSSL zlib/1.3.1 brotli/1.2.0 zstd/1.5.7 libidn2/2.3.7 nghttp2/1.63.0 ngtcp2/1.20.0 nghttp3/1.15.0",
+        "curlCode": 60,
+        "error": "Failed to perform, curl: (60) SSL certificate OpenSSL verify result: unable to get local issuer certificate (20). See https://curl.se/libcurl/c/libcurl-errors.html first for more details.",
+        "status": 0,
+        "httpVersion": 0,
+        "sslVerifyResult": 20,
+        "primaryIp": "",
+        "primaryPort": -1,
+        "bodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rawHeaders": "",
+        "socketCountBeforeHandleClose": 0,
+        "socketCountAfterHandleClose": 0
+      }
+    },
+    {
+      "name": "independent-h3-head-wrong-hostname-rejected",
+      "status": "passed",
+      "elapsedMs": 116,
+      "detail": {
+        "method": "HEAD",
+        "requestedHttpVersion": "V3ONLY",
+        "verifyPeer": true,
+        "verifyHost": 2,
+        "bodyBytes": 0,
+        "clientVersion": "libcurl/8.21.0-IMPERSONATE BoringSSL zlib/1.3.1 brotli/1.2.0 zstd/1.5.7 libidn2/2.3.7 nghttp2/1.63.0 ngtcp2/1.20.0 nghttp3/1.15.0",
+        "curlCode": 60,
+        "error": "Failed to perform, curl: (60) SSL: no alternative certificate subject name matches target hostname 'wrong.invalid'. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.",
+        "status": 0,
+        "httpVersion": 0,
+        "sslVerifyResult": 1,
+        "primaryIp": "",
+        "primaryPort": -1,
+        "bodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "rawHeaders": "",
+        "socketCountBeforeHandleClose": 0,
+        "socketCountAfterHandleClose": 0
+      }
+    }
+  ],
+  "skips": [],
+  "identity": {
+    "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+    "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+    "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api\n",
+    "sourceFilesSha256": {
+      "src/http/v3/ngx_http_v3_module.c": "35143d29723d05b491fe8b02a6181d4dc82b2ba215524b650d69e803704ddeee",
+      "src/http/v3/ngx_http_v3_request.c": "c9b12b01b646ecee16219ed5d801a52a864f85ed48fb1ced68e2d09ba12ed821",
+      "src/http/v3/ngx_http_v3_filter_module.c": "b0294e27cca0cb8eaf8ceb2a74da9ece61f3a71d19ebc81527e92efdf6f7629c",
+      "src/event/quic/ngx_event_quic_ssl.c": "ffd8ef9dac1580503f41b351ee68c4438fa02909a2a7ca161613aaae7002459a",
+      "src/event/quic/ngx_event_quic_transport.c": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a"
+    },
+    "harnessSha256": "e9e7316b016d095ae7fc44fa61348e9927a82f3d7ff1d71eef11e91cc6486b6a",
+    "launcherSha256": "e0cc8c4441e2bd7ff0b7b3fc6ff085baa3b72ee479712019a2fd4da81dcac409",
+    "observedSourceCheckout": "/workspace/scratch/d8c3d94bb512/nginx-x10",
+    "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+    "interpreter": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/http3-head-venv/bin/python",
+    "client": {
+      "name": "curl_cffi",
+      "version": "0.16.3"
+    },
+    "versions": {
+      "curl_cffi": "0.16.3",
+      "certifi": "2026.10.19",
+      "cffi": "2.1.1",
+      "pycparser": "3.12"
+    },
+    "lockSha256": "3ccf1913a2c5cca06e8d1af2660c08d7447943f10839777d038bd4df63ad5b0f",
+    "clientFilesSha256": {
+      "__init__.py": "e9827081dfedf066ee1e4da6a9eecf58daa69185538e15fd802571cd323261d7",
+      "curl.py": "5d0bb4f8fd99446c3a99edf145ab935252fad7c3d074c0800921d9e96fc4dd52",
+      "const.py": "ba46c35b545168fd46170859a6d853ef8487c94066d93915f9c167f7292a9afb",
+      "_wrapper.abi3.so": "79c9faa1630b25a5c0b7bd3d8fd19356fb3e98aa7ebf594a8fe3809ac65b75f0"
+    },
+    "nativePid": 26,
+    "nativeProcIdentity": {
+      "procPid": 34520,
+      "pidNamespace": "pid:[4026532347]",
+      "startTicks": "2275865"
+    },
+    "nativeUdpListener": {
+      "address": "127.0.0.1",
+      "port": 51155,
+      "socketInode": "217968"
+    },
+    "binaryUnchangedDuringTest": true,
+    "clientUnchangedDuringTest": true,
+    "harnessUnchangedDuringTest": true,
+    "launcherUnchangedDuringTest": true
+  },
+  "fixtureErrors": [],
+  "limitations": [
+    "Independent libcurl/ngtcp2 client on loopback; no browser/loss/migration/platform matrix.",
+    "HEAD body is the zero bytes exposed by libcurl; this is interoperability, not a packet-level proof of absent DATA.",
+    "Separate from unchanged aioquic HEAD diagnostic; no claim that aioquic HEAD is fixed.",
+    "Local hashes and build records are consistency checks, not signed build attestations."
+  ],
+  "dependencyLockSha256": "3ccf1913a2c5cca06e8d1af2660c08d7447943f10839777d038bd4df63ad5b0f",
+  "scope": {
+    "network": "loopback UDP QUIC",
+    "processMode": "single-native-process",
+    "requestedHttpVersion": "V3ONLY",
+    "tls": "TLS1.3",
+    "quicRetry": true
+  },
+  "protocol": {
+    "nativeHttp3": "h3",
+    "nativeRequestProtocol": "HTTP/3.0",
+    "clientHttpVersion": 30,
+    "requestedHttpVersion": "V3ONLY"
+  },
+  "nativeErrorLogTail": "2026/10/23 14:14:08 [notice] 26#26: using the \"epoll\" event method\n2026/10/23 14:14:08 [notice] 26#26: nginx/1.31.9\n2026/10/23 14:14:08 [notice] 26#26: built by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \n2026/10/23 14:14:08 [notice] 26#26: OS: Linux 6.18.55\n2026/10/23 14:14:08 [notice] 26#26: getrlimit(RLIMIT_NOFILE): 16384:16384\n2026/10/23 14:14:08 [warn] 26#26: control API unavailable in single process mode\n2026/10/23 14:14:08 [notice] 26#26: signal 3 (SIGQUIT) received from 18, shutting down\n2026/10/23 14:14:08 [info] 26#26: epoll_wait() failed (4: Interrupted system call)\n2026/10/23 14:14:08 [notice] 26#26: exit\n",
+  "unexpectedNativeErrors": [],
+  "sourceUnchangedDuringTest": true,
+  "cleanup": {
+    "nativeStopped": true,
+    "nativeExit": 0,
+    "fixturesStopped": true,
+    "clientProcessesCompleted": 4,
+    "clientSocketsClosed": true,
+    "openSockets": 0,
+    "temporaryRootRemoved": true,
+    "errors": []
+  },
+  "interruptedSignal": null,
+  "finishedAt": "2026-10-23T10:14:08.727451+00:00"
+}

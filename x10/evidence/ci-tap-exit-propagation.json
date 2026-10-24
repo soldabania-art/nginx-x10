@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "date": "2026-10-23",
+  "suite": "ci-tap-exit-propagation",
+  "checkpoint": "ed191b3060a136346e652b4dfa45026c04619510",
+  "passed": true,
+  "tests": [
+    {
+      "name": "old-pipeline-hides-failure",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "passed": true
+    },
+    {
+      "name": "redirect-preserves-failure",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "passed": true
+    },
+    {
+      "name": "redirect-preserves-success",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "passed": true
+    }
+  ],
+  "workflowBeforeSha256": "4f752c6edc035f18eedd9e1e9c58795aa465287e11aba65702030eaca0f9ac0f",
+  "workflowAfterSha256": "73b5678df1e5053aa2048f72e09590bc75d135a55563478e95d19e334655beec",
+  "reviewScope": "Two TAP commands redirect to retained artifacts directly, preserving the Node exit status under the default bash -e shell. No native or test implementation changes.",
+  "limitations": [
+    "Shell counterexample only; full functional checks belong to the prior commit and hosted runs.",
+    "Passing prior TAP artifact content must be inspected independently of the old pipeline exit status."
+  ],
+  "publication": {
+    "rawRecordSha256": "ce091a7544b72cdbc4d4e65aebf1b5a6afcb8fe2122d5ac7cc05582653b46846",
+    "rawRecordRetainedLocally": true,
+    "note": "Public allowlisted shell counterexample summary; no runtime or host metadata."
+  }
+}

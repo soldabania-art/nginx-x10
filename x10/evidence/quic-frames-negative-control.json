@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "suite": "quic-frame-harness-negative-control",
+  "passed": true,
+  "expectedFailure": true,
+  "mutation": "Disable ngx_quic_read_bytes declared-length bounds check in an isolated source copy only.",
+  "exitCode": 1,
+  "strict": {
+    "cases": 6579,
+    "passed": 5487,
+    "failed": 1092
+  },
+  "propertyFailures": [
+    {
+      "name": "structured_frame_prefixes_are_rejected",
+      "cases": 289,
+      "failed": 60
+    },
+    {
+      "name": "declared_payload_lengths_and_borrowed_bounds",
+      "cases": 1304,
+      "failed": 645
+    },
+    {
+      "name": "seeded_inputs_return_only_bounded_consumption",
+      "cases": 4096,
+      "failed": 387
+    }
+  ],
+  "compilerDiagnostics": "",
+  "failureDiagnosticExamples": "property=structured_frame_prefixes_are_rejected label=every-structured-prefix type=6 bytes=3\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=6 bytes=4\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=6 bytes=5\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=6 bytes=6\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=6 bytes=7\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=10 bytes=3\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=10 bytes=4\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=10 bytes=5\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=10 bytes=6\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=10 bytes=7\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=11 bytes=3\nproperty=structured_frame_prefixes_are_rejected label=every-structured-prefix type=11 bytes=4\n",
+  "sourceCopySha256": "4e656c9329fece4dee3c789d785c8f04a72b9c0fbfd30b997d4f49d5ee7202fa",
+  "harnessSha256": "9a2b4e9fa60881891b4e77e09a92540702559f792f5e0fad2b9310cd2415d289",
+  "sanitizers": {
+    "enabled": [
+      "address",
+      "undefined"
+    ],
+    "leakDetection": false,
+    "runtimeOptions": {
+      "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+      "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+    }
+  },
+  "limitations": [
+    "This deliberate source mutation tests fixture assertions, not an identified defect in NGINX.",
+    "No network or native server was started."
+  ],
+  "canonicalSourceUnchanged": true,
+  "temporarySourceRemoved": true
+}

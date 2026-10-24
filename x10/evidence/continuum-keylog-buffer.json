@@ -1,0 +1,2182 @@
+{
+  "schemaVersion": 1,
+  "scope": "bounded-buffer-only-NSS-ingestion-in-research-runner",
+  "baseCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+  "publicationParent": "01a0ec49b73cc1f2003564930c5f79d990696247",
+  "sourceFilesSha256": {
+    "openssl-probe-run.mjs": "ba64f51b13ececafd8393ced474173072e27ac57427dbadffccc462d6313915d",
+    "openssl-probe.test.mjs": "6c271de95f4cfba2bfb7860b9b82aedf0a1980e992c9af6074e8f29a950371f5",
+    "keylog-buffer.mjs": "3b575bfc16dc0a1c651799386e4fe8a26c5da693e6e013299d237910b89e9139",
+    "keylog-buffer.test.mjs": "28929e93da7d805a38a681c20aa3b45f469a4144c1b3f0cb7d08135a1f061f61",
+    "openssl-capture.c": "771606b8fc4ebcff76d9c7191d862e4e0532e9ab8a89007ef29ba1157f0c0142",
+    "openssl-capture.h": "30bf6e677f3a4926b35589d467b70caf249876c19b8a7aed77563a3eaefdeb84",
+    "openssl-probe-fixture.c": "3c38cdbebb85ca0746f6a4995021bb044bafec24c1a9b293e7dc7d6a85630bae",
+    "openssl-probe.c": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+    "openssl-probe.h": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+    "capsule-preflight.mjs": "5efdc25929a96178496753bf58b0ab5b99c6a2d9ca636e0b372360cd6a0744b5",
+    "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+    "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+    "openssl-peer-client.c": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+    "handshake-oracle.mjs": "adf57f5ac461aa997ca24dba516b7b05aa63e455edae03ff6e0103c6e22d5889",
+    "record.mjs": "124baea5d841b3036041ee46aa8992a8c348cc9ffe13e3661b391bed0927e272"
+  },
+  "checks": {
+    "canonical": {
+      "exitCode": 0,
+      "elapsedMs": 230530,
+      "stderrBytes": 0,
+      "report": {
+        "schemaVersion": 1,
+        "suite": "continuum-pinned-openssl-state-probe",
+        "passed": true,
+        "testFiles": 1,
+        "scope": "pinned-openssl-read-only-state-observation",
+        "nativeNginxMigration": false,
+        "realSessionMigration": false,
+        "counts": {
+          "tests": 36,
+          "suites": 0,
+          "pass": 36,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "interrupted": false,
+        "runnerError": null
+      }
+    },
+    "core": {
+      "exitCode": 0,
+      "elapsedMs": 366,
+      "stderrBytes": 0,
+      "report": {
+        "schemaVersion": 1,
+        "suite": "continuum-record-and-state-kernel",
+        "passed": true,
+        "testFiles": 2,
+        "scope": "in-memory-record-and-state-only",
+        "liveTlsProcessHandover": false,
+        "counts": {
+          "tests": 21,
+          "suites": 0,
+          "pass": 21,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "interrupted": false,
+        "runnerError": null
+      }
+    },
+    "process": {
+      "exitCode": 0,
+      "elapsedMs": 1225,
+      "stderrBytes": 0,
+      "report": null,
+      "counts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    "c1": {
+      "exitCode": 0,
+      "elapsedMs": 3547,
+      "stderrBytes": 0,
+      "report": {
+        "schemaVersion": 1,
+        "suite": "continuum-real-handshake-and-record-observation",
+        "passed": true,
+        "testFiles": 2,
+        "scope": "real-handshake-and-record-observation-only",
+        "nativeNginxMigration": false,
+        "realSessionMigration": false,
+        "counts": {
+          "tests": 27,
+          "suites": 0,
+          "pass": 27,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "interrupted": false,
+        "runnerError": null
+      }
+    },
+    "unit": {
+      "schemaVersion": 1,
+      "scope": "synthetic-keylog-parser-buffer-lifetime-controls",
+      "passed": true,
+      "accepted": 14,
+      "refused": 36,
+      "totalControls": 50,
+      "trackedFailedDecodedAllocations": 2,
+      "trackedFailedDecodedAllocationsZeroAfterThrow": true,
+      "sourceInputBuffersWipedOnSuccessAndRefusal": true,
+      "prior35TestPrefixExact": true,
+      "getterOrProxySecurityBoundaryClaimed": false,
+      "actualTLS": false,
+      "syntheticDataOnly": true,
+      "wholeProcessWipeClaimed": false,
+      "migration": false,
+      "testSha256": "28929e93da7d805a38a681c20aa3b45f469a4144c1b3f0cb7d08135a1f061f61",
+      "parserSha256": "3b575bfc16dc0a1c651799386e4fe8a26c5da693e6e013299d237910b89e9139",
+      "observedCommand": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "x10/continuum/keylog-buffer.test.mjs"
+      ],
+      "observedStandaloneTAP": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "rawLogsPublished": false,
+      "realKeys": false
+    },
+    "baseline": {
+      "schemaVersion": 1,
+      "sourceCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+      "scope": "exact-historical-Node-keylog-handler-synthetic-buffer-control",
+      "handlerSha256": "5930cfd2f5658978de4424cb0228e87ba7974d18987fa6d9922cd9cc79912441",
+      "syntheticDataOnly": true,
+      "sourceInputUncleansed": true,
+      "knownSecretDecoded": true,
+      "expectedDefectReproduced": true,
+      "realTLS": false,
+      "realKeys": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "migration": false
+    },
+    "security": {
+      "schemaVersion": 1,
+      "scope": "independent-synthetic-buffer-and-extracted-current-handler-review",
+      "sourceSha256": {
+        "keylog-buffer.mjs": "3b575bfc16dc0a1c651799386e4fe8a26c5da693e6e013299d237910b89e9139",
+        "openssl-probe-run.mjs": "ba64f51b13ececafd8393ced474173072e27ac57427dbadffccc462d6313915d"
+      },
+      "passed": true,
+      "syntheticCases": 11,
+      "temporariesObservedScrubbed": 16,
+      "realTLSCases": 0,
+      "realSecretsUsed": false,
+      "privateExtractedHandler": true,
+      "sourceEdits": false,
+      "controlledAllocationFaults": 1,
+      "knownSecretConversionCalls": 0,
+      "publicLabelConversionCalls": 1,
+      "reviewFindings": [
+        "No blocking lifetime or parsing issue found in trusted Node keylog event path.",
+        "Complete bounded grammar is validated before public-label ASCII conversion; random and secret values remain mutable Buffers.",
+        "Original event Buffer is wiped by parser finally and handler finally. Unknown labels, duplicates, mismatch candidates and allocation-failure temporaries are scrubbed.",
+        "Ownership transfer happens after binding checks; retained decoded buffers remain owned by the existing scenario cleanup.",
+        "This does not erase earlier Node/OpenSSL allocations, compiler/runtime copies, allocator metadata or the whole process; no importer or capsule authority is added.",
+        "Independent controls use an extracted current handler and synthetic canaries only; this is not independent actual TLS proof."
+      ],
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "processIdentifiersPublished": false,
+      "secretFingerprintsPublished": false,
+      "privateScriptSha256": "af871c5a114f08e761edb6f76df28f80c7f9efd2ee7e021cd8241da468fe6624"
+    },
+    "independent": {
+      "schemaVersion": 1,
+      "scope": "independent-actual-TLS-keylog-buffer-ingestion-regression",
+      "outcome": "passed",
+      "failureCode": null,
+      "cases": [
+        {
+          "scenario": "quiescent",
+          "payloadBytes": 5171,
+          "passed": true,
+          "exactEchoAndWire": true,
+          "bothCloseNotify": true,
+          "observedKeylogLines": 5,
+          "sourceEventBuffersZeroAfterHandler": true
+        },
+        {
+          "scenario": "quiescent-live-hold",
+          "payloadBytes": 28019,
+          "passed": true,
+          "exactEchoAndWire": true,
+          "bothCloseNotify": true,
+          "observedKeylogLines": 5,
+          "sourceEventBuffersZeroAfterHandler": true,
+          "captureClearedBeforeRelease": true,
+          "returnedHistorical": true
+        }
+      ],
+      "actualTLSCases": 2,
+      "keylogEvents": 10,
+      "observedZeroSourceBuffers": 10,
+      "nonzeroSourceBuffersAfterHandler": 0,
+      "sourceHashes": {
+        "keylog-buffer.mjs": "3b575bfc16dc0a1c651799386e4fe8a26c5da693e6e013299d237910b89e9139",
+        "keylog-buffer.test.mjs": "28929e93da7d805a38a681c20aa3b45f469a4144c1b3f0cb7d08135a1f061f61",
+        "openssl-probe-run.mjs": "ba64f51b13ececafd8393ced474173072e27ac57427dbadffccc462d6313915d",
+        "openssl-probe-fixture.c": "3c38cdbebb85ca0746f6a4995021bb044bafec24c1a9b293e7dc7d6a85630bae",
+        "openssl-capture.c": "771606b8fc4ebcff76d9c7191d862e4e0532e9ab8a89007ef29ba1157f0c0142",
+        "openssl-capture.h": "30bf6e677f3a4926b35589d467b70caf249876c19b8a7aed77563a3eaefdeb84",
+        "capsule-preflight.mjs": "5efdc25929a96178496753bf58b0ab5b99c6a2d9ca636e0b372360cd6a0744b5",
+        "openssl-probe.c": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+        "openssl-probe.h": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+        "openssl-usage.h": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+        "openssl-peer-client.c": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+        "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+        "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+        "openssl-interruption.mjs": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+        "handshake-oracle.mjs": "adf57f5ac461aa997ca24dba516b7b05aa63e455edae03ff6e0103c6e22d5889"
+      },
+      "sourceHashesStable": true,
+      "observedChildren": 43,
+      "remainingObservedChildren": 0,
+      "observedTemporaryRoots": 4,
+      "absentTemporaryRoots": 4,
+      "identity": {
+        "schemaVersion": 1,
+        "pinnedBuild": {
+          "schemaVersion": 1,
+          "suite": "continuum-openssl-pinned-build",
+          "source": {
+            "repository": "https://github.com/openssl/openssl.git",
+            "commit": "85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c",
+            "tree": "4e48caeae2374ee4982c8e44b6a15cf4753229cb",
+            "patchedTree": "f6301918a737267208ade21de6ab162d5e82f9cb",
+            "licenseSha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+          },
+          "patch": {
+            "sha256": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+          },
+          "compiler": {
+            "command": "cc",
+            "version": "13.3.0",
+            "target": "x86_64-linux-gnu",
+            "binarySha256": "6117c52522997d2aaccb2b52b3c6bf42c0a6c5edb1d718431fed6b2fc5fec234"
+          },
+          "tools": {
+            "gitSha256": "2dae8066ef4d6a926561b4b0eaca7b458d4f5b56bb83760656e6baa7fc3e974f",
+            "perlSha256": "38d70f54fd18d614e9e6cc35c960b45f54e7b991894b8308e704ae9953c86ce4",
+            "makeSha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+          },
+          "configuration": {
+            "target": "linux-x86_64",
+            "flags": [
+              "no-shared",
+              "no-module",
+              "no-engine",
+              "no-async",
+              "no-ktls",
+              "no-tests",
+              "no-legacy",
+              "no-asm",
+              "no-comp",
+              "no-zlib",
+              "no-dso",
+              "no-autoload-config",
+              "no-fips",
+              "--prefix=/continuum-research",
+              "--openssldir=/continuum-research/config",
+              "CC={compiler}",
+              "-O2",
+              "-fno-omit-frame-pointer",
+              "-fno-ident",
+              "-ffile-prefix-map={privateRoot}=/continuum-build"
+            ],
+            "disabled": [
+              "acvp-tests",
+              "afalgeng",
+              "asan",
+              "asm",
+              "async",
+              "autoload-config",
+              "buildtest-c++",
+              "capieng",
+              "comp",
+              "crypto-mdebug",
+              "crypto-mdebug-backtrace",
+              "devcryptoeng",
+              "dso",
+              "dynamic-engine",
+              "ec_nistp_64_gcc_128",
+              "egd",
+              "engine",
+              "external-tests",
+              "fips",
+              "fips-securitychecks",
+              "fuzz-afl",
+              "fuzz-libfuzzer",
+              "ktls",
+              "legacy",
+              "loadereng",
+              "md2",
+              "module",
+              "msan",
+              "padlockeng",
+              "rc5",
+              "sctp",
+              "shared",
+              "ssl3",
+              "ssl3-method",
+              "tests",
+              "trace",
+              "ubsan",
+              "unit-test",
+              "uplink",
+              "weak-ssl-ciphers",
+              "zlib",
+              "zlib-dynamic"
+            ],
+            "sourceDateEpoch": "1706621296",
+            "configDataSha256": "bf9175d2e2e640d7660974ebed331f35785093a91647670aade4f42499c1908c",
+            "makefileSha256": "df4cfba0ccdf7644508128ca7eabcf0b9a25bfb5bce432de64d935fdc683b99f",
+            "configurationHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81"
+          },
+          "provider": {
+            "active": [
+              "default"
+            ],
+            "externalModules": false,
+            "autoloadConfiguration": false
+          },
+          "artifacts": {
+            "linkage": "static-libssl-and-libcrypto",
+            "systemRuntimeStatic": false,
+            "version": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)",
+            "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+            "libcryptoSha256": "36117678e19ec366406b039761aab0515f5bbdd4e4ae656a8451462986ab1080",
+            "opensslSha256": "aa72a8f5d61fcffd884b062a9340c5e6b91484cbfc67edbe5972b138699a2474"
+          }
+        },
+        "sourceSha256": {
+          "fixture": "3c38cdbebb85ca0746f6a4995021bb044bafec24c1a9b293e7dc7d6a85630bae",
+          "peerClient": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+          "probe": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+          "capture": "771606b8fc4ebcff76d9c7191d862e4e0532e9ab8a89007ef29ba1157f0c0142",
+          "captureHeader": "30bf6e677f3a4926b35589d467b70caf249876c19b8a7aed77563a3eaefdeb84",
+          "header": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+          "usage": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+          "patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+        },
+        "fixtureBinarySha256": "8dbab137865ba14eaf729aeec5d6f2abaa544608edb2318ff694d6e16c59f9b9",
+        "peerClientBinarySha256": "23e1a8d0f6885794796585bca0b0e565c2dd3f274a932ff9d0ed76acb8657c50",
+        "nodeBinarySha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12",
+        "nodeVersion": "v24.19.0",
+        "nodeOpenSSLVersion": "3.5.7"
+      },
+      "scriptSha256": "1653d07dcdb19b5ade5415db635636bcbb15b2b1949fdc96691a8c59b4231c6b",
+      "observer": "Read-only keylog listener queues a microtask after the synchronous production listener; publishes only zero-check counts. Does not copy or stringify real key bytes.",
+      "wholeProcessWipeClaimed": false,
+      "semanticExportImport": false,
+      "migration": false,
+      "realSessionKeysPublished": false,
+      "secretHashesPublished": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "processIdentifiersPublished": false
+    },
+    "native": {
+      "schemaVersion": 1,
+      "suite": "keylog-native-verification",
+      "generatedAtUTC": "2026-10-24T07:25:38.773929+00:00",
+      "sourceBaselineCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+      "leaseCommit": "01a0ec49b73cc1f2003564930c5f79d990696247",
+      "snapshotCheckoutRevision": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+      "manifestCheckoutRevision": "01a0ec49b73cc1f2003564930c5f79d990696247",
+      "freshBuild": true,
+      "buildCommand": [
+        "bash",
+        "x10/build.sh",
+        "--jobs",
+        "2"
+      ],
+      "buildExitCode": 0,
+      "aggregateCommand": [
+        "node",
+        "x10/test/all.mjs",
+        "--official"
+      ],
+      "aggregateExitCode": 0,
+      "buildStatus": "built",
+      "installed": false,
+      "aggregateSuccess": true,
+      "aggregateGroups": {
+        "expected": 20,
+        "executed": 20,
+        "passed": 20,
+        "failed": 0
+      },
+      "nativeSourceUnchangedVsBaseline": true,
+      "nativeSourceUnchangedVsBaselineAndDuringAggregate": true,
+      "untrackedNativeInputsPresent": false,
+      "nativeSnapshotBefore": {
+        "nativeTrackedFileCount": 499,
+        "nativeTreeSha256": "a135cdc166ef32cf23b8b4526de84a0265eefa09b7e1853fca3c6041a4952131",
+        "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1"
+      },
+      "identitiesBeforeAggregate": {
+        "manifestSha256": "601806ce03f793b26a70b495e8bea7d5cc2c96fd3b368e8b35ee151c15ae3ae4",
+        "binarySha256": "91b9e5673e159e320ef8494158dd7f6d745a4666c5ad3e868b2e74fbe8aeac0a",
+        "generatedFiles": {
+          "ngx_auto_config.h": {
+            "sha256": "d9478293c3ff3efc53f6da7eff98b7525acd2b6456d2c1e294f7141aabf9ca6d",
+            "bytes": 10147,
+            "mode": "0644"
+          },
+          "ngx_auto_headers.h": {
+            "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+            "bytes": 657,
+            "mode": "0644"
+          },
+          "ngx_modules.c": {
+            "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+            "bytes": 11820,
+            "mode": "0644"
+          }
+        },
+        "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+        "compiledModuleCount": 105,
+        "dependencyVersionsFromHeaders": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        },
+        "status": "built"
+      },
+      "identitiesAfterAggregate": {
+        "nativeTrackedFileCount": 499,
+        "nativeTreeSha256": "a135cdc166ef32cf23b8b4526de84a0265eefa09b7e1853fca3c6041a4952131",
+        "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+        "manifestSha256": "601806ce03f793b26a70b495e8bea7d5cc2c96fd3b368e8b35ee151c15ae3ae4",
+        "binarySha256": "91b9e5673e159e320ef8494158dd7f6d745a4666c5ad3e868b2e74fbe8aeac0a",
+        "generatedFiles": {
+          "ngx_auto_config.h": {
+            "sha256": "d9478293c3ff3efc53f6da7eff98b7525acd2b6456d2c1e294f7141aabf9ca6d",
+            "bytes": 10147,
+            "mode": "0644"
+          },
+          "ngx_auto_headers.h": {
+            "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+            "bytes": 657,
+            "mode": "0644"
+          },
+          "ngx_modules.c": {
+            "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+            "bytes": 11820,
+            "mode": "0644"
+          }
+        },
+        "trackedChanges": [
+          "x10/continuum/openssl-probe-run.mjs",
+          "x10/continuum/openssl-probe.test.mjs"
+        ]
+      },
+      "earlierCheckoutBinaryIdentityClaimed": false,
+      "compiler": {
+        "command": "cc",
+        "version": "cc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+        "flags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g"
+      },
+      "configureOptions": [
+        "--with-http_ssl_module",
+        "--with-http_v2_module",
+        "--with-http_v3_module",
+        "--with-stream",
+        "--with-stream_ssl_module",
+        "--with-stream_ssl_preread_module",
+        "--with-mail",
+        "--with-mail_ssl_module",
+        "--with-threads",
+        "--with-file-aio",
+        "--with-http_realip_module",
+        "--with-http_stub_status_module",
+        "--with-http_auth_request_module",
+        "--with-http_addition_module",
+        "--with-http_sub_module",
+        "--with-http_dav_module",
+        "--with-http_slice_module",
+        "--with-http_gunzip_module",
+        "--with-http_gzip_static_module",
+        "--with-compat",
+        "--with-control-api"
+      ],
+      "compiledModuleCount": 105,
+      "compiledModules": [
+        "ngx_core_module",
+        "ngx_errlog_module",
+        "ngx_conf_module",
+        "ngx_openssl_module",
+        "ngx_openssl_cache_module",
+        "ngx_quic_module",
+        "ngx_quic_bpf_module",
+        "ngx_regex_module",
+        "ngx_events_module",
+        "ngx_event_core_module",
+        "ngx_epoll_module",
+        "ngx_thread_pool_module",
+        "ngx_http_module",
+        "ngx_http_core_module",
+        "ngx_http_log_module",
+        "ngx_http_upstream_module",
+        "ngx_http_v2_module",
+        "ngx_http_v3_module",
+        "ngx_http_static_module",
+        "ngx_http_gzip_static_module",
+        "ngx_http_dav_module",
+        "ngx_http_autoindex_module",
+        "ngx_http_index_module",
+        "ngx_http_mirror_module",
+        "ngx_http_try_files_module",
+        "ngx_http_auth_request_module",
+        "ngx_http_auth_basic_module",
+        "ngx_http_access_module",
+        "ngx_http_limit_conn_module",
+        "ngx_http_limit_req_module",
+        "ngx_http_realip_module",
+        "ngx_http_geo_module",
+        "ngx_http_map_module",
+        "ngx_http_split_clients_module",
+        "ngx_http_referer_module",
+        "ngx_http_rewrite_module",
+        "ngx_http_ssl_module",
+        "ngx_http_proxy_module",
+        "ngx_http_fastcgi_module",
+        "ngx_http_uwsgi_module",
+        "ngx_http_scgi_module",
+        "ngx_http_grpc_module",
+        "ngx_http_proxy_v2_module",
+        "ngx_http_tunnel_module",
+        "ngx_http_memcached_module",
+        "ngx_http_empty_gif_module",
+        "ngx_http_browser_module",
+        "ngx_http_upstream_hash_module",
+        "ngx_http_upstream_ip_hash_module",
+        "ngx_http_upstream_least_conn_module",
+        "ngx_http_upstream_least_time_module",
+        "ngx_http_upstream_random_module",
+        "ngx_http_upstream_keepalive_module",
+        "ngx_http_upstream_zone_module",
+        "ngx_http_upstream_sticky_module",
+        "ngx_http_stub_status_module",
+        "ngx_http_write_filter_module",
+        "ngx_http_header_filter_module",
+        "ngx_http_chunked_filter_module",
+        "ngx_http_v2_filter_module",
+        "ngx_http_v3_filter_module",
+        "ngx_http_range_header_filter_module",
+        "ngx_http_gzip_filter_module",
+        "ngx_http_postpone_filter_module",
+        "ngx_http_ssi_filter_module",
+        "ngx_http_charset_filter_module",
+        "ngx_http_sub_filter_module",
+        "ngx_http_addition_filter_module",
+        "ngx_http_gunzip_filter_module",
+        "ngx_http_userid_filter_module",
+        "ngx_http_headers_filter_module",
+        "ngx_http_copy_filter_module",
+        "ngx_http_range_body_filter_module",
+        "ngx_http_not_modified_filter_module",
+        "ngx_http_slice_filter_module",
+        "ngx_mail_module",
+        "ngx_mail_core_module",
+        "ngx_mail_ssl_module",
+        "ngx_mail_pop3_module",
+        "ngx_mail_imap_module",
+        "ngx_mail_smtp_module",
+        "ngx_mail_auth_http_module",
+        "ngx_mail_proxy_module",
+        "ngx_mail_realip_module",
+        "ngx_stream_module",
+        "ngx_stream_core_module",
+        "ngx_stream_log_module",
+        "ngx_stream_proxy_module",
+        "ngx_stream_upstream_module",
+        "ngx_stream_write_filter_module",
+        "ngx_stream_ssl_module",
+        "ngx_stream_limit_conn_module",
+        "ngx_stream_access_module",
+        "ngx_stream_geo_module",
+        "ngx_stream_map_module",
+        "ngx_stream_split_clients_module",
+        "ngx_stream_return_module",
+        "ngx_stream_pass_module",
+        "ngx_stream_set_module",
+        "ngx_stream_upstream_hash_module",
+        "ngx_stream_upstream_least_conn_module",
+        "ngx_stream_upstream_least_time_module",
+        "ngx_stream_upstream_random_module",
+        "ngx_stream_upstream_zone_module",
+        "ngx_stream_ssl_preread_module"
+      ],
+      "dependencyVersionsFromHeaders": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "dependencyVersionsFromPkgConfig": {},
+      "offlineDependencyVerification": {
+        "offlineWheelsValidatedByLockHashes": true,
+        "packages": [
+          {
+            "package": "aioquic",
+            "version": "1.3.0",
+            "sha256": "396e5f53f6ddb27713d9b5bb11d8f0f842e42857b7e671c5ae203bf618528550"
+          },
+          {
+            "package": "attrs",
+            "version": "26.1.0",
+            "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309"
+          },
+          {
+            "package": "certifi",
+            "version": "2026.10.19",
+            "sha256": "42d35340cc5b9ba78e818ddbff0c5b1c2b779de448a340fd1b989f5fa8670e1b"
+          },
+          {
+            "package": "cffi",
+            "version": "2.1.1",
+            "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf"
+          },
+          {
+            "package": "cryptography",
+            "version": "50.0.2",
+            "sha256": "9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079"
+          },
+          {
+            "package": "pycparser",
+            "version": "3.12",
+            "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
+          },
+          {
+            "package": "pylsqpack",
+            "version": "0.3.24",
+            "sha256": "6024854eb16d32803d4890fb90a73b9348c74b61c0770680aefaaa75f8456e8c"
+          },
+          {
+            "package": "pyOpenSSL",
+            "version": "26.4.0",
+            "sha256": "f0eb0cb2d581d3ad2b9c489468485e7f2ab6727d08401bcf9d824c3caddf3c1c"
+          },
+          {
+            "package": "service-identity",
+            "version": "26.1.0",
+            "sha256": "68c32dadbb69135fb951077677e07cd7f6031020f3a8c8f47a28cda8a0742118"
+          },
+          {
+            "package": "typing_extensions",
+            "version": "4.16.0",
+            "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+          },
+          {
+            "package": "curl_cffi",
+            "version": "0.16.3",
+            "sha256": "a875a661e2f9a949be29454880bbb9553307a487c4c08819738298cf5c1622e2"
+          }
+        ],
+        "freshLocalVirtualEnvironments": true,
+        "offlineNoIndexInstall": true,
+        "pipChecksPassed": 2,
+        "officialCheckoutPin": "47e78403ba756629adc3a8421bab700f344b7e3b",
+        "officialCheckoutClean": true,
+        "officialLicenseHashValid": true,
+        "officialFreshNetworkClone": true
+      },
+      "suites": [
+        {
+          "name": "http-tls-http2-reload",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1326,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 11,
+            "passed": 11,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "stream-mail",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 176,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 12,
+            "passed": 12,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "mail-tls-starttls",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1081,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 15,
+            "passed": 15,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "openSockets": 0
+          },
+          "sourceUnchangedDuringTest": true,
+          "cleanupErrorCount": 0,
+          "explicitSkips": 0
+        },
+        {
+          "name": "protocol-adapters",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1495,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 21,
+            "passed": 21,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "openSockets": 0
+          },
+          "sourceUnchangedDuringTest": true,
+          "cleanupErrorCount": 0,
+          "explicitSkips": 0
+        },
+        {
+          "name": "http3-interop",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1218,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 7,
+            "passed": 7,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "udpTransportsStopped": true,
+            "openSockets": 0,
+            "udpClientsCreated": 7,
+            "udpClientsClosed": 7
+          },
+          "sourceUnchangedDuringTest": true,
+          "cleanupErrorCount": 0,
+          "explicitSkips": 0
+        },
+        {
+          "name": "http3-head-independent-client",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 891,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 4,
+            "passed": 4,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "clientSocketsClosed": true,
+            "openSockets": 0,
+            "clientProcessesCompleted": 4
+          },
+          "sourceUnchangedDuringTest": true,
+          "cleanupErrorCount": 0,
+          "explicitSkips": 0
+        },
+        {
+          "name": "native-features",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 750,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 19,
+            "passed": 19,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "quic-regression",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 563,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "strictCounts": {
+            "caseCount": 13
+          },
+          "cleanupFlags": {},
+          "sourceUnchangedDuringTest": true
+        },
+        {
+          "name": "quic-generated-sanitized",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1294,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "cleanupFlags": {},
+          "sourceUnchangedDuringTest": true
+        },
+        {
+          "name": "quic-frame-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1314,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "cleanupFlags": {},
+          "temporaryRootRemoved": true,
+          "sourceUnchangedDuringTest": true,
+          "generatedFilesUnchangedDuringTest": true
+        },
+        {
+          "name": "native-load-client-verification",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 1806,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 41,
+            "passed": 41,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixtureServersClosed": true,
+            "temporaryRootRemoved": true,
+            "openSockets": 0,
+            "activeChildren": 0
+          },
+          "sourceUnchangedDuringTest": true,
+          "cleanupErrorCount": 0
+        },
+        {
+          "name": "managed-native-control",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 45562,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "total": 77,
+            "passed": 77,
+            "failed": 0,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "operator-status",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 3159,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "total": 30,
+            "passed": 30,
+            "failed": 0,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "local-alpha-lifecycle",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 12629,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "total": 37,
+            "passed": 37,
+            "failed": 0,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "listener-observer-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 6766,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "tapCounts": {
+            "total": 29,
+            "passed": 29,
+            "failed": 0,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "cleanupFlags": {}
+        },
+        {
+          "name": "reload-listener-observation",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 850,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 7,
+            "passed": 7,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "stoppedWorkerResumeRequested": true,
+            "openSockets": 0
+          },
+          "sourceUnchangedDuringTest": true,
+          "cleanupErrorCount": 0,
+          "explicitSkips": 0
+        },
+        {
+          "name": "native-control-api",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 566,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 9,
+            "passed": 9,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "openSockets": 0
+          },
+          "sourceUnchangedDuringTest": true,
+          "cleanupErrorCount": 0,
+          "explicitSkips": 0
+        },
+        {
+          "name": "native-process-generations",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 793,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 10,
+            "passed": 10,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "temporaryRootRemoved": true,
+            "openSockets": 0
+          },
+          "sourceUnchangedDuringTest": true,
+          "cleanupErrorCount": 0,
+          "explicitSkips": 0
+        },
+        {
+          "name": "native-generation-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 2435,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 20,
+            "passed": 20,
+            "skipped": 0,
+            "failed": 0
+          },
+          "cleanupFlags": {},
+          "temporaryRootRemoved": true,
+          "activeChildren": 0,
+          "sourceUnchangedDuringTest": true,
+          "generatedFilesUnchangedDuringTest": true
+        },
+        {
+          "name": "official-nginx-tests",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "elapsedMs": 107133,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "caseCounts": {
+            "total": 35,
+            "passed": 32,
+            "skipped": 3,
+            "failed": 0
+          },
+          "cleanupFlags": {},
+          "sourceUnchangedDuringTest": true
+        }
+      ],
+      "official": {
+        "success": true,
+        "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+        "summary": {
+          "files": 35,
+          "filesPassed": 32,
+          "filesSkipped": 3,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1109,
+            "passed": 1083,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        },
+        "sourceUnchangedDuringTest": true,
+        "cleanupErrorCount": 0,
+        "skippedFiles": [
+          "fastcgi.t",
+          "scgi.t",
+          "uwsgi.t"
+        ],
+        "perFileExceptions": [
+          {
+            "file": "proxy_cache_vary.t",
+            "skipped": 12,
+            "todoFailed": 1,
+            "todoPassed": 0
+          },
+          {
+            "file": "grpc.t",
+            "skipped": 1,
+            "todoFailed": 0,
+            "todoPassed": 0
+          },
+          {
+            "file": "h2.t",
+            "skipped": 4,
+            "todoFailed": 0,
+            "todoPassed": 0
+          },
+          {
+            "file": "upstream.t",
+            "skipped": 1,
+            "todoFailed": 0,
+            "todoPassed": 0
+          },
+          {
+            "file": "upstream_least_time.t",
+            "skipped": 7,
+            "todoFailed": 0,
+            "todoPassed": 0
+          }
+        ],
+        "parseErrorCount": 0,
+        "bailoutCount": 0
+      },
+      "cleanup": {
+        "ownedNativeProcessesRemaining": 0,
+        "observedNativeProcessesRemaining": 0
+      },
+      "privateBuildAndRuntimePrefixesOmitted": true,
+      "rawLogsIncluded": false,
+      "nativeSnapshotTiming": "Before fresh native build; immutable base Git blob hashes and permission modes matched all 499 entries.",
+      "setupCorrections": [],
+      "spendingUSD": 0,
+      "limitations": [
+        "Local Linux fixtures, not a complete platform or interoperability matrix.",
+        "Generated inputs, TAP assertions and protocol cases are reported separately, not added as interchangeable tests.",
+        "Performance measurements require the separate benchmark runner and a quiet measurement window."
+      ],
+      "binaryMetadata": {
+        "fromFreshBuildManifest": {
+          "sha256": "91b9e5673e159e320ef8494158dd7f6d745a4666c5ad3e868b2e74fbe8aeac0a",
+          "bytes": 8553080,
+          "mode": "0755",
+          "executable": true
+        },
+        "afterAggregate": {
+          "sha256": "91b9e5673e159e320ef8494158dd7f6d745a4666c5ad3e868b2e74fbe8aeac0a",
+          "bytes": 8553080,
+          "mode": "0755",
+          "executable": true
+        },
+        "afterMatchesFreshBuild": true
+      },
+      "nativeTreeHashAlgorithm": "SHA-256 of UTF-8 json.dumps(entries, sort_keys=True, separators=(comma,colon)); entries follow git ls-files -z -- src auto conf order, each object has file repo-relative path, sha256 of file bytes, and mode oct(stat_mode & 0o7777), with no trailing newline in hashed serialization.",
+      "nativeInputCountExpected": 499,
+      "immutableBaselineNativeTreeSha256": "a135cdc166ef32cf23b8b4526de84a0265eefa09b7e1853fca3c6041a4952131",
+      "immutableBaselineHashSource": "git ls-tree -rz base -- src auto conf; SHA-256 of each git cat-file blob with recorded octal permission bits, serialized by the same ordered-entry algorithm.",
+      "configurePathArgumentsOmitted": [
+        "--builddir",
+        "--prefix"
+      ],
+      "officialExpectedTodo": {
+        "file": "proxy_cache_vary.t",
+        "assertion": "normalize order",
+        "upstreamTodoReason": "not yet",
+        "acceptedAsStrictPass": false
+      },
+      "officialExpectedCounts": {
+        "strictPassed": 1083,
+        "skipped": 25,
+        "expectedTodoFailed": 1,
+        "unexpectedFailed": 0
+      },
+      "license": {
+        "sha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c",
+        "unchangedVsBaseline": true
+      },
+      "aggregateStderrVerification": {
+        "expectedProgressLines": 20,
+        "observedProgressLines": 20,
+        "bytes": 679,
+        "unexpectedLines": 0
+      },
+      "receiptValidationNotes": [],
+      "nativeVerificationHarnessTrees": {
+        "sourceAreas": [
+          "x10/alpha",
+          "x10/test",
+          "x10/bench"
+        ],
+        "unchangedVsBaseline": true,
+        "before": {
+          "fileCount": 50,
+          "sourceSha256": {
+            "x10/alpha/NOTICE.txt": "27f28e07cead124c76c2cd290077117278c2dd61ac336d04ef3f08a48de685bc",
+            "x10/alpha/README.md": "4779fba1f6bee0b5bd111784553f37d06f592239b179ab4ba77a9b9f13c372bf",
+            "x10/alpha/cli.mjs": "5792054b28d36a1301392dd68c7ea360545de606d58b78df9abbeacf97e256b4",
+            "x10/alpha/runtime.mjs": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51",
+            "x10/bench/NATIVE-COMPARE.md": "89c3ac54754f81f79b9b2fc25ea1125ef4a1974335033ea01413b90a791484e6",
+            "x10/bench/NATIVE-LOAD.md": "d5c0ca407b1cf910b6bf8e15633288b058e34cf6b5d24f76c0d031364aee2d30",
+            "x10/bench/README.md": "b30f7af619ae8902b111e43db935c54ddab71a623563100f514526519890d270",
+            "x10/bench/compare-native.mjs": "243a6152f6bd5d25be2180825833cd7e47b943a417c550f27fccf510000b39a2",
+            "x10/bench/compare.mjs": "3196eeaf1fc9ff07adff2a0b442a10bb7e12fa61129d094da681b44de64190b3",
+            "x10/bench/native-load.c": "ea0c28a2a4ec24d67978b442993ca86c86f14a823a6a24e1b7116807f0795828",
+            "x10/bench/native-load.mjs": "bb3befd34886d278052f209a87220a6ee9b819833c4d1a1fe93ef50663716a71",
+            "x10/test/ADAPTERS.md": "e873b9314e6d19eb3a7f72c15fbb022e0bae55e708cf1866288de183addbb537",
+            "x10/test/CONTROL-API.md": "4e83a1f150ec192ae4ed2ccf2af5bd8df96ed5a5d20b74058feaf77f0889d96c",
+            "x10/test/GENERATIONS.md": "5605685ee986471de36d1485a21635ac83ee778eddca99b6f4ad5417d9146053",
+            "x10/test/HANDOVER.md": "127f24ab1c5b8ad17419d51a4f882bd7432bd4900ff41d6a5745dfb1352d6c0e",
+            "x10/test/HTTP3.md": "b464ed2df5dd2dc05a200d5484da902cbfce1c22cb8370cf37d0166c855d4a2b",
+            "x10/test/MAIL-TLS.md": "32dad3082f2b15c250f8aab4397434e385c7a821d029ef001772083095bbbae3",
+            "x10/test/adapters-baseline.mjs": "4e4f9599788c98ec1a4eb112b56363822539fc91a6990d5ded0efca1bb856f63",
+            "x10/test/all.mjs": "5a85ed0655933dc353ae5c60a748c83029840d391abbb30ab2bed677713d554e",
+            "x10/test/alpha-runtime.test.mjs": "e3c483bd042b47e604663eb27a3c81aa663a7b4c0cf4cfeeefd1bf426b635328",
+            "x10/test/alpha.test.mjs": "0eccb4738616f81b32661051c2a1fd93217d9d3853974c021ae427397a1b9cce",
+            "x10/test/control-api-baseline.mjs": "b81d396fb7193120d505c72c668a26e2e1ce3a79af2b8884c3c7bbfa565a1786",
+            "x10/test/control-disabled.sh": "5f8f0837fe07ac6affbdf172a07d59f3a43f4543654188ac9131346cf2ddb313",
+            "x10/test/control.test.mjs": "795cf8ac991225a74039aa05efd07dbd563f92631e3958c19b4917fde16100b8",
+            "x10/test/features-baseline.mjs": "c3f13ad98aabf2cbf2517cc3737203361e32f500c9718ad3d416bbd57d26e6f9",
+            "x10/test/generation-boundaries.c": "b1fc24570be6225147f7b9f190384ed53b6886f31dc42a2b61ed943e0b44a666",
+            "x10/test/generation-boundaries.sh": "4817699f2a0547862ef9f5d62c6b6fd7e03e9f6a047cef7fa6b0bda6cb2527c0",
+            "x10/test/generations.mjs": "39f335e42152dcb3022d153a32ac71fa5a0910fb24acf38975eee2010b894354",
+            "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612",
+            "x10/test/http-baseline.mjs": "994289e9aa90d2e89719379924211e7574856135d1db524d53ca8c53d1e2abbb",
+            "x10/test/http3-baseline.mjs": "bace6eeeb55af6bd412b33d3c5c33902916a48a97af28299e173cf57362b9170",
+            "x10/test/http3-baseline.py": "2b657e7719bbe68bf294133bf7808d4db39a61b35fb8890a82d2641db9b68655",
+            "x10/test/http3-baseline.requirements.txt": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+            "x10/test/http3-head.md": "b0b08b472e0db90ecd738d0a0deb62c6c1296d8cd0decd8003c15a7d52aeacb7",
+            "x10/test/http3-head.mjs": "e0cc8c4441e2bd7ff0b7b3fc6ff085baa3b72ee479712019a2fd4da81dcac409",
+            "x10/test/http3-head.py": "e9e7316b016d095ae7fc44fa61348e9927a82f3d7ff1d71eef11e91cc6486b6a",
+            "x10/test/http3-head.requirements.txt": "3ccf1913a2c5cca06e8d1af2660c08d7447943f10839777d038bd4df63ad5b0f",
+            "x10/test/listeners.test.mjs": "5beedeeda6879a77ba1804f6a05d19f1e9d6bd009b4063bf87d712fd8a1b8dc0",
+            "x10/test/mail-tls-baseline.mjs": "c5662a3941090d75ca371c45c157236c53757d90708ab2de13add25cf58550fd",
+            "x10/test/official-tests.json": "c17e51f3767696fae639bdb0e9e82e77d660d4ad9573f4e4b96f4b616a23e07e",
+            "x10/test/official-tests.sh": "07b58f0708f359745d61db3fa9f7516c8aaf89085e0bce6db9a399190cd55ce5",
+            "x10/test/operator-status.test.mjs": "0c24bce2518848d14c317b451c261f437a8209387ea9ae8a1abb3e86c560e03d",
+            "x10/test/proof.test.mjs": "c0964090631e7fd7776a97772fe7de91784b0a8c4920426ca266e4922597b050",
+            "x10/test/quic-frames.c": "9a2b4e9fa60881891b4e77e09a92540702559f792f5e0fad2b9310cd2415d289",
+            "x10/test/quic-frames.sh": "8ea4dde51ebf8ab152ab67d79310a02b2e4caa1b438d2bed7c0d9af2c9d2ddd8",
+            "x10/test/quic-generated.c": "877a3b230ca886ef5cadb86d41350557e28d507e7a105ec5ae149fb5c5bd5ac5",
+            "x10/test/quic-generated.sh": "9f2fee4861ee658ccc3c2d40dcb8fafcab73659326c793f69b236e21e915d062",
+            "x10/test/quic-transport.c": "6e7d9a49d2be858361f03d932037b842940ad6ddb8fb52fefba97047f0b1c6f7",
+            "x10/test/runner.sh": "fc759f6ae3da74727dab1d2363e1da3b404cf2a0624a36f1602c940b028e6a13",
+            "x10/test/stream-mail-baseline.mjs": "a48b099b4a2850635dee68a0ea2c47f93427483d8c8118ad36c8f7420ece7982"
+          }
+        },
+        "after": {
+          "fileCount": 50,
+          "sourceSha256": {
+            "x10/alpha/NOTICE.txt": "27f28e07cead124c76c2cd290077117278c2dd61ac336d04ef3f08a48de685bc",
+            "x10/alpha/README.md": "4779fba1f6bee0b5bd111784553f37d06f592239b179ab4ba77a9b9f13c372bf",
+            "x10/alpha/cli.mjs": "5792054b28d36a1301392dd68c7ea360545de606d58b78df9abbeacf97e256b4",
+            "x10/alpha/runtime.mjs": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51",
+            "x10/bench/NATIVE-COMPARE.md": "89c3ac54754f81f79b9b2fc25ea1125ef4a1974335033ea01413b90a791484e6",
+            "x10/bench/NATIVE-LOAD.md": "d5c0ca407b1cf910b6bf8e15633288b058e34cf6b5d24f76c0d031364aee2d30",
+            "x10/bench/README.md": "b30f7af619ae8902b111e43db935c54ddab71a623563100f514526519890d270",
+            "x10/bench/compare-native.mjs": "243a6152f6bd5d25be2180825833cd7e47b943a417c550f27fccf510000b39a2",
+            "x10/bench/compare.mjs": "3196eeaf1fc9ff07adff2a0b442a10bb7e12fa61129d094da681b44de64190b3",
+            "x10/bench/native-load.c": "ea0c28a2a4ec24d67978b442993ca86c86f14a823a6a24e1b7116807f0795828",
+            "x10/bench/native-load.mjs": "bb3befd34886d278052f209a87220a6ee9b819833c4d1a1fe93ef50663716a71",
+            "x10/test/ADAPTERS.md": "e873b9314e6d19eb3a7f72c15fbb022e0bae55e708cf1866288de183addbb537",
+            "x10/test/CONTROL-API.md": "4e83a1f150ec192ae4ed2ccf2af5bd8df96ed5a5d20b74058feaf77f0889d96c",
+            "x10/test/GENERATIONS.md": "5605685ee986471de36d1485a21635ac83ee778eddca99b6f4ad5417d9146053",
+            "x10/test/HANDOVER.md": "127f24ab1c5b8ad17419d51a4f882bd7432bd4900ff41d6a5745dfb1352d6c0e",
+            "x10/test/HTTP3.md": "b464ed2df5dd2dc05a200d5484da902cbfce1c22cb8370cf37d0166c855d4a2b",
+            "x10/test/MAIL-TLS.md": "32dad3082f2b15c250f8aab4397434e385c7a821d029ef001772083095bbbae3",
+            "x10/test/adapters-baseline.mjs": "4e4f9599788c98ec1a4eb112b56363822539fc91a6990d5ded0efca1bb856f63",
+            "x10/test/all.mjs": "5a85ed0655933dc353ae5c60a748c83029840d391abbb30ab2bed677713d554e",
+            "x10/test/alpha-runtime.test.mjs": "e3c483bd042b47e604663eb27a3c81aa663a7b4c0cf4cfeeefd1bf426b635328",
+            "x10/test/alpha.test.mjs": "0eccb4738616f81b32661051c2a1fd93217d9d3853974c021ae427397a1b9cce",
+            "x10/test/control-api-baseline.mjs": "b81d396fb7193120d505c72c668a26e2e1ce3a79af2b8884c3c7bbfa565a1786",
+            "x10/test/control-disabled.sh": "5f8f0837fe07ac6affbdf172a07d59f3a43f4543654188ac9131346cf2ddb313",
+            "x10/test/control.test.mjs": "795cf8ac991225a74039aa05efd07dbd563f92631e3958c19b4917fde16100b8",
+            "x10/test/features-baseline.mjs": "c3f13ad98aabf2cbf2517cc3737203361e32f500c9718ad3d416bbd57d26e6f9",
+            "x10/test/generation-boundaries.c": "b1fc24570be6225147f7b9f190384ed53b6886f31dc42a2b61ed943e0b44a666",
+            "x10/test/generation-boundaries.sh": "4817699f2a0547862ef9f5d62c6b6fd7e03e9f6a047cef7fa6b0bda6cb2527c0",
+            "x10/test/generations.mjs": "39f335e42152dcb3022d153a32ac71fa5a0910fb24acf38975eee2010b894354",
+            "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612",
+            "x10/test/http-baseline.mjs": "994289e9aa90d2e89719379924211e7574856135d1db524d53ca8c53d1e2abbb",
+            "x10/test/http3-baseline.mjs": "bace6eeeb55af6bd412b33d3c5c33902916a48a97af28299e173cf57362b9170",
+            "x10/test/http3-baseline.py": "2b657e7719bbe68bf294133bf7808d4db39a61b35fb8890a82d2641db9b68655",
+            "x10/test/http3-baseline.requirements.txt": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+            "x10/test/http3-head.md": "b0b08b472e0db90ecd738d0a0deb62c6c1296d8cd0decd8003c15a7d52aeacb7",
+            "x10/test/http3-head.mjs": "e0cc8c4441e2bd7ff0b7b3fc6ff085baa3b72ee479712019a2fd4da81dcac409",
+            "x10/test/http3-head.py": "e9e7316b016d095ae7fc44fa61348e9927a82f3d7ff1d71eef11e91cc6486b6a",
+            "x10/test/http3-head.requirements.txt": "3ccf1913a2c5cca06e8d1af2660c08d7447943f10839777d038bd4df63ad5b0f",
+            "x10/test/listeners.test.mjs": "5beedeeda6879a77ba1804f6a05d19f1e9d6bd009b4063bf87d712fd8a1b8dc0",
+            "x10/test/mail-tls-baseline.mjs": "c5662a3941090d75ca371c45c157236c53757d90708ab2de13add25cf58550fd",
+            "x10/test/official-tests.json": "c17e51f3767696fae639bdb0e9e82e77d660d4ad9573f4e4b96f4b616a23e07e",
+            "x10/test/official-tests.sh": "07b58f0708f359745d61db3fa9f7516c8aaf89085e0bce6db9a399190cd55ce5",
+            "x10/test/operator-status.test.mjs": "0c24bce2518848d14c317b451c261f437a8209387ea9ae8a1abb3e86c560e03d",
+            "x10/test/proof.test.mjs": "c0964090631e7fd7776a97772fe7de91784b0a8c4920426ca266e4922597b050",
+            "x10/test/quic-frames.c": "9a2b4e9fa60881891b4e77e09a92540702559f792f5e0fad2b9310cd2415d289",
+            "x10/test/quic-frames.sh": "8ea4dde51ebf8ab152ab67d79310a02b2e4caa1b438d2bed7c0d9af2c9d2ddd8",
+            "x10/test/quic-generated.c": "877a3b230ca886ef5cadb86d41350557e28d507e7a105ec5ae149fb5c5bd5ac5",
+            "x10/test/quic-generated.sh": "9f2fee4861ee658ccc3c2d40dcb8fafcab73659326c793f69b236e21e915d062",
+            "x10/test/quic-transport.c": "6e7d9a49d2be858361f03d932037b842940ad6ddb8fb52fefba97047f0b1c6f7",
+            "x10/test/runner.sh": "fc759f6ae3da74727dab1d2363e1da3b404cf2a0624a36f1602c940b028e6a13",
+            "x10/test/stream-mail-baseline.mjs": "a48b099b4a2850635dee68a0ea2c47f93427483d8c8118ad36c8f7420ece7982"
+          }
+        }
+      },
+      "alphaAndRunnerFrozenSourceSha256": {
+        "x10/alpha/runtime.mjs": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51",
+        "x10/alpha/cli.mjs": "5792054b28d36a1301392dd68c7ea360545de606d58b78df9abbeacf97e256b4",
+        "x10/test/alpha.test.mjs": "0eccb4738616f81b32661051c2a1fd93217d9d3853974c021ae427397a1b9cce",
+        "x10/test/all.mjs": "5a85ed0655933dc353ae5c60a748c83029840d391abbb30ab2bed677713d554e",
+        "x10/test/alpha-runtime.test.mjs": "e3c483bd042b47e604663eb27a3c81aa663a7b4c0cf4cfeeefd1bf426b635328"
+      },
+      "frozenAlphaAndRunnerUnchangedDuringAggregate": true,
+      "executionCounts": {
+        "freshNativeBuilds": 1,
+        "officialAggregates": 1,
+        "aggregateReruns": 0
+      },
+      "controllerTAP": {
+        "tests": 77,
+        "pass": 77,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "controllerTAPInterpretation": "TAP entries include parents and explicitly synthetic observation controls; not77 distinct native transactions.",
+      "alphaTAPInterpretation": "37 TAP entries =28 synthetic controls plus9 original lifecycle entries including parents; not37 independent native lifecycles.",
+      "controllerRuntimeChanged": false,
+      "historicalControllerInterleavingProven": false,
+      "aggregateOuterElapsedMilliseconds": 192009
+    },
+    "priorControllerCI": {
+      "schemaVersion": 1,
+      "implementationCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+      "native": {
+        "schemaVersion": 1,
+        "implementationCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+        "verifiedAtUTC": "2026-10-24T07:22:05.948127+00:00",
+        "nativeRunsCompletedSuccess": true,
+        "runs": [
+          {
+            "id": 40073228720,
+            "runId": 40073228720,
+            "event": "push",
+            "name": "X10 native compatibility",
+            "headSha": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+            "status": "completed",
+            "conclusion": "success",
+            "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40073228720",
+            "runAttempt": 1,
+            "jobId": 120811018815,
+            "jobs": [
+              {
+                "id": 120810983781,
+                "name": "scope",
+                "status": "completed",
+                "conclusion": "success",
+                "steps": [
+                  {
+                    "name": "Set up job",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Check scope fail-closed controls",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Classify exact event delta",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Complete job",
+                    "status": "completed",
+                    "conclusion": "success"
+                  }
+                ]
+              },
+              {
+                "id": 120811018815,
+                "name": "linux",
+                "status": "completed",
+                "conclusion": "success",
+                "steps": [
+                  {
+                    "name": "Set up job",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Build dependencies and optional test clients",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Install pinned HTTP3 interoperability client",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Install independent HTTP3 HEAD client",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Compile native profile",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Native regressions and pinned official compatibility sample",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Verify native tenant cache contract experiment",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Verify private Unix control transport",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Build profile without control API",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Package local Linux alpha",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Checksum local Linux alpha",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Preserve JSON evidence",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Preserve local Linux alpha",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Complete job",
+                    "status": "completed",
+                    "conclusion": "success"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": 40073231545,
+            "runId": 40073231545,
+            "event": "pull_request",
+            "name": "X10 native compatibility",
+            "headSha": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+            "status": "completed",
+            "conclusion": "success",
+            "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40073231545",
+            "runAttempt": 1,
+            "jobId": 120811036704,
+            "jobs": [
+              {
+                "id": 120810992411,
+                "name": "scope",
+                "status": "completed",
+                "conclusion": "success",
+                "steps": [
+                  {
+                    "name": "Set up job",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Check scope fail-closed controls",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Classify exact event delta",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Complete job",
+                    "status": "completed",
+                    "conclusion": "success"
+                  }
+                ]
+              },
+              {
+                "id": 120811036704,
+                "name": "linux",
+                "status": "completed",
+                "conclusion": "success",
+                "steps": [
+                  {
+                    "name": "Set up job",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Build dependencies and optional test clients",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Install pinned HTTP3 interoperability client",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Install independent HTTP3 HEAD client",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Compile native profile",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Native regressions and pinned official compatibility sample",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Verify native tenant cache contract experiment",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Verify private Unix control transport",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Build profile without control API",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Package local Linux alpha",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Checksum local Linux alpha",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Preserve JSON evidence",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Preserve local Linux alpha",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                    "status": "completed",
+                    "conclusion": "success"
+                  },
+                  {
+                    "name": "Complete job",
+                    "status": "completed",
+                    "conclusion": "success"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "nativeArtifacts": {
+          "push": {
+            "artifactId": 12551754849,
+            "artifactName": "x10-native-evidence",
+            "archiveSha256": "e6156235773a8412c0d2bbce56b4dc6013c45172cb448dce7c25bdd490eda29f",
+            "githubDigest": "sha256:e6156235773a8412c0d2bbce56b4dc6013c45172cb448dce7c25bdd490eda29f",
+            "digestMatches": true,
+            "workflowRunId": 40073228720,
+            "eventHeadSha": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+            "aggregateSuccess": true,
+            "groups": {
+              "executed": 20,
+              "passed": 20,
+              "failed": 0
+            },
+            "alpha": {
+              "total": 37,
+              "pass": 37,
+              "fail": 0,
+              "skipped": 0,
+              "todo": 0,
+              "cancelled": 0
+            },
+            "managedNativeControl": {
+              "tests": 77,
+              "pass": 77,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "localInitialControlFailureFixed": false,
+            "alphaCountInterpretation": "37 TAP = 28 synthetic tests plus 9 original lifecycle TAP entries including parents; not 37 independent native lifecycles.",
+            "official": {
+              "success": true,
+              "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+              "summary": {
+                "files": 35,
+                "filesPassed": 34,
+                "filesSkipped": 1,
+                "filesFailed": 0,
+                "assertions": {
+                  "run": 1131,
+                  "passed": 1105,
+                  "failed": 0,
+                  "skipped": 25,
+                  "todoFailed": 1,
+                  "todoPassed": 0
+                }
+              },
+              "skippedFiles": [
+                "uwsgi.t"
+              ],
+              "selectedOptionalClientFileResults": [
+                {
+                  "file": "fastcgi.t",
+                  "status": "passed",
+                  "assertions": {
+                    "failed": 0,
+                    "passed": 10,
+                    "run": 10,
+                    "skipped": 0,
+                    "todoFailed": 0,
+                    "todoPassed": 0
+                  }
+                },
+                {
+                  "file": "scgi.t",
+                  "status": "passed",
+                  "assertions": {
+                    "failed": 0,
+                    "passed": 12,
+                    "run": 12,
+                    "skipped": 0,
+                    "todoFailed": 0,
+                    "todoPassed": 0
+                  }
+                },
+                {
+                  "file": "uwsgi.t",
+                  "status": "skipped",
+                  "assertions": {
+                    "failed": 0,
+                    "passed": 0,
+                    "run": 0,
+                    "skipped": 0,
+                    "todoFailed": 0,
+                    "todoPassed": 0
+                  }
+                }
+              ],
+              "parseErrorCount": 0,
+              "bailoutCount": 0,
+              "cleanupErrorCount": 0,
+              "sourceUnchangedDuringTest": true
+            },
+            "verifiedBuildIdentity": {
+              "manifestSha256": "939c4e8c258d9d2ae6cb473551359d8bfcf0fa7575b3760e31aae3d8d4bab838",
+              "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+              "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+              "checkoutRevision": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+              "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+              "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+              "nginxVersion": "1.31.9",
+              "compiledModuleCount": 105
+            },
+            "generatedFiles": {
+              "ngx_auto_config.h": {
+                "sha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+                "bytes": 10104,
+                "mode": "0644"
+              },
+              "ngx_auto_headers.h": {
+                "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+                "bytes": 657,
+                "mode": "0644"
+              },
+              "ngx_modules.c": {
+                "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+                "bytes": 11820,
+                "mode": "0644"
+              }
+            },
+            "dependencyVersionsFromHeaders": {
+              "pcre2": "10.42",
+              "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+              "zlib": "1.3"
+            },
+            "dependencyVersionsFromPkgConfig": {
+              "libpcre2-8": "10.42",
+              "openssl": "3.0.13",
+              "zlib": "1.3"
+            },
+            "compiler": "cc",
+            "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+            "configureOptions": [
+              "--with-http_ssl_module",
+              "--with-http_v2_module",
+              "--with-http_v3_module",
+              "--with-stream",
+              "--with-stream_ssl_module",
+              "--with-stream_ssl_preread_module",
+              "--with-mail",
+              "--with-mail_ssl_module",
+              "--with-threads",
+              "--with-file-aio",
+              "--with-http_realip_module",
+              "--with-http_stub_status_module",
+              "--with-http_auth_request_module",
+              "--with-http_addition_module",
+              "--with-http_sub_module",
+              "--with-http_dav_module",
+              "--with-http_slice_module",
+              "--with-http_gunzip_module",
+              "--with-http_gzip_static_module",
+              "--with-compat",
+              "--with-control-api"
+            ],
+            "buildManifestMatchesAggregate": true,
+            "checkoutAndEventHeadEqual": true,
+            "localBinaryEqualityClaimed": false,
+            "rawLogsIncluded": false,
+            "hostPathsIncluded": false,
+            "realProcessIdentifiersIncluded": false
+          },
+          "pullRequest": {
+            "artifactId": 12551728171,
+            "artifactName": "x10-native-evidence",
+            "archiveSha256": "da5b43ce8eefc4c6812691643f1b166c215f5174dc35ff159a14c9b8bdede709",
+            "githubDigest": "sha256:da5b43ce8eefc4c6812691643f1b166c215f5174dc35ff159a14c9b8bdede709",
+            "digestMatches": true,
+            "workflowRunId": 40073231545,
+            "eventHeadSha": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+            "aggregateSuccess": true,
+            "groups": {
+              "executed": 20,
+              "passed": 20,
+              "failed": 0
+            },
+            "alpha": {
+              "total": 37,
+              "pass": 37,
+              "fail": 0,
+              "skipped": 0,
+              "todo": 0,
+              "cancelled": 0
+            },
+            "managedNativeControl": {
+              "tests": 77,
+              "pass": 77,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "localInitialControlFailureFixed": false,
+            "alphaCountInterpretation": "37 TAP = 28 synthetic tests plus 9 original lifecycle TAP entries including parents; not 37 independent native lifecycles.",
+            "official": {
+              "success": true,
+              "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+              "summary": {
+                "files": 35,
+                "filesPassed": 34,
+                "filesSkipped": 1,
+                "filesFailed": 0,
+                "assertions": {
+                  "run": 1131,
+                  "passed": 1105,
+                  "failed": 0,
+                  "skipped": 25,
+                  "todoFailed": 1,
+                  "todoPassed": 0
+                }
+              },
+              "skippedFiles": [
+                "uwsgi.t"
+              ],
+              "selectedOptionalClientFileResults": [
+                {
+                  "file": "fastcgi.t",
+                  "status": "passed",
+                  "assertions": {
+                    "failed": 0,
+                    "passed": 10,
+                    "run": 10,
+                    "skipped": 0,
+                    "todoFailed": 0,
+                    "todoPassed": 0
+                  }
+                },
+                {
+                  "file": "scgi.t",
+                  "status": "passed",
+                  "assertions": {
+                    "failed": 0,
+                    "passed": 12,
+                    "run": 12,
+                    "skipped": 0,
+                    "todoFailed": 0,
+                    "todoPassed": 0
+                  }
+                },
+                {
+                  "file": "uwsgi.t",
+                  "status": "skipped",
+                  "assertions": {
+                    "failed": 0,
+                    "passed": 0,
+                    "run": 0,
+                    "skipped": 0,
+                    "todoFailed": 0,
+                    "todoPassed": 0
+                  }
+                }
+              ],
+              "parseErrorCount": 0,
+              "bailoutCount": 0,
+              "cleanupErrorCount": 0,
+              "sourceUnchangedDuringTest": true
+            },
+            "verifiedBuildIdentity": {
+              "manifestSha256": "c12a2bd8315189dd4fd9f99106308c6dac156153578e20b9cfe55c47a65bfdc0",
+              "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+              "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+              "checkoutRevision": "1fddc182ae71ca13662ca18b5789afdd09c0b4d4",
+              "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+              "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+              "nginxVersion": "1.31.9",
+              "compiledModuleCount": 105
+            },
+            "generatedFiles": {
+              "ngx_auto_config.h": {
+                "sha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+                "bytes": 10104,
+                "mode": "0644"
+              },
+              "ngx_auto_headers.h": {
+                "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+                "bytes": 657,
+                "mode": "0644"
+              },
+              "ngx_modules.c": {
+                "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+                "bytes": 11820,
+                "mode": "0644"
+              }
+            },
+            "dependencyVersionsFromHeaders": {
+              "pcre2": "10.42",
+              "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+              "zlib": "1.3"
+            },
+            "dependencyVersionsFromPkgConfig": {
+              "libpcre2-8": "10.42",
+              "openssl": "3.0.13",
+              "zlib": "1.3"
+            },
+            "compiler": "cc",
+            "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+            "configureOptions": [
+              "--with-http_ssl_module",
+              "--with-http_v2_module",
+              "--with-http_v3_module",
+              "--with-stream",
+              "--with-stream_ssl_module",
+              "--with-stream_ssl_preread_module",
+              "--with-mail",
+              "--with-mail_ssl_module",
+              "--with-threads",
+              "--with-file-aio",
+              "--with-http_realip_module",
+              "--with-http_stub_status_module",
+              "--with-http_auth_request_module",
+              "--with-http_addition_module",
+              "--with-http_sub_module",
+              "--with-http_dav_module",
+              "--with-http_slice_module",
+              "--with-http_gunzip_module",
+              "--with-http_gzip_static_module",
+              "--with-compat",
+              "--with-control-api"
+            ],
+            "buildManifestMatchesAggregate": true,
+            "checkoutAndEventHeadEqual": false,
+            "localBinaryEqualityClaimed": false,
+            "rawLogsIncluded": false,
+            "hostPathsIncluded": false,
+            "realProcessIdentifiersIncluded": false
+          }
+        },
+        "nativeVerificationRerunsRequested": 0,
+        "sourceMutations": false,
+        "spendingUSD": 0,
+        "rawLogsIncluded": false,
+        "hostPathsIncluded": false,
+        "realProcessIdentifiersIncluded": false,
+        "privateArtifactsPublished": false,
+        "officialLocalVsHosted": {
+          "localStrictPASS": 1083,
+          "localSkippedFiles": [
+            "fastcgi.t",
+            "scgi.t",
+            "uwsgi.t"
+          ],
+          "eachHostedStrictPASS": 1105,
+          "hostedSkippedFiles": [
+            "uwsgi.t"
+          ],
+          "bothSkippedAssertions": 25,
+          "bothExpectedTodoFailed": 1,
+          "unexpectedFailures": 0,
+          "identicalOptionalEnvironmentClaimed": false
+        },
+        "limitations": [
+          "Workflow event head identifies the source event; PR merge checkout identity is recorded separately from source head.",
+          "Hosted artifact identity checks compare manifest bytes, binary hashes and generated input metadata; downloaded JSON does not re-execute the binary.",
+          "Pinned official sample is curated, with explicit upstream skips and expected TODO; no all-platform, performance or production acceptance claim.",
+          "Local and hosted optional test-client environments differ; no identical local/hosted binary claim.",
+          "A current hosted control PASS does not fix or explain the preserved initial local expectedB/actualA observation; deterministic review remains pending."
+        ]
+      },
+      "research": {
+        "implementationCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+        "push": {
+          "runId": 40073228712,
+          "status": "completed",
+          "conclusion": "success",
+          "runtimeJobSkipped": true,
+          "newRuntimeAcceptance": false
+        },
+        "pullRequest": {
+          "runId": 40073231572,
+          "jobId": 120811034198,
+          "status": "completed",
+          "conclusion": "success",
+          "wrappers": [
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-record-and-state-kernel",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "in-memory-record-and-state-only",
+              "liveTlsProcessHandover": false,
+              "counts": {
+                "tests": 21,
+                "suites": 0,
+                "pass": 21,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-real-handshake-and-record-observation",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "real-handshake-and-record-observation-only",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 27,
+                "suites": 0,
+                "pass": 27,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-pinned-openssl-state-probe",
+              "passed": true,
+              "testFiles": 1,
+              "scope": "pinned-openssl-read-only-state-observation",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 35,
+                "suites": 0,
+                "pass": 35,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            }
+          ],
+          "process": {
+            "tests": 7,
+            "pass": 7,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        }
+      },
+      "interpretation": "Fixture-only sampled-generation observation repair; native/controller runtime unchanged; exact historical interleaving remains unproven. Research push skipped runtime job; research PR was executed.",
+      "spendingUSD": 0,
+      "newWorkflowRunsRequested": 0,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "processIdentifiersPublished": false
+    }
+  },
+  "sourceFreezeStable": true,
+  "historicalControllerEvidence": "x10/evidence/control-observation-contract.json",
+  "nativeAndControllerRuntimeChanged": false,
+  "sourceCProtectedMappingContractChanged": false,
+  "semanticExportImport": false,
+  "reusableSemanticCapsule": false,
+  "migration": false,
+  "limitations": [
+    "Only parser-owned decoded Buffers and the mutable delivered event Buffer are explicitly wiped; original TLS/provider allocations, Node internals and compiler/runtime copies are outside that guarantee.",
+    "Synthetic byte controls do not prove actual TLS handover, exclusive transport ownership or complete secret erasure.",
+    "Original expectedB/actualA remains historical evidence; the separately verified47515734 repair is fixture observation logic, not a controller/native runtime or historical-interleaving fix.",
+    "Reusable C-owned capsule lifetime, revocation/expiry, SIGTERM-after-filled-capsule acknowledgement, late-handle refusal and API allowlist remain later gates.",
+    "Importer, actual TLS-code version change, source retirement and native NGINX migration are not implemented."
+  ],
+  "spendingUSD": 0,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "processIdentifiersPublished": false,
+  "realSessionKeysPublished": false,
+  "secretFingerprintsPublished": false,
+  "hostedCI": "pending-exact-implementation-commit"
+}

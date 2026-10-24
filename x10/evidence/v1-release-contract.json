@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 1,
+  "suite": "bounded-v1-contract-and-release-record-validation",
+  "runId": "x10-v1-contract-20261024T112328Z",
+  "baseCommit": "1cb03eaa0b9318da8ab5d1e7457fd749e854bf5f",
+  "publicationParent": "4496cf08d46a1aa5f979f97f4208d1039116f44f",
+  "verifiedAtUTC": "2026-10-24T11:38:00.172969Z",
+  "scope": "G0 routing reconciliation and local G1 definitions/structural checker only",
+  "reports": {
+    "coordinator": {
+      "runId": "x10-v1-contract-20261024T112328Z",
+      "sourceBase": "1cb03eaa0b9318da8ab5d1e7457fd749e854bf5f",
+      "publicationParent": "4496cf08d46a1aa5f979f97f4208d1039116f44f",
+      "authority": {
+        "phase": "RUNNING",
+        "transition": null,
+        "activeProject": "x10",
+        "projectStatus": "ACTIVE_FOR_V1",
+        "paths": [
+          "docs/PORTFOLIO-EXECUTION.md",
+          "docs/PORTFOLIO-STATE.json",
+          "docs/project-prompts/README.md"
+        ],
+        "privateRevisionOmitted": true
+      },
+      "priorImplementation": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
+      "priorReceipt": "52ba4143eb929fd1e8227cec33b6c9d274a268d0",
+      "core": {
+        "suite": "core",
+        "tests": 21,
+        "pass": 21,
+        "exitCode": 0,
+        "stderrBytes": 0,
+        "runtimeScope": "unchanged-research-regression-only"
+      },
+      "process": {
+        "suite": "process",
+        "tests": 7,
+        "pass": 7,
+        "exitCode": 0,
+        "stderrBytes": 0,
+        "runtimeScope": "unchanged-synthetic-process-regression-only"
+      },
+      "capability": {
+        "nodeMajor": 24,
+        "uidClass": "root",
+        "compilerAvailable": true,
+        "pythonAvailable": true,
+        "gitAvailable": true,
+        "targetNode22NonrootAccepted": false
+      },
+      "nativeRuntimeChanged": false,
+      "newPurchases": false,
+      "productionDeployChanged": false
+    },
+    "authored": {
+      "schemaVersion": 1,
+      "scope": "G1-declared-release-record-structure-and-cross-reference-validation-only",
+      "authoredTests": {
+        "tests": 21,
+        "pass": 21,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "command": "node --test --test-reporter=tap x10/release/check-release-record.test.mjs"
+      },
+      "implementationFilesSha256": {
+        "x10/release/release-record.schema.json": "d39e33ea5dcd5713c6f668d9dcf326d592ba476d1c9dc2f5f474e6e1f020b97c",
+        "x10/release/check-release-record.mjs": "98afefd5e764073184bdbca723affb57d948ffc880c8c95b07d2b4ffa538915c",
+        "x10/release/check-release-record.test.mjs": "dc3d04d2508ee2e2116a12d93a8e15c0d6f393f42ef90de3257091ea2069e1c3"
+      },
+      "api": "validateReleaseRecord(value) -> { valid: boolean, errors: fixed sanitized code strings[] }",
+      "cli": {
+        "maxFileBytes": 262144,
+        "regularFileRequired": true,
+        "recordSymlinkRefused": true,
+        "cliSymlinkEntryRunsValidator": true,
+        "fixedSanitizedDiagnostics": true,
+        "successExit": 0,
+        "refusalExit": 1,
+        "evidenceAuthenticated": false,
+        "productionAccepted": false
+      },
+      "shapeAndCrossChecks": [
+        "Schema v1 and exact supported profile",
+        "Source/event/checkout/PR merge identities distinct and linked",
+        "Artifact version tag and blob source identity",
+        "Explicit permanent release and expiration distinction",
+        "Mandatory staged G0-G8 refs, outcome and source bindings",
+        "Accepted gate proof kind, predecessor and minimum3600second soak",
+        "Skipped and expectedTODO units retained independently from unexpected failures",
+        "Direct JSON-input structural bounds, accessors/cycles/nonplain refusal",
+        "Source tree plus current CI run/job/attempt and seven actual required named step declarations, including this checker step; absent/failed/skipped declarations refused"
+      ],
+      "reviewCorrectionsBeforeFinalTests": [
+        "Artifact version tag originally lacked cross-field binding; reviewer control led to canonical vVERSION tag check.",
+        "Candidate blob artifact source originally unbound; now source or actual checkout SHA required.",
+        "Symlink invocation of CLI originally skipped main; realpath entry matching now executes refusal.",
+        "Required source tree and explicit CI run/job/attempt/steps added after review found minimal envelope insufficient for G1 provenance declarations.",
+        "Current release-record validation step added to the seven mandatory named CI step declarations."
+      ],
+      "diagnostics": [
+        "Private template-builder Python syntax error corrected before any validator test; no public evidence fabricated.",
+        "Optional independent Python jsonschema verifier unavailable: module not installed; no install attempted."
+      ],
+      "runtimeAcceptance": false,
+      "nativeRuntimeRerun": false,
+      "newPurchases": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "realSessionKeysPublished": false,
+      "limitations": [
+        "Invented unit records, hashes and URLs test declarations; no artifact was fetched, built, installed or authenticated.",
+        "JSON Schema covers shape; checker adds documented identity/reference/gate consistency rules. Neither independently authenticates evidence.",
+        "Canonical Node22/Ubuntu nonroot gateway profile not executed by these unit tests; current Node24 environment is not V1 acceptance.",
+        "A structurally valid v1 record is a declaration, not release authority, real runtime success or central portfolio transition.",
+        "No independent full-draft JSON Schema implementation was available locally."
+      ],
+      "prepublicationCounterexample": {
+        "observedBy": "independent reviewer",
+        "case": "CLI symlink entry with missing record",
+        "before": {
+          "exitCode": 0,
+          "stdoutBytes": 0,
+          "stderrBytes": 0
+        },
+        "exactPreFixHashCaptured": false,
+        "limit": "Observation before entry guard fix, not a claimed historical Git baseline or failed full-suite count; separate reviewer safe record retains original observation."
+      }
+    },
+    "independentReview": {
+      "schemaVersion": 1,
+      "suite": "independent-v1-release-contract-and-record-review",
+      "baseCommit": "1cb03eaa0b9318da8ab5d1e7457fd749e854bf5f",
+      "leasedParent": "4496cf08d46a1aa5f979f97f4208d1039116f44f",
+      "reviewedAtUTC": "2026-10-24T11:36:05.004458+00:00",
+      "scope": "G1 declared contract/profile and release-record structure only; no accepted release, service, native runtime or soak.",
+      "sourceFilesSha256": {
+        "x10/release/RELEASE-CONTRACT.md": "fce36f6ff9575e50042d473eea52a361730216a2155da2c687feea7b9d482d6a",
+        "x10/release/profile.json": "9604e00e0dfb68e437dbc967049d3b6816580a8a1d75d96387e84169cb4f9457",
+        "x10/release/README.md": "846735d23f592e43d75593e768d93c5d79825f3cbe75e59d6c8826b59c92f060",
+        "x10/release/release-record.schema.json": "d39e33ea5dcd5713c6f668d9dcf326d592ba476d1c9dc2f5f474e6e1f020b97c",
+        "x10/release/check-release-record.mjs": "98afefd5e764073184bdbca723affb57d948ffc880c8c95b07d2b4ffa538915c",
+        "x10/release/check-release-record.test.mjs": "dc3d04d2508ee2e2116a12d93a8e15c0d6f393f42ef90de3257091ea2069e1c3",
+        "x10/release/release-record-heldout.test.mjs": "835ed714031b2b12512c46089f5d996e27af02cc2c3400ed43e2955d01039b23",
+        ".github/workflows/x10-native.yml": "0de52a7df7861cf7253fe5acc903f3d70f5f5d52a7faa7e80d6cdfd47e13bc85"
+      },
+      "independentHeldout": {
+        "exitCode": 0,
+        "counts": {
+          "tests": 14,
+          "pass": 14,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "sourceBeforeSha256": {
+          "x10/release/check-release-record.mjs": "98afefd5e764073184bdbca723affb57d948ffc880c8c95b07d2b4ffa538915c",
+          "x10/release/release-record.schema.json": "d39e33ea5dcd5713c6f668d9dcf326d592ba476d1c9dc2f5f474e6e1f020b97c",
+          "x10/release/release-record-heldout.test.mjs": "835ed714031b2b12512c46089f5d996e27af02cc2c3400ed43e2955d01039b23"
+        },
+        "sourceAfterSha256": {
+          "x10/release/check-release-record.mjs": "98afefd5e764073184bdbca723affb57d948ffc880c8c95b07d2b4ffa538915c",
+          "x10/release/release-record.schema.json": "d39e33ea5dcd5713c6f668d9dcf326d592ba476d1c9dc2f5f474e6e1f020b97c",
+          "x10/release/release-record-heldout.test.mjs": "835ed714031b2b12512c46089f5d996e27af02cc2c3400ed43e2955d01039b23"
+        },
+        "sourceStable": true
+      },
+      "reviewedChecks": [
+        "Production V1 remains unaccepted; G1 does not promote G2-G8",
+        "One declared Ubuntu24.04/x86_64/Node22/nonroot profile; UID0/Node24 current environment is not target acceptance",
+        "Service target systemd-user remains pending; foreground alpha/self-check not service/app health",
+        "Trusted same-UID/private prefix/Unix management and unsigned consistency limits explicit",
+        "Config rollback and package rollback separated; application side effects not undone",
+        "Predeclared60minute normal/slow soak and fixed resource/error/latency/CPU/RSS bounds are not measurements or SLA",
+        "Complete native/module/platform and unfinished Continuum scope preserved",
+        "Exact source/tree/event/build/PR merge plus CI IDs/attempt/required success steps declared",
+        "Stage promotion requires cumulative G0-G8 classes and references; one accepted flag insufficient",
+        "Expired CI artifact cannot stand in for permanent alpha/V1; checksum is not signature",
+        "Version tag/blob identity mismatches refused; evidence source and reference bindings checked",
+        "Unknown keys/schema, malformed/cyclic/accessor/nonplain values refused; fixed diagnostics do not reflect payload",
+        "CLI bounds bytes, rejects symlink/nonregular input, and alias invocation cannot silently skip validation",
+        "Required hosted release-record step targets both authored and heldout files without continue-on-error"
+      ],
+      "resolvedFindings": [
+        {
+          "finding": "Release URL tag and candidate blob SHA were not bound to declared version/source",
+          "resolution": "Author added record_version and record_identity refusal controls; heldouts pass"
+        },
+        {
+          "finding": "CLI invoked through symlink returned exit0 with no validation output",
+          "resolution": "Author canonicalized executable identity with realpathSync; dedicated heldout passes",
+          "initialObservation": {
+            "scope": "Synthetic release-record CLI entrypoint observation, not release/runtime acceptance.",
+            "initialObservation": {
+              "aliasInvocationWithMissingRecord": true,
+              "exitCode": 0,
+              "stdoutBytes": 0,
+              "stderrBytes": 0,
+              "frozenSourceHashRecorded": false,
+              "baselineIdentityLimit": "Observed before fix; exact pre-fix source hash was not captured."
+            },
+            "postFixHeldout": {
+              "sourceSha256": "84720a1329034125f4b4abfae3325d336053606f83e93dca43d67cf8734f1586",
+              "exitCode": 0,
+              "counts": {
+                "tests": 13,
+                "pass": 13,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              }
+            },
+            "sequencingNote": "Author fixed alias entrypoint before the newly added13-case file first executed; no failed13-case run is claimed."
+          }
+        },
+        {
+          "finding": "Minimal envelope could not directly declare required source tree/exact CI job/attempt/steps while contract implied them",
+          "resolution": "Author added required source.tree and bounded build.ci records with identity/success/required-step rules; heldouts pass"
+        }
+      ],
+      "blockingFindings": [],
+      "nativeRuntimePathsChanged": [],
+      "newNativeRuntimeTestsExecuted": 0,
+      "hostedAcceptanceOfNewCode": "PENDING_EXACT_IMPLEMENTATION_CI",
+      "productionAccepted": false,
+      "limitations": [
+        "A structurally valid self-declaration does not authenticate evidence or verify hashes/artifact bytes/CI execution.",
+        "Schema declares necessary shape; Node cross-field checks supplement it. An independent full JSON-Schema implementation was unavailable to author; no differential validator acceptance is claimed.",
+        "All release-record test identities, URLs and successful gate claims are synthetic.",
+        "No nonroot installation, systemd-user runtime, real proxy/TLS flow, package upgrade/rollback,60minute soak or permanent release replay performed by this reviewer.",
+        "Original CLI alias observation captured exit/output facts but no frozen pre-fix source hash; author fixed before the13-case file first ran. No failed13-case run is claimed."
+      ],
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "processIdentifiersPublished": false,
+      "realSecretsPublished": false,
+      "finalFreezeNote": "Earlier14-case report is diagnostic after the required CI step list grew from6 to7; reran final14cases with all7required current workflow step names."
+    },
+    "combined": {
+      "schemaVersion": 1,
+      "scope": "local-release-record-structure-only",
+      "nodeMajor": 24,
+      "command": "node --test --test-reporter=tap x10/release/check-release-record.test.mjs x10/release/release-record-heldout.test.mjs",
+      "counts": {
+        "tests": 35,
+        "pass": 35,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "sourceSha256": {
+        "x10/release/release-record.schema.json": "d39e33ea5dcd5713c6f668d9dcf326d592ba476d1c9dc2f5f474e6e1f020b97c",
+        "x10/release/README.md": "846735d23f592e43d75593e768d93c5d79825f3cbe75e59d6c8826b59c92f060",
+        "x10/release/RELEASE-CONTRACT.md": "fce36f6ff9575e50042d473eea52a361730216a2155da2c687feea7b9d482d6a",
+        "x10/release/check-release-record.mjs": "98afefd5e764073184bdbca723affb57d948ffc880c8c95b07d2b4ffa538915c",
+        "x10/release/check-release-record.test.mjs": "dc3d04d2508ee2e2116a12d93a8e15c0d6f393f42ef90de3257091ea2069e1c3",
+        "x10/release/release-record-heldout.test.mjs": "835ed714031b2b12512c46089f5d996e27af02cc2c3400ed43e2955d01039b23",
+        "x10/release/profile.json": "9604e00e0dfb68e437dbc967049d3b6816580a8a1d75d96387e84169cb4f9457",
+        ".github/workflows/x10-native.yml": "0de52a7df7861cf7253fe5acc903f3d70f5f5d52a7faa7e80d6cdfd47e13bc85"
+      },
+      "sourceUnchangedDuringRun": true,
+      "productionAccepted": false,
+      "targetNode22NonrootAccepted": false,
+      "profileDeclarationChecksPassed": true,
+      "coordinatorCheckCorrection": "Combined35 tests passed; a separate profile assertion then used a nonexistent slowUploads key and raised KeyError. Corrected the private assertion to declared slowUploadConnections/slowDownloadConnections without source changes or runtime rerun."
+    }
+  },
+  "sourceFilesSha256": {
+    ".github/workflows/x10-native.yml": "0de52a7df7861cf7253fe5acc903f3d70f5f5d52a7faa7e80d6cdfd47e13bc85",
+    "x10/release/RELEASE-CONTRACT.md": "fce36f6ff9575e50042d473eea52a361730216a2155da2c687feea7b9d482d6a",
+    "x10/release/profile.json": "9604e00e0dfb68e437dbc967049d3b6816580a8a1d75d96387e84169cb4f9457",
+    "x10/release/release-record.schema.json": "d39e33ea5dcd5713c6f668d9dcf326d592ba476d1c9dc2f5f474e6e1f020b97c",
+    "x10/release/check-release-record.mjs": "98afefd5e764073184bdbca723affb57d948ffc880c8c95b07d2b4ffa538915c",
+    "x10/release/check-release-record.test.mjs": "dc3d04d2508ee2e2116a12d93a8e15c0d6f393f42ef90de3257091ea2069e1c3",
+    "x10/release/release-record-heldout.test.mjs": "835ed714031b2b12512c46089f5d996e27af02cc2c3400ed43e2955d01039b23",
+    "x10/release/README.md": "846735d23f592e43d75593e768d93c5d79825f3cbe75e59d6c8826b59c92f060"
+  },
+  "nativeCompatibility": {
+    "sourceFilesChanged": false,
+    "trackedTreeRows": 500,
+    "trackedTreeListingSha256": "b1f38f66a31b672a3b1b7b39e262f3fccc896165befa7774d28099c258465da2",
+    "localFullNativeRerun": false,
+    "exactNewHostedAcceptance": "PENDING",
+    "requiredNewWorkflowStep": "Validate release-record contract and refusal controls",
+    "priorAcceptedResearchReceipt": "52ba4143eb929fd1e8227cec33b6c9d274a268d0"
+  },
+  "acceptance": {
+    "G0": "ROUTING_RECONCILED",
+    "G1": "LOCAL_CONTRACT_AND_VALIDATOR_VERIFIED_HOSTED_PENDING",
+    "targetRuntimeAccepted": false,
+    "permanentReleaseAccepted": false,
+    "productionAccepted": false,
+    "otherProductActivated": false
+  },
+  "nextConcreteTask": "Verify exact resulting G1 implementation CI first: the native main job must execute the new release-record authored/heldout step and required native/Unix/feature-off/package checks; scope success is not acceptance. Then implement G2: correct the stale Quickstart to the accepted exact release, provide a real upstream with application readiness, replay the extracted bundle independently and publish a permanent versioned Local Alpha. G3-G8 service, TLS, package rollback/recovery, security, frozen soak and independent permanent V1 acceptance remain mandatory. Do not resume Continuum R&D or activate another product by default.",
+  "limitations": [
+    "JSON shape and declared cross-reference validity do not authenticate evidence or accept a release.",
+    "Local unit records and identities are synthetic; no artifact download/install/service/deployment/soak is proved by them.",
+    "Current local root/Node24 capability is not the supported target nonroot Node22 runtime.",
+    "Exact implementation CI must execute the new required release-record step, not merely metadata scope.",
+    "Historical native mode drift, controller observations, skips/TODO and Continuum unsupported gates remain preserved.",
+    "No new native/crypto/controller change; no full-platform, performance, SLA or migration acceptance.",
+    "Private coordinator exact revision and internal budget/price hypotheses are omitted from public evidence by policy."
+  ],
+  "publication": {
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "realSessionKeysPublished": false,
+    "privateCoordinatorRevisionPublished": false,
+    "newPurchases": false,
+    "productionDeployChanged": false
+  }
+}

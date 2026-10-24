@@ -1,0 +1,135 @@
+{
+  "suite": "native-stream-mail-baseline",
+  "passed": true,
+  "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+  "version": "nginx version: nginx/1.31.9",
+  "processMode": "master_process off; single native process under the current uid",
+  "masterProcess": false,
+  "scope": "Existing native NGINX stream/mail behavior with synthetic loopback fixtures; no performance or production-readiness claim.",
+  "limits": [
+    "No mail TLS/STARTTLS coverage",
+    "No external identity provider or real accounts",
+    "No exhaustive protocol, failure, platform or load coverage"
+  ],
+  "tests": [
+    {
+      "name": "stream.tcp.exact_binary_payload",
+      "passed": true,
+      "durationMs": 7.79,
+      "payloadBytes": 31
+    },
+    {
+      "name": "stream.udp.exact_binary_datagram",
+      "passed": true,
+      "durationMs": 2.19,
+      "payloadBytes": 8
+    },
+    {
+      "name": "mail.smtp.greeting_capability_quit",
+      "passed": true,
+      "durationMs": 2
+    },
+    {
+      "name": "mail.imap.greeting_capability_logout",
+      "passed": true,
+      "durationMs": 2.45
+    },
+    {
+      "name": "mail.pop3.greeting_capability_quit",
+      "passed": true,
+      "durationMs": 1.17
+    },
+    {
+      "name": "mail.smtp.auth_http_denial",
+      "passed": true,
+      "durationMs": 15.66
+    },
+    {
+      "name": "mail.imap.auth_http_denial",
+      "passed": true,
+      "durationMs": 3.81
+    },
+    {
+      "name": "mail.pop3.auth_http_denial",
+      "passed": true,
+      "durationMs": 6.79
+    },
+    {
+      "name": "mail.smtp.auth_proxy_success_and_tunnel",
+      "passed": true,
+      "durationMs": 16.23
+    },
+    {
+      "name": "mail.imap.auth_proxy_literal_handshake_and_tunnel",
+      "passed": true,
+      "durationMs": 12.71
+    },
+    {
+      "name": "mail.pop3.auth_proxy_success_and_tunnel",
+      "passed": true,
+      "durationMs": 11.88
+    },
+    {
+      "name": "fixtures.expected_auth_and_backend_counts",
+      "passed": true,
+      "durationMs": 0.31,
+      "authRequests": 6,
+      "backendConnections": {
+        "smtp": 1,
+        "imap": 1,
+        "pop3": 1
+      },
+      "backendHandshakes": {
+        "smtp": 1,
+        "imap": 1,
+        "pop3": 1
+      }
+    }
+  ],
+  "authCalls": [
+    {
+      "protocol": "smtp",
+      "decision": "deny"
+    },
+    {
+      "protocol": "imap",
+      "decision": "deny"
+    },
+    {
+      "protocol": "pop3",
+      "decision": "deny"
+    },
+    {
+      "protocol": "smtp",
+      "decision": "allow"
+    },
+    {
+      "protocol": "imap",
+      "decision": "allow"
+    },
+    {
+      "protocol": "pop3",
+      "decision": "allow"
+    }
+  ],
+  "backendConnections": {
+    "smtp": 1,
+    "imap": 1,
+    "pop3": 1
+  },
+  "backendHandshakes": {
+    "smtp": 1,
+    "imap": 1,
+    "pop3": 1
+  },
+  "fixtureErrors": [],
+  "cleanupErrors": [],
+  "unexpectedNginxErrors": [],
+  "shutdown": {
+    "requestedSignal": "SIGQUIT",
+    "result": {
+      "code": 0,
+      "signal": null
+    }
+  }
+}

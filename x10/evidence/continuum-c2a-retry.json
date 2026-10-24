@@ -1,0 +1,814 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "suite": "continuum-c2a-real-read-retry-lifecycle",
+  "date": "2026-10-23",
+  "baselineCommit": "3d7d74fc6d34ebb2a85d5ba76b5aeec5f32997b4",
+  "publicationParent": "a438d472bd89e2a258fbc6b53ed11438c1d8f0c4",
+  "implementationCommitRule": "First commit introducing this file; coordinator records exact SHA/run IDs after publication.",
+  "scope": {
+    "actualTLSReadRetryLifecycle": true,
+    "existingLedgerContractExtendedCoverage": true,
+    "fullInventoryAccepted": false,
+    "semanticExportImport": false,
+    "actualTLSCodeVersionChange": false,
+    "migration": false,
+    "nativeNginxIntegration": false,
+    "automaticAdapterCompiler": false
+  },
+  "profile": "x10/continuum/C2A-PROFILE.md",
+  "sourceSha256": {
+    "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+    "openssl-probe-run.mjs": "c43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3",
+    "openssl-probe-fixture.c": "7754dc56122bf46f4d80d7c6d5fa9d5b472f0c7a2d45eb88757e599fe0d369cf",
+    "openssl-probe.h": "ca4c0d5e86a4e008a59c7788057fa03dc8c6fb64237beb06b0edfbee473fb0d8",
+    "openssl-probe.c": "453091bbfb54439bf1304ea15ad3de9bbe9b9bf1ce465da5c7723fef9f11e9ca",
+    "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+    "openssl-probe.test.mjs": "df1e42c986de1e205f15721c4715e5de4bd915d95fe9f79cd5fa2602dc31bb98",
+    "openssl-probe-check.mjs": "45da87fdb75ee404b8403c3c80afa51c55a4b6d8713e5040ee88354c8b9d313a",
+    "handshake-oracle.mjs": "b551e55d6d20ebb687f6d49c38a0cd6b144acd5981047fc24c502b2fccd4c835",
+    "record.mjs": "124baea5d841b3036041ee46aa8992a8c348cc9ffe13e3661b391bed0927e272"
+  },
+  "coordinatorAggregate": {
+    "command": "node x10/continuum/openssl-probe-check.mjs",
+    "result": {
+      "schemaVersion": 1,
+      "suite": "continuum-pinned-openssl-state-probe",
+      "passed": true,
+      "testFiles": 1,
+      "scope": "pinned-openssl-read-only-state-observation",
+      "nativeNginxMigration": false,
+      "realSessionMigration": false,
+      "counts": {
+        "tests": 10,
+        "suites": 0,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "interrupted": false,
+      "runnerError": null
+    },
+    "recordSha256": "7f69b3f0e7e80500c537f413bb81d7c4e9bcdf99a028a5d48de9414cc1da5280",
+    "exactFinalRunnerSha256": "c43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3"
+  },
+  "runtimeMatrix": {
+    "historicalCasesPreserved": 8,
+    "newCases": [
+      "completed-read-retry",
+      "unrelated-write-read-retry"
+    ],
+    "total": 10,
+    "completion": "Actual initial WANT_READ with no client application write; original READ arguments retained; immediate READ success/retryNONE event before further READ or echo; bounded ACK then full echo/wire sequences/clean TLS closure.",
+    "unrelated": "Separate successful outbound WRITE leaves original READ retry; final exact16 refusal despite both pending getters false and last WRITE success; exact plaintext receipt ACK precedes intentional raw teardown."
+  },
+  "coverageBaseline": {
+    "recordSha256": "eafbc84c815ea9082a8bd0c342d82d7b0c3ca41304cfad2dad4eda43aee08614",
+    "result": {
+      "schemaVersion": 1,
+      "baselineCommit": "3d7d74fc6d34ebb2a85d5ba76b5aeec5f32997b4",
+      "kind": "unsupported-scenario-api-baseline-not-realTLS",
+      "controls": [
+        {
+          "scenario": "completed-read-retry",
+          "rejected": true,
+          "code": "scenario_options"
+        },
+        {
+          "scenario": "unrelated-write-read-retry",
+          "rejected": true,
+          "code": "scenario_options"
+        }
+      ],
+      "realTLS": false
+    },
+    "isRuntimeDefectReproduction": false
+  },
+  "authorVerification": {
+    "recordSha256": "2df3f25c0561822c7e5162b5f2dd0468586f226f6888bb5596d2d4fa8fed1837",
+    "firstAdverse": {
+      "counts": {
+        "tests": 10,
+        "pass": 0,
+        "fail": 10,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 3839.577037
+      },
+      "rawRecordSha256": "1996f59a7c15aee5b8eeb9b76cbccb311bb63ff694a1091a5b80397f5f16f2c3",
+      "runtimeTLSCasesExecuted": 0,
+      "failurePhase": "before-hook dependency build",
+      "sanitizedCode": "probe_build_failed",
+      "underlyingBuildStage": "UNKNOWN-existing-catch-did-not-preserve-it",
+      "cause": "not-established",
+      "ownerReportedSourceHashes": {
+        "runner": "c1cb7f81c0c6515745b0451390fe890a93c686d92d771aa5d0d86e9d06e0c168",
+        "tests": "df1e42c986de1e205f15721c4715e5de4bd915d95fe9f79cd5fa2602dc31bb98",
+        "fixture": "85998ad3e4a25dcaa82c588db67bd127c1cd5e8147e8c4b625a81bbb812065bd"
+      }
+    },
+    "directPinnedBuildRepeat": {
+      "result": {
+        "build": "pass"
+      },
+      "cleanupAwaited": true,
+      "recordSha256": "557ad133c94a37320bd883b86a94dd5cde065ffa73ad6c3d2b0fad493733d898",
+      "builderSourceUnchanged": true,
+      "failureCauseResolved": false
+    },
+    "firstActualTenCases": {
+      "counts": {
+        "tests": 10,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "duration_ms": 80979.166523
+      },
+      "rawRecordSha256": "4df89ad0bbc67328ffb01517b11dfaf27adb340f0216dd617b72d2440688dd86",
+      "exitCode": 0,
+      "sourceHashes": {
+        "runner": "2425ebe02abb3811c47f37adb1ed024d88427d8db36e7c0d26137d8869242b7d",
+        "tests": "df1e42c986de1e205f15721c4715e5de4bd915d95fe9f79cd5fa2602dc31bb98",
+        "fixture": "7754dc56122bf46f4d80d7c6d5fa9d5b472f0c7a2d45eb88757e599fe0d369cf"
+      },
+      "finalDiagnosticCorrectionNotYetInThisRun": true
+    },
+    "finalDiagnosticDelta": {
+      "fixedAllowedBuilderCodes": 28,
+      "controls": {
+        "schemaVersion": 1,
+        "suite": "retry-build-diagnostic-private-controls",
+        "actualTLS": false,
+        "runnerSha256": "c43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3",
+        "controls": [
+          {
+            "case": "known-stage",
+            "passed": true
+          },
+          {
+            "case": "unknown-stage",
+            "passed": true
+          },
+          {
+            "case": "malicious-code",
+            "passed": true
+          },
+          {
+            "case": "nonstring-code",
+            "passed": true
+          }
+        ],
+        "passed": true,
+        "rawLogsPublished": false
+      },
+      "controlsRecordSha256": "7866223bc57e8487c8999bc71cf562134897330c14cd7b9ca0cce2a0c8a444b9",
+      "finalRuntimeCoveredByCoordinatorAggregate": true
+    }
+  },
+  "independentHeldout": {
+    "recordSha256": "bf77fa07d59583c6c955fec5100e360189609c7a0b49c2abd3ace8fb328bbe5c",
+    "actualTLSControls": 4,
+    "exactFrozenModuleBytes": true,
+    "observations": [
+      {
+        "options": {
+          "scenario": "completed-read-retry",
+          "payloadBytes": 33371
+        },
+        "outcome": "pass",
+        "probe": {
+          "event": "probe",
+          "scenario": "completed-read-retry",
+          "sample": 1,
+          "allowed": true,
+          "reasons": "0",
+          "monitorKnown": true,
+          "readGeneration": "0",
+          "writeGeneration": "0",
+          "mutationSerial": "2",
+          "readNextSequence": "0000000000000003",
+          "writeNextSequence": "0000000000000003",
+          "sslPending": 0,
+          "sslHasPending": false,
+          "packetLength": 0,
+          "rbufLeft": 0,
+          "rbufOffset": 628,
+          "rbufLength": 16712,
+          "unreadRecordBytes": 0,
+          "unreadControlBytes": 0,
+          "wbufLeft": 0,
+          "wbufOffset": 628,
+          "wbufLength": 16584,
+          "wnum": 0,
+          "staleWpendTot": 603,
+          "staleWpendRet": 603,
+          "readRecordSlots": 1,
+          "writeBufferSlots": 1,
+          "rstate": 240,
+          "rwstate": 1,
+          "flowState": 4,
+          "handshakeState": 1,
+          "inInit": 0,
+          "inHandshake": 0,
+          "encReadState": 0,
+          "encWriteState": 0,
+          "keyUpdate": -1,
+          "alertDispatch": 0,
+          "shutdown": 0,
+          "handshakeFragmentLength": 0,
+          "initNum": 0,
+          "ledgerLastCall": 3,
+          "ledgerRetryCall": 0,
+          "ledgerLastOutcome": 1,
+          "ledgerCallSerial": "9"
+        },
+        "retryLifecycle": {
+          "ready": {
+            "event": "retry-ready",
+            "scenario": "completed-read-retry",
+            "call": 2,
+            "outcome": 2,
+            "retryCall": 2,
+            "applicationBytesRead": 0,
+            "sslPending": 0
+          },
+          "completed": {
+            "event": "retry-completed",
+            "scenario": "completed-read-retry",
+            "call": 2,
+            "outcome": 1,
+            "retryCall": 0,
+            "applicationBytesRead": 16384,
+            "sslPending": 0,
+            "sameReadArguments": true
+          },
+          "clientApplicationWritesBeforeRetry": 0
+        },
+        "immutableSelectedMetadata": true,
+        "wire": {
+          "schemaVersion": 1,
+          "recordKind": "tls13-handshake-wire-oracle",
+          "passed": true,
+          "protocol": "TLSv1.3",
+          "cipher": "TLS_AES_128_GCM_SHA256",
+          "alpn": "continuum-c1",
+          "endpointAuthorizationObserved": true,
+          "authenticatedHandshakeBoundary": true,
+          "independentFinishedMacVerification": false,
+          "fullHandshakeVerifier": false,
+          "directions": {
+            "client": {
+              "captureRecords": 7,
+              "preApplicationRecords": 3,
+              "helloRecords": 1,
+              "compatibilityCCSRecords": 1,
+              "encryptedHandshakeRecords": 1,
+              "applicationRecords": 3,
+              "applicationBytes": 33371,
+              "keyUpdates": 0,
+              "closeNotify": true,
+              "trailingBytes": 0
+            },
+            "server": {
+              "captureRecords": 10,
+              "preApplicationRecords": 6,
+              "helloRecords": 1,
+              "compatibilityCCSRecords": 1,
+              "encryptedHandshakeRecords": 4,
+              "applicationRecords": 3,
+              "applicationBytes": 33371,
+              "keyUpdates": 0,
+              "closeNotify": true,
+              "trailingBytes": 0
+            }
+          },
+          "capturedStreamComplete": true,
+          "stateExportImport": false,
+          "migration": false,
+          "nativeNginxIntegration": false
+        },
+        "fixtureGracefulShutdown": true
+      },
+      {
+        "options": {
+          "scenario": "completed-read-retry",
+          "payloadBytes": 53419
+        },
+        "outcome": "pass",
+        "probe": {
+          "event": "probe",
+          "scenario": "completed-read-retry",
+          "sample": 1,
+          "allowed": true,
+          "reasons": "0",
+          "monitorKnown": true,
+          "readGeneration": "0",
+          "writeGeneration": "0",
+          "mutationSerial": "2",
+          "readNextSequence": "0000000000000004",
+          "writeNextSequence": "0000000000000004",
+          "sslPending": 0,
+          "sslHasPending": false,
+          "packetLength": 0,
+          "rbufLeft": 0,
+          "rbufOffset": 4292,
+          "rbufLength": 16712,
+          "unreadRecordBytes": 0,
+          "unreadControlBytes": 0,
+          "wbufLeft": 0,
+          "wbufOffset": 4292,
+          "wbufLength": 16584,
+          "wnum": 0,
+          "staleWpendTot": 4267,
+          "staleWpendRet": 4267,
+          "readRecordSlots": 1,
+          "writeBufferSlots": 1,
+          "rstate": 240,
+          "rwstate": 1,
+          "flowState": 4,
+          "handshakeState": 1,
+          "inInit": 0,
+          "inHandshake": 0,
+          "encReadState": 0,
+          "encWriteState": 0,
+          "keyUpdate": -1,
+          "alertDispatch": 0,
+          "shutdown": 0,
+          "handshakeFragmentLength": 0,
+          "initNum": 0,
+          "ledgerLastCall": 3,
+          "ledgerRetryCall": 0,
+          "ledgerLastOutcome": 1,
+          "ledgerCallSerial": "10"
+        },
+        "retryLifecycle": {
+          "ready": {
+            "event": "retry-ready",
+            "scenario": "completed-read-retry",
+            "call": 2,
+            "outcome": 2,
+            "retryCall": 2,
+            "applicationBytesRead": 0,
+            "sslPending": 0
+          },
+          "completed": {
+            "event": "retry-completed",
+            "scenario": "completed-read-retry",
+            "call": 2,
+            "outcome": 1,
+            "retryCall": 0,
+            "applicationBytesRead": 16384,
+            "sslPending": 0,
+            "sameReadArguments": true
+          },
+          "clientApplicationWritesBeforeRetry": 0
+        },
+        "immutableSelectedMetadata": true,
+        "wire": {
+          "schemaVersion": 1,
+          "recordKind": "tls13-handshake-wire-oracle",
+          "passed": true,
+          "protocol": "TLSv1.3",
+          "cipher": "TLS_AES_128_GCM_SHA256",
+          "alpn": "continuum-c1",
+          "endpointAuthorizationObserved": true,
+          "authenticatedHandshakeBoundary": true,
+          "independentFinishedMacVerification": false,
+          "fullHandshakeVerifier": false,
+          "directions": {
+            "client": {
+              "captureRecords": 8,
+              "preApplicationRecords": 3,
+              "helloRecords": 1,
+              "compatibilityCCSRecords": 1,
+              "encryptedHandshakeRecords": 1,
+              "applicationRecords": 4,
+              "applicationBytes": 53419,
+              "keyUpdates": 0,
+              "closeNotify": true,
+              "trailingBytes": 0
+            },
+            "server": {
+              "captureRecords": 11,
+              "preApplicationRecords": 6,
+              "helloRecords": 1,
+              "compatibilityCCSRecords": 1,
+              "encryptedHandshakeRecords": 4,
+              "applicationRecords": 4,
+              "applicationBytes": 53419,
+              "keyUpdates": 0,
+              "closeNotify": true,
+              "trailingBytes": 0
+            }
+          },
+          "capturedStreamComplete": true,
+          "stateExportImport": false,
+          "migration": false,
+          "nativeNginxIntegration": false
+        },
+        "fixtureGracefulShutdown": true
+      },
+      {
+        "options": {
+          "scenario": "unrelated-write-read-retry",
+          "payloadBytes": 2293
+        },
+        "outcome": "pass",
+        "probe": {
+          "event": "probe",
+          "scenario": "unrelated-write-read-retry",
+          "sample": 1,
+          "allowed": false,
+          "reasons": "16",
+          "monitorKnown": true,
+          "readGeneration": "0",
+          "writeGeneration": "0",
+          "mutationSerial": "2",
+          "readNextSequence": "0000000000000000",
+          "writeNextSequence": "0000000000000001",
+          "sslPending": 0,
+          "sslHasPending": false,
+          "packetLength": 0,
+          "rbufLeft": 0,
+          "rbufOffset": 3,
+          "rbufLength": 16712,
+          "unreadRecordBytes": 0,
+          "unreadControlBytes": 0,
+          "wbufLeft": 0,
+          "wbufOffset": 2318,
+          "wbufLength": 16584,
+          "wnum": 0,
+          "staleWpendTot": 2293,
+          "staleWpendRet": 2293,
+          "readRecordSlots": 0,
+          "writeBufferSlots": 1,
+          "rstate": 240,
+          "rwstate": 1,
+          "flowState": 4,
+          "handshakeState": 1,
+          "inInit": 0,
+          "inHandshake": 0,
+          "encReadState": 0,
+          "encWriteState": 0,
+          "keyUpdate": -1,
+          "alertDispatch": 0,
+          "shutdown": 0,
+          "handshakeFragmentLength": 0,
+          "initNum": 0,
+          "ledgerLastCall": 3,
+          "ledgerRetryCall": 2,
+          "ledgerLastOutcome": 1,
+          "ledgerCallSerial": "5"
+        },
+        "retryLifecycle": {
+          "ready": {
+            "event": "retry-ready",
+            "scenario": "unrelated-write-read-retry",
+            "call": 2,
+            "outcome": 2,
+            "retryCall": 2,
+            "applicationBytesRead": 0,
+            "sslPending": 0
+          },
+          "completed": null,
+          "clientApplicationWritesBeforeRetry": 0
+        },
+        "immutableSelectedMetadata": false,
+        "wire": null,
+        "fixtureGracefulShutdown": false
+      },
+      {
+        "options": {
+          "scenario": "unrelated-write-read-retry",
+          "payloadBytes": 49807
+        },
+        "outcome": "pass",
+        "probe": {
+          "event": "probe",
+          "scenario": "unrelated-write-read-retry",
+          "sample": 1,
+          "allowed": false,
+          "reasons": "16",
+          "monitorKnown": true,
+          "readGeneration": "0",
+          "writeGeneration": "0",
+          "mutationSerial": "2",
+          "readNextSequence": "0000000000000000",
+          "writeNextSequence": "0000000000000004",
+          "sslPending": 0,
+          "sslHasPending": false,
+          "packetLength": 0,
+          "rbufLeft": 0,
+          "rbufOffset": 3,
+          "rbufLength": 16712,
+          "unreadRecordBytes": 0,
+          "unreadControlBytes": 0,
+          "wbufLeft": 0,
+          "wbufOffset": 680,
+          "wbufLength": 16584,
+          "wnum": 0,
+          "staleWpendTot": 655,
+          "staleWpendRet": 655,
+          "readRecordSlots": 0,
+          "writeBufferSlots": 1,
+          "rstate": 240,
+          "rwstate": 1,
+          "flowState": 4,
+          "handshakeState": 1,
+          "inInit": 0,
+          "inHandshake": 0,
+          "encReadState": 0,
+          "encWriteState": 0,
+          "keyUpdate": -1,
+          "alertDispatch": 0,
+          "shutdown": 0,
+          "handshakeFragmentLength": 0,
+          "initNum": 0,
+          "ledgerLastCall": 3,
+          "ledgerRetryCall": 2,
+          "ledgerLastOutcome": 1,
+          "ledgerCallSerial": "5"
+        },
+        "retryLifecycle": {
+          "ready": {
+            "event": "retry-ready",
+            "scenario": "unrelated-write-read-retry",
+            "call": 2,
+            "outcome": 2,
+            "retryCall": 2,
+            "applicationBytesRead": 0,
+            "sslPending": 0
+          },
+          "completed": null,
+          "clientApplicationWritesBeforeRetry": 0
+        },
+        "immutableSelectedMetadata": false,
+        "wire": null,
+        "fixtureGracefulShutdown": false
+      }
+    ],
+    "cleanup": {
+      "pinnedBuildRootsAbsent": true,
+      "fixtureAndPKIRootEmpty": true
+    },
+    "sourceUnchanged": true,
+    "driverSha256": "5584b7b2092c06d25173ae3f74da8ba62aa1cd7c5d32e7808dfc9fa609d9ca26"
+  },
+  "observedPinnedBuildIdentity": {
+    "schemaVersion": 1,
+    "pinnedBuild": {
+      "schemaVersion": 1,
+      "suite": "continuum-openssl-pinned-build",
+      "source": {
+        "repository": "https://github.com/openssl/openssl.git",
+        "commit": "85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c",
+        "tree": "4e48caeae2374ee4982c8e44b6a15cf4753229cb",
+        "patchedTree": "f6301918a737267208ade21de6ab162d5e82f9cb",
+        "licenseSha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+      },
+      "patch": {
+        "sha256": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+      },
+      "compiler": {
+        "command": "cc",
+        "version": "13.3.0",
+        "target": "x86_64-linux-gnu",
+        "binarySha256": "6117c52522997d2aaccb2b52b3c6bf42c0a6c5edb1d718431fed6b2fc5fec234"
+      },
+      "tools": {
+        "gitSha256": "2dae8066ef4d6a926561b4b0eaca7b458d4f5b56bb83760656e6baa7fc3e974f",
+        "perlSha256": "38d70f54fd18d614e9e6cc35c960b45f54e7b991894b8308e704ae9953c86ce4",
+        "makeSha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+      },
+      "configuration": {
+        "target": "linux-x86_64",
+        "flags": [
+          "no-shared",
+          "no-module",
+          "no-engine",
+          "no-async",
+          "no-ktls",
+          "no-tests",
+          "no-legacy",
+          "no-asm",
+          "no-comp",
+          "no-zlib",
+          "no-dso",
+          "no-autoload-config",
+          "no-fips",
+          "--prefix=/continuum-research",
+          "--openssldir=/continuum-research/config",
+          "CC={compiler}",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fno-ident",
+          "-ffile-prefix-map={privateRoot}=/continuum-build"
+        ],
+        "disabled": [
+          "acvp-tests",
+          "afalgeng",
+          "asan",
+          "asm",
+          "async",
+          "autoload-config",
+          "buildtest-c++",
+          "capieng",
+          "comp",
+          "crypto-mdebug",
+          "crypto-mdebug-backtrace",
+          "devcryptoeng",
+          "dso",
+          "dynamic-engine",
+          "ec_nistp_64_gcc_128",
+          "egd",
+          "engine",
+          "external-tests",
+          "fips",
+          "fips-securitychecks",
+          "fuzz-afl",
+          "fuzz-libfuzzer",
+          "ktls",
+          "legacy",
+          "loadereng",
+          "md2",
+          "module",
+          "msan",
+          "padlockeng",
+          "rc5",
+          "sctp",
+          "shared",
+          "ssl3",
+          "ssl3-method",
+          "tests",
+          "trace",
+          "ubsan",
+          "unit-test",
+          "uplink",
+          "weak-ssl-ciphers",
+          "zlib",
+          "zlib-dynamic"
+        ],
+        "sourceDateEpoch": "1706621296",
+        "configDataSha256": "8d698c3bd2f96a86310977d0e2786a28dbfbfa1c96c16733b309ff31c099d314",
+        "makefileSha256": "1576b1de81917bb2b55049870b5bc3bb791d839e94412c15080c2aa3358aacdf",
+        "configurationHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81"
+      },
+      "provider": {
+        "active": [
+          "default"
+        ],
+        "externalModules": false,
+        "autoloadConfiguration": false
+      },
+      "artifacts": {
+        "linkage": "static-libssl-and-libcrypto",
+        "systemRuntimeStatic": false,
+        "version": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)",
+        "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+        "libcryptoSha256": "d02fbbbf090de1eeb9375233a059d1d403277046b594837e74903d344287eae6",
+        "opensslSha256": "017ee8305306cd83ca66b3b4b4574b8d0d4054ec5e23337b007f96e6aa3916fc"
+      }
+    },
+    "sourceSha256": {
+      "fixture": "7754dc56122bf46f4d80d7c6d5fa9d5b472f0c7a2d45eb88757e599fe0d369cf",
+      "probe": "453091bbfb54439bf1304ea15ad3de9bbe9b9bf1ce465da5c7723fef9f11e9ca",
+      "header": "ca4c0d5e86a4e008a59c7788057fa03dc8c6fb64237beb06b0edfbee473fb0d8",
+      "patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+    },
+    "fixtureBinarySha256": "ec196598f0c44387975eb3fc0dea4f7c698664f872be1d28bb3bb9362b95b53b",
+    "nodeBinarySha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12",
+    "nodeVersion": "v24.19.0",
+    "nodeOpenSSLVersion": "3.5.7"
+  },
+  "independentSensitivityNegative": {
+    "recordSha256": "483096511753db231b4fd2de29627e2e2b78be6c3363e6737da8f39a44c5913c",
+    "actualTLSControls": 1,
+    "privateMutant": "unconditional-success-clears-retry",
+    "privateObservationHooks": true,
+    "progress": {
+      "handshake": 1,
+      "ready": {
+        "call": 2,
+        "outcome": 2,
+        "retryCall": 2,
+        "applicationBytesRead": 0,
+        "sslPending": 0
+      },
+      "successfulWrite": {
+        "call": 3,
+        "outcome": 1,
+        "retryCall": 0,
+        "applicationBytesWritten": 1379
+      },
+      "nativeError": "scenario_unreached"
+    },
+    "expectedFailureCode": "native_early_exit",
+    "identityGuardRejected": false,
+    "passed": true,
+    "frozenSourceUnchanged": true,
+    "privateSourceSha256": {
+      "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+      "openssl-probe-run.mjs": "2d90ee379afe146d05ee874df9274440ade15429d29a32661d267444f7e91f1a",
+      "openssl-probe-fixture.c": "cbe8ca35c7621de77f1f5d7805ee5142f476b574fe0fa5a8388d13f1147c8ed0",
+      "openssl-probe.h": "ca4c0d5e86a4e008a59c7788057fa03dc8c6fb64237beb06b0edfbee473fb0d8",
+      "openssl-probe.c": "453091bbfb54439bf1304ea15ad3de9bbe9b9bf1ce465da5c7723fef9f11e9ca",
+      "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+      "openssl-probe.test.mjs": "df1e42c986de1e205f15721c4715e5de4bd915d95fe9f79cd5fa2602dc31bb98",
+      "openssl-probe-check.mjs": "45da87fdb75ee404b8403c3c80afa51c55a4b6d8713e5040ee88354c8b9d313a",
+      "handshake-oracle.mjs": "b551e55d6d20ebb687f6d49c38a0cd6b144acd5981047fc24c502b2fccd4c835",
+      "record.mjs": "124baea5d841b3036041ee46aa8992a8c348cc9ffe13e3661b391bed0927e272"
+    },
+    "privateFixtureBinarySha256": "9f947b4406698971318d3802d545e16d8632ec395fea2b596d9a612e605a473a",
+    "privateBuildArtifacts": {
+      "linkage": "static-libssl-and-libcrypto",
+      "systemRuntimeStatic": false,
+      "version": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)",
+      "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+      "libcryptoSha256": "17999b531669e5b5b44007f913ed0382bea9da54521d4a6cb53270386324f566",
+      "opensslSha256": "04d548e22486df58a79dfbdd86d546c4870187ee9c32713f0cf9abec2e894271"
+    },
+    "cleanup": {
+      "pinnedBuildRootsAbsent": true,
+      "fixtureAndPKIRootEmpty": true
+    },
+    "driverSha256": "eff86f553a4067f3bc3db329b13dbc8dc4284aba45671d3415154a3f643f469d",
+    "interpretation": "Intentional regression of fixture ledger bookkeeping; rejection before probe PASS after real WRITE. Not an original OpenSSL defect or proof that a checker detects a lying caller ledger."
+  },
+  "regressions": {
+    "core": {
+      "tests": 21,
+      "suites": 0,
+      "pass": 21,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "process": {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 0,
+      "exitCode": 0,
+      "recordSha256": "644b89c6feb8cf3a1da6c04addba1b6e9f0d7256f6559803a6bdf28cce753534"
+    },
+    "c1": {
+      "tests": 22,
+      "suites": 0,
+      "pass": 22,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "native": {
+      "evidence": "x10/evidence/continuum-c2a-retry-native-regression.json",
+      "groups": 20,
+      "nativeSourceChanged": false,
+      "freshBinarySha256": "5daf222464cf97145f82ae848123f65f7e627bfb626db0e267bfd6147134562f",
+      "identityWithOlderCheckoutBinaryClaimed": false
+    }
+  },
+  "previousPendingCIClosed": {
+    "implementationCommit": "624f70fa1b5061c5be65759eed5a45a4d56a4af7",
+    "nativePushRun": 39995200740,
+    "nativePRRun": 39995212470,
+    "state": "completed-success"
+  },
+  "hostedCI": {
+    "state": "pending-exact-new-implementation-SHA",
+    "previous99a017eAcceptanceDoesNotAcceptNewCode": true
+  },
+  "primaryContractsReviewed": [
+    {
+      "url": "https://docs.openssl.org/3.0/man3/SSL_read/",
+      "scope": "One-record success and repeat-after-WANT; same pointer/length in this experiment is a fixture discipline, not a generalized read-API argument rule."
+    },
+    {
+      "url": "https://docs.openssl.org/3.0/man3/SSL_write/",
+      "scope": "Write retry same-argument constraints are separate; write retry completion is not covered by these new read cases."
+    }
+  ],
+  "limitations": [
+    "The typed ledger tracks call enums under a trusted single-thread owner; it does not generally enforce operation/argument identity or provide ownership fencing.",
+    "An outstanding READ obligation here is part of the chosen caller contract, not evidence of hidden ciphertext or an OpenSSL getter vulnerability.",
+    "Negative unrelated-write case intentionally lacks graceful TLS closure/full transcript verification.",
+    "Both relay TCP legs remain explicit; no transfer or old-process/code retirement is attempted.",
+    "Endpoint authentication covers PKI/Finished; observer does not independently verify Finished MAC or PKI.",
+    "Four diagnostic no-build controls and two unsupported-API controls are not real TLS tests; one mutant TLS control is separate from four exact-source heldouts.",
+    "Initial3.84s hook failure executed zero TLS cases; its cause remains unknown despite subsequent successful builds.",
+    "Pinned static OpenSSL/default provider is not a fully static system-runtime pin or full upstream test-suite acceptance.",
+    "No performance,10x,novelty,production-security or complete-state acceptance."
+  ],
+  "nextTask": "Accept exact hosted implementation SHA, then peer/read KeyUpdate, WRITE retry completion, overlapping retry/control/shutdown/key-usage inventory and runtime interruption cleanup before C2b.",
+  "publication": "Allowlisted counters/identities/hashes only; no raw runtime/TAP logs, host paths, PIDs, real keys/certificates/payloads/ciphertext/session material."
+}

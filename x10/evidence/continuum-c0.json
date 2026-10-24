@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "suite": "continuum-c0",
+  "date": "2026-10-23",
+  "passed": true,
+  "core": {
+    "schemaVersion": 1,
+    "suite": "continuum-record-and-state-kernel",
+    "passed": true,
+    "testFiles": 2,
+    "scope": "in-memory-record-and-state-only",
+    "liveTlsProcessHandover": false,
+    "counts": {
+      "tests": 21,
+      "suites": 0,
+      "pass": 21,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "exitCode": 0,
+    "signal": null,
+    "timedOut": false,
+    "outputLimitExceeded": false,
+    "interrupted": false,
+    "runnerError": null
+  },
+  "processTests": {
+    "tests": 7,
+    "pass": 7,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "process": {
+    "schemaVersion": 1,
+    "recordKind": "research-process-fixture-result",
+    "outcome": "pass",
+    "acceptedConnections": 1,
+    "oldProcessExited": true,
+    "sameClientConnection": true,
+    "manualLayoutAdapter": [
+      "v1-counter",
+      "v2-nested-statistics"
+    ],
+    "partialCipherBytesTransferred": 13,
+    "readKeyUpdates": 1,
+    "writeKeyUpdates": 1,
+    "applicationBytesEchoed": 54,
+    "exactApplicationBytes": true,
+    "terminalStateChecked": true,
+    "peerObservedCleanFin": true,
+    "pendingCipherBytesAtEnd": 0,
+    "acceptedEncryptedRecords": 4,
+    "sourceBinaryChanged": false,
+    "tlsLibraryChanged": false,
+    "handshakeImplemented": false,
+    "nativeNginxIntegration": false,
+    "automaticAdapter": false,
+    "independentPeerRecordCode": true
+  },
+  "sourceSha256": {
+    "check.mjs": "93168b7d6b57f171013489fb576f8768df01232651e5d426755694d19d3009dc",
+    "process-worker.mjs": "7c28793307866972deba9dc16cf9aa4af751de39119cdf20770e0ddd0afb4dca",
+    "process-handover.test.mjs": "4a83f471c2bda5a9636c9d52087df4fe09f6eab4eae83e2a7c3927ff5b0dfbd9",
+    "record.mjs": "124baea5d841b3036041ee46aa8992a8c348cc9ffe13e3661b391bed0927e272",
+    "process-handover.mjs": "ced07e9260ace3584eecb709500dc351da3b41ab57c81ce2f91a3e6cdba79278",
+    "record.test.mjs": "c40afbbe7341a633e1e352a5504446e9568294c526629966428f71e04906ec7f",
+    "state.test.mjs": "7f96d9fec70c7a5ddc508ba5ab07fab30d6c582353ac6c8da7b0c5ee3fc5eb38",
+    "state.mjs": "00f48e82ccda55478464d1e2421fba7e18e108f8bcb7695ef25167e0745fe540"
+  },
+  "independentReview": {
+    "recordPrimitiveControls": 77,
+    "stateRecordCompatibilityControls": 20,
+    "aggregateProducerControls": 13,
+    "processReview": {
+      "passed": true,
+      "regressionControls": 2,
+      "freshHeldOutFragmentationSchedules": [
+        7,
+        19
+      ],
+      "ordinaryControl": 1,
+      "sourceUnchanged": true,
+      "listenersAfter": 0,
+      "liveChildrenAfter": 0,
+      "scope": "Final terminal/trailer and selected fragmentation controls; not a complete protocol matrix"
+    }
+  },
+  "counterexamples": [
+    {
+      "case": "state-sequence-at-conservative-key-limit",
+      "before": "accepted-by-IR-then-rejected-by-record-worker",
+      "after": "rejected-before-ownership-grant"
+    },
+    {
+      "case": "late-corrupt-or-incomplete-ciphertext",
+      "before": "false-positive-process-PASS-at-source-d9c2557b",
+      "after": "terminal-peer-state-check-and-regressions"
+    },
+    {
+      "case": "drop-partial-record-buffer",
+      "expected": "reject"
+    },
+    {
+      "case": "changed-physical-commit-digest",
+      "expected": "reject"
+    }
+  ],
+  "limitations": [
+    "Synthetic established TLS1.3 record state; authenticated handshake not implemented.",
+    "Same Node executable and TLS library; one worker source, manual v1/v2 application-layout adapter.",
+    "No native NGINX handover, automatic adapter compiler, cross-release TLS upgrade or complete-state proof.",
+    "Selected partial encrypted KeyUpdate plus TCP FIN; not partial-output/backpressure/half-close/TLS close_notify/crash matrix.",
+    "Independent controls and TAP suites are separate evidence categories, not an interchangeable total."
+  ],
+  "rawRecordSha256": {
+    "core": "49283fd5cf983b6fdbbf512a01f91c1fe86e6019a044e4fdc8d148fb55e281cc",
+    "process": "5e85a863c2885697a69551169294ea8317775b3ba883ac9a2e7c6bff6de38b80",
+    "processTap": "0aa0a7cc8efb88d05872489cc15ac3ffb5abc9e881f032bcafb2d5e47cf07030"
+  },
+  "publication": "Sanitized deterministic counts and source hashes; no runtime keys, host paths, PIDs or raw logs."
+}

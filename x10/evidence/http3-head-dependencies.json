@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "suite": "http3-head-client-dependencies",
+  "success": true,
+  "profile": "Linux x86_64 / CPython 3.12",
+  "downloadedWheels": [
+    {
+      "name": "curl_cffi",
+      "version": "0.16.3",
+      "wheel": "curl_cffi-0.16.3-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "bytes": 13484311,
+      "sha256": "a875a661e2f9a949be29454880bbb9553307a487c4c08819738298cf5c1622e2"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.10.19",
+      "wheel": "certifi-2026.10.19-py3-none-any.whl",
+      "bytes": 136464,
+      "sha256": "42d35340cc5b9ba78e818ddbff0c5b1c2b779de448a340fd1b989f5fa8670e1b"
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "wheel": "cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "bytes": 221822,
+      "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf"
+    },
+    {
+      "name": "pycparser",
+      "version": "3.12",
+      "wheel": "pycparser-3.12-py3-none-any.whl",
+      "bytes": 62600,
+      "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
+    }
+  ],
+  "lockSha256": "3ccf1913a2c5cca06e8d1af2660c08d7447943f10839777d038bd4df63ad5b0f",
+  "installation": {
+    "command": "python -m pip install --require-hashes --only-binary=:all: -r x10/test/http3-head.requirements.txt",
+    "reportSha256": "835114c62a1c89d03e7c8f3a06ba7780d9c5fcab246c21da756c0e5fbf591429",
+    "environment": "x10/.build/http3-head-venv",
+    "globalInstallation": false
+  },
+  "pipCheck": {
+    "exitCode": 0,
+    "stdout": "No broken requirements found.\n",
+    "stderr": ""
+  },
+  "limits": [
+    "Downloaded wheel bytes match the pinned hashes; local installation and module identities are not a signed runtime attestation.",
+    "No aioquic fixture, dependency lock or historical diagnostic was changed."
+  ]
+}

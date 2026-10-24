@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "suite": "candidate-checker-provenance-boundary",
+  "startedAt": "2026-10-23T03:30:17.837820+00:00",
+  "checks": [
+    {
+      "name": "current-recorded-build-accepted",
+      "exitCode": 0,
+      "passed": true,
+      "mode": "provenance-only",
+      "checkerSuccess": true,
+      "error": null,
+      "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf"
+    },
+    {
+      "name": "stale-source-digest-rejected-before-suites",
+      "exitCode": 1,
+      "passed": true,
+      "mode": null,
+      "checkerSuccess": false,
+      "error": "Native source changed after the recorded build; rebuild before checking",
+      "binarySha256": null
+    },
+    {
+      "name": "output-write-failure-reports-success-false",
+      "exitCode": 1,
+      "passed": true,
+      "mode": "provenance-only",
+      "checkerSuccess": false,
+      "error": "EEXIST: file already exists, mkdir '/tmp/x10-provenance-negative-13ujw_r4/plain-file'",
+      "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf"
+    },
+    {
+      "name": "baseline-binary-with-candidate-manifest-rejected-before-suites",
+      "exitCode": 1,
+      "passed": true,
+      "mode": null,
+      "checkerSuccess": false,
+      "error": "Built manifest does not identify the selected binary; rebuild before checking",
+      "binarySha256": null
+    }
+  ],
+  "scope": "Actual CLI checks; functional suites are not started by --provenance-only.",
+  "success": true,
+  "finishedAt": "2026-10-23T03:30:38.858329+00:00",
+  "checkerSha256": "b34518b71b3156c27590d2c16c3e6b0e37233547095227d572e62a724552e276"
+}

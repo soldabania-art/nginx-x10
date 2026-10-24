@@ -48,6 +48,34 @@ typedef struct {
 } ngx_control_process_t;
 
 
+typedef struct {
+    ngx_pid_t     pid;
+    uint64_t      generation;
+    uint64_t      birth;
+} ngx_control_process_identity_t;
+
+
+typedef struct {
+    ngx_str_t     scope;
+    ngx_int_t     master_pid;
+    uint64_t      current_generation;
+    ngx_uint_t    available;
+    ngx_str_t     reason;
+    ngx_int_t     excluded_detached;
+} ngx_control_generation_t;
+
+
+typedef struct {
+    ngx_str_t     name;
+    ngx_int_t     pid;
+    ngx_int_t     slot;
+    uint64_t      generation;
+    uint64_t      birth;
+    ngx_uint_t    exiting;
+    ngx_uint_t    exited;
+} ngx_control_generation_process_t;
+
+
 static ngx_int_t ngx_control_inherit(void);
 static void ngx_control_close(ngx_control_request_t *r);
 static void ngx_control_handle_accept(void);
@@ -61,6 +89,9 @@ static ngx_int_t ngx_control_handle_write(ngx_control_request_t *r);
 static ngx_int_t ngx_control_api_endpoints(ngx_control_request_t *r,
     const char **paths, ngx_int_t npaths);
 static ngx_int_t ngx_control_show_processes(ngx_control_request_t *r);
+static ngx_int_t ngx_control_show_generations(ngx_control_request_t *r);
+static ngx_data_item_t *ngx_control_generation_string_handler(uintptr_t data,
+    ngx_pool_t *pool, void *ctx);
 static ngx_int_t ngx_control_show_version(ngx_control_request_t *r);
 static ngx_int_t ngx_control_reload_config(ngx_control_request_t *r);
 static ngx_int_t ngx_control_print_config(ngx_control_request_t *r);
@@ -79,6 +110,14 @@ static char                   ngx_control_unix_path[NGX_UNIX_ADDRSTRLEN];
 static ngx_uint_t             ngx_control_inherited;
 static u_char                *ngx_control_env;
 ngx_uint_t                    ngx_control_api_enabled;
+
+/* Master-owned diagnostics; no cycle/process layout or worker protocol change. */
+static ngx_cycle_t          *ngx_control_generation_cycle;
+static uint64_t              ngx_control_generation;
+static uint64_t              ngx_control_birth;
+static ngx_uint_t            ngx_control_identity_exhausted;
+static ngx_control_process_identity_t
+                             ngx_control_identities[NGX_MAX_PROCESSES];
 
 
 static ngx_str_t  ngx_control_version = ngx_string(NGINX_VERSION);
@@ -102,6 +141,68 @@ static ngx_data_decl_t  ngx_control_process_fields[] = {
     { ngx_string("exiting"),
       ngx_data_struct_boolean_handler,
       offsetof(ngx_control_process_t, exiting) },
+
+      ngx_data_null_decl
+};
+
+static ngx_data_decl_t  ngx_control_generation_fields[] = {
+
+    { ngx_string("scope"),
+      ngx_data_struct_str_handler,
+      offsetof(ngx_control_generation_t, scope) },
+
+    { ngx_string("master_pid"),
+      ngx_data_struct_int_handler,
+      offsetof(ngx_control_generation_t, master_pid) },
+
+    { ngx_string("current_generation"),
+      ngx_control_generation_string_handler,
+      offsetof(ngx_control_generation_t, current_generation) },
+
+    { ngx_string("available"),
+      ngx_data_struct_boolean_handler,
+      offsetof(ngx_control_generation_t, available) },
+
+    { ngx_string("reason"),
+      ngx_data_struct_str_handler,
+      offsetof(ngx_control_generation_t, reason) },
+
+    { ngx_string("excluded_detached"),
+      ngx_data_struct_int_handler,
+      offsetof(ngx_control_generation_t, excluded_detached) },
+
+      ngx_data_null_decl
+};
+
+static ngx_data_decl_t  ngx_control_generation_process_fields[] = {
+
+    { ngx_string("name"),
+      ngx_data_struct_str_handler,
+      offsetof(ngx_control_generation_process_t, name) },
+
+    { ngx_string("pid"),
+      ngx_data_struct_int_handler,
+      offsetof(ngx_control_generation_process_t, pid) },
+
+    { ngx_string("slot"),
+      ngx_data_struct_int_handler,
+      offsetof(ngx_control_generation_process_t, slot) },
+
+    { ngx_string("generation"),
+      ngx_control_generation_string_handler,
+      offsetof(ngx_control_generation_process_t, generation) },
+
+    { ngx_string("birth"),
+      ngx_control_generation_string_handler,
+      offsetof(ngx_control_generation_process_t, birth) },
+
+    { ngx_string("exiting"),
+      ngx_data_struct_boolean_handler,
+      offsetof(ngx_control_generation_process_t, exiting) },
+
+    { ngx_string("exited"),
+      ngx_data_struct_boolean_handler,
+      offsetof(ngx_control_generation_process_t, exited) },
 
       ngx_data_null_decl
 };
@@ -130,6 +231,76 @@ static ngx_data_decl_t  ngx_control_config_fields[] = {
 
       ngx_data_null_decl
 };
+
+
+void
+ngx_control_generation_start(ngx_cycle_t *cycle)
+{
+    if (ngx_control_pollfd_n == 0) {
+        return;
+    }
+
+    ngx_control_generation_cycle = cycle;
+    ngx_control_generation = 1;
+    ngx_control_birth = 0;
+    ngx_control_identity_exhausted = 0;
+    ngx_memzero(ngx_control_identities, sizeof(ngx_control_identities));
+}
+
+
+void
+ngx_control_generation_commit(ngx_cycle_t *cycle)
+{
+    if (ngx_control_pollfd_n == 0 || ngx_control_generation == 0) {
+        return;
+    }
+
+    ngx_control_generation_cycle = cycle;
+
+    if (ngx_control_identity_exhausted) {
+        return;
+    }
+
+    if (ngx_control_generation == (uint64_t) -1) {
+        ngx_control_identity_exhausted = 1;
+        return;
+    }
+
+    ngx_control_generation++;
+}
+
+
+void
+ngx_control_process_spawned(ngx_cycle_t *cycle, ngx_int_t slot, ngx_pid_t pid,
+    ngx_uint_t detached)
+{
+    ngx_control_process_identity_t  *identity;
+
+    if (ngx_control_pollfd_n == 0 || ngx_control_generation == 0
+        || slot < 0 || slot >= NGX_MAX_PROCESSES)
+    {
+        return;
+    }
+
+    identity = &ngx_control_identities[slot];
+    ngx_memzero(identity, sizeof(ngx_control_process_identity_t));
+    identity->pid = pid;
+
+    if (detached || ngx_control_identity_exhausted) {
+        return;
+    }
+
+    if (ngx_control_birth == (uint64_t) -1) {
+        ngx_control_identity_exhausted = 1;
+        return;
+    }
+
+    identity->birth = ++ngx_control_birth;
+
+    if (cycle == ngx_control_generation_cycle) {
+        identity->generation = ngx_control_generation;
+    }
+}
 
 
 void
@@ -621,7 +792,9 @@ ngx_control_content(ngx_control_request_t *r)
 
     static const char  *root_endpoints[] = { "1" };
     static const char  *api_endpoints[] = { "control", "nginx" };
-    static const char  *control_endpoints[] = { "processes", "config" };
+    static const char  *control_endpoints[] = {
+        "processes", "config", "generations"
+    };
 
     p = r->path.data;
     len = r->path.len;
@@ -668,7 +841,7 @@ ngx_control_content(ngx_control_request_t *r)
                 return ngx_control_send_response(r, NGX_CTRL_NOT_ALLOWED, NULL);
             }
 
-            return ngx_control_api_endpoints(r, control_endpoints, 2);
+            return ngx_control_api_endpoints(r, control_endpoints, 3);
         }
 
         break;
@@ -684,6 +857,17 @@ ngx_control_content(ngx_control_request_t *r)
             }
 
             return ngx_control_send_response(r, NGX_CTRL_NOT_ALLOWED, NULL);
+        }
+
+        break;
+
+    case 22:
+        if (ngx_strncmp(p, "/1/control/generations", len) == 0) {
+            if (r->method != NGX_CTRL_GET) {
+                return ngx_control_send_response(r, NGX_CTRL_NOT_ALLOWED, NULL);
+            }
+
+            return ngx_control_show_generations(r);
         }
 
         break;
@@ -895,6 +1079,114 @@ ngx_control_show_processes(ngx_control_request_t *r)
 }
 
 
+static ngx_data_item_t *
+ngx_control_generation_string_handler(uintptr_t data, ngx_pool_t *pool,
+    void *ctx)
+{
+    uint64_t   value;
+    ngx_str_t  text;
+    u_char     buffer[NGX_INT64_LEN];
+
+    value = *(uint64_t *) ((u_char *) ctx + data);
+
+    if (value == 0) {
+        return ngx_data_new_null(pool);
+    }
+
+    text.data = buffer;
+    text.len = ngx_sprintf(buffer, "%uL", value) - buffer;
+
+    return ngx_data_string_handler((uintptr_t) &text, pool, NULL);
+}
+
+
+static ngx_int_t
+ngx_control_show_generations(ngx_control_request_t *r)
+{
+    ngx_int_t                        i;
+    ngx_data_item_t                 *list, *obj, *entry;
+    ngx_control_generation_t         status;
+    ngx_control_generation_process_t process;
+    ngx_control_process_identity_t  *identity;
+
+    static ngx_str_t  processes_field = ngx_string("processes");
+
+    ngx_memzero(&status, sizeof(ngx_control_generation_t));
+    ngx_str_set(&status.scope, "master-process");
+    ngx_str_set(&status.reason, "");
+    status.master_pid = ngx_pid;
+    status.available = ngx_control_generation != 0
+                       && !ngx_control_identity_exhausted;
+    status.current_generation = status.available ? ngx_control_generation : 0;
+
+    if (ngx_control_identity_exhausted) {
+        ngx_str_set(&status.reason, "counter_exhausted");
+
+    } else if (ngx_control_generation == 0) {
+        ngx_str_set(&status.reason, "uninitialized");
+    }
+
+    list = ngx_data_new_list(r->pool);
+    if (list == NULL) {
+        return NGX_ERROR;
+    }
+
+    for (i = 0; i < ngx_last_process; i++) {
+        if (ngx_processes[i].pid == -1) {
+            continue;
+        }
+
+        if (ngx_processes[i].detached) {
+            status.excluded_detached++;
+            continue;
+        }
+
+        ngx_memzero(&process, sizeof(ngx_control_generation_process_t));
+        process.name.data = (u_char *) ngx_processes[i].name;
+        process.name.len = ngx_strlen(process.name.data);
+        process.pid = ngx_processes[i].pid;
+        process.slot = i;
+        process.exiting = ngx_processes[i].exiting;
+        process.exited = ngx_processes[i].exited;
+
+        identity = &ngx_control_identities[i];
+
+        if (!ngx_control_identity_exhausted
+            && identity->pid == ngx_processes[i].pid)
+        {
+            process.generation = identity->generation;
+            process.birth = identity->birth;
+        }
+
+        if ((process.generation == 0 || process.birth == 0)
+            && status.available)
+        {
+            status.available = 0;
+            ngx_str_set(&status.reason, "unclassified_process");
+        }
+
+        entry = ngx_data_obj_handler(
+                    (uintptr_t) ngx_control_generation_process_fields,
+                    r->pool, &process);
+        if (entry == NULL) {
+            return NGX_ERROR;
+        }
+
+        ngx_data_add_item(list, NULL, entry);
+    }
+
+    obj = ngx_data_obj_handler((uintptr_t) ngx_control_generation_fields,
+                              r->pool, &status);
+    if (obj == NULL) {
+        return NGX_ERROR;
+    }
+
+    ngx_data_add_item(obj, &processes_field, list);
+
+    return ngx_control_send_json(r, NGX_CTRL_OK, obj);
+}
+
+
 static ngx_int_t
 ngx_control_show_version(ngx_control_request_t *r)
 {
@@ -1010,6 +1302,7 @@ ngx_control_reload_config(ngx_control_request_t *r)
 
     } else {
         ngx_cycle = cycle;
+        ngx_control_generation_commit(cycle);
         r->reloaded = 1;
         r->pool->log = ngx_cycle->log;
     }

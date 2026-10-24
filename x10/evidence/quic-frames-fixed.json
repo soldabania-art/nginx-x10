@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "suite": "quic-frame-boundaries",
+  "startedAt": "2026-10-23T09:26:03.673496+00:00",
+  "passed": true,
+  "networkUsed": false,
+  "seed": 9000,
+  "randomInputs": 4096,
+  "source": "src/event/quic/ngx_event_quic_transport.c",
+  "limitations": [
+    "Six bounded properties and related inputs are not independent protocol/security tests.",
+    "Parsing only: ACK arithmetic, stream flow/final-size and connection state handlers are outside this fixture.",
+    "Nonminimal frame-type rejection is receiver MAY policy; observations are not strict failures.",
+    "64-bit Linux profile only; no 32-bit, packet protection, handshake, network or interoperability proof.",
+    "ASan and UBSan check this corpus; LeakSanitizer is disabled and memory leaks are unverified."
+  ],
+  "sourceSha256": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a",
+  "sourceFilesSha256": {
+    "src/event/quic/ngx_event_quic_transport.c": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a",
+    "src/event/quic/ngx_event_quic_transport.h": "bfdd117254953492a1482bf52d4a8db3af6bbff0795dfb2cfd2d38552fb374dc",
+    "src/event/quic/ngx_event_quic_connection.h": "459131ac1c4ab0ea0f91bc059d20648f2ccc680b8637ddc7193c699fa562a119"
+  },
+  "sourceCheckout": "nginx-x10",
+  "harnessSha256": "9a2b4e9fa60881891b4e77e09a92540702559f792f5e0fad2b9310cd2415d289",
+  "generatedConfigSha256": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+  "generatedFilesSha256": {
+    "ngx_auto_config.h": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+    "ngx_auto_headers.h": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+    "ngx_modules.c": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f"
+  },
+  "checkoutRevision": "43618ecca59fe802620f810a13f083554952bd7d",
+  "compilerExecutable": "cc",
+  "compilerFlags": [
+    "-std=c99",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-unused-parameter",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-fsanitize=address,undefined",
+    "-fno-sanitize-recover=all",
+    "-fno-omit-frame-pointer"
+  ],
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+  "sanitizers": {
+    "enabled": [
+      "address",
+      "undefined"
+    ],
+    "leakDetection": false,
+    "runtimeOptions": {
+      "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+      "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+    }
+  },
+  "compileExitCode": 0,
+  "compilerDiagnostics": "",
+  "executionExitCode": 0,
+  "sanitizerDiagnostics": "",
+  "properties": [
+    {
+      "name": "complete_fields_consumption_and_nonminimal_values",
+      "cases": 721,
+      "failed": 0
+    },
+    {
+      "name": "structured_frame_prefixes_are_rejected",
+      "cases": 289,
+      "failed": 0
+    },
+    {
+      "name": "declared_payload_lengths_and_borrowed_bounds",
+      "cases": 1304,
+      "failed": 0
+    },
+    {
+      "name": "client_frame_packet_eligibility",
+      "cases": 124,
+      "failed": 0
+    },
+    {
+      "name": "unknown_type_cid_and_stream_limit_boundaries",
+      "cases": 45,
+      "failed": 0
+    },
+    {
+      "name": "seeded_inputs_return_only_bounded_consumption",
+      "cases": 4096,
+      "failed": 0
+    }
+  ],
+  "strict": {
+    "cases": 6579,
+    "passed": 6579,
+    "failed": 0
+  },
+  "inputDigestFnv1a64": "60272381a5a42680",
+  "policyObservations": [
+    {
+      "name": "nonminimal_ping_type_2bytes",
+      "returnCode": 2,
+      "accepted": true
+    },
+    {
+      "name": "nonminimal_ping_type_4bytes",
+      "returnCode": 4,
+      "accepted": true
+    },
+    {
+      "name": "nonminimal_ping_type_8bytes",
+      "returnCode": 8,
+      "accepted": true
+    }
+  ],
+  "temporaryRootRemoved": true,
+  "sourceUnchangedDuringTest": true,
+  "generatedFilesUnchangedDuringTest": true,
+  "finishedAt": "2026-10-23T09:26:04.788815+00:00"
+}

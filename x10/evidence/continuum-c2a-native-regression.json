@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "suite": "continuum-c2a-native-regression",
+  "date": "2026-10-23",
+  "sourceBaselineCommit": "a882c9505271ab49abbdd6293177f3683d72f3a4",
+  "passed": true,
+  "nativeSourceChanged": false,
+  "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+  "sourceDiffSha256": "b511aad052c1abb29a514660ae01473e1bfaadb941026d70e9019c2245ddeea5",
+  "buildManifestSha256": "64f51d4aabcd6a04ea46521193a3c2fe3183a7a1373261f78263ff925b2856a8",
+  "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+  "compiledModuleCount": 105,
+  "groups": [
+    {
+      "name": "http-tls-http2-reload",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "stream-mail",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "mail-tls-starttls",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "protocol-adapters",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "http3-interop",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "http3-head-independent-client",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-features",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "quic-regression",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "quic-generated-sanitized",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "quic-frame-boundaries",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-load-client-verification",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "managed-native-control",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "operator-status",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "local-alpha-lifecycle",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "listener-observer-boundaries",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "reload-listener-observation",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-control-api",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-process-generations",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-generation-boundaries",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "official-nginx-tests",
+      "passed": true,
+      "exitCode": 0
+    }
+  ],
+  "official": {
+    "files": 35,
+    "filesPassed": 32,
+    "filesSkipped": 3,
+    "filesFailed": 0,
+    "assertions": {
+      "run": 1109,
+      "passed": 1083,
+      "failed": 0,
+      "skipped": 25,
+      "todoFailed": 1,
+      "todoPassed": 0
+    }
+  },
+  "rawRecordSha256": "4be55d998c08198b778adb88a59ceecc9a01da339a7f903da61481b5c2a41e26",
+  "limitations": [
+    "Unchanged native baseline profile; isolated C2a sources are not linked into native NGINX.",
+    "Curated official sample retains3 dependency file skips and1 expected TODO.",
+    "No TLS migration, performance or production acceptance."
+  ],
+  "publication": "Allowlisted counts/hashes only; no host paths, PIDs, runtime payloads or keys."
+}

@@ -1,0 +1,327 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "scoped-source-review-ledger",
+  "date": "2026-10-23",
+  "checkpoint": "ea150e4e47ecad2c53b0b72e088977220686207a",
+  "feature": "Local Linux alpha lifecycle, bundle and explicit operator diagnostics",
+  "fileCount": 21,
+  "files": [
+    {
+      "path": ".github/workflows/x10-native.yml",
+      "changeKind": "modified",
+      "beforeSha256": "39dc401a7c1e6465177bf10cf1e689820ddf01c06ccdb00b83b8cdb51bccca86",
+      "afterSha256": "768692656fde018e0ab1845190a421e3fbfe744951c0305539ff2278a36df9f4",
+      "bytes": 3656,
+      "lineCount": 82,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "aggregate/workflow reviewer"
+      ],
+      "reviewScope": "Read full workflow and checkpoint diff; reviewed two required TAP groups through aggregate, separate explicit Unix operator gate, feature-off build ordering, verified pack/checksum steps, pinned actions and separate development artifacts. Hosted execution is not inferred from local results."
+    },
+    {
+      "path": "README.md",
+      "changeKind": "modified",
+      "beforeSha256": "bcbd5e7ed9107d55d0485205cc857019cd4f75b186939a1ddf520f623828258b",
+      "afterSha256": "bf79027f01d98474d356720768b27d460ef445f7f39cad99d29774309585b4b2",
+      "bytes": 15201,
+      "lineCount": 246,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "aggregate/workflow reviewer"
+      ],
+      "reviewScope": "Read full README as context; reviewed only milestone-7 independent-fork introduction and local-alpha entry links. Upstream introduction, platform and release instructions remain historical context, not a new compatibility audit."
+    },
+    {
+      "path": "x10/CI.md",
+      "changeKind": "modified",
+      "beforeSha256": "0a496fa907acfbea84eb41e1a6366b43776ad49061714f389ca9ecc512cddab0",
+      "afterSha256": "2f5a904c6dbcb304906d0e4b56fa9f234910b9cdbdcf81853a677dd1de2a980b",
+      "bytes": 24903,
+      "lineCount": 406,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "documentation author",
+        "scoped documentation reviewer"
+      ],
+      "reviewScope": "Read full document and checkpoint diff; checked nineteen/default and twenty/official groups, separate TAP/official units, required hosted Unix/operator and feature-off steps, pack/checksum artifacts and dynamic-runtime limits against workflow."
+    },
+    {
+      "path": "x10/STATUS.md",
+      "changeKind": "modified",
+      "beforeSha256": "a7b5431e934e45ae8eb7453c0dc94b16d57d42406876bd4def547786af8c64f8",
+      "afterSha256": "8693c6d5bcfad9a72824e48fb1be79991fcfe10d6ff73042a009acba6fa8ad9b",
+      "bytes": 53306,
+      "lineCount": 429,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "documentation author",
+        "scoped documentation reviewer"
+      ],
+      "reviewScope": "Read full document and checkpoint diff; checked actual local 20/20 aggregate and 30/9/68/29 TAP units, unchanged native C/binary, diagnostic versus readiness semantics, session lifecycle bounds and pending hosted Unix acceptance. Historical source coverage and adverse measurements remain historical."
+    },
+    {
+      "path": "x10/PLAN.md",
+      "changeKind": "modified",
+      "beforeSha256": "b9aa9f8bdd82309768e689add17362b42faacef786f95a5d9c2c842a91e4908d",
+      "afterSha256": "f4626aab2880a0d1fa9ca8796f0e9f1d2ec36eec16847b4c72f1b3d708f88c8a",
+      "bytes": 14683,
+      "lineCount": 73,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "documentation author",
+        "scoped documentation reviewer"
+      ],
+      "reviewScope": "Read full document and checkpoint diff; reviewed completed isolated-alpha/operator scope against remaining clean-host, update, failure, compatibility and performance gates. Earlier requirements remain context, without declaring the full feature matrix complete."
+    },
+    {
+      "path": "x10/ROADMAP.md",
+      "changeKind": "modified",
+      "beforeSha256": "d3d2d22c1f3562c741a05ed67b850aa4cb4e07445ea7d8ca4307a115217c2fd5",
+      "afterSha256": "21bcda7747aaeca270b1d693b830da2f6ccc0f57522a1a43ba34fc7597b1b73f",
+      "bytes": 8775,
+      "lineCount": 74,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "documentation author",
+        "scoped documentation reviewer"
+      ],
+      "reviewScope": "Read full document and checkpoint diff; reviewed locally verified alpha versus pending hosted/clean-host and future beta/release criteria, dynamic ABI, opt-in API and generation-versus-drain limits. Test units and X10 goal are not performance gains."
+    },
+    {
+      "path": "x10/README.md",
+      "changeKind": "modified",
+      "beforeSha256": "5ccf140c4f08f51127b8725290f9056c3ebf47cdbb9efba931029cbd5a0db169",
+      "afterSha256": "6cee56d2469a7d99bec3bffaf79f2b8f789e808ffb14a67ad9db84d3c86126e5",
+      "bytes": 18504,
+      "lineCount": 96,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "documentation author",
+        "scoped documentation reviewer"
+      ],
+      "reviewScope": "Read full document and checkpoint diff; checked native data-plane and Node-control separation, operator entry points, private restart histories, bundle prerequisites, current nineteen/twenty-group profile, local results and pending hosted gates. Historical protocol/recovery/performance limits remain intact."
+    },
+    {
+      "path": "x10/QUICKSTART.md",
+      "changeKind": "new",
+      "beforeSha256": null,
+      "afterSha256": "0ba19623ea31768eb3d3dd7837e7e46d5bc1b0d0aaa9009b6b76a0e5e72a0432",
+      "bytes": 9145,
+      "lineCount": 159,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "quickstart author",
+        "alpha implementation owner"
+      ],
+      "reviewScope": "Read full new guide; checked exact install/run/bind/status/info/apply/revert/history/stop/restart/uninstall and explicit Unix commands against frozen CLI and actual tests. Added tested bundle extraction/install, unverified startup event, old-worker overlap and abnormal-exit/operator-inspection limits."
+    },
+    {
+      "path": "x10/alpha/cli.mjs",
+      "changeKind": "new",
+      "beforeSha256": null,
+      "afterSha256": "5792054b28d36a1301392dd68c7ea360545de606d58b78df9abbeacf97e256b4",
+      "bytes": 40986,
+      "lineCount": 434,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "alpha implementation owner",
+        "independent alpha reviewer"
+      ],
+      "reviewScope": "Read full new implementation; reviewed manifest/source/native/generated-input checks, exact copied helper inventory, private install, dynamic-dependency records, allowlisted bundle, foreground lifetime, early signal cancellation, fresh-session restart, bound identity stop and quarantine uninstall guards. Actual lifecycle, tamper/refusal, bundle, interruption and abnormal-exit tests are separate execution evidence."
+    },
+    {
+      "path": "x10/alpha/runtime.mjs",
+      "changeKind": "new",
+      "beforeSha256": null,
+      "afterSha256": "5952dfe5eb577daa3e4e8d0bf2d7b36d5f4ce53ff901814f98a1880e6dea66e2",
+      "bytes": 7030,
+      "lineCount": 105,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "alpha implementation owner",
+        "independent alpha reviewer"
+      ],
+      "reviewScope": "Read full new helper; reviewed owned canonical paths, exact master executable/UID/start/command/prefix/config/PID/network namespace checks, bounded proc inventory, exact prefix candidate selection and native process-group quiescence. It never signals; sampled procfs checks retain documented race and same-UID limits."
+    },
+    {
+      "path": "x10/alpha/README.md",
+      "changeKind": "new",
+      "beforeSha256": null,
+      "afterSha256": "4779fba1f6bee0b5bd111784553f37d06f592239b179ab4ba77a9b9f13c372bf",
+      "bytes": 6550,
+      "lineCount": 128,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "alpha implementation owner",
+        "independent alpha reviewer"
+      ],
+      "reviewScope": "Read full new guide; reviewed checked source/bundle installation, actual CLI sequence, session history, demo-only self-check, dynamic ABI/Node prerequisites, explicit Unix/no-fallback behavior, graceful stop, faulted exits and inventory-preserving uninstall limitations against implementation."
+    },
+    {
+      "path": "x10/alpha/NOTICE.txt",
+      "changeKind": "new",
+      "beforeSha256": null,
+      "afterSha256": "27f28e07cead124c76c2cd290077117278c2dd61ac336d04ef3f08a48de685bc",
+      "bytes": 1931,
+      "lineCount": 33,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "alpha implementation owner",
+        "independent alpha reviewer"
+      ],
+      "reviewScope": "Read full notice; checked original NGINX LICENSE retention, Austin Appleby MurmurHash2 attribution and MIT notice, separately supplied dynamic-library/Node references, and absence of static/reproducible-package claims. This is scoped attribution review, not legal certification."
+    },
+    {
+      "path": "x10/control/manager.mjs",
+      "changeKind": "modified",
+      "beforeSha256": "65ce6e5f3ccd6099786abf0a6253309febef5bdefcfeba1849f86f2b394c83b9",
+      "afterSha256": "f033c4ec66973211bad096cccdbbce63d724c02458711e3ff3a04f5227d9dc53",
+      "bytes": 42631,
+      "lineCount": 670,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "control source reviewer",
+        "operator implementation owner"
+      ],
+      "reviewScope": "Read full file for existing initialization, journal, native-master identity, probe and mutation/recovery context; reviewed milestone-7 import and read-only inspection wrapper through existing lock, bound-master and pre/post file guards. Existing controller semantics were context, not newly certified behavior."
+    },
+    {
+      "path": "x10/control/cli.mjs",
+      "changeKind": "modified",
+      "beforeSha256": "7c6227f1f48ddc68bdfdf07e5a0b26b4387f34be1bfd9e9acacadcda8b8dad76",
+      "afterSha256": "72972fd1093068d05b788a326962f641fb2871dd7fa4cabb66957fcb3b22775b",
+      "bytes": 4749,
+      "lineCount": 81,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "control source reviewer",
+        "operator implementation owner"
+      ],
+      "reviewScope": "Read full file; reviewed human-status presentation/error routing, generation inspection dispatch and restrictions preventing status/endpoint options from silently changing mutating commands. Default JSON and prior exit semantics remain intact."
+    },
+    {
+      "path": "x10/control/generations.mjs",
+      "changeKind": "new",
+      "beforeSha256": null,
+      "afterSha256": "dba28810084f0cbb84275cc200f5bec93150406306c6bd78b06ac2b585815789",
+      "bytes": 13323,
+      "lineCount": 192,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "control source reviewer",
+        "independent operator reviewer"
+      ],
+      "reviewScope": "Read full new module; reviewed exact envelope/process schema, decimal uint64 preservation, explicit endpoint selection, master lifetime and namespace checks, endpoint inode/descriptor ownership before/after GET, HTTP/procfs bounds and cleanup. Sampled diagnostics do not prove readiness or complete drain."
+    },
+    {
+      "path": "x10/control/status-format.mjs",
+      "changeKind": "new",
+      "beforeSha256": null,
+      "afterSha256": "522d932cbfe9ca8493a5f472207da910eb71476ed47f1148dda589a4171929f8",
+      "bytes": 4312,
+      "lineCount": 47,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "control source reviewer",
+        "independent operator reviewer"
+      ],
+      "reviewScope": "Read full new formatter; reviewed bounded control-character sanitization, stale/unbound/pending/mismatch presentation, actionable errors and explicit separation of revision observations from health/drain checks."
+    },
+    {
+      "path": "x10/control/README.md",
+      "changeKind": "modified",
+      "beforeSha256": "f28156f1e09f8c553919bdec0ef237a49e0d4f493532c802c1059fe07b03d6e5",
+      "afterSha256": "afa8f5b85d06e4b5f46c6cf5bf3793080114af443389fe8a844ef99aaa4a4d4c",
+      "bytes": 18509,
+      "lineCount": 343,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "control source reviewer",
+        "operator implementation owner"
+      ],
+      "reviewScope": "Read full document; reviewed milestone-7 examples, explicit endpoint activation/selection, no fallback, JSON compatibility and diagnostic limits against implementation. Earlier recovery guarantees were read as context."
+    },
+    {
+      "path": "x10/test/all.mjs",
+      "changeKind": "modified",
+      "beforeSha256": "de06cd2f702b01179dd733f17f39906615b60b48be948f94166f72a5d6f7b6fe",
+      "afterSha256": "5a85ed0655933dc353ae5c60a748c83029840d391abbb30ab2bed677713d554e",
+      "bytes": 32033,
+      "lineCount": 426,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "aggregate/workflow reviewer"
+      ],
+      "reviewScope": "Read full runner and checkpoint diff; reviewed operator-status and local-alpha TAP group integration, complete TAP counters rejecting skips/TODO/cancellation in those groups, selected manifest/binary environment, bounded child handling and separate official addition. Existing validators were read as context."
+    },
+    {
+      "path": "x10/test/alpha.test.mjs",
+      "changeKind": "new",
+      "beforeSha256": null,
+      "afterSha256": "f6cbbe5ecc597170b68650d2c02146b46d738fef4ad9a25590da215c655f6f11",
+      "bytes": 20360,
+      "lineCount": 204,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "alpha implementation owner",
+        "independent alpha reviewer"
+      ],
+      "reviewScope": "Read full new fixture; reviewed selected-manifest identity, native loopback/no-API install-run-bind lifecycle, sampled post-reload bodies, apply/revert/recovery/history, guarded stop/new-session restart, tamper/PID/symlink/extraneous-data refusals, extracted bundle, early SIGTERM and SIGKILL/orphan-serving fault controls, and bounded fixture-owned cleanup. Owner tests and independent reviewer executions are not conflated."
+    },
+    {
+      "path": "x10/test/operator-status.test.mjs",
+      "changeKind": "new",
+      "beforeSha256": null,
+      "afterSha256": "0c24bce2518848d14c317b451c261f437a8209387ea9ae8a1abb3e86c560e03d",
+      "bytes": 21353,
+      "lineCount": 236,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "control source reviewer",
+        "independent operator reviewer"
+      ],
+      "reviewScope": "Read full new fixture; reviewed schema/synthetic controls versus actual native cases, endpoint refusal before requests, journal/config nonmutation, human/JSON compatibility, deadlines, stale-master rejection and bounded native/socket/temp cleanup. Source review itself is not an additional execution."
+    },
+    {
+      "path": "x10/review/local-alpha-review.md",
+      "changeKind": "new",
+      "beforeSha256": null,
+      "afterSha256": "0e412c579434b3a24abe5bf470db67ed888ec17a6bd5f70493662ccfe3f70140",
+      "bytes": 8922,
+      "lineCount": 141,
+      "fullContentRead": true,
+      "reviewerRoles": [
+        "alpha evidence/ledger reviewer"
+      ],
+      "reviewScope": "Read full independent report; checked attribution of independently executed operator/package groups versus owner interruption/orphan controls, exact frozen code identities, no-native-change statement, cleanup facts and residual local-operator/ABI/race/health/drain limits."
+    }
+  ],
+  "nativeSourceUnchangedFromCheckpoint": true,
+  "nativeBinarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+  "validation": {
+    "aggregatePublicSummary": "x10/evidence/native-checks-milestone-7.json",
+    "operatorPublicSummary": "x10/evidence/operator-status-fixed.json",
+    "independentReview": "x10/review/local-alpha-review.md",
+    "aggregateGroupsPassed": 20,
+    "aggregateGroupsExpected": 20,
+    "nodeTestUnits": {
+      "operator": 30,
+      "alpha": 9,
+      "controller": 68,
+      "listenerObserver": 29
+    },
+    "note": "Execution units remain separate. Full-content reads provide context; review scopes above define the feature-specific claims."
+  },
+  "exclusions": [
+    "This ledger itself and evidence records",
+    "Separate milestone-8 proof files and guard research",
+    "Original historical source-coverage records"
+  ],
+  "limitations": [
+    "This is a scoped implementation/documentation review, not a whole-project security/platform/ABI audit.",
+    "No all-traffic transaction, worker readiness, complete listener drain or performance improvement is established.",
+    "Local results do not replace pending hosted Unix and clean-host/update acceptance.",
+    "Original 533-file source-coverage accounting remains historical and unchanged."
+  ]
+}

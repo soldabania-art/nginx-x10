@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "per-file-review-ledger",
+  "date": "2026-10-23",
+  "baselineCommit": "99a017e64b33eda537ea0fc19db623984fa2dd9e",
+  "publicationParent": "cad5a169f0b20135569a675827f23d5e1c09bb77",
+  "files": [
+    {
+      "path": "x10/PLAN.md",
+      "beforeSha256": "21ce85807ef5940398837b94ec34119544ee08a78c06b63072515334cd806803",
+      "afterSha256": "45e38d80344115a953c744ff24792ed6ea68cc3ba93de63b7426159b96e3e770",
+      "reviewScope": "Exact patch-only format policy, full PR-history baseline/candidate and separate hosted evidence reviewed by coordinator; independent private Git controls confirmed scope. No C/TLS source changes."
+    },
+    {
+      "path": "x10/STATUS.md",
+      "beforeSha256": "7854730d87835d6b5be794bba53c9a856cb15644a56021e98f3d6c4bb5d716e5",
+      "afterSha256": "1cc611e247426c7769fd29a17b802096729ff0acb6d81ce957f9f209c2ddce59",
+      "reviewScope": "Exact patch-only format policy, full PR-history baseline/candidate and separate hosted evidence reviewed by coordinator; independent private Git controls confirmed scope. No C/TLS source changes."
+    },
+    {
+      "path": "x10/continuum/BACKGROUND.json",
+      "beforeSha256": "d2baa0becbba8b70c20b2b3d0ed9eca70cedf94ef5470596e8a3c7688876e343",
+      "afterSha256": "a859f83752ab86f9d84c167099c9b8ec917f1d58f1932a83617c397b5b264f5f",
+      "reviewScope": "Exact patch-only format policy, full PR-history baseline/candidate and separate hosted evidence reviewed by coordinator; independent private Git controls confirmed scope. No C/TLS source changes."
+    },
+    {
+      "path": "x10/continuum/C2A-PROFILE.md",
+      "beforeSha256": "7613525da7c1c8092f5ed1b6f033395c05bf95235a6e4c2063cfa90f73387335",
+      "afterSha256": "a1eab709c858be35b10cb8fcdba267f9c467b77c6ce4c45b11f230b9106ca96d",
+      "reviewScope": "Exact patch-only format policy, full PR-history baseline/candidate and separate hosted evidence reviewed by coordinator; independent private Git controls confirmed scope. No C/TLS source changes."
+    },
+    {
+      "path": "x10/continuum/PLAN.md",
+      "beforeSha256": "ac9b993f1e2c3e9b33142aa6c1311cd4bd232eb7ded42b340c1cd81175cf2551",
+      "afterSha256": "bb6972086abaddcec9303e25f1a4c52d465b72d5453425654a552d078265cee6",
+      "reviewScope": "Exact patch-only format policy, full PR-history baseline/candidate and separate hosted evidence reviewed by coordinator; independent private Git controls confirmed scope. No C/TLS source changes."
+    },
+    {
+      "path": ".gitattributes",
+      "beforeSha256": null,
+      "afterSha256": "15245fb907541fb0d2caf336ed1f57b68c4f1ed0a1a236d62f62fd42104e2327",
+      "reviewScope": "Exact patch-only format policy, full PR-history baseline/candidate and separate hosted evidence reviewed by coordinator; independent private Git controls confirmed scope. No C/TLS source changes."
+    },
+    {
+      "path": "x10/continuum/C2A-CHECKPOINT.md",
+      "beforeSha256": null,
+      "afterSha256": "acbc0ab8c6462214994b736ddcf65d1ebc507825e9a09963f7449a74ac52d2a8",
+      "reviewScope": "Exact patch-only format policy, full PR-history baseline/candidate and separate hosted evidence reviewed by coordinator; independent private Git controls confirmed scope. No C/TLS source changes."
+    }
+  ],
+  "selfReference": "Own digest omitted; Git tree/commit identifies bytes.",
+  "verification": {
+    "baselineHistoryExitCode": 2,
+    "baselineContextWarnings": 5,
+    "candidateHistoryExitCode": 0,
+    "candidateDiagnosticsEmpty": true,
+    "ordinaryCWhitespaceAttributeUnspecified": true,
+    "independentDefaultChecksRetained": [
+      "patch-space-before-tab",
+      "patch-blank-at-EOF",
+      "other-file-blank-at-EOL"
+    ],
+    "hostedResearch99a017e": {
+      "push": 39994034417,
+      "pr": 39994040940,
+      "state": "completed-success",
+      "c2aTestsPerRun": 8
+    },
+    "native99a017e": {
+      "push": 39994034390,
+      "pr": 39994040738,
+      "state": "completed-success"
+    }
+  },
+  "unchanged": {
+    "all8C2aImplementationFiles": true,
+    "nativeSourceAndBinary": true,
+    "commercialBudgetAndOwnerWindow": true
+  },
+  "limitations": [
+    "Exact path disables blank-at-EOL for entire patch file, not only5 context markers.",
+    "String-valued target attribute need not preserve arbitrary custom core.whitespace flags.",
+    "Policy hosted result pending exact new SHA; C2a runtime acceptance tied to99a017e.",
+    "No migration or complete inventory acceptance."
+  ]
+}

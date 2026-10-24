@@ -1,0 +1,526 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-control-storage-failures",
+  "startedAt": "2026-10-23T09:27:44.751Z",
+  "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+  "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+  "managerSha256": "209a47ab92ac387442c628c36e69d70494f8e5ba41886a8ac919ca405e735c60",
+  "testSha256": "6513ae9da2d68514a1284776838842c1eea1cd36048d15dba92ef19d94ea6965",
+  "baseline": {
+    "commit": "43618ecca59fe802620f810a13f083554952bd7d",
+    "managerSha256": "751641de1b47f14fae4667da75ebc22fba5d0204f0d50394b3c6cf982d062c42",
+    "poisonedPending": {
+      "reproduced": true,
+      "stage": "ambiguous",
+      "recoveryError": "commit_integrity",
+      "expectedFailureOfRecoveryProtection": true
+    },
+    "missingSyncRetry": {
+      "reproduced": true,
+      "observedOutcome": "reconciled",
+      "forcedSyncHits": 0,
+      "expectedFailureOfDurabilityProtection": true
+    }
+  },
+  "tests": [
+    {
+      "name": "unbound-initialization-intent-reconciles-before-native-bind",
+      "passed": true
+    },
+    {
+      "name": "unbound-initialization-history-reconciles-before-native-bind",
+      "passed": true
+    },
+    {
+      "name": "unbound-initialization-state-reconciles-before-native-bind",
+      "passed": true
+    },
+    {
+      "name": "unbound-initialization-cleared-reconciles-before-native-bind",
+      "passed": true
+    },
+    {
+      "name": "initialization-io-failure-cleans-state-with-native-test-sideeffect-explicit",
+      "passed": true,
+      "details": {
+        "injectedBeforeRealSync": true,
+        "emptyNativeTestPidPreserved": true,
+        "operatorRemovedEmptyPidBeforeRetry": true
+      }
+    },
+    {
+      "name": "baseline-rejected-io-failure-poisons-matching-pending-intent",
+      "passed": true
+    },
+    {
+      "name": "baseline-recovery-skips-unsuccessful-history-sync-retry",
+      "passed": true
+    },
+    {
+      "name": "rejected-history-write-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "history-write",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rejected",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rejected-history-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "history-sync",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rejected",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rejected-history-after-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "history-after-sync",
+          "realSyncCalled": true
+        },
+        "recordedOutcome": "rejected",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rejected-state-rename-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "state-rename",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rejected",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rejected-state-directory-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "state-directory-sync",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rejected",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rejected-intent-directory-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "intent-directory-sync",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rejected",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rejected-intent-unlink-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "intent-unlink",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rejected",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rejected-commit-directory-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "commit-directory-sync",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rejected",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rejected-pending-unlink-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "pending-unlink",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rejected",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rejected-pending-directory-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "pending-directory-sync",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rejected",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rolled_back-history-write-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "history-write",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rolled_back",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rolled_back-history-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "history-sync",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rolled_back",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rolled_back-history-after-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "history-after-sync",
+          "realSyncCalled": true
+        },
+        "recordedOutcome": "rolled_back",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rolled_back-state-rename-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "state-rename",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rolled_back",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rolled_back-state-directory-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "state-directory-sync",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rolled_back",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rolled_back-intent-directory-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "intent-directory-sync",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rolled_back",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rolled_back-intent-unlink-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "intent-unlink",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rolled_back",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rolled_back-commit-directory-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "commit-directory-sync",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rolled_back",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rolled_back-pending-unlink-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "pending-unlink",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rolled_back",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "rolled_back-pending-directory-sync-retains-recoverable-terminal-outcome",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "pending-directory-sync",
+          "realSyncCalled": false
+        },
+        "recordedOutcome": "rolled_back",
+        "historyOccurrences": 1,
+        "noFreshActivation": true
+      }
+    },
+    {
+      "name": "recovery-retries-full-history-sync-before-state-or-intent-change",
+      "passed": true,
+      "details": {
+        "initial": {
+          "action": "history-sync",
+          "realSyncCalled": false
+        },
+        "blockedRetry": {
+          "action": "history-sync",
+          "realSyncCalled": false
+        },
+        "visibleFileBytesPreserved": true
+      }
+    },
+    {
+      "name": "already-visible-state-state-file-sync-must-complete-before-intent-unlink",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "state-file-sync",
+          "realSyncCalled": false
+        },
+        "visibleFileBytesPreserved": true
+      }
+    },
+    {
+      "name": "already-visible-state-state-directory-sync-must-complete-before-intent-unlink",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "state-directory-sync",
+          "realSyncCalled": false
+        },
+        "visibleFileBytesPreserved": true
+      }
+    },
+    {
+      "name": "apply-partial-history-prefix-is-preserved-and-refused",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "history-partial",
+          "realSyncCalled": true
+        },
+        "previousHistoryBytes": 514,
+        "validPrefixBytes": 844,
+        "addedBytes": 492,
+        "partialTailBytes": 162,
+        "visibleFileBytesPreserved": true
+      }
+    },
+    {
+      "name": "recover-partial-history-prefix-is-preserved-and-refused",
+      "passed": true,
+      "details": {
+        "injected": {
+          "action": "history-partial",
+          "realSyncCalled": true
+        },
+        "previousHistoryBytes": 844,
+        "validPrefixBytes": 844,
+        "addedBytes": 162,
+        "partialTailBytes": 162,
+        "visibleFileBytesPreserved": true
+      }
+    }
+  ],
+  "shutdowns": [
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    },
+    {
+      "exitCode": 0,
+      "signal": null
+    }
+  ],
+  "passed": true,
+  "limitations": [
+    "SIGKILL pauses follow real sync calls; EIO is injected only by the subprocess filesystem wrapper, not by failing hardware.",
+    "Before-sync EIO omits the real sync call; after-sync EIO models an error reported after the syscall completed.",
+    "Partial append really writes and syncs a strict record prefix; recovery never truncates it.",
+    "These bounded fault classes do not certify power-loss behavior, every syscall interleaving, or concurrent hostile filesystem changes.",
+    "No automatic stale-lock deletion or master rebinding; sampled health is not an all-traffic cutover guarantee."
+  ],
+  "finishedAt": "2026-10-23T09:28:11.444Z"
+}

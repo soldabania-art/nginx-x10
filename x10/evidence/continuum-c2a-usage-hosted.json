@@ -1,0 +1,1084 @@
+{
+  "schemaVersion": 1,
+  "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+  "implementationTree": "91818df31809efb261d773a9b6668fcc4135f998",
+  "verifiedAtUTC": "2026-10-24T03:42:34.010387Z",
+  "allFourCompletedSuccess": true,
+  "researchHosted": {
+    "schemaVersion": 1,
+    "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+    "scope": "Exact implementation research workflows; read-only quiescent usage admission, no migration",
+    "runs": [
+      {
+        "runId": 40058848933,
+        "event": "push",
+        "status": "completed",
+        "conclusion": "success",
+        "headSha": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+        "jobId": 120767779299,
+        "jobStatus": "completed",
+        "jobConclusion": "success",
+        "counts": {
+          "core": 21,
+          "process": 7,
+          "c1": 27,
+          "c2a": 22
+        },
+        "wrapperFacts": {
+          "core": {
+            "suite": "continuum-record-and-state-kernel",
+            "passed": true,
+            "counts": {
+              "tests": 21,
+              "suites": 0,
+              "pass": 21,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimitExceeded": false,
+            "interrupted": false,
+            "runnerError": null
+          },
+          "c1": {
+            "suite": "continuum-real-handshake-and-record-observation",
+            "passed": true,
+            "counts": {
+              "tests": 27,
+              "suites": 0,
+              "pass": 27,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimitExceeded": false,
+            "interrupted": false,
+            "runnerError": null
+          },
+          "c2a": {
+            "suite": "continuum-pinned-openssl-state-probe",
+            "passed": true,
+            "counts": {
+              "tests": 22,
+              "suites": 0,
+              "pass": 22,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimitExceeded": false,
+            "interrupted": false,
+            "runnerError": null
+          }
+        },
+        "processTAP": {
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build dependencies for TLS interoperability and isolated source probe",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Independent record and state counterexamples",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Same TCP connection across research worker versions",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Real TLS handshake and independent record observer",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Pinned OpenSSL read-only state probe",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "logsDecodedAndCountsVerified": true,
+        "rawLogsPublished": false
+      },
+      {
+        "runId": 40058853171,
+        "event": "pull_request",
+        "status": "completed",
+        "conclusion": "success",
+        "headSha": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+        "jobId": 120767792880,
+        "jobStatus": "completed",
+        "jobConclusion": "success",
+        "counts": {
+          "core": 21,
+          "process": 7,
+          "c1": 27,
+          "c2a": 22
+        },
+        "wrapperFacts": {
+          "core": {
+            "suite": "continuum-record-and-state-kernel",
+            "passed": true,
+            "counts": {
+              "tests": 21,
+              "suites": 0,
+              "pass": 21,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimitExceeded": false,
+            "interrupted": false,
+            "runnerError": null
+          },
+          "c1": {
+            "suite": "continuum-real-handshake-and-record-observation",
+            "passed": true,
+            "counts": {
+              "tests": 27,
+              "suites": 0,
+              "pass": 27,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimitExceeded": false,
+            "interrupted": false,
+            "runnerError": null
+          },
+          "c2a": {
+            "suite": "continuum-pinned-openssl-state-probe",
+            "passed": true,
+            "counts": {
+              "tests": 22,
+              "suites": 0,
+              "pass": 22,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimitExceeded": false,
+            "interrupted": false,
+            "runnerError": null
+          }
+        },
+        "processTAP": {
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Build dependencies for TLS interoperability and isolated source probe",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Independent record and state counterexamples",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Same TCP connection across research worker versions",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Real TLS handshake and independent record observer",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Pinned OpenSSL read-only state probe",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ],
+        "logsDecodedAndCountsVerified": true,
+        "rawLogsPublished": false
+      }
+    ],
+    "canonicalFamilies": {
+      "flatChecks": 22,
+      "ordinaryActualTLSScenarios": 18,
+      "handledRuntimeSignals": 2,
+      "nonTLSCachedSourceControl": 1,
+      "syntheticCounterPredicateTest": 1
+    },
+    "familyIdentitySource": "Frozen implementation test source reviewed independently; hosted count reports are aggregate counts, not 22 independent real TLS handshakes.",
+    "researchFamilies": {
+      "core": "21 synthetic record/state checks",
+      "process": "7 synthetic established-record process controls",
+      "c1": "27=18 synthetic oracle controls+9 runtime checks",
+      "c2a": "22=18 ordinary actualTLS+2 handled signals+1 nonTLS cached-source control+1 synthetic predicate"
+    },
+    "verification": {
+      "bothWorkflowAndResearchJobCompletedSuccess": true,
+      "decodedLogsParsed": true,
+      "rerunsRequested": 0,
+      "wrapperExitCodesZero": true,
+      "interruptions": false,
+      "timeouts": false,
+      "outputLimitExceeded": false,
+      "unexpectedFailures": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "limitations": [
+      "Workflow head SHA identifies event source, not proof of identical PR merge checkout or local binary.",
+      "No near-limit real TLS traffic was emitted; large counters tested synthetically.",
+      "This is an observation/admission gate, not runtime record-budget enforcement or AEAD safety proof.",
+      "No semantic export/import, actual TLS library release change or native NGINX migration."
+    ],
+    "publication": {
+      "rawLogsIncluded": false,
+      "hostPathsIncluded": false,
+      "realPIDsIncluded": false,
+      "sessionKeysIncluded": false
+    }
+  },
+  "nativeHosted": {
+    "schemaVersion": 1,
+    "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+    "verifiedAtUTC": "2026-10-24T03:41:39.169838+00:00",
+    "nativeRunsCompletedSuccess": true,
+    "runs": [
+      {
+        "id": 40058848929,
+        "runId": 40058848929,
+        "name": "X10 native compatibility",
+        "event": "push",
+        "headSha": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40058848929",
+        "runAttempt": 1,
+        "jobId": 120767775848,
+        "jobs": [
+          {
+            "id": 120767734951,
+            "name": "scope",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check scope fail-closed controls",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Classify exact event delta",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          },
+          {
+            "id": 120767775848,
+            "name": "linux",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build dependencies and optional test clients",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install pinned HTTP3 interoperability client",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install independent HTTP3 HEAD client",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Compile native profile",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Native regressions and pinned official compatibility sample",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify native tenant cache contract experiment",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify private Unix control transport",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build profile without control API",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Package local Linux alpha",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Checksum local Linux alpha",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Preserve JSON evidence",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Preserve local Linux alpha",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 40058853120,
+        "runId": 40058853120,
+        "name": "X10 native compatibility",
+        "event": "pull_request",
+        "headSha": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40058853120",
+        "runAttempt": 1,
+        "jobId": 120767781356,
+        "jobs": [
+          {
+            "id": 120767747465,
+            "name": "scope",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check scope fail-closed controls",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Classify exact event delta",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          },
+          {
+            "id": 120767781356,
+            "name": "linux",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build dependencies and optional test clients",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install pinned HTTP3 interoperability client",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install independent HTTP3 HEAD client",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Compile native profile",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Native regressions and pinned official compatibility sample",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify native tenant cache contract experiment",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Verify private Unix control transport",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build profile without control API",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Package local Linux alpha",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Checksum local Linux alpha",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Preserve JSON evidence",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Preserve local Linux alpha",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "nativeArtifacts": {
+      "push": {
+        "artifactId": 12546392298,
+        "artifactName": "x10-native-evidence",
+        "archiveSha256": "50e0fcf0f5aa97c7253ab17e31a99c6892d6f1bc8176972a496aa138f3b2f8ad",
+        "githubDigest": "sha256:50e0fcf0f5aa97c7253ab17e31a99c6892d6f1bc8176972a496aa138f3b2f8ad",
+        "digestMatches": true,
+        "workflowRunId": 40058848929,
+        "eventHeadSha": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+        "aggregateSuccess": true,
+        "groups": {
+          "executed": 20,
+          "passed": 20,
+          "failed": 0
+        },
+        "alpha": {
+          "total": 37,
+          "pass": 37,
+          "fail": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "alphaCountInterpretation": "37 TAP = 28 synthetic tests plus 9 original lifecycle TAP entries including parents; not 37 independent native lifecycles.",
+        "official": {
+          "success": true,
+          "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+          "summary": {
+            "files": 35,
+            "filesPassed": 34,
+            "filesSkipped": 1,
+            "filesFailed": 0,
+            "assertions": {
+              "run": 1131,
+              "passed": 1105,
+              "failed": 0,
+              "skipped": 25,
+              "todoFailed": 1,
+              "todoPassed": 0
+            }
+          },
+          "skippedFiles": [
+            "uwsgi.t"
+          ],
+          "selectedOptionalClientFileResults": [
+            {
+              "file": "fastcgi.t",
+              "status": "passed",
+              "assertions": {
+                "failed": 0,
+                "passed": 10,
+                "run": 10,
+                "skipped": 0,
+                "todoFailed": 0,
+                "todoPassed": 0
+              }
+            },
+            {
+              "file": "scgi.t",
+              "status": "passed",
+              "assertions": {
+                "failed": 0,
+                "passed": 12,
+                "run": 12,
+                "skipped": 0,
+                "todoFailed": 0,
+                "todoPassed": 0
+              }
+            },
+            {
+              "file": "uwsgi.t",
+              "status": "skipped",
+              "assertions": {
+                "failed": 0,
+                "passed": 0,
+                "run": 0,
+                "skipped": 0,
+                "todoFailed": 0,
+                "todoPassed": 0
+              }
+            }
+          ],
+          "parseErrorCount": 0,
+          "bailoutCount": 0,
+          "cleanupErrorCount": 0,
+          "sourceUnchangedDuringTest": true
+        },
+        "verifiedBuildIdentity": {
+          "manifestSha256": "d8222cc663d328aebe1941e1412b164bffcf1b9544e0a36186e49857f2c79333",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "checkoutRevision": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+          "nginxVersion": "1.31.9",
+          "compiledModuleCount": 105
+        },
+        "generatedFiles": {
+          "ngx_auto_config.h": {
+            "sha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+            "bytes": 10104,
+            "mode": "0644"
+          },
+          "ngx_auto_headers.h": {
+            "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+            "bytes": 657,
+            "mode": "0644"
+          },
+          "ngx_modules.c": {
+            "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+            "bytes": 11820,
+            "mode": "0644"
+          }
+        },
+        "dependencyVersionsFromHeaders": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        },
+        "dependencyVersionsFromPkgConfig": {
+          "libpcre2-8": "10.42",
+          "openssl": "3.0.13",
+          "zlib": "1.3"
+        },
+        "compiler": "cc",
+        "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+        "configureOptions": [
+          "--with-http_ssl_module",
+          "--with-http_v2_module",
+          "--with-http_v3_module",
+          "--with-stream",
+          "--with-stream_ssl_module",
+          "--with-stream_ssl_preread_module",
+          "--with-mail",
+          "--with-mail_ssl_module",
+          "--with-threads",
+          "--with-file-aio",
+          "--with-http_realip_module",
+          "--with-http_stub_status_module",
+          "--with-http_auth_request_module",
+          "--with-http_addition_module",
+          "--with-http_sub_module",
+          "--with-http_dav_module",
+          "--with-http_slice_module",
+          "--with-http_gunzip_module",
+          "--with-http_gzip_static_module",
+          "--with-compat",
+          "--with-control-api"
+        ],
+        "buildManifestMatchesAggregate": true,
+        "checkoutAndEventHeadEqual": true,
+        "localBinaryEqualityClaimed": false,
+        "rawLogsIncluded": false,
+        "hostPathsIncluded": false,
+        "realProcessIdentifiersIncluded": false
+      },
+      "pullRequest": {
+        "artifactId": 12546174984,
+        "artifactName": "x10-native-evidence",
+        "archiveSha256": "8264b5b86a8453cfc3a6d87540c10949d3575ce89929aac04350368137aac22f",
+        "githubDigest": "sha256:8264b5b86a8453cfc3a6d87540c10949d3575ce89929aac04350368137aac22f",
+        "digestMatches": true,
+        "workflowRunId": 40058853120,
+        "eventHeadSha": "b05ee33160b218854da4cac5710125b90e5ee8ac",
+        "aggregateSuccess": true,
+        "groups": {
+          "executed": 20,
+          "passed": 20,
+          "failed": 0
+        },
+        "alpha": {
+          "total": 37,
+          "pass": 37,
+          "fail": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "alphaCountInterpretation": "37 TAP = 28 synthetic tests plus 9 original lifecycle TAP entries including parents; not 37 independent native lifecycles.",
+        "official": {
+          "success": true,
+          "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+          "summary": {
+            "files": 35,
+            "filesPassed": 34,
+            "filesSkipped": 1,
+            "filesFailed": 0,
+            "assertions": {
+              "run": 1131,
+              "passed": 1105,
+              "failed": 0,
+              "skipped": 25,
+              "todoFailed": 1,
+              "todoPassed": 0
+            }
+          },
+          "skippedFiles": [
+            "uwsgi.t"
+          ],
+          "selectedOptionalClientFileResults": [
+            {
+              "file": "fastcgi.t",
+              "status": "passed",
+              "assertions": {
+                "failed": 0,
+                "passed": 10,
+                "run": 10,
+                "skipped": 0,
+                "todoFailed": 0,
+                "todoPassed": 0
+              }
+            },
+            {
+              "file": "scgi.t",
+              "status": "passed",
+              "assertions": {
+                "failed": 0,
+                "passed": 12,
+                "run": 12,
+                "skipped": 0,
+                "todoFailed": 0,
+                "todoPassed": 0
+              }
+            },
+            {
+              "file": "uwsgi.t",
+              "status": "skipped",
+              "assertions": {
+                "failed": 0,
+                "passed": 0,
+                "run": 0,
+                "skipped": 0,
+                "todoFailed": 0,
+                "todoPassed": 0
+              }
+            }
+          ],
+          "parseErrorCount": 0,
+          "bailoutCount": 0,
+          "cleanupErrorCount": 0,
+          "sourceUnchangedDuringTest": true
+        },
+        "verifiedBuildIdentity": {
+          "manifestSha256": "8e937863b3601f48447234f28f905cc4e55c9c2d70dffe55b036a4e8705b49d7",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "checkoutRevision": "9a1e1f6119e58afab231115a6a6b9a41c909d690",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+          "nginxVersion": "1.31.9",
+          "compiledModuleCount": 105
+        },
+        "generatedFiles": {
+          "ngx_auto_config.h": {
+            "sha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+            "bytes": 10104,
+            "mode": "0644"
+          },
+          "ngx_auto_headers.h": {
+            "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+            "bytes": 657,
+            "mode": "0644"
+          },
+          "ngx_modules.c": {
+            "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+            "bytes": 11820,
+            "mode": "0644"
+          }
+        },
+        "dependencyVersionsFromHeaders": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        },
+        "dependencyVersionsFromPkgConfig": {
+          "libpcre2-8": "10.42",
+          "openssl": "3.0.13",
+          "zlib": "1.3"
+        },
+        "compiler": "cc",
+        "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+        "configureOptions": [
+          "--with-http_ssl_module",
+          "--with-http_v2_module",
+          "--with-http_v3_module",
+          "--with-stream",
+          "--with-stream_ssl_module",
+          "--with-stream_ssl_preread_module",
+          "--with-mail",
+          "--with-mail_ssl_module",
+          "--with-threads",
+          "--with-file-aio",
+          "--with-http_realip_module",
+          "--with-http_stub_status_module",
+          "--with-http_auth_request_module",
+          "--with-http_addition_module",
+          "--with-http_sub_module",
+          "--with-http_dav_module",
+          "--with-http_slice_module",
+          "--with-http_gunzip_module",
+          "--with-http_gzip_static_module",
+          "--with-compat",
+          "--with-control-api"
+        ],
+        "buildManifestMatchesAggregate": true,
+        "checkoutAndEventHeadEqual": false,
+        "localBinaryEqualityClaimed": false,
+        "rawLogsIncluded": false,
+        "hostPathsIncluded": false,
+        "realProcessIdentifiersIncluded": false
+      }
+    },
+    "nativeVerificationRerunsRequested": 0,
+    "sourceMutations": false,
+    "spendingUSD": 0,
+    "rawLogsIncluded": false,
+    "hostPathsIncluded": false,
+    "realProcessIdentifiersIncluded": false,
+    "privateArtifactsPublished": false,
+    "officialLocalVsHosted": {
+      "localStrictPASS": 1083,
+      "localSkippedFiles": [
+        "fastcgi.t",
+        "scgi.t",
+        "uwsgi.t"
+      ],
+      "eachHostedStrictPASS": 1105,
+      "hostedSkippedFiles": [
+        "uwsgi.t"
+      ],
+      "bothSkippedAssertions": 25,
+      "bothExpectedTodoFailed": 1,
+      "unexpectedFailures": 0,
+      "identicalOptionalEnvironmentClaimed": false
+    },
+    "limitations": [
+      "Workflow event head identifies the source event; PR merge checkout identity is recorded separately from source head.",
+      "Hosted artifact identity checks compare manifest bytes, binary hashes and generated input metadata; downloaded JSON does not re-execute the binary.",
+      "Pinned official sample is curated, with explicit upstream skips and expected TODO; no all-platform, performance or production acceptance claim.",
+      "Local and hosted optional test-client environments differ; no identical local/hosted binary claim."
+    ]
+  },
+  "familyInterpretation": {
+    "c2aFlatChecks": 22,
+    "ordinaryActualTLS": 18,
+    "handledRuntimeSignals": 2,
+    "nonTLSCachedSourceControl": 1,
+    "syntheticCounterPredicateTest": 1,
+    "purePredicateInputsWithinThatTest": 192,
+    "independentActualTLSHeldouts": 2,
+    "independentPureSyntheticVectors": 8527,
+    "independentFullProbeSyntheticPairs": 13
+  },
+  "officialLocalVsHosted": {
+    "localStrictPASS": 1083,
+    "localSkippedFiles": [
+      "fastcgi.t",
+      "scgi.t",
+      "uwsgi.t"
+    ],
+    "hostedStrictPASS": 1105,
+    "hostedSkippedFiles": [
+      "uwsgi.t"
+    ],
+    "assertionSKIPBoth": 25,
+    "expectedTODOFailBoth": 1,
+    "unexpectedFAILBoth": 0,
+    "identicalOptionalEnvironmentClaimed": false
+  },
+  "formatChecks": {
+    "whitespaceRun": 40058853173,
+    "commitMessageRun": 40058853180,
+    "versionBumpRun": 40058853235,
+    "state": "completed-success"
+  },
+  "inheritedF5CLA": {
+    "run": 40058850963,
+    "state": "failure-inherited-publisher-integration",
+    "agreementAcceptedForOwner": false
+  },
+  "historicalNativeAlphaFailure": {
+    "implementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
+    "originalPushRun": 40040045133,
+    "originalAttempt": 1,
+    "originalJob": 120708800093,
+    "originalFailurePreserved": true,
+    "exactCauseProven": false,
+    "diagnosticSameSHARetryWasFix": false
+  },
+  "runtimeSourcesChangedByReceipt": false,
+  "sourceFreezeUnchanged": {
+    "openssl-probe-fixture.c": "9176122f053058117d0a219c6c345b9096505726fd3f08e3cdd2930a34297864",
+    "openssl-peer-client.c": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+    "openssl-probe.c": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+    "openssl-probe.h": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+    "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+    "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+    "openssl-probe-run.mjs": "1a0b1272e546d934f4c55b2408ed6fd9faf486af3ddddf192748776cdc40a16c",
+    "openssl-probe.test.mjs": "9f87635f73fab1bba6bd2ccb9dc12a26fbe25f7fc8fd8f4c8ee02625256eb5eb",
+    "openssl-probe-check.mjs": "45da87fdb75ee404b8403c3c80afa51c55a4b6d8713e5040ee88354c8b9d313a",
+    "openssl-interruption.mjs": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+    "handshake-oracle.mjs": "adf57f5ac461aa997ca24dba516b7b05aa63e455edae03ff6e0103c6e22d5889",
+    "handshake-oracle.test.mjs": "e7479d163d2d57d7b1f9c93d2d5cec6cecaee1c67cadf781f1a8e758fd072f75",
+    "record.mjs": "124baea5d841b3036041ee46aa8992a8c348cc9ffe13e3661b391bed0927e272",
+    "openssl-usage.h": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+    "openssl-usage-test.c": "b2a0f2b65cd470a18cc76c537a03db3ec846cafc4427977c800bcd7299785781",
+    "openssl-usage-test.mjs": "44c4091b98bae7d65726ac4a3627787d9e7955f6a5c9a71851330bf4ad17224c"
+  },
+  "limitations": [
+    "Read-only narrow initial-application-key usage observation.",
+    "High counters are synthetic; no near-limit authenticated TLS exchange claim.",
+    "No future I/O budget enforcement, traffic grant, complete inventory, AEAD safety proof or migration.",
+    "Event head, actual PR merge checkout and local/hosted build identities remain distinct."
+  ],
+  "publication": {
+    "hostPathsIncluded": false,
+    "realPIDsIncluded": false,
+    "sessionKeysIncluded": false,
+    "rawLogsIncluded": false
+  },
+  "spendingUSD": 0
+}
