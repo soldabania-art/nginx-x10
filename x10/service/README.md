@@ -62,3 +62,15 @@ static verify отказал при инициализации с ENXIO. Эти 
 unit не запускался. Прежние наблюдения сохраняются исторически. Downstream TLS, verified upstream CA/hostname,
 автоматический readiness gate и реальный lifecycle требуют следующих проверок.
 G2 permanent archive/published-file replay и Production V1 остаются открыты.
+
+
+## Exact hosted recipe compatibility
+
+Implementation `0daf4086` passed the required user-unit recipe tests and existing
+native compatibility jobs on Node22 in both exact push/PR runs.
+[Receipt](../evidence/g3-service-recipe-hosted.json) preserves actual artifacts,
+identities and skips. This accepts generation/refusal compatibility only: no
+service was installed or activated by those recipe tests. The local user-mode
+static verifier ENXIO remains unresolved; system-mode parser success does not
+accept a user-manager deployment. Manual bind and all runtime/TLS gates above
+remain mandatory. Permanent alpha distribution and Production V1 remain open.

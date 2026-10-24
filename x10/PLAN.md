@@ -843,3 +843,22 @@ The accepted readiness6abc8883 and archive783de799 CI remain preserved. G2 remai
 partial with permanent release/published-file replay open. Real nonroot user-manager
 service lifecycle, TLS trust, failure/slow-drain/orphan cases, G4-G8 and Production
 V1 remain unaccepted. Full native and deferred Continuum scope stay preserved.
+
+
+### Exact CI: generated user-unit recipe only
+
+Implementation `0daf4086f77e43b829c6a848d19597411fb6325d` passed both
+actual native CI jobs, including the new required user-unit recipe checks on
+Node22. [Hosted receipt](evidence/g3-service-recipe-hosted.json) records actual
+job/step outcomes, downloaded native artifact ZIP digests, separate event/build
+identities, existing native/Unix/archive compatibility and research runtime skips.
+No runtime sources changed or runtime reruns were requested in this receipt.
+
+This verifies recipe generation/refusal compatibility only. It preserves local
+authored15 and independent40 controls separately, including initial test/setup
+failures, user-mode static verify ENXIO and system-mode parser success. No real
+service was installed or activated. Type=exec is not application readiness;
+manual bind remains mandatory, and an installed bounded wait helper needs its
+own acceptance. Real nonroot user-manager lifecycle, TLS, failure/drain/orphan
+cases, G2 permanent distribution/published-file replay, G4-G8 and Production V1
+remain open. Full native and deferred Continuum scope remain preserved.

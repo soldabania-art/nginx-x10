@@ -263,7 +263,7 @@
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "PARTIAL_READINESS_EXACT_HOSTED_VERIFIED_SERVICE_TLS_PENDING",
+      "status": "PARTIAL_READINESS_AND_RECIPE_EXACT_HOSTED_VERIFIED_RUNTIME_TLS_PENDING",
       "depends_on": [
         "G2"
       ],
@@ -305,11 +305,13 @@
         "publicationParent": "96e0c71c652230120321109a255e2dcd2ee18feb",
         "evidence": "x10/evidence/g3-service-recipe.json",
         "scope": "Generated systemd-user process recipe only; no service activation or runtime acceptance",
-        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+        "exactHostedAcceptance": "SUCCESS_SCOPED_RECIPE_COMPATIBILITY_ONLY",
         "serviceAccepted": false,
         "readinessAutomated": false,
         "tlsAccepted": false,
-        "productionAccepted": false
+        "productionAccepted": false,
+        "implementationCommit": "0daf4086f77e43b829c6a848d19597411fb6325d",
+        "hostedEvidence": "x10/evidence/g3-service-recipe-hosted.json"
       }
     },
     {
@@ -650,6 +652,16 @@
     "nextConcreteTask": "First verify exact resulting G3 user-unit recipe CI and its actual required test step. This generated systemd-user recipe has not installed or activated a service and Type=exec only confirms process execution, not native identity or application readiness. Manual bind after confirmed native startup remains mandatory; an installed bounded readiness wait helper requires its own implementation and acceptance before automatic health startup. Then continue permitted G3 downstream/upstream TLS CA and hostname controls and real nonroot user-manager service startup/stop/restart, failed-start, slow-drain and faulted/orphan tests. G2 permanent publication/published-file replay remain blocked by available Release/asset publication capability; do not bypass credentials or permissions. G2 remains partial, G3-G8 and Production V1 unaccepted; preserve full native and deferred Continuum scope.",
     "serviceAccepted": false,
     "targetUserManagerAccepted": false,
+    "productionAccepted": false,
+    "fullScopePreserved": true
+  },
+  "g3ServiceRecipeHostedCheckpoint": {
+    "implementationCommit": "0daf4086f77e43b829c6a848d19597411fb6325d",
+    "evidence": "x10/evidence/g3-service-recipe-hosted.json",
+    "nextConcreteTask": "Implement the next bounded G3 TLS or installed readiness-wait package: explicit downstream/upstream CA and hostname controls, or an installed bounded helper before automatic startup health. Recipe implementation 0daf4086f77e43b829c6a848d19597411fb6325d is exact-hosted verified for generation/refusal compatibility only; do not rerun unchanged CI without a new question. Type=exec is process execution, manual bind after confirmed startup remains mandatory, and actual nonroot user-manager startup/stop/restart, failed-start cleanup, slow-drain and faulted/orphan behavior remain unaccepted. Preserve user-mode static verify ENXIO and the separate system-mode parser result; neither proves an operated service. G2 permanent distribution and independent published-file nonroot Node22 replay remain blocked by currently available Release/asset publication capabilities. Do not bypass credentials/permissions or switch products. G3-G8/Production V1 and deferred Continuum remain open.",
+    "serviceAccepted": false,
+    "targetUserManagerAccepted": false,
+    "tlsAccepted": false,
     "productionAccepted": false,
     "fullScopePreserved": true
   }
