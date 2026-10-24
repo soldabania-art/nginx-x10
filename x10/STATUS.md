@@ -930,3 +930,20 @@ snapshot нельзя переименовать ради admission. Далее 
 held-profile admission и контракт protected-RAM source capsule capture;
 секреты/cleansing, future budget, target ownership и retirement требуют
 отдельной проверки. [Readiness](continuum/C2B-READINESS.md) сохраняет эти границы.
+
+### Exact CI: bounded source-side C hold
+
+Implementation `2debcc30101a72b1e5b08b22dd2ac9b0d040c401`: research push
+`40065524807` и PR `40065527979`, native push `40065524846` и PR
+`40065528012` завершены success. Оба research logs подтверждают21/7/27/30;
+полные native workflows, включая Unix/tenant gates, feature-off и alpha
+package/checksum, прошли. [Очищенная квитанция](evidence/continuum-live-hold-hosted.json) сохраняет artifact
+digests и отдельные event-head/checkout/build identities. Hosted official:
+1105 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL; local1083 отдельно.
+
+Принят узкий opt-in source fixture hold: только bounded callback видит
+удерживаемый source; returned result после cleanup является историей.
+Это не exporter/importer, transport/ownership fence или migration.
+Далее — combined reviewed live preflight binding и первый protected-RAM
+read-only source capture после inventory/secret lifetime contract gate.
+Held scenario не переименовывается в quiescent ради старого checker.
