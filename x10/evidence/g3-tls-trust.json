@@ -1,0 +1,663 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-g3-tls-trust-20261024T182212Z",
+  "sourceBase": "0570ab674493eac2ca25907244ef397f1daee484",
+  "publicationParent": "cfa9aecfb076cd339913c00727ea018991086c4d",
+  "recordedAtUTC": "2026-10-24T18:35:21.861096Z",
+  "scope": "Installed managed HTTP frontend to authenticated HTTPS upstream with explicit CA/hostname/SNI and refusal controls",
+  "sourceFreezeSha256": {
+    "x10/test/alpha-tls.test.mjs": "15d0b113d982aa4064135f0c315f043061962b7140fc304d090ecb3277de9ea5",
+    ".github/workflows/x10-native.yml": "0054c86c613493e8ae479d43ea6928bee5f7e3317575d9a10ac5c314700b8e7f",
+    "x10/alpha/README.md": "c56e4343b776bd7f9f683ca35905d49f1763a0b9eb8d29b97220eee09f029bf9"
+  },
+  "runtimeFilesUnchanged": 508,
+  "reportsSha256": {
+    "author": "149c88ac3038dbf372d611915787ac0e0dd8605871ee83b8e5b8e5a25903fef4",
+    "independentReview": "cb26747b8663a7e4cc2203346708743000625d5a9ad1fad4ca3142756c339d13",
+    "native": "3180d1aae80165456ce7544730444e368c43b5aba9b620fe54af11cc2132a709"
+  },
+  "author": {
+    "schemaVersion": 1,
+    "scope": "Extracted installed native HTTP gateway authenticates an HTTPS application upstream; bounded local loopback acceptance only",
+    "baseCommit": "0570ab674493eac2ca25907244ef397f1daee484",
+    "leaseCommit": "cfa9aecfb076cd339913c00727ea018991086c4d",
+    "sourceFilesSha256": {
+      "x10/test/alpha-tls.test.mjs": "15d0b113d982aa4064135f0c315f043061962b7140fc304d090ecb3277de9ea5"
+    },
+    "relatedFileHashesAtReport": {
+      ".github/workflows/x10-native.yml": "0054c86c613493e8ae479d43ea6928bee5f7e3317575d9a10ac5c314700b8e7f",
+      "x10/alpha/README.md": "c56e4343b776bd7f9f683ca35905d49f1763a0b9eb8d29b97220eee09f029bf9"
+    },
+    "finalCandidate": {
+      "command": "node --test --test-reporter=tap x10/test/alpha-tls.test.mjs",
+      "exitCode": 0,
+      "elapsedMs": 14905,
+      "distinctNestedScenarios": 9,
+      "tapCountsIncludingOneWrapper": {
+        "tests": 10,
+        "pass": 10,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "nodeVersion": "v24.22.1",
+      "sourceHashUnchangedDuringRun": true
+    },
+    "flow": [
+      "pack exact current native build",
+      "extract archive and invoke extracted installer",
+      "install private prefix and start installed launcher",
+      "explicit bounded wait-bind",
+      "apply verified HTTPS upstream CA/SNI/name candidate",
+      "authenticated proxy GET plus exact POST65551 and stream65537 bytes",
+      "wrong CA, wrong hostname and plaintext TLS peer each produce actual native502 at readiness relay and controller rolled_back",
+      "recover known-good, stop identity-verified native group, uninstall"
+    ],
+    "trustControls": {
+      "proxySslVerifyOn": true,
+      "explicitTrustedCertificate": true,
+      "proxySslServerNameOn": true,
+      "proxySslName": "localhost",
+      "trustBypassUsed": false,
+      "directClientRejectUnauthorized": true,
+      "directWrongCARefused": true,
+      "directWrongHostnameRefused": true,
+      "negativeCandidateCount": 3,
+      "eachNegativeAssertsActualNative502": true,
+      "eachNegativeAssertsControllerHealth502": true,
+      "eachNegativeAssertsNewRestoredRevisionAndContentSource": true,
+      "oldContentRemainsServingAfterRollback": true,
+      "applicationPOSTReplayCount": 0
+    },
+    "readiness": {
+      "relayIsFixtureOnly": true,
+      "boundedHttpRelayProbesRegularManagedReadyRoute": true,
+      "recursiveHealthRouteUsed": false,
+      "statusBodyContract": {
+        "status": 200,
+        "body": "ready newline"
+      },
+      "defaultHttpReadinessDoesNotAutomaticallyAuthenticateTLS": true,
+      "plainHttpFrontListener": true
+    },
+    "cleanup": {
+      "suite": "alpha-tls-owned-cleanup",
+      "nativeStopped": true,
+      "launcherExited": true,
+      "openSockets": 0,
+      "temporaryRootRemoved": true,
+      "relay502Observations": 206,
+      "applicationPostRequests": 1,
+      "privateCAKeysMode0600": true,
+      "privateFixtureDirectoryMode0700": true,
+      "exactNativeIdentityAndEmptyGroupConfirmedBeforeUninstall": true,
+      "onUnconfirmedNativeExitPrefixIsPreservedAndTestFails": true,
+      "spawnErrorsLatched": true,
+      "failedSubtestStopsFurtherScenarioOperations": true,
+      "serverCloseAndSocketCleanupBounded": true,
+      "certificateKeyBytesPublished": false
+    },
+    "diagnosticHistory": {
+      "initialActualRun": {
+        "exitCode": 1,
+        "tap": {
+          "tests": 10,
+          "pass": 5,
+          "fail": 5
+        },
+        "failedNestedScenarios": 4,
+        "wrapperFailures": 1,
+        "issues": [
+          "Positive response body and header were sampled from different requests during legitimate old/new worker overlap",
+          "Rollback creates a fresh restored revision; three assertions incorrectly expected the original revision ID"
+        ]
+      },
+      "intermediateCorrectedCandidate": {
+        "exitCode": 0,
+        "tap": {
+          "tests": 10,
+          "pass": 10,
+          "fail": 0
+        }
+      },
+      "laterReviewCorrections": [
+        "Extracted installer description does not claim physically absent source checkout",
+        "Identity-verified cleanup requires owned master/group absence and preserves prefix on uncertainty",
+        "Spawn error/fail-fast scenario handling and bounded origin close added"
+      ],
+      "finalRunRepeatedSameScenariosAfterSourceAndDocumentationFreezeNotAdditionalCoverage": true,
+      "initialDiagnosticSummaryParserError": "AttributeError on top-level TAP wrapper without matching nested status; raw TAP inspected directly; no product source effect"
+    },
+    "baselineMeaning": "Existing capability acceptance gap, not a reproduced runtime defect. No fabricated baseline product failure.",
+    "runtimeSourcesChanged": false,
+    "nativeCChanged": false,
+    "managerListenGuardUnchanged": true,
+    "httpsUpstreamOnly": true,
+    "frontendTLSAccepted": false,
+    "serviceActivated": false,
+    "serviceAccepted": false,
+    "targetNonrootNode22Accepted": false,
+    "permanentDistributionAccepted": false,
+    "productionAccepted": false,
+    "fullSemanticTLSMigrationAccepted": false,
+    "historicalObserverCauseKnown": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "privateKeysPublished": false,
+    "limitations": [
+      "Local root/Node24 execution is not accepted target nonroot Node22 deployment.",
+      "CA verification and hostname/SNI apply to proxy-to-upstream TLS; downstream listener is HTTP.",
+      "The HTTP readiness relay exists only in this bounded fixture; production TLS readiness requires an approved operator implementation.",
+      "Certificates are ephemeral private fixtures, not public CA issuance or domain deployment.",
+      "POST and stream checks are bounded functional payloads, not V1 load/soak acceptance.",
+      "No actual service supervisor, frontend TLS, permanent published package or Production V1 acceptance."
+    ]
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "scope": "Independent local native HTTPS-upstream trust heldouts and review of extracted installed acceptance; not frontend HTTPS, supervisor/service or Production V1 acceptance",
+    "baseCommit": "0570ab674493eac2ca25907244ef397f1daee484",
+    "leaseCommit": "cfa9aecfb076cd339913c00727ea018991086c4d",
+    "sourceFreezeSha256": {
+      "x10/test/alpha-tls.test.mjs": "15d0b113d982aa4064135f0c315f043061962b7140fc304d090ecb3277de9ea5",
+      ".github/workflows/x10-native.yml": "0054c86c613493e8ae479d43ea6928bee5f7e3317575d9a10ac5c314700b8e7f",
+      "x10/alpha/README.md": "c56e4343b776bd7f9f683ca35905d49f1763a0b9eb8d29b97220eee09f029bf9"
+    },
+    "staticReview": {
+      "checks": 17,
+      "passed": 17,
+      "blockingFindings": 0,
+      "details": {
+        "native explicit proxy SSL verification": true,
+        "native explicit trusted certificate": true,
+        "native SNI and expected hostname": true,
+        "direct client strict certificate verification": true,
+        "no TLS global trust bypass": true,
+        "actual per-negative native502 assertion": true,
+        "controller rollback content identity": true,
+        "fixture health relay avoids recursive route": true,
+        "same response payload and authenticated origin header": true,
+        "failed subtest aborts later operations": true,
+        "native normal cleanup master and group proof": true,
+        "uncertain cleanup preserves prefix and fails": true,
+        "spawn errors latched": true,
+        "origin socket close bounded": true,
+        "required CI test step without skip or continue-on-error": true,
+        "operator CA outside immutable inventory documented": true,
+        "upstream-only and readiness-fixture scope documented": true
+      },
+      "resolvedFindings": [
+        "Removed claim that original source files were physically unavailable",
+        "Added actual native502 observation plus controller health502 per negative candidate",
+        "Cleanup now confirms exact native identity/group absence and preserves uncertain prefix",
+        "Added spawn error latch and fail-fast scenario wrapper; origin close and socket cleanup bounded"
+      ]
+    },
+    "independentNativeHeldouts": {
+      "schemaVersion": 1,
+      "scope": "Independent actual native single-process HTTPS upstream heldouts; no installed lifecycle, frontend TLS, systemd or historical-failure acceptance",
+      "cases": 5,
+      "passed": 5,
+      "failed": 0,
+      "rows": [
+        {
+          "name": "SAN exact DNS name with native SNI and TLS1.3",
+          "status": 200,
+          "expected": 200,
+          "outcome": "passed"
+        },
+        {
+          "name": "matching CN localhost cannot override nonmatching DNS SAN",
+          "status": 502,
+          "expected": 502,
+          "outcome": "passed"
+        },
+        {
+          "name": "missing native SNI cannot reach SNI-required application",
+          "status": 502,
+          "expected": 502,
+          "outcome": "passed"
+        },
+        {
+          "name": "TLS1.2-only native upstream refuses TLS1.3-only peer",
+          "status": 502,
+          "expected": 502,
+          "outcome": "passed"
+        },
+        {
+          "name": "known verified TLS1.3 route remains usable after negative fixtures",
+          "status": 200,
+          "expected": 200,
+          "outcome": "passed"
+        }
+      ],
+      "applicationRequests": 3,
+      "expectedSNIObserved": 2,
+      "missingSNIObserved": 1,
+      "sourceBinarySha256": "004c255ccbbdd33e9354d5fe32ec9f67497d28ced4d43d2971f9e15d3bd1fc1c",
+      "cleanup": {
+        "ownedNativeChildren": 0,
+        "ownedServersClosed": true,
+        "ownedSockets": 0,
+        "temporaryRootRemoved": true
+      },
+      "rejectUnauthorizedBypassUsed": false,
+      "systemTrustModified": false,
+      "rawLogsPublished": false,
+      "realProcessIdentifiersPublished": false,
+      "privateKeysPublished": false,
+      "diagnosticHistory": [
+        {
+          "stage": "initial private native fixture configuration",
+          "exitCode": 1,
+          "result": "native -t refused default unmapped nobody account with chown EINVAL; no product test accepted",
+          "correctiveFixtureChange": "explicit current owned operator user directive, as existing native HTTP fixture does; no host user or permission changes",
+          "cleanup": "no launched native server; owned HTTPS server closed and temporary PKI root removed in finally"
+        }
+      ],
+      "SNIControlClarification": "The missing-SNI case completes certificate-authenticated TLS to the expected certificate name, then the test-owned application observes no SNI and closes before sending its response body. It is not claimed as a certificate-verification failure or absence of HTTP request I/O.",
+      "scriptSha256": "ca5198a3bcc2b09a11ac81fb9fc15e6b368430f3cb586fd6ba50dc178d1be677",
+      "recordedBinaryMatchesFreshBuildManifest": true,
+      "buildCheckout": "cfa9aecfb076cd339913c00727ea018991086c4d"
+    },
+    "authorFinalEvidenceReviewed": {
+      "reportSha256": "149c88ac3038dbf372d611915787ac0e0dd8605871ee83b8e5b8e5a25903fef4",
+      "actualExitCode": 0,
+      "nestedScenarios": 9,
+      "TAPIncludingWrapper": 10,
+      "cleanup": {
+        "suite": "alpha-tls-owned-cleanup",
+        "nativeStopped": true,
+        "launcherExited": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "relay502Observations": 206,
+        "applicationPostRequests": 1,
+        "privateCAKeysMode0600": true,
+        "privateFixtureDirectoryMode0700": true,
+        "exactNativeIdentityAndEmptyGroupConfirmedBeforeUninstall": true,
+        "onUnconfirmedNativeExitPrefixIsPreservedAndTestFails": true,
+        "spawnErrorsLatched": true,
+        "failedSubtestStopsFurtherScenarioOperations": true,
+        "serverCloseAndSocketCleanupBounded": true,
+        "certificateKeyBytesPublished": false
+      },
+      "baselineMeaning": "Existing capability acceptance gap, not a reproduced runtime defect. No fabricated baseline product failure."
+    },
+    "runtimeSourcesChanged": false,
+    "nativeCChanged": false,
+    "frontendTLSAccepted": false,
+    "serviceAccepted": false,
+    "targetNonrootNode22Accepted": false,
+    "productionAccepted": false,
+    "historicalObserverCauseKnown": false,
+    "testsRerunForStaticReview": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "privateKeysPublished": false,
+    "limitations": [
+      "Five independent heldouts execute native single-process loopback proxy, not the extracted-installed operator lifecycle. Authored nine nested scenarios cover that lifecycle separately.",
+      "The native TLS connection is outbound to an HTTPS application; the incoming managed endpoint remains HTTP.",
+      "Readiness relay is private fixture-only and requires an operator-approved implementation for production use.",
+      "Correcting fixture current-user configuration after initial chown EINVAL does not repair or bypass a product/native permissions defect.",
+      "No protected TLS state transfer, old-code migration, supervisor activation or permanent release is accepted.",
+      "Existing sampled generation and PID-to-signal residual races are not converted into an OS-level fence."
+    ]
+  },
+  "native": {
+    "schemaVersion": 1,
+    "scope": "Fresh native compatibility for the installed TLS acceptance package; separate authored TLS evidence",
+    "installedTLSSuiteIncludedInAggregate": false,
+    "build": {
+      "builds": 1,
+      "exitCode": 0,
+      "elapsedMs": 27100,
+      "timedOut": false,
+      "checkoutRevision": "cfa9aecfb076cd339913c00727ea018991086c4d",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+      "manifestSha256": "8a574eb6108a1f6fd897c6494d2230c2426e3ba3968a0256917b7f6d4be7ef68",
+      "binarySha256": "004c255ccbbdd33e9354d5fe32ec9f67497d28ced4d43d2971f9e15d3bd1fc1c",
+      "binaryMode": "0755",
+      "compiledModuleCount": 105,
+      "nginxVersion": "1.31.9",
+      "dependencyVersionsFromHeaders": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "generatedFiles": {
+        "ngx_auto_config.h": {
+          "sha256": "2f251169e0b0ec0ae425d2c6ccd6e4bca9226388325240b8f64c41a57c12d6ac",
+          "bytes": 10144,
+          "mode": "0644"
+        },
+        "ngx_auto_headers.h": {
+          "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+          "bytes": 657,
+          "mode": "0644"
+        },
+        "ngx_modules.c": {
+          "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+          "bytes": 11820,
+          "mode": "0644"
+        }
+      },
+      "licenseSha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c"
+    },
+    "environment": {
+      "nodeVersion": "v24.22.1",
+      "uid": 0,
+      "targetNonrootNode22Accepted": false
+    },
+    "dependencies": {
+      "pinnedWheelHashesVerified": 11,
+      "freshVenvs": 2,
+      "pipCheckPassed": 2,
+      "networkDependencyDownloads": 0,
+      "requireHashes": true,
+      "onlyBinary": true
+    },
+    "aggregate": {
+      "command": "node x10/test/all.mjs --official",
+      "exitCode": 0,
+      "elapsedMs": 224712,
+      "timedOut": false,
+      "stderrBytes": 679,
+      "success": true,
+      "groups": 20,
+      "passed": 20,
+      "failed": 0,
+      "suites": [
+        {
+          "name": "http-tls-http2-reload",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "stream-mail",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "mail-tls-starttls",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "protocol-adapters",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-interop",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-head-independent-client",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-features",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-regression",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-generated-sanitized",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-frame-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-load-client-verification",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "managed-native-control",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "operator-status",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "local-alpha-lifecycle",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "listener-observer-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "reload-listener-observation",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-control-api",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-process-generations",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-generation-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "official-nginx-tests",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        }
+      ]
+    },
+    "controller": {
+      "format": "node-test-tap",
+      "pass": 86,
+      "fail": 0,
+      "valid": true
+    },
+    "alpha": {
+      "format": "node-test-tap",
+      "pass": 45,
+      "fail": 0,
+      "valid": true,
+      "total": 45,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "operatorStatus": {
+      "format": "node-test-tap",
+      "pass": 30,
+      "fail": 0,
+      "valid": true,
+      "total": 30,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "listenerBoundaries": {
+      "format": "node-test-tap",
+      "pass": 42,
+      "fail": 0,
+      "valid": true
+    },
+    "handover": {
+      "success": true,
+      "tests": 7,
+      "passed": 7,
+      "interrupted": false,
+      "cleanup": {
+        "nativeStopped": true,
+        "nativeExitCode": 0,
+        "fixturesStopped": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true
+      },
+      "cleanupErrorCount": 0,
+      "fixtureErrorCount": 0,
+      "sourceUnchangedDuringTest": true,
+      "binaryUnchangedDuringTest": true,
+      "harnessUnchangedDuringTest": true,
+      "observerUnchangedDuringTest": true
+    },
+    "official": {
+      "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+      "summary": {
+        "files": 35,
+        "filesPassed": 32,
+        "filesSkipped": 3,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1109,
+          "passed": 1083,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "skippedFiles": [
+        "fastcgi.t",
+        "scgi.t",
+        "uwsgi.t"
+      ],
+      "cleanupErrorCount": 0,
+      "sourceUnchangedDuringTest": true
+    },
+    "nativeTrackedInputsCount": 499,
+    "nativeTrackedInputsUnchanged": true,
+    "frozenFilesCount": 55,
+    "frozenFilesUnchanged": true,
+    "sourceFreezeSha256": {
+      "x10/test/alpha-tls.test.mjs": "15d0b113d982aa4064135f0c315f043061962b7140fc304d090ecb3277de9ea5",
+      "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+      "x10/control/listeners.mjs": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+      "x10/test/listeners.test.mjs": "a43b12acdfedd6125f5b0bd84010581c8b28141215b804e8895c453928918b3c",
+      "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612"
+    },
+    "supplementalUnixReruns": 0,
+    "featureOffReruns": 0,
+    "historicalLocalFailurePreserved": true,
+    "historicalESRCHCauseProven": false,
+    "nativeProcessGroupSignalEscalationPerformed": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "serviceActivated": false,
+    "tlsAccepted": false,
+    "productionAccepted": false,
+    "limitations": [
+      "Local root/Node24 compatibility does not accept nonroot Node22 service/TLS.",
+      "One fresh native build and one frozen native official aggregate for the TLS acceptance package; no unchanged native diagnostic rerun.",
+      "The historical19/20 ESRCH failure and exact process/interleaving remain unproven.",
+      "Existing restricted AF_UNIX EPERM supplemental failure was not retried unchanged; hosted required Unix evidence remains separate.",
+      "Control-disabled profile was not rerun for this test-only TLS package; previous exact evidence is not a new runtime PASS.",
+      "Official optional-client skips and expected TODO remain explicit.",
+      "The new installed TLS suite is a separate authored run; it is not included in the twenty existing aggregate groups."
+    ]
+  },
+  "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+  "nextConcreteTask": "First verify exact resulting implementation CI, including the new installed HTTPS-upstream trust step and actual alpha-tls.tap artifact with10 TAP (9 nested cases plus one wrapper), actual jobs/logs/artifacts and source/build identities. Do not borrow previous observer CI acceptance for these new test/workflow bytes. Then continue a separately supported frontend TLS path and actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan boundaries. The current package verifies HTTPS upstream CA/hostname/SNI through existing native proxy directives behind an installed managed HTTP frontend only; frontend TLS and actual service remain unaccepted. G2 permanent versioned release/published-file replay remain blocked by available Release/asset writer capabilities; do not bypass credentials or permissions. G4-G8/Production V1 and full deferred Continuum remain open.",
+  "retainedHistoricalObservation": "The retained wait-bind local aggregate failed19/20 with ESRCH. The failing captured-process observation and exact historical cause remain unknown. The held old worker had previously been observed stopped; the fixture had not issued its own SIGCONT. Later local20/20 and exact hosted observer compatibility do not identify that historical interleaving or establish no causality.",
+  "historicalEvidence": "x10/evidence/g3-wait-bind.json",
+  "observerHostedEvidence": "x10/evidence/listener-esrch-hosted.json",
+  "historicalFailureCauseKnown": false,
+  "historicalCapturedProcessIdentified": false,
+  "historicalInterleavingReproduced": false,
+  "nativeCChanged": false,
+  "controllerImplementationChanged": false,
+  "alphaRuntimeChanged": false,
+  "observerImplementationChanged": false,
+  "frontendTLSAccepted": false,
+  "serviceInstalled": false,
+  "serviceActivated": false,
+  "serviceAccepted": false,
+  "targetUserManagerAccepted": false,
+  "tlsProfileAccepted": false,
+  "readinessAutomated": false,
+  "permanentAlphaAccepted": false,
+  "productionAccepted": false,
+  "fullNativeScopePreserved": true,
+  "fullContinuumScopePreserved": true,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "privateKeysPublished": false,
+  "realSessionKeysPublished": false,
+  "newPurchases": false,
+  "limitations": [
+    "This is a local installed/extracted managed HTTP frontend to HTTPS upstream path, not an HTTPS frontend or operated service.",
+    "Native upstream TLS trust is explicit via existing proxy_ssl_* directives; manager readiness remains an HTTP application check.",
+    "Ephemeral test CA/keys are fixture-owned and never installed into system trust or published.",
+    "Authored cases, independent scenarios, native groups and official assertions use separate counting units.",
+    "New tests and workflow bytes require exact resulting CI; prior observer CI cannot establish their hosted acceptance.",
+    "No permanent published-file replay, supported nonroot Node22 service, frontend TLS, final soak, Production V1 or semantic TLS migration acceptance.",
+    "Historical local19/20 ESRCH cause remains unknown and is not explained by this unrelated TLS verification."
+  ]
+}

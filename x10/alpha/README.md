@@ -273,3 +273,39 @@ or service/TLS acceptance. The local first native19/20 observer ESRCH remains
 unresolved; later CI success is neither a local repair nor a historical fix.
 Which captured-process observation failed remains unknown. Late/cancelled bind
 may have committed, and the inspection/runbook restrictions above still apply.
+
+
+### Verified HTTPS upstream: bounded test profile
+
+The managed listener remains loopback HTTP. An operator-owned candidate can
+proxy to an HTTPS application using the existing native configuration body.
+It must explicitly enable `proxy_ssl_verify on`, set an operator-provided CA
+with `proxy_ssl_trusted_certificate`, enable `proxy_ssl_server_name on`, and
+set `proxy_ssl_name` to the expected certificate DNS name. Connecting to
+`127.0.0.1` does not remove the certificate-name check. Keep
+`proxy_next_upstream off` to avoid implicit request replay.
+
+The CA file is operator-controlled trust material outside the immutable
+installation inventory; it is not shipped in the bundle or authenticated by
+its checksum. Keep it in a protected operator directory outside the installed
+prefix. The HTTPS application owns its certificate and private key. Never put
+private keys in release evidence or Git. Certificate/trust rotation requires
+its own verified reload and operational procedure.
+
+The reproducible acceptance command, after the documented native build, is:
+
+```sh
+node --test --test-reporter=tap x10/test/alpha-tls.test.mjs
+```
+
+This test packs and extracts the alpha, installs it separately, and uses only
+owned loopback endpoints and temporary CA/key material. Its HTTP readiness
+relay probes the managed `/ready` route through the HTTPS upstream. It does
+not probe `__x10_health` recursively. A plain application health endpoint that
+bypasses HTTPS cannot establish TLS readiness. The relay is a test fixture,
+not an installed production health service.
+
+This profile verifies upstream TLS only. It does not enable incoming HTTPS,
+change the managed `listen` guard, operate a user service, authenticate a
+permanent published release, or accept Production V1. Exact CI and supported
+nonroot service/deployment acceptance are recorded separately.

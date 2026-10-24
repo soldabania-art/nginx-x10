@@ -996,3 +996,41 @@ then actual nonroot user-manager startup/stop/restart and failure/drain/orphan
 gates. Automatic unit readiness, G2 permanent distribution/published-file replay,
 G4-G8 and Production V1 remain open. Full native and deferred Continuum scope
 remain preserved.
+
+
+## Installed HTTPS-upstream trust verification
+
+A bounded extracted/installed native proxy path now has reproducible TLS
+upstream acceptance checks with an explicit private fixture CA, hostname/SNI
+and rejection controls. The managed frontend remains HTTP: this package does
+not add a frontend TLS listener or change the manager listener restrictions.
+Existing native `proxy_ssl_*` directives enforce upstream trust; application
+readiness remains a separate HTTP check.
+
+[Evidence](evidence/g3-tls-trust.json) retains the actual authored, independent
+and fresh native outcomes, hashes, cleanup, failures and counting units. A new
+required native CI step executes the installed trust suite. Exact resulting
+implementation CI remains pending; earlier observer CI does not verify these
+new test/workflow bytes. Native C, alpha/controller/observer runtime, bundle
+inventory and service recipe remain unchanged.
+
+The original local19/20 ESRCH observation and unknown historical cause remain
+retained. No TLS check identifies its failing process or interleaving. Next
+verify exact new CI, then continue a supported frontend TLS path and real
+nonroot service startup/stop/restart, failure, drain and orphan boundaries.
+Automatic unit readiness, permanent versioned release/published-file replay,
+G4-G8 and Production V1 remain open. Full native and deferred Continuum scope
+remain preserved.
+
+The authored installed suite passed 9 nested scenarios plus one wrapper
+(10 TAP), including 3 rejected TLS candidates with actual native502 and
+controller rollback checks. Independent review passed 5 separate actual native
+upstream heldouts and 17 static checks; those heldouts use a single-process
+native fixture, not the installed lifecycle. One fresh native build and one
+frozen official aggregate passed 20/20 existing groups; the new TLS suite is
+counted separately. Official outcomes retain 1083 strict PASS,
+25 SKIP and 1 expected TODO-fail, with
+0 unexpected FAIL. Local root/Node24 does not accept the
+nonroot Node22 target. Initial authored 5PASS/5FAIL test assertions and the
+independent chown EINVAL fixture setup are retained as diagnostic history;
+they are not product runtime fixes.
