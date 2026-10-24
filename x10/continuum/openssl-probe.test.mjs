@@ -437,3 +437,68 @@ test('peer close_notify is refused before and after reciprocal shutdown complete
   assert.equal(result.semanticExportImport, false);
   assert.equal(result.migration, false);
 });
+
+// This relay fault discards an authenticated client's encrypted record tail.
+// It is not a clean peer TLS close, a completed wire stream or migration.
+test('truncated encrypted body retains its real read retry through fatal EOF refusal', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'truncated-body-eof', payloadBytes: 8093, fragmentPrefix: 13 });
+  const lifecycle = result.truncationLifecycle;
+  assert.equal(result.outcome, 'pass');
+  assert.equal(result.negotiated.authorized, true);
+  assert.equal(lifecycle.ready.call, 2);
+  assert.equal(lifecycle.ready.outcome, 2);
+  assert.equal(lifecycle.ready.retryCall, 2);
+  assert.equal(lifecycle.ready.rawResult, 0);
+  assert.equal(lifecycle.ready.sslError, 2);
+  assert.equal(lifecycle.ready.applicationBytesRead, 0);
+  assert.equal(lifecycle.ready.applicationBytesWritten, 0);
+  for (const probe of [lifecycle.refused, lifecycle.repeatedRefused]) {
+    assert.equal(probe.allowed, false);
+    assert.equal(probe.ledgerLastCall, 2);
+    assert.equal(probe.ledgerLastOutcome, 2);
+    assert.equal(probe.ledgerRetryCall, 2);
+    assert.equal(probe.sslPending, 0);
+    assert.ok(probe.packetLength > 0 || probe.rbufLeft > 0);
+    assert.ok((BigInt(probe.reasons) & 128n) !== 0n);
+    assert.ok((BigInt(probe.reasons) & 16n) !== 0n);
+  }
+  assert.equal(lifecycle.immutablePartialProbes, true);
+  const fault = lifecycle.relayTruncation;
+  assert.equal(fault.prefixBytes, 13);
+  assert.ok(fault.recordBytes > fault.prefixBytes);
+  assert.equal(fault.discardedRecordTailBytes, fault.recordBytes - fault.prefixBytes);
+  assert.ok(fault.withheldBytesAtFin >= fault.discardedRecordTailBytes);
+  assert.equal(fault.backendFinForwarded, true);
+  assert.equal(fault.serverReadsPaused, true);
+  assert.equal(lifecycle.observed.call, 2);
+  assert.equal(lifecycle.observed.outcome, 4);
+  assert.equal(lifecycle.observed.retryCall, 2);
+  assert.equal(lifecycle.observed.rawResult, 0);
+  assert.equal(lifecycle.observed.sslError, 1);
+  assert.equal(lifecycle.observed.errorReason, 294);
+  assert.equal(lifecycle.observed.applicationBytesRead, 0);
+  assert.equal(lifecycle.observed.sameReadArguments, true);
+  assert.equal(lifecycle.observed.readLength, 8093);
+  assert.equal(lifecycle.sameReadArguments, true);
+  for (const probe of [result.probe, lifecycle.repeatedFatal]) {
+    assert.equal(probe.allowed, false);
+    assert.equal(probe.ledgerLastCall, 2);
+    assert.equal(probe.ledgerLastOutcome, 4);
+    assert.equal(probe.ledgerRetryCall, 2);
+    assert.equal(probe.sslPending, 0);
+    assert.ok((BigInt(probe.reasons) & 4n) !== 0n);
+    assert.ok((BigInt(probe.reasons) & 16n) !== 0n);
+  }
+  assert.equal(lifecycle.clientApplicationWrites, 1);
+  assert.equal(lifecycle.applicationBytesReceived, 0);
+  assert.equal(lifecycle.clientTLSEndCalled, false);
+  assert.equal(result.fragmentPrefix, 13);
+  assert.equal(result.immutableRepeatedProbe, true);
+  assert.equal(result.fixtureGracefulShutdown, false);
+  assert.equal(result.wire, null);
+  assert.equal(result.clientConnections, 1);
+  assert.equal(result.serverConnections, 1);
+  assert.equal(result.semanticExportImport, false);
+  assert.equal(result.migration, false);
+  assert.equal(result.nativeNginxIntegration, false);
+});

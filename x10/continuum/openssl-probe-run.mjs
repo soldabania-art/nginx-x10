@@ -18,7 +18,7 @@ const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
 const SCENARIOS = ['quiescent', 'partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update', 'completed-key-update',
-  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'unexpected-transport-eof', 'peer-first-shutdown-lifecycle'];
+  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'unexpected-transport-eof', 'peer-first-shutdown-lifecycle', 'truncated-body-eof'];
 const SECRET_LABELS = Object.freeze({
   CLIENT_HANDSHAKE_TRAFFIC_SECRET: 'clientHandshake', SERVER_HANDSHAKE_TRAFFIC_SECRET: 'serverHandshake',
   CLIENT_TRAFFIC_SECRET_0: 'clientApplication', SERVER_TRAFFIC_SECRET_0: 'serverApplication',
@@ -320,6 +320,19 @@ function relayTo(port, sockets, signal) {
         record('clientToServer', chunk);
         if (!gate) back.write(chunk);
         else {
+          if (gate.truncation) {
+            // Keep only the first bounded ciphertext record in private memory.
+            // It establishes that the network fault drops a real record tail.
+            gate.record = Buffer.concat([gate.record, chunk]).subarray(0, 16645);
+            if (gate.record.length >= 5 && gate.recordBytes === null) {
+              assertFixture(gate.record[0] === 23 && gate.record[1] === 3 && gate.record[2] === 3,
+                'truncated_record_header');
+              const body = gate.record.readUInt16BE(3);
+              assertFixture(body >= 17 && body <= 16640 && gate.prefix < body + 5,
+                'truncated_record_length');
+              gate.recordBytes = body + 5;
+            }
+          }
           const count = Math.min(chunk.length, gate.prefix - gate.forwarded);
           gate.withheld += chunk.length - count;
           if (count) {
@@ -353,6 +366,31 @@ function relayTo(port, sockets, signal) {
   return { server, capture, observed,
     prefix(count) { assertFixture(!gate && count > 0, 'prefix_gate_invalid'); gate = { prefix: count, forwarded: 0, withheld: 0, delivered: false }; },
     waitPrefix: () => wait(() => gate?.delivered === true),
+    truncatedPrefix(count) {
+      assertFixture(!gate && count >= 6, 'truncated_prefix_invalid');
+      gate = { prefix: count, forwarded: 0, withheld: 0, delivered: false,
+        truncation: true, record: Buffer.alloc(0), recordBytes: null };
+    },
+    async truncateBody(payloadBytes) {
+      await wait(() => gate?.truncation === true && gate.delivered && gate.recordBytes !== null &&
+        gate.record.length >= gate.recordBytes && gate.withheld >= gate.recordBytes - gate.prefix);
+      assertFixture(gate.recordBytes === payloadBytes + 22 && gate.record.length === gate.recordBytes &&
+        gate.withheld === gate.recordBytes - gate.prefix, 'truncated_single_record');
+      assertFixture(backend?.isPaused() && !backend.writableEnded && !backend.destroyed &&
+        gate.forwarded === gate.prefix && gate.withheld > 0, 'truncated_backend_not_ready');
+      const facts = { prefixBytes: gate.prefix, recordBytes: gate.recordBytes,
+        withheldBytesAtFin: gate.withheld, discardedRecordTailBytes: gate.recordBytes - gate.prefix,
+        backendFinForwarded: false, serverReadsPaused: true };
+      // Fault injection ends only the server-facing TCP leg. The client stays
+      // owned and alive; withheld bytes are never replayed or forwarded.
+      await bounded(new Promise((resolve, reject) => backend.end(error => error ?
+        reject(new ProbeFixtureError('truncated_backend_end')) : resolve())),
+      'truncated_backend_end', DEADLINE_MS, signal);
+      assertFixture(!failure && !backend.destroyed && backend.writableEnded,
+        'truncated_backend_end_failed');
+      facts.backendFinForwarded = true;
+      return facts;
+    },
     pauseServerReads() { assertFixture(backend !== undefined, 'relay_backend_missing'); backend.pause(); },
     serverReadsPaused: () => backend?.isPaused() === true,
     resumeServerReads() { assertFixture(backend?.isPaused(), 'relay_backend_not_paused'); backend.resume(); },
@@ -432,6 +470,7 @@ function independentClient(port, ca, payload, sockets, secrets, signal, explicit
     endOnEcho() { endAfterEcho = true; if (received.equals(payload)) socket.end(); }, finish: () => wait(() => closed && ended && received.equals(payload)),
     receivedPayload: () => wait(() => received.equals(payload)), receivedBytes: () => received.length,
     applicationWrites: () => applicationWrites,
+    transportIntact: () => !failure && !socket.destroyed && !socket.writableEnded,
     negotiated: () => negotiated, random: () => clientRandom,
   };
 }
@@ -498,7 +537,7 @@ const numericFields = ['sslPending', 'packetLength', 'rbufLeft', 'rbufOffset', '
 function checkedProbe(message, scenario) {
   const keys = ['event', 'scenario', 'sample', ...decimalFields, ...sequenceFields, ...booleanFields, ...numericFields];
   assertFixture(message?.event === 'probe' && message.scenario === scenario &&
-    (['completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'peer-first-shutdown-lifecycle'].includes(scenario) ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
+    (['completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'peer-first-shutdown-lifecycle', 'truncated-body-eof'].includes(scenario) ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
     Object.keys(message).sort().join(',') === keys.sort().join(','), 'probe_schema');
   for (const field of decimalFields) assertFixture(typeof message[field] === 'string' && /^(0|[1-9][0-9]{0,19})$/.test(message[field]) && BigInt(message[field]) <= 0xffffffffffffffffn, 'probe_counter');
   for (const field of sequenceFields) assertFixture(typeof message[field] === 'string' && /^[0-9a-f]{16}$/.test(message[field]), 'probe_sequence');
@@ -643,6 +682,29 @@ function checkedEOFProbe(probe) {
     (BigInt(probe.reasons) & 4n) !== 0n, 'eof_refusal_not_observed');
 }
 
+function checkedTruncatedEvent(message, event, payloadBytes) {
+  const ready = event === 'truncated-ready';
+  const keys = ['event', 'scenario', 'call', 'outcome', 'retryCall', 'rawResult', 'sslError',
+    'applicationBytesRead', ...(ready ? ['applicationBytesWritten'] :
+      ['errorReason', 'sameReadArguments', 'readLength'])];
+  assertFixture(message?.event === event && message.scenario === 'truncated-body-eof' &&
+    Object.keys(message).sort().join(',') === keys.sort().join(','), 'truncated_event_schema');
+  assertFixture(message.call === 2 && message.outcome === (ready ? 2 : 4) && message.retryCall === 2 &&
+    message.rawResult === 0 && message.sslError === (ready ? 2 : 1) && message.applicationBytesRead === 0 &&
+    (ready ? message.applicationBytesWritten === 0 : message.errorReason === 294 &&
+      message.sameReadArguments === true && message.readLength === payloadBytes),
+  'truncated_read_state_not_observed');
+  return structuredClone(message);
+}
+function checkedTruncatedProbe(probe, fatal) {
+  const reasons = BigInt(probe.reasons);
+  assertFixture(!probe.allowed && probe.sslPending === 0 && probe.ledgerLastCall === 2 &&
+    probe.ledgerLastOutcome === (fatal ? 4 : 2) && probe.ledgerRetryCall === 2 &&
+    (reasons & 16n) !== 0n && (fatal ? (reasons & 4n) !== 0n :
+      (reasons & 128n) !== 0n && (probe.packetLength > 0 || probe.rbufLeft > 0)),
+  'truncated_probe_not_refused');
+}
+
 function checkedImmutablePair(first, second) {
   const normalized = value => { const copy = { ...value }; delete copy.sample; return copy; };
   assertFixture(second.sample === first.sample + 1 &&
@@ -654,8 +716,9 @@ function checkedImmutablePair(first, second) {
 export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = ['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario) ? 65536 : 257, fragmentPrefix } = {}) {
   assertFixture(SCENARIOS.includes(scenario) && Number.isInteger(payloadBytes) && payloadBytes >= 2 && payloadBytes <= 65536, 'scenario_options');
   if (['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario)) assertFixture(payloadBytes === 65536, 'write_retry_payload_size');
+  if (scenario === 'truncated-body-eof') assertFixture(payloadBytes <= 16384, 'truncated_payload_size');
   const prefix = fragmentPrefix ?? (scenario === 'partial-header' ? 3 : 13);
-  if (scenario.startsWith('partial-')) assertFixture(Number.isInteger(prefix) &&
+  if (scenario.startsWith('partial-') || scenario === 'truncated-body-eof') assertFixture(Number.isInteger(prefix) &&
     (scenario === 'partial-header' ? prefix >= 1 && prefix <= 4 : prefix >= 6 && prefix < Math.min(payloadBytes, 16384) + 22), 'fragment_prefix');
   assertFixture(!running, 'concurrent_probe_fixture');
   assertFixture(!process.execArgv.some(value => value.startsWith('--tls-keylog')) && !(process.env.NODE_OPTIONS ?? '').includes('--tls-keylog'), 'external_keylog_option');
@@ -669,6 +732,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
   const writeRetryCompleted = scenario === 'completed-write-retry';
   const shutdownScenario = scenario === 'server-shutdown-lifecycle';
   const eofScenario = scenario === 'unexpected-transport-eof';
+  const truncatedScenario = scenario === 'truncated-body-eof';
   const peerShutdownScenario = scenario === 'peer-first-shutdown-lifecycle';
   const allowed = scenario === 'quiescent' || retryCompleted || writeRetryCompleted;
   const graceful = allowed || scenario === 'completed-key-update' || peerCompleted || shutdownScenario || peerShutdownScenario;
@@ -700,7 +764,9 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     await client.secure();
     await native.wait('ready', message => message.scenario === scenario);
     if (peerScenario) { await client.send(); }
-    else if (scenario.startsWith('partial-')) {
+    else if (truncatedScenario) {
+      relay.truncatedPrefix(prefix); relay.pauseServerReads(); client.write(); await relay.waitPrefix();
+    } else if (scenario.startsWith('partial-')) {
       relay.prefix(prefix); client.write(); await relay.waitPrefix();
     } else if (overlappingRetry) {
       client.socket.pause(); relay.pauseServerReads();
@@ -817,6 +883,24 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         immutableInitialProbes: true, peerExplicitEndAfterEcho: true,
         relayClientFinBeforeRead: true, clientApplicationWrites: 1 };
     }
+    let truncationLifecycle;
+    if (truncatedScenario) {
+      const ready = checkedTruncatedEvent(await native.wait('truncated-ready'), 'truncated-ready', payloadBytes);
+      const refused = checkedProbe(await native.wait('probe', message => message.sample === 1), scenario);
+      const repeatedRefused = checkedProbe(await native.wait('probe', message => message.sample === 2), scenario);
+      checkedTruncatedProbe(refused, false); checkedTruncatedProbe(repeatedRefused, false);
+      checkedImmutablePair(refused, repeatedRefused);
+      assertFixture(client.transportIntact() && client.applicationWrites() === 1 && client.receivedBytes() === 0,
+        'truncated_client_not_preserved');
+      const relayTruncation = await relay.truncateBody(payloadBytes);
+      assertFixture(client.transportIntact() && relay.serverReadsPaused(), 'truncated_fault_boundary');
+      await stepNative(native, owned.signal);
+      const observed = checkedTruncatedEvent(await native.wait('truncated-observed'), 'truncated-observed', payloadBytes);
+      truncationLifecycle = { ready, refused, repeatedRefused, observed,
+        immutablePartialProbes: true, sameReadArguments: observed.sameReadArguments,
+        relayTruncation, clientApplicationWrites: 1, applicationBytesReceived: 0,
+        clientTLSEndCalled: false };
+    }
     let eofLifecycle;
     if (eofScenario) {
       const ready = checkedEOFEvent(await native.wait('eof-ready'), 'eof-ready', payloadBytes);
@@ -833,16 +917,20 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         clientTLSEndCalled: false, relayClientFinObserved: true,
         transportClose: 'node-tls-socket-destroy-confirmed-by-relay-fin-and-pinned-server-error' };
     }
-    const firstSample = writeRetryCompleted || overlappingRetry || shutdownScenario || peerShutdownScenario ? 3 : 1;
+    const firstSample = writeRetryCompleted || overlappingRetry || shutdownScenario || peerShutdownScenario || truncatedScenario ? 3 : 1;
     const first = checkedProbe(await native.wait('probe', message => message.sample === firstSample), scenario);
     let immutableRepeatedProbe = false;
-    if (graceful || peerScenario || overlappingRetry || eofScenario) {
+    if (graceful || peerScenario || overlappingRetry || eofScenario || truncatedScenario) {
       const second = checkedProbe(await native.wait('probe', message => message.sample === firstSample + 1), scenario);
       assertFixture(first.allowed === allowed, 'stable_probe_changed_or_wrong_gate');
       checkedImmutablePair(first, second);
       if (overlappingRetry) {
         checkedOverlapProbe(first, true); checkedOverlapProbe(second, true);
         overlapRetryLifecycle.repeatedCompleted = second;
+      }
+      if (truncatedScenario) {
+        checkedTruncatedProbe(first, true); checkedTruncatedProbe(second, true);
+        truncationLifecycle.repeatedFatal = second;
       }
       if (eofScenario) {
         checkedEOFProbe(first); checkedEOFProbe(second);
@@ -903,6 +991,15 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         !native.messages.some(message => message.event === 'shutdown') && done.applicationBytesRead === 0 &&
         done.applicationBytesWritten === 65536 && done.pressureBytesCompleted === 0 && client.applicationWrites() === 0,
       'overlap_event_order_or_counts');
+    }
+    if (truncatedScenario) {
+      const expected = ['ready', 'truncated-ready', 'probe', 'probe', 'truncated-observed', 'probe', 'probe', 'done'];
+      assertFixture(native.messages.filter(message => expected.includes(message.event)).map(message => message.event).join(',') === expected.join(',') &&
+        native.messages.filter(message => message.event === 'probe').map(message => message.sample).join(',') === '1,2,3,4' &&
+        !native.messages.some(message => message.event === 'shutdown') && done.applicationBytesRead === 0 &&
+        done.applicationBytesWritten === 0 && done.pressureBytesCompleted === 0 && client.applicationWrites() === 1 &&
+        client.receivedBytes() === 0 && client.transportIntact() && relay.serverReadsPaused(),
+      'truncated_event_order_or_counts');
     }
     if (eofScenario) {
       const expected = ['ready', 'eof-ready', 'eof-observed', 'probe', 'probe', 'done'];
@@ -989,13 +1086,14 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     return { schemaVersion: 1, recordKind: 'research-openssl-read-only-probe-result', outcome: 'pass', scenario,
       negotiated: client.negotiated(), probe: first, immutableRepeatedProbe, wire: wire ?? null,
       topology: 'two-leg-recording-relay-not-migration', clientConnections: 1, serverConnections: 1,
-      fragmentPrefix: scenario.startsWith('partial-') ? prefix : null, fixtureGracefulShutdown: done.graceful,
+      fragmentPrefix: scenario.startsWith('partial-') || truncatedScenario ? prefix : null, fixtureGracefulShutdown: done.graceful,
       ...(retryLifecycle ? { retryLifecycle } : {}), ...(peerReceived ? { peerReceived } : {}),
       ...(writeRetryLifecycle ? { writeRetryLifecycle } : {}),
       ...(overlapRetryLifecycle ? { overlapRetryLifecycle } : {}),
       ...(shutdownLifecycle ? { shutdownLifecycle } : {}),
       ...(peerShutdownLifecycle ? { peerShutdownLifecycle } : {}),
       ...(eofLifecycle ? { eofLifecycle } : {}),
+      ...(truncationLifecycle ? { truncationLifecycle } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {
     if (owned.signal.aborted) throw owned.signal.reason;

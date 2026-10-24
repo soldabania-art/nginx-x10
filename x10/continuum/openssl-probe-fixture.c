@@ -263,7 +263,8 @@ int main(int argc, char **argv)
         "completed-key-update", "completed-read-retry", "unrelated-write-read-retry",
         "peer-key-update-pending", "peer-key-update-completed", "completed-write-retry",
         "overlapping-read-write-retry", "server-shutdown-lifecycle",
-        "unexpected-transport-eof", "peer-first-shutdown-lifecycle"};
+        "unexpected-transport-eof", "peer-first-shutdown-lifecycle",
+        "truncated-body-eof"};
     SSL_CTX *ctx = NULL;
     PEER peer;
     X10_PROBE_RESULT first, second;
@@ -281,7 +282,7 @@ int main(int argc, char **argv)
     int quiescent, unread, partial, pressure_case, ku, empty, completed_ku, exchange;
     int completed_read, unrelated_write, completed_write, overlap, allowed_case;
     int peer_ku, peer_ku_pending, peer_ku_completed, shutdown_lifecycle, unexpected_eof;
-    int peer_shutdown;
+    int peer_shutdown, truncated_body;
     unsigned long eof_error = 0;
     int64_t deadline;
 
@@ -340,10 +341,12 @@ int main(int argc, char **argv)
     shutdown_lifecycle = !strcmp(scenario, "server-shutdown-lifecycle");
     unexpected_eof = !strcmp(scenario, "unexpected-transport-eof");
     peer_shutdown = !strcmp(scenario, "peer-first-shutdown-lifecycle");
+    truncated_body = !strcmp(scenario, "truncated-body-eof");
     allowed_case = quiescent || completed_read || completed_write;
     exchange = allowed_case || completed_ku || peer_ku_completed
         || shutdown_lifecycle || unexpected_eof || peer_shutdown;
     if (unread && wanted < 2) goto done;
+    if (truncated_body && wanted > 16384) goto done;
     if ((completed_write || overlap) && wanted != MAX_APPLICATION_BYTES) goto done;
 
     failure = "configuration";
@@ -631,6 +634,23 @@ int main(int argc, char **argv)
         if (!ready(peer.fd, POLLIN, deadline)
             || !complete(&peer, X10_CALL_READ, payload, 1, deadline)
             || peer.amount != 1 || SSL_pending(peer.ssl) <= 0) goto done;
+    } else if (truncated_body) {
+        failure = "truncated_partial_state_not_reached";
+        /* Keep this original application buffer and length across the later
+         * EOF retry. No plaintext may be produced from the record prefix. */
+        retry_buffer = payload; retry_size = wanted;
+        memset(payload, 0xa5, wanted);
+        if ((SSL_get_options(peer.ssl) & SSL_OP_IGNORE_UNEXPECTED_EOF)
+            || SSL_get_quiet_shutdown(peer.ssl)
+            || !ready(peer.fd, POLLIN, deadline)
+            || invoke(&peer, X10_CALL_READ, retry_buffer, retry_size)
+            || peer.last_result != 0 || peer.error != SSL_ERROR_WANT_READ
+            || peer.amount != 0 || SSL_pending(peer.ssl) != 0
+            || peer.ledger.last_call != X10_CALL_READ
+            || peer.ledger.last_outcome != X10_OUTCOME_WANT_READ
+            || peer.ledger.retry_call != X10_CALL_READ) goto done;
+        for (i = 0; i < wanted; i++)
+            if (payload[i] != 0xa5) goto done;
     } else if (partial || empty) {
         if (partial && !ready(peer.fd, POLLIN, deadline)) goto done;
         if (invoke(&peer, X10_CALL_READ, payload, wanted)
@@ -648,6 +668,59 @@ int main(int argc, char **argv)
             } else break;
         }
         if (peer.error != SSL_ERROR_WANT_WRITE || peer.ledger.retry_call != X10_CALL_WRITE) goto done;
+    }
+
+    if (truncated_body) {
+        failure = "truncated_partial_state_not_reached";
+        if (!observe(&peer, &first) || first.allowed
+            || !(first.reasons & X10_REASON_READ_BUFFER)
+            || !(first.reasons & X10_REASON_RETRY)
+            || !(first.packet_length || first.rbuf_left)
+            || first.ledger_last_call != X10_CALL_READ
+            || first.ledger_last_outcome != X10_OUTCOME_WANT_READ
+            || first.ledger_retry_call != X10_CALL_READ
+            || retry_buffer != payload || retry_size != wanted) goto done;
+        printf("{\"event\":\"truncated-ready\",\"scenario\":\"%s\","
+            "\"call\":%d,\"outcome\":%d,\"retryCall\":%d,\"rawResult\":%d,"
+            "\"sslError\":%d,\"applicationBytesRead\":%zu,\"applicationBytesWritten\":0}\n",
+            scenario, (int) peer.ledger.last_call,
+            (int) peer.ledger.last_outcome, (int) peer.ledger.retry_call,
+            peer.last_result, peer.error, peer.amount);
+        emit_probe(scenario, 1, &peer, &first);
+        failure = "truncated_partial_probe";
+        if (!observe(&peer, &second)) goto done;
+        emit_probe(scenario, 2, &peer, &second);
+        if (memcmp(&first, &second, sizeof(first))) goto done;
+        /* The fault-injecting relay discards the encrypted tail and half
+         * closes only this backend leg. It is not a direct peer TLS close. */
+        failure = "truncated_fin_step";
+        if (!step(deadline) || !ready(peer.fd, POLLIN, deadline)) goto done;
+        if (retry_buffer != payload || retry_size != wanted) goto done;
+        for (i = 0; i < wanted; i++)
+            if (payload[i] != 0xa5) goto done;
+        failure = "truncated_eof_state_not_reached";
+        if (invoke(&peer, X10_CALL_READ, retry_buffer, retry_size)) goto done;
+        /* invoke immediately classifies the actual result before this first
+         * error-queue observation; a secondary alert BIO error is not EOF. */
+        eof_error = ERR_peek_error();
+        if (peer.last_result != 0 || peer.error != SSL_ERROR_SSL
+            || ERR_GET_LIB(eof_error) != ERR_LIB_SSL
+            || ERR_GET_REASON(eof_error) != SSL_R_UNEXPECTED_EOF_WHILE_READING
+            || peer.amount != 0 || peer.ledger.last_call != X10_CALL_READ
+            || peer.ledger.last_outcome != X10_OUTCOME_ERROR
+            || peer.ledger.retry_call != X10_CALL_READ
+            || retry_buffer != payload || retry_size != wanted) goto done;
+        for (i = 0; i < wanted; i++)
+            if (payload[i] != 0xa5) goto done;
+        printf("{\"event\":\"truncated-observed\",\"scenario\":\"%s\","
+            "\"call\":%d,\"outcome\":%d,\"retryCall\":%d,\"rawResult\":%d,"
+            "\"sslError\":%d,\"errorReason\":%d,\"applicationBytesRead\":%zu,"
+            "\"sameReadArguments\":true,\"readLength\":%zu}\n",
+            scenario, (int) peer.ledger.last_call,
+            (int) peer.ledger.last_outcome, (int) peer.ledger.retry_call,
+            peer.last_result, peer.error, ERR_GET_REASON(eof_error), peer.amount, retry_size);
+        /* The retained retry is bookkeeping, not permission to execute it.
+         * After fatal SSL_ERROR_SSL only metadata and cleanup may follow. */
     }
 
     if (unexpected_eof) {
@@ -807,8 +880,17 @@ int main(int argc, char **argv)
     failure = "probe";
     if (interrupted || now_ms() >= deadline) goto done;
     if (!observe(&peer, &first)) goto done;
-    emit_probe(scenario, completed_write || overlap || shutdown_lifecycle || peer_shutdown ? 3 : 1, &peer, &first);
-    if (unexpected_eof) {
+    emit_probe(scenario, completed_write || overlap || shutdown_lifecycle || peer_shutdown || truncated_body ? 3 : 1, &peer, &first);
+    if (truncated_body) {
+        if (first.allowed || !(first.reasons & X10_REASON_LEDGER)
+            || !(first.reasons & X10_REASON_RETRY)
+            || first.ledger_last_call != X10_CALL_READ
+            || first.ledger_last_outcome != X10_OUTCOME_ERROR
+            || first.ledger_retry_call != X10_CALL_READ) goto done;
+        if (!observe(&peer, &second)) goto done;
+        emit_probe(scenario, 4, &peer, &second);
+        if (memcmp(&first, &second, sizeof(first))) goto done;
+    } else if (unexpected_eof) {
         if (first.allowed || !(first.reasons & X10_REASON_LEDGER)
             || first.ledger_last_call != X10_CALL_READ
             || first.ledger_last_outcome != X10_OUTCOME_ERROR

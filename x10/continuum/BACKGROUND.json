@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-trunc-20261024T021812255Z",
-    "owner": "cloud-coordinator",
-    "baseCommit": "0d088591de17b2d8742fb1d96d1e28822771bbcf",
-    "acquiredAtUTC": "2026-10-24T02:18:12.255Z",
-    "expiresAtUTC": "2026-10-24T03:03:12.255Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -29,7 +23,7 @@
   "acceptedCheckpoint": {
     "nativeCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
     "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40050023101",
-    "continuumStage": "C2a peer-first closure locally and exact hosted verified; remaining state/usage inventory before C2b.",
+    "continuumStage": "C2a truncated-body EOF locally verified; exact implementation hosted CI pending before sequence/key usage gate.",
     "continuumNativeIntegration": false,
     "continuumEvidence": "x10/evidence/continuum-c2a-peer-close.json",
     "nativeHostedCI": {
@@ -746,9 +740,23 @@
         40050023101,
         40050026739
       ]
+    },
+    "c2aTruncatedBodyLocal": {
+      "state": "success-local-exact-hosted-pending",
+      "evidence": "x10/evidence/continuum-c2a-truncated-body.json",
+      "nativeEvidence": "x10/evidence/continuum-c2a-truncated-body-native-regression.json",
+      "flatChecks": 21,
+      "ordinaryActualTLSScenarios": 18,
+      "signals": 2,
+      "noTLSControls": 1,
+      "independentActualTLSHeldouts": 2,
+      "separateNoTLSOptionControls": 2,
+      "fullInventory": false,
+      "migration": false
     }
   },
   "pendingVerification": [
+    "Priority: verify exact truncated-body-EOF implementation SHA CI and retain failures. Local21=18TLS+2signals+1source; independent2 actualTLS, separate2 noTLS options, core21/process7/C127/native20 passed. Only relay-injected single-record body truncation, wire:null, no migration.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
     "C2a remaining inventory: other control/alert/partial/EOF/shutdown and sequence/key usage admission. Normal server-first shutdown and post-echo unexpected FIN refusal observed locally; full inventory and overlap admission remain unsupported.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
@@ -769,7 +777,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Peer-first close20 locally+hosted accepted as refusal observation; remaining truncated/partial/control and sequence/key usage inventory before C2b."
+      "goal": "Verify exact truncated-body EOF CI, then bounded quiescent sequence/key usage gate before C2b; remaining variants unsupported."
     },
     {
       "id": "C3",
@@ -926,26 +934,17 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
-    "runId": "continuum-peerclose-20261024T011655166Z",
-    "baseCommit": "dabe7b812ac24c95f752efec7508be9785b6b2c2",
-    "publicationParent": "be477b6a665f382394625b3a48a601618f2ac886",
-    "result": "Canonical20 plus2 independent actualTLS heldouts, core21/process7/C1 27 and native20 passed locally; both exact research and both native workflows completed success. Read-only closed-state refusal, no migration.",
-    "helpers": "5 temporary roles; only coordinator integrates/publishes",
+    "runId": "continuum-trunc-20261024T021812255Z",
+    "baseCommit": "0d088591de17b2d8742fb1d96d1e28822771bbcf",
+    "publicationParent": "2aa0f484365bd2cb6bd68ed0741ef2956c72a211",
+    "result": "Truncated-body local21 plus2 independent TLS and2 noTLS optioncontrols; core21/process7/C127/native20 passed. Exact CI pending. No semantic migration.",
+    "helpers": "5 temporary delegated roles, only coordinator integrates/publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-peer-close-ledger.json",
+    "perFileLedger": "x10/review/continuum-c2a-truncated-body-ledger.json",
     "hostedVerification": {
-      "state": "success-narrow-profile",
-      "researchRuns": [
-        40050023137,
-        40050026763
-      ],
-      "nativeRuns": [
-        40050023101,
-        40050026739
-      ]
-    },
-    "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8"
+      "state": "pending-exact-implementation-SHA"
+    }
   },
   "lastVerificationReceipt": {
     "runId": "continuum-peerclose-ci-20261024T013025923Z",
@@ -967,28 +966,28 @@
     ],
     "scope": "Read-only peer-first closure refusal; no migration"
   },
-  "nextConcreteTask": "Next one bounded truncated/partial TLS closure or sequence/key usage gate from C2A-PROFILE before C2b. First investigate any new native failure without weakening guards; historical d4bb2bc cause remains unproven.",
+  "nextConcreteTask": "First exact truncated-body implementation CI. Then one bounded sequence/key usage admission gate for the quiescent profile before C2b; other truncation/RST variants remain fail-closed and unsupported. Investigate any new native failure first.",
   "previousDevelopmentPass": {
-    "runId": "continuum-stop-20261024T002456401Z",
-    "baseCommit": "1b9c55ffc2dd074da415a2b8a69f0c42e4ac95e4",
-    "publicationParent": "ceb75abdba9781dd2eace89d9095a0461c11b704",
-    "result": "Controlled alpha proc-disappearance baseline failure, candidate28 synthetic, independent15 synthetic and fresh native20 passed; core21/process7 passed. Historical CI cause unproven, new exact CI pending.",
-    "helpers": "5 temporary delegated roles; only coordinator integrates/publishes",
+    "runId": "continuum-peerclose-20261024T011655166Z",
+    "baseCommit": "dabe7b812ac24c95f752efec7508be9785b6b2c2",
+    "publicationParent": "be477b6a665f382394625b3a48a601618f2ac886",
+    "result": "Canonical20 plus2 independent actualTLS heldouts, core21/process7/C1 27 and native20 passed locally; both exact research and both native workflows completed success. Read-only closed-state refusal, no migration.",
+    "helpers": "5 temporary roles; only coordinator integrates/publishes",
     "nativeSourceChanged": false,
-    "alphaRuntimeChanged": true,
     "spendingUSD": 0,
-    "perFileLedger": "x10/review/alpha-stop-identity-ledger.json",
+    "perFileLedger": "x10/review/continuum-c2a-peer-close-ledger.json",
     "hostedVerification": {
-      "state": "success-narrow-alpha-candidate",
-      "nativeRuns": [
-        40045814679,
-        40045819101
+      "state": "success-narrow-profile",
+      "researchRuns": [
+        40050023137,
+        40050026763
       ],
-      "researchPRRun": 40045819013,
-      "researchPushRun": 40045814644,
-      "researchPushScopeOnly": true
+      "nativeRuns": [
+        40050023101,
+        40050026739
+      ]
     },
-    "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214"
+    "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8"
   },
   "previousVerificationReceipt": {
     "runId": "continuum-stop-ci-20261024T003810143Z",

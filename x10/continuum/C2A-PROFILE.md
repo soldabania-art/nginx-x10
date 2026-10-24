@@ -491,3 +491,29 @@ actualTLS heldouts2. Core21/process7/C1 27 и native20/20 прошли. Native
 beforeguard smoke — в [evidence](../evidence/continuum-c2a-peer-close.json). Exact implementation CI pending.
 Далее — truncated/partial closure и sequence/key usage gates перед C2b.
 Export/import, actual TLS-code change и native NGINX migration не реализованы.
+
+## Continuum C2a: truncated record body EOF
+
+Добавлен один actualTLS case: authenticated handshake, одна ciphertext record
+от Nodeclient, relay передаёт только body prefix и удерживает хвост. Первый
+реальный READ даёт WANT_READ с partialbuffer и две immutable refusal snapshots.
+Затем relay отбрасывает хвост и делает FIN только backendTCPleg. Повторяется
+тот же READ с прежними buffer/length/sentinel: raw0/SSL_ERROR_SSL1/reason294,
+plaintext0; ещё две refused snapshots. После fatal возврата только metadata
+и cleanup, без TLS I/O/shutdown. RetryREAD остаётся bookkeeping, не разрешением
+повтора после fatal. IGNORE_UNEXPECTED_EOF/quiet shutdown выключены.
+
+Relay проверяет exact ciphertext record size и tail counts; только новый
+case ограничен payload<=16384. Клиент остаётся жив, backend reads paused
+изолируют fatalalert/RSTrace без подавления ошибок. Усечённый record сервером
+не аутентифицирован. wire=null: fullwire/gracefulclosure/serverFIN не заявлены;
+sequence metadata не wirevalidated. Это relay faultinjection, не прямой
+обрыв клиентского соединения и не migration.
+
+Локально21/21=18ordinaryTLS+2signals+1source; независимые actualTLS heldouts2,
+ещё2 noTLS optioncontrols отдельно. Core21/process7/C127 и native20/20 прошли.
+Prior20bytes, generic ledger/probe/oracle и499 native files сохранены.
+[Очищенные evidence](../evidence/continuum-c2a-truncated-body.json) сохраняют identities/cleanup/границы и
+setup corrections. Exact implementation CI pending. Далее — ограниченный
+sequence/key usage gate для quiescent profile перед C2b; остальные
+truncation/RST variants unsupported. Export/import и TLS-code change не готовы.
