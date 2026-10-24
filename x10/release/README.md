@@ -41,3 +41,19 @@ exit1 — отказ. Вывод сохраняет `scope: declared-record-vali
 записи. Checker не скачивает evidence, не запускает пакет, не удостоверяет подпись
 и не даёт разрешение на release/deployment. Принятие G8 требует независимых
 фактических проверок опубликованной поставки по контракту.
+
+
+## Проверка exact CI контракта G1
+
+Контракт и declaration checker implementation `80629638` прошли отдельный
+обязательный hosted step:35 checks на Node22 в каждом из двух native runs,
+плюс20/20 native groups. [Квитанция](../evidence/v1-release-contract-hosted.json)
+сохраняет фактические jobs/artifacts, skips и границы доказательства.
+Research push пропустил runtime; это не новая приёмка исследовательского кода.
+
+Это приёмка формы и согласованности деклараций. Профиль остаётся
+DECLARED_NOT_ACCEPTED: service, clean nonroot target,60-minute soak, постоянный
+alpha/V1 archive и весь опубликованный operator path ещё требуют G2–G8.
+Следующий пакет — настоящий upstream/readiness и независимый extracted-bundle
+маршрут G2. Валидный JSON по-прежнему не подтверждает подлинность evidence
+и не разрешает выпуск или переход к другому продукту.

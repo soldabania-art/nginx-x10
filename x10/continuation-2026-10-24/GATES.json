@@ -18,7 +18,7 @@
   "portfolio_stage": "ACTIVE_FOR_V1",
   "transition_target": "AVERKRON",
   "transition_requires": "All G0-G8 accepted at an exact published V1 ref, then G9 recorded; alpha alone is insufficient.",
-  "contract_status": "G1 bounded contract and declaration validator locally recorded; exact new CI pending. No V1 runtime/release acceptance.",
+  "contract_status": "G1 contract/declaration validator local and exact hosted checks verified. Supported target runtime and Production V1 release remain NOT_ACCEPTED; proceed through G2-G8.",
   "snapshot": {
     "observed_at_utc": "2026-10-24T10:37:54Z",
     "active_branch": "x10-continuum-development",
@@ -173,7 +173,7 @@
     {
       "id": "G1",
       "name": "Record bounded Production V1 contract",
-      "status": "LOCAL_CONTRACT_AND_VALIDATOR_VERIFIED_HOSTED_PENDING",
+      "status": "CONTRACT_AND_VALIDATOR_EXACT_HOSTED_VERIFIED",
       "depends_on": [
         "G0"
       ],
@@ -200,7 +200,9 @@
         "checker": "x10/release/check-release-record.mjs",
         "evidence": "x10/evidence/v1-release-contract.json",
         "runtimeAcceptance": false,
-        "exactHostedAcceptance": "PENDING"
+        "exactHostedAcceptance": "SUCCESS_DECLARATION_VALIDATION_ONLY",
+        "implementationCommit": "80629638e1d1c7635f76e655760c9db987ea82ea",
+        "hostedEvidence": "x10/evidence/v1-release-contract-hosted.json"
       }
     },
     {
@@ -544,8 +546,15 @@
   "g1Checkpoint": {
     "recordedAtUTC": "2026-10-24T11:38:00.122601Z",
     "runId": "x10-v1-contract-20261024T112328Z",
-    "nextConcreteTask": "Verify exact resulting G1 implementation CI first: the native main job must execute the new release-record authored/heldout step and required native/Unix/feature-off/package checks; scope success is not acceptance. Then implement G2: correct the stale Quickstart to the accepted exact release, provide a real upstream with application readiness, replay the extracted bundle independently and publish a permanent versioned Local Alpha. G3-G8 service, TLS, package rollback/recovery, security, frozen soak and independent permanent V1 acceptance remain mandatory. Do not resume Continuum R&D or activate another product by default.",
+    "nextConcreteTask": "Implement G2 Local Alpha: correct the stale Quickstart to an accepted exact release, add a real upstream with application readiness, independently replay the extracted bundle and publish a permanent versioned alpha archive. Keep G3-G8 operated service/proxy/TLS, config and package rollback/recovery, security, frozen60minute soak and independent permanent Production V1 acceptance open. Alpha does not activate another product; Continuum R&D remains preserved and deferred under the current V1 priority.",
     "productionAccepted": false,
-    "fullScopePreserved": true
+    "fullScopePreserved": true,
+    "hostedReceipt": {
+      "runId": "x10-v1-contract-ci-20261024T114216Z",
+      "implementationCommit": "80629638e1d1c7635f76e655760c9db987ea82ea",
+      "evidence": "x10/evidence/v1-release-contract-hosted.json",
+      "productionAccepted": false,
+      "researchPushRuntime": "SKIPPED_NOT_NEW_RUNTIME_ACCEPTANCE"
+    }
   }
 }

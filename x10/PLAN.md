@@ -688,3 +688,21 @@ Next verify that exact CI, then G2: corrected pinned Quickstart, real upstream
 and application readiness, independent extracted-bundle lifecycle and permanent
 versioned Local Alpha. Alpha alone does not close V1 or activate AVERKRON. The
 full native compatibility matrix and deferred Continuum remain preserved.
+
+
+### Exact CI: G1 contract and release-record declarations
+
+Implementation `80629638e1d1c7635f76e655760c9db987ea82ea` passed both
+required native CI runs. Each actually executed35 authored/held-out release-record
+checks on Node22 and20 native aggregate groups. Actual native artifacts and
+ZIP digests were checked; counts and checkout/event identities are separate in
+[evidence](evidence/v1-release-contract-hosted.json). Research push runtime was
+SKIPPED (scope-only success), not a new48-case acceptance; PR research actually
+executed21core/7process/27C1/48C2a. No runtime sources changed in this receipt.
+
+This verifies G1 definitions and structural declaration checks, not evidence
+authenticity or target service/runtime acceptance. Profile remains
+DECLARED_NOT_ACCEPTED. G2 permanent Local Alpha and G3–G8 proxy/TLS/service,
+package rollback/recovery, security, frozen60minute soak and independent
+Production V1 acceptance remain open. Next G2 implements a real application
+upstream/readiness and independently replayed, permanently published package.

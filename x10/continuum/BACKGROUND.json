@@ -3,34 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-v1-contract-ci-20261024T114216Z",
-    "owner": "codex-coordinator-v1-contract-ci",
-    "baseCommit": "80629638e1d1c7635f76e655760c9db987ea82ea",
-    "acquiredAtUTC": "2026-10-24T11:42:16.000Z",
-    "expiresAtUTC": "2026-10-24T12:08:28.000Z",
-    "task": "Verify exact new release-record Node22 step, native compatibility and research CI",
-    "verification": {
-      "implementationCommit": "80629638e1d1c7635f76e655760c9db987ea82ea",
-      "nativeRuns": [
-        40090886680,
-        40090891044
-      ],
-      "researchRuns": [
-        40090886666,
-        40090891056
-      ]
-    },
-    "allowedFiles": [
-      "x10/STATUS.md",
-      "x10/PLAN.md",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/continuum/BACKGROUND.json",
-      "x10/release/README.md",
-      "x10/evidence/v1-release-contract-hosted.json",
-      "x10/review/v1-release-contract-hosted-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1080,17 +1053,28 @@
       "migration": false
     },
     "v1ContractLocal": {
-      "state": "local-definition-and-declaration-validation-only-hosted-pending",
+      "state": "local-and-exact-hosted-definition-validation-only",
       "evidence": "x10/evidence/v1-release-contract.json",
       "profile": "x10/release/profile.json",
       "releaseContract": "x10/release/RELEASE-CONTRACT.md",
       "runtimeAccepted": false,
       "productionAccepted": false,
       "resultIdentityRule": "Result commit whose single parent is publicationParent in evidence."
+    },
+    "v1ContractHosted": {
+      "state": "success-contract-and-declaration-validator-only",
+      "implementationCommit": "80629638e1d1c7635f76e655760c9db987ea82ea",
+      "evidence": "x10/evidence/v1-release-contract-hosted.json",
+      "releaseRecordTestsEachNativeRun": 35,
+      "nativeGroupsEachRun": 20,
+      "researchPushRuntimeSkipped": true,
+      "researchPRRuntimeChecked": true,
+      "targetRuntimeAccepted": false,
+      "productionAccepted": false
     }
   },
   "pendingVerification": [
-    "Verify exact resulting G1 release-contract implementation CI: native main job must execute release-record tests and existing native/Unix/feature-off/package checks. Local structural validation is not authenticated evidence, Node22 clean-host acceptance or Production V1.",
+    "G1 contract/declaration validation is exact-hosted verified only. G2 permanent Local Alpha replay and G3-G8 nonroot target service/TLS/rollback/recovery/security/soak/Production V1 acceptance remain open.",
     "Held-source API metadata exact CI accepted only for bounded observations. Actual required ALPN/Finished values and restricted authentication-class state still need protected preservation and reviewed unsupported API semantics before target reconstruction.",
     "Private synthetic capture-TU ASan/UBSan8 controls passed with detect_leaks=0; LeakSanitizer detect_leaks=1 was unavailable due owned-process /proc/task access. Not a leak-detection PASS or full syscall-failure matrix.",
     "Retained copy is source-only record material, not a complete reusable semantic TLS capsule. Full semantic/API inventory and protection-syscall failure matrix remain unaccepted; original SSL/EVP heap is not covered. SIGKILL/crash explicit wipe remains unknown.",
@@ -1106,13 +1090,8 @@
   ],
   "nextTasks": [
     {
-      "id": "G1-exact-CI",
-      "state": "pending-exact-resulting-implementation",
-      "goal": "Verify required new release-record test step and native compatibility jobs."
-    },
-    {
       "id": "G2",
-      "state": "next-after-G1-verification",
+      "state": "next-implementation-package",
       "goal": "Real upstream/readiness and independent permanent Local Alpha package path."
     },
     {
@@ -1374,7 +1353,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "Verify exact resulting G1 implementation CI first: the native main job must execute the new release-record authored/heldout step and required native/Unix/feature-off/package checks; scope success is not acceptance. Then implement G2: correct the stale Quickstart to the accepted exact release, provide a real upstream with application readiness, replay the extracted bundle independently and publish a permanent versioned Local Alpha. G3-G8 service, TLS, package rollback/recovery, security, frozen soak and independent permanent V1 acceptance remain mandatory. Do not resume Continuum R&D or activate another product by default.",
+  "nextConcreteTask": "Implement G2 Local Alpha: correct the stale Quickstart to an accepted exact release, add a real upstream with application readiness, independently replay the extracted bundle and publish a permanent versioned alpha archive. Keep G3-G8 operated service/proxy/TLS, config and package rollback/recovery, security, frozen60minute soak and independent permanent Production V1 acceptance open. Alpha does not activate another product; Continuum R&D remains preserved and deferred under the current V1 priority.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1582,11 +1561,12 @@
     "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G1_LOCAL_CONTRACT_HOSTED_PENDING",
+    "currentGate": "G2_NEXT_NOT_RELEASED",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
-    "researchRuntimeChangedByThisPublication": false
+    "researchRuntimeChangedByThisPublication": false,
+    "g1HostedEvidence": "x10/evidence/v1-release-contract-hosted.json"
   },
   "lastV1DevelopmentPass": {
     "runId": "x10-v1-contract-20261024T112328Z",
@@ -1614,5 +1594,14 @@
     },
     "newPurchases": false,
     "productionDeployChanged": false
+  },
+  "lastV1VerificationReceipt": {
+    "runId": "x10-v1-contract-ci-20261024T114216Z",
+    "implementationCommit": "80629638e1d1c7635f76e655760c9db987ea82ea",
+    "publicationParent": "b209f12330b05ddce00941bf51e386c79e18434a",
+    "evidence": "x10/evidence/v1-release-contract-hosted.json",
+    "ledger": "x10/review/v1-release-contract-hosted-ledger.json",
+    "runtimeSourceChanged": false,
+    "productionAccepted": false
   }
 }
