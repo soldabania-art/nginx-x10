@@ -32,8 +32,10 @@ int x10_capture_slot_check(const X10_CAPTURE_SLOT *slot, uint64_t generation,
 int x10_capture_slot_discard(X10_CAPTURE_SLOT *slot, uint64_t generation,
     const SSL *ssl, const X10_PROBE_LEDGER *ledger, const char nonce[33],
     const volatile sig_atomic_t *interrupted, X10_CAPTURE_RESULT *result);
-/* Internal abort cleanup is allowed after expiry/interruption. It is
- * idempotent, revokes before touching the mapping, and latches any failure. */
+/* Internal abort cleanup is allowed after expiry/interruption. It revokes
+ * before touching the mapping and latches any failure permanently. A failed
+ * unmap keeps ownership for another bounded cleanup/free attempt; the slot
+ * remains failed even if that later destruction reclaims the mapping. */
 int x10_capture_slot_cleanup(X10_CAPTURE_SLOT *slot,
     X10_CAPTURE_RESULT *result);
 /* Free only when the hold has ended and no caller can use the slot again.

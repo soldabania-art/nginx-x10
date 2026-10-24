@@ -719,6 +719,7 @@ test('synthetic keylog source and failed decode buffers are scrubbed under stric
 });
 
 import { retainedCapsuleCases, checkRetainedCapsuleLifetime } from './retained-capsule.test.mjs';
+import { checkCaptureProtection } from './capture-protection.test.mjs';
 
 // Source-only protected lifetime; no importer, ownership or TLS-code migration.
 for (const { kind, name } of retainedCapsuleCases) {
@@ -726,3 +727,7 @@ for (const { kind, name } of retainedCapsuleCases) {
     assert.equal((await checkRetainedCapsuleLifetime({ kind })).passed, true);
   });
 }
+
+test('synthetic production capture TU refuses protection faults and retries failed mapping cleanup', { timeout: 650000 }, async () => {
+  assert.equal((await checkCaptureProtection()).passed, true);
+});

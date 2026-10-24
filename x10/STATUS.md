@@ -1125,3 +1125,27 @@ semantic/API inventory и protection-syscall failure matrix остаются с�
 gates. LSan unavailable не считается PASS; SIGKILL/crash wipe неизвестен.
 Exclusive ownership, distinct TLS code, actual old-code exit и native NGINX
 continuation по-прежнему не реализованы. Runtime sources в receipt не менялись.
+
+
+## Continuum: отказы защиты памяти и повторная очистка
+
+В source-only capture исправлен воспроизведённый отказ повторного уничтожения:
+после failed munmap прежний FAILED slot больше не пропускает cleanup оставшейся
+mapping. При combined restore-RW/unmap failure неочищенная копия остаётся
+locked. Успешный unlock отмечается, поэтому повторный unmap не повторяет его.
+Любой прежний отказ навсегда запрещает успешный discard/resume, даже если
+следующая bounded cleanup попытка действительно очистила и освободила память.
+
+Авторские контрпримеры на неизменённом production TU:2/2 FAIL, кандидат2/2 PASS;
+независимые5 synthetic heldouts прошли plain и ASan/UBSan, leak detection off.
+Это не actualTLS admission и не перенос. Публичная матрица:18 synthetic cases,
+plain18/18 и ASan/UBSan18/18 (те же cases),4 вложенных guard/fork controls.
+Финальный frozen C2a44/44, core21/process7/C1 27; independent2 actualTLS
+heldouts прошли с отдельной fresh binary identity. Native в изолированной
+копии20/20, controller77, official1083 strictPASS/25SKIP/1expectedTODO-fail.
+Три прежних workspace native отказа12/20,12/20,13/20 из-за observed execute-mode
+drift сохранены; isolated PASS не объясняет причину и не исправляет native код.
+Exact implementation CI нового cleanup fix pending. Результаты и границы — в
+[evidence](evidence/continuum-capture-protection.json).
+Persistent failure через final free требует terminal source exit; explicit wipe
+не гарантирован. Full semantic/API inventory, importer и migration не реализованы.

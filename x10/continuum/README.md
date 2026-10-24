@@ -718,3 +718,16 @@ semantic/API inventory и protection-syscall failure matrix остаются с�
 gates. LSan unavailable не считается PASS; SIGKILL/crash wipe неизвестен.
 Exclusive ownership, distinct TLS code, actual old-code exit и native NGINX
 continuation по-прежнему не реализованы. Runtime sources в receipt не менялись.
+
+
+## Continuum: защита памяти при отказах
+
+Source-only capture теперь повторяет уничтожение FAILED mapping без
+восстановления authority и не снимает lock с неочищенных copied bytes.
+[Контракт](SOURCE-CAPTURE.md) и
+[проверки](../evidence/continuum-capture-protection.json)
+отделяют synthetic production-TU fault controls от настоящих TLS exchanges.
+Локально C2a44,18 synthetic fault cases, independent2 actualTLS и native20
+прошли; неблагоприятные попытки сохранены, exact hosted CI нового кода pending.
+Semantic/API inventory остаётся следующим gate,
+не разрешением на importer, ownership transfer или migration.

@@ -160,12 +160,14 @@ int x10_capture_slot_cleanup(X10_CAPTURE_SLOT *slot, X10_CAPTURE_RESULT *out)
 
     if (slot == NULL) { if (out != NULL) memset(out, 0, sizeof(*out)); return 0; }
     if (slot->state == X10_CAPTURE_CLEARED
-        || slot->state == X10_CAPTURE_FAILED) {
+        || (slot->state == X10_CAPTURE_FAILED && slot->mapping == NULL)) {
         if (out != NULL) *out = slot->result;
         return !slot->cleanup_failed;
     }
     /* Revoke before any system call. Expiry, interruption and bad decisions
-     * do not bypass destruction, and cannot turn cleanup into a resume grant. */
+     * do not bypass destruction, and cannot turn cleanup into a resume grant.
+     * A failed unmap retains ownership for a later bounded cleanup/free call;
+     * its latched failure can never become a successful operation. */
     slot->state = X10_CAPTURE_DESTROYING;
     if (slot->mapping != NULL) {
         if (slot->copied && !slot->writable) {
@@ -180,8 +182,13 @@ int x10_capture_slot_cleanup(X10_CAPTURE_SLOT *slot, X10_CAPTURE_RESULT *out)
             if (nonzero == 0) slot->result.cleansed = 1;
             else slot->cleanup_failed = 1;
         } else if (slot->copied) slot->cleanup_failed = 1;
-        if (slot->locked && munlock(slot->page, slot->size) != 0)
-            slot->cleanup_failed = 1;
+        /* If restoring RW failed, the copied bytes are still live. Keep their
+         * lock until unmap rather than expose them to paging on a second fault.
+         * A successful unmap releases locks itself; no wipe is claimed. */
+        if (slot->locked && (!slot->copied || slot->result.cleansed)) {
+            if (munlock(slot->page, slot->size) == 0) slot->locked = 0;
+            else slot->cleanup_failed = 1;
+        }
         if (munmap(slot->mapping, slot->size * 3) == 0) {
             slot->result.unmapped = 1;
             slot->mapping = NULL; slot->page = NULL;

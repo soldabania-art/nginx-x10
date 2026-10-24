@@ -158,3 +158,26 @@ budget enforcement or later KeyUpdate semantics. Those full semantic/API gates,
 exclusive target I/O ownership, distinct TLS code, source retirement and native
 NGINX integration remain unaccepted. Protections still cover only this extra
 mapping, not the original SSL/EVP heap, compiler temporaries or Node oracle.
+
+## Failed destruction and bounded retry
+
+An unmap failure no longer makes the owned mapping unreachable to a later
+cleanup call. A FAILED slot with a remaining mapping may retry destruction,
+including the existing terminal free call. Its failure stays latched: later
+zeroing/unmapping cannot grant READY, a successful discard or source resume.
+There is no retry loop and no retry beyond the trusted caller's bounded calls.
+
+If restoring write access fails after a copy, cleanup keeps that nonzero page
+locked while attempting unmap. It does not call munlock before a verified
+whole-page cleanse. Successful unmap itself removes the mapping and its lock;
+that does not prove explicit wiping. A successful munlock clears the internal
+ownership flag so an unmap retry does not repeat an already completed unlock.
+
+The unchanged implementation was shown to skip a second unmap after one
+injected failure and to unlock uncleaned bytes after a combined restore/unmap
+failure. These are synthetic production-translation-unit fault controls, not
+live TLS admission or migration tests. The bounded fix preserves permanent
+failure and mandatory terminal source exit. Persistent OS failure, crash or
+SIGKILL still cannot promise explicit erasure; free is best-effort, not a
+general recoverable allocator. Exact cases and identities belong in the
+[protection evidence](../evidence/continuum-capture-protection.json).
