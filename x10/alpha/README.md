@@ -261,3 +261,15 @@ The generated systemd recipe does not automatically invoke this command yet.
 Actual user-manager startup/stop/restart, readiness cancellation and failed-start
 cleanup, slow drain, TLS and published-file target acceptance remain gates.
 G3 and Production V1 are not completed by this helper.
+
+
+## Exact hosted wait-bind compatibility
+
+Implementation `3b293c57` passed exact hosted native checks, including the
+expanded installed alpha cases. [Receipt](../evidence/g3-wait-bind-hosted.json)
+keeps actual artifacts and build identities distinct from source events.
+This verifies the helper's narrow compatibility, not automatic systemd readiness
+or service/TLS acceptance. The local first native19/20 observer ESRCH remains
+unresolved; later CI success is neither a local repair nor a historical fix.
+Which captured-process observation failed remains unknown. Late/cancelled bind
+may have committed, and the inspection/runbook restrictions above still apply.

@@ -263,7 +263,7 @@
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "PARTIAL_WAIT_BIND_LOCAL_CHECKPOINT_EXACT_CI_PENDING_RUNTIME_TLS",
+      "status": "PARTIAL_WAIT_BIND_EXACT_HOSTED_VERIFIED_LOCAL_OBSERVER_FAILURE_OPEN",
       "depends_on": [
         "G2"
       ],
@@ -319,11 +319,15 @@
         "publicationParent": "970f5deeb6113a736910e1617abb2e90421e5389",
         "evidence": "x10/evidence/g3-wait-bind.json",
         "scope": "Installed bounded startup wait-bind command; no automatic user-unit activation",
-        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+        "exactHostedAcceptance": "SUCCESS_SCOPED_WAIT_BIND_COMPATIBILITY_ONLY",
         "serviceAccepted": false,
         "readinessAutomated": false,
         "tlsAccepted": false,
-        "productionAccepted": false
+        "productionAccepted": false,
+        "implementationCommit": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+        "hostedEvidence": "x10/evidence/g3-wait-bind-hosted.json",
+        "completeLocalNativeAggregateAccepted": false,
+        "localObserverDiagnosisOpen": true
       }
     },
     {
@@ -686,5 +690,17 @@
     "targetUserManagerAccepted": false,
     "tlsAccepted": false,
     "productionAccepted": false
+  },
+  "g3WaitBindHostedCheckpoint": {
+    "implementationCommit": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+    "evidence": "x10/evidence/g3-wait-bind-hosted.json",
+    "nextConcreteTask": "First reproduce and diagnose the retained local native observer ESRCH with a bounded scoped counterexample under a new lease; make an observer fix only if that counterexample establishes the required change. Do not rerun an unchanged expensive aggregate as diagnosis. Later exact hosted native success does not repair the local19/20 failure or prove a historical fix or no causal relationship. Which captured-process observation failed and its exact cause remain unknown; ESRCH alone does not establish disappearance. The held old worker had been observed stopped before the observer call, and the fixture had not yet issued its own SIGCONT. Installed wait-bind implementation 3b293c570f9a4cf80e06ba6887f0799c39b755eb is exact-hosted verified narrowly, not automatic systemd health or actual service acceptance. Then continue verified TLS CA/hostname and actual nonroot user-manager startup/stop/restart, failed-start/drain/orphan gates. G2 permanent distribution/published-file replay remain blocked by available Release/asset writer capabilities; do not bypass credentials or permissions. G3-G8/Production V1 and full deferred Continuum remain open.",
+    "completeLocalNativeAggregateAccepted": false,
+    "localObserverDiagnosisOpen": true,
+    "serviceAccepted": false,
+    "targetUserManagerAccepted": false,
+    "tlsAccepted": false,
+    "productionAccepted": false,
+    "fullScopePreserved": true
   }
 }

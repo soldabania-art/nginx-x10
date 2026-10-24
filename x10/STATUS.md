@@ -1432,3 +1432,27 @@ manager. Explicit operator bind or wait-bind remains necessary. G2 permanent
 release/published-file replay, verified TLS, real service failure/drain/orphan
 paths, G4-G8 and Production V1 remain open. Full native and deferred Continuum
 scope remain preserved.
+
+
+### Exact CI: installed wait-bind; local observer failure retained
+
+Implementation `3b293c570f9a4cf80e06ba6887f0799c39b755eb` passed actual
+exact native CI, including the expanded installed alpha checks and required
+Unix/archive/feature-off compatibility. [Receipt](evidence/g3-wait-bind-hosted.json)
+records jobs/steps, downloaded ZIP digests, actual build identities, counts and
+research runtime skips. No runtime sources changed or runtime reruns were
+requested in this receipt.
+
+This narrow hosted acceptance does not repair the local first final native19/20
+ESRCH failure. Alpha45/controller86 positives, earlier test/setup failures and
+local Unix EPERM remain separate evidence. Which captured-process observation
+failed and its exact cause remain unknown; ESRCH alone is not disappearance
+proof. The held old worker had previously been observed stopped, and the fixture
+had not yet issued its own SIGCONT. Stable source/binary/mode and later CI success
+do not prove no causal relationship or a historical observer fix. The next gate
+is a bounded counterexample and scoped fix only if established under new lease;
+no unchanged expensive aggregate rerun substitutes for diagnosis.
+
+Automatic unit readiness, real nonroot service/TLS, failure/drain/orphan paths,
+G2 permanent distribution/published-file replay, G4-G8 and Production V1 remain
+open. Full native and deferred Continuum scope remain preserved.
