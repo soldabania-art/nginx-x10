@@ -717,3 +717,12 @@ test('synthetic keylog source and failed decode buffers are scrubbed under stric
   assert.equal(result.decodedFailureWipeVerified, true);
   assert.equal(result.wholeProcessWipeClaimed, false);
 });
+
+import { retainedCapsuleCases, checkRetainedCapsuleLifetime } from './retained-capsule.test.mjs';
+
+// Source-only protected lifetime; no importer, ownership or TLS-code migration.
+for (const { kind, name } of retainedCapsuleCases) {
+  test(name, { timeout: 30000 }, async () => {
+    assert.equal((await checkRetainedCapsuleLifetime({ kind })).passed, true);
+  });
+}

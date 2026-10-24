@@ -228,12 +228,24 @@ function scope(milliseconds, externalSignal) {
   return { signal: controller.signal, close() { clearTimeout(timer); externalSignal?.removeEventListener('abort', cancel); process.removeListener('SIGTERM', term); process.removeListener('SIGINT', int); } };
 }
 async function reap(children) {
-  const work = [];
-  for (const child of children) {
-    work.push(bounded(new Promise(resolve => child.once('close', resolve)), 'cleanup_process_timeout', 2000));
-    child.kill('SIGKILL');
-  }
-  await Promise.all(work);
+  const forcedChildren = new Set();
+  await Promise.all([...children].map(async child => {
+    // This cleanup budget must not inherit the aborted operation signal.
+    // A handled SIGTERM needs ordinary native control flow to clear a live
+    // protected copy. Escalation is process cleanup, never proof of a wipe.
+    const closed = new Promise(resolve => child.once('close', resolve));
+    child.kill('SIGTERM');
+    let timer;
+    const graceful = await Promise.race([closed.then(() => true), new Promise(resolve => {
+      timer = setTimeout(() => resolve(false), 1000);
+    })]).finally(() => clearTimeout(timer));
+    if (!graceful) {
+      forcedChildren.add(child);
+      child.kill('SIGKILL');
+      await bounded(closed, 'cleanup_process_timeout', 2000);
+    }
+  }));
+  return { forcedChildren };
 }
 
 let harness;
@@ -603,17 +615,17 @@ function holdDecision(input) {
   const descriptors = Object.getOwnPropertyDescriptors(input);
   const actionDescriptor = descriptors.action;
   assertFixture(actionDescriptor && Object.hasOwn(actionDescriptor, 'value'), 'live_hold_decision');
-  const capture = actionDescriptor.value === 'capture';
+  const capture = ['capture', 'capture-held'].includes(actionDescriptor.value);
   const expectedKeys = ['action', 'nonce', 'callSerial', ...(capture ? ['budget'] : [])];
   assertFixture(keys.length === expectedKeys.length && keys.every(key => expectedKeys.includes(key)), 'live_hold_decision');
   for (const key of ['action', 'nonce', 'callSerial']) assertFixture(Object.hasOwn(descriptors[key], 'value') && descriptors[key].enumerable, 'live_hold_decision');
   const { action: { value: action }, nonce: { value: nonce }, callSerial: { value: serial } } = descriptors;
-  assertFixture(['continue', 'abort', 'capture'].includes(action) && typeof nonce === 'string' && /^[0-9a-f]{32}$/.test(nonce) &&
+  assertFixture(['continue', 'abort', 'capture', 'capture-held'].includes(action) && typeof nonce === 'string' && /^[0-9a-f]{32}$/.test(nonce) &&
     typeof serial === 'string' && /^[1-9][0-9]{0,19}$/.test(serial) && BigInt(serial) <= 0xffffffffffffffffn, 'live_hold_decision');
   // Validly shaped stale values deliberately reach C's independent binding check.
   if (capture) assertFixture(Object.hasOwn(descriptors.budget, 'value') && descriptors.budget.enumerable, 'live_hold_decision');
   return { action, nonce, callSerial: serial, budget: capture ? descriptors.budget.value : undefined,
-    line: `${action === 'continue' ? 'CONTINUE' : capture ? 'CAPTURE' : 'ABORT'} ${nonce} ${serial}\n` };
+    line: `${action === 'continue' ? 'CONTINUE' : action === 'capture-held' ? 'CAPTURE_HOLD' : capture ? 'CAPTURE' : 'ABORT'} ${nonce} ${serial}\n` };
 }
 
 function checkedCaptureEvent(message, nonce, callSerial) {
@@ -627,6 +639,66 @@ function checkedCaptureEvent(message, nonce, callSerial) {
     && flags.every(key => message[key] === true) && message.secretBytes === 64
     && message.ivBytes === 24 && message.sequenceBytes === 16, 'live_capture_event_schema');
   return structuredClone(message);
+}
+
+function checkedCapsuleEvent(message, event, nonce, callSerial, generation) {
+  const ready = event === 'capsule-ready';
+  const flags = ['captured', 'locked', 'dontDump', 'dontFork', 'readOnly', 'sourceUnchanged',
+    ...(ready ? [] : ['cleansed', 'unmapped'])];
+  const keys = ['event', 'scenario', 'nonce', 'callSerial', 'generation', ...flags,
+    'secretBytes', 'ivBytes', 'sequenceBytes', ...(ready ? ['deadlineMilliseconds'] : [])];
+  assertFixture(message?.event === event && message.scenario === 'quiescent-live-hold'
+    && Object.keys(message).sort().join(',') === keys.sort().join(',')
+    && message.nonce === nonce && message.callSerial === callSerial
+    && typeof message.generation === 'string' && /^[1-9][0-9]{0,19}$/.test(message.generation)
+    && BigInt(message.generation) <= 0xffffffffffffffffn
+    && (generation === undefined || message.generation === generation)
+    && flags.every(key => message[key] === true) && message.secretBytes === 64
+    && message.ivBytes === 24 && message.sequenceBytes === 16
+    && (!ready || Number.isSafeInteger(message.deadlineMilliseconds)
+      && message.deadlineMilliseconds > 0 && message.deadlineMilliseconds <= 3000), 'live_capsule_event_schema');
+  return structuredClone(message);
+}
+
+function capsuleDecision(input) {
+  assertFixture(input !== null && typeof input === 'object' && !types.isProxy(input)
+    && [Object.prototype, null].includes(Object.getPrototypeOf(input)), 'live_capsule_decision');
+  const expected = ['action', 'nonce', 'callSerial', 'generation'];
+  const keys = Reflect.ownKeys(input), descriptors = Object.getOwnPropertyDescriptors(input);
+  assertFixture(keys.length === expected.length && keys.every(key => expected.includes(key))
+    && expected.every(key => descriptors[key] && Object.hasOwn(descriptors[key], 'value')
+      && descriptors[key].enumerable), 'live_capsule_decision');
+  const action = descriptors.action.value, nonce = descriptors.nonce.value;
+  const callSerial = descriptors.callSerial.value, generation = descriptors.generation.value;
+  const serial = value => typeof value === 'string' && /^[1-9][0-9]{0,19}$/.test(value)
+    && BigInt(value) <= 0xffffffffffffffffn;
+  assertFixture(['discard', 'abort'].includes(action) && typeof nonce === 'string'
+    && /^[0-9a-f]{32}$/.test(nonce) && serial(callSerial) && serial(generation), 'live_capsule_decision');
+  // Well-shaped stale values reach the independent native binding check.
+  return { action, line: `${action === 'discard' ? 'DISCARD' : 'ABORT'} ${nonce} ${callSerial} ${generation}\n` };
+}
+
+async function capsuleCleanupReceipt(native, expected, reaped) {
+  const refused = () => freezePublic({ acknowledged: false,
+    released: native.messages.some(message => message.event === 'hold-released'),
+    nativeClosed: native.child.exitCode !== null || native.child.signalCode !== null,
+    forcedTermination: native.child.signalCode === 'SIGKILL' || reaped?.forcedChildren.has(native.child) === true });
+  try {
+    await bounded(native.closed, 'cleanup_native_close_timeout', 2000);
+    assertFixture(native.validOutput(), 'live_capsule_cleanup_channel');
+    const readyEvents = native.messages.filter(message => message.event === 'capsule-ready');
+    const clearedEvents = native.messages.filter(message => message.event === 'capsule-cleared');
+    assertFixture(readyEvents.length === 1 && clearedEvents.length === 1
+      && native.messages.indexOf(readyEvents[0]) < native.messages.indexOf(clearedEvents[0]), 'live_capsule_cleanup_order');
+    const ready = checkedCapsuleEvent(readyEvents[0],
+      'capsule-ready', expected.nonce, expected.callSerial);
+    const cleared = checkedCapsuleEvent(clearedEvents[0],
+      'capsule-cleared', expected.nonce, expected.callSerial, ready.generation);
+    const status = refused();
+    if (status.released || status.forcedTermination) return status;
+    return freezePublic({ ...cleared, acknowledged: true, released: false,
+      nativeClosed: true, forcedTermination: false });
+  } catch { return refused(); }
 }
 
 function checkedRetryEvent(message, event, scenario, payloadBytes) {
@@ -782,9 +854,12 @@ function checkedImmutablePair(first, second) {
 
 /** Observe only; controlled refusal cases intentionally terminate the fixture
  * without claiming clean TLS shutdown, state export, migration or ownership. */
-export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = ['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario) ? 65536 : 257, fragmentPrefix, onLiveHold, signal: externalSignal } = {}) {
+export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = ['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario) ? 65536 : 257, fragmentPrefix, onLiveHold, onCapsuleHold, signal: externalSignal } = {}) {
   const liveHoldScenario = scenario === 'quiescent-live-hold';
-  assertFixture(liveHoldScenario ? typeof onLiveHold === 'function' && (externalSignal === undefined || externalSignal instanceof AbortSignal) : onLiveHold === undefined && externalSignal === undefined, 'live_hold_options');
+  assertFixture(liveHoldScenario ? typeof onLiveHold === 'function'
+    && (onCapsuleHold === undefined || typeof onCapsuleHold === 'function')
+    && (externalSignal === undefined || externalSignal instanceof AbortSignal)
+    : onLiveHold === undefined && onCapsuleHold === undefined && externalSignal === undefined, 'live_hold_options');
   assertFixture(SCENARIOS.includes(scenario) && Number.isInteger(payloadBytes) && payloadBytes >= 2 && payloadBytes <= 65536, 'scenario_options');
   if (['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario)) assertFixture(payloadBytes === 65536, 'write_retry_payload_size');
   if (scenario === 'truncated-body-eof') assertFixture(payloadBytes <= 16384, 'truncated_payload_size');
@@ -814,6 +889,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
   let directory;
   let relay;
   let client;
+  let native, capsuleExpected, scenarioFailure;
   try {
     await verifyHarness(owned.signal);
     directory = await mkdtemp(join(tmpdir(), 'x10-c2a-pki-'));
@@ -823,7 +899,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     const cert = await makeCertificates(directory, children, owned.signal, harness.build.privatePaths.openssl);
     const challenge = randomBytes(16);
     const payload = Buffer.from(Array.from({ length: payloadBytes }, (_, i) => ((i * 29 + 7) & 255) ^ challenge[i % 16]));
-    const native = nativeChannel(harness.binary, ['--cert', cert.cert, '--key', cert.key, '--scenario', scenario,
+    native = nativeChannel(harness.binary, ['--cert', cert.cert, '--key', cert.key, '--scenario', scenario,
       '--bytes', String(payloadBytes), '--challenge', challenge.toString('hex')], children, owned.signal);
     const listening = await native.wait('listening');
     assertFixture(Number.isInteger(listening.port) && listening.port >= 1 && listening.port <= 65535, 'native_port');
@@ -1048,8 +1124,9 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       const decision = await Promise.race([bounded(callback, 'live_hold_callback_timeout', callbackMilliseconds, owned.signal), refused]);
       assertFixture(native.child.exitCode === null && !native.child.killed && client.transportIntact(), 'live_hold_source_not_alive');
       const command = holdDecision(decision);
+      assertFixture((command.action === 'capture-held') === (typeof onCapsuleHold === 'function'), 'live_capsule_options');
       let capturePreflight;
-      if (command.action === 'capture') {
+      if (command.action === 'capture' || command.action === 'capture-held') {
         const identity = { sourceCommit: harness.identity.pinnedBuild.source.commit,
           probeSha256: harness.identity.sourceSha256.probe,
           fixtureBinarySha256: harness.identity.fixtureBinarySha256 };
@@ -1059,6 +1136,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
           budget: command.budget }, identity, { nonce: ready.nonce, callSerial: ready.callSerial });
         assertFixture(capturePreflight.eligibleForInventoryReview, 'live_capture_preflight');
       }
+      if (command.action === 'capture-held') capsuleExpected = { nonce: ready.nonce, callSerial: ready.callSerial };
       await verifyHarness(owned.signal);
       assertFixture(performance.now() - holdReceivedAt < ready.deadlineMilliseconds - 100, 'live_hold_deadline');
       await bounded(new Promise((resolve, reject) => native.child.stdin.write(command.line, error => error ? reject(new ProbeFixtureError('live_hold_write')) : resolve())), 'live_hold_write', 500, owned.signal);
@@ -1069,6 +1147,39 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       assertFixture(JSON.stringify(normalize(first)) === JSON.stringify(normalize(reobserved)), 'live_hold_metadata_changed');
       const capture = command.action === 'capture'
         ? checkedCaptureEvent(await native.wait('capture-cleared'), ready.nonce, ready.callSerial) : undefined;
+      let capsule;
+      if (command.action === 'capture-held') {
+        const retained = checkedCapsuleEvent(await native.wait('capsule-ready'), 'capsule-ready', ready.nonce, ready.callSerial);
+        const capsuleReceivedAt = performance.now();
+        // The second callback shares the original native hold budget. Neither
+        // this observation nor its deadline creates a fresh lifetime grant.
+        const remaining = Math.min(retained.deadlineMilliseconds,
+          ready.deadlineMilliseconds - (capsuleReceivedAt - holdReceivedAt));
+        const capsuleMilliseconds = Math.min(2000, remaining - 500);
+        assertFixture(capsuleMilliseconds > 0, 'live_capsule_deadline');
+        const capsuleContext = freezePublic({ schemaVersion: 1, nonce: ready.nonce,
+          callSerial: ready.callSerial, generation: retained.generation,
+          deadlineMilliseconds: capsuleMilliseconds, nativeDeadlineMilliseconds: retained.deadlineMilliseconds,
+          ready: structuredClone(retained), probe: structuredClone(first), identity: structuredClone(harness.identity),
+          sourceHeld: true, historical: false, exportAuthority: false, semanticExportImport: false, migration: false });
+        const capsuleCallback = Promise.resolve().then(() => onCapsuleHold(capsuleContext))
+          .catch(() => { throw new ProbeFixtureError('live_capsule_callback_failed'); });
+        // Only this awaited path can send a command. A value produced after a
+        // timeout settles an already-handled promise and cannot resume C.
+        const capsuleReply = await Promise.race([bounded(capsuleCallback,
+          'live_capsule_callback_timeout', capsuleMilliseconds, owned.signal), refused]);
+        assertFixture(native.child.exitCode === null && !native.child.killed && client.transportIntact(), 'live_hold_source_not_alive');
+        const disposal = capsuleDecision(capsuleReply);
+        await verifyHarness(owned.signal);
+        assertFixture(performance.now() - holdReceivedAt < ready.deadlineMilliseconds - 100
+          && performance.now() - capsuleReceivedAt < retained.deadlineMilliseconds - 100, 'live_capsule_deadline');
+        await bounded(new Promise((resolve, reject) => native.child.stdin.write(disposal.line,
+          error => error ? reject(new ProbeFixtureError('live_capsule_write')) : resolve())), 'live_capsule_write', 500, owned.signal);
+        const cleared = checkedCapsuleEvent(await native.wait('capsule-cleared'),
+          'capsule-cleared', ready.nonce, ready.callSerial, retained.generation);
+        assertFixture(disposal.action === 'discard', 'live_capsule_aborted');
+        capsule = { ready: retained, cleared, decision: disposal.action, sourceHeld: false, historical: true };
+      }
       const released = checkedHoldEvent(await native.wait('hold-released'), 'hold-released', first, ready.nonce);
       assertFixture(client.transportIntact(), 'live_hold_peer_closed_before_release');
       liveHold = { nonce: ready.nonce, callSerial: ready.callSerial, deadlineMilliseconds: callbackMilliseconds,
@@ -1076,6 +1187,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         sourceAliveBeforeAndAfterCallback: true, heldDuringCallback: true, sourceHeld: false, historical: true, decision: command.action,
         immutableBeforeRelease: true, applicationBytesRead: payloadBytes, applicationBytesWritten: payloadBytes,
         ...(capture ? { capture, capturePreflight } : {}),
+        ...(capsule ? { capsule, capturePreflight } : {}),
         exportAuthority: false, semanticExportImport: false, migration: false };
       client.endOnEcho();
     }
@@ -1218,16 +1330,31 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       ...(liveHold ? { liveHold } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {
-    if (owned.signal.aborted) throw owned.signal.reason;
-    if (error instanceof ProbeFixtureError || error?.name === 'HandshakeOracleError') throw error;
-    throw new ProbeFixtureError('probe_fixture_failed');
+    scenarioFailure = owned.signal.aborted ? owned.signal.reason
+      : error instanceof ProbeFixtureError || error?.name === 'HandshakeOracleError'
+        ? error : new ProbeFixtureError('probe_fixture_failed');
+    throw scenarioFailure;
   } finally {
     for (const socket of sockets) socket.destroy();
     try { if (relay?.server.listening) { relay.server.close(); relay.server.unref(); } }
     finally {
-      try { await reap(children); }
+      let reaped, cleanupFailure;
+      try { reaped = await reap(children); }
+      catch (error) { cleanupFailure = error; throw error; }
       finally {
-        try { for (const value of Object.values(secrets)) value.fill(0); client?.random()?.fill(0); client?.clear?.(); if (directory) await rm(directory, { recursive: true, force: true }); }
+        try {
+          // Refusal wins the operation even if a cleanup receipt shares its
+          // stdout chunk. Inspect only checked public events after actual
+          // native close; an ACK never converts that original FAIL to PASS.
+          try {
+            const failure = cleanupFailure ?? scenarioFailure;
+            if (failure && native && capsuleExpected) failure.capsuleCleanup = await capsuleCleanupReceipt(native, capsuleExpected, reaped);
+          } finally {
+            for (const value of Object.values(secrets)) value.fill(0);
+            client?.random()?.fill(0); client?.clear?.();
+            if (directory) await rm(directory, { recursive: true, force: true });
+          }
+        }
         finally { running = false; owned.close(); }
       }
     }

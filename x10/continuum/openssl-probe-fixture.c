@@ -266,18 +266,142 @@ static int hold_socket_idle(int fd)
     return result < 0 && (errno == EAGAIN || errno == EWOULDBLOCK);
 }
 
+/* A retained copy has a second, generation-bound control decision. No TLS
+ * call is made while this slot is live, including on refusal/interruption.
+ * The slot's tombstone stays owned until cleanup has revoked the generation. */
+static const char *hold_retained_capture(PEER *peer, const char *scenario,
+    const X10_PROBE_RESULT *initial, const char nonce[33], int64_t deadline)
+{
+    X10_CAPTURE_SLOT *slot = NULL;
+    X10_CAPTURE_RESULT capture;
+    struct pollfd descriptors[2];
+    char line[96], discard_line[96], abort_line[96];
+    size_t at = 0;
+    ssize_t got;
+    uint64_t generation = 0;
+    int rc, discard_length, abort_length, ready_emitted = 0, cleared = 0;
+    int64_t now, remaining;
+    const char *failure = "hold_capture";
+
+    memset(&capture, 0, sizeof(capture));
+    slot = x10_capture_slot_new();
+    if (slot == NULL || !x10_capture_slot_open(slot, peer->ssl,
+        &peer->ledger, initial, nonce, deadline, &interrupted, &capture))
+        goto done;
+    generation = x10_capture_slot_generation(slot);
+    now = now_ms();
+    if (now < 0 || (remaining = deadline - now) <= 0) {
+        failure = "hold_timeout"; goto done;
+    }
+    if (generation == 0 || interrupted
+        || !x10_capture_slot_check(slot, generation, peer->ssl,
+            &peer->ledger, nonce, &interrupted)) goto done;
+    if (!hold_socket_idle(peer->fd)) {
+        failure = "hold_transport_activity"; goto done;
+    }
+    discard_length = snprintf(discard_line, sizeof(discard_line),
+        "DISCARD %s %" PRIu64 " %" PRIu64 "\n", nonce,
+        initial->ledger_call_serial, generation);
+    abort_length = snprintf(abort_line, sizeof(abort_line),
+        "ABORT %s %" PRIu64 " %" PRIu64 "\n", nonce,
+        initial->ledger_call_serial, generation);
+    if (discard_length <= 0
+        || (size_t) discard_length >= sizeof(discard_line)
+        || abort_length <= 0 || (size_t) abort_length >= sizeof(abort_line))
+        goto done;
+    printf("{\"event\":\"capsule-ready\",\"scenario\":\"%s\",\"nonce\":\"%s\","
+        "\"callSerial\":\"%" PRIu64 "\",\"generation\":\"%" PRIu64 "\","
+        "\"deadlineMilliseconds\":%" PRId64 ",\"captured\":true,\"locked\":true,"
+        "\"dontDump\":true,\"dontFork\":true,\"readOnly\":true,"
+        "\"sourceUnchanged\":true,\"secretBytes\":%u,\"ivBytes\":%u,"
+        "\"sequenceBytes\":%u}\n", scenario, nonce,
+        initial->ledger_call_serial, generation, remaining,
+        capture.secret_bytes, capture.iv_bytes, capture.sequence_bytes);
+    ready_emitted = 1;
+    descriptors[0].fd = STDIN_FILENO; descriptors[0].events = POLLIN;
+    descriptors[1].fd = peer->fd; descriptors[1].events = POLLIN;
+    while (!interrupted) {
+        now = now_ms();
+        if (now < 0 || (remaining = deadline - now) <= 0) {
+            failure = "hold_timeout"; goto done;
+        }
+        descriptors[0].revents = descriptors[1].revents = 0;
+        rc = poll(descriptors, 2, (int) remaining);
+        if (rc < 0 && errno == EINTR) continue;
+        if (rc == 0) { failure = "hold_timeout"; goto done; }
+        if (rc < 0) goto done;
+        if (descriptors[1].revents != 0) {
+            failure = "hold_transport_activity"; goto done;
+        }
+        failure = "hold_decision";
+        if (descriptors[0].revents & (POLLERR | POLLNVAL)) goto done;
+        if (!(descriptors[0].revents & (POLLIN | POLLHUP))) continue;
+        got = read(STDIN_FILENO, line + at, 1);
+        if (got < 0 && (errno == EINTR || errno == EAGAIN)) continue;
+        if (got != 1) goto done;
+        if (line[at++] == '\n') break;
+        if (at == sizeof(line)) goto done;
+    }
+    if (interrupted) { failure = "hold_capture"; goto done; }
+    now = now_ms();
+    if (now < 0 || now >= deadline) { failure = "hold_timeout"; goto done; }
+    if (at == (size_t) abort_length && memcmp(line, abort_line, at) == 0) {
+        failure = "hold_aborted"; goto done;
+    }
+    failure = "hold_decision";
+    if (at != (size_t) discard_length
+        || memcmp(line, discard_line, at) != 0) goto done;
+    descriptors[0].revents = 0;
+    if (poll(descriptors, 1, 0) != 0) goto done;
+    if (!hold_socket_idle(peer->fd)) {
+        failure = "hold_transport_activity"; goto done;
+    }
+    failure = "hold_capture";
+    if (!x10_capture_slot_discard(slot, generation, peer->ssl,
+        &peer->ledger, nonce, &interrupted, &capture)) goto done;
+    cleared = 1;
+    failure = NULL;
+done:
+    /* Cleanup is deliberately independent of interrupted/deadline. A stale
+     * decision cannot resume the source, but must still destroy its copy. */
+    if (slot != NULL) {
+        if (!cleared) cleared = x10_capture_slot_cleanup(slot, &capture);
+        if (!cleared) failure = "hold_capture";
+        if (ready_emitted && cleared && capture.cleansed && capture.unmapped) {
+            printf("{\"event\":\"capsule-cleared\",\"scenario\":\"%s\",\"nonce\":\"%s\","
+                "\"callSerial\":\"%" PRIu64 "\",\"generation\":\"%" PRIu64 "\","
+                "\"captured\":true,\"locked\":true,\"dontDump\":true,"
+                "\"dontFork\":true,\"readOnly\":true,\"sourceUnchanged\":true,"
+                "\"cleansed\":true,\"unmapped\":true,\"secretBytes\":%u,"
+                "\"ivBytes\":%u,\"sequenceBytes\":%u}\n", scenario, nonce,
+                initial->ledger_call_serial, generation,
+                capture.secret_bytes, capture.iv_bytes, capture.sequence_bytes);
+        }
+        x10_capture_slot_free(slot);
+    }
+    if (failure == NULL) {
+        now = now_ms();
+        if (interrupted) failure = "hold_capture";
+        else if (now < 0 || now >= deadline) failure = "hold_timeout";
+        else if (!hold_socket_idle(peer->fd)) failure = "hold_transport_activity";
+    }
+    return failure;
+}
+
 static const char *hold_quiescent(PEER *peer, const char *scenario,
     const X10_PROBE_RESULT *initial, int64_t deadline)
 {
     static const char digits[] = "0123456789abcdef";
     unsigned char random[16];
-    char nonce[33], line[64], expected[64], abort_line[64], capture_line[64];
+    char nonce[33], line[96], expected[96], abort_line[96], capture_line[96];
+    char retained_line[96];
     X10_CAPTURE_RESULT capture;
     X10_PROBE_RESULT third, fourth;
     struct pollfd descriptors[2];
     size_t i, at = 0;
     ssize_t got;
-    int rc, length, abort_length, capture_length, capture_requested = 0;
+    int rc, length, abort_length, capture_length, retained_length;
+    int capture_requested = 0, retained_requested = 0;
     int64_t now, hold_deadline, remaining;
     const char *failure = "hold_decision";
 
@@ -299,9 +423,13 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
         nonce, initial->ledger_call_serial);
     capture_length = snprintf(capture_line, sizeof(capture_line), "CAPTURE %s %" PRIu64 "\n",
         nonce, initial->ledger_call_serial);
+    retained_length = snprintf(retained_line, sizeof(retained_line),
+        "CAPTURE_HOLD %s %" PRIu64 "\n", nonce, initial->ledger_call_serial);
     if (length <= 0 || (size_t) length >= sizeof(expected)
         || abort_length <= 0 || (size_t) abort_length >= sizeof(abort_line)
-        || capture_length <= 0 || (size_t) capture_length >= sizeof(capture_line)) goto refused;
+        || capture_length <= 0 || (size_t) capture_length >= sizeof(capture_line)
+        || retained_length <= 0 || (size_t) retained_length >= sizeof(retained_line))
+        goto refused;
     if (!hold_socket_idle(peer->fd)) {
         failure = "hold_transport_activity"; goto refused;
     }
@@ -343,7 +471,9 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
     }
     capture_requested = at == (size_t) capture_length
         && memcmp(line, capture_line, at) == 0;
-    if (!capture_requested
+    retained_requested = at == (size_t) retained_length
+        && memcmp(line, retained_line, at) == 0;
+    if (!capture_requested && !retained_requested
         && (at != (size_t) length || memcmp(line, expected, at) != 0)) goto refused;
     /* Reject bytes/EOF already queued after the one authorized decision.
      * This is a sample of the trusted control pipe, not a writer fence. */
@@ -364,7 +494,11 @@ static const char *hold_quiescent(PEER *peer, const char *scenario,
     if (!hold_socket_idle(peer->fd)) {
         failure = "hold_transport_activity"; goto refused;
     }
-    if (capture_requested) {
+    if (retained_requested) {
+        failure = hold_retained_capture(peer, scenario, initial, nonce,
+            hold_deadline);
+        if (failure != NULL) goto refused;
+    } else if (capture_requested) {
         failure = "hold_capture";
         if (!x10_capture_source(peer->ssl, &peer->ledger, initial, nonce,
             &interrupted, &capture)) goto refused;

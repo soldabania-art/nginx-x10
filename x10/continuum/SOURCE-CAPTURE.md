@@ -97,3 +97,64 @@ The next gate is a reviewed fuller semantic inventory and a source-only,
 protected lifetime/abort contract for a reusable capsule. Target import,
 exclusive I/O ownership, a distinct TLS code version, source exit before target
 continuation and opt-in native NGINX integration remain separate milestones.
+
+## Opt-in retained source-copy lifetime
+
+The additional `capture-held` action extends the same genuine live-hold
+scenario. It retains only the already documented record-material subset, not
+full semantic TLS state. The original transient `capture` action remains a
+create/compare/destroy operation; no target object or importer is introduced.
+
+A private C-owned opaque slot keeps mapping ownership and public bindings, not
+another secret copy. A by-value nonzero generation is scoped to this native
+process/hold and is bound to the original SSL pointer, ledger identity and
+snapshot, nonce, call serial and the original monotonic hold deadline. The
+process-local generation counter refuses exhaustion without wrapping. A closed
+slot cannot reopen; its tombstone lives until hold exit so stale generation
+values do not cause a free-then-dereference API. No pointer crosses into JS.
+
+The slot becomes READY only after protected allocation, actual copy, read-only
+protection and fresh source equality. `CAPTURE_HOLD nonce serial` emits one
+`capsule-ready` while that protected mapping is still live. The trusted runner
+can then provide a bounded `onCapsuleHold` callback with frozen public metadata.
+Its exact inert decision is `DISCARD nonce serial generation` or the matching
+ABORT. Neither callback nor capsule creation restarts the original three-second
+native hold deadline; the cooperative JS budget is reduced against its remainder.
+A timed-out callback result has no later command or reacquisition authority.
+
+DISCARD checks the live generation/source/ledger/nonce/expiry, then always
+revokes and destroys the copy. Internal abort cleanup is independent of expiry
+and interruption and remains available after authorization has failed. Cleanup
+revokes READY before system calls, restores writable protection, cleanses the
+whole accessible page, verifies zero through volatile reads, unlocks and unmaps.
+The single `capsule-cleared` receipt precedes any hold release. Cleanup alone
+never grants source resume; a valid decision, successful cleanup and post-clear
+deadline/interruption/transport checks are all required for release.
+
+ABORT, stale/malformed/duplicate decisions, observed transport activity, native
+expiry or handled SIGTERM after READY require destruction and refusal without
+later TLS READ/WRITE/control/shutdown. A failed restore/unmap cannot claim an
+explicit wipe; the source must refuse continuation and exit. The runner gives
+owned children a bounded SIGTERM cleanup grace before SIGKILL escalation,
+independent of the already aborted operation signal. A failure may carry a
+checked public cleanup receipt only after actual native close, exactly one
+ordered READY/CLEARED pair, matching bindings, a valid output channel, no release
+and no forced termination. That receipt does not turn the original failure
+into a successful operation. SIGKILL/crash remains explicit-wipe-unknown.
+
+### Source API allowlist during READY
+
+The retained-copy profile allows only the slot generation/check/discard/internal
+cleanup operations and the existing read-only profile/probe helpers. It forbids
+source TLS/BIO I/O, key updates, shutdown, session setters, arbitrary application
+callbacks or other state-mutating calls while READY. This trusted single-thread
+fixture discipline is not a concurrent-application fence. Socket peek/poll remain
+samples, not transport ownership. Returned JS results are historical after the
+copy and source are cleaned up; retained metadata is not live authority.
+
+The slot does not preserve or implement target authentication/session/exporter,
+Finished/resumption/ALPN APIs, fresh provider/cipher reconstruction, future record
+budget enforcement or later KeyUpdate semantics. Those full semantic/API gates,
+exclusive target I/O ownership, distinct TLS code, source retirement and native
+NGINX integration remain unaccepted. Protections still cover only this extra
+mapping, not the original SSL/EVP heap, compiler temporaries or Node oracle.

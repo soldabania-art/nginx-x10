@@ -1,0 +1,577 @@
+{
+  "schemaVersion": 1,
+  "suite": "continuum-retained-source-copy-lifetime",
+  "baseCommit": "3ec481e91ce32124603c9a2a4c90739263173aac",
+  "leaseCommit": "96259b1328a5c0335554abd2542922293193ac7c",
+  "runId": "continuum-retained-20261024T075615502Z",
+  "verifiedAtUTC": "2026-10-24T08:17:08.726Z",
+  "scope": {
+    "sourceOnlyRetainedRecordMaterial": true,
+    "liveCProtectedCopy": true,
+    "fullSemanticCapsule": false,
+    "semanticExportImport": false,
+    "migration": false,
+    "nativeNginxIntegration": false,
+    "originalSSLHeapProtected": false,
+    "targetIOAuthority": false,
+    "productionChanged": false
+  },
+  "implementation": {
+    "optInAction": "capture-held",
+    "scenario": "quiescent-live-hold",
+    "subset": "Only the existing directional application secrets/IV/next sequences; 64/24/16 bytes. No SSL/EVP/BIO object copy.",
+    "binding": [
+      "C-owned opaque slot kept through hold exit",
+      "process-local nonwrapping generation",
+      "original SSL and ledger pointer identity",
+      "nonce and call serial",
+      "immutable source probe and copied record subset",
+      "original native monotonic hold expiry"
+    ],
+    "lifecycle": "EMPTY -> PREPARING -> READY -> DESTROYING -> CLEARED or FAILED; terminal slot cannot reopen.",
+    "release": "DISCARD needs exact live binding and successful destruction plus post-clear interruption/deadline/transport checks. Cleanup alone never authorizes resume.",
+    "receipt": "One ordered current READY/CLEARED pair and valid bounded native channel, actual child close, no hold release or forced kill required for a failed operation's cleanup acknowledgement.",
+    "signalBoundary": "Handled SIGTERM after actual filled protected READY must clear before refusal; SIGKILL/crash explicit wipe remains unknown.",
+    "sourceAPIAllowlist": "While READY: slot lifecycle/read-only profile/probe only; no TLS/BIO I/O, key update, shutdown or source mutation."
+  },
+  "baseline": {
+    "schemaVersion": 1,
+    "suite": "retained-capability-baseline",
+    "sourceCommit": "3ec481e91ce32124603c9a2a4c90739263173aac",
+    "expectedUnsupported": true,
+    "observedCode": "live_hold_decision",
+    "notAProductionDefect": true,
+    "sourceHashes": {
+      "fixture": "3c38cdbebb85ca0746f6a4995021bb044bafec24c1a9b293e7dc7d6a85630bae",
+      "peerClient": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+      "probe": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+      "capture": "771606b8fc4ebcff76d9c7191d862e4e0532e9ab8a89007ef29ba1157f0c0142",
+      "captureHeader": "30bf6e677f3a4926b35589d467b70caf249876c19b8a7aed77563a3eaefdeb84",
+      "header": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+      "usage": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+      "patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+    },
+    "fixtureBinarySha256": "6688d590139128d70c4a0fc7b986bf73908afdf4684b1c1c8beb00b4431d8a49",
+    "pinnedSourceCommit": "85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c",
+    "cleanupCompleted": true,
+    "rawReportSha256": "9a7f568f905443af2a6284aaed0e8519e58b408dfce8e80f3f94d8a428213c21",
+    "classification": "Expected missing retained capability on unchanged source, not an old production defect."
+  },
+  "authored": {
+    "canonicalCommand": [
+      "node",
+      "x10/continuum/openssl-probe-check.mjs"
+    ],
+    "freezeAtUTC": "2026-10-24T08:10:49.693Z",
+    "result": {
+      "schemaVersion": 1,
+      "suite": "continuum-pinned-openssl-state-probe",
+      "passed": true,
+      "testFiles": 1,
+      "scope": "pinned-openssl-read-only-state-observation",
+      "nativeNginxMigration": false,
+      "realSessionMigration": false,
+      "counts": {
+        "tests": 43,
+        "suites": 0,
+        "pass": 43,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "interrupted": false,
+      "runnerError": null
+    },
+    "rawReportSha256": "d5fa446805ab20fb49f46126f1b9eaa212ff3e941c99502ed81cfeb0dc05487a",
+    "previous36TestPrefixPreserved": true,
+    "newActualTLSControls": [
+      "delayed discard and exact wire/closure",
+      "ABORT after actual READY",
+      "stale generation refusal and clear",
+      "JS timeout with late valid callback unable to send command",
+      "actual native expiry with real DISCARD bytes withheld",
+      "SIGTERM after actual filled READY",
+      "actual prlimit memlock=0 refusal before READY"
+    ],
+    "families": {
+      "flatChecks": 43,
+      "ordinaryActualTLSScenarios": 34,
+      "handledOSSignalControls": 3,
+      "programmaticCancellationControl": 1,
+      "nonTLSCachedSourceControl": 1,
+      "syntheticGroups": 4
+    },
+    "fullSourceFreezeUnchangedAfterFinalRun": true,
+    "sourceFilesSha256": {
+      "x10/continuum/openssl-capture.c": "dbcbc2633434d94da3afbe5958dbc07b55db357437dc509090e64e799d170f40",
+      "x10/continuum/openssl-capture.h": "7c95196dce028356890b3bfca31ec97bbd22f1d9d93d3c9e947fa6e8642d3870",
+      "x10/continuum/openssl-probe-fixture.c": "8a4bf0c202ea9a4e5887c1b789057dcc81f1fd087688e744166e5ac84b642638",
+      "x10/continuum/openssl-probe-run.mjs": "4c115fa68c8b799549db184a6bb637307a1217c7e6f07004326cd98afc383ff2",
+      "x10/continuum/openssl-probe.test.mjs": "f2da0586c764e9cbb2516a53160a1d96150857b375a259d4149e490eef8a327e",
+      "x10/continuum/retained-capsule.test.mjs": "cc08177764b97385fe9c1a9458a2a8c9c1242131dc6adc5f06c349dc8bdf8de8"
+    }
+  },
+  "initialDiagnostic": {
+    "result": {
+      "schemaVersion": 1,
+      "suite": "continuum-pinned-openssl-state-probe",
+      "passed": true,
+      "testFiles": 1,
+      "scope": "pinned-openssl-read-only-state-observation",
+      "nativeNginxMigration": false,
+      "realSessionMigration": false,
+      "counts": {
+        "tests": 42,
+        "suites": 0,
+        "pass": 42,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "interrupted": false,
+      "runnerError": null
+    },
+    "rawReportSha256": "fe5ae18c9441c92802f2423566294005c1230ad81dd70b06e3b4c82c94c65753",
+    "acceptedAsFinalEvidence": false,
+    "reason": "Initial 42-case run loaded the earlier test module before final assertion additions and the seventh native-expiry case. Runtime files unchanged; final43 rerun is the accepted candidate result."
+  },
+  "independent": {
+    "schemaVersion": 1,
+    "suite": "independent-retained-source-lifetime",
+    "independent": true,
+    "startedAtUTC": "2026-10-24T08:08:56.254Z",
+    "sourceSha256": {
+      "openssl-capture.c": "dbcbc2633434d94da3afbe5958dbc07b55db357437dc509090e64e799d170f40",
+      "openssl-capture.h": "7c95196dce028356890b3bfca31ec97bbd22f1d9d93d3c9e947fa6e8642d3870",
+      "openssl-probe-fixture.c": "8a4bf0c202ea9a4e5887c1b789057dcc81f1fd087688e744166e5ac84b642638",
+      "openssl-probe-run.mjs": "4c115fa68c8b799549db184a6bb637307a1217c7e6f07004326cd98afc383ff2",
+      "openssl-probe.c": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+      "openssl-probe.h": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+      "openssl-usage.h": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+      "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+      "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+      "handshake-oracle.mjs": "adf57f5ac461aa997ca24dba516b7b05aa63e455edae03ff6e0103c6e22d5889",
+      "keylog-buffer.mjs": "3b575bfc16dc0a1c651799386e4fe8a26c5da693e6e013299d237910b89e9139"
+    },
+    "controls": [
+      {
+        "kind": "delayed-discard",
+        "payloadBytes": 11729,
+        "pauseMilliseconds": 137,
+        "initialPauseMilliseconds": 0,
+        "passed": true,
+        "actualTLS": true,
+        "nativeCleared": true,
+        "sourceReleased": true,
+        "explicitWipeKnown": true,
+        "noMigrationClaim": true
+      },
+      {
+        "kind": "delayed-discard",
+        "payloadBytes": 41471,
+        "pauseMilliseconds": 311,
+        "initialPauseMilliseconds": 0,
+        "passed": true,
+        "actualTLS": true,
+        "nativeCleared": true,
+        "sourceReleased": true,
+        "explicitWipeKnown": true,
+        "noMigrationClaim": true
+      },
+      {
+        "kind": "native-expiry",
+        "payloadBytes": 23057,
+        "pauseMilliseconds": 0,
+        "initialPauseMilliseconds": 421,
+        "passed": true,
+        "actualTLS": true,
+        "nativeCleared": true,
+        "sourceReleased": false,
+        "explicitWipeKnown": true,
+        "originalHoldToClearMilliseconds": 3003,
+        "noMigrationClaim": true
+      },
+      {
+        "kind": "duplicate-terminal",
+        "payloadBytes": 32149,
+        "pauseMilliseconds": 83,
+        "initialPauseMilliseconds": 0,
+        "passed": true,
+        "actualTLS": true,
+        "nativeCleared": true,
+        "sourceReleased": false,
+        "explicitWipeKnown": true,
+        "noMigrationClaim": true
+      },
+      {
+        "kind": "forced-kill-unknown",
+        "payloadBytes": 17351,
+        "pauseMilliseconds": 0,
+        "initialPauseMilliseconds": 0,
+        "passed": true,
+        "actualTLS": true,
+        "nativeCleared": false,
+        "sourceReleased": false,
+        "explicitWipeKnown": false,
+        "noMigrationClaim": true
+      }
+    ],
+    "success": true,
+    "cleanup": {
+      "observedChildren": 99,
+      "allObservedChildrenClosed": true,
+      "observedPrivateRoots": 6,
+      "allObservedPrivateRootsAbsent": true
+    },
+    "identity": {
+      "schemaVersion": 1,
+      "pinnedBuild": {
+        "schemaVersion": 1,
+        "suite": "continuum-openssl-pinned-build",
+        "source": {
+          "repository": "https://github.com/openssl/openssl.git",
+          "commit": "85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c",
+          "tree": "4e48caeae2374ee4982c8e44b6a15cf4753229cb",
+          "patchedTree": "f6301918a737267208ade21de6ab162d5e82f9cb",
+          "licenseSha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+        },
+        "patch": {
+          "sha256": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+        },
+        "compiler": {
+          "command": "cc",
+          "version": "13.3.0",
+          "target": "x86_64-linux-gnu",
+          "binarySha256": "6117c52522997d2aaccb2b52b3c6bf42c0a6c5edb1d718431fed6b2fc5fec234"
+        },
+        "tools": {
+          "gitSha256": "2dae8066ef4d6a926561b4b0eaca7b458d4f5b56bb83760656e6baa7fc3e974f",
+          "perlSha256": "38d70f54fd18d614e9e6cc35c960b45f54e7b991894b8308e704ae9953c86ce4",
+          "makeSha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+        },
+        "configuration": {
+          "target": "linux-x86_64",
+          "flags": [
+            "no-shared",
+            "no-module",
+            "no-engine",
+            "no-async",
+            "no-ktls",
+            "no-tests",
+            "no-legacy",
+            "no-asm",
+            "no-comp",
+            "no-zlib",
+            "no-dso",
+            "no-autoload-config",
+            "no-fips",
+            "--prefix=/continuum-research",
+            "--openssldir=/continuum-research/config",
+            "CC={compiler}",
+            "-O2",
+            "-fno-omit-frame-pointer",
+            "-fno-ident",
+            "-ffile-prefix-map={privateRoot}=/continuum-build"
+          ],
+          "disabled": [
+            "acvp-tests",
+            "afalgeng",
+            "asan",
+            "asm",
+            "async",
+            "autoload-config",
+            "buildtest-c++",
+            "capieng",
+            "comp",
+            "crypto-mdebug",
+            "crypto-mdebug-backtrace",
+            "devcryptoeng",
+            "dso",
+            "dynamic-engine",
+            "ec_nistp_64_gcc_128",
+            "egd",
+            "engine",
+            "external-tests",
+            "fips",
+            "fips-securitychecks",
+            "fuzz-afl",
+            "fuzz-libfuzzer",
+            "ktls",
+            "legacy",
+            "loadereng",
+            "md2",
+            "module",
+            "msan",
+            "padlockeng",
+            "rc5",
+            "sctp",
+            "shared",
+            "ssl3",
+            "ssl3-method",
+            "tests",
+            "trace",
+            "ubsan",
+            "unit-test",
+            "uplink",
+            "weak-ssl-ciphers",
+            "zlib",
+            "zlib-dynamic"
+          ],
+          "sourceDateEpoch": "1706621296",
+          "configDataSha256": "2e26fc7cf0cfba160e54b377f649c45afa8b7c92f15e95b5c6348b6c3e5d1c05",
+          "makefileSha256": "27f1d8c66fa350f500528e43720257b333e41876c3213a2139803c12a7ff39f5",
+          "configurationHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81"
+        },
+        "provider": {
+          "active": [
+            "default"
+          ],
+          "externalModules": false,
+          "autoloadConfiguration": false
+        },
+        "artifacts": {
+          "linkage": "static-libssl-and-libcrypto",
+          "systemRuntimeStatic": false,
+          "version": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)",
+          "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+          "libcryptoSha256": "0e8b555491d1417ca5e78b61d06ba0ec0f842a24c03db7edf331009afe99704e",
+          "opensslSha256": "e9ff104c83fd843c2711c8b12c0788e848176c9e7c5c1908415ba85633ef0023"
+        }
+      },
+      "sourceSha256": {
+        "fixture": "8a4bf0c202ea9a4e5887c1b789057dcc81f1fd087688e744166e5ac84b642638",
+        "peerClient": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+        "probe": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+        "capture": "dbcbc2633434d94da3afbe5958dbc07b55db357437dc509090e64e799d170f40",
+        "captureHeader": "7c95196dce028356890b3bfca31ec97bbd22f1d9d93d3c9e947fa6e8642d3870",
+        "header": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+        "usage": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+        "patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+      },
+      "fixtureBinarySha256": "fa2ce597480cb40f7c5dbe187d97650897cab82542a8b63b24eec44ef3b5a79c",
+      "peerClientBinarySha256": "44bea32424f2598320f1b33db71cfec29ef4a53b52832c37bf6067ea88ba0302",
+      "nodeBinarySha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12",
+      "nodeVersion": "v24.19.0",
+      "nodeOpenSSLVersion": "3.5.7"
+    },
+    "observerScriptSha256": "0eba7e57ac03d8eee05de36da3f61b2741638f1589cbc595dee6198c8bc0c2d1",
+    "finishedAtUTC": "2026-10-24T08:10:16.384Z",
+    "rawReportSha256": "3aeb68ce03294655bd699ecccdd199c748fce6fbfa884637eda60dc895e30c87",
+    "cleanupACKPredicateControls": {
+      "kind": "synthetic direct extracted-checker controls; not actual TLS",
+      "passed": 11,
+      "total": 11,
+      "extractedFunctionsSha256": "c5b18bb941d54f4a9d01bb425287b8b587a8b3449b7e3aae878784dfdff62e51",
+      "refusals": [
+        "duplicate READY",
+        "duplicate CLEARED",
+        "reordered receipts",
+        "wrong generation",
+        "invalid output channel",
+        "hold release",
+        "SIGKILL",
+        "wrong nonce",
+        "missing clear",
+        "forced child"
+      ]
+    }
+  },
+  "regressions": {
+    "core": {
+      "schemaVersion": 1,
+      "suite": "continuum-record-and-state-kernel",
+      "passed": true,
+      "testFiles": 2,
+      "scope": "in-memory-record-and-state-only",
+      "liveTlsProcessHandover": false,
+      "counts": {
+        "tests": 21,
+        "suites": 0,
+        "pass": 21,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "interrupted": false,
+      "runnerError": null
+    },
+    "coreRawSha256": "49283fd5cf983b6fdbbf512a01f91c1fe86e6019a044e4fdc8d148fb55e281cc",
+    "process": {
+      "tests": 7,
+      "passed": 7,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "rawReportSha256": "91148c8ecb041827399cf868232a34de1eff65b3b4e6c407c940cc47763646ea"
+    },
+    "c1": {
+      "schemaVersion": 1,
+      "suite": "continuum-real-handshake-and-record-observation",
+      "passed": true,
+      "testFiles": 2,
+      "scope": "real-handshake-and-record-observation-only",
+      "nativeNginxMigration": false,
+      "realSessionMigration": false,
+      "counts": {
+        "tests": 27,
+        "suites": 0,
+        "pass": 27,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "interrupted": false,
+      "runnerError": null
+    },
+    "c1RawSha256": "5a6767b807f593cb284db0d65f168597f0a199c1ce9a1dc270ff7c36355bfea1",
+    "nativeEvidence": "x10/evidence/continuum-retained-capsule-native-regression.json",
+    "nativeGroups": 20,
+    "nativeControllerTAP": 77
+  },
+  "review": {
+    "teamHelpers": 6,
+    "temporaryTeam": true,
+    "roles": [
+      "capture C slot",
+      "native hold protocol",
+      "JS runner and cleanup",
+      "authored actual TLS controls",
+      "independent security/lifetime review",
+      "native compatibility and evidence"
+    ],
+    "onlyCoordinatorPublishes": true,
+    "independentNarrowAcceptance": true,
+    "runtimeChangesDuringFinalRun": false,
+    "reportedNewSpendingUSD": 0
+  },
+  "limitations": [
+    "Retained source-copy lifetime only, not full reusable semantic TLS capsule/API inventory.",
+    "Protected mapping excludes original SSL/EVP heap, compiler temporaries and Node oracle.",
+    "Single trusted C owner/callback discipline; raw socket/poll checks are samples, not transport/ownership fencing.",
+    "JS callbacks are cooperative; native original deadline is authoritative but not a blocked-syscall preemption guarantee.",
+    "Full memory-syscall fault matrix is not accepted; failed restore/unmap cannot be explicit-wipe PASS.",
+    "Canonical aggregate wrapper publishes counts only. Independent fresh build identity is recorded separately; canonical/independent binary equality is not claimed.",
+    "Future record budget enforcement, later KeyUpdate/API semantics, fresh target objects, exclusive ownership, distinct TLS code and old-code exit remain gates."
+  ],
+  "hostedCI": {
+    "state": "pending-exact-new-implementation-SHA",
+    "prior787ReceiptsNotAcceptanceForNewCode": true
+  },
+  "nextGate": "Verify exact implementation CI, then finish the narrow established-state semantic/API inventory and protection-failure matrix before any importer. Do not mask unsupported transitions or SIGKILL uncertainty.",
+  "publication": {
+    "noSecretsOrRawHostEvidence": true,
+    "noDeploymentOrProductionChange": true,
+    "noDomainDNSMailPaymentChange": true,
+    "noNewPaidResources": true
+  },
+  "additionalCrossOwnerSyntheticC": {
+    "schemaVersion": 1,
+    "kind": "private-synthetic-production-TU-cleanup-controls",
+    "productionSource": "x10/continuum/openssl-capture.c",
+    "productionSourceSha256": "dbcbc2633434d94da3afbe5958dbc07b55db357437dc509090e64e799d170f40",
+    "scriptSha256": "1d0b00adf77a16160dbb5b8c7f90a3d13026f3e6f8a2448b93c89d5016ed807d",
+    "actualTLS": false,
+    "captureAdmissionTested": false,
+    "method": "Include actual production capture C in one private translation unit; manually seed the private slot with a guarded/locked read-only page containing public sentinel 0xa5, with controlled restore-RW and munmap wrapper failures. Probe stub always refuses; observed probeCalls=0.",
+    "scenarios": [
+      "empty cleanup idempotence and closed tombstone checks",
+      "filled full-page wipe/unmap with kernel mincore ENOMEM plus idempotence",
+      "stale generation discard destroys but refuses",
+      "expired generation discard destroys but refuses",
+      "interrupted discard destroys but refuses",
+      "restore-RW failure refuses without wipe claim; unmap succeeds and failure remains sticky",
+      "munmap failure refuses despite wipe; failure sticky and private harness explicitly unmaps its deliberate failed mapping",
+      "null slot cleanup and generation refusal"
+    ],
+    "plain": {
+      "scenarios": 8,
+      "failed": 0,
+      "exitCode": 0,
+      "probeCalls": 0,
+      "binarySha256": "0d2eff0a771a737ec5290ab2e5b430db0ea6d7e6ee4133202fbf33bf69e6828c",
+      "flags": [
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter"
+      ]
+    },
+    "asanUbsan": {
+      "scenarios": 8,
+      "failed": 0,
+      "exitCode": 0,
+      "binarySha256": "a07d8fd34e4fcc09db0d1c63fb19d704452cb8c7a5f514b48be86ede29a58d78",
+      "flags": [
+        "-std=c11",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer"
+      ],
+      "environment": {
+        "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+        "UBSAN_OPTIONS": "halt_on_error=1"
+      },
+      "dependencyLibrariesInstrumented": false,
+      "leakDetection": false
+    },
+    "unavailableLeakSanitizerAttempt": {
+      "exitCode": 1,
+      "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1",
+      "reason": "LeakSanitizer could not read /proc/<owned-process>/task in this environment and exited fatally; this is preserved as unavailable, not PASS."
+    },
+    "setupCorrections": [
+      "Copied missing pinned e_os.h dependency before compiling.",
+      "Added -Wno-unused-parameter for pinned OpenSSL inline header parameters; no production source edits."
+    ],
+    "dependencies": {
+      "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+      "libcryptoSha256": "11ee32ed9f30a71dcc5f562fc37ef6ab08e56c26bcca7a342595f9b5b3b47293",
+      "copiedLibraryHashesMatchOriginals": true,
+      "sslLocalHeaderSha256": "d4fbb0116ec3ff67c56344ccd491e355338c2ebef26d5d7a0446eb0d4037d744",
+      "configurationHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81"
+    },
+    "cleanup": {
+      "allSyntheticMappingsUnmapped": true,
+      "failedMunmapFixtureExplicitTeardown": true,
+      "allPrivateTestProcessesExited": true,
+      "privateIgnoredFilesRetainedForCoordinatorReview": true
+    },
+    "limitations": [
+      "Not actual TLS, source capture admission or semantic capsule validation.",
+      "No complete allocation/protection/syscall fault matrix; mmap/RW allocation/mlock/madvise/RO/munlock failures still pending as a systematic matrix.",
+      "Sanitizers cover the included capture C/harness translation unit, not rebuilt OpenSSL dependencies.",
+      "No full-process erasure, SIGKILL wipe, ownership transfer or migration claim."
+    ],
+    "rawReportSha256": "bd535299b1242acbc5ae587dfb543502fbcd3d5ec474975448d4a88a761c7a48",
+    "author": "retained_fixture; not the capture-core author",
+    "notAnActualTLSResult": true
+  }
+}

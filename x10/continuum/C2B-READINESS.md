@@ -228,3 +228,22 @@ reusable semantic capsule/exporter/importer или TLS-code migration.
 Локальный исходный controller expectedB/actualA сохранён: последующие local
 и hosted PASS не считаются его исправлением. Далее deterministic contract
 review/counterexample, затем fuller capsule API inventory/protected lifetime.
+
+
+## Retained record-material lifetime: narrow local checkpoint
+
+The opt-in retained slot now keeps the existing protected record-material copy
+alive across a bounded native decision barrier. Generation/nonce/serial/source
+bindings and original expiry are checked before discard; destruction precedes
+release or refusal. Actual filled-copy SIGTERM and late-result rejection are
+separate controls. See [SOURCE-CAPTURE](SOURCE-CAPTURE.md) for the lifecycle and
+READY-phase source API allowlist. This is not a complete established-state API
+inventory or a reusable semantic capsule accepted for target reconstruction.
+
+Local final43 C2a checks, independent5 actual-TLS heldouts and11 synthetic ACK
+controls passed; exact implementation hosted CI remains pending. SIGKILL stays
+wipe-unknown. Full protection-syscall failure coverage, exporter/session/Finished/
+resumption/authentication/ALPN semantics, fresh provider objects, future record
+budget enforcement, target ownership and distinct-code retirement remain gates.
+The source remains the original TLS implementation after successful discard;
+no importer, migrated socket or native NGINX continuation has been implemented.

@@ -571,3 +571,30 @@ cleanup acknowledgement before release; SIGTERM после реально зап
 копии и late-after-timeout authority refusal требуют отдельных controls.
 Полный semantic/API inventory, exclusive reader/writer ownership, distinct
 TLS code и actual old-code exit остаются отдельными условиями приёмки.
+
+
+## Continuum: retained protected source-copy lifetime
+
+Opt-in `capture-held` сохраняет защищённую read-only копию record-material
+между C-вызовами. Opaque C-slot связывает generation, исходные SSL/ledger,
+nonce/serial и прежний monotonic deadline; terminal slot не открывается снова.
+READY → DISCARD/ABORT → CLEARED подтверждает уничтожение до release либо
+отказа. Истечение срока и SIGTERM после реально заполненной копии очищают
+её без дальнейшего TLS I/O; поздний JS callback не восстанавливает authority.
+SIGKILL остаётся explicit-wipe-unknown. Старый transient CAPTURE сохранён.
+
+Локально финальный C2a43/43: прежние36 плюс7 actualTLS controls, из них
+6 ordinary и1 SIGTERM-after-filled. Независимо5 actualTLS heldouts и11
+synthetic cleanup-ACK controls прошли. Core21/process7/C1 27 и native20/20,
+controller77/77; official1083 strictPASS/25SKIP/1expectedTODO-fail/0FAIL.
+Первый42-case PASS — diagnostic: после его старта дополнены тестовые assertions
+и native-expiry case; для final bytes выполнен отдельный43-case прогон.
+
+[Evidence](evidence/continuum-retained-capsule.json) сохраняет identities, baseline refusal,
+независимые controls, cleanup и различие JS-timeout/native expiry. Это только
+retained source record-material subset, не полный semantic capsule, importer,
+ownership transfer или migration. Защита исходного SSL heap и полный syscall
+fault matrix не заявлены. [Контракт](continuum/SOURCE-CAPTURE.md) задаёт source API allowlist
+во время READY. Exact implementation CI pending. Далее — его приёмка, полный
+узкий established-state API/inventory и оставшиеся protection-failure gates
+до target reconstruction/import; distinct TLS code и old-code exit отдельно.
