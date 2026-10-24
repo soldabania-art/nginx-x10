@@ -385,3 +385,25 @@ official1083 strictPASS/25SKIP/1expectedTODO/0FAIL учитываются отд
 Exact новый SHA ожидает hosted CI;1f92d82 принят ранее. Другие alert/partial/
 EOF/control states и usage gates остаются перед C2b. Semantic export/import,
 смена TLS code и native NGINX continuation ещё не реализованы.
+
+## Alpha: исчезновение процесса во время проверки идентичности
+
+Исправлен контролируемый race чтения `/proc`: после `runtime_identity`
+в `findMasters` выполняется одна немедленная проверка той же записи. Только
+`ENOENT` позволяет пропустить исчезнувшего кандидата; отдельная проверка
+записанного PID остаётся. Существующие Z/X, чужие/повторно использованные
+PID и ошибки доступа не считаются подтверждённым завершением. CLI stop,
+проверки перед сигналом и все 499 native source files не изменены.
+
+Baseline даёт контролируемый `runtime_identity`; candidate проходит 28/28
+синтетических тестов, независимые controls — 15/15. Native aggregate: 20/20
+групп, включая реальный alpha lifecycle; official: 1083 strict PASS, 25 SKIP,
+1 ожидаемый TODO, 0 FAIL. Core21/process7 также прошли. Counts synthetic
+и настоящего lifecycle учитываются отдельно; исходники и identities — в
+[evidence](../evidence/alpha-stop-identity.json).
+
+Первоначальный сбой CI `d4bb2bc` сохранён: причина его точного interleaving
+не доказана, повтор на том же SHA не был исправлением. Новый implementation
+ожидает exact-SHA CI. Далее — сначала его результаты и возможные повторные
+сбои, затем C2a alert/partial/control и sequence/key usage inventory. Атомарный
+снимок `/proc`, pidfd fencing и перенос NGINX/TLS этим изменением не реализованы.

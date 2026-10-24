@@ -54,7 +54,18 @@ export async function findMasters(binary, prefix) {
         const argument = flag => tokens[tokens.indexOf(flag) + 1]?.replace(/\/$/, '');
         if (argument('-p') !== prefix && argument('-c') !== path.join(prefix, 'nginx.conf')) return null;
         return await procIdentity(name, binary, prefix);
-      } catch (error) { if (['ENOENT', 'ESRCH'].includes(error.code)) return null; throw error; }
+      } catch (error) {
+        if (['ENOENT', 'ESRCH'].includes(error.code)) return null;
+        if (error.code === 'runtime_identity') {
+          // Proc reads are not atomic: a master can disappear after the
+          // prefilter and leave an inconsistent identity snapshot. Only an
+          // absent entry resolves that observation; existing entries, even
+          // zombies, retain the original strict identity refusal.
+          try { await lstat(`/proc/${name}`); }
+          catch (absence) { if (absence.code === 'ENOENT') return null; throw absence; }
+        }
+        throw error;
+      }
     }));
     found.push(...values.filter(Boolean));
   }
