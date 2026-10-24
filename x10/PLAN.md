@@ -1133,3 +1133,33 @@ local19/20 ESRCH uncertainty remain preserved. Next complete actual nonroot
 user-manager startup/stop/restart, failed-start, drain and orphan boundaries.
 HTTP health is not automatic TLS acceptance; renewal, permanent published
 release/replay, final soak and Production V1 remain open.
+
+
+## Read-only user-manager preflight
+
+The service prerequisite command now checks a bounded, explicit nonroot
+user-manager capability response. An exit0 with a textual systemd-unavailable
+stub is refused; exit status alone cannot accept a manager. The command
+performs no service activation, unit installation, enablement or linger
+change. Existing user-unit rendering and installed native lifecycle stay
+unchanged. [Evidence](evidence/g3-service-preflight.json) keeps real root CLI
+refusal separate from synthetic positive manager-property fixtures.
+
+Actual authored tests passed 42/42 TAP; independent
+review passed 39/39 separate controls with no blocking
+findings. One fresh native build and final official aggregate passed
+20/20 groups. Official results retain 1083 strict
+PASS, 25 SKIP and 1 expected TODO-fail, with
+0 unexpected FAIL. These counts have different units.
+
+The new mandatory CI step tests the preflight contract and records a
+sanitized actual read-only CLI observation. It does not activate a manager
+or service. A structured prerequisite refusal is not live-manager or
+service acceptance. Exact resulting implementation CI remains pending.
+Then use an authorized nonroot environment for actual manager and service
+startup/stop/restart, failed-start, drain and orphan checks. Do not manufacture a manager through account/security changes.
+G2 permanent distribution/published-file replay, G4-G8, final soak and
+Production V1 remain open. Prior frontend HTTPS hosted evidence, its
+shutdown143 failure and historical local19/20 ESRCH uncertainty are retained;
+this prerequisite does not explain their causes. Full native and deferred
+Continuum scope remains preserved.
