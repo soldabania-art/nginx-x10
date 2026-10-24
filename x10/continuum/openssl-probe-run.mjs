@@ -12,6 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { verifyHandshakeCapture } from './handshake-oracle.mjs';
 import { buildOpenSSL } from './openssl-build.mjs';
 import { checkHeldCapturePreflight } from './capsule-preflight.mjs';
+import { parseKeylogBuffer } from './keylog-buffer.mjs';
 
 const SOURCE = fileURLToPath(new URL('./openssl-probe-fixture.c', import.meta.url));
 const PEER_SOURCE = fileURLToPath(new URL('./openssl-peer-client.c', import.meta.url));
@@ -428,18 +429,19 @@ function independentClient(port, ca, payload, sockets, secrets, signal, explicit
   const observers = new Set();
   const wake = () => { for (const callback of observers) callback(); };
   socket.on('keylog', line => {
+    let decoded;
     try {
-      assertFixture(line.length <= 512, 'keylog_invalid');
-      const fields = line.toString('ascii').trim().split(' ');
-      if (!Object.hasOwn(SECRET_LABELS, fields[0])) return;
-      assertFixture(fields.length === 3 && /^[0-9a-fA-F]{64}$/.test(fields[1]) && /^[0-9a-fA-F]{64}$/.test(fields[2]), 'keylog_invalid');
-      const random = Buffer.from(fields[1], 'hex');
-      if (clientRandom) assertFixture(clientRandom.equals(random), 'keylog_binding'); else clientRandom = random;
-      const name = SECRET_LABELS[fields[0]];
-      const value = Buffer.from(fields[2], 'hex');
-      if (secrets[name]) { assertFixture(secrets[name].equals(value), 'keylog_binding'); value.fill(0); }
-      else secrets[name] = value;
+      decoded = parseKeylogBuffer(line);
+      if (!Object.hasOwn(SECRET_LABELS, decoded.label)) return;
+      const name = SECRET_LABELS[decoded.label];
+      if (clientRandom) assertFixture(clientRandom.equals(decoded.random), 'keylog_binding');
+      if (secrets[name]) assertFixture(secrets[name].equals(decoded.secret), 'keylog_binding');
+      // Transfer ownership only after every binding check. Duplicate and
+      // refused values remain temporary and are wiped in the finally block.
+      if (!clientRandom) { clientRandom = decoded.random; decoded.random = undefined; }
+      if (!secrets[name]) { secrets[name] = decoded.secret; decoded.secret = undefined; }
     } catch { failure = new ProbeFixtureError('keylog_invalid'); socket.destroy(); wake(); }
+    finally { decoded?.random?.fill(0); decoded?.secret?.fill(0); line.fill(0); }
   });
   socket.on('secureConnect', () => {
     negotiated = { protocol: socket.getProtocol(), cipher: socket.getCipher()?.standardName,

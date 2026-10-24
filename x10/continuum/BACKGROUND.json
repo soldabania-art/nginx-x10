@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-keylog-20261024T071950477Z",
-    "owner": "codex-coordinator",
-    "baseCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
-    "acquiredAtUTC": "2026-10-24T07:19:50.477Z",
-    "expiresAtUTC": "2026-10-24T08:04:50.477Z",
-    "task": "Bounded buffer-only TLS keylog ingestion before reusable capsule lifetime"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -22,10 +15,11 @@
     "state": "enabled",
     "cadence": "hourly bounded cloud development passes; not continuous execution",
     "id": "6adb7b11dea0819199d7924f912610d7",
-    "schedule": "BEGIN:VEVENT\nDTSTART:20261023T151945Z\nRRULE:FREQ=HOURLY\nEND:VEVENT",
+    "schedule": "BEGIN:VEVENT\nDTSTART:20261023T151945Z\nRRULE:FREQ=HOURLY;UNTIL=20261026T201736Z\nEND:VEVENT",
     "timezone": "Europe/Samara",
     "createdAtUTC": "2026-10-23T15:19:46.868904+00:00",
-    "lastRunVerified": false
+    "lastRunVerified": false,
+    "scheduleRecordAuthority": "Owner-supplied current schedule; no automation mutation performed in this development pass."
   },
   "acceptedCheckpoint": {
     "nativeCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
@@ -897,10 +891,31 @@
       "reusableSemanticCapsule": false,
       "semanticExportImport": false,
       "migration": false
+    },
+    "keylogBufferLocal": {
+      "state": "local-reviewed-hosted-pending",
+      "evidence": "x10/evidence/continuum-keylog-buffer.json",
+      "scope": "Mutable keylog event and parser-owned Buffer lifetime only; no full erasure or migration."
+    },
+    "controllerFixtureHosted": {
+      "state": "success-exact-fixture-only",
+      "implementationCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+      "evidence": "x10/evidence/continuum-keylog-buffer.json",
+      "nativeRuns": [
+        40073228720,
+        40073231545
+      ],
+      "researchRuns": [
+        40073228712,
+        40073231572
+      ],
+      "nativeRuntimeChanged": false,
+      "historicalInterleavingProven": false
     }
   },
   "pendingVerification": [
-    "Controller fixture contract repaired with deterministic explicitly synthetic counterexample and bounded exact HTTP samples; local official aggregate20/20, controller77/77, independent review accepted. Exact implementation native hosted CI remains pending. Preserve original native17/20/controller66/68 expectedBactualA; historical scheduler interleaving is not proven and controller/native runtime was not changed.",
+    "Exact research/native CI for the implementation commit carrying this keylog Buffer-lifetime checkpoint remains pending; obtain its verified publication SHA, not the lease or older controller/source-capture receipt.",
+    "Buffer-only keylog ingestion is bounded local hardening only. Parser-owned Buffers and delivered mutable event input are cleared; original Node/OpenSSL allocations, V8 internals, process-wide protection and total erasure are not proven.",
     "Transient record-material-only source copy passed locally and in exact hosted CI; full semantic capsule inventory, supported established-state APIs and reusable protected lifetime/abort contract remain unaccepted. No exporter/importer or source retirement proof.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
     "C2a remaining inventory: other control/alert/partial/EOF states remain unsupported/fail-closed. Conservative initial-key sequence usage observation is accepted; future record budget and a complete first-profile C2b readiness inventory remain unaccepted.",
@@ -922,7 +937,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Transient protected record-material sample remains accepted narrow profile. Fixture-contract repair is locally verified with exact native CI pending; next source-only reusable protected lifetime/API allowlist before any importer."
+      "goal": "Bounded keylog Buffer lifetime hardened locally; exact implementation CI then source-only reusable protected capsule lifetime/API allowlist, no importer."
     },
     {
       "id": "C3",
@@ -1062,14 +1077,16 @@
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
   "ownerWorkWindow": {
-    "requestedAtUTC": "2026-10-23T16:16:08Z",
-    "hours": 70,
-    "reportTargetAtUTC": "2026-10-26T14:16:08Z",
-    "goal": "Maximum verified development through pinned OpenSSL state gate, semantic continuation and then opt-in native integration; preserve all existing NGINX capabilities",
+    "requestedAtUTC": "2026-10-24T07:17:36.000Z",
+    "hours": 60,
+    "codeStopAtUTC": "2026-10-26T19:17:36.000Z",
+    "reportOnlyUntilUTC": "2026-10-26T20:17:36.000Z",
+    "goal": "Maximum verified X10 / Continuum development within available cloud resources; preserve native NGINX capabilities.",
     "completionIsEvidenceGated": true,
     "fullReleaseIsNotGuaranteedByElapsedHours": true,
     "spendingPolicyUnchanged": true,
-    "plan": "x10/continuum/PLAN.md"
+    "plan": "x10/continuum/PLAN.md",
+    "afterCodeStop": "No code changes. Safely stop owned fixtures, read results, give one honest final report and disable this automation. Extra UNTIL hour is reporting only."
   },
   "ciOptimizationHostedObservation": {
     "implementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
@@ -1115,6 +1132,54 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
+    "runId": "continuum-keylog-20261024T071950477Z",
+    "baseCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
+    "publicationParent": "01a0ec49b73cc1f2003564930c5f79d990696247",
+    "result": "C2a Node keylog ingestion uses bounded wipeable Buffers. Exact synthetic baseline input-wipe defect reproduced; unit50 and independent lifetime11 passed; actualTLS2/10eventBuffers zero observed; core21/process7/C127/C2a36/native20/controller77 local checks passed. Prior475 native CI verified; research push skipped runtime and PR actual21/7/27/35. Exact new implementation CI pending. No whole-process wipe/reusable capsule/import/migration.",
+    "helpers": {
+      "count": 5,
+      "temporary": true,
+      "roles": [
+        "buffer parser/runner implementation",
+        "independent tests/TLS review",
+        "prior CI/native regression",
+        "checkpoint/evidence",
+        "independent security/lifetime review"
+      ],
+      "onlyCoordinatorIntegrates": true
+    },
+    "nativeSourceChanged": false,
+    "nativeVerificationSourceChanged": false,
+    "controllerImplementationChanged": false,
+    "spendingUSD": 0,
+    "perFileLedger": "x10/review/continuum-keylog-buffer-ledger.json",
+    "localEvidence": "x10/evidence/continuum-keylog-buffer.json",
+    "hostedVerification": {
+      "state": "pending-exact-implementation-SHA"
+    }
+  },
+  "lastVerificationReceipt": {
+    "runId": "continuum-capture-ci-20261024T064949962Z",
+    "baseCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+    "publicationParent": "1eb71050340d88bb76618c25636c2b37eb25e526",
+    "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
+    "verifiedAtUTC": "2026-10-24T06:51:12.667735+00:00",
+    "runtimeSourcesChanged": false,
+    "evidence": "x10/evidence/continuum-source-capture-hosted.json",
+    "perFileLedger": "x10/review/continuum-source-capture-hosted-ledger.json",
+    "researchRuns": [
+      40071366794,
+      40071371690
+    ],
+    "nativeRuns": [
+      40071366797,
+      40071371664
+    ],
+    "spendingUSD": 0,
+    "scope": "Transient source record-material-only sample; no reusable semantic capsule or migration."
+  },
+  "nextConcreteTask": "Verify exact keylog-ingestion implementation CI, then source-only reusable protected capsule lifetime and explicit established-state API allowlist before any importer: C-owned generation-bound handle, current held source, expiry/revocation and cleanup acknowledgement before release. Add SIGTERM after an actually filled capsule and late-after-timeout authority refusal controls. Preserve existing supported-state refusals, exact budgets, ownership, distinct TLS-code and old-code retirement gates.",
+  "previousDevelopmentPass": {
     "runId": "x10-control-contract-20261024T070015878Z",
     "baseCommit": "c0e229d48c75e0adc4e7b727f8bfa52505da0ab6",
     "publicationParent": "73a8925b580dc81479358d74a8f9f78fb7298622",
@@ -1145,51 +1210,6 @@
       "state": "pending-exact-implementation-SHA"
     }
   },
-  "lastVerificationReceipt": {
-    "runId": "continuum-capture-ci-20261024T064949962Z",
-    "baseCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
-    "publicationParent": "1eb71050340d88bb76618c25636c2b37eb25e526",
-    "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
-    "verifiedAtUTC": "2026-10-24T06:51:12.667735+00:00",
-    "runtimeSourcesChanged": false,
-    "evidence": "x10/evidence/continuum-source-capture-hosted.json",
-    "perFileLedger": "x10/review/continuum-source-capture-hosted-ledger.json",
-    "researchRuns": [
-      40071366794,
-      40071371690
-    ],
-    "nativeRuns": [
-      40071366797,
-      40071371664
-    ],
-    "spendingUSD": 0,
-    "scope": "Transient source record-material-only sample; no reusable semantic capsule or migration."
-  },
-  "nextConcreteTask": "First verify exact published fixture implementation native CI without reusing the source-capture receipt as acceptance. Then source-only reusable protected capsule lifetime and explicit established-state API allowlist before any importer: C-owned generation-bound handle, held source, expiry/revocation, cleanup acknowledgement before release, actual-TLS abort barrier and memory-protection refusal matrix. Forced-kill process cleanup does not prove explicit wipe. Preserve unsupported refusals, usage budgets, exclusive ownership, distinct TLS code and source retirement gates.",
-  "previousDevelopmentPass": {
-    "runId": "continuum-capture-20261024T062248247Z",
-    "baseCommit": "2398063d474aebf0f33835d35fb8ea3543d0688b",
-    "publicationParent": "59fcb96c2527a5490ec5835036747c88c9d83be5",
-    "result": "Transient protected source record-material sample; canonical35 after real profile fix, core21/process7/C127, independent4actualTLS and4096synthetic controls. Native first17/20 then20/20 after actual HTTP3 dependency setup; controller observation unresolved, not fixed. Both exact research and native workflows succeeded; original local controller observation remains pending. No reusable capsule/import/migration.",
-    "helpers": "1 temporary implementation/review assistant; only coordinator integrates and publishes",
-    "nativeSourceChanged": false,
-    "nativeVerificationSourceChanged": false,
-    "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-source-capture-ledger.json",
-    "localEvidence": "x10/evidence/continuum-source-capture.json",
-    "hostedVerification": {
-      "state": "success-transient-source-subset-only",
-      "researchRuns": [
-        40071366794,
-        40071371690
-      ],
-      "nativeRuns": [
-        40071366797,
-        40071371664
-      ]
-    },
-    "implementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448"
-  },
   "previousVerificationReceipt": {
     "runId": "continuum-peerclose-ci-20261024T013025923Z",
     "baseCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
@@ -1214,7 +1234,43 @@
     "maxHelperAgents": 6,
     "coordinatorSeparate": true,
     "historicalHelpersPreserved": true,
-    "ownerWorkWindowUnchanged": true,
-    "authority": "Latest direct owner instruction: all available helpers on X10; AVERKRON and Replyscope paused."
-  }
+    "ownerWorkWindowUnchanged": false,
+    "authority": "Direct owner instruction2026-10-24T07:17:36Z: X10 only, up to six useful helpers; AVERKRON and Replyscope paused.",
+    "otherProjectsRemainPaused": [
+      "AVERKRON",
+      "Replyscope"
+    ],
+    "historicalMaximumOneHelper": {
+      "maxHelperAgents": 1,
+      "scope": "Earlier owner policy, superseded; preserved in c0e229d48c75e0adc4e7b727f8bfa52505da0ab6 and history."
+    }
+  },
+  "ownerWorkWindowHistory": [
+    {
+      "supersededAtUTC": "2026-10-24T07:17:36.000Z",
+      "reason": "Direct owner instruction replaces the previous70-hour deadline.",
+      "window": {
+        "requestedAtUTC": "2026-10-23T16:16:08Z",
+        "hours": 70,
+        "reportTargetAtUTC": "2026-10-26T14:16:08Z",
+        "goal": "Maximum verified development through pinned OpenSSL state gate, semantic continuation and then opt-in native integration; preserve all existing NGINX capabilities",
+        "completionIsEvidenceGated": true,
+        "fullReleaseIsNotGuaranteedByElapsedHours": true,
+        "spendingPolicyUnchanged": true,
+        "plan": "x10/continuum/PLAN.md"
+      }
+    }
+  ],
+  "ownerWorkPolicyHistory": [
+    {
+      "sourceCommit": "c0e229d48c75e0adc4e7b727f8bfa52505da0ab6",
+      "policy": {
+        "maxHelperAgents": 1,
+        "coordinatorSeparate": true,
+        "effectiveAfterImplementation": "2debcc30101a72b1e5b08b22dd2ac9b0d040c401",
+        "historicalHelpersPreserved": true,
+        "ownerWorkWindowUnchanged": true
+      }
+    }
+  ]
 }

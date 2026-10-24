@@ -705,3 +705,15 @@ test('real TLS held capture rejects an executable budget without invoking its ge
   }, 'live_capture_preflight');
   assert.equal(getters, 0);
 });
+
+import { checkSyntheticKeylogBuffers } from './keylog-buffer.test.mjs';
+
+test('synthetic keylog source and failed decode buffers are scrubbed under strict framing', () => {
+  const result = checkSyntheticKeylogBuffers();
+  assert.equal(result.passed, true);
+  assert.equal(result.actualTLS, false);
+  assert.equal(result.syntheticDataOnly, true);
+  assert.equal(result.inputWipeVerified, true);
+  assert.equal(result.decodedFailureWipeVerified, true);
+  assert.equal(result.wholeProcessWipeClaimed, false);
+});

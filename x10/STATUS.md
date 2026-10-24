@@ -1023,3 +1023,38 @@ Official35 files:32 passed/3 skipped,1083 strictPASS/25SKIP/
 Следующий блок: source-only reusable protected capsule lifetime и явный API
 allowlist, без importer. Cleanup-before-release, expiry/revocation и actual-TLS
 abort barrier ещё не реализованы; SIGKILL не считается доказанным wipe.
+
+
+## Continuum: bounded buffer-only keylog ingestion
+В C2a Node keylog handler секреты и random больше не переводятся в
+неизменяемые JS strings. Bounded parser разбирает NSS line из Buffer;
+только public label становится строкой. Input event Buffer очищается при
+успехе и отказе; decoded temporaries очищаются при ошибке/отсутствии передачи
+владения. Exact framing допускает один optional LF, без trim/CRLF/padding.
+Это явная очистка доставленного Buffer и parser-owned копий, не всех
+Node/OpenSSL/V8 allocations или всей памяти процесса.
+
+Synthetic baseline выполняет exact historical handler и сохраняет
+неочищенный input как воспроизведённый дефект. Новый unit:14 accept/36 refuse,
+2 partially decoded allocations очищены; independent lifetime review:
+11 synthetic controls/16 временных Buffers. Эти случаи не TLS handover.
+Два настоящих TLS heldouts прошли: quiescent и transient capture;10/10
+доставленных keylog Buffers наблюдались нулевыми после synchronous handler.
+Все43 наблюдавшихся child завершены,4/4 temporary roots отсутствуют.
+
+Локально core21/process7/C1 27/C2a36, предыдущий35-test prefix сохранён.
+Native --official20/20 и controller77/77;499 native inputs, LICENSE и
+verification harness неизменны. Official1083 strictPASS/25SKIP/
+1expectedTODO-fail/0unexpectedFAIL. Exact CI нового implementation pending.
+Для прежнего47515734 оба native workflow/artifacts успешны; research push
+runtime skipped, PR фактически выполнил21/7/27/35. Исторический expectedB/
+actualA не переписан; исправлялся fixture contract, не controller/runtime.
+
+Текущее прямое поручение —60 часов с24.10.2026 07:17:36UTC;
+code stop26.10.2026 19:17:36UTC (23:17 Europe/Samara). Прежние70 часов
+сохранены только в истории. После code stop — остановка собственных fixtures,
+чтение результатов и итоговый отчёт без изменений кода.
+Следующий gate: source-only reusable protected lifetime/API allowlist,
+expiry/revocation и cleanup-before-release; importer/migration не реализованы.
+
+[Очищенный evidence](evidence/continuum-keylog-buffer.json) сохраняет точные проверки и границы.
