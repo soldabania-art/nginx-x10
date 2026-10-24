@@ -3,7 +3,27 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": null,
+  "executionLease": {
+    "runId": "x10-frontend-tls-20261024T202351Z",
+    "owner": "codex-coordinator-frontend-tls",
+    "baseCommit": "eaf3a9376f80d25d9dcaed1bbeea643151b841e9",
+    "acquiredAtUTC": "2026-10-24T20:23:51.000Z",
+    "expiresAtUTC": "2026-10-24T21:08:51.000Z",
+    "task": "G3 explicit managed loopback frontend HTTPS and certificate lifecycle/refusal controls",
+    "allowedFiles": [
+      "x10/control/manager.mjs",
+      "x10/test/frontend-tls.test.mjs",
+      "x10/control/README.md",
+      "x10/alpha/README.md",
+      ".github/workflows/x10-native.yml",
+      "x10/STATUS.md",
+      "x10/PLAN.md",
+      "x10/continuation-2026-10-24/GATES.json",
+      "x10/continuum/BACKGROUND.json",
+      "x10/evidence/g3-frontend-tls.json",
+      "x10/review/g3-frontend-tls-ledger.json"
+    ]
+  },
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
