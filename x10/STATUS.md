@@ -1105,3 +1105,23 @@ fault matrix не заявлены. [Контракт](continuum/SOURCE-CAPTURE.
 во время READY. Exact implementation CI pending. Далее — его приёмка, полный
 узкий established-state API/inventory и оставшиеся protection-failure gates
 до target reconstruction/import; distinct TLS code и old-code exit отдельно.
+
+
+### Exact CI: retained protected source-copy lifetime
+
+Implementation `f2f9684abf59064ec10c39ad1195b6d075b990a5`: research push
+`40078352816` и PR `40078356587`, native push `40078352804` и PR
+`40078356557` завершены success, attempt1. Оба actual research jobs
+выполнили core21/process7/C1 27/C2a43 без FAIL/skip/TODO. Оба native
+artifacts:20/20 групп, controller77TAP, alpha37TAP; official1105 strictPASS,
+25SKIP,1expectedTODO-fail,0unexpectedFAIL. Local official1083 учтён отдельно.
+[Очищенная квитанция](evidence/continuum-retained-capsule-hosted.json)
+содержит проверенные ZIP digests, отдельные event-head/PR merge checkout
+identities и независимое static review без новых runtime reruns.
+
+Это приёмка restricted retained source record-material lifetime/cleanup,
+не полного semantic capsule, importer или migration. Полный established-state
+semantic/API inventory и protection-syscall failure matrix остаются следующими
+gates. LSan unavailable не считается PASS; SIGKILL/crash wipe неизвестен.
+Exclusive ownership, distinct TLS code, actual old-code exit и native NGINX
+continuation по-прежнему не реализованы. Runtime sources в receipt не менялись.

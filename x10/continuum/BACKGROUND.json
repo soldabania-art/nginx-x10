@@ -3,23 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-retained-ci-20261024T083753Z",
-    "owner": "codex-coordinator-hosted-review",
-    "baseCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
-    "acquiredAtUTC": "2026-10-24T08:37:53.000Z",
-    "expiresAtUTC": "2026-10-24T09:22:53.000Z",
-    "task": "Verify exact retained source-copy implementation CI and record hosted acceptance",
-    "allowedFiles": [
-      "x10/STATUS.md",
-      "x10/PLAN.md",
-      "x10/continuum/README.md",
-      "x10/continuum/PLAN.md",
-      "x10/continuum/BACKGROUND.json",
-      "x10/evidence/continuum-retained-capsule-hosted.json",
-      "x10/review/continuum-retained-capsule-hosted-ledger.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -38,21 +22,21 @@
     "scheduleRecordAuthority": "Owner-supplied current schedule; no automation mutation performed in this development pass."
   },
   "acceptedCheckpoint": {
-    "nativeCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
-    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40074320788",
-    "continuumStage": "Bounded buffer-only C2a Node keylog ingestion locally and exact hosted verified; explicit delivered-input/parser-owned Buffer lifetime only. No whole-process erasure, reusable semantic capsule or migration.",
+    "nativeCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
+    "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40078352804",
+    "continuumStage": "Restricted retained protected source record-material lifetime locally and exact hosted verified; not a complete reusable semantic capsule, importer, ownership transfer or migration.",
     "continuumNativeIntegration": false,
-    "continuumEvidence": "x10/evidence/continuum-keylog-buffer.json",
+    "continuumEvidence": "x10/evidence/continuum-retained-capsule.json",
     "nativeHostedCI": {
-      "state": "success-exact-keylog-implementation-regression",
-      "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
-      "pushRun": 40074320788,
-      "pullRequestRun": 40074324454,
+      "state": "success-exact-retained-source-implementation-regression",
+      "implementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
+      "pushRun": 40078352804,
+      "pullRequestRun": 40078356557,
       "nativeJobIDs": [
-        120814372738,
-        120814394137
+        120826528935,
+        120826520519
       ],
-      "scope": "Both full exact workflows and matching native artifacts: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum. Native/controller implementations unchanged."
+      "scope": "Both exact full workflows and matching evidence ZIP digests; official aggregate20/20, controller77TAP, alpha37TAP,105modules. Native/controller implementations unchanged."
     },
     "previousContinuumImplementationCommit": "fc7161945a5855e7c650609bef33cd4a66f2e448",
     "previousContinuumHostedCI": {
@@ -79,29 +63,21 @@
       "scope": "Protected copy is cleared before source release; no reusable semantic capsule/export/import/migration."
     },
     "continuumHostedCI": {
-      "state": "success-bounded-keylog-buffer-lifetime-only",
-      "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
-      "pushRun": 40074320805,
-      "pullRequestRun": 40074324467,
+      "state": "success-retained-source-copy-lifetime-only",
+      "implementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
+      "pushRun": 40078352816,
+      "pullRequestRun": 40078356587,
       "researchJobIDs": [
-        120814380819,
-        120814393966
+        120826511177,
+        120826527482
       ],
       "coreTests": 21,
       "processTests": 7,
       "c1Tests": 27,
-      "c2aTests": 36,
-      "c2aFamilies": {
-        "flatChecks": 36,
-        "ordinaryActualTLSScenarios": 28,
-        "handledOSSignals": 2,
-        "programmaticCancellationControl": 1,
-        "nonTLSCachedSourceControl": 1,
-        "syntheticGroups": 4
-      },
-      "scope": "Bounded input/decoded-Buffer wiping in C2a runner; no full erasure or semantic export/import."
+      "c2aTests": 43,
+      "scope": "Restricted retained source record-material lifetime and cleanup acknowledgment; not semantic export/import or migration."
     },
-    "continuumImplementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+    "continuumImplementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
     "implementationIdentityRule": "Keylog Buffer-lifetime hardening accepted only for787f5f69 and frozen files. Mutable delivered input and parser-owned buffers are not all Node/OpenSSL allocations. Event head and actual PR merge/build checkout remain separate; no migration claim.",
     "nativeAndC0SourceHashesUnchanged": true,
     "nativeLocalRegression": {
@@ -950,7 +926,7 @@
       "migration": false
     },
     "retainedSourceLocal": {
-      "state": "local-reviewed-hosted-pending-narrow-source-copy-only",
+      "state": "accepted-local-and-hosted-narrow-source-copy-only",
       "evidence": "x10/evidence/continuum-retained-capsule.json",
       "flatChecks": 43,
       "newActualTLSControls": 7,
@@ -961,14 +937,68 @@
       "migration": false,
       "syntheticCleanupTUScenarios": 8,
       "syntheticTUAsanUbsan": "pass-with-leak-detection-disabled-and-uninstrumented-OpenSSL-dependencies"
+    },
+    "previousContinuumStageBeforeRetainedSource": "Bounded buffer-only C2a Node keylog ingestion locally and exact hosted verified; explicit delivered-input/parser-owned Buffer lifetime only. No whole-process erasure, reusable semantic capsule or migration.",
+    "previousContinuumEvidenceBeforeRetainedSource": "x10/evidence/continuum-keylog-buffer.json",
+    "previousContinuumImplementationCommitBeforeRetainedSource": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+    "previousContinuumHostedCIBeforeRetainedSource": {
+      "state": "success-bounded-keylog-buffer-lifetime-only",
+      "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+      "pushRun": 40074320805,
+      "pullRequestRun": 40074324467,
+      "researchJobIDs": [
+        120814380819,
+        120814393966
+      ],
+      "coreTests": 21,
+      "processTests": 7,
+      "c1Tests": 27,
+      "c2aTests": 36,
+      "c2aFamilies": {
+        "flatChecks": 36,
+        "ordinaryActualTLSScenarios": 28,
+        "handledOSSignals": 2,
+        "programmaticCancellationControl": 1,
+        "nonTLSCachedSourceControl": 1,
+        "syntheticGroups": 4
+      },
+      "scope": "Bounded input/decoded-Buffer wiping in C2a runner; no full erasure or semantic export/import."
+    },
+    "previousNativeCommitBeforeRetainedSource": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+    "previousNativeCIBeforeRetainedSource": "https://github.com/soldabania-art/nginx-x10/actions/runs/40074320788",
+    "previousNativeHostedCIBeforeRetainedSource": {
+      "state": "success-exact-keylog-implementation-regression",
+      "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+      "pushRun": 40074320788,
+      "pullRequestRun": 40074324454,
+      "nativeJobIDs": [
+        120814372738,
+        120814394137
+      ],
+      "scope": "Both full exact workflows and matching native artifacts: official aggregate, Unix/tenant gates, feature-off and alpha package/checksum. Native/controller implementations unchanged."
+    },
+    "retainedSourceHosted": {
+      "state": "success-narrow-source-copy-only",
+      "implementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
+      "evidence": "x10/evidence/continuum-retained-capsule-hosted.json",
+      "researchRuns": [
+        40078352816,
+        40078356587
+      ],
+      "nativeRuns": [
+        40078352804,
+        40078356557
+      ],
+      "fullSemanticCapsule": false,
+      "semanticExportImport": false,
+      "migration": false
     }
   },
   "pendingVerification": [
     "Private synthetic capture-TU ASan/UBSan8 controls passed with detect_leaks=0; LeakSanitizer detect_leaks=1 was unavailable due owned-process /proc/task access. Not a leak-detection PASS or full syscall-failure matrix.",
-    "Exact implementation research/native CI for retained source-copy lifetime remains pending; use the publication implementation SHA, not this lease or prior787 receipt.",
     "Retained copy is source-only record material, not a complete reusable semantic TLS capsule. Full semantic/API inventory and protection-syscall failure matrix remain unaccepted; original SSL/EVP heap is not covered. SIGKILL/crash explicit wipe remains unknown.",
     "Buffer-only keylog ingestion is bounded local hardening only. Parser-owned Buffers and delivered mutable event input are cleared; original Node/OpenSSL allocations, V8 internals, process-wide protection and total erasure are not proven.",
-    "Transient source copy remains exact-hosted accepted; new retained lifetime locally reviewed with exact-hosted pending. Full semantic/API preservation, target import and source retirement remain separate unaccepted gates.",
+    "Transient source copy remains exact-hosted accepted; new retained lifetime exact-hosted accepted for the narrow source copy only. Full semantic/API preservation, target import and source retirement remain separate unaccepted gates.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
     "C2a remaining inventory: other control/alert/partial/EOF states remain unsupported/fail-closed. Conservative initial-key sequence usage observation is accepted; future record budget and a complete first-profile C2b readiness inventory remain unaccepted.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
@@ -989,7 +1019,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Restricted retained protected source-copy lifetime locally verified; exact CI pending, then complete first-profile semantic/API and protection-failure gates before importer."
+      "goal": "Restricted retained protected source-copy lifetime locally and exact-hosted accepted; complete first-profile semantic/API inventory and protection-failure controls before importer."
     },
     {
       "id": "C3",
@@ -1125,6 +1155,15 @@
       "commitMessageRun": 40071371721,
       "versionBumpRun": 40071371642,
       "inheritedF5CLAFailedRun": 40071368929
+    },
+    {
+      "name": "Retained source-copy implementation format checks",
+      "state": "success",
+      "implementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
+      "whitespaceRun": 40078356764,
+      "commitMessageRun": 40078356542,
+      "versionBumpRun": 40078356575,
+      "inheritedF5CLAFailedRun": 40078354342
     }
   ],
   "ciPathSemantics": "Cheap per-event Git delta classifier, no workflow paths prefilter: push before/after; PR synchronize exact before/after plus base-ancestry gate. Uncertain input or failed/missing scope output runs expensive profiles. SHA concurrency prevents metadata SHA cancellation of a prior implementation run. Optimization only, not security admission.",
@@ -1208,30 +1247,41 @@
     "perFileLedger": "x10/review/continuum-retained-capsule-ledger.json",
     "localEvidence": "x10/evidence/continuum-retained-capsule.json",
     "hostedVerification": {
-      "state": "pending-exact-implementation-SHA"
-    }
+      "state": "success-exact-implementation-SHA",
+      "evidence": "x10/evidence/continuum-retained-capsule-hosted.json",
+      "researchRuns": [
+        40078352816,
+        40078356587
+      ],
+      "nativeRuns": [
+        40078352804,
+        40078356557
+      ]
+    },
+    "implementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5"
   },
   "lastVerificationReceipt": {
-    "runId": "continuum-keylog-ci-20261024T073502372Z",
-    "baseCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
-    "publicationParent": "6b93655191bb56dfcc7df1a8bbe308ad524b6276",
-    "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
-    "verifiedAtUTC": "2026-10-24T07:35:55.844823+00:00",
+    "runId": "continuum-retained-ci-20261024T083753Z",
+    "baseCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
+    "publicationParent": "2e7e4e653b324b214daa7050ff34a502a9e7ef52",
+    "implementationCommit": "f2f9684abf59064ec10c39ad1195b6d075b990a5",
+    "verifiedAtUTC": "2026-10-24T08:42:01.153560Z",
     "runtimeSourcesChanged": false,
-    "evidence": "x10/evidence/continuum-keylog-buffer-hosted.json",
-    "perFileLedger": "x10/review/continuum-keylog-buffer-hosted-ledger.json",
+    "newRuntimeTestsExecuted": 0,
+    "evidence": "x10/evidence/continuum-retained-capsule-hosted.json",
+    "perFileLedger": "x10/review/continuum-retained-capsule-hosted-ledger.json",
     "researchRuns": [
-      40074320805,
-      40074324467
+      40078352816,
+      40078356587
     ],
     "nativeRuns": [
-      40074320788,
-      40074324454
+      40078352804,
+      40078356557
     ],
     "spendingUSD": 0,
-    "scope": "C2a delivered-input/parser-owned Buffer lifetime only; no full erasure, reusable capsule or migration."
+    "scope": "Restricted source-only retained protected record-material lifetime; no full semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First verify exact retained-copy implementation CI. Then finish the bounded established-state semantic/API inventory and remaining protection-failure controls before any importer/target reconstruction. Retained lifecycle proves only the restricted source copy and cleanup acknowledgements, not session/authentication/exporter/Finished/resumption/ALPN preservation, future usage enforcement or later KeyUpdate semantics. Preserve unsupported refusals, exclusive target reader/writer ownership, distinct TLS code and actual old-code exit gates.",
+  "nextConcreteTask": "Complete the bounded established-state semantic/API inventory and remaining protection-failure controls before any importer/target reconstruction. Retained lifecycle and exact CI prove only the restricted source copy and cleanup acknowledgements, not session/authentication/exporter/Finished/resumption/ALPN preservation, future usage enforcement or later KeyUpdate semantics. Preserve unsupported refusals, exclusive target reader/writer ownership, distinct TLS code and actual old-code exit gates.",
   "previousDevelopmentPass": {
     "runId": "continuum-keylog-20261024T071950477Z",
     "baseCommit": "47515734a4287466b26b1d95a39c12e06bb1dfee",
@@ -1269,24 +1319,24 @@
     "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8"
   },
   "previousVerificationReceipt": {
-    "runId": "continuum-peerclose-ci-20261024T013025923Z",
-    "baseCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
-    "publicationParent": "776c8152b5d931e0e38eac3d631e4106f99e8ef9",
-    "verifiedAtUTC": "2026-10-24T01:36:00.354Z",
-    "implementationCommit": "2ca7892a7e1f448a98679da59e57e9a0023da2e8",
+    "runId": "continuum-keylog-ci-20261024T073502372Z",
+    "baseCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+    "publicationParent": "6b93655191bb56dfcc7df1a8bbe308ad524b6276",
+    "implementationCommit": "787f5f69e1f793b1b34e6d9b0acaa74381e059b8",
+    "verifiedAtUTC": "2026-10-24T07:35:55.844823+00:00",
     "runtimeSourcesChanged": false,
-    "spendingUSD": 0,
-    "evidence": "x10/evidence/continuum-c2a-peer-close-hosted.json",
-    "perFileLedger": "x10/review/continuum-c2a-peer-close-hosted-ledger.json",
+    "evidence": "x10/evidence/continuum-keylog-buffer-hosted.json",
+    "perFileLedger": "x10/review/continuum-keylog-buffer-hosted-ledger.json",
     "researchRuns": [
-      40050023137,
-      40050026763
+      40074320805,
+      40074324467
     ],
     "nativeRuns": [
-      40050023101,
-      40050026739
+      40074320788,
+      40074324454
     ],
-    "scope": "Read-only peer-first closure refusal; no migration"
+    "spendingUSD": 0,
+    "scope": "C2a delivered-input/parser-owned Buffer lifetime only; no full erasure, reusable capsule or migration."
   },
   "ownerWorkPolicy": {
     "maxHelperAgents": 6,
