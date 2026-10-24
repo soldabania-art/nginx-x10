@@ -1,6 +1,7 @@
 // C2a read-only OpenSSL metadata fixture. No exporter, importer or migration.
 // Two recording-relay TCP legs are explicit and never called a handover.
 import { spawn } from 'node:child_process';
+import { types } from 'node:util';
 import { createHash, randomBytes } from 'node:crypto';
 import { mkdtemp, chmod, readFile, writeFile, rm, stat } from 'node:fs/promises';
 import { createServer, createConnection } from 'node:net';
@@ -18,7 +19,7 @@ const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
 const SCENARIOS = ['quiescent', 'partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update', 'completed-key-update',
-  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'unexpected-transport-eof', 'peer-first-shutdown-lifecycle', 'truncated-body-eof'];
+  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'unexpected-transport-eof', 'peer-first-shutdown-lifecycle', 'truncated-body-eof', 'quiescent-live-hold'];
 const SECRET_LABELS = Object.freeze({
   CLIENT_HANDSHAKE_TRAFFIC_SECRET: 'clientHandshake', SERVER_HANDSHAKE_TRAFFIC_SECRET: 'serverHandshake',
   CLIENT_TRAFFIC_SECRET_0: 'clientApplication', SERVER_TRAFFIC_SECRET_0: 'serverApplication',
@@ -121,6 +122,13 @@ function nativeChannel(binary, args, children, signal, privateSecrets) {
   const wait = (event, predicate = () => true) => bounded(new Promise((resolve, reject) => {
     const callback = () => {
       if (failure) { waiters.delete(callback); reject(new ProbeFixtureError('native_output_invalid')); return; }
+      const refused = messages.find(item => item.event === 'hold-refused');
+      if (refused && event !== 'hold-refused') {
+        waiters.delete(callback);
+        try { reject(new ProbeFixtureError(checkedHoldRefusal(refused))); }
+        catch { reject(new ProbeFixtureError('live_hold_refusal_schema')); }
+        return;
+      }
       const message = messages.find(item => item.event === event && predicate(item));
       if (message) { waiters.delete(callback); resolve(message); }
       else if (closed) { waiters.delete(callback); reject(new ProbeFixtureError('native_early_exit')); }
@@ -200,7 +208,7 @@ async function makeCertificates(directory, children, signal, openssl) {
   return { cert: path('leaf.crt'), key: path('leaf.key'), caPath: path('ca.crt'), ca: await readFile(path('ca.crt')) };
 }
 
-function scope(milliseconds) {
+function scope(milliseconds, externalSignal) {
   const controller = new AbortController();
   const interrupt = name => {
     const error = new ProbeFixtureError('fixture_interrupted');
@@ -210,8 +218,11 @@ function scope(milliseconds) {
   const term = () => interrupt('SIGTERM');
   const int = () => interrupt('SIGINT');
   process.on('SIGTERM', term); process.on('SIGINT', int);
+  const cancel = () => controller.abort(new ProbeFixtureError('fixture_interrupted'));
+  externalSignal?.addEventListener('abort', cancel, { once: true });
+  if (externalSignal?.aborted) cancel();
   const timer = setTimeout(() => controller.abort(new ProbeFixtureError('fixture_deadline')), milliseconds);
-  return { signal: controller.signal, close() { clearTimeout(timer); process.removeListener('SIGTERM', term); process.removeListener('SIGINT', int); } };
+  return { signal: controller.signal, close() { clearTimeout(timer); externalSignal?.removeEventListener('abort', cancel); process.removeListener('SIGTERM', term); process.removeListener('SIGINT', int); } };
 }
 async function reap(children) {
   const work = [];
@@ -538,7 +549,7 @@ const numericFields = ['sslPending', 'packetLength', 'rbufLeft', 'rbufOffset', '
 function checkedProbe(message, scenario) {
   const keys = ['event', 'scenario', 'sample', ...decimalFields, ...sequenceFields, ...booleanFields, ...numericFields];
   assertFixture(message?.event === 'probe' && message.scenario === scenario &&
-    (['completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'peer-first-shutdown-lifecycle', 'truncated-body-eof'].includes(scenario) ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
+    (['completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'peer-first-shutdown-lifecycle', 'truncated-body-eof', 'quiescent-live-hold'].includes(scenario) ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
     Object.keys(message).sort().join(',') === keys.sort().join(','), 'probe_schema');
   for (const field of decimalFields) assertFixture(typeof message[field] === 'string' && /^(0|[1-9][0-9]{0,19})$/.test(message[field]) && BigInt(message[field]) <= 0xffffffffffffffffn, 'probe_counter');
   for (const field of sequenceFields) assertFixture(typeof message[field] === 'string' && /^[0-9a-f]{16}$/.test(message[field]), 'probe_sequence');
@@ -559,6 +570,39 @@ function checkRefusal(probe, scenario) {
   else if (scenario === 'unrelated-write-read-retry') assertFixture(probe.reasons === '16' &&
     probe.sslPending === 0 && probe.sslHasPending === false && probe.ledgerRetryCall === 2 &&
     probe.ledgerLastCall === 3 && probe.ledgerLastOutcome === 1, 'unrelated_write_cleared_read_retry');
+}
+
+const HOLD_REFUSALS = new Set(['hold_nonce', 'hold_timeout', 'hold_decision', 'hold_aborted', 'hold_transport_activity', 'hold_changed']);
+function checkedHoldRefusal(message) {
+  assertFixture(message?.event === 'hold-refused' && message.scenario === 'quiescent-live-hold' &&
+    Object.keys(message).sort().join(',') === 'code,event,scenario' && HOLD_REFUSALS.has(message.code), 'live_hold_refusal_schema');
+  return message.code;
+}
+function checkedHoldEvent(message, event, probe, nonce) {
+  const ready = event === 'hold-ready';
+  assertFixture(message?.event === event && message.scenario === 'quiescent-live-hold' &&
+    Object.keys(message).sort().join(',') === (ready ? 'callSerial,deadlineMilliseconds,event,nonce,scenario' : 'callSerial,event,nonce,scenario,unchanged') &&
+    typeof message.nonce === 'string' && /^[0-9a-f]{32}$/.test(message.nonce) &&
+    message.callSerial === probe.ledgerCallSerial && (nonce === undefined || message.nonce === nonce) &&
+    (ready ? Number.isSafeInteger(message.deadlineMilliseconds) && message.deadlineMilliseconds > 0 && message.deadlineMilliseconds <= 3000 : message.unchanged === true), 'live_hold_event_schema');
+  return structuredClone(message);
+}
+function freezePublic(value) {
+  if (value && typeof value === 'object') { for (const child of Object.values(value)) freezePublic(child); Object.freeze(value); }
+  return value;
+}
+function holdDecision(input) {
+  assertFixture(input !== null && typeof input === 'object' && !types.isProxy(input) &&
+    [Object.prototype, null].includes(Object.getPrototypeOf(input)), 'live_hold_decision');
+  const keys = Reflect.ownKeys(input);
+  assertFixture(keys.length === 3 && keys.every(key => ['action', 'nonce', 'callSerial'].includes(key)), 'live_hold_decision');
+  const descriptors = Object.getOwnPropertyDescriptors(input);
+  for (const key of ['action', 'nonce', 'callSerial']) assertFixture(Object.hasOwn(descriptors[key], 'value') && descriptors[key].enumerable, 'live_hold_decision');
+  const { action: { value: action }, nonce: { value: nonce }, callSerial: { value: serial } } = descriptors;
+  assertFixture(['continue', 'abort'].includes(action) && typeof nonce === 'string' && /^[0-9a-f]{32}$/.test(nonce) &&
+    typeof serial === 'string' && /^[1-9][0-9]{0,19}$/.test(serial) && BigInt(serial) <= 0xffffffffffffffffn, 'live_hold_decision');
+  // Validly shaped stale values deliberately reach C's independent binding check.
+  return `${action === 'continue' ? 'CONTINUE' : 'ABORT'} ${nonce} ${serial}\n`;
 }
 
 function checkedRetryEvent(message, event, scenario, payloadBytes) {
@@ -714,7 +758,9 @@ function checkedImmutablePair(first, second) {
 
 /** Observe only; controlled refusal cases intentionally terminate the fixture
  * without claiming clean TLS shutdown, state export, migration or ownership. */
-export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = ['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario) ? 65536 : 257, fragmentPrefix } = {}) {
+export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = ['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario) ? 65536 : 257, fragmentPrefix, onLiveHold, signal: externalSignal } = {}) {
+  const liveHoldScenario = scenario === 'quiescent-live-hold';
+  assertFixture(liveHoldScenario ? typeof onLiveHold === 'function' && (externalSignal === undefined || externalSignal instanceof AbortSignal) : onLiveHold === undefined && externalSignal === undefined, 'live_hold_options');
   assertFixture(SCENARIOS.includes(scenario) && Number.isInteger(payloadBytes) && payloadBytes >= 2 && payloadBytes <= 65536, 'scenario_options');
   if (['completed-write-retry', 'overlapping-read-write-retry'].includes(scenario)) assertFixture(payloadBytes === 65536, 'write_retry_payload_size');
   if (scenario === 'truncated-body-eof') assertFixture(payloadBytes <= 16384, 'truncated_payload_size');
@@ -735,9 +781,9 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
   const eofScenario = scenario === 'unexpected-transport-eof';
   const truncatedScenario = scenario === 'truncated-body-eof';
   const peerShutdownScenario = scenario === 'peer-first-shutdown-lifecycle';
-  const allowed = scenario === 'quiescent' || retryCompleted || writeRetryCompleted;
+  const allowed = scenario === 'quiescent' || liveHoldScenario || retryCompleted || writeRetryCompleted;
   const graceful = allowed || scenario === 'completed-key-update' || peerCompleted || shutdownScenario || peerShutdownScenario;
-  const owned = scope(25000);
+  const owned = scope(25000, externalSignal);
   const children = new Set();
   const sockets = new Set();
   const secrets = {};
@@ -774,7 +820,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     } else if (writeRetryCompleted) {
       client.socket.pause(); relay.pauseServerReads(); client.write();
     } else if ((graceful && !retryCompleted) || scenario === 'unread-plaintext' || eofScenario) {
-      if (graceful && !shutdownScenario && !peerShutdownScenario) client.endOnEcho();
+      if (graceful && !shutdownScenario && !peerShutdownScenario && !liveHoldScenario) client.endOnEcho();
       client.write();
     } else if (scenario === 'write-backpressure') {
       client.socket.pause(); relay.pauseServerReads();
@@ -959,6 +1005,40 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       }
       immutableRepeatedProbe = true;
     } else checkRefusal(first, scenario);
+    let liveHold;
+    if (liveHoldScenario) {
+      await client.receivedPayload();
+      const ready = checkedHoldEvent(await native.wait('hold-ready'), 'hold-ready', first);
+      assertFixture(client.transportIntact() && native.child.exitCode === null && !native.child.killed, 'live_hold_source_not_alive');
+      const holdReceivedAt = performance.now();
+      const callbackMilliseconds = Math.min(2000, ready.deadlineMilliseconds - 500);
+      assertFixture(callbackMilliseconds > 0, 'live_hold_deadline');
+      const context = freezePublic({ schemaVersion: 1, nonce: ready.nonce, callSerial: ready.callSerial,
+        deadlineMilliseconds: callbackMilliseconds, nativeDeadlineMilliseconds: ready.deadlineMilliseconds,
+        probe: structuredClone(first), identity: structuredClone(harness.identity),
+        sourceHeld: true, historical: false, exportAuthority: false, semanticExportImport: false, migration: false });
+      const refused = native.wait('hold-refused').then(message => { throw new ProbeFixtureError(checkedHoldRefusal(message)); });
+      const callback = Promise.resolve().then(() => onLiveHold(context)).catch(() => { throw new ProbeFixtureError('live_hold_callback_failed'); });
+      const decision = await Promise.race([bounded(callback, 'live_hold_callback_timeout', callbackMilliseconds, owned.signal), refused]);
+      assertFixture(native.child.exitCode === null && !native.child.killed && client.transportIntact(), 'live_hold_source_not_alive');
+      const line = holdDecision(decision);
+      await verifyHarness(owned.signal);
+      assertFixture(performance.now() - holdReceivedAt < ready.deadlineMilliseconds - 100, 'live_hold_deadline');
+      await bounded(new Promise((resolve, reject) => native.child.stdin.write(line, error => error ? reject(new ProbeFixtureError('live_hold_write')) : resolve())), 'live_hold_write', 500, owned.signal);
+      const reobserved = checkedProbe(await native.wait('probe', message => message.sample === 3), scenario);
+      const repeatedReobserved = checkedProbe(await native.wait('probe', message => message.sample === 4), scenario);
+      checkedImmutablePair(reobserved, repeatedReobserved);
+      const normalize = value => { const copy = { ...value }; delete copy.sample; return copy; };
+      assertFixture(JSON.stringify(normalize(first)) === JSON.stringify(normalize(reobserved)), 'live_hold_metadata_changed');
+      const released = checkedHoldEvent(await native.wait('hold-released'), 'hold-released', first, ready.nonce);
+      assertFixture(client.transportIntact(), 'live_hold_peer_closed_before_release');
+      liveHold = { nonce: ready.nonce, callSerial: ready.callSerial, deadlineMilliseconds: callbackMilliseconds,
+        nativeDeadlineMilliseconds: ready.deadlineMilliseconds, ready, reobserved, repeatedReobserved, released,
+        sourceAliveBeforeAndAfterCallback: true, heldDuringCallback: true, sourceHeld: false, historical: true, decision: 'continue',
+        immutableBeforeRelease: true, applicationBytesRead: payloadBytes, applicationBytesWritten: payloadBytes,
+        exportAuthority: false, semanticExportImport: false, migration: false };
+      client.endOnEcho();
+    }
     if (retryScenario) {
       if (retryCompleted) assertFixture(first.ledgerRetryCall === 0 && first.ledgerLastCall === 3 &&
         first.ledgerLastOutcome === 1, 'completed_retry_not_cleared');
@@ -1095,6 +1175,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       ...(peerShutdownLifecycle ? { peerShutdownLifecycle } : {}),
       ...(eofLifecycle ? { eofLifecycle } : {}),
       ...(truncationLifecycle ? { truncationLifecycle } : {}),
+      ...(liveHold ? { liveHold } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {
     if (owned.signal.aborted) throw owned.signal.reason;
@@ -1119,7 +1200,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     try {
       await prepareProbeHarness();
       const observations = [];
-      for (const scenario of all ? SCENARIOS : [process.argv[2] ?? 'quiescent']) observations.push(await runProbeScenario({ scenario }));
+      for (const scenario of all ? SCENARIOS : [process.argv[2] ?? 'quiescent']) observations.push(await runProbeScenario({ scenario, ...(scenario === 'quiescent-live-hold' ? { onLiveHold: context => ({ action: 'continue', nonce: context.nonce, callSerial: context.callSerial }) } : {}) }));
       console.log(JSON.stringify({ schemaVersion: 1, outcome: 'pass', observations }));
     } finally { await cleanupProbeHarness(); }
   };

@@ -531,3 +531,114 @@ test('synthetic capsule preflight rejects schema and directional budget violatio
 });
 
 import { checkSyntheticCapsulePreflight } from './capsule-preflight.test.mjs';
+
+
+// These are actual authenticated TLS source-side hold cases. They do not
+// export state, grant target I/O, change TLS releases or migrate a connection.
+test('real quiescent TLS source waits for a nonce-bound decision before reobserving and releasing', { timeout: 30000 }, async () => {
+  let entered = false;
+  let callbackFinished = false;
+  let callbackSnapshot;
+  const result = await runProbeScenario({
+    scenario: 'quiescent-live-hold', payloadBytes: 12013,
+    onLiveHold: async context => {
+      entered = true;
+      assert.equal(context.sourceHeld, true);
+      assert.equal(context.historical, false);
+      assert.equal(context.exportAuthority, false);
+      assert.equal(context.semanticExportImport, false);
+      assert.equal(context.migration, false);
+      assert.match(context.nonce, /^[0-9a-f]{32}$/);
+      assert.match(context.callSerial, /^[1-9][0-9]*$/);
+      assert.ok(context.deadlineMilliseconds > 0 && context.deadlineMilliseconds <= 3000);
+      assert.equal(context.probe.allowed, true);
+      assert.equal(context.probe.reasons, '0');
+      assert.equal(context.probe.ledgerCallSerial, context.callSerial);
+      assert.equal(Object.isFrozen(context), true);
+      assert.equal(Object.isFrozen(context.probe), true);
+      assert.equal(Object.isFrozen(context.identity), true);
+      callbackSnapshot = structuredClone(context.probe);
+      await new Promise(resolve => setTimeout(resolve, 25));
+      assert.deepEqual(context.probe, callbackSnapshot);
+      callbackFinished = true;
+      return { action: 'continue', nonce: context.nonce, callSerial: context.callSerial };
+    },
+  });
+  assert.equal(entered, true);
+  assert.equal(callbackFinished, true);
+  assert.equal(result.outcome, 'pass');
+  assert.equal(result.liveHold.sourceAliveBeforeAndAfterCallback, true);
+  assert.equal(result.liveHold.sourceHeld, false);
+  assert.equal(result.liveHold.historical, true);
+  assert.equal(result.liveHold.heldDuringCallback, true);
+  assert.equal(result.liveHold.decision, 'continue');
+  assert.equal(result.liveHold.immutableBeforeRelease, true);
+  assert.equal(result.liveHold.callSerial, callbackSnapshot.ledgerCallSerial);
+  assert.equal(result.liveHold.released.unchanged, true);
+  assert.equal(result.liveHold.reobserved.ledgerCallSerial, callbackSnapshot.ledgerCallSerial);
+  assert.equal(result.liveHold.repeatedReobserved.ledgerCallSerial, callbackSnapshot.ledgerCallSerial);
+  assert.equal(result.liveHold.reobserved.readNextSequence, callbackSnapshot.readNextSequence);
+  assert.equal(result.liveHold.reobserved.writeNextSequence, callbackSnapshot.writeNextSequence);
+  assert.equal(result.wire.passed, true);
+  assert.equal(result.fixtureGracefulShutdown, true);
+  assert.equal(result.semanticExportImport, false);
+  assert.equal(result.migration, false);
+});
+
+async function expectLiveHoldRefusal(makeDecision, expectedCode) {
+  let entered = false;
+  await assert.rejects(runProbeScenario({
+    scenario: 'quiescent-live-hold', payloadBytes: 2053,
+    onLiveHold: async context => {
+      entered = true;
+      assert.equal(context.sourceHeld, true);
+      assert.equal(context.historical, false);
+      assert.equal(context.probe.allowed, true);
+      return makeDecision(context);
+    },
+  }), error => error?.code === expectedCode);
+  assert.equal(entered, true, 'refusal must occur after the actual C hold, not before TLS');
+}
+
+test('real TLS live hold refuses an explicit source abort', { timeout: 30000 }, async () => {
+  await expectLiveHoldRefusal(context => ({ action: 'abort', nonce: context.nonce,
+    callSerial: context.callSerial }), 'hold_aborted');
+});
+
+test('real TLS live hold refuses a stale nonce decision', { timeout: 30000 }, async () => {
+  await expectLiveHoldRefusal(context => ({ action: 'continue',
+    nonce: (context.nonce[0] === '0' ? '1' : '0') + context.nonce.slice(1),
+    callSerial: context.callSerial }), 'hold_decision');
+});
+
+test('real TLS live hold refuses a malformed callback decision', { timeout: 30000 }, async () => {
+  await expectLiveHoldRefusal(context => ({ action: 'continue', nonce: context.nonce,
+    callSerial: context.callSerial, unknown: true }), 'live_hold_decision');
+});
+
+test('real TLS live hold fails when its coordinator callback throws', { timeout: 30000 }, async () => {
+  await expectLiveHoldRefusal(() => { throw new Error('controlled callback refusal'); },
+    'live_hold_callback_failed');
+});
+
+test('real TLS live hold has a bounded runner deadline for an unanswered coordinator', { timeout: 15000 }, async () => {
+  await expectLiveHoldRefusal(() => new Promise(() => {}), 'live_hold_callback_timeout');
+});
+
+
+// Programmatic cancellation is a runtime control, separate from ordinary
+// TLS scenarios and from the two existing handled OS signal controls.
+test('real TLS live hold cancels and cleans up after coordinator cancellation', { timeout: 30000 }, async () => {
+  const controller = new AbortController();
+  let entered = false;
+  await assert.rejects(runProbeScenario({
+    scenario: 'quiescent-live-hold', payloadBytes: 3079, signal: controller.signal,
+    onLiveHold: async context => {
+      entered = true;
+      assert.equal(context.sourceHeld, true);
+      controller.abort();
+      return { action: 'continue', nonce: context.nonce, callSerial: context.callSerial };
+    },
+  }), error => error?.code === 'fixture_interrupted');
+  assert.equal(entered, true);
+});

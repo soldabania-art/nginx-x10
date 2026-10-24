@@ -104,3 +104,59 @@ digests и отдельные event-head/checkout/build identities. Hosted offic
 Возвращённые snapshots являются post-cleanup историей. Далее — bounded C
 STEP после immutable pair до любого TLS READ/control/shutdown и runner
 decision/nonce/reobservation barrier, с abort/cleanup перед экспортом.
+
+## Opt-in source-side live hold
+
+The new `quiescent-live-hold` fixture path adds an explicit C decision barrier
+immediately after its first immutable allowed probe pair, before the next TLS
+READ/control/shutdown. The existing ordinary `quiescent` scenario is unchanged.
+The single-threaded C source generates a fresh public 128-bit nonce, records
+the current call serial and waits on its control pipe and raw socket with an
+independent monotonic deadline of at most three seconds. Only an exact bounded
+CONTINUE line matching nonce and serial can reach reobservation and release.
+ABORT, stale/malformed/queued duplicate decisions, timeout or observed transport
+activity take the refusal/cleanup path without SSL_shutdown or later TLS I/O.
+
+The runner calls `onLiveHold` only after the C hold-ready event and first probe
+pair. Its deeply frozen context exposes allowlisted metadata and verified-build
+identity, not an SSL object or secret bytes. During this callback, `sourceHeld`
+is true and `historical` false. The cooperative callback deadline is at most
+two seconds, reduced against the advertised C remainder; the C deadline remains
+independent and authoritative. After callback completion the runner verifies its
+harness again, and C requires fresh probes3/4 to match the initial complete
+result and ledger serial before hold-released. Only then is normal client
+closure permitted. A returned final result is historical evidence:
+`historical:true`, `sourceHeld:false`, `heldDuringCallback:true`.
+
+Independent checks used two genuine authenticated TLS exchanges with delayed
+continue decisions (payload3701 and52009), observing the owned C child alive
+before and after each callback delay, exactly two initial probes before the
+decision, unchanged ledger serial and fresh probes before release. Exact echo,
+wire verification, both close_notify and normal closure passed after release.
+Seven separate actual-TLS refusal controls covered ABORT, stale nonce, stale
+ledger serial, callback throw, the actual C three-second timeout, an already
+queued duplicate decision and peer raw transport closure while held. The C
+timeout control deliberately withheld the real CONTINUE control-pipe line;
+the duplicate control wrote two real decision lines in one pipe write. Neither
+control changed TLS counters, SSL return values, native clock or library state.
+All negative controls required no probes3/4, release, TLS shutdown or successful
+done event, and actual source child closure. Sanitized counts, source identities,
+cleanup facts and the private observer-script hash are recorded in the evidence.
+
+This closes only the explicit single-threaded fixture hold gap. Raw socket and
+control-pipe idleness checks are samples; arrivals after the last check remain
+possible. They are not atomic transport ownership fences or proof of absent
+concurrent use in arbitrary applications. The public nonce binds this control
+exchange and is not a credential or attestation. Caller-provided blocking code
+cannot be forcibly preempted by a JavaScript timer; callbacks are trusted and
+cooperative. Held standalone OS-signal/CLI behavior was not independently
+validated by these controls; canonical programmatic cancellation is separate
+from the pre-existing OS-signal boundaries.
+
+The metadata preflight still accepts only its original `quiescent` scenario;
+new live-hold probes retain the genuine `quiescent-live-hold` label and are not
+silently relabeled to bypass that contract. Live preflight compatibility,
+read-only secret capture, protected-RAM lifetime and cleansing, importer/target
+construction, exclusive I/O ownership, distinct TLS-code versions and source
+retirement before continuation remain separate unaccepted gates. There is no
+semantic export/import, automatic adapter compiler or native NGINX migration.

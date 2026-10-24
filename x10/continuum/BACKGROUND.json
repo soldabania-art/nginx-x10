@@ -3,14 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-hold-20261024T045603013Z",
-    "owner": "codex-coordinator",
-    "baseCommit": "fc0738abd1a6a8399d16707d6c60a1ca5fbdf415",
-    "acquiredAtUTC": "2026-10-24T04:56:03.013Z",
-    "expiresAtUTC": "2026-10-24T05:41:03.013Z",
-    "task": "Explicit bounded C quiescence decision barrier before subsequent TLS I/O"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -825,10 +818,29 @@
       "liveSafepoint": false,
       "semanticExportImport": false,
       "migration": false
+    },
+    "liveHoldLocal": {
+      "state": "success-local-exact-hosted-pending",
+      "evidence": "x10/evidence/continuum-live-hold.json",
+      "nativeEvidence": "x10/evidence/continuum-live-hold-native-regression.json",
+      "flatChecks": 30,
+      "families": {
+        "flatChecks": 30,
+        "ordinaryActualTLSScenarios": 24,
+        "handledOSSignals": 2,
+        "programmaticCancellationControl": 1,
+        "nonTLSCachedSourceControl": 1,
+        "syntheticGroups": 2
+      },
+      "liveCallback": true,
+      "semanticExportImport": false,
+      "migration": false,
+      "nativeNginxIntegration": false
     }
   },
   "pendingVerification": [
-    "C2b readiness blocker: current returned result.probe is post-cleanup metadata, not a held live safepoint. Implement live quiescence hold with bounded freshness and decision barrier before exporter; budget preflight is arithmetic only.",
+    "Exact research/native CI for the result commit enclosing live-hold evidence is pending; record exact SHA and workflow run IDs before hosted acceptance.",
+    "Live hold narrowly implemented in the source fixture; explicit held-profile metadata preflight admission and protected-RAM source capture contract remain unaccepted. Existing preflight is quiescent-only; never relabel held metadata. Source/target ownership, secret lifetime and importer remain separate gates.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
     "C2a remaining inventory: other control/alert/partial/EOF states remain unsupported/fail-closed. Conservative initial-key sequence usage observation is accepted; future record budget and a complete first-profile C2b readiness inventory remain unaccepted.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
@@ -849,7 +861,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Metadata budget preflight locally and exact hosted verified. Live C STEP/freshness/runner decision barrier blocks first C2b exporter; unsupported states remain refused."
+      "goal": "Opt-in live C hold locally verified; exact CI pending. Held-profile admission and source capsule inventory/lifetime contract precede exporter; no migration."
     },
     {
       "id": "C3",
@@ -1024,26 +1036,17 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
-    "runId": "continuum-preflight-20261024T041732553Z",
-    "baseCommit": "4e75ae7b153ff0991624dcf1fdedc2d4a394425c",
-    "publicationParent": "d06523574c3333b90f24fbc750b27e9d60adb6b8",
-    "result": "Metadata-only initial-profile preflight: canonical23/core21/process7/C127/native20 locally passed; both exact research and both native workflows completed success. Historical post-cleanup snapshots are not a live safepoint; exporter remains blocked.",
-    "helpers": "5 temporary delegated roles; only coordinator integrates and publishes",
+    "runId": "continuum-hold-20261024T045603013Z",
+    "baseCommit": "fc0738abd1a6a8399d16707d6c60a1ca5fbdf415",
+    "publicationParent": "f6f53dab3ec923261cc26a6766f7d100c985b6b4",
+    "result": "Explicit opt-in source-side C decision hold locally verified; canonical/core/process/C1/native passed. Exact hosted pending; no semantic export/import or migration.",
+    "helpers": "6 temporary delegated roles; only coordinator integrates and publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-capsule-preflight-ledger.json",
+    "perFileLedger": "x10/review/continuum-live-hold-ledger.json",
     "hostedVerification": {
-      "state": "success-metadata-only",
-      "researchRuns": [
-        40062408179,
-        40062412144
-      ],
-      "nativeRuns": [
-        40062408165,
-        40062412125
-      ]
-    },
-    "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986"
+      "state": "pending-exact-result-commit"
+    }
   },
   "lastVerificationReceipt": {
     "runId": "continuum-preflight-ci-20261024T042819768Z",
@@ -1065,28 +1068,28 @@
     ],
     "scope": "Metadata-only preflight; live C quiescence barrier absent"
   },
-  "nextConcreteTask": "Implement bounded C STEP after the quiescent immutable probe pair and before any TLS READ/control/shutdown, with bounded runner decision/nonce/reobservation and abort/cleanup tests. Current returned probe is post-cleanup metadata, not export authority. Preserve budgets and unsupported-state refusals; importer/target I/O/old-code retirement remain separate gates.",
+  "nextConcreteTask": "First verify exact live-hold implementation CI. Then combine explicitly reviewed held-profile preflight binding with first protected-RAM read-only source capsule capture after secret lifetime/inventory contract acceptance. Bind current challenge, identity and reobserved pair; never relabel the new scenario or spend another slice on an allowlist-only change. Future budget enforcement, importer/target ownership, distinct TLS code and old-code retirement remain separate gates.",
   "previousDevelopmentPass": {
-    "runId": "continuum-usage-20261024T032250401Z",
-    "baseCommit": "15641e756c3dad8eec925eeff698e564b8b213c5",
-    "publicationParent": "f5ead0a5414e5c3e60d0058fcf260d57bc04d653",
-    "result": "Conservative directional next<2^24 policy: canonical22, independent2 actual low-counter TLS plus synthetic boundaries, core21/process7/C127/native20 locally passed; both exact research and both native workflows completed success. No future I/O budget enforcement or migration.",
+    "runId": "continuum-preflight-20261024T041732553Z",
+    "baseCommit": "4e75ae7b153ff0991624dcf1fdedc2d4a394425c",
+    "publicationParent": "d06523574c3333b90f24fbc750b27e9d60adb6b8",
+    "result": "Metadata-only initial-profile preflight: canonical23/core21/process7/C127/native20 locally passed; both exact research and both native workflows completed success. Historical post-cleanup snapshots are not a live safepoint; exporter remains blocked.",
     "helpers": "5 temporary delegated roles; only coordinator integrates and publishes",
     "nativeSourceChanged": false,
     "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-usage-ledger.json",
+    "perFileLedger": "x10/review/continuum-capsule-preflight-ledger.json",
     "hostedVerification": {
-      "state": "success-narrow-profile",
+      "state": "success-metadata-only",
       "researchRuns": [
-        40058848933,
-        40058853171
+        40062408179,
+        40062412144
       ],
       "nativeRuns": [
-        40058848929,
-        40058853120
+        40062408165,
+        40062412125
       ]
     },
-    "implementationCommit": "b05ee33160b218854da4cac5710125b90e5ee8ac"
+    "implementationCommit": "deecc35825a706ac8b58d728f8f8a6e35b9d0986"
   },
   "previousVerificationReceipt": {
     "runId": "continuum-peerclose-ci-20261024T013025923Z",

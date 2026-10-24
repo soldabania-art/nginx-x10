@@ -393,3 +393,33 @@ digests и отдельные event-head/checkout/build identities. Hosted offic
 Возвращённые snapshots являются post-cleanup историей. Далее — bounded C
 STEP после immutable pair до любого TLS READ/control/shutdown и runner
 decision/nonce/reobservation barrier, с abort/cleanup перед экспортом.
+
+## Continuum: bounded live C hold
+
+Новый opt-in `quiescent-live-hold` после настоящего TLS exchange получает
+immutable probe pair и явно ждёт решения в C до следующего TLS I/O.
+Bounded callback runner видит только metadata/identity и свежий challenge.
+Продолжение требует корректного решения и неизменной повторной metadata;
+abort/timeout/наблюдённая активность peer ведут к cleanup без TLS shutdown.
+Старые scenarios и native NGINX сохранены.
+
+Локально30/30 C2a:24 ordinaryTLS,2 OS signals,1 programmatic cancel,
+1 noTLS source control и2 synthetic groups; прежние23 tests сохранены.
+Независимо9 actualTLS cases:2 delayed continue и7 refusal controls,
+включая отдельные C timeout/duplicate-control fault injections и peer close.
+Исходный author smoke с ранним runner считается только diagnostic:
+его3 PASS не приписаны final bytes; final fresh3 author cases прошли.
+Pre-runtime deadline/schema corrections отделены от runtime failures.
+Counts, cleanup и hashes записаны в [evidence](evidence/continuum-live-hold.json). Core21/process7/C1 27 и native20/20 прошли;
+official1083 strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL.
+Exact implementation CI pending. Наблюдение socket activity является
+выборочным, не transport/ownership fence; caller ledger доверяет одному
+владельцу. Result после возврата остаётся историей, live phase доступна
+только внутри bounded callback.
+
+Это source-side fixture barrier, не exporter/importer или migration.
+Metadata preflight пока принимает только прежний `quiescent`: новый
+snapshot нельзя переименовать ради admission. Далее — явно reviewed
+held-profile admission и контракт protected-RAM source capsule capture;
+секреты/cleansing, future budget, target ownership и retirement требуют
+отдельной проверки. [Readiness](continuum/C2B-READINESS.md) сохраняет эти границы.

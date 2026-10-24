@@ -23,6 +23,7 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 #include <openssl/crypto.h>
+#include <openssl/rand.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <poll.h>
@@ -253,6 +254,119 @@ static int observe(PEER *peer, X10_PROBE_RESULT *result)
     return memcmp(&before, &peer->ledger, sizeof(before)) == 0;
 }
 
+/* A source-side single-threaded fixture barrier, not a transport ownership
+ * fence. Raw poll/peek do not consume ciphertext or call the TLS engine.
+ * Any observed transport activity while held is outside this narrow profile.
+ * A peer can still change transport state after the final idle observation. */
+static int hold_socket_idle(int fd)
+{
+    unsigned char byte;
+    ssize_t result = recv(fd, &byte, 1, MSG_PEEK | MSG_DONTWAIT);
+    return result < 0 && (errno == EAGAIN || errno == EWOULDBLOCK);
+}
+
+static const char *hold_quiescent(PEER *peer, const char *scenario,
+    const X10_PROBE_RESULT *initial, int64_t deadline)
+{
+    static const char digits[] = "0123456789abcdef";
+    unsigned char random[16];
+    char nonce[33], line[64], expected[64], abort_line[64];
+    X10_PROBE_RESULT third, fourth;
+    struct pollfd descriptors[2];
+    size_t i, at = 0;
+    ssize_t got;
+    int rc, length, abort_length;
+    int64_t now, hold_deadline, remaining;
+    const char *failure = "hold_decision";
+
+    now = now_ms();
+    if (now < 0 || now >= deadline) { failure = "hold_timeout"; goto refused; }
+    hold_deadline = deadline - now > 3000 ? now + 3000 : deadline;
+    if (RAND_bytes(random, sizeof(random)) != 1) {
+        failure = "hold_nonce"; goto refused;
+    }
+    for (i = 0; i < sizeof(random); i++) {
+        nonce[i * 2] = digits[random[i] >> 4];
+        nonce[i * 2 + 1] = digits[random[i] & 15];
+    }
+    nonce[32] = '\0';
+    OPENSSL_cleanse(random, sizeof(random));
+    length = snprintf(expected, sizeof(expected), "CONTINUE %s %" PRIu64 "\n",
+        nonce, initial->ledger_call_serial);
+    abort_length = snprintf(abort_line, sizeof(abort_line), "ABORT %s %" PRIu64 "\n",
+        nonce, initial->ledger_call_serial);
+    if (length <= 0 || (size_t) length >= sizeof(expected)
+        || abort_length <= 0 || (size_t) abort_length >= sizeof(abort_line)) goto refused;
+    if (!hold_socket_idle(peer->fd)) {
+        failure = "hold_transport_activity"; goto refused;
+    }
+    now = now_ms();
+    if (now < 0 || now >= hold_deadline) { failure = "hold_timeout"; goto refused; }
+    printf("{\"event\":\"hold-ready\",\"scenario\":\"%s\",\"nonce\":\"%s\","
+        "\"callSerial\":\"%" PRIu64 "\",\"deadlineMilliseconds\":%" PRId64 "}\n",
+        scenario, nonce, initial->ledger_call_serial, hold_deadline - now);
+    descriptors[0].fd = STDIN_FILENO; descriptors[0].events = POLLIN;
+    descriptors[1].fd = peer->fd; descriptors[1].events = POLLIN;
+    while (!interrupted) {
+        now = now_ms();
+        if (now < 0 || (remaining = hold_deadline - now) <= 0) {
+            failure = "hold_timeout"; goto refused;
+        }
+        descriptors[0].revents = descriptors[1].revents = 0;
+        rc = poll(descriptors, 2, (int) remaining);
+        if (rc < 0 && errno == EINTR) continue;
+        if (rc == 0) { failure = "hold_timeout"; goto refused; }
+        if (rc < 0) goto refused;
+        /* Activity wins even when a CONTINUE decision becomes readable in
+         * the same poll. No SSL read/shutdown classifies this raw activity. */
+        if (descriptors[1].revents != 0) {
+            failure = "hold_transport_activity"; goto refused;
+        }
+        if (descriptors[0].revents & (POLLERR | POLLNVAL)) goto refused;
+        if (!(descriptors[0].revents & (POLLIN | POLLHUP))) continue;
+        got = read(STDIN_FILENO, line + at, 1);
+        if (got < 0 && (errno == EINTR || errno == EAGAIN)) continue;
+        if (got != 1) goto refused;
+        if (line[at++] == '\n') break;
+        if (at == sizeof(line)) goto refused;
+    }
+    if (interrupted) goto refused;
+    now = now_ms();
+    if (now < 0 || now >= hold_deadline) { failure = "hold_timeout"; goto refused; }
+    if (at == (size_t) abort_length && memcmp(line, abort_line, at) == 0) {
+        failure = "hold_aborted"; goto refused;
+    }
+    if (at != (size_t) length || memcmp(line, expected, at) != 0) goto refused;
+    /* Reject bytes/EOF already queued after the one authorized decision.
+     * This is a sample of the trusted control pipe, not a writer fence. */
+    descriptors[0].revents = 0;
+    if (poll(descriptors, 1, 0) != 0) goto refused;
+    if (!hold_socket_idle(peer->fd)) {
+        failure = "hold_transport_activity"; goto refused;
+    }
+    failure = "hold_changed";
+    if (!observe(peer, &third) || memcmp(initial, &third, sizeof(third)) != 0)
+        goto refused;
+    emit_probe(scenario, 3, peer, &third);
+    if (!observe(peer, &fourth) || memcmp(initial, &fourth, sizeof(fourth)) != 0)
+        goto refused;
+    emit_probe(scenario, 4, peer, &fourth);
+    now = now_ms();
+    if (now < 0 || now >= hold_deadline) { failure = "hold_timeout"; goto refused; }
+    if (!hold_socket_idle(peer->fd)) {
+        failure = "hold_transport_activity"; goto refused;
+    }
+    printf("{\"event\":\"hold-released\",\"scenario\":\"%s\",\"nonce\":\"%s\","
+        "\"callSerial\":\"%" PRIu64 "\",\"unchanged\":true}\n",
+        scenario, nonce, initial->ledger_call_serial);
+    return NULL;
+refused:
+    OPENSSL_cleanse(random, sizeof(random));
+    printf("{\"event\":\"hold-refused\",\"scenario\":\"%s\",\"code\":\"%s\"}\n",
+        scenario, failure);
+    return failure;
+}
+
 int main(int argc, char **argv)
 {
     const char *cert = NULL, *key = NULL, *count = NULL, *nonce = NULL;
@@ -264,7 +378,7 @@ int main(int argc, char **argv)
         "peer-key-update-pending", "peer-key-update-completed", "completed-write-retry",
         "overlapping-read-write-retry", "server-shutdown-lifecycle",
         "unexpected-transport-eof", "peer-first-shutdown-lifecycle",
-        "truncated-body-eof"};
+        "truncated-body-eof", "quiescent-live-hold"};
     SSL_CTX *ctx = NULL;
     PEER peer;
     X10_PROBE_RESULT first, second;
@@ -282,7 +396,7 @@ int main(int argc, char **argv)
     int quiescent, unread, partial, pressure_case, ku, empty, completed_ku, exchange;
     int completed_read, unrelated_write, completed_write, overlap, allowed_case;
     int peer_ku, peer_ku_pending, peer_ku_completed, shutdown_lifecycle, unexpected_eof;
-    int peer_shutdown, truncated_body;
+    int peer_shutdown, truncated_body, live_hold;
     unsigned long eof_error = 0;
     int64_t deadline;
 
@@ -324,7 +438,8 @@ int main(int argc, char **argv)
         if (a < 0 || b < 0) goto done;
         challenge[i] = (unsigned char) (a * 16 + b);
     }
-    quiescent = !strcmp(scenario, "quiescent");
+    live_hold = !strcmp(scenario, "quiescent-live-hold");
+    quiescent = !strcmp(scenario, "quiescent") || live_hold;
     unread = !strcmp(scenario, "unread-plaintext");
     partial = !strcmp(scenario, "partial-header") || !strcmp(scenario, "partial-body");
     pressure_case = !strcmp(scenario, "write-backpressure");
@@ -931,6 +1046,10 @@ int main(int argc, char **argv)
         if (!observe(&peer, &second)) goto done;
         emit_probe(scenario, completed_write ? 4 : 2, &peer, &second);
         if (memcmp(&first, &second, sizeof(first))) goto done;
+        if (live_hold) {
+            failure = hold_quiescent(&peer, scenario, &first, deadline);
+            if (failure != NULL) goto done;
+        }
         failure = "peer_close_notify";
         while (1) {
             if (complete(&peer, X10_CALL_READ, &trailer, 1, deadline)) {
