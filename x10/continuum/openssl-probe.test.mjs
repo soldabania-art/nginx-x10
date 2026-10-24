@@ -373,3 +373,67 @@ test('a cached interruption helper refuses changed source bytes before any build
     assert.equal(refusedChangedSource, true, 'cached helper did not refuse its changed source');
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
+
+// This is actual peer-first TLS closure, not a fatal transport EOF or a
+// continuation admission. The fixture's generic ledger still records the
+// clean ZERO_RETURN read as ERROR; sslError distinguishes its real result.
+test('peer close_notify is refused before and after reciprocal shutdown completes', { timeout: 30000 }, async () => {
+  const result = await runProbeScenario({ scenario: 'peer-first-shutdown-lifecycle', payloadBytes: 8093 });
+  const lifecycle = result.peerShutdownLifecycle;
+  assert.equal(result.outcome, 'pass');
+  assert.equal(result.negotiated.authorized, true);
+  assert.equal(lifecycle.ready.applicationBytesRead, 8093);
+  assert.equal(lifecycle.ready.applicationBytesWritten, 8093);
+  assert.equal(lifecycle.peerExplicitEndAfterEcho, true);
+  assert.equal(lifecycle.relayClientFinBeforeRead, true);
+  assert.equal(lifecycle.clientApplicationWrites, 1);
+  assert.equal(lifecycle.received.rawResult, 0);
+  assert.equal(lifecycle.received.sslError, 6);
+  assert.equal(lifecycle.received.call, 2);
+  assert.equal(lifecycle.received.outcome, 4);
+  assert.equal(lifecycle.received.retryCall, 0);
+  assert.equal(lifecycle.received.shutdownBits, 2);
+  assert.equal(lifecycle.received.applicationBytesRead, 0);
+  for (const probe of [lifecycle.refused, lifecycle.repeatedRefused]) {
+    assert.equal(probe.allowed, false);
+    assert.equal(probe.shutdown, 2);
+    assert.equal(probe.ledgerLastCall, 2);
+    assert.equal(probe.ledgerLastOutcome, 4);
+    assert.equal(probe.ledgerRetryCall, 0);
+    assert.ok((BigInt(probe.reasons) & 4096n) !== 0n);
+    assert.ok((BigInt(probe.reasons) & 4n) !== 0n);
+    assert.equal(BigInt(probe.reasons) & 16n, 0n);
+  }
+  assert.equal(lifecycle.immutableInitialProbes, true);
+  assert.equal(lifecycle.completed.rawResult, 1);
+  assert.equal(lifecycle.completed.sslError, 0);
+  assert.equal(lifecycle.completed.call, 5);
+  assert.equal(lifecycle.completed.outcome, 1);
+  assert.equal(lifecycle.completed.retryCall, 0);
+  assert.equal(lifecycle.completed.shutdownBits, 3);
+  for (const probe of [result.probe, lifecycle.repeatedCompleted]) {
+    assert.equal(probe.allowed, false);
+    assert.equal(probe.shutdown, 3);
+    assert.equal(probe.ledgerLastCall, 5);
+    assert.equal(probe.ledgerLastOutcome, 1);
+    assert.equal(probe.ledgerRetryCall, 0);
+    assert.ok((BigInt(probe.reasons) & 4096n) !== 0n);
+    assert.equal(BigInt(probe.reasons) & 16n, 0n);
+  }
+  assert.equal(result.immutableRepeatedProbe, true);
+  assert.equal(result.fixtureGracefulShutdown, true);
+  assert.equal(result.wire.passed, true);
+  for (const direction of ['client', 'server']) {
+    assert.equal(result.wire.directions[direction].applicationBytes, 8093);
+    assert.equal(result.wire.directions[direction].closeNotify, true);
+    assert.equal(result.wire.directions[direction].keyUpdates, 0);
+  }
+  assert.equal(BigInt('0x' + lifecycle.refused.readNextSequence), BigInt(result.wire.directions.client.finalNextSequence));
+  assert.equal(BigInt('0x' + lifecycle.refused.writeNextSequence), BigInt(result.wire.directions.server.beforeCloseNotify.nextSequence));
+  assert.equal(BigInt('0x' + result.probe.readNextSequence), BigInt(result.wire.directions.client.finalNextSequence));
+  assert.equal(BigInt('0x' + result.probe.writeNextSequence), BigInt(result.wire.directions.server.finalNextSequence));
+  assert.equal(result.clientConnections, 1);
+  assert.equal(result.serverConnections, 1);
+  assert.equal(result.semanticExportImport, false);
+  assert.equal(result.migration, false);
+});

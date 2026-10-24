@@ -18,7 +18,7 @@ const PATCH = fileURLToPath(new URL('./openssl-probe.patch', import.meta.url));
 const DEADLINE_MS = 12000;
 const CAPTURE_LIMIT = 262144;
 const SCENARIOS = ['quiescent', 'partial-header', 'partial-body', 'unread-plaintext', 'empty-read-retry', 'write-backpressure', 'queued-key-update', 'completed-key-update',
-  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'unexpected-transport-eof'];
+  'completed-read-retry', 'unrelated-write-read-retry', 'peer-key-update-pending', 'peer-key-update-completed', 'completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'unexpected-transport-eof', 'peer-first-shutdown-lifecycle'];
 const SECRET_LABELS = Object.freeze({
   CLIENT_HANDSHAKE_TRAFFIC_SECRET: 'clientHandshake', SERVER_HANDSHAKE_TRAFFIC_SECRET: 'serverHandshake',
   CLIENT_TRAFFIC_SECRET_0: 'clientApplication', SERVER_TRAFFIC_SECRET_0: 'serverApplication',
@@ -299,6 +299,7 @@ function relayTo(port, sockets, signal) {
   let backend;
   let failure;
   let captureBytes = 0;
+  let clientEndForwarded = false;
   let gate;
   const wake = () => { for (const callback of watchers) callback(); };
   const server = createServer({ allowHalfOpen: true }, front => {
@@ -334,7 +335,7 @@ function relayTo(port, sockets, signal) {
       wake();
     });
     back.on('data', chunk => { try { record('serverToClient', chunk); front.write(chunk); } catch { failure = true; front.destroy(); back.destroy(); } wake(); });
-    front.on('end', () => { observed.clientFin = true; back.end(); wake(); });
+    front.on('end', () => { observed.clientFin = true; back.end(() => { clientEndForwarded = true; wake(); }); wake(); });
     back.on('end', () => { observed.serverFin = true; front.end(); wake(); });
     front.on('close', bad => { observed.frontClosed = true; failure ||= bad; wake(); });
     back.on('close', bad => { observed.backClosed = true; failure ||= bad; wake(); });
@@ -356,6 +357,7 @@ function relayTo(port, sockets, signal) {
     serverReadsPaused: () => backend?.isPaused() === true,
     resumeServerReads() { assertFixture(backend?.isPaused(), 'relay_backend_not_paused'); backend.resume(); },
     waitClosed: () => wait(() => observed.frontClosed && observed.backClosed),
+    waitClientFin: () => wait(() => observed.clientFin === true && clientEndForwarded),
   };
 }
 function independentClient(port, ca, payload, sockets, secrets, signal, explicitShutdown = false) {
@@ -496,7 +498,7 @@ const numericFields = ['sslPending', 'packetLength', 'rbufLeft', 'rbufOffset', '
 function checkedProbe(message, scenario) {
   const keys = ['event', 'scenario', 'sample', ...decimalFields, ...sequenceFields, ...booleanFields, ...numericFields];
   assertFixture(message?.event === 'probe' && message.scenario === scenario &&
-    (['completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle'].includes(scenario) ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
+    (['completed-write-retry', 'overlapping-read-write-retry', 'server-shutdown-lifecycle', 'peer-first-shutdown-lifecycle'].includes(scenario) ? [1, 2, 3, 4] : [1, 2]).includes(message.sample) &&
     Object.keys(message).sort().join(',') === keys.sort().join(','), 'probe_schema');
   for (const field of decimalFields) assertFixture(typeof message[field] === 'string' && /^(0|[1-9][0-9]{0,19})$/.test(message[field]) && BigInt(message[field]) <= 0xffffffffffffffffn, 'probe_counter');
   for (const field of sequenceFields) assertFixture(typeof message[field] === 'string' && /^[0-9a-f]{16}$/.test(message[field]), 'probe_sequence');
@@ -595,6 +597,33 @@ function checkedShutdownProbe(probe, completed) {
     probe.wbufLeft === 0 && probe.wnum === 0, 'shutdown_refusal_not_observed');
 }
 
+function checkedPeerShutdownEvent(message, event, payloadBytes) {
+  const ready = event === 'peer-shutdown-ready';
+  const completed = event === 'peer-shutdown-completed';
+  const keys = ready ? ['event', 'scenario', 'applicationBytesRead', 'applicationBytesWritten'] :
+    ['event', 'scenario', 'call', 'outcome', 'retryCall', 'shutdownBits', 'rawResult', 'sslError',
+      ...(completed ? [] : ['applicationBytesRead'])];
+  assertFixture(message?.event === event && message.scenario === 'peer-first-shutdown-lifecycle' &&
+    Object.keys(message).sort().join(',') === keys.sort().join(','), 'peer_shutdown_event_schema');
+  if (ready) assertFixture(message.applicationBytesRead === payloadBytes &&
+    message.applicationBytesWritten === payloadBytes, 'peer_shutdown_echo_counts');
+  else assertFixture(message.call === (completed ? 5 : 2) && message.outcome === (completed ? 1 : 4) &&
+    message.retryCall === 0 && message.shutdownBits === (completed ? 3 : 2) &&
+    message.rawResult === (completed ? 1 : 0) && message.sslError === (completed ? 0 : 6) &&
+    (completed || message.applicationBytesRead === 0), 'peer_shutdown_event_transition');
+  return structuredClone(message);
+}
+function checkedPeerShutdownProbe(probe, completed) {
+  const reasons = BigInt(probe.reasons);
+  // ZERO_RETURN is the existing ledger's ERROR4 classification, not a fatal
+  // SSL_ERROR_SSL. Do not fabricate a new outcome or clear a retry here.
+  assertFixture(!probe.allowed && probe.shutdown === (completed ? 3 : 2) &&
+    probe.ledgerLastCall === (completed ? 5 : 2) && probe.ledgerLastOutcome === (completed ? 1 : 4) &&
+    probe.ledgerRetryCall === 0 && (reasons & 4096n) !== 0n &&
+    (completed || (reasons & 4n) !== 0n) && probe.sslPending === 0 &&
+    probe.wbufLeft === 0 && probe.wnum === 0, 'peer_shutdown_refusal_not_observed');
+}
+
 function checkedEOFEvent(message, event, payloadBytes) {
   const ready = event === 'eof-ready';
   const keys = ready ? ['event', 'scenario', 'applicationBytesRead', 'applicationBytesWritten'] :
@@ -640,8 +669,9 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
   const writeRetryCompleted = scenario === 'completed-write-retry';
   const shutdownScenario = scenario === 'server-shutdown-lifecycle';
   const eofScenario = scenario === 'unexpected-transport-eof';
+  const peerShutdownScenario = scenario === 'peer-first-shutdown-lifecycle';
   const allowed = scenario === 'quiescent' || retryCompleted || writeRetryCompleted;
-  const graceful = allowed || scenario === 'completed-key-update' || peerCompleted || shutdownScenario;
+  const graceful = allowed || scenario === 'completed-key-update' || peerCompleted || shutdownScenario || peerShutdownScenario;
   const owned = scope(25000);
   const children = new Set();
   const sockets = new Set();
@@ -666,7 +696,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     await bounded(new Promise((resolve, reject) => { relay.server.once('error', reject); relay.server.listen({ port: 0, host: '127.0.0.1', signal: owned.signal }, resolve); }), 'relay_listen', DEADLINE_MS, owned.signal);
     client = peerScenario
       ? peerClient(relay.server.address().port, cert, scenario, payloadBytes, challenge, children, secrets, owned.signal)
-      : independentClient(relay.server.address().port, cert.ca, payload, sockets, secrets, owned.signal, shutdownScenario);
+      : independentClient(relay.server.address().port, cert.ca, payload, sockets, secrets, owned.signal, shutdownScenario || peerShutdownScenario);
     await client.secure();
     await native.wait('ready', message => message.scenario === scenario);
     if (peerScenario) { await client.send(); }
@@ -677,7 +707,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
     } else if (writeRetryCompleted) {
       client.socket.pause(); relay.pauseServerReads(); client.write();
     } else if ((graceful && !retryCompleted) || scenario === 'unread-plaintext' || eofScenario) {
-      if (graceful && !shutdownScenario) client.endOnEcho();
+      if (graceful && !shutdownScenario && !peerShutdownScenario) client.endOnEcho();
       client.write();
     } else if (scenario === 'write-backpressure') {
       client.socket.pause(); relay.pauseServerReads();
@@ -759,6 +789,34 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         immutableInitialProbes: true, peerCloseWithheldUntilInitialProbes: true,
         peerExplicitEndAfterInitialProbes: true, clientApplicationWrites: 1 };
     }
+    let peerShutdownLifecycle;
+    if (peerShutdownScenario) {
+      const ready = checkedPeerShutdownEvent(await native.wait('peer-shutdown-ready'), 'peer-shutdown-ready', payloadBytes);
+      await client.receivedPayload();
+      assertFixture(client.applicationWrites() === 1 && client.receivedBytes() === payloadBytes &&
+        client.socket.allowHalfOpen === true && !client.socket.writableEnded,
+      'peer_shutdown_before_exact_echo');
+      await bounded(new Promise((resolve, reject) => client.socket.end(error =>
+        error ? reject(new ProbeFixtureError('peer_shutdown_client_end')) : resolve())),
+      'peer_shutdown_client_end', DEADLINE_MS, owned.signal);
+      // Require actual frontend FIN and backend end callback after queued
+      // writes. This is forwarding completion, not proof of remote delivery;
+      // the strict C READ and final wire oracle must prove close_notify.
+      await relay.waitClientFin();
+      assertFixture(relay.observed.clientFin === true && client.socket.writableEnded,
+        'peer_shutdown_fin_before_read');
+      await stepNative(native, owned.signal);
+      const received = checkedPeerShutdownEvent(await native.wait('peer-shutdown-received'), 'peer-shutdown-received', payloadBytes);
+      const refused = checkedProbe(await native.wait('probe', message => message.sample === 1), scenario);
+      const repeatedRefused = checkedProbe(await native.wait('probe', message => message.sample === 2), scenario);
+      checkedPeerShutdownProbe(refused, false); checkedPeerShutdownProbe(repeatedRefused, false);
+      checkedImmutablePair(refused, repeatedRefused);
+      await stepNative(native, owned.signal);
+      const completed = checkedPeerShutdownEvent(await native.wait('peer-shutdown-completed'), 'peer-shutdown-completed', payloadBytes);
+      peerShutdownLifecycle = { ready, received, refused, repeatedRefused, completed,
+        immutableInitialProbes: true, peerExplicitEndAfterEcho: true,
+        relayClientFinBeforeRead: true, clientApplicationWrites: 1 };
+    }
     let eofLifecycle;
     if (eofScenario) {
       const ready = checkedEOFEvent(await native.wait('eof-ready'), 'eof-ready', payloadBytes);
@@ -775,7 +833,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         clientTLSEndCalled: false, relayClientFinObserved: true,
         transportClose: 'node-tls-socket-destroy-confirmed-by-relay-fin-and-pinned-server-error' };
     }
-    const firstSample = writeRetryCompleted || overlappingRetry || shutdownScenario ? 3 : 1;
+    const firstSample = writeRetryCompleted || overlappingRetry || shutdownScenario || peerShutdownScenario ? 3 : 1;
     const first = checkedProbe(await native.wait('probe', message => message.sample === firstSample), scenario);
     let immutableRepeatedProbe = false;
     if (graceful || peerScenario || overlappingRetry || eofScenario) {
@@ -793,6 +851,10 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       if (shutdownScenario) {
         checkedShutdownProbe(first, true); checkedShutdownProbe(second, true);
         shutdownLifecycle.repeatedCompleted = second;
+      }
+      if (peerShutdownScenario) {
+        checkedPeerShutdownProbe(first, true); checkedPeerShutdownProbe(second, true);
+        peerShutdownLifecycle.repeatedCompleted = second;
       }
       if (writeRetryCompleted) {
         assertFixture(first.reasons === '0' && first.ledgerRetryCall === 0 && first.ledgerLastCall === 3 &&
@@ -862,6 +924,17 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
         done.pressureBytesCompleted === 0 && client.applicationWrites() === 1,
       'shutdown_event_order_or_counts');
     }
+    if (peerShutdownScenario) {
+      const expected = ['ready', 'peer-shutdown-ready', 'peer-shutdown-received', 'probe', 'probe', 'peer-shutdown-completed', 'probe', 'probe', 'shutdown', 'done'];
+      const shutdown = await native.wait('shutdown');
+      assertFixture(Object.keys(shutdown).sort().join(',') === 'clean,event,shutdownBits' &&
+        shutdown.clean === true && shutdown.shutdownBits === 3 &&
+        native.messages.filter(message => expected.includes(message.event)).map(message => message.event).join(',') === expected.join(',') &&
+        native.messages.filter(message => message.event === 'probe').map(message => message.sample).join(',') === '1,2,3,4' &&
+        done.applicationBytesRead === payloadBytes && done.applicationBytesWritten === payloadBytes &&
+        done.pressureBytesCompleted === 0 && client.applicationWrites() === 1,
+      'peer_shutdown_event_order_or_counts');
+    }
     if (retryScenario) {
       const events = native.messages.map(message => message.event);
       assertFixture(events.filter(event => event === 'retry-ready').length === 1 &&
@@ -896,6 +969,14 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
           BigInt(`0x${shutdownLifecycle.refused.writeNextSequence}`) === BigInt(wire.directions.server.finalNextSequence),
         'shutdown_wire_probe_sequence_mismatch');
       }
+      else if (peerShutdownScenario) {
+        assertFixture(first.readGeneration === '0' && first.writeGeneration === '0' &&
+          BigInt(`0x${first.readNextSequence}`) === BigInt(wire.directions.client.finalNextSequence) &&
+          BigInt(`0x${first.writeNextSequence}`) === BigInt(wire.directions.server.finalNextSequence) &&
+          BigInt(`0x${peerShutdownLifecycle.refused.readNextSequence}`) === BigInt(wire.directions.client.finalNextSequence) &&
+          BigInt(`0x${peerShutdownLifecycle.refused.writeNextSequence}`) === BigInt(wire.directions.server.beforeCloseNotify.nextSequence),
+        'peer_shutdown_wire_probe_sequence_mismatch');
+      }
       else if (peerCompleted) assertFixture(wire.directions.client.beforeCloseNotify.epoch === 1 &&
         wire.directions.server.beforeCloseNotify.epoch === 1 &&
         BigInt(`0x${first.readNextSequence}`) === BigInt(wire.directions.client.beforeCloseNotify.nextSequence) &&
@@ -913,6 +994,7 @@ export async function runProbeScenario({ scenario = 'quiescent', payloadBytes = 
       ...(writeRetryLifecycle ? { writeRetryLifecycle } : {}),
       ...(overlapRetryLifecycle ? { overlapRetryLifecycle } : {}),
       ...(shutdownLifecycle ? { shutdownLifecycle } : {}),
+      ...(peerShutdownLifecycle ? { peerShutdownLifecycle } : {}),
       ...(eofLifecycle ? { eofLifecycle } : {}),
       identity: structuredClone(harness.identity), semanticExportImport: false, migration: false, nativeNginxIntegration: false };
   } catch (error) {

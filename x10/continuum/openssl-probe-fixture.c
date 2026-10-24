@@ -263,7 +263,7 @@ int main(int argc, char **argv)
         "completed-key-update", "completed-read-retry", "unrelated-write-read-retry",
         "peer-key-update-pending", "peer-key-update-completed", "completed-write-retry",
         "overlapping-read-write-retry", "server-shutdown-lifecycle",
-        "unexpected-transport-eof"};
+        "unexpected-transport-eof", "peer-first-shutdown-lifecycle"};
     SSL_CTX *ctx = NULL;
     PEER peer;
     X10_PROBE_RESULT first, second;
@@ -281,6 +281,7 @@ int main(int argc, char **argv)
     int quiescent, unread, partial, pressure_case, ku, empty, completed_ku, exchange;
     int completed_read, unrelated_write, completed_write, overlap, allowed_case;
     int peer_ku, peer_ku_pending, peer_ku_completed, shutdown_lifecycle, unexpected_eof;
+    int peer_shutdown;
     unsigned long eof_error = 0;
     int64_t deadline;
 
@@ -338,9 +339,10 @@ int main(int argc, char **argv)
     peer_ku = peer_ku_pending || peer_ku_completed;
     shutdown_lifecycle = !strcmp(scenario, "server-shutdown-lifecycle");
     unexpected_eof = !strcmp(scenario, "unexpected-transport-eof");
+    peer_shutdown = !strcmp(scenario, "peer-first-shutdown-lifecycle");
     allowed_case = quiescent || completed_read || completed_write;
     exchange = allowed_case || completed_ku || peer_ku_completed
-        || shutdown_lifecycle || unexpected_eof;
+        || shutdown_lifecycle || unexpected_eof || peer_shutdown;
     if (unread && wanted < 2) goto done;
     if ((completed_write || overlap) && wanted != MAX_APPLICATION_BYTES) goto done;
 
@@ -684,6 +686,69 @@ int main(int argc, char **argv)
          * follow. No read/write/control/handshake/shutdown operation is legal. */
     }
 
+    if (peer_shutdown) {
+        /* An exact echo receipt precedes the peer's explicit TLS end. The
+         * orchestrator waits for forwarded close bytes before STEP. Only a
+         * real ZERO_RETURN, not a retry/fatal EOF, reaches these snapshots. */
+        failure = "peer_shutdown_ready";
+        if (!observe(&peer, &first) || !first.allowed
+            || peer.ledger.retry_call != X10_CALL_NONE
+            || SSL_pending(peer.ssl) != 0 || SSL_has_pending(peer.ssl)
+            || SSL_get_shutdown(peer.ssl) != 0
+            || (SSL_get_options(peer.ssl) & SSL_OP_IGNORE_UNEXPECTED_EOF)
+            || SSL_get_quiet_shutdown(peer.ssl)) goto done;
+        printf("{\"event\":\"peer-shutdown-ready\",\"scenario\":\"%s\","
+            "\"applicationBytesRead\":%zu,\"applicationBytesWritten\":%zu}\n",
+            scenario, total, wanted);
+        if (!step(deadline) || !ready(peer.fd, POLLIN, deadline)) goto done;
+        failure = "peer_shutdown_received_state_not_reached";
+        if (invoke(&peer, X10_CALL_READ, &trailer, 1)
+            || peer.last_result != 0 || peer.error != SSL_ERROR_ZERO_RETURN
+            || peer.amount != 0 || SSL_get_shutdown(peer.ssl) != SSL_RECEIVED_SHUTDOWN
+            || peer.ledger.last_call != X10_CALL_READ
+            || peer.ledger.last_outcome != X10_OUTCOME_ERROR
+            || peer.ledger.retry_call != X10_CALL_NONE
+            || !observe(&peer, &first) || first.allowed
+            || !(first.reasons & X10_REASON_CONTROL)
+            || !(first.reasons & X10_REASON_LEDGER)
+            || (first.reasons & X10_REASON_RETRY)
+            || first.shutdown != SSL_RECEIVED_SHUTDOWN
+            || first.alert_dispatch != 0 || first.wbuf_left || first.wnum
+            || SSL_pending(peer.ssl) != 0 || SSL_has_pending(peer.ssl)) goto done;
+        /* ZERO_RETURN is a clean received close, not fatal SSL_ERROR_SSL.
+         * The existing ledger records both as ERROR; no new CLOSED enum or
+         * artificial retry completion is introduced by this fixture case. */
+        printf("{\"event\":\"peer-shutdown-received\",\"scenario\":\"%s\","
+            "\"call\":%d,\"outcome\":%d,\"retryCall\":%d,"
+            "\"shutdownBits\":%d,\"rawResult\":%d,\"sslError\":%d,"
+            "\"applicationBytesRead\":%zu}\n", scenario,
+            (int) peer.ledger.last_call, (int) peer.ledger.last_outcome,
+            (int) peer.ledger.retry_call, first.shutdown, peer.last_result,
+            peer.error, peer.amount);
+        emit_probe(scenario, 1, &peer, &first);
+        failure = "peer_shutdown_received_probe";
+        if (!observe(&peer, &second)) goto done;
+        emit_probe(scenario, 2, &peer, &second);
+        if (memcmp(&first, &second, sizeof(first))) goto done;
+        failure = "peer_shutdown_response_step";
+        if (!step(deadline)) goto done;
+        failure = "peer_shutdown_completion";
+        /* Respond only after the received-only observations. No application
+         * read/write/control call follows the peer close_notify. */
+        if (!complete(&peer, X10_CALL_SHUTDOWN, NULL, 0, deadline)
+            || peer.last_result != 1 || peer.error != SSL_ERROR_NONE
+            || SSL_get_shutdown(peer.ssl) != (SSL_SENT_SHUTDOWN | SSL_RECEIVED_SHUTDOWN)
+            || peer.ledger.last_call != X10_CALL_SHUTDOWN
+            || peer.ledger.last_outcome != X10_OUTCOME_SUCCESS
+            || peer.ledger.retry_call != X10_CALL_NONE) goto done;
+        printf("{\"event\":\"peer-shutdown-completed\",\"scenario\":\"%s\","
+            "\"call\":%d,\"outcome\":%d,\"retryCall\":%d,"
+            "\"shutdownBits\":%d,\"rawResult\":%d,\"sslError\":%d}\n", scenario,
+            (int) peer.ledger.last_call, (int) peer.ledger.last_outcome,
+            (int) peer.ledger.retry_call, SSL_get_shutdown(peer.ssl),
+            peer.last_result, peer.error);
+    }
+
     if (shutdown_lifecycle) {
         /* The client withholds close_notify until both sent-only snapshots.
          * This exact-echo ACK excludes unread application data for this narrow
@@ -742,7 +807,7 @@ int main(int argc, char **argv)
     failure = "probe";
     if (interrupted || now_ms() >= deadline) goto done;
     if (!observe(&peer, &first)) goto done;
-    emit_probe(scenario, completed_write || overlap || shutdown_lifecycle ? 3 : 1, &peer, &first);
+    emit_probe(scenario, completed_write || overlap || shutdown_lifecycle || peer_shutdown ? 3 : 1, &peer, &first);
     if (unexpected_eof) {
         if (first.allowed || !(first.reasons & X10_REASON_LEDGER)
             || first.ledger_last_call != X10_CALL_READ
@@ -751,7 +816,7 @@ int main(int argc, char **argv)
         if (!observe(&peer, &second)) goto done;
         emit_probe(scenario, 2, &peer, &second);
         if (memcmp(&first, &second, sizeof(first))) goto done;
-    } else if (shutdown_lifecycle) {
+    } else if (shutdown_lifecycle || peer_shutdown) {
         /* A fully closed session remains outside the live continuation
          * safepoint, even after its shutdown retry is actually complete. */
         if (first.allowed || !(first.reasons & X10_REASON_CONTROL)

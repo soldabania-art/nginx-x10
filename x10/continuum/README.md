@@ -407,3 +407,23 @@ Baseline даёт контролируемый `runtime_identity`; candidate п�
 ожидает exact-SHA CI. Далее — сначала его результаты и возможные повторные
 сбои, затем C2a alert/partial/control и sequence/key usage inventory. Атомарный
 снимок `/proc`, pidfd fencing и перенос NGINX/TLS этим изменением не реализованы.
+
+## Continuum C2a: peer-first close_notify
+
+Добавлен один actual-TLS case: после exact echo клиент явно завершает TLS.
+Сервер обязан получить реальный READ raw0/ZERO_RETURN6/received2; это
+чистый close_notify, не fatal SSL_ERROR_SSL. Прежний coarse ledger хранит
+ERROR4; он не менялся. Две immutable snapshots запрещают перенос. Только
+после STEP разрешён SSL_shutdown: actual1/flags3 и ещё две refusal snapshots.
+IGNORE_UNEXPECTED_EOF/quiet shutdown выключены. Отказ4356 включает сохранённые
+2 control bytes; это не доказательство непроцессированного alert.
+
+Неизменный wire oracle проверяет exact data, оба close_notify/FIN и final
+sequences. Relay FIN/end callback не объявляется remote delivery или
+гарантированной TCP segmentation. Один READ с WANT_READ/fatal EOF не PASS.
+Локально20/20=17 ordinary actualTLS+2signals+1noTLS control; независимые
+actualTLS heldouts2. Core21/process7/C1 27 и native20/20 прошли. Native
+исходники499 и alpha guards сохранены. Counts/identities/cleanup и initial
+beforeguard smoke — в [evidence](../evidence/continuum-c2a-peer-close.json). Exact implementation CI pending.
+Далее — truncated/partial closure и sequence/key usage gates перед C2b.
+Export/import, actual TLS-code change и native NGINX migration не реализованы.

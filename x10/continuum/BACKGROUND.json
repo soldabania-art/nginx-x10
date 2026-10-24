@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "continuum-peerclose-20261024T011655166Z",
-    "owner": "cloud-coordinator",
-    "baseCommit": "dabe7b812ac24c95f752efec7508be9785b6b2c2",
-    "acquiredAtUTC": "2026-10-24T01:16:55.166Z",
-    "expiresAtUTC": "2026-10-24T02:01:55.166Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -29,7 +23,7 @@
   "acceptedCheckpoint": {
     "nativeCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
     "nativeCI": "https://github.com/soldabania-art/nginx-x10/actions/runs/40045814679",
-    "continuumStage": "C2a EOF research remains accepted; bounded alpha disappearance fix accepted locally and exact hosted. Remaining state/usage inventory before C2b.",
+    "continuumStage": "C2a peer-first closure locally verified; exact implementation hosted CI pending, remaining state/usage inventory before C2b.",
     "continuumNativeIntegration": false,
     "continuumEvidence": "x10/evidence/continuum-c2a-eof.json",
     "nativeHostedCI": {
@@ -706,9 +700,22 @@
       ],
       "researchPRRun": 40045819013,
       "researchPushSkipped": true
+    },
+    "c2aPeerCloseLocal": {
+      "state": "success-local-exact-hosted-pending",
+      "evidence": "x10/evidence/continuum-c2a-peer-close.json",
+      "nativeEvidence": "x10/evidence/continuum-c2a-peer-close-native-regression.json",
+      "flatChecks": 20,
+      "ordinaryActualTLSScenarios": 17,
+      "signals": 2,
+      "noTLSControls": 1,
+      "independentActualTLSHeldouts": 2,
+      "fullInventory": false,
+      "migration": false
     }
   },
   "pendingVerification": [
+    "Priority: read exact new peer-first close implementation CI; save SHA/run IDs, retain any failure. Local20=17TLS+2signals+1source, independent2TLS, core21/process7/C1 27/native20 passed; no full inventory or migration acceptance.",
     "Historical alpha CI failure exact cause remains unproven; original d4bb2bc attempt1 and one diagnostic same-SHA retry retained. New95fb43b controlled disappearance fix passed baseline/candidate, strict heldouts, local official aggregate and both exact native CI runs. Investigate any recurrence without weakening PID/identity guards; no further unchanged rerun is required.",
     "C2a remaining inventory: other control/alert/partial/EOF/shutdown and sequence/key usage admission. Normal server-first shutdown and post-echo unexpected FIN refusal observed locally; full inventory and overlap admission remain unsupported.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
@@ -729,7 +736,7 @@
     {
       "id": "C2",
       "state": "active-C2a-extended-inventory",
-      "goal": "Alpha disappearance fix95fb43b verified locally and hosted; historical exact cause unproven. Next bounded C2a alert/control/partial and sequence/key usage inventory before C2b."
+      "goal": "Verify exact peer-first-close CI, then remaining truncated/partial/control and sequence/key usage admission before C2b."
     },
     {
       "id": "C3",
@@ -886,6 +893,38 @@
     "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
   },
   "lastDevelopmentPass": {
+    "runId": "continuum-peerclose-20261024T011655166Z",
+    "baseCommit": "dabe7b812ac24c95f752efec7508be9785b6b2c2",
+    "publicationParent": "be477b6a665f382394625b3a48a601618f2ac886",
+    "result": "Peer-first close local20 plus2 independent actualTLS heldouts; core21/process7/C1 27/native20. Exact CI pending; closed-state refusal only, no migration.",
+    "helpers": "5 temporary roles; only coordinator integrates/publishes",
+    "nativeSourceChanged": false,
+    "spendingUSD": 0,
+    "perFileLedger": "x10/review/continuum-c2a-peer-close-ledger.json",
+    "hostedVerification": {
+      "state": "pending-exact-implementation-SHA"
+    }
+  },
+  "lastVerificationReceipt": {
+    "runId": "continuum-stop-ci-20261024T003810143Z",
+    "baseCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+    "publicationParent": "727825739c5257d46861e226a83ba924eecd8c17",
+    "verifiedAtUTC": "2026-10-24T00:44:54.090Z",
+    "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
+    "runtimeSourcesChanged": false,
+    "spendingUSD": 0,
+    "evidence": "x10/evidence/alpha-stop-hosted.json",
+    "perFileLedger": "x10/review/alpha-stop-hosted-ledger.json",
+    "nativeRuns": [
+      40045814679,
+      40045819101
+    ],
+    "researchPRRun": 40045819013,
+    "researchPushSkipped": true,
+    "historicalFailureAndCauseUncertaintyPreserved": true
+  },
+  "nextConcreteTask": "First exact peer-first-close implementation CI; then one bounded truncated/partial TLS closure or sequence/key usage gate before C2b. Investigate any new native failure without weakening guards.",
+  "previousDevelopmentPass": {
     "runId": "continuum-stop-20261024T002456401Z",
     "baseCommit": "1b9c55ffc2dd074da415a2b8a69f0c42e4ac95e4",
     "publicationParent": "ceb75abdba9781dd2eace89d9095a0461c11b704",
@@ -906,146 +945,6 @@
       "researchPushScopeOnly": true
     },
     "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214"
-  },
-  "lastVerificationReceipt": {
-    "runId": "continuum-stop-ci-20261024T003810143Z",
-    "baseCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
-    "publicationParent": "727825739c5257d46861e226a83ba924eecd8c17",
-    "verifiedAtUTC": "2026-10-24T00:44:54.090Z",
-    "implementationCommit": "95fb43bb2f7c5795d341e638f7b287f7dd443214",
-    "runtimeSourcesChanged": false,
-    "spendingUSD": 0,
-    "evidence": "x10/evidence/alpha-stop-hosted.json",
-    "perFileLedger": "x10/review/alpha-stop-hosted-ledger.json",
-    "nativeRuns": [
-      40045814679,
-      40045819101
-    ],
-    "researchPRRun": 40045819013,
-    "researchPushSkipped": true,
-    "historicalFailureAndCauseUncertaintyPreserved": true
-  },
-  "nextConcreteTask": "Resume one bounded C2a alert/control/partial or sequence/key usage inventory case from C2A-PROFILE; first inspect any new native failure. Semantic export/import, actual TLS code-version migration and native integration remain pending.",
-  "previousDevelopmentPass": {
-    "runId": "continuum-eof-20261023T231937617Z",
-    "baseCommit": "6a24fc94fbec1f85cb73cd7abcb70d88aa3c6807",
-    "publicationParent": "69d8d564ae4199da0515e30e47280ec3d874d5de",
-    "result": "Canonical19/19, independent2 actualTLS heldouts, core21/process7, C1 27 and native20 passed locally; both exact research runs and native PR succeeded. Initial native push failed alpha lifecycle19/20. Original adverse result and one same-SHA retry retained; no stop-race fix or full native candidate acceptance.",
-    "helpers": "5 temporary delegated roles; only coordinator integrates/publishes",
-    "nativeSourceChanged": false,
-    "spendingUSD": 0,
-    "perFileLedger": "x10/review/continuum-c2a-eof-ledger.json",
-    "hostedVerification": {
-      "state": "research-success-native-investigation-pending",
-      "researchRuns": [
-        40040044905,
-        40040050370
-      ],
-      "nativePullRequestRun": 40040050401,
-      "nativePushRun": 40040045133,
-      "initialNativePushFailurePreserved": true,
-      "latestNativePush": {
-        "run": 40040045133,
-        "attempt": 2,
-        "headSha": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
-        "status": "completed",
-        "conclusion": "success",
-        "jobId": 120711043827,
-        "steps": [
-          {
-            "name": "Set up job",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Build dependencies and optional test clients",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Install pinned HTTP3 interoperability client",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Install independent HTTP3 HEAD client",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Compile native profile",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Native regressions and pinned official compatibility sample",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Verify native tenant cache contract experiment",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Verify private Unix control transport",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Build profile without control API",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Package local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Checksum local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Preserve JSON evidence",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Preserve local Linux alpha",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
-            "status": "completed",
-            "conclusion": "success"
-          },
-          {
-            "name": "Complete job",
-            "status": "completed",
-            "conclusion": "success"
-          }
-        ]
-      }
-    },
-    "implementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8"
   },
   "previousVerificationReceipt": {
     "runId": "continuum-eof-ci-20261023T233122995Z",
