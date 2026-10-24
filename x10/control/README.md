@@ -60,12 +60,28 @@ Create `candidate.json`, selecting a real readiness endpoint for the application
 ```json
 {
   "serverBody": "location / { proxy_pass http://127.0.0.1:9000; }",
-  "healthURL": "http://127.0.0.1:9000/health"
+  "healthURL": "http://127.0.0.1:9000/health",
+  "healthExpectedStatus": 200,
+  "healthExpectedBody": "ready\n"
 }
 ```
 
-The backend must already be running. Its health response must finish with HTTP
-200. `healthURL` accepts only explicit `http://127.0.0.1:port/path`, on a
+The backend must already be running. With this explicit contract, its health
+response must finish with the declared status and exact UTF-8 body bytes.
+`healthExpectedStatus` is an integer from 200 through 299;
+`healthExpectedBody` is a well-formed string of at most 4096 UTF-8 bytes,
+including the empty string. Both fields must be supplied together. Explicit
+health responses exceeding 4096 bytes refuse the gate; bodies are not included
+in mismatch diagnostics. Revision and health probes still require two
+consecutive fresh observations of the same revision.
+
+For compatibility, candidates with neither field keep their previous HTTP 200
+requirement, unchecked response body and 64 KiB response bound. Their canonical
+revision records and hashes do not acquire new defaults. Declaring an explicit
+pair is recommended for application readiness; existing stored revisions do
+not silently become stricter.
+
+`healthURL` accepts only explicit `http://127.0.0.1:port/path`, on a
 different port from the managed server, without credentials, query or fragment.
 The tool does not follow redirects. This health endpoint is chosen by the
 operator; it does not automatically prove every application route or peer is
@@ -117,7 +133,8 @@ started native master and its readiness before enabling changes.
 4. Recheck native master identity immediately before SIGHUP. Success from a
    signal command is not treated as a reload acknowledgement.
 5. Require two consecutive fresh HTTP connections with the new revision body
-   and header, plus HTTP 200 from a health response carrying that same new ID.
+   and header, plus the declared health status/body contract carrying that same
+   new ID (legacy candidates require HTTP 200 without body equality).
    The health location bypasses inherited proxy cache/store, forces bodyless GET
    and disables buffering and ignored client aborts. It does not forward probe
    client headers or follow redirects. Probes have an absolute 350 ms deadline

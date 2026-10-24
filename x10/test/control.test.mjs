@@ -199,6 +199,9 @@ include ${fragmentPath};
     const state = init.state, initial = init.revision;
     await check('initialization-is-unbound-and-keeps-operator-config', async () => {
       assert.equal((await status(state)).binding, null); assert.equal(await readFile(configPath, 'utf8'), config);
+      const legacy = JSON.parse(await readFile(path.join(state, 'revisions', `${initial}.json`), 'utf8'));
+      assert.deepEqual(Object.keys(legacy.input), ['serverBody', 'healthURL']);
+      assert.equal(legacy.inputSha256, digest(JSON.stringify(input('A'))));
       await assert.rejects(apply(state, input('B')), { code: 'unbound' });
     });
     child = spawn(binary, ['-p', `${prefix}/`, '-c', configPath], { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -376,6 +379,120 @@ include ${fragmentPath};
   }
 });
 
+test('native explicit readiness status and exact UTF-8 bytes', { timeout: 30000 }, async t => {
+  let prefix, child, backend, output = '', activeTrickles = 0;
+  const interrupted = () => {
+    if (child?.pid) { try { process.kill(-child.pid, 'SIGTERM'); } catch {} }
+    backend?.closeAllConnections();
+  };
+  process.once('SIGINT', interrupted); process.once('SIGTERM', interrupted);
+  try {
+    prefix = await mkdtemp(path.join(os.tmpdir(), 'x10-readiness-')); await chmod(prefix, 0o700);
+    const privateResponse = 'readiness-private-actual-value';
+    const responses = {
+      '/ready': { status: 200, body: 'ready\n' },
+      '/wrong': { status: 200, body: privateResponse },
+      '/created': { status: 201, body: 'created\n' },
+      '/empty': { status: 204, body: '' },
+      '/utf8': { status: 200, body: 'é'.repeat(2048) },
+      '/oversized': { status: 200, body: 'x'.repeat(4097) },
+      '/invalid-utf8': { status: 200, body: Buffer.from([0xc3, 0x28]) },
+    };
+    backend = http.createServer((req, res) => {
+      if (req.url === '/trickle') {
+        activeTrickles++; res.writeHead(200); res.write('r');
+        const timer = setInterval(() => res.write('e'), 50);
+        res.once('close', () => { clearInterval(timer); activeTrickles--; }); return;
+      }
+      const response = responses[req.url] || { status: 503, body: 'unavailable' };
+      res.writeHead(response.status); res.end(response.body);
+    });
+    const healthPort = await listen(backend), port = await unusedPort();
+    const configPath = path.join(prefix, 'nginx.conf'), fragmentPath = path.join(prefix, 'managed.conf');
+    await writeFile(configPath, `${process.getuid() === 0 ? `user ${os.userInfo().username};` : ''}
+daemon off; master_process on; worker_processes 1;
+pid ${prefix}/nginx.pid;
+error_log ${prefix}/error.log notice;
+events { worker_connections 128; }
+http { access_log off;
+include ${fragmentPath};
+}
+`, { mode: 0o600 });
+    const input = (text, route = '/ready', body = 'ready\n', expectedStatus = 200) => ({
+      serverBody: `location / { return 200 "${text}"; }`, healthURL: `http://127.0.0.1:${healthPort}${route}`,
+      healthExpectedStatus: expectedStatus, healthExpectedBody: body,
+    });
+    const init = await initialize({ prefix, binary, port, gateTimeoutMs: 600 }, input('A'));
+    const state = init.state;
+    child = spawn(binary, ['-p', `${prefix}/`, '-c', configPath], { detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    child.stdout.on('data', b => output += b); child.stderr.on('data', b => output += b);
+    await waitForBody(port, 'A'); await bind(state);
+    let confirmed = init.revision;
+    const accepted = async candidate => {
+      const result = await apply(state, candidate); assert.equal(result.outcome, 'applied'); confirmed = result.revision;
+      await waitForRevision(port, confirmed);
+      const saved = JSON.parse(await readFile(path.join(state, 'revisions', `${confirmed}.json`), 'utf8'));
+      assert.deepEqual(saved.input, candidate); assert.equal(saved.inputSha256, digest(JSON.stringify(candidate)));
+      return result;
+    };
+    const refused = async candidate => {
+      const before = confirmed, result = await apply(state, candidate);
+      assert.equal(result.outcome, 'rolled_back'); assert.equal(result.ok, false); assert.equal(result.restoredContentFrom, before);
+      assert(!JSON.stringify(result).includes(privateResponse), 'failure must not disclose the readiness response');
+      confirmed = result.revision; await waitForRevision(port, confirmed);
+      const current = await status(state); assert.equal(current.pending, null); assert.equal(current.lastConfirmedRevision, confirmed);
+      assert.equal((await recover(state)).outcome, 'nothing_pending');
+      assert(!(await readFile(path.join(state, 'history.jsonl'), 'utf8')).includes(privateResponse));
+    };
+    await t.test('wrong-body-with-200-and-current-revision-rolls-back', async () => {
+      await refused(input('must-not-confirm', '/wrong')); await waitForBody(port, 'A');
+    });
+    await t.test('invalid-contracts-refuse-without-state-or-fragment-change', async () => {
+      const valid = input('unused'), { healthExpectedStatus, healthExpectedBody, ...legacy } = valid;
+      const invalid = [
+        { ...legacy, healthExpectedStatus }, { ...legacy, healthExpectedBody },
+        ...[null, true, '200', 199, 300, 200.5].map(value => ({ ...valid, healthExpectedStatus: value })),
+        ...[null, false, {}, ['ready'], '\ud800', '\udfff', 'x'.repeat(4097), 'é'.repeat(2049)].map(value => ({ ...valid, healthExpectedBody: value })),
+      ];
+      const files = [fragmentPath, path.join(state, 'state.json'), path.join(state, 'history.jsonl')];
+      const before = await Promise.all(files.map(file => readFile(file)));
+      for (const candidate of invalid) await assert.rejects(apply(state, candidate), { code: 'invalid_candidate' });
+      assert.deepEqual(await Promise.all(files.map(file => readFile(file))), before);
+      assert.equal((await status(state)).lastConfirmedRevision, confirmed);
+    });
+    await t.test('declared-success-status-is-exact-and-empty-204-body-is-supported', async () => {
+      await accepted(input('created', '/created', 'created\n', 201));
+      await refused(input('wrong-status', '/created', 'created\n', 200));
+      await accepted(input('empty', '/empty', '', 204));
+    });
+    await t.test('4096-byte-multibyte-body-passes-and-larger-response-refuses', async () => {
+      await accepted(input('utf8', '/utf8', 'é'.repeat(2048)));
+      await refused(input('oversized', '/oversized', 'x'.repeat(4096)));
+    });
+    await t.test('invalid-UTF8-response-cannot-match-decoded-replacement-characters', async () => {
+      assert.equal(responses['/invalid-utf8'].body.toString('utf8'), '�(');
+      await refused(input('invalid-utf8', '/invalid-utf8', '�('));
+    });
+    await t.test('explicit-trickle-response-remains-bounded-and-restores-confirmed-input', async () => {
+      const started = Date.now(); await refused(input('trickling', '/trickle'));
+      assert(Date.now() - started < 5000); await waitFor(() => activeTrickles === 0);
+      await waitForBody(port, 'utf8');
+    });
+    await t.test('revert-preserves-explicit-contract', async () => {
+      const result = await revert(state, init.revision); assert.equal(result.outcome, 'applied');
+      await waitForBody(port, 'A');
+      const saved = JSON.parse(await readFile(path.join(state, 'revisions', `${result.revision}.json`), 'utf8'));
+      assert.deepEqual(saved.input, input('A'));
+    });
+  } finally {
+    const shutdown = await stop(child);
+    if (backend) { backend.closeAllConnections(); await new Promise(resolve => backend.close(resolve)); }
+    if (prefix) await rm(prefix, { recursive: true, force: true });
+    process.removeListener('SIGINT', interrupted); process.removeListener('SIGTERM', interrupted);
+    if (shutdown) { assert.equal(shutdown.exitCode, 0, output.slice(-4096)); assert.equal(shutdown.signal, null, output.slice(-4096)); }
+  }
+});
+
 
 // Faults exist only in this child-side fixture. Production controller code has
 // no crash environment variable or test-only execution branch. Each pause is
@@ -452,8 +569,8 @@ test('native durable event commit reconciliation and crash boundaries', { timeou
     let prefix, output = '', shutdown;
     try {
       prefix = await mkdtemp(path.join(os.tmpdir(), 'x10-recovery-')); await chmod(prefix, 0o700);
-      const health = { healthy: true };
-      backend = http.createServer((req, res) => { const good = health.healthy && req.url === '/healthy'; res.writeHead(good ? 200 : 503); res.end(good ? 'healthy' : 'unhealthy'); });
+      const health = { healthy: true, body: 'healthy' };
+      backend = http.createServer((req, res) => { const good = health.healthy && req.url === '/healthy'; res.writeHead(good ? 200 : 503); res.end(good ? health.body : 'unhealthy'); });
       const healthPort = await listen(backend), port = await unusedPort();
       const configPath = path.join(prefix, 'nginx.conf'), fragmentPath = path.join(prefix, 'managed.conf');
       const config = `${process.getuid() === 0 ? `user ${os.userInfo().username};` : ''}
@@ -575,6 +692,22 @@ include ${fragmentPath};
       health.healthy = false; await assert.rejects(recover(state), { code: 'health_gate_failed' });
       health.healthy = true; assert.equal((await recover(state)).outcome, 'reconciled');
     });
+    await check('reconciliation-rechecks-exact-readiness-body-before-durable-acceptance', async ({ state, input, crash, health, fragmentPath, port }) => {
+      const exact = text => ({ ...input(text), healthExpectedStatus: 200, healthExpectedBody: 'healthy' });
+      await apply(state, exact('B'));
+      await crash('applied', 'history', { candidate: exact('C') });
+      const files = [path.join(state, 'state.json'), path.join(state, 'history.jsonl'), path.join(state, 'event-commit.json'), fragmentPath];
+      const before = await Promise.all(files.map(file => readFile(file)));
+      health.body = 'private-readiness-regression';
+      await assert.rejects(recover(state), error => {
+        assert.equal(error.code, 'health_gate_failed'); assert(!error.message.includes(health.body)); return true;
+      });
+      assert.deepEqual(await Promise.all(files.map(file => readFile(file))), before);
+      health.body = 'healthy';
+      const result = await recover(state); assert.equal(result.outcome, 'reconciled'); assert.equal(result.recordedOutcome, 'applied');
+      assert.equal((await status(state)).pending, null); await waitForBody(port, 'C');
+      assert.equal((await recover(state)).outcome, 'nothing_pending');
+    });
     await check('reconciliation-refuses-partial-history-and-invalid-event-transition', async ({ state, crash }) => {
       await crash('applied', 'history');
       const historyFile = path.join(state, 'history.jsonl'), bytes = await readFile(historyFile);
@@ -618,7 +751,7 @@ include ${fragmentPath};
       }
       assert.equal((await recover(state)).outcome, 'nothing_pending');
     });
-    report.passed = report.tests.length === 15 && !report.interrupted;
+    report.passed = report.tests.length === 16 && !report.interrupted;
   } finally {
     report.finishedAt = new Date().toISOString(); process.removeListener('SIGINT', interrupted); process.removeListener('SIGTERM', interrupted);
     if (process.env.X10_CONTROL_RECOVERY_EVIDENCE) await writeFile(path.resolve(process.env.X10_CONTROL_RECOVERY_EVIDENCE), `${JSON.stringify(report, null, 2)}\n`, { mode: 0o600 });

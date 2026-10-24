@@ -75,10 +75,17 @@ existing demo mode. Installation prepares configuration and records its inputs;
 For an operator-owned application listening on that port, provide an idempotent
 `GET /ready` endpoint. The managed `/` location proxies HTTP/1.1 to it with
 `proxy_next_upstream off`; this example does not automatically retry requests.
+New application-mode installations require `/ready` to finish with HTTP 200
+and exactly `ready` followed by one newline. Both the initial input and bundled
+candidate set `healthExpectedStatus: 200` and `healthExpectedBody: "ready\n"`.
 Application readiness is sampled through the managed native listener at
 `http://127.0.0.1:8088/__x10_health`. Bind/apply gates require HTTP 200 and the
-current revision header. They do not compare the readiness response body or
-prove database/business readiness. The separate native demo self-check on port
+current revision header and the exact configured response bytes, bounded to
+4096 bytes. This checks the declared endpoint contract; it does not prove
+database/business readiness. An operator-owned candidate can declare another
+successful status/body pair; both fields are required together. Legacy candidates
+with neither field retain their previous HTTP 200/body-unchecked behavior and
+64 KiB response bound. The separate native demo self-check on port
 8089 remains available and can return 200 while the application is unavailable.
 `status` observes runtime/revision state; it does not continuously recheck
 application readiness. Use an explicit current request when needed.

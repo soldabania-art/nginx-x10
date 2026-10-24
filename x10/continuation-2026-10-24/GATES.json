@@ -252,16 +252,18 @@
         "publicationParent": "fd55932d940768834e3a5b946d8cd8b0d79b07d4",
         "evidence": "x10/evidence/g2-archive.json",
         "scope": "Bounded pre-extraction archive consistency only",
-        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+        "exactHostedAcceptance": "SUCCESS_SCOPED_ARCHIVE_CONSISTENCY_ONLY",
         "publishedAlphaAccepted": false,
         "productionAccepted": false,
-        "payloadExecutionPerformed": false
+        "payloadExecutionPerformed": false,
+        "implementationCommit": "783de7994f0af0ea9d4d1129be28c31c57227f8d",
+        "hostedEvidence": "x10/evidence/g2-archive-hosted.json"
       }
     },
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "NOT_ACCEPTED",
+      "status": "PARTIAL_EXPLICIT_READINESS_IMPLEMENTATION_EXACT_CI_PENDING",
       "depends_on": [
         "G2"
       ],
@@ -281,7 +283,20 @@
         "tls_trust_report",
         "service_lifecycle_report",
         "test_deployment_identity"
-      ]
+      ],
+      "readinessSubcheckpoint": {
+        "runId": "x10-g3-readiness-20261024T134116049Z",
+        "scope": "Optional explicit bounded application readiness status/body contract; not TLS or service acceptance",
+        "evidence": "x10/evidence/g3-readiness.json",
+        "sourceBase": "783de7994f0af0ea9d4d1129be28c31c57227f8d",
+        "publicationParent": "5faf99283f6eac55790a03b67c2482a378ae931c",
+        "exactHostedAcceptance": "PENDING_RESULTING_IMPLEMENTATION",
+        "serviceAccepted": false,
+        "tlsAccepted": false,
+        "productionAccepted": false,
+        "localAcceptance": "SUCCESS_SCOPED_READINESS_AND_NATIVE_COMPATIBILITY_ONLY",
+        "targetServiceAccepted": false
+      }
     },
     {
       "id": "G4",
@@ -601,6 +616,16 @@
     "nextConcreteTask": "First verify exact resulting archive-verifier CI: authored refusal controls and the actual newly packed alpha archive must execute successfully in native jobs. Permanent versioned alpha publication and independent published-file nonroot Node22 replay remain blocked by the currently exposed connector lacking Release/asset publication operations; do not bypass credentials or workflow permissions. Continue independent permitted G3 service/proxy/TLS preparation with explicit dependency limits while that publication capability is unavailable. G2 remains partial, G3-G8 and Production V1 unaccepted, and deferred Continuum and the remaining full native scope stay preserved.",
     "productionAccepted": false,
     "permanentAlphaAccepted": false,
+    "fullScopePreserved": true,
+    "hostedEvidence": "x10/evidence/g2-archive-hosted.json"
+  },
+  "g3ReadinessCheckpoint": {
+    "runId": "x10-g3-readiness-20261024T134116049Z",
+    "evidence": "x10/evidence/g3-readiness.json",
+    "nextConcreteTask": "First verify exact resulting G3 readiness implementation CI: controller explicit status/body refusals, durable recovery, legacy compatibility, expanded extracted-bundle alpha, native aggregate, required Unix and feature-off checks must actually run. Then implement the next permitted G3 TLS and systemd-user service package with explicit CA/hostname controls, guarded startup/stop/restart, failed-start and orphan/drain refusals. The current local UID0/Node24 and absent user manager do not accept the target service. G2 permanent versioned distribution and independent published-file nonroot Node22 replay remain blocked by available Release/asset publication capabilities; do not bypass credentials or workflow permissions. G2 stays partial and G3-G8/Production V1 stay unaccepted; preserve all native capabilities and deferred Continuum.",
+    "serviceAccepted": false,
+    "tlsAccepted": false,
+    "productionAccepted": false,
     "fullScopePreserved": true
   }
 }

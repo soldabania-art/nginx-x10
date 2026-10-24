@@ -86,8 +86,8 @@ async function lock(state, operation) {
 }
 
 function candidate(value) {
-  if (!value || typeof value !== 'object' || Object.keys(value).some(k => !['serverBody', 'healthURL'].includes(k)))
-    fail('invalid_candidate', 'Candidate must contain only serverBody and healthURL');
+  if (!value || typeof value !== 'object' || Object.keys(value).some(k => !['serverBody', 'healthURL', 'healthExpectedStatus', 'healthExpectedBody'].includes(k)))
+    fail('invalid_candidate', 'Candidate contains unsupported fields');
   if (typeof value.serverBody !== 'string' || Buffer.byteLength(value.serverBody) > 1024 * 1024)
     fail('invalid_candidate', 'serverBody must be a string of at most 1 MiB');
   let parsed;
@@ -96,6 +96,13 @@ function candidate(value) {
       || parsed.hostname !== '127.0.0.1' || parsed.port === '' || Number(parsed.port) > 65535
       || parsed.username || parsed.password || parsed.search || parsed.hash)
     fail('invalid_health_url', 'healthURL must be http://127.0.0.1:port/path without credentials, query or fragment');
+  const explicitStatus = Object.hasOwn(value, 'healthExpectedStatus'), explicitBody = Object.hasOwn(value, 'healthExpectedBody');
+  if (explicitStatus !== explicitBody)
+    fail('invalid_candidate', 'Explicit readiness requires both healthExpectedStatus and healthExpectedBody');
+  if (explicitStatus && (!Number.isInteger(value.healthExpectedStatus) || value.healthExpectedStatus < 200 || value.healthExpectedStatus > 299
+      || typeof value.healthExpectedBody !== 'string' || Buffer.byteLength(value.healthExpectedBody) > 4096
+      || Buffer.from(value.healthExpectedBody, 'utf8').toString('utf8') !== value.healthExpectedBody))
+    fail('invalid_candidate', 'Explicit readiness requires status 200..299 and a well-formed UTF-8 body of at most 4096 bytes');
   // This is a containment check, not an NGINX parser. Native -t remains required.
   let quote = '', comment = false, escaped = false, depth = 0, token = '', start = true;
   function finish() {
@@ -121,7 +128,11 @@ function candidate(value) {
   }
   finish();
   if (quote || escaped || depth !== 0) fail('invalid_candidate', 'serverBody has unbalanced quotes or braces');
-  return { serverBody: value.serverBody, healthURL: value.healthURL };
+  // Preserve the exact shape and key order of legacy revision inputs: their
+  // existing hashes must not gain absent/defaulted readiness properties.
+  const input = { serverBody: value.serverBody, healthURL: value.healthURL };
+  if (explicitStatus) { input.healthExpectedStatus = value.healthExpectedStatus; input.healthExpectedBody = value.healthExpectedBody; }
+  return input;
 }
 
 function render(settings, revision) {
@@ -420,14 +431,13 @@ async function signal(settings, current) {
   process.kill(identity.pid, 'SIGHUP');
 }
 
-function request(settings, target) {
+function request(settings, target, bodyLimitBytes = 64 * 1024) {
   return new Promise((resolve, reject) => {
     const req = http.get({ host: '127.0.0.1', port: settings.port, path: target, agent: false, headers: { connection: 'close' } }, res => {
-      let bytes = 0, body = '';
-      res.setEncoding('utf8');
-      res.on('data', chunk => { bytes += Buffer.byteLength(chunk); if (bytes > 64 * 1024) req.destroy(new Error('Probe response exceeded 64 KiB')); else body += chunk; });
+      let bytes = 0; const chunks = [];
+      res.on('data', chunk => { bytes += chunk.length; if (bytes > bodyLimitBytes) req.destroy(new Error('Probe response exceeded allowed byte limit')); else chunks.push(chunk); });
       res.once('error', reject);
-      res.once('end', () => resolve({ status: res.statusCode, revision: res.headers['x-x10-revision'], body }));
+      res.once('end', () => { const bodyBytes = Buffer.concat(chunks); resolve({ status: res.statusCode, revision: res.headers['x-x10-revision'], body: bodyBytes.toString('utf8'), bodyBytes }); });
     });
     const timer = setTimeout(() => req.destroy(new Error('Probe absolute deadline exceeded')), 350);
     req.once('close', () => clearTimeout(timer));
@@ -438,12 +448,16 @@ function request(settings, target) {
 
 async function acknowledged(settings, revision) {
   const deadline = Date.now() + settings.gateTimeoutMs;
+  const explicit = Object.hasOwn(revision.input, 'healthExpectedStatus');
+  const expectedStatus = explicit ? revision.input.healthExpectedStatus : 200;
+  const expectedBody = explicit ? Buffer.from(revision.input.healthExpectedBody, 'utf8') : null;
   let consecutive = 0, last = 'no response';
   while (Date.now() < deadline) {
     try {
       const probe = await request(settings, '/__x10_revision');
-      const health = await request(settings, '/__x10_health');
-      if (probe.status === 200 && probe.body === revision.id && probe.revision === revision.id && health.status === 200 && health.revision === revision.id) {
+      const health = await request(settings, '/__x10_health', explicit ? 4096 : 64 * 1024);
+      if (probe.status === 200 && probe.body === revision.id && probe.revision === revision.id && health.status === expectedStatus
+          && health.revision === revision.id && (!explicit || health.bodyBytes.equals(expectedBody))) {
         if (++consecutive === 2) return;
       } else { consecutive = 0; last = `revision=${probe.revision}, health=${health.status}/${health.revision}`; }
     } catch (error) { consecutive = 0; last = message(error); }

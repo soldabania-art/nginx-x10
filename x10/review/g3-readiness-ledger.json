@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-g3-readiness-20261024T134116049Z",
+  "baseCommit": "783de7994f0af0ea9d4d1129be28c31c57227f8d",
+  "publicationParent": "5faf99283f6eac55790a03b67c2482a378ae931c",
+  "nativeSourceChanged": false,
+  "continuumRuntimeChanged": false,
+  "files": [
+    {
+      "path": "x10/control/manager.mjs",
+      "sha256": "2cfcb7d92131671939aa0e7d57403af42448b73878256a68b24c0af69b2d1ecb",
+      "purpose": "Optional paired status/body contract, stable legacy records, raw bounded health bytes"
+    },
+    {
+      "path": "x10/test/control.test.mjs",
+      "sha256": "927d1ee25a3ee76d6642ca31f3483113a72167bdb384f0bdeda0bfa84db93d04",
+      "purpose": "Native rollback/revert/recovery/UTF-8/size/trickle and canonical compatibility regressions"
+    },
+    {
+      "path": "x10/alpha/cli.mjs",
+      "sha256": "515c4ce5eab37d69acff36caccc62b28a9b6ba27cb791eab3f5840b4083e755a",
+      "purpose": "New application-mode installs and candidate use explicit HTTP200/ready newline contract"
+    },
+    {
+      "path": "x10/test/alpha.test.mjs",
+      "sha256": "b2c89526e3cfdd1b2b3317ff7f087e9d45ccb8a57437b0b7dabe77c537830e5c",
+      "purpose": "Extracted-bundle wrong-body bind/apply refusal and session restart preservation"
+    },
+    {
+      "path": "x10/control/README.md",
+      "sha256": "4660a189bfa7b3e08d105387dc8300ccc1988c8d46da8bbbf397cf20e6e271ce",
+      "purpose": "Public operator contract and explicit legacy behavior"
+    },
+    {
+      "path": "x10/alpha/README.md",
+      "sha256": "2ca210d739dac6413be88c609714f831668aa969fd37e37967804a0c95a9aecd",
+      "purpose": "Application readiness instructions and bounded exact response semantics"
+    }
+  ],
+  "independentReview": {
+    "reviewer": "separate assistant builder_economics",
+    "result": "PASS_NO_CRITICAL_FINDING",
+    "managerSha256": "2cfcb7d92131671939aa0e7d57403af42448b73878256a68b24c0af69b2d1ecb",
+    "checksPassed": 12,
+    "scope": "Actual private functions extracted into an independent HTTP fixture; not native rollback or target service acceptance",
+    "probeSha256": "b4e61ba0d4f2c4bb0465f7234e92feb70e5477e34393bd7ed254a3ad08bd1851",
+    "results": [
+      {
+        "name": "legacy-canonical-input-keeps-exact-two-field-bytes-and-hash",
+        "passed": true
+      },
+      {
+        "name": "legacy-wrong-body-HTTP200-is-accepted-by-old-optional-contract",
+        "passed": true
+      },
+      {
+        "name": "explicit-pair-keeps-fields-and-compares-valid-UTF8-bytes",
+        "passed": true
+      },
+      {
+        "name": "explicit-wrong-body-HTTP200-is-refused-without-response-leak",
+        "passed": true
+      },
+      {
+        "name": "explicit-wrong-status-is-refused",
+        "passed": true
+      },
+      {
+        "name": "malformed-UTF8-cannot-match-replacement-character",
+        "passed": true
+      },
+      {
+        "name": "4096-raw-byte-body-is-accepted",
+        "passed": true
+      },
+      {
+        "name": "4097-raw-byte-response-is-refused-without-body-leak",
+        "passed": true
+      },
+      {
+        "name": "incomplete-response-is-refused",
+        "passed": true
+      },
+      {
+        "name": "trickle-response-remains-bounded",
+        "passed": true
+      },
+      {
+        "name": "candidate-rejects-partial-null-invalid-UTF8-oversize-and-bad-status",
+        "passed": true
+      },
+      {
+        "name": "empty-body-and-204-status-supported-as-explicit-pair",
+        "passed": true
+      }
+    ]
+  },
+  "productionAccepted": false,
+  "testBookkeepingCorrection": {
+    "file": "x10/test/control.test.mjs",
+    "oldExpectedDurableCases": 15,
+    "newExpectedDurableCases": 16,
+    "reason": "One new readiness recovery case was added; all16 subtests passed, but the prior expected-count guard remained15",
+    "assertionStrengthUnchanged": true,
+    "priorSupplementalPass": 85,
+    "priorSupplementalFail": 1,
+    "priorSupplementalTotal": 86
+  }
+}

@@ -134,6 +134,8 @@ const demo = healthPort => ({ serverBody: 'location = / { return 200 "NGINX X10 
 const application = upstreamPort => ({
   serverBody: `client_max_body_size 16m;\nlocation / { proxy_pass http://127.0.0.1:${upstreamPort}; proxy_http_version 1.1; proxy_next_upstream off; }`,
   healthURL: `http://127.0.0.1:${upstreamPort}/ready`,
+  healthExpectedStatus: 200,
+  healthExpectedBody: 'ready\n',
 });
 
 async function createSession(prefix, manifest, seed) {
@@ -201,7 +203,7 @@ export async function install(values) {
       nodeRuntime: { version: process.version, executable: await realpath(process.execPath), sha256: digest(await readFile(process.execPath)) },
       healthNote: upstreamPort === null
         ? 'Native demo self-check only; application health is not established.'
-        : 'Configured application readiness via loopback HTTP /ready; installation has not checked application health or readiness body.' };
+        : 'Configured application readiness via loopback HTTP /ready with expected HTTP 200 and exact ready newline body; installation has not checked application health.' };
     await saveRecord(path.join(prefix, '.alpha-install.json'), manifest);
     const prepared = await createSession(prefix, manifest, seed);
     await saveRecord(path.join(prefix, '.alpha-registry.json'), { schemaVersion: 1, installationId: manifest.installationId, current: prepared.session, sessions: [prepared.session] });

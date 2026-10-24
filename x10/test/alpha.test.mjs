@@ -248,11 +248,11 @@ test('application upstream port syntax and collisions refuse before creating a p
 
 test('extracted bundle proxies an independent app and preserves application readiness across config and sessions', { timeout: 65000 }, async () => {
   const parent = await mkdtemp(path.join(os.tmpdir(), 'x10-alpha-upstream-')); await chmod(parent, 0o700);
-  let ready = false, appRequests = 0, echoRequests = 0, runChild, output = '', nativePid;
+  let ready = false, readinessBody = 'ready\n', appRequests = 0, echoRequests = 0, runChild, output = '', nativePid;
   const groups = new Set(), children = new Set();
   const app = http.createServer((req, res) => {
     appRequests++; res.setHeader('X-App-Marker', 'independent-upstream');
-    if (req.url === '/ready' || req.url === '/not-ready') { res.writeHead(ready && req.url === '/ready' ? 200 : 503); res.end(ready ? 'ready\n' : 'not ready\n'); return; }
+    if (req.url === '/ready' || req.url === '/not-ready') { res.writeHead(ready && req.url === '/ready' ? 200 : 503); res.end(ready ? readinessBody : 'not ready\n'); return; }
     if (req.method === 'POST' && req.url === '/echo') {
       echoRequests++;
       const chunks = []; let bytes = 0;
@@ -292,7 +292,14 @@ test('extracted bundle proxies an independent app and preserves application read
     assert.equal((await request(port, '/__x10_health')).status, 503, 'native demo must not stand in for application readiness');
     const denied = await cli(launcher, 'bind'); assert.equal(denied.code, 1); assert.equal(denied.json.code, 'health_gate_failed');
     assert.equal((await cli(launcher, 'status')).json.binding, null);
-    ready = true; const bound = await cli(launcher, 'bind'); assert.equal(bound.code, 0, bound.stdout);
+    ready = true; readinessBody = 'private-wrong-readiness-body\n';
+    assert.equal((await request(port, '/__x10_health')).status, 200);
+    const wrongBody = await cli(launcher, 'bind');
+    assert.equal(wrongBody.code, 1, 'HTTP 200 with the wrong body must not bind the application');
+    assert.equal(wrongBody.json.code, 'health_gate_failed');
+    assert.equal(wrongBody.stdout.includes(readinessBody.trim()), false, 'readiness bodies stay out of diagnostics');
+    assert.equal((await cli(launcher, 'status')).json.binding, null);
+    readinessBody = 'ready\n'; const bound = await cli(launcher, 'bind'); assert.equal(bound.code, 0, bound.stdout);
     const initialRevision = bound.json.revision;
     const response = await upstreamTransfer(port); assert.equal(response.status, 200); assert.equal(response.body.toString(), 'independent application\n'); assert.equal(response.headers['x-app-marker'], 'independent-upstream');
     const payload = Buffer.alloc(65551); for (let i = 0; i < payload.length; i++) payload[i] = (i * 37) & 255;
@@ -305,8 +312,15 @@ test('extracted bundle proxies an independent app and preserves application read
     assert.equal((await cli(launcher, 'apply', '--file', path.join(prefix, 'examples/candidate-b.json'))).code, 0);
     await until(async () => (await request(port)).headers['x-x10-example'] === 'application-b');
     const seed = JSON.parse(await readFile(path.join(prefix, 'examples/candidate-b.json'), 'utf8'));
+    assert.equal(seed.healthExpectedStatus, 200); assert.equal(seed.healthExpectedBody, 'ready\n');
     const unhealthy = path.join(parent, 'unhealthy.json'); await writeFile(unhealthy, JSON.stringify({ ...seed, healthURL: `http://127.0.0.1:${upstreamPort}/not-ready` }), { mode: 0o600 });
     const rolled = await cli(launcher, 'apply', '--file', unhealthy); assert.equal(rolled.code, 1); assert.equal(rolled.json.outcome, 'rolled_back'); assert.match(rolled.json.reason, /^No fresh acknowledged healthy revision .*health=503\//);
+    await until(async () => (await request(port)).headers['x-x10-example'] === 'application-b');
+    const wrongCandidate = path.join(parent, 'wrong-body.json');
+    await writeFile(wrongCandidate, JSON.stringify({ ...seed, healthURL: `http://127.0.0.1:${upstreamPort}/wrong-ready-body` }), { mode: 0o600 });
+    const bodyRollback = await cli(launcher, 'apply', '--file', wrongCandidate);
+    assert.equal(bodyRollback.code, 1); assert.equal(bodyRollback.json.outcome, 'rolled_back');
+    assert.equal(bodyRollback.stdout.includes('independent application'), false, 'application response bodies stay out of rollback diagnostics');
     await until(async () => (await request(port)).headers['x-x10-example'] === 'application-b');
     assert.equal((await cli(launcher, 'recover')).code, 0);
     await stop(); await assert.rejects(request(port));

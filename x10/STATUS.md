@@ -1301,3 +1301,36 @@ limits; do not bypass credentials/permissions or switch products. G3-G8 and
 Production V1 remain unaccepted, with full native and deferred Continuum scope
 preserved. The receipt also retains the coordinator's lease-message validation
 protocol failure; exit0 with diagnostics was incorrectly allowed to publish.
+
+
+### Exact CI: G2 archive consistency; G3 readiness contract
+
+Implementation `783de7994f0af0ea9d4d1129be28c31c57227f8d` passed both
+actual native CI runs, including archive refusal controls and verification of
+the newly packed native archive. The PR evidence ZIP was downloaded and its
+GitHub digest matched; event head, PR merge build, internal archive and binary
+identities remain separate in [the receipt](evidence/g2-archive-hosted.json).
+This closes the pending archive implementation CI check, not permanent
+distribution, publisher authentication or clean published-file acceptance.
+
+The next bounded G3 preparation adds an optional paired expected readiness
+status/body contract. New application-mode alpha installs declare HTTP 200 and
+exact `ready` plus newline; a wrong-body HTTP 200 cannot bind or confirm that
+application. Explicit responses are compared as raw UTF-8 bytes with a 4096-byte
+cap. Existing candidates without the pair keep their exact two-field canonical
+records and previous status-only behavior. Native C and Continuum are unchanged.
+
+[Readiness evidence](evidence/g3-readiness.json) separates the observed baseline
+counterexample, candidate tests and independent review from exact future CI.
+This is still G3 preparation: TLS and an operated systemd-user service remain
+open, as do G2 permanent distribution and G4–G8. Local UID0/Node24 fixtures and
+the absent user manager do not satisfy nonroot Node22 or service acceptance.
+No product transition, performance claim or Production V1 acceptance occurs.
+
+Final frozen local native aggregate passed20/20 groups; controller86 TAP,
+alpha40 TAP and operator30 TAP passed separately. Official35files:32passed,
+3dependency skips;1083strict PASS,25SKIP,1expected TODO-fail,0unexpected FAIL.
+Release checks50 and independent HTTP-function checks12 are separate units.
+Earlier failed preparation/bookkeeping runs are retained in the evidence.
+Exact resulting hosted CI is pending; these UID0/Node24 fixtures are not target
+service, TLS or Production V1 acceptance.
