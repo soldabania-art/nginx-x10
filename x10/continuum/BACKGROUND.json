@@ -3,22 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "portfolio-handoff-2026-10-24T105912210Z",
-    "owner": "portfolio-coordinator",
-    "baseCommit": "52ba4143eb929fd1e8227cec33b6c9d274a268d0",
-    "acquiredAtUTC": "2026-10-24T10:59:12.210Z",
-    "expiresAtUTC": "2026-10-24T11:29:12.210Z",
-    "task": "Publish owner-prioritized continuation contract and route next work to bounded X10 Production V1; no runtime source changes.",
-    "allowedFiles": [
-      "AGENTS.md",
-      "x10/continuum/BACKGROUND.json",
-      "x10/continuation-2026-10-24/CONTINUATION-PROMPT.md",
-      "x10/continuation-2026-10-24/CURRENT-STATE.md",
-      "x10/continuation-2026-10-24/GATES.json",
-      "x10/continuation-2026-10-24/CI-EVIDENCE-SNAPSHOT.json"
-    ]
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1084,6 +1069,11 @@
   ],
   "nextTasks": [
     {
+      "id": "X10-V1",
+      "state": "active-release-priority",
+      "goal": "Execute continuation G0-G8; accept a real supported native service and published V1, not alpha alone. G9 hands the team to new AVERKRON."
+    },
+    {
       "id": "C0",
       "state": "accepted-local-and-hosted-narrow-profile",
       "goal": "Bounded TLS 1.3 record engine, strict continuation-state model, independent vectors and a same-connection child-process transfer fixture"
@@ -1095,7 +1085,7 @@
     },
     {
       "id": "C2",
-      "state": "active-C2a-extended-inventory",
+      "state": "deferred-by-owner-portfolio-until-bounded-v1",
       "goal": "Read-only held-source API metadata is exact-hosted accepted. Next preserve actual required ALPN/Finished/auth-class state under protected lifetime and review unsupported API semantics; no target reconstruction before complete first-profile state and remaining runtime gates."
     },
     {
@@ -1357,7 +1347,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "Review and implement fuller protected source state for actual required ALPN/Finished values and the restricted authentication class using the bounded observed API contract. Length equality is not value preservation. Keep exporter/session/resumption/PHA explicitly unsupported and future record budget/later KeyUpdate unresolved. Target reconstruction remains gated on reviewed complete first-profile state, exclusive reader/writer ownership, distinct TLS code and actual old-code exit.",
+  "nextConcreteTask": "Read AGENTS and the full continuation prompt, refresh central portfolio state and exact source/CI receipt, then execute G0-G1 for the bounded X10 Production V1 contract and supported profile. Complete G2 Local Alpha as an intermediate package and proceed through service/proxy/TLS, config and package rollback, recovery, independent security/runtime acceptance and permanent V1 distribution. Preserve existing Continuum evidence; do not continue semantic TLS research as the next default task before V1.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -1525,5 +1515,45 @@
       "scope": "Exact preceding AD cleanup implementation only; does not accept new inventory code.",
       "spendingUSD": 0
     }
-  ]
+  ],
+  "portfolioContinuation": {
+    "ownerDecisionDate": "2026-10-24",
+    "activeProduct": "X10",
+    "target": "bounded Production V1; alpha is intermediate",
+    "promptPath": "x10/continuation-2026-10-24/CONTINUATION-PROMPT.md",
+    "gatesPath": "x10/continuation-2026-10-24/GATES.json",
+    "currentStatePath": "x10/continuation-2026-10-24/CURRENT-STATE.md",
+    "fullResearchScopePreserved": true,
+    "deferredResearchNextConcreteTask": "Review and implement fuller protected source state for actual required ALPN/Finished values and the restricted authentication class using the bounded observed API contract. Length equality is not value preservation. Keep exporter/session/resumption/PHA explicitly unsupported and future record budget/later KeyUpdate unresolved. Target reconstruction remains gated on reviewed complete first-profile state, exclusive reader/writer ownership, distinct TLS code and actual old-code exit.",
+    "deferredResearchNextTasks": [
+      {
+        "id": "C0",
+        "state": "accepted-local-and-hosted-narrow-profile",
+        "goal": "Bounded TLS 1.3 record engine, strict continuation-state model, independent vectors and a same-connection child-process transfer fixture"
+      },
+      {
+        "id": "C1",
+        "state": "accepted-local-and-hosted-narrow-profile",
+        "goal": "Real authenticated TLS1.3 endpoints and strict record observer; cleanup/cancellation and fail-closed denial evidence; no migration"
+      },
+      {
+        "id": "C2",
+        "state": "active-C2a-extended-inventory",
+        "goal": "Read-only held-source API metadata is exact-hosted accepted. Next preserve actual required ALPN/Finished/auth-class state under protected lifetime and review unsupported API semantics; no target reconstruction before complete first-profile state and remaining runtime gates."
+      },
+      {
+        "id": "C3",
+        "state": "pending",
+        "goal": "Integrate opt-in with native NGINX and prove old workers and old TLS code fully exit after successful continuation"
+      },
+      {
+        "id": "C4",
+        "state": "pending",
+        "goal": "Held-out third-version adapter, adverse I/O/KeyUpdate/half-close tests, cost and overhead measurements"
+      }
+    ],
+    "runtimeCodeChangedByThisPublication": false,
+    "releaseAcceptedByThisPublication": false,
+    "publicationOnly": true
+  }
 }

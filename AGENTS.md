@@ -1,3 +1,13 @@
+## Поручение владельца — 24.10.2026: порядок завершения
+
+Сначала X10, затем новый AVERKRON как главная площадка, далее TEXTORA / AI Index, TROVENDI, Replyscope. Все продукты должны получить работающий выпуск; промежуточные alpha/Core/mock не означают завершение полного сервиса.
+
+Перед продолжением прочитай [подробный промпт](x10/continuation-2026-10-24/CONTINUATION-PROMPT.md) и [проверенный срез](x10/continuation-2026-10-24/CURRENT-STATE.md), затем свежие инструкции и checkpoint. Центральный порядок и текущий активный продукт — `soldabania-art/engine-x10`, `docs/PORTFOLIO-EXECUTION.md` и `docs/PORTFOLIO-STATE.json`. Исторический статус этого продукта при публикации: **ACTIVE_FOR_V1**. Перед реализацией требуются актуальные `execution.phase=RUNNING`, `execution.transition=null`, `execution.activeProject` и `projects[].status=ACTIVE_FOR_V1`; WAITING не запускает параллельную разработку. Исторический SHA не заменяет свежий remote HEAD.
+
+Это новое прямое решение заменяет прежний параллельный порядок, сохраняя полный продуктовый замысел, действительные расходы/данные/доступы, проектный lease и незакрытые критерии. Не прерывай живого чужого координатора. Разработчик собственных продуктов — АВЕРКРОН; исходное авторство и лицензии стороннего кода сохраняются.
+
+---
+
 # ENGINE X10 native development
 
 - Develop the original NGINX Open Source codebase. Keep existing modules, protocols, configuration semantics and platform branches unless the owner explicitly approves a change of scope.

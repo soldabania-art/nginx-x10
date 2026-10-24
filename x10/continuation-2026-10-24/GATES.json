@@ -1,0 +1,517 @@
+{
+  "schema_version": 1,
+  "product": "X10",
+  "owner": "AVERKRON",
+  "source_repository": "soldabania-art/nginx-x10",
+  "portfolio_control_repository": "soldabania-art/engine-x10",
+  "portfolio_control_paths": [
+    "docs/PORTFOLIO-EXECUTION.md",
+    "docs/PORTFOLIO-STATE.json"
+  ],
+  "portfolio_order": [
+    "X10",
+    "AVERKRON",
+    "TEXTORA / AI Index",
+    "TROVENDI",
+    "Replyscope"
+  ],
+  "portfolio_stage": "ACTIVE_FOR_V1",
+  "transition_target": "AVERKRON",
+  "transition_requires": "All G0-G8 accepted at an exact published V1 ref, then G9 recorded; alpha alone is insufficient.",
+  "contract_status": "Bounded Production V1 target recorded by portfolio coordinator; implementation/release acceptance remains NOT_ACCEPTED.",
+  "snapshot": {
+    "observed_at_utc": "2026-10-24T10:37:54Z",
+    "active_branch": "x10-continuum-development",
+    "active_sha": "bf7f9aa23f3fb714ee31fa044853c3c48fff4eb4",
+    "upstream_branch": "master",
+    "upstream_sha": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+    "integration_branch": "x10-main",
+    "integration_sha": "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+    "release_count_observed": 0,
+    "stale_snapshot_rule": "Read fresh branch HEAD, central manifest and BACKGROUND before every action.",
+    "private_coordinator_read": "Read fresh authorized owner-coordinator main; do not publish private commit SHA."
+  },
+  "readiness": {
+    "native_engineering": "Verified within named profile; not a production acceptance.",
+    "local_alpha": "Runtime and hosted lifecycle verified; no permanent release observed.",
+    "production_v1": "NOT_ACCEPTED",
+    "continuum": "C2a source-copy/cleanup research; semantic import, transport ownership and native migration not implemented.",
+    "full_platform_scope": "PRESERVED_NOT_COMPLETED"
+  },
+  "coordination": {
+    "existing_lease_at_snapshot": {
+      "run_id": "continuum-api-20261024T101550264Z",
+      "owner": "codex-coordinator-api-inventory",
+      "acquired_at_utc": "2026-10-24T10:15:50.264Z",
+      "expires_at_utc": "2026-10-24T11:00:50.264Z",
+      "base_commit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
+      "active_when_observed": true,
+      "task": "Exact cleanup CI plus bounded read-only established-state API inventory; no importer."
+    },
+    "fresh_lease_check_required": true,
+    "maximum_lease_minutes": 45,
+    "coordinator_only_shared_ref_updates": true,
+    "update_mode": "Non-force, expected_sha CAS, reread after acquire and publication.",
+    "result_commit": "One parent = exact current leased HEAD; result/checkpoint/pending plus executionLease:null atomically.",
+    "conflict_policy": "Stop shared publication, preserve local result, reread; no blind rebase/force/retry.",
+    "while_other_lease_live": "Read-only active branch. Separate docs branch/PR may hold root's prompt; no merge/auto-merge or interruption.",
+    "maximum_helpers": 6,
+    "one_writer_per_file": true,
+    "concurrent_shared_builds_allowed": false,
+    "latest_recheck_lease": {
+      "run_id": "continuum-api-ci-20261024T104742Z",
+      "owner": "codex-coordinator-hosted-review",
+      "base_commit": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
+      "acquired_at_utc": "2026-10-24T10:47:42Z",
+      "expires_at_utc": "2026-10-24T11:32:42Z",
+      "task": "Verify exact held-source API metadata CI and record bounded hosted acceptance",
+      "active_when_observed": true
+    }
+  },
+  "evidence": {
+    "native": {
+      "event_head": "bf7f9aa23f3fb714ee31fa044853c3c48fff4eb4",
+      "run_id": 40085252512,
+      "job_id": 120846791209,
+      "job_result": "success",
+      "actual_steps_checked": true,
+      "artifact_id": 12556573908,
+      "artifact_zip_sha256": "de3c8f0d5fb07260588c9aa3204fefdf8cc222c391c507e94be0a9236da57787",
+      "zip_downloaded_and_digest_verified": true,
+      "artifact_contents_read": true,
+      "build_checkout": "cc627b03590fa2e171a5d9117263ff5e3ddf44ce",
+      "suites_passed": 20,
+      "suites_total": 20,
+      "controller_tap_pass": 77,
+      "operator_tap_pass": 30,
+      "alpha_tap_pass": 37,
+      "official_files": {
+        "total": 35,
+        "passed": 34,
+        "skipped": 1,
+        "failed": 0
+      },
+      "official_assertions": {
+        "strict_pass": 1105,
+        "skipped": 25,
+        "expected_todo_fail": 1,
+        "unexpected_fail": 0
+      },
+      "compiled_modules": 105,
+      "not_additive_units": true
+    },
+    "research": {
+      "event_head": "bf7f9aa23f3fb714ee31fa044853c3c48fff4eb4",
+      "run_id": 40085252538,
+      "job_id": 120846786246,
+      "job_result": "success",
+      "actual_log_read": true,
+      "counts": {
+        "core": 21,
+        "process": 7,
+        "handshake_observer": 27,
+        "openssl_probe": 44
+      },
+      "scope": "Source-only research acceptance, not TLS migration or production V1.",
+      "published_background_reconciliation_required": true
+    },
+    "candidate_bundle": {
+      "artifact_id": 12556379902,
+      "run_id": 40085252512,
+      "zip_sha256_from_github": "5ecba6c8e42d082791b39f8046d3b9d97be3de284b94266e9f34a5476cc92a1a",
+      "bytes": 3891662,
+      "expires_at_utc": "2026-11-07T10:21:10Z",
+      "downloaded_in_this_pass": false,
+      "installed_in_this_pass": false,
+      "permanent_release": false
+    }
+  },
+  "gates": [
+    {
+      "id": "G0",
+      "name": "Fresh authority, ownership and checkpoint handoff",
+      "status": "RECHECK_REQUIRED",
+      "depends_on": [],
+      "outputs": [
+        "Fresh central manifest SHA and source HEAD",
+        "Current research checkpoint and exact CI reconciled",
+        "One coordinator and V1 release routing recorded"
+      ],
+      "acceptance": [
+        "No live foreign lease bypassed",
+        "Own lease/CAS/reread verified before shared writes",
+        "Research results preserved; finite V1 route replaces stale automatic R&D priority"
+      ],
+      "required_evidence": [
+        "central_ref",
+        "source_ref",
+        "lease_commit",
+        "checkpoint_ref"
+      ],
+      "blocking_unknowns": [
+        "Recheck latest foreign lease and exact new API metadata CI; do not reuse prior44-case evidence as acceptance of new48-case bytes."
+      ]
+    },
+    {
+      "id": "G1",
+      "name": "Record bounded Production V1 contract",
+      "status": "NOT_ACCEPTED",
+      "depends_on": [
+        "G0"
+      ],
+      "outputs": [
+        "Supported Linux/arch/Node/dependency ABI profile",
+        "Threat model and support matrix",
+        "Predeclared runtime/failure/load acceptance",
+        "Preserved broad platform and Continuum roadmap"
+      ],
+      "acceptance": [
+        "V1 is a usable operated service, not alpha demo",
+        "No silent removal of existing NGINX modules or future scope",
+        "Exact unsupported states and recover boundaries stated"
+      ],
+      "required_evidence": [
+        "release_contract_ref",
+        "support_matrix_ref",
+        "acceptance_thresholds_ref"
+      ]
+    },
+    {
+      "id": "G2",
+      "name": "Complete and publish Local Alpha",
+      "status": "ENGINEERING_VERIFIED_RELEASE_PENDING",
+      "depends_on": [
+        "G1"
+      ],
+      "outputs": [
+        "Correct pinned Quickstart",
+        "Actual upstream/health example",
+        "Independent extracted-bundle lifecycle",
+        "Permanent alpha archive/checksum/provenance"
+      ],
+      "acceptance": [
+        "Install/run/bind/apply/revert/recover/stop/uninstall from published files",
+        "No source checkout dependency",
+        "Foreign PID/symlink/unknown-file refusals preserved",
+        "Alpha not recorded as completed V1"
+      ],
+      "required_evidence": [
+        "alpha_version",
+        "alpha_source_sha",
+        "alpha_artifact_sha256",
+        "clean_install_report",
+        "operator_flow_report"
+      ]
+    },
+    {
+      "id": "G3",
+      "name": "Real gateway and operated service",
+      "status": "NOT_ACCEPTED",
+      "depends_on": [
+        "G2"
+      ],
+      "outputs": [
+        "Real app reverse proxy and verified HTTP/TLS path",
+        "Supported supervisor/service recipe",
+        "Status/health/logging/restart runbook"
+      ],
+      "acceptance": [
+        "Native request path works outside development checkout",
+        "No admin exposure by default",
+        "Restart and operator disconnect behavior verified",
+        "Demo self-check distinguished from application health"
+      ],
+      "required_evidence": [
+        "gateway_e2e_report",
+        "tls_trust_report",
+        "service_lifecycle_report",
+        "test_deployment_identity"
+      ]
+    },
+    {
+      "id": "G4",
+      "name": "Config and package update/rollback/recovery",
+      "status": "PARTIAL_EXISTING_CONTROLLER_EVIDENCE",
+      "depends_on": [
+        "G3"
+      ],
+      "outputs": [
+        "Config release/revert/recover acceptance",
+        "Package upgrade/downgrade procedure",
+        "State compatibility and backup/restore contract",
+        "Faulted/orphan-process runbook"
+      ],
+      "acceptance": [
+        "Invalid config and unhealthy candidate safely refused/reverted",
+        "Interrupted durable state handled or explicitly refused",
+        "Stale identities/revisions and library drift guarded",
+        "Old known-good package retained until acceptance",
+        "No side-effect/database rollback or atomic-all-traffic claim"
+      ],
+      "required_evidence": [
+        "config_failure_matrix",
+        "package_upgrade_report",
+        "package_rollback_report",
+        "recovery_report"
+      ]
+    },
+    {
+      "id": "G5",
+      "name": "Security and supported compatibility review",
+      "status": "NOT_ACCEPTED",
+      "depends_on": [
+        "G3",
+        "G4"
+      ],
+      "outputs": [
+        "Independent review",
+        "Negative/held-out cases",
+        "Residual issue register and supported boundaries"
+      ],
+      "acceptance": [
+        "No unresolved critical issue in supported V1 path",
+        "Private ownership/permissions/socket/secret checks pass",
+        "New native patches have baseline counterexamples and neighboring regressions",
+        "Same-UID and unsupported-profile limits documented"
+      ],
+      "required_evidence": [
+        "security_review",
+        "heldout_report",
+        "residual_risks",
+        "native_patch_evidence_if_changed"
+      ]
+    },
+    {
+      "id": "G6",
+      "name": "Frozen candidate runtime and load acceptance",
+      "status": "NOT_ACCEPTED",
+      "depends_on": [
+        "G4",
+        "G5"
+      ],
+      "outputs": [
+        "Final native/Unix/feature-off gates",
+        "Predeclared representative load/slow-client run",
+        "Cleanup and recovery acceptance",
+        "Retained adverse/A-A evidence"
+      ],
+      "acceptance": [
+        "Exact frozen source and test identities",
+        "Required tests actually ran; no fake passing skips",
+        "Planned initial V1 soak at least 60 minutes on an authorized compatible host",
+        "Metrics/thresholds declared before run",
+        "No unexplained supported-path regression or data loss"
+      ],
+      "required_evidence": [
+        "final_ci_runs",
+        "test_units_and_limits",
+        "load_contract",
+        "soak_report",
+        "cleanup_report"
+      ]
+    },
+    {
+      "id": "G7",
+      "name": "Versioned distribution and supply chain",
+      "status": "NOT_ACCEPTED",
+      "depends_on": [
+        "G6"
+      ],
+      "outputs": [
+        "Clean final binary and allowlisted CLI package",
+        "Version/source/provenance/checksums",
+        "LICENSE/NOTICE/dependency inventory",
+        "Update/security-maintenance policy"
+      ],
+      "acceptance": [
+        "Event head and actual build checkout distinguished",
+        "ZIP/tar/payload identities verified",
+        "ABI support explicit",
+        "Checksum not mislabeled as signature",
+        "Persistent artifacts independent of CI expiration"
+      ],
+      "required_evidence": [
+        "version",
+        "source_sha",
+        "build_manifest",
+        "binary_sha256",
+        "archive_sha256",
+        "license_files",
+        "dependency_inventory"
+      ]
+    },
+    {
+      "id": "G8",
+      "name": "Publish and accept Production V1",
+      "status": "NOT_ACCEPTED",
+      "depends_on": [
+        "G7"
+      ],
+      "outputs": [
+        "Permanent V1 release",
+        "Independent download-to-operation replay",
+        "Verified package upgrade and rollback from published files",
+        "Accurate AVERKRON project card"
+      ],
+      "acceptance": [
+        "Independent reviewer reproduces entire supported operator path",
+        "Authorized test deployment serves real app using published candidate",
+        "No experimental Continuum in production hot path",
+        "Release notes list actual features and unknowns",
+        "No 10x/customer/SLA claims without proof"
+      ],
+      "required_evidence": [
+        "release_url",
+        "release_sha",
+        "published_artifacts",
+        "independent_release_path_report",
+        "deployment_identity",
+        "rollback_plan",
+        "project_card_status"
+      ]
+    },
+    {
+      "id": "G9",
+      "name": "Portfolio transition to new AVERKRON",
+      "status": "BLOCKED_BY_V1",
+      "depends_on": [
+        "G8"
+      ],
+      "outputs": [
+        "Central state records accepted X10 V1",
+        "AVERKRON becomes next active product",
+        "X10 maintenance lane and preserved R&D next gate"
+      ],
+      "acceptance": [
+        "All G0-G8 accepted with evidence",
+        "Local Alpha alone did not trigger transition",
+        "Unfinished broad platform/Continuum not marked completed",
+        "Final queue remains X10→AVERKRON→TEXTORA/AI Index→TROVENDI→Replyscope"
+      ],
+      "required_evidence": [
+        "central_transition_commit",
+        "v1_acceptance_record",
+        "maintenance_handoff",
+        "rnd_remaining_scope"
+      ]
+    }
+  ],
+  "preserved_scope": {
+    "native_matrix_source": "x10/PLAN.md",
+    "areas": [
+      "process/reload",
+      "events/platforms",
+      "memory/buffers",
+      "HTTP1/2/3",
+      "QUIC/TLS",
+      "upstream/DNS",
+      "proxy/adapters",
+      "cache",
+      "static/media/filters",
+      "rewrite/routing",
+      "access/limits",
+      "TCP/UDP",
+      "mail",
+      "files",
+      "management/observability",
+      "build/module ABI"
+    ],
+    "continuum_stages": [
+      "C0 record/state model",
+      "C1 real handshake/observer",
+      "C2a semantic inventory and protection failures",
+      "C2b semantic export/import",
+      "exclusive I/O ownership",
+      "distinct TLS code and source retirement",
+      "HTTP/WebSocket/native adapters",
+      "third-version heldouts and comparative costs"
+    ],
+    "not_required_for_bounded_v1_acceptance": [
+      "full Continuum migration",
+      "fleet/cloud console",
+      "universal 10x claim",
+      "complete all-platform/all-module certification"
+    ],
+    "not_marked_completed_by_v1": true
+  },
+  "money": {
+    "resource_policy": "Use only existing explicitly authorized resources; do not infer authority for new purchases or outreach.",
+    "financial_sources": [
+      "x10/continuum/COMMERCIAL.md",
+      "x10/continuum/ECONOMICS.md"
+    ],
+    "public_handoff_policy": "Do not repeat internal budget amounts or commercial price hypotheses in these public handoff files."
+  },
+  "attribution": {
+    "site_path": "/cases/",
+    "section_title": "Наши проекты",
+    "developer_label": "Разработчик — АВЕРКРОН",
+    "preserve_upstream_license_authorship_history": true,
+    "card_status_requires_confirmed_release": true
+  },
+  "publication": {
+    "author_actions": "Read-only GitHub; local handoff files only.",
+    "root_publishes": true,
+    "files": [
+      "CONTINUATION-PROMPT.md",
+      "CURRENT-STATE.md",
+      "GATES.json",
+      "CI-EVIDENCE-SNAPSHOT.json"
+    ],
+    "exclude": [
+      "reference-snapshot/"
+    ],
+    "remote_changes_by_author": false,
+    "privacy_rules": [
+      "No exact private coordinator commit SHA",
+      "No repeated internal budget amounts",
+      "No repeated commercial price hypotheses",
+      "Preserve public X10 technical SHA and sanitized CI evidence"
+    ]
+  },
+  "latest_recheck": {
+    "observed_at_utc": "2026-10-24T10:49:28Z",
+    "active_sha": "66a65419a04ec5e4ff3604dec214d553a85f2a1b",
+    "implementation_sha": "c0c4e308eca839049de4b64aa2fd2493d0b8865c",
+    "scope": "Bounded held-source read-only API metadata, not API value preservation or migration",
+    "local_research_counts_claimed": {
+      "core": 21,
+      "process": 7,
+      "handshake_observer": 27,
+      "openssl_probe": 48
+    },
+    "new_hosted_acceptance": "PENDING_AT_RECHECK",
+    "native_pr_run": 40087363660,
+    "research_pr_run": 40087363637,
+    "run_state": "in_progress",
+    "prior_bf7_native_artifact_and44_log_evidence_is_historical": true
+  },
+  "dispatch_guard": {
+    "execution.phase": "RUNNING",
+    "execution.transition": null,
+    "execution.activeProject": "x10",
+    "projects[x10].status": "ACTIVE_FOR_V1",
+    "while_transitioning": "No new writer; existing owner completes checkpoint and release before atomic portfolio activation."
+  },
+  "publication_recheck": {
+    "observedAtUTC": "2026-10-24T11:00:06Z",
+    "eventHead": "66a65419a04ec5e4ff3604dec214d553a85f2a1b",
+    "native": {
+      "runId": 40087363660,
+      "jobId": 120852957405,
+      "status": "completed",
+      "conclusion": "success",
+      "actualStepsPresent": true
+    },
+    "research": {
+      "runId": 40087363637,
+      "jobId": 120852955113,
+      "status": "completed",
+      "conclusion": "success",
+      "actualStepsPresent": true
+    },
+    "artifactDownloadedInThisRecheck": false,
+    "testedCheckoutSha": null,
+    "limits": "Fresh run/job metadata and executed steps only; do not reuse bf7f9aa artifact counts/hash as the new binary identity. Not V1 acceptance."
+  }
+}
