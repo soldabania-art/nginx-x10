@@ -572,3 +572,13 @@ Prior20bytes, generic ledger/probe/oracle и499 native files сохранены.
 setup corrections. Exact implementation CI pending. Далее — ограниченный
 sequence/key usage gate для quiescent profile перед C2b; остальные
 truncation/RST variants unsupported. Export/import и TLS-code change не готовы.
+
+### Exact CI: truncated body EOF
+
+Implementation `6cee2384e91e9fda4251c53dbeddce9cc951f473`: research push
+`40054592561` и PR `40054596847`, native push `40054592543` и PR
+`40054596722` завершены success. Оба research logs подтверждают21/7/27/21;
+все основные native steps, включая feature-off и alpha package/checksum,
+прошли. [Очищенная квитанция](../evidence/continuum-c2a-truncated-body-hosted.json) сохраняет exact SHA/run IDs,
+artifact hashes и отдельные checkout identities. Это relay-injected refusal,
+wire=null; не migration/full inventory. Далее — quiescent sequence/key usage.
