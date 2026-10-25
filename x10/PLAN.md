@@ -1517,3 +1517,29 @@ counters, cleanup resets and runtime retention remain; admission now also
 revalidates authority/state after the diagnostic await. Exact new CI is
 pending; direct owned-hook outcome/rendezvous evidence and broader G3/V1
 acceptance remain open.
+
+
+## Explicit startup session preparation
+
+Both exact ee464 native workflows FAILED second_start/request_start with
+unit_start_failed and separate native_cleanup_unknown. Their guarded
+post-failure known-command hook record showed exit1, but both pre-start
+records were parse_refused and every record comparison was unknown.
+Neither current invocation freshness nor semantic startup cause was proved.
+Final cleanup remained unconfirmed and private Node/bootstrap were retained.
+Separate native20 and lifecycle194PASS/1rootSKIP remain scoped observations.
+
+The automatic-readiness recipe now runs installed prepare-run as ExecStartPre.
+It uses the same locked guarded session preparation as run, publishing the
+prepared session before run and strict wait-bind can execute concurrently.
+Preparation neither starts native code nor performs bind/readiness. Missing
+or false autoReadiness retains the exact previous default recipe bytes.
+The general wait-bind state, registry and binding rules remain unchanged.
+
+[Evidence](evidence/g3-startup-rendezvous.json) records the actual baseline
+CI failure, source identities and separate local validation receipts. A
+local ordering counterexample is not a reconstruction of the older hosted
+failure. Exact new CI, repeated automatic service cycles and complete owned
+service/private Node cleanup are required before scoped service acceptance.
+Logging, one manager restart, adverse paths, combined TLS/service, package
+rollback/recovery, permanent release, security/soak and Production V1 stay open.

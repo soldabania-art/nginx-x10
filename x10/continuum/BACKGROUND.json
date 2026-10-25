@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-hook-rendezvous-20261025T072500Z",
-    "owner": "codex-coordinator-hook-rendezvous",
-    "baseCommit": "ee464e8267af1183cc3a7e08480a02c4c55d5c98",
-    "acquiredAtUTC": "2026-10-25T07:20:45.000Z",
-    "expiresAtUTC": "2026-10-25T08:04:45.000Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1890,12 +1884,12 @@
       "runId": "x10-hook-status-20261025T062500Z",
       "sourceBase": "d6973a6e00473c5d4d8e1d6c35eaec07640d84b4",
       "publicationParent": "982d6525119ba470b0bcb5e3637a6f6245a73ab8",
-      "implementationCommit": null,
+      "implementationCommit": "ee464e8267af1183cc3a7e08480a02c4c55d5c98",
       "implementationCommitLocator": "Current publication commit containing bounded owned post-start status diagnostics and pre-start authority/cancellation rechecks; exact resulting CI must be reconciled separately",
       "scope": "Best-effort bounded known-owned ExecStartPost property observations before start and after failed start; raw process/time identity remains private comparison input, never invocation authority; full owned-unit/inactive-state authority and cancellation are rechecked after the new pre-start await",
       "evidence": "x10/evidence/g3-hook-status.json",
       "localAcceptance": "BOUNDED_OWNED_EXECSTARTPOST_STATUS_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_BOUNDED_OWNED_HOOK_STATUS",
+      "exactHostedAcceptance": "EXACT_BOUNDED_HOOK_RECORD_OBSERVED_AUTOMATIC_SECOND_START_FAILED",
       "nativeRuntimeChanged": false,
       "controllerRuntimeChanged": false,
       "alphaRuntimeChanged": false,
@@ -1916,11 +1910,91 @@
       "actualHookStatusObservedLocallyUnderManager": false,
       "serviceAccepted": false,
       "productionAccepted": false,
-      "nextConcreteTask": "First inspect exact resulting bounded owned ExecStartPost diagnostic CI. Keep primary unit_start_failed and cleanup native_cleanup_unknown independent of best-effort property-query or parse failures. Require before-start and failed-start records to match the exact installed pinned Node/launcher/argv grammar under fresh known-owned unit checks, with only finite allowlisted classifications published. Raw process identifiers and start-time values remain private comparison inputs. recordChangedSincePreStart compares only the private process-ID/start-time tuple with three possible states, not evidence that this attempt invoked or owns that hook. Do not treat an unchanged or matched property record, main-process status, query success or changed PID/time as fresh hook authority. Use actual safe observations to select the next bounded installed-hook outcome or owned rendezvous experiment and reproduce the relevant ordering before repairing startup. Preserve current-attempt cleanup resets, unknown-cause/runtime-retention boundaries and all identity/refusal guards. Require actual repeated automatic startup and complete owned service/Node cleanup before service acceptance; no unchanged retry or forced unknown cleanup. Logging, restart, failed-start/cancel/drain/orphan, combined TLS/service, package rollback/recovery, permanent release, security/soak and G4-G8 V1 remain open along with deferred Continuum."
+      "nextConcreteTask": "First inspect exact resulting bounded owned ExecStartPost diagnostic CI. Keep primary unit_start_failed and cleanup native_cleanup_unknown independent of best-effort property-query or parse failures. Require before-start and failed-start records to match the exact installed pinned Node/launcher/argv grammar under fresh known-owned unit checks, with only finite allowlisted classifications published. Raw process identifiers and start-time values remain private comparison inputs. recordChangedSincePreStart compares only the private process-ID/start-time tuple with three possible states, not evidence that this attempt invoked or owns that hook. Do not treat an unchanged or matched property record, main-process status, query success or changed PID/time as fresh hook authority. Use actual safe observations to select the next bounded installed-hook outcome or owned rendezvous experiment and reproduce the relevant ordering before repairing startup. Preserve current-attempt cleanup resets, unknown-cause/runtime-retention boundaries and all identity/refusal guards. Require actual repeated automatic startup and complete owned service/Node cleanup before service acceptance; no unchanged retry or forced unknown cleanup. Logging, restart, failed-start/cancel/drain/orphan, combined TLS/service, package rollback/recovery, permanent release, security/soak and G4-G8 V1 remain open along with deferred Continuum.",
+      "hostedEvidence": "x10/evidence/g3-startup-rendezvous.json"
+    },
+    "ownedHookStatusHosted": {
+      "state": "EXACT_BOUNDED_HOOK_RECORD_OBSERVED_AUTOMATIC_SECOND_START_FAILED",
+      "implementationCommit": "ee464e8267af1183cc3a7e08480a02c4c55d5c98",
+      "implementationTree": "472b4a524533255a7692c3f2c5fb5f442fac0138",
+      "evidence": "x10/evidence/g3-startup-rendezvous.json",
+      "nativeRunIds": [
+        40170151178,
+        40170155403
+      ],
+      "nativeJobIds": [
+        121099202559,
+        121099212826
+      ],
+      "researchRunIds": [
+        40170151136,
+        40170155498
+      ],
+      "bothExactNativeWorkflowsSuccessful": false,
+      "requiredActualServiceStepsFailed": true,
+      "phase": "second_start",
+      "primaryFailureSubphase": "request_start",
+      "primaryFailureCode": "unit_start_failed",
+      "cleanupFailureCode": "native_cleanup_unknown",
+      "firstAutomaticSessionObservedNarrowly": true,
+      "firstProxyUploadStreamChecksPerRun": 1,
+      "hookObservationsPerRun": 3,
+      "preStartParseRefusedPerRun": 2,
+      "postFailedStartKnownCommandRecordObserved": true,
+      "postFailedStartRecordExitStatus": 1,
+      "everyHookRecordComparisonUnknown": true,
+      "hookRecordFreshnessProven": false,
+      "currentHookInvocationIdentityProven": false,
+      "semanticHookFailureCauseKnown": false,
+      "cleanupObservationFreshnessPreserved": true,
+      "fiveCurrentAttemptCleanupConfirmationsFalse": true,
+      "completeAutomaticReadinessLifecycleAccepted": false,
+      "failedSecondStartOrFinalCleanupConfirmed": false,
+      "runtimeLinkAbsent": false,
+      "installationRemoved": false,
+      "temporaryRootRemoved": false,
+      "privateDependencyRuntimeRetained": true,
+      "dependencyCleanupReceiptPresent": false,
+      "secondManagerStartCauseKnown": false,
+      "failingInventoryRecordKnown": false,
+      "sameHistoricalCauseOrInterleavingProven": false,
+      "fullG3ServiceAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0
+    },
+    "startupRendezvousLocal": {
+      "runId": "x10-hook-rendezvous-20261025T072500Z",
+      "sourceBase": "ee464e8267af1183cc3a7e08480a02c4c55d5c98",
+      "publicationParent": "f0ede06eca8d3c6d4694edced8a7c6131820d63d",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+      "scope": "Explicit installed locked startup session preparation before automatic service run/wait-bind; general readiness authority remains strict",
+      "result": "Added optionless installed prepare-run using the existing locked run-preparation contract and selected ExecStartPre only for explicit automatic readiness; exact new service CI pending.",
+      "evidence": "x10/evidence/g3-startup-rendezvous.json",
+      "perFileLedger": "x10/review/g3-startup-rendezvous-ledger.json",
+      "localAcceptance": "LOCAL_LOCKED_PREPARATION_AND_NATIVE_COMPATIBILITY_VERIFIED_EXACT_NEW_SERVICE_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_STARTUP_RENDEZVOUS",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": true,
+      "serviceRecipeChanged": true,
+      "preflightChanged": false,
+      "knownGuardsPreserved": true,
+      "historicalHostedCauseProven": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "nextConcreteTask": "First reconcile exact resulting implementation CI and its actual nonroot repeated automatic startup/cleanup reports. A deterministic baseline ordering counterexample and candidate controls do not reconstruct the previous hosted interleaving or establish its semantic cause. Preserve fresh ownership/session authority, general wait-bind refusals, independent primary/cleanup errors and unknown-runtime retention. Require two actual automatic cycles and complete owned service/Node cleanup before accepting that scoped path. Logging, one manager restart, adverse startup/cancel/drain/orphan, combined TLS/service, package rollback/recovery, permanent release, security/soak and G4-G8 Production V1 remain open; deferred Continuum remains separate and unimplemented.",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_STARTUP_RENDEZVOUS"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
     }
   },
   "pendingVerification": [
-    "First verify exact resulting bounded owned ExecStartPost diagnostics CI. Finite property-record matches and recordChangedSincePreStart tri-state comparisons do not grant invocation authority. The normal full ownedProperties(false) plus inactive/MainPID0 gate must run after the diagnostic await, then cancellation is checked before issuing start; a signal during failed-start observation must not replace unit_start_failed. Both exactd697 native workflows FAILED actual service at second_start/request_start with primary unit_start_failed, nonzero manager start and separate cleanup native_cleanup_unknown. One first automatic cycle and its readiness/proxy/upload/stream checks completed per run. All five current-attempt stop/absence confirmations were false, narrowly verifying the cleanup-freshness correction; false means unconfirmed, not observed resource presence. Other removal flags were false, private Node/bootstrap were retained and no dependency-cleanup receipt existed. Actual ExecStartPost exit, underlying manager/native cause and failing cleanup inventory record remain unknown. Matching outer error codes do not prove the same historical cause or interleaving. Earlierd119 manual basic-service acceptance and older failures remain exact-source history.",
+    "First verify exact resulting startup rendezvous implementation and actual repeated automatic lifecycle; no service/V1 acceptance from local controls. First reconcile exact resulting implementation CI and its actual nonroot repeated automatic startup/cleanup reports. A deterministic baseline ordering counterexample and candidate controls do not reconstruct the previous hosted interleaving or establish its semantic cause. Preserve fresh ownership/session authority, general wait-bind refusals, independent primary/cleanup errors and unknown-runtime retention. Require two actual automatic cycles and complete owned service/Node cleanup before accepting that scoped path. Logging, one manager restart, adverse startup/cancel/drain/orphan, combined TLS/service, package rollback/recovery, permanent release, security/soak and G4-G8 Production V1 remain open; deferred Continuum remains separate and unimplemented.",
+    "Both exact ee464 native workflows failed actual service at second_start/request_start with primary unit_start_failed and separate cleanup native_cleanup_unknown. One first automatic cycle completed per run. The guarded post-failure known-command ExecStartPost record showed exit1, while both pre-start observations were parse_refused and every record comparison was unknown. This does not prove record freshness, current invocation identity, the semantic hook failure or the historical startup interleaving. All five current-attempt cleanup confirmations were false (unconfirmed, not observed presence); final cleanup remained unknown and private Node/bootstrap were retained without a cleanup receipt. Native20, recipe28, lifecycle194PASS/1rootSKIP, dependency46, preflight42 and TLS18/16 passed separately; research PR actually ran21/7/27/48 and push runtime skipped. These separate passes do not override either native workflow FAIL.",
     "Exactd697 native runs40166044910/40166047210 both FAILED actual service step23 at second_start/request_start with primary unit_start_failed and cleanup native_cleanup_unknown. Five current-attempt stop/absence confirmations are now false in both actual reports, narrowly verifying the cleanup-freshness change; final cleanup remains unknown and private runtime retained. First cycle passed once per run. Native20, recipe28, lifecycle138total137PASS1rootSKIP, dependency46, preflight42 and TLS18/16 passed separately; research PR ran21/7/27/48 and push runtime skipped. Hook exit, failing inventory record, underlying cause and same historical interleaving remain unknown.",
     "Exact1eb native runs40162013011/40162015860 both FAILED actual service step23 at second_start/request_start with primary unit_start_failed and cleanup native_cleanup_unknown. One first session passed per run; five true first-stop cleanup flags were stale for the later failure. Final cleanup and hook cause are unknown, removal flags false, private runtime retained. Native20, recipe28, lifecycle124total123PASS1rootSKIP, dependency46, preflight42 and TLS18/16 passed separately. Research PR actually ran21/7/27/48; push runtime skipped. No unchanged rerun was requested.",
     "Exactd119 basic service fixture is accepted narrowly from both completed successful native workflows, actual digest-verified artifacts and independent72 proofs: two separate manual-readiness start/stop sessions, proxy/upload/stream and complete owned service/private Node/bootstrap cleanup. Preceding native20/TLS18/16/preflight42/lifecycle118total117PASS1rootSKIP/dependency46 and research PR21/7/27/48 belong to d119. This is not one manager restart, automatic readiness, combined TLS/service, full G3 or V1. Earlierf434/7d1 failures and unknown700/0ade causes remain history.",
@@ -1952,9 +2026,14 @@
   ],
   "nextTasks": [
     {
+      "id": "G3-startup-rendezvous-exact-CI",
+      "state": "pending-exact-resulting-automatic-startup",
+      "goal": "First reconcile exact resulting implementation CI and its actual nonroot repeated automatic startup/cleanup reports. A deterministic baseline ordering counterexample and candidate controls do not reconstruct the previous hosted interleaving or establish its semantic cause. Preserve fresh ownership/session authority, general wait-bind refusals, independent primary/cleanup errors and unknown-runtime retention. Require two actual automatic cycles and complete owned service/Node cleanup before accepting that scoped path. Logging, one manager restart, adverse startup/cancel/drain/orphan, combined TLS/service, package rollback/recovery, permanent release, security/soak and G4-G8 Production V1 remain open; deferred Continuum remains separate and unimplemented."
+    },
+    {
       "id": "G3-owned-hook-status-exact-CI",
-      "state": "pending-exact-resulting-bounded-hook-observations",
-      "goal": "Verify before/failed-start bounded known-owned post-hook record observations and best-effort error isolation; tri-state record comparison is not invocation authority; require pre-start diagnostic-window cancellation refusal and preserved post-failure primary."
+      "state": "exact-bounded-post-failure-record-observed-service-second-start-failed",
+      "goal": "Retain both workflow FAILs, observed exit1 record and unknown freshness/invocation/cause; diagnostics only."
     },
     {
       "id": "G3-cleanup-observation-freshness-exact-CI",
@@ -2275,7 +2354,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First inspect exact resulting bounded owned ExecStartPost diagnostic CI. Keep primary unit_start_failed and cleanup native_cleanup_unknown independent of best-effort property-query or parse failures. Require before-start and failed-start records to match the exact installed pinned Node/launcher/argv grammar under fresh known-owned unit checks, with only finite allowlisted classifications published. Raw process identifiers and start-time values remain private comparison inputs. recordChangedSincePreStart compares only the private process-ID/start-time tuple with three possible states, not evidence that this attempt invoked or owns that hook. Do not treat an unchanged or matched property record, main-process status, query success or changed PID/time as fresh hook authority. Use actual safe observations to select the next bounded installed-hook outcome or owned rendezvous experiment and reproduce the relevant ordering before repairing startup. Preserve current-attempt cleanup resets, unknown-cause/runtime-retention boundaries and all identity/refusal guards. Require actual repeated automatic startup and complete owned service/Node cleanup before service acceptance; no unchanged retry or forced unknown cleanup. Logging, restart, failed-start/cancel/drain/orphan, combined TLS/service, package rollback/recovery, permanent release, security/soak and G4-G8 V1 remain open along with deferred Continuum.",
+  "nextConcreteTask": "First reconcile exact resulting implementation CI and its actual nonroot repeated automatic startup/cleanup reports. A deterministic baseline ordering counterexample and candidate controls do not reconstruct the previous hosted interleaving or establish its semantic cause. Preserve fresh ownership/session authority, general wait-bind refusals, independent primary/cleanup errors and unknown-runtime retention. Require two actual automatic cycles and complete owned service/Node cleanup before accepting that scoped path. Logging, one manager restart, adverse startup/cancel/drain/orphan, combined TLS/service, package rollback/recovery, permanent release, security/soak and G4-G8 Production V1 remain open; deferred Continuum remains separate and unimplemented.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -2480,10 +2559,10 @@
         "goal": "Held-out third-version adapter, adverse I/O/KeyUpdate/half-close tests, cost and overhead measurements"
       }
     ],
-    "runtimeCodeChangedByThisPublication": false,
+    "runtimeCodeChangedByThisPublication": true,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G3_CLEANUP_FRESHNESS_VERIFIED_HOOK_STATUS_EXACT_CI_PENDING",
+    "currentGate": "G3_STARTUP_RENDEZVOUS_LOCAL_EXACT_CI_PENDING",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -2526,7 +2605,7 @@
     "automaticReadinessEvidence": "x10/evidence/g3-auto-readiness.json",
     "basicUserServiceHostedEvidence": "x10/evidence/g3-auto-readiness.json",
     "ownedFragmentEquivalenceHostedEvidence": "x10/evidence/g3-auto-readiness.json",
-    "serviceRecipeChangedByThisPublication": false,
+    "serviceRecipeChangedByThisPublication": true,
     "automaticReadinessOptInAddedByThisPublication": true,
     "cleanupFreshnessEvidence": "x10/evidence/g3-cleanup-freshness.json",
     "automaticReadinessHostedEvidence": "x10/evidence/g3-cleanup-freshness.json",
@@ -2535,67 +2614,55 @@
     "cleanupObservationFreshnessHostedEvidence": "x10/evidence/g3-hook-status.json",
     "boundedHookPropertyDiagnosticsAddedByThisPublication": true,
     "preStartCancellationRecheckAddedByThisPublication": true,
-    "preStartOwnedStateRecheckAddedByThisPublication": true
+    "preStartOwnedStateRecheckAddedByThisPublication": true,
+    "startupRendezvousEvidence": "x10/evidence/g3-startup-rendezvous.json",
+    "ownedHookStatusHostedEvidence": "x10/evidence/g3-startup-rendezvous.json"
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-hook-status-20261025T062500Z",
-    "sourceBase": "d6973a6e00473c5d4d8e1d6c35eaec07640d84b4",
-    "publicationParent": "982d6525119ba470b0bcb5e3637a6f6245a73ab8",
+    "runId": "x10-hook-rendezvous-20261025T072500Z",
+    "sourceBase": "ee464e8267af1183cc3a7e08480a02c4c55d5c98",
+    "publicationParent": "f0ede06eca8d3c6d4694edced8a7c6131820d63d",
     "implementationCommit": null,
-    "implementationCommitLocator": "Current publication commit containing bounded owned post-start status diagnostics and pre-start authority/cancellation rechecks; exact resulting CI must be reconciled separately",
-    "scope": "Best-effort bounded known-owned ExecStartPost property observations before start and after failed start; raw process/time identity remains private comparison input, never invocation authority; full owned-unit/inactive-state authority and cancellation are rechecked after the new pre-start await",
-    "evidence": "x10/evidence/g3-hook-status.json",
-    "localAcceptance": "BOUNDED_OWNED_EXECSTARTPOST_STATUS_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_BOUNDED_OWNED_HOOK_STATUS",
+    "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+    "scope": "Explicit installed locked startup session preparation before automatic service run/wait-bind; general readiness authority remains strict",
+    "result": "Added optionless installed prepare-run using the existing locked run-preparation contract and selected ExecStartPre only for explicit automatic readiness; exact new service CI pending.",
+    "evidence": "x10/evidence/g3-startup-rendezvous.json",
+    "perFileLedger": "x10/review/g3-startup-rendezvous-ledger.json",
+    "localAcceptance": "LOCAL_LOCKED_PREPARATION_AND_NATIVE_COMPATIBILITY_VERIFIED_EXACT_NEW_SERVICE_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_STARTUP_RENDEZVOUS",
     "nativeRuntimeChanged": false,
     "controllerRuntimeChanged": false,
-    "alphaRuntimeChanged": false,
-    "serviceRecipeChanged": false,
+    "alphaRuntimeChanged": true,
+    "serviceRecipeChanged": true,
     "preflightChanged": false,
-    "existingOwnedIdentityGuardImplementationsChanged": false,
-    "preStartOwnedStateRecheckAdded": true,
-    "normalStartStopMutatingCommandsChanged": false,
-    "existingServiceCountersChanged": false,
-    "preStartCancellationRecheckAdded": true,
-    "postFailedStartDiagnosticCancellationMayReplacePrimary": false,
-    "cleanupObservationFreshnessPreserved": true,
-    "boundedReadOnlyHookPropertyQueriesAdded": true,
-    "hookRecordComparisonConfersInvocationAuthority": false,
-    "rawHookProcessOrStartTimePublished": false,
-    "verifiedNodeLogicChangedBeyondCheckerPin": false,
-    "workflowLogicChangedBeyondCheckerPin": false,
-    "actualHookStatusObservedLocallyUnderManager": false,
+    "knownGuardsPreserved": true,
+    "historicalHostedCauseProven": false,
     "serviceAccepted": false,
     "productionAccepted": false,
-    "nextConcreteTask": "First inspect exact resulting bounded owned ExecStartPost diagnostic CI. Keep primary unit_start_failed and cleanup native_cleanup_unknown independent of best-effort property-query or parse failures. Require before-start and failed-start records to match the exact installed pinned Node/launcher/argv grammar under fresh known-owned unit checks, with only finite allowlisted classifications published. Raw process identifiers and start-time values remain private comparison inputs. recordChangedSincePreStart compares only the private process-ID/start-time tuple with three possible states, not evidence that this attempt invoked or owns that hook. Do not treat an unchanged or matched property record, main-process status, query success or changed PID/time as fresh hook authority. Use actual safe observations to select the next bounded installed-hook outcome or owned rendezvous experiment and reproduce the relevant ordering before repairing startup. Preserve current-attempt cleanup resets, unknown-cause/runtime-retention boundaries and all identity/refusal guards. Require actual repeated automatic startup and complete owned service/Node cleanup before service acceptance; no unchanged retry or forced unknown cleanup. Logging, restart, failed-start/cancel/drain/orphan, combined TLS/service, package rollback/recovery, permanent release, security/soak and G4-G8 V1 remain open along with deferred Continuum.",
-    "result": "Added bounded best-effort owned hook property observations before start and after failed start, publishing finite classifications and a tri-state private-record comparison only. A fresh normal ownedProperties(false) inactive/MainPID0 gate and cancellation recheck after the diagnostic await prevent a changed owned unit/state or observed signal from issuing start. Primary/cleanup failures and runtime retention remain separate; exact new CI pending.",
-    "perFileLedger": "x10/review/g3-hook-status-ledger.json",
+    "nextConcreteTask": "First reconcile exact resulting implementation CI and its actual nonroot repeated automatic startup/cleanup reports. A deterministic baseline ordering counterexample and candidate controls do not reconstruct the previous hosted interleaving or establish its semantic cause. Preserve fresh ownership/session authority, general wait-bind refusals, independent primary/cleanup errors and unknown-runtime retention. Require two actual automatic cycles and complete owned service/Node cleanup before accepting that scoped path. Logging, one manager restart, adverse startup/cancel/drain/orphan, combined TLS/service, package rollback/recovery, permanent release, security/soak and G4-G8 Production V1 remain open; deferred Continuum remains separate and unimplemented.",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_BOUNDED_OWNED_HOOK_STATUS"
+      "state": "PENDING_EXACT_RESULTING_STARTUP_RENDEZVOUS"
     },
     "newPurchases": false,
     "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
-    "state": "EXACT_CLEANUP_FRESHNESS_VERIFIED_AUTOMATIC_SECOND_START_FAILED",
-    "implementationCommit": "d6973a6e00473c5d4d8e1d6c35eaec07640d84b4",
-    "evidence": "x10/evidence/g3-hook-status.json",
-    "runId": "x10-hook-status-20261025T062500Z",
-    "publicationParent": "982d6525119ba470b0bcb5e3637a6f6245a73ab8",
+    "state": "EXACT_BOUNDED_HOOK_RECORD_OBSERVED_AUTOMATIC_SECOND_START_FAILED",
+    "implementationCommit": "ee464e8267af1183cc3a7e08480a02c4c55d5c98",
+    "implementationTree": "472b4a524533255a7692c3f2c5fb5f442fac0138",
+    "evidence": "x10/evidence/g3-startup-rendezvous.json",
     "nativeRunIds": [
-      40166044910,
-      40166047210
+      40170151178,
+      40170155403
     ],
     "nativeJobIds": [
-      121087243021,
-      121087235674
+      121099202559,
+      121099212826
     ],
     "researchRunIds": [
-      40166044937,
-      40166047228
+      40170151136,
+      40170155498
     ],
-    "cleanupObservationFreshnessVerifiedNarrowly": true,
-    "fiveCurrentAttemptCleanupConfirmationsFalse": true,
     "bothExactNativeWorkflowsSuccessful": false,
     "requiredActualServiceStepsFailed": true,
     "phase": "second_start",
@@ -2604,6 +2671,16 @@
     "cleanupFailureCode": "native_cleanup_unknown",
     "firstAutomaticSessionObservedNarrowly": true,
     "firstProxyUploadStreamChecksPerRun": 1,
+    "hookObservationsPerRun": 3,
+    "preStartParseRefusedPerRun": 2,
+    "postFailedStartKnownCommandRecordObserved": true,
+    "postFailedStartRecordExitStatus": 1,
+    "everyHookRecordComparisonUnknown": true,
+    "hookRecordFreshnessProven": false,
+    "currentHookInvocationIdentityProven": false,
+    "semanticHookFailureCauseKnown": false,
+    "cleanupObservationFreshnessPreserved": true,
+    "fiveCurrentAttemptCleanupConfirmationsFalse": true,
     "completeAutomaticReadinessLifecycleAccepted": false,
     "failedSecondStartOrFinalCleanupConfirmed": false,
     "runtimeLinkAbsent": false,
@@ -2612,7 +2689,6 @@
     "privateDependencyRuntimeRetained": true,
     "dependencyCleanupReceiptPresent": false,
     "secondManagerStartCauseKnown": false,
-    "actualExecStartPostOutcomeDirectlyObserved": false,
     "failingInventoryRecordKnown": false,
     "sameHistoricalCauseOrInterleavingProven": false,
     "fullG3ServiceAccepted": false,
@@ -3571,6 +3647,45 @@
       },
       "newPurchases": false,
       "productionDeployChanged": false
+    },
+    {
+      "runId": "x10-hook-status-20261025T062500Z",
+      "sourceBase": "d6973a6e00473c5d4d8e1d6c35eaec07640d84b4",
+      "publicationParent": "982d6525119ba470b0bcb5e3637a6f6245a73ab8",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit containing bounded owned post-start status diagnostics and pre-start authority/cancellation rechecks; exact resulting CI must be reconciled separately",
+      "scope": "Best-effort bounded known-owned ExecStartPost property observations before start and after failed start; raw process/time identity remains private comparison input, never invocation authority; full owned-unit/inactive-state authority and cancellation are rechecked after the new pre-start await",
+      "evidence": "x10/evidence/g3-hook-status.json",
+      "localAcceptance": "BOUNDED_OWNED_EXECSTARTPOST_STATUS_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_BOUNDED_OWNED_HOOK_STATUS",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "existingOwnedIdentityGuardImplementationsChanged": false,
+      "preStartOwnedStateRecheckAdded": true,
+      "normalStartStopMutatingCommandsChanged": false,
+      "existingServiceCountersChanged": false,
+      "preStartCancellationRecheckAdded": true,
+      "postFailedStartDiagnosticCancellationMayReplacePrimary": false,
+      "cleanupObservationFreshnessPreserved": true,
+      "boundedReadOnlyHookPropertyQueriesAdded": true,
+      "hookRecordComparisonConfersInvocationAuthority": false,
+      "rawHookProcessOrStartTimePublished": false,
+      "verifiedNodeLogicChangedBeyondCheckerPin": false,
+      "workflowLogicChangedBeyondCheckerPin": false,
+      "actualHookStatusObservedLocallyUnderManager": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "nextConcreteTask": "First inspect exact resulting bounded owned ExecStartPost diagnostic CI. Keep primary unit_start_failed and cleanup native_cleanup_unknown independent of best-effort property-query or parse failures. Require before-start and failed-start records to match the exact installed pinned Node/launcher/argv grammar under fresh known-owned unit checks, with only finite allowlisted classifications published. Raw process identifiers and start-time values remain private comparison inputs. recordChangedSincePreStart compares only the private process-ID/start-time tuple with three possible states, not evidence that this attempt invoked or owns that hook. Do not treat an unchanged or matched property record, main-process status, query success or changed PID/time as fresh hook authority. Use actual safe observations to select the next bounded installed-hook outcome or owned rendezvous experiment and reproduce the relevant ordering before repairing startup. Preserve current-attempt cleanup resets, unknown-cause/runtime-retention boundaries and all identity/refusal guards. Require actual repeated automatic startup and complete owned service/Node cleanup before service acceptance; no unchanged retry or forced unknown cleanup. Logging, restart, failed-start/cancel/drain/orphan, combined TLS/service, package rollback/recovery, permanent release, security/soak and G4-G8 V1 remain open along with deferred Continuum.",
+      "result": "Added bounded best-effort owned hook property observations before start and after failed start, publishing finite classifications and a tri-state private-record comparison only. A fresh normal ownedProperties(false) inactive/MainPID0 gate and cancellation recheck after the diagnostic await prevent a changed owned unit/state or observed signal from issuing start. Primary/cleanup failures and runtime retention remain separate; exact new CI pending.",
+      "perFileLedger": "x10/review/g3-hook-status-ledger.json",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_BOUNDED_OWNED_HOOK_STATUS"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
     }
   ],
   "v1VerificationReceiptHistory": [
@@ -4052,6 +4167,50 @@
       "serviceAccepted": false,
       "productionAccepted": false,
       "workflowRerunsRequested": 0
+    },
+    {
+      "state": "EXACT_CLEANUP_FRESHNESS_VERIFIED_AUTOMATIC_SECOND_START_FAILED",
+      "implementationCommit": "d6973a6e00473c5d4d8e1d6c35eaec07640d84b4",
+      "evidence": "x10/evidence/g3-hook-status.json",
+      "runId": "x10-hook-status-20261025T062500Z",
+      "publicationParent": "982d6525119ba470b0bcb5e3637a6f6245a73ab8",
+      "nativeRunIds": [
+        40166044910,
+        40166047210
+      ],
+      "nativeJobIds": [
+        121087243021,
+        121087235674
+      ],
+      "researchRunIds": [
+        40166044937,
+        40166047228
+      ],
+      "cleanupObservationFreshnessVerifiedNarrowly": true,
+      "fiveCurrentAttemptCleanupConfirmationsFalse": true,
+      "bothExactNativeWorkflowsSuccessful": false,
+      "requiredActualServiceStepsFailed": true,
+      "phase": "second_start",
+      "primaryFailureSubphase": "request_start",
+      "primaryFailureCode": "unit_start_failed",
+      "cleanupFailureCode": "native_cleanup_unknown",
+      "firstAutomaticSessionObservedNarrowly": true,
+      "firstProxyUploadStreamChecksPerRun": 1,
+      "completeAutomaticReadinessLifecycleAccepted": false,
+      "failedSecondStartOrFinalCleanupConfirmed": false,
+      "runtimeLinkAbsent": false,
+      "installationRemoved": false,
+      "temporaryRootRemoved": false,
+      "privateDependencyRuntimeRetained": true,
+      "dependencyCleanupReceiptPresent": false,
+      "secondManagerStartCauseKnown": false,
+      "actualExecStartPostOutcomeDirectlyObserved": false,
+      "failingInventoryRecordKnown": false,
+      "sameHistoricalCauseOrInterleavingProven": false,
+      "fullG3ServiceAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0
     }
   ],
   "currentNativeCIFailure": {
@@ -4076,25 +4235,22 @@
     "candidateExactNativeCIAccepted": true
   },
   "currentServiceLifecycleCIFailure": {
-    "state": "EXACT_CLEANUP_FRESHNESS_VERIFIED_AUTOMATIC_SECOND_START_FAILED",
-    "implementationCommit": "d6973a6e00473c5d4d8e1d6c35eaec07640d84b4",
-    "evidence": "x10/evidence/g3-hook-status.json",
-    "runId": "x10-hook-status-20261025T062500Z",
-    "publicationParent": "982d6525119ba470b0bcb5e3637a6f6245a73ab8",
+    "state": "EXACT_BOUNDED_HOOK_RECORD_OBSERVED_AUTOMATIC_SECOND_START_FAILED",
+    "implementationCommit": "ee464e8267af1183cc3a7e08480a02c4c55d5c98",
+    "implementationTree": "472b4a524533255a7692c3f2c5fb5f442fac0138",
+    "evidence": "x10/evidence/g3-startup-rendezvous.json",
     "nativeRunIds": [
-      40166044910,
-      40166047210
+      40170151178,
+      40170155403
     ],
     "nativeJobIds": [
-      121087243021,
-      121087235674
+      121099202559,
+      121099212826
     ],
     "researchRunIds": [
-      40166044937,
-      40166047228
+      40170151136,
+      40170155498
     ],
-    "cleanupObservationFreshnessVerifiedNarrowly": true,
-    "fiveCurrentAttemptCleanupConfirmationsFalse": true,
     "bothExactNativeWorkflowsSuccessful": false,
     "requiredActualServiceStepsFailed": true,
     "phase": "second_start",
@@ -4103,6 +4259,16 @@
     "cleanupFailureCode": "native_cleanup_unknown",
     "firstAutomaticSessionObservedNarrowly": true,
     "firstProxyUploadStreamChecksPerRun": 1,
+    "hookObservationsPerRun": 3,
+    "preStartParseRefusedPerRun": 2,
+    "postFailedStartKnownCommandRecordObserved": true,
+    "postFailedStartRecordExitStatus": 1,
+    "everyHookRecordComparisonUnknown": true,
+    "hookRecordFreshnessProven": false,
+    "currentHookInvocationIdentityProven": false,
+    "semanticHookFailureCauseKnown": false,
+    "cleanupObservationFreshnessPreserved": true,
+    "fiveCurrentAttemptCleanupConfirmationsFalse": true,
     "completeAutomaticReadinessLifecycleAccepted": false,
     "failedSecondStartOrFinalCleanupConfirmed": false,
     "runtimeLinkAbsent": false,
@@ -4111,7 +4277,6 @@
     "privateDependencyRuntimeRetained": true,
     "dependencyCleanupReceiptPresent": false,
     "secondManagerStartCauseKnown": false,
-    "actualExecStartPostOutcomeDirectlyObserved": false,
     "failingInventoryRecordKnown": false,
     "sameHistoricalCauseOrInterleavingProven": false,
     "fullG3ServiceAccepted": false,
@@ -4340,28 +4505,69 @@
       "serviceAccepted": false,
       "productionAccepted": false,
       "workflowRerunsRequested": 0
+    },
+    {
+      "state": "EXACT_CLEANUP_FRESHNESS_VERIFIED_AUTOMATIC_SECOND_START_FAILED",
+      "implementationCommit": "d6973a6e00473c5d4d8e1d6c35eaec07640d84b4",
+      "evidence": "x10/evidence/g3-hook-status.json",
+      "runId": "x10-hook-status-20261025T062500Z",
+      "publicationParent": "982d6525119ba470b0bcb5e3637a6f6245a73ab8",
+      "nativeRunIds": [
+        40166044910,
+        40166047210
+      ],
+      "nativeJobIds": [
+        121087243021,
+        121087235674
+      ],
+      "researchRunIds": [
+        40166044937,
+        40166047228
+      ],
+      "cleanupObservationFreshnessVerifiedNarrowly": true,
+      "fiveCurrentAttemptCleanupConfirmationsFalse": true,
+      "bothExactNativeWorkflowsSuccessful": false,
+      "requiredActualServiceStepsFailed": true,
+      "phase": "second_start",
+      "primaryFailureSubphase": "request_start",
+      "primaryFailureCode": "unit_start_failed",
+      "cleanupFailureCode": "native_cleanup_unknown",
+      "firstAutomaticSessionObservedNarrowly": true,
+      "firstProxyUploadStreamChecksPerRun": 1,
+      "completeAutomaticReadinessLifecycleAccepted": false,
+      "failedSecondStartOrFinalCleanupConfirmed": false,
+      "runtimeLinkAbsent": false,
+      "installationRemoved": false,
+      "temporaryRootRemoved": false,
+      "privateDependencyRuntimeRetained": true,
+      "dependencyCleanupReceiptPresent": false,
+      "secondManagerStartCauseKnown": false,
+      "actualExecStartPostOutcomeDirectlyObserved": false,
+      "failingInventoryRecordKnown": false,
+      "sameHistoricalCauseOrInterleavingProven": false,
+      "fullG3ServiceAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0
     }
   ],
   "currentServiceLifecycleCIState": {
-    "state": "EXACT_CLEANUP_FRESHNESS_VERIFIED_AUTOMATIC_SECOND_START_FAILED",
-    "implementationCommit": "d6973a6e00473c5d4d8e1d6c35eaec07640d84b4",
-    "evidence": "x10/evidence/g3-hook-status.json",
-    "runId": "x10-hook-status-20261025T062500Z",
-    "publicationParent": "982d6525119ba470b0bcb5e3637a6f6245a73ab8",
+    "state": "EXACT_BOUNDED_HOOK_RECORD_OBSERVED_AUTOMATIC_SECOND_START_FAILED",
+    "implementationCommit": "ee464e8267af1183cc3a7e08480a02c4c55d5c98",
+    "implementationTree": "472b4a524533255a7692c3f2c5fb5f442fac0138",
+    "evidence": "x10/evidence/g3-startup-rendezvous.json",
     "nativeRunIds": [
-      40166044910,
-      40166047210
+      40170151178,
+      40170155403
     ],
     "nativeJobIds": [
-      121087243021,
-      121087235674
+      121099202559,
+      121099212826
     ],
     "researchRunIds": [
-      40166044937,
-      40166047228
+      40170151136,
+      40170155498
     ],
-    "cleanupObservationFreshnessVerifiedNarrowly": true,
-    "fiveCurrentAttemptCleanupConfirmationsFalse": true,
     "bothExactNativeWorkflowsSuccessful": false,
     "requiredActualServiceStepsFailed": true,
     "phase": "second_start",
@@ -4370,6 +4576,16 @@
     "cleanupFailureCode": "native_cleanup_unknown",
     "firstAutomaticSessionObservedNarrowly": true,
     "firstProxyUploadStreamChecksPerRun": 1,
+    "hookObservationsPerRun": 3,
+    "preStartParseRefusedPerRun": 2,
+    "postFailedStartKnownCommandRecordObserved": true,
+    "postFailedStartRecordExitStatus": 1,
+    "everyHookRecordComparisonUnknown": true,
+    "hookRecordFreshnessProven": false,
+    "currentHookInvocationIdentityProven": false,
+    "semanticHookFailureCauseKnown": false,
+    "cleanupObservationFreshnessPreserved": true,
+    "fiveCurrentAttemptCleanupConfirmationsFalse": true,
     "completeAutomaticReadinessLifecycleAccepted": false,
     "failedSecondStartOrFinalCleanupConfirmed": false,
     "runtimeLinkAbsent": false,
@@ -4378,7 +4594,6 @@
     "privateDependencyRuntimeRetained": true,
     "dependencyCleanupReceiptPresent": false,
     "secondManagerStartCauseKnown": false,
-    "actualExecStartPostOutcomeDirectlyObserved": false,
     "failingInventoryRecordKnown": false,
     "sameHistoricalCauseOrInterleavingProven": false,
     "fullG3ServiceAccepted": false,

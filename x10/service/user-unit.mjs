@@ -32,7 +32,8 @@ export function renderUserUnit(value) {
   const { prefix, nodeExecutable, autoReadiness } = inputs(value);
   const command = `${nodeExecutable} ${prefix}/bin/x10`;
   return `# X10 systemd --user recipe only; no activation performed.\n`
-    + (autoReadiness ? `# ExecStartPost waits for installed guarded bind; full startup health is not accepted.\n`
+    + (autoReadiness ? `# ExecStartPre prepares the guarded session before run and wait-bind can race.\n`
+      + `# ExecStartPost waits for installed guarded bind; full startup health is not accepted.\n`
       + `# readinessAutomated:true startupHealthAccepted:false serviceAccepted:false\n`
       + `# The explicit pinned-node installed launcher waits within the start timeout.\n`
       : `# Type=exec confirms process exec, not native startup or application readiness.\n`
@@ -40,6 +41,7 @@ export function renderUserUnit(value) {
       + `# Run the explicit pinned-node launcher bind after native startup, before use.\n`)
     + `[Unit]\nDescription=NGINX X10 private operator service\n\n`
     + `[Service]\nType=exec\nWorkingDirectory=${prefix}\n`
+    + (autoReadiness ? `ExecStartPre=${command} prepare-run\n` : '')
     + `ExecStart=${command} run --control-socket ${prefix}/control.sock\n`
     + (autoReadiness ? `ExecStartPost=${command} wait-bind --timeout-ms 10000\n` : '')
     + `ExecStop=${command} stop\n`

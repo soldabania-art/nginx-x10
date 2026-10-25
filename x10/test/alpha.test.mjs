@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { digest } from '../alpha/runtime.mjs';
 import './alpha-runtime.test.mjs';
+import '../alpha/prepare-run.test.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url)), source = path.join(root, 'x10/alpha/cli.mjs');
 const manifestFile = path.resolve(process.env.X10_BUILD_MANIFEST || path.join(root, 'x10/.build/manifest.json'));
@@ -391,6 +392,7 @@ async function waitBindFixture(t, { upstream = false } = {}) {
     return { child, done, ready };
   };
   const start = async () => {
+    output = '';
     runChild = spawn(process.execPath, [launcher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); children.add(runChild);
     runChild.stdout.on('data', b => { output += b; const m = /"(?:pid|candidatePid)": (\d+)/.exec(output); if (m) nativePid = Number(m[1]); }); runChild.stderr.on('data', b => output += b);
     await until(() => { if (runChild.exitCode !== null || runChild.signalCode !== null) throw new Error(output); return output.includes('"outcome": "running"'); });
@@ -484,4 +486,63 @@ test('wait-bind retains possible durable binding after an injected alpha lock cl
   }
   const status = await cli(f.launcher, 'status'); assert(status.json.binding, 'Durable bind must not be misreported as absent after alpha cleanup failed');
   await f.stop();
+});
+
+
+// The deterministic baseline ordering starts wait-bind while the prior native
+// session is stopped. This reproduces a possible supervisor ordering, not the
+// unobserved cause/interleaving of any earlier hosted failure.
+test('prepare-run publishes a stable session before concurrent native run and wait-bind', { timeout: 30000 }, async t => {
+  const f = await waitBindFixture(t);
+  const initial = await cli(f.launcher, 'prepare-run');
+  assert.equal(initial.code, 0); assert.equal(initial.json.session, f.installed.session);
+  assert.equal(initial.json.nativeStarted, false); assert.equal(initial.json.readinessChecked, false);
+  await assert.rejects(request((await cli(f.launcher, 'info')).json.port));
+  await f.start(); assert.equal((await cli(f.launcher, 'wait-bind')).code, 0); await f.stop();
+  const before = await cli(f.launcher, 'info'); assert.equal(before.json.stage, 'stopped');
+  const early = await cli(f.launcher, 'wait-bind');
+  assert.equal(early.code, 1); assert.equal(early.json.code, 'wait_bind_state');
+  const next = await cli(f.launcher, 'prepare-run');
+  assert.equal(next.code, 0); assert.equal(next.json.outcome, 'run_prepared');
+  assert.notEqual(next.json.session, before.json.session);
+  assert.equal(next.json.nativeStarted, false); assert.equal(next.json.readinessChecked, false);
+  const marker = path.join(f.prefix, '.alpha-registry.json'), prepared = await readFile(marker);
+  const again = await cli(f.launcher, 'prepare-run');
+  assert.equal(again.code, 0); assert.equal(again.json.session, next.json.session);
+  assert.deepEqual(await readFile(marker), prepared, 'Preparation must not rotate an already prepared session');
+  const info = await cli(f.launcher, 'info'); assert.equal(info.json.stage, 'prepared');
+  await assert.rejects(request(info.json.port)); await assert.rejects(request(info.json.healthPort));
+  assert.equal((await cli(f.launcher, 'status')).json.binding, null);
+  const lockFile = path.join(f.prefix, '.alpha-lock');
+  await writeFile(lockFile, JSON.stringify({ pid: process.pid, at: new Date().toISOString() }), { mode: 0o600, flag: 'wx' });
+  const pending = f.spawnWait('--timeout-ms', '10000'); await pending.ready;
+  await rm(lockFile); await f.start();
+  const bound = await pending.done;
+  assert.equal(bound.code, 0, bound.stdout); assert.equal(bound.json.session, next.json.session);
+  assert.equal(bound.json.outcome, 'wait_bound'); assert.deepEqual(await readFile(marker), prepared);
+  await f.stop(); assert.equal((await cli(f.launcher, 'uninstall')).code, 0);
+});
+
+test('prepare-run preserves live, faulted, locked and malformed prepared records', { timeout: 25000 }, async t => {
+  const f = await waitBindFixture(t), marker = path.join(f.prefix, '.alpha-registry.json');
+  const original = await readFile(f.lifeFile), registry = await readFile(marker), lockFile = path.join(f.prefix, '.alpha-lock');
+  assert.equal((await cli(f.launcher, 'prepare-run', '--timeout-ms', '10000')).json.code, 'arguments');
+  await writeFile(lockFile, '{}', { mode: 0o600, flag: 'wx' });
+  try { assert.equal((await cli(f.launcher, 'prepare-run')).json.code, 'alpha_locked'); }
+  finally { await rm(lockFile); }
+  assert.deepEqual(await readFile(marker), registry); assert.deepEqual(await readFile(f.lifeFile), original);
+  try {
+    await amendRecord(f.lifeFile, life => { life.stage = 'faulted'; });
+    assert.equal((await cli(f.launcher, 'prepare-run')).json.code, 'abnormal_exit');
+    assert.deepEqual(await readFile(marker), registry);
+  } finally { await writeFile(f.lifeFile, original); }
+  try {
+    await amendRecord(f.lifeFile, life => { life.controlSocket = path.join(f.prefix, 'unexpected.sock'); });
+    assert.equal((await cli(f.launcher, 'prepare-run')).json.code, 'runtime_identity');
+    assert.deepEqual(await readFile(marker), registry);
+  } finally { await writeFile(f.lifeFile, original); }
+  await f.start();
+  assert.equal((await cli(f.launcher, 'prepare-run')).json.code, 'alpha_live');
+  assert.deepEqual(await readFile(marker), registry); await f.stop();
+  assert.equal((await cli(f.launcher, 'uninstall')).code, 0);
 });

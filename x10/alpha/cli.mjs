@@ -258,6 +258,26 @@ async function stopped(context, life) {
   }
 }
 
+// Called only under the existing alpha lock. Preparation publishes one guarded
+// session before a supervisor starts run and wait-bind concurrently. It neither
+// starts native code nor binds health, and partial writes require inspection.
+async function prepareRun(context) {
+  const prefix = context.prefix;
+  let life = await lifecycle(context);
+  await stopped(context, life); const prior = await sessionStatus(context, life);
+  if (life.stage !== 'prepared') {
+    if (life.stage !== 'stopped') fail('stop_required', 'Confirm the previous session with stop before another run');
+    if (context.registry.sessions.length >= 256) fail('session_limit', 'Session bound reached; preserve history and prepare a new installation');
+    const revision = await load(path.join(life.prefix, '.x10-control/revisions', `${prior.result.lastConfirmedRevision}.json`));
+    const { recordSha256, ...body } = revision;
+    if (digest(JSON.stringify(body)) !== recordSha256 || digest(JSON.stringify(revision.input)) !== revision.inputSha256) fail('alpha_integrity', 'Last-confirmed input failed integrity');
+    const next = await createSession(prefix, context.manifest, revision.input); life = next.lifecycle;
+    context.registry.sessions.push(next.session); context.registry.current = next.session;
+    await saveRecord(path.join(prefix, '.alpha-registry.json'), context.registry);
+  }
+  return life;
+}
+
 async function run(prefix, values) {
   let context, life, child, identity, cancelled = false, forwarding = false;
   const forward = async () => {
@@ -270,18 +290,7 @@ async function run(prefix, values) {
   process.on('SIGINT', forward); process.on('SIGTERM', forward);
   try {
   await lock(prefix, async () => {
-    context = await installed(prefix); life = await lifecycle(context);
-    await stopped(context, life); const prior = await sessionStatus(context, life);
-    if (life.stage !== 'prepared') {
-      if (life.stage !== 'stopped') fail('stop_required', 'Confirm the previous session with stop before another run');
-      if (context.registry.sessions.length >= 256) fail('session_limit', 'Session bound reached; preserve history and prepare a new installation');
-      const revision = await load(path.join(life.prefix, '.x10-control/revisions', `${prior.result.lastConfirmedRevision}.json`));
-      const { recordSha256, ...body } = revision;
-      if (digest(JSON.stringify(body)) !== recordSha256 || digest(JSON.stringify(revision.input)) !== revision.inputSha256) fail('alpha_integrity', 'Last-confirmed input failed integrity');
-      const next = await createSession(prefix, context.manifest, revision.input); life = next.lifecycle;
-      context.registry.sessions.push(next.session); context.registry.current = next.session;
-      await saveRecord(path.join(prefix, '.alpha-registry.json'), context.registry);
-    }
+    context = await installed(prefix); life = await prepareRun(context);
     let controlSocket = null;
     if (values['control-socket']) {
       controlSocket = path.resolve(values['control-socket']);
@@ -502,9 +511,9 @@ export async function main(argv, installedPrefix = null) {
       ['human', { type: 'boolean' }], ['help', { type: 'boolean', short: 'h' }],
     ]) });
     const [command] = positionals;
-    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
+    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 prepare-run | run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
     if (positionals.length !== 1) fail('arguments', 'Exactly one command is required; use --help');
-    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
+    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
     if (!allowed[command] || Object.keys(values).some(key => !allowed[command].includes(key))) fail('arguments', 'Unsupported command or option for this command');
     let waitTimeout = 10000;
     if (command === 'wait-bind' && values['timeout-ms'] !== undefined) {
@@ -522,6 +531,12 @@ export async function main(argv, installedPrefix = null) {
       else result = await lock(prefix, async moved => {
         const context = await installed(prefix, allowDrift);
         if (context.dependencyDrift.length) process.stderr.write('Recorded host libraries changed; only inspection, stop and uninstall remain available.\n');
+        if (command === 'prepare-run') {
+          const life = await prepareRun(context);
+          if (life.stage !== 'prepared' || life.runtime !== null || life.controlSocket !== null)
+            fail('runtime_identity', 'Prepared startup session has unexpected runtime state');
+          return { ok: true, outcome: 'run_prepared', session: life.session, nativeStarted: false, readinessChecked: false };
+        }
         if (command === 'stop') return stop(context);
         if (command === 'uninstall') return uninstall(context, moved);
         if (command === 'info') { const life = await lifecycle(context); return { ok: true, prefix, session: life.session, sessionPrefix: life.prefix, stage: life.stage, port: context.manifest.port, healthPort: context.manifest.healthPort, controlSocket: life.controlSocket, nginxVersion: context.manifest.nginxVersion, moduleCount: context.manifest.compiledModules.length, healthNote: context.manifest.healthNote }; }

@@ -525,3 +525,34 @@ failing inventory record remain unknown. The new record observations are
 diagnostics, not startup repair. Actual hook-query evidence and full repeated
 automatic lifecycle require exact new CI; an owned installed-hook outcome or
 rendezvous mechanism and complete service/V1 gates remain separate work.
+
+
+## Prepare the startup session before automatic readiness
+
+When autoReadiness is explicitly true, the generated unit first invokes the
+pinned absolute Node and installed launcher prepare-run as ExecStartPre.
+The existing ExecStart run and ExecStartPost wait-bind commands retain their
+arguments. With the option absent or false, default unit bytes are unchanged.
+
+Use a newly verified bundle that provides prepare-run. Older installed CLI
+versions refuse the unknown command before ExecStart; default manual recipes
+remain byte-compatible. The installed prepare-run command accepts no options. Under the existing
+alpha lock it runs the same stopped/prepared session checks and last-confirmed
+revision integrity checks already used by run. A stopped session advances to
+a newly prepared session; an already prepared session is reused. Preparation
+neither launches native code nor binds health. Its success therefore reports
+nativeStarted:false and readinessChecked:false, not service readiness.
+
+This ordering publishes the guarded session before run and wait-bind can race.
+General wait-bind still refuses stopped/faulted sessions and changed registries;
+it does not follow an arbitrary new session or retry a changed authority.
+Existing runtime/dependency/lock/session limits remain required. Partial durable
+writes need inspection; this adds no atomic rollback or same-UID process fence.
+
+The deterministic baseline control exercises a possible early-hook ordering.
+It does not establish that ordering as the cause of the previous hosted failure.
+Both exact ee464 service workflows remained FAIL with unconfirmed final cleanup.
+Their post-failure hook record showed exit1 with unknown freshness/invocation;
+the semantic cause and actual failing cleanup inventory record remain unknown.
+The new recipe and installed command require exact new nonroot CI before
+repeated automatic startup or complete owned cleanup can be accepted.

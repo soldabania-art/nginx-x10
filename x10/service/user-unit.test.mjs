@@ -34,7 +34,7 @@ test('rendered recipe starts the explicit node and only requests guarded launche
   assert.match(unit, /ExecStart=\/usr\/bin\/node \/tmp\/x10-example\/prefix\/bin\/x10 run --control-socket \/tmp\/x10-example\/prefix\/control.sock\n/);
   assert.match(unit, /ExecStop=\/usr\/bin\/node \/tmp\/x10-example\/prefix\/bin\/x10 stop\n/);
   for (const line of ['Type=exec', 'Restart=no', 'KillMode=process', 'KillSignal=SIGTERM', 'SendSIGKILL=no', 'TimeoutStartSec=30s', 'TimeoutStopSec=30s', 'UMask=0077', 'UnsetEnvironment=NODE_OPTIONS NODE_PATH NGINX_CTRL']) assert.ok(unit.split('\n').includes(line));
-  assert.doesNotMatch(unit, /^ExecStartPost=|^ExecStopPost=|^User=|^Group=|\/bin\/sh|killall|SIGKILL=yes/gm);
+  assert.doesNotMatch(unit, /^ExecStartPre=|^ExecStartPost=|^ExecStopPost=|^User=|^Group=|\/bin\/sh|killall|SIGKILL=yes/gm);
   assert.equal(RECIPE_LIMITATIONS.readinessAutomated, false);
   assert.equal(RECIPE_LIMITATIONS.serviceAccepted, false);
 });
@@ -124,8 +124,17 @@ test('omitted and false readiness preserve the exact accepted default unit bytes
   assert.equal(renderUserUnit({ ...good, autoReadiness: false }), unit);
   assert.equal(renderUserUnit(Object.assign(Object.create({ autoReadiness: true }), good)), unit);
 });
-test('explicit automatic readiness adds one pinned installed wait-bind within the existing start bound', () => {
+test('automatic readiness prepares before exec and waits on the stable guarded session', () => {
   const unit = renderUserUnit({ ...good, autoReadiness: true });
+  const lines = unit.split('\n');
+  const prepare = 'ExecStartPre=/usr/bin/node /tmp/x10-example/prefix/bin/x10 prepare-run';
+  const start = 'ExecStart=/usr/bin/node /tmp/x10-example/prefix/bin/x10 run --control-socket /tmp/x10-example/prefix/control.sock';
+  const wait = 'ExecStartPost=/usr/bin/node /tmp/x10-example/prefix/bin/x10 wait-bind --timeout-ms 10000';
+  assert.equal(lines.filter(line => line.startsWith('ExecStartPre=')).length, 1);
+  assert.ok(lines.includes(prepare));
+  assert.ok(lines.indexOf(prepare) < lines.indexOf(start));
+  assert.ok(lines.indexOf(start) < lines.indexOf(wait));
+  assert.doesNotMatch(unit, /^ExecStartPre=-|^ExecStartPost=-|\/bin\/sh/gm);
   assert.equal(unit.split('\n').filter(line => line.startsWith('ExecStartPost=')).length, 1);
   assert.ok(unit.split('\n').includes('ExecStartPost=/usr/bin/node /tmp/x10-example/prefix/bin/x10 wait-bind --timeout-ms 10000'));
   assert.match(unit, /readinessAutomated:true startupHealthAccepted:false serviceAccepted:false/);
