@@ -409,7 +409,13 @@ export async function main(argv = process.argv.slice(2)) {
     report.nativeSessionsStarted++;
     return s;
   }
+  // These are confirmations of the current attempt, not historical stop counts.
+  function resetServiceCleanupEvidence() {
+    report.cleanup.managerStopped = false; report.cleanup.launcherExited = false; report.cleanup.nativeGroupsAbsent = false;
+    report.cleanup.listeningPortsClosed = false; report.cleanup.controlSocketAbsent = false;
+  }
   async function stopOwned() {
+    resetServiceCleanupEvidence();
     try { await inventorySessions(); } catch (e) { if (e.code !== 'native_cleanup_unknown') throw e; }
     const p = await ownedProperties();
     if (Number(p.MainPID) > 0) {
@@ -428,6 +434,7 @@ export async function main(argv = process.argv.slice(2)) {
     report.cleanup.listeningPortsClosed = true; report.cleanup.controlSocketAbsent = true;
   }
   async function startAndServe() {
+    resetServiceCleanupEvidence();
     start.begin();
     checkCancelled();
     start.step('before_properties');

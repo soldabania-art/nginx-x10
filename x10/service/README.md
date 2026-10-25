@@ -447,3 +447,29 @@ allow startup to fail on a failed or timed-out ExecStartPost before the unit
 is fully active; ExecStop can then be skipped. Actual failed-start and
 cancellation cleanup require separate acceptance, and uncertain service
 cleanup must retain the private Node needed by owned stop operations.
+
+
+## Cleanup facts belong to the current attempt
+
+The checker clears managerStopped, launcherExited, nativeGroupsAbsent,
+listeningPortsClosed and controlSocketAbsent before every startAndServe
+and stopOwned attempt. This includes stopOwned during finally cleanup.
+A previous successful stop cannot confirm cleanup after a later start or
+failed stop. False means current-attempt unconfirmed; it does not prove
+that a resource is physically present. Existing checks alone can establish
+new true values. Historical counters and the other cleanup fields retain
+their original meanings.
+
+Both prior exact1eb jobs completed their first automatic service cycle,
+then failed the second manager start. Their five true flags came from the
+first stop, while runtime-link/install/temp removal remained false and the
+private Node was retained. Those original artifacts are preserved; they do
+not prove final cleanup. The hook cause and failing inventory record are
+unknown. This reporting change does not alter or repair service startup.
+
+No manager or hook telemetry is added. Main-process exit metadata cannot
+stand in for the post-start command result, and raw ExecStartPost records
+must not be exposed. Further diagnosis needs bounded direct installed-hook
+outcomes and an owned startup rendezvous, with unknown-state retention.
+Actual repeated automatic lifecycle and final cleanup require exact new
+CI; local freshness controls do not accept an actual service or V1.

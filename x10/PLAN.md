@@ -1450,3 +1450,35 @@ limits remain explicit; earlier failed executions are retained as history.
 Package rollback/recovery, permanent distribution, soak and Production V1
 remain open. Next verify this exact automatic-readiness CI, then continue
 the remaining bounded G3 operational gates.
+
+
+## Fresh cleanup observations for each service attempt
+
+Both exact1eb native workflows FAILED actual service at second_start /
+request_start with primary unit_start_failed and separate cleanup failure
+native_cleanup_unknown. One first automatic start/stop/proxy/upload/stream
+cycle completed per run. The five true stop/absence cleanup flags were
+already set by that first stop; they do not confirm final cleanup after the
+failed second start. Removal flags stayed false and private Node/bootstrap
+were retained. Hook cause and failing inventory record remain unknown.
+
+[Evidence](evidence/g3-cleanup-freshness.json) preserves both actual failed
+artifacts and95 native/13 research/74 independent proofs plus fresh46 CI
+reconciliation checks once. Native20/recipe28/lifecycle124total123PASS/
+1rootSKIP/dependency46/preflight42/TLS18/16 passed separately; research PR
+actually ran21/7/27/48 and push runtime skipped. These do not accept the
+failed full service lifecycle or final cleanup.
+
+The checker now resets exactly five existing stop/absence facts before
+every start and stop attempt, including finally cleanup. False means
+current-attempt unconfirmed, not observed resource presence. All actions,
+guards, counters, other cleanup fields and runtime-retention rules remain
+unchanged. No hook telemetry is added. Local controls and review establish
+report freshness only; exact new actual CI remains pending.
+
+Next verify fresh cleanup reporting, then capture bounded direct installed
+hook outcomes and an owned startup rendezvous. ExecMain is not the post-hook
+and raw ExecStartPost serialization is unsafe evidence. Preserve the unknown
+cause, original first-cycle progress and earlier adverse history. Automatic
+two-cycle service, logging/restart/adverse/TLS, package recovery, permanent
+distribution, soak and Production V1 remain open.

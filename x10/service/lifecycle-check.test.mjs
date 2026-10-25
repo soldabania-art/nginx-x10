@@ -387,14 +387,16 @@ test('known-path verifier refuses non-record containers and hostile prototype tr
   }
 });
 
-async function syntheticAutomaticStart({ binding = true, lateBinding = binding, identityValid = true, startOK = true, cancelAt = 0 } = {}) {
+async function syntheticAutomaticStart({ binding = true, lateBinding = binding, identityValid = true, startOK = true, cancelAt = 0, priorStopped = 0, priorReport = null } = {}) {
   const source = await readFile(script, 'utf8'), body = source.slice(source.indexOf('  async function startAndServe()'), source.indexOf("  process.once('SIGINT', cancel)"));
-  const calls = [], report = { explicitReadinessPasses: 0, nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0 }, sessions = [];
+  const reset = source.slice(source.indexOf('  function resetServiceCleanupEvidence()'), source.indexOf('  async function stopOwned()'));
+  const calls = [], report = priorReport || { explicitReadinessPasses: 0, nativeSessionsStarted: priorStopped, nativeSessionsStopped: priorStopped, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
+    cleanup: { managerStopped: true, launcherExited: true, nativeGroupsAbsent: true, listeningPortsClosed: true, controlSocketAbsent: true, runtimeLinkAbsent: true, installationRemoved: false, temporaryRootRemoved: false, appSocketsRemaining: 0 } }, sessions = Array.from({ length: priorStopped }, () => ({}));
   let observations = 0, cancelChecks = 0, statusObservations = 0;
   const reject = code => { throw Object.assign(new Error(code), { code }); };
   const own = async () => { calls.push('properties'); return ++observations === 1 ? { ActiveState: 'inactive', MainPID: '0' } : { ActiveState: 'active', SubState: 'running' }; };
   const cli = async (_node, _launcher, args) => { calls.push(`cli_${args[0]}`); assert.equal(args[0], 'status'); return { binding: ++statusObservations === 1 ? binding : lateBinding, runtime: { identityValid } }; };
-  const factory = new Function('start', 'checkCancelled', 'ownedProperties', 'systemctl', 'unitName', 'launcherIdentities', 'launcherIdentity', 'report', 'cli', 'node', 'launcher', 'env', 'until', 'inventorySessions', 'sessions', 'observeNative', 'request', 'gatewayPort', 'reject', `let startRequested = false, lastSession = null; ${body}; return startAndServe;`);
+  const factory = new Function('start', 'checkCancelled', 'ownedProperties', 'systemctl', 'unitName', 'launcherIdentities', 'launcherIdentity', 'report', 'cli', 'node', 'launcher', 'env', 'until', 'inventorySessions', 'sessions', 'observeNative', 'request', 'gatewayPort', 'reject', `let startRequested = false, lastSession = null; ${reset}${body}; return startAndServe;`);
   const start = factory(createStartDiagnostics(), () => { if (++cancelChecks === cancelAt) reject('cancelled'); }, own,
     async (args, timeout) => { calls.push('manager_start'); assert.deepEqual(args, ['start', 'fixture.service']); assert.equal(timeout, 15000); return { ok: startOK }; },
     'fixture.service', [], async () => { calls.push('launcher'); return {}; }, report, cli, '/synthetic/node', '/synthetic/launcher', {},
@@ -426,4 +428,59 @@ test('source-extracted automatic start retains the later fresh binding check bef
   assert.equal(result.failure, 'binding_unconfirmed'); assert.equal(result.report.explicitReadinessPasses, 0);
   assert.equal(result.calls.filter(x => x === 'cli_status').length, 2); assert.equal(result.report.nativeSessionsStarted, 1);
   assert.equal(result.report.proxyBodyChecks, 0); assert.equal(result.calls.some(x => x.includes('wait-bind')), false);
+});
+
+const serviceCleanupNames = ['managerStopped', 'launcherExited', 'nativeGroupsAbsent', 'listeningPortsClosed', 'controlSocketAbsent'];
+const assertServiceCleanup = (report, expected) => { for (const name of serviceCleanupNames) assert.equal(report.cleanup[name], expected, name); };
+async function syntheticOwnedStop({ report, failure = null } = {}) {
+  const source = await readFile(script, 'utf8');
+  const reset = source.slice(source.indexOf('  function resetServiceCleanupEvidence()'), source.indexOf('  async function stopOwned()'));
+  const body = source.slice(source.indexOf('  async function stopOwned()'), source.indexOf('  async function startAndServe()'));
+  report ||= { explicitReadinessPasses: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0, nativeSessionsStarted: 1, nativeSessionsStopped: 1, cleanup: Object.fromEntries([...serviceCleanupNames.map(name => [name, true]), ['runtimeLinkAbsent', true], ['installationRemoved', false], ['temporaryRootRemoved', false], ['appSocketsRemaining', 0]]) };
+  const calls = []; let inventories = 0, properties = 0;
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  const inventory = async () => { calls.push('inventory'); inventories++;
+    if (failure === 'inventory_before') reject('lifecycle_identity');
+    if (failure === 'inventory_after' && inventories === 2) reject('native_cleanup_unknown');
+  };
+  const owned = async () => { calls.push('properties'); properties++;
+    if (failure === 'properties_before' && properties === 1 || failure === 'properties_after' && properties === 2) reject('unit_fragment_identity');
+    return { MainPID: failure === 'launcher' && properties === 1 ? '123' : '0', ActiveState: failure === 'state_after' && properties === 2 ? 'active' : 'inactive', Result: 'success' };
+  };
+  const factory = new Function('report', 'inventorySessions', 'ownedProperties', 'launcherIdentity', 'launcherIdentities', 'systemctl', 'unitName', 'until', 'exitedLauncher', 'sessions', 'nativeStopped', 'absent', 'prefix', 'closedPort', 'gatewayPort', 'healthPort', 'reject', `${reset}${body};return stopOwned;`);
+  const stop = factory(report, inventory, owned, async () => { reject('unit_launcher_identity'); }, [],
+    async (args, timeout) => { calls.push('manager_stop'); assert.deepEqual(args, ['stop', 'fixture.service']); assert.equal(timeout, 35000); return { ok: failure !== 'manager_stop' }; },
+    'fixture.service', async fn => { if (failure === 'absence_wait' || !await fn()) reject('observation_timeout'); }, async () => true, [], async () => true,
+    async () => failure !== 'control_socket', '/synthetic/prefix', async port => failure !== (port === 1 ? 'gateway_port' : 'health_port'), 1, 2, reject);
+  let code = null; try { await stop(); } catch (e) { code = e.code; }
+  return { report, calls, code };
+}
+test('every start invalidates prior service cleanup confirmations even on early cancel or start failure', async () => {
+  for (const options of [{ cancelAt: 1 }, { startOK: false }, {}]) {
+    const result = await syntheticAutomaticStart({ ...options, priorStopped: 1 });
+    assertServiceCleanup(result.report, false);
+    assert.equal(result.report.nativeSessionsStopped, 1);
+    assert.equal(result.report.nativeSessionsStarted, options.cancelAt || options.startOK === false ? 1 : 2);
+    assert.equal(result.report.cleanup.runtimeLinkAbsent, true); assert.equal(result.report.cleanup.installationRemoved, false);
+  }
+});
+for (const [failure, code] of [['inventory_before', 'lifecycle_identity'], ['properties_before', 'unit_fragment_identity'], ['launcher', 'unit_launcher_identity'], ['manager_stop', 'unit_stop_unconfirmed'], ['properties_after', 'unit_fragment_identity'], ['inventory_after', 'native_cleanup_unknown'], ['state_after', 'unit_stop_unconfirmed'], ['absence_wait', 'observation_timeout'], ['control_socket', 'service_resources_live'], ['gateway_port', 'service_resources_live'], ['health_port', 'service_resources_live']]) {
+  test(`each stop attempt invalidates stale confirmations before ${failure} refusal`, async () => {
+    const result = await syntheticOwnedStop({ failure }); assert.equal(result.code, code); assertServiceCleanup(result.report, false);
+    assert.equal(result.report.nativeSessionsStarted, 1); assert.equal(result.report.nativeSessionsStopped, 1);
+    assert.equal(result.report.cleanup.runtimeLinkAbsent, true); assert.equal(result.report.cleanup.installationRemoved, false); assert.equal(result.report.cleanup.temporaryRootRemoved, false);
+  });
+}
+test('second-start failure followed by final cleanup uncertainty cannot reuse the first-stop confirmations', async () => {
+  const firstStop = await syntheticOwnedStop(); assert.equal(firstStop.code, null); assertServiceCleanup(firstStop.report, true);
+  const started = await syntheticAutomaticStart({ startOK: false, priorStopped: 1, priorReport: firstStop.report });
+  assert.equal(started.failure, 'unit_start_failed'); assertServiceCleanup(started.report, false);
+  const cleanup = await syntheticOwnedStop({ report: started.report, failure: 'inventory_after' });
+  assert.equal(cleanup.code, 'native_cleanup_unknown'); assertServiceCleanup(cleanup.report, false);
+  assert.equal(cleanup.report.nativeSessionsStarted, 1); assert.equal(cleanup.report.nativeSessionsStopped, 1);
+});
+test('freshly completed stop restores all five confirmations only after the unchanged checks pass', async () => {
+  const result = await syntheticOwnedStop(); assert.equal(result.code, null); assertServiceCleanup(result.report, true);
+  assert.equal(result.report.nativeSessionsStarted, 1); assert.equal(result.report.nativeSessionsStopped, 1);
+  assert.equal(result.report.cleanup.runtimeLinkAbsent, true); assert.equal(result.report.cleanup.appSocketsRemaining, 0);
 });
