@@ -1422,3 +1422,31 @@ owned-file and synthetic manager controls do not prove actual nonroot
 service operation or cleanup. Exact new CI is pending. Service lifecycle,
 logging, manager restart, adverse cases, combined TLS/service, package
 rollback/recovery, permanent distribution, soak and Production V1 stay open.
+
+
+## Opt-in automatic readiness after basic service acceptance
+
+Both exactd119 native workflows passed the narrow real nonroot service
+fixture: two separate start/stop sessions, manually invoked installed
+wait-bind, HTTP proxy/upload/stream and complete owned service cleanup,
+verified Node removal and bootstrap root removal. Native20/TLS18/16/
+preflight42/dependency46 and lifecycle118total/117PASS/1rootSKIP passed
+separately; research PR ran21/7/27/48 and push research was scope-only.
+[Evidence](evidence/g3-auto-readiness.json) preserves actual artifacts and
+101 native,13 research and72 independent baseline proof checks once.
+
+The new explicit autoReadiness option adds ExecStartPost with the pinned
+absolute Node, installed wait-bind and fixed10000ms budget. Missing/false
+options retain identical default unit bytes. The lifecycle harness selects
+the option and has no manual wait-bind fallback; after manager start it
+independently observes the bound installed session. Local contracts and
+independent controls do not prove this new actual manager path. Exact new
+CI remains pending and readinessAutomated is not product acceptance.
+
+The current basic-service success does not accept a single manager restart,
+automatic readiness, logging, failed-start/cancel/drain/orphan or combined
+TLS/service. Existing pre-validation canonical snapshots and truncation
+limits remain explicit; earlier failed executions are retained as history.
+Package rollback/recovery, permanent distribution, soak and Production V1
+remain open. Next verify this exact automatic-readiness CI, then continue
+the remaining bounded G3 operational gates.

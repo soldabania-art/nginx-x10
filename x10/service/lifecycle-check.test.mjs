@@ -386,3 +386,44 @@ test('known-path verifier refuses non-record containers and hostile prototype tr
     await assert.rejects(verifyKnownUnitFragmentPaths(fields, paths), { code: 'unit_fragment_identity' });
   }
 });
+
+async function syntheticAutomaticStart({ binding = true, lateBinding = binding, identityValid = true, startOK = true, cancelAt = 0 } = {}) {
+  const source = await readFile(script, 'utf8'), body = source.slice(source.indexOf('  async function startAndServe()'), source.indexOf("  process.once('SIGINT', cancel)"));
+  const calls = [], report = { explicitReadinessPasses: 0, nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0 }, sessions = [];
+  let observations = 0, cancelChecks = 0, statusObservations = 0;
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  const own = async () => { calls.push('properties'); return ++observations === 1 ? { ActiveState: 'inactive', MainPID: '0' } : { ActiveState: 'active', SubState: 'running' }; };
+  const cli = async (_node, _launcher, args) => { calls.push(`cli_${args[0]}`); assert.equal(args[0], 'status'); return { binding: ++statusObservations === 1 ? binding : lateBinding, runtime: { identityValid } }; };
+  const factory = new Function('start', 'checkCancelled', 'ownedProperties', 'systemctl', 'unitName', 'launcherIdentities', 'launcherIdentity', 'report', 'cli', 'node', 'launcher', 'env', 'until', 'inventorySessions', 'sessions', 'observeNative', 'request', 'gatewayPort', 'reject', `let startRequested = false, lastSession = null; ${body}; return startAndServe;`);
+  const start = factory(createStartDiagnostics(), () => { if (++cancelChecks === cancelAt) reject('cancelled'); }, own,
+    async (args, timeout) => { calls.push('manager_start'); assert.deepEqual(args, ['start', 'fixture.service']); assert.equal(timeout, 15000); return { ok: startOK }; },
+    'fixture.service', [], async () => { calls.push('launcher'); return {}; }, report, cli, '/synthetic/node', '/synthetic/launcher', {},
+    async fn => { assert.equal(await fn(), true); }, async () => { calls.push('inventory'); sessions.push({}); }, sessions,
+    async () => { calls.push('native'); report.nativeSessionsStarted++; return { id: 'one' }; },
+    async (_port, route = '/', body) => { calls.push(`request_${route}`); return { status: 200, body: route === '/echo' ? body : route === '/stream' ? Buffer.alloc(65537, 0x62) : Buffer.from('service-fixture\n') }; }, 0, reject);
+  let failure = null; try { await start(); } catch (e) { failure = e.code; }
+  return { calls, report, failure };
+}
+test('source-extracted start requires bound status after manager activation without manual bind fallback', async () => {
+  const result = await syntheticAutomaticStart(); assert.equal(result.failure, null); assert.equal(result.report.explicitReadinessPasses, 1);
+  assert.equal(result.calls.filter(x => x.startsWith('cli_')).join(','), 'cli_status,cli_status');
+  assert.ok(result.calls.indexOf('manager_start') < result.calls.indexOf('cli_status'));
+  assert.ok(result.calls.indexOf('cli_status') < result.calls.indexOf('inventory'));
+  assert.ok(result.calls.lastIndexOf('cli_status') > result.calls.indexOf('native'));
+  assert.equal(result.report.proxyBodyChecks, 1); assert.equal(result.report.uploadChecks, 1); assert.equal(result.report.streamChecks, 1);
+});
+for (const [name, options, expected] of [['missing binding', { binding: false }, 'binding_unconfirmed'], ['invalid runtime identity', { identityValid: false }, 'binding_unconfirmed'], ['failed manager start', { startOK: false }, 'unit_start_failed'], ['cancel before start', { cancelAt: 1 }, 'cancelled']]) {
+  test(`source-extracted automatic start refuses ${name} without a manual fallback`, async () => {
+    const result = await syntheticAutomaticStart(options); assert.equal(result.failure, expected); assert.equal(result.report.explicitReadinessPasses, 0);
+    assert.equal(result.report.proxyBodyChecks, 0); assert.equal(result.calls.some(x => x.includes('wait-bind')), false);
+    if (expected === 'binding_unconfirmed') assert.equal(result.calls.includes('inventory'), false);
+    else assert.equal(result.calls.includes('cli_status'), false);
+  });
+}
+
+test('source-extracted automatic start retains the later fresh binding check before proxy use', async () => {
+  const result = await syntheticAutomaticStart({ binding: true, lateBinding: false });
+  assert.equal(result.failure, 'binding_unconfirmed'); assert.equal(result.report.explicitReadinessPasses, 0);
+  assert.equal(result.calls.filter(x => x === 'cli_status').length, 2); assert.equal(result.report.nativeSessionsStarted, 1);
+  assert.equal(result.report.proxyBodyChecks, 0); assert.equal(result.calls.some(x => x.includes('wait-bind')), false);
+});

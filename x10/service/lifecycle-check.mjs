@@ -303,7 +303,7 @@ export async function main(argv = process.argv.slice(2)) {
   const report = { ok: false, code: 'not_started', phase: 'arguments', ...LIMITATIONS,
     actualNonrootManagerObserved: false, actualUnitStarted: false, explicitReadinessPasses: 0,
     nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
-    runtimeUnitLinked: false, runtimeUnitRemoved: false, unitEnabled: false, subprocessOutputsPublished: false,
+    readinessAutomated: false, runtimeUnitLinked: false, runtimeUnitRemoved: false, unitEnabled: false, subprocessOutputsPublished: false,
     cleanup: { managerStopped: false, launcherExited: false, nativeGroupsAbsent: false,
       listeningPortsClosed: false, controlSocketAbsent: false, runtimeLinkAbsent: false,
       appSocketsRemaining: 0, installationRemoved: false, temporaryRootRemoved: false } };
@@ -442,10 +442,10 @@ export async function main(argv = process.argv.slice(2)) {
     const active = await ownedProperties(); if (active.ActiveState !== 'active' || active.SubState !== 'running') reject('unit_not_active');
     start.step('launcher_identity');
     launcherIdentities.push(await launcherIdentity(active)); report.actualUnitStarted = true;
+    start.step('binding_status');
+    const startupStatus = await cli(node, launcher, ['status'], env); if (!startupStatus.binding || startupStatus.runtime?.identityValid !== true) reject('binding_unconfirmed');
     start.step('native_inventory');
     await until(async () => { try { await inventorySessions(); return sessions.length > report.nativeSessionsStopped; } catch (e) { if (e.code === 'native_cleanup_unknown') return false; throw e; } });
-    start.step('wait_bind');
-    await cli(node, launcher, ['wait-bind', '--timeout-ms', '10000'], env);
     start.step('native_observation');
     const s = await observeNative();
     start.step('session_freshness');
@@ -499,7 +499,7 @@ export async function main(argv = process.argv.slice(2)) {
     await runtimeParents();
     if (!await absent(runtimeLink)) reject('unit_collision');
     const prior = await properties(); if (prior.LoadState !== 'not-found' || prior.ActiveState !== 'inactive' || prior.MainPID !== '0' || prior.FragmentPath !== '') reject('unit_collision');
-    const unit = renderUserUnit({ prefix, nodeExecutable: node }); report.unitSha256 = digest(unit);
+    const unit = renderUserUnit({ prefix, nodeExecutable: node, autoReadiness: true }); report.unitSha256 = digest(unit); report.readinessAutomated = true;
     const handle = await open(unitFile, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
     try { await handle.writeFile(unit); await handle.sync(); } finally { await handle.close(); }
     report.phase = 'link';

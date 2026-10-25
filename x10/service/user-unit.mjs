@@ -20,22 +20,28 @@ function safePath(value) {
 }
 function inputs(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)
-      || Object.keys(value).some(k => !['prefix', 'nodeExecutable'].includes(k))) refuse();
+      || Object.keys(value).some(k => !['prefix', 'nodeExecutable', 'autoReadiness'].includes(k))) refuse();
   const prefix = safePath(value.prefix), nodeExecutable = safePath(value.nodeExecutable);
   if (path.posix.dirname(prefix) === '/' || prefix.length + 13 > 107) refuse();
-  return { prefix, nodeExecutable };
+  const option = Object.getOwnPropertyDescriptor(value, 'autoReadiness');
+  if (option && (!Object.hasOwn(option, 'value') || typeof option.value !== 'boolean')) refuse();
+  return { prefix, nodeExecutable, autoReadiness: option ? option.value : false };
 }
 
 export function renderUserUnit(value) {
-  const { prefix, nodeExecutable } = inputs(value);
+  const { prefix, nodeExecutable, autoReadiness } = inputs(value);
   const command = `${nodeExecutable} ${prefix}/bin/x10`;
   return `# X10 systemd --user recipe only; no activation performed.\n`
-    + `# Type=exec confirms process exec, not native startup or application readiness.\n`
-    + `# readinessAutomated:false startupHealthAccepted:false serviceAccepted:false\n`
-    + `# Run the explicit pinned-node launcher bind after native startup, before use.\n`
+    + (autoReadiness ? `# ExecStartPost waits for installed guarded bind; full startup health is not accepted.\n`
+      + `# readinessAutomated:true startupHealthAccepted:false serviceAccepted:false\n`
+      + `# The explicit pinned-node installed launcher waits within the start timeout.\n`
+      : `# Type=exec confirms process exec, not native startup or application readiness.\n`
+      + `# readinessAutomated:false startupHealthAccepted:false serviceAccepted:false\n`
+      + `# Run the explicit pinned-node launcher bind after native startup, before use.\n`)
     + `[Unit]\nDescription=NGINX X10 private operator service\n\n`
     + `[Service]\nType=exec\nWorkingDirectory=${prefix}\n`
     + `ExecStart=${command} run --control-socket ${prefix}/control.sock\n`
+    + (autoReadiness ? `ExecStartPost=${command} wait-bind --timeout-ms 10000\n` : '')
     + `ExecStop=${command} stop\n`
     + `Restart=no\nKillMode=process\nKillSignal=SIGTERM\nSendSIGKILL=no\n`
     + `TimeoutStartSec=30s\nTimeoutStopSec=30s\nUMask=0077\n`
@@ -69,7 +75,7 @@ async function readRegular(file, maxBytes, { uid, privateFile = false, executabl
 // Runtime lifecycle, dependency integrity and health are checked by the installed CLI,
 // not accepted by this generator. Trust is limited to the existing same-UID operator.
 export async function inspectInstallation(value) {
-  const { prefix, nodeExecutable } = inputs(value);
+  const { prefix, nodeExecutable, autoReadiness } = inputs(value);
   if (process.platform !== 'linux' || typeof process.getuid !== 'function' || await realpath(prefix) !== prefix) refuse();
   const directory = await open(prefix, constants.O_RDONLY | constants.O_DIRECTORY | constants.O_NOFOLLOW);
   let stat;
@@ -94,15 +100,17 @@ export async function inspectInstallation(value) {
   const actual = await readRegular(nodeExecutable, 256 * 1024 * 1024, { executable: true });
   if (![0, stat.uid].includes(actual.stat.uid) || digest(actual.bytes) !== node.sha256) refuse();
   return { installationChecked: true, launcherChecked: true, recordedNodeChecked: true,
-    fullInstallationAccepted: false, targetRuntimeAccepted: false, ...RECIPE_LIMITATIONS };
+    fullInstallationAccepted: false, targetRuntimeAccepted: false, ...RECIPE_LIMITATIONS, readinessAutomated: autoReadiness };
 }
 
 export async function main(argv = process.argv.slice(2)) {
   try {
-    if (argv.length !== 4 || argv[0] !== '--prefix' || argv[2] !== '--node') refuse();
+    if (!Array.isArray(argv) || ![4, 5].includes(argv.length) || argv[0] !== '--prefix' || argv[2] !== '--node'
+        || (argv.length === 5 && argv[4] !== '--auto-readiness')) refuse();
     const value = { prefix: argv[1], nodeExecutable: argv[3] };
+    if (argv.length === 5) value.autoReadiness = true;
     await inspectInstallation(value);
-    return { ok: true, unit: renderUserUnit(value), ...RECIPE_LIMITATIONS };
+    return { ok: true, unit: renderUserUnit(value), ...RECIPE_LIMITATIONS, readinessAutomated: value.autoReadiness === true };
   } catch { return { ok: false, code: 'service_recipe_invalid', ...RECIPE_LIMITATIONS }; }
 }
 let cli = false;

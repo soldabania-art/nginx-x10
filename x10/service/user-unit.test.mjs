@@ -117,3 +117,50 @@ test('CLI invoked through a script alias still executes refusal rather than sile
     assert.equal(e.code, 1); assert.equal(e.stderr, ''); assert.equal(JSON.parse(e.stdout).code, 'service_recipe_invalid'); return true;
   });
 }));
+
+test('omitted and false readiness preserve the exact accepted default unit bytes', () => {
+  const unit = renderUserUnit(good);
+  assert.equal(hash(unit), '257083957a4899dfca61895c9fd80cb0545e67e4d3555caa0a1aae267c12c1ae');
+  assert.equal(renderUserUnit({ ...good, autoReadiness: false }), unit);
+  assert.equal(renderUserUnit(Object.assign(Object.create({ autoReadiness: true }), good)), unit);
+});
+test('explicit automatic readiness adds one pinned installed wait-bind within the existing start bound', () => {
+  const unit = renderUserUnit({ ...good, autoReadiness: true });
+  assert.equal(unit.split('\n').filter(line => line.startsWith('ExecStartPost=')).length, 1);
+  assert.ok(unit.split('\n').includes('ExecStartPost=/usr/bin/node /tmp/x10-example/prefix/bin/x10 wait-bind --timeout-ms 10000'));
+  assert.match(unit, /readinessAutomated:true startupHealthAccepted:false serviceAccepted:false/);
+  for (const line of ['Type=exec', 'TimeoutStartSec=30s', 'TimeoutStopSec=30s', 'Restart=no', 'KillMode=process', 'SendSIGKILL=no']) assert.ok(unit.split('\n').includes(line));
+  assert.equal(RECIPE_LIMITATIONS.readinessAutomated, false); assert.equal(RECIPE_LIMITATIONS.startupHealthAccepted, false);
+});
+for (const [name, autoReadiness] of [['undefined', undefined], ['null', null], ['zero', 0], ['one', 1], ['string', 'true'], ['array', []], ['object', {}]]) {
+  test(`automatic readiness refuses nonboolean option ${name}`, () => assert.throws(() => renderUserUnit({ ...good, autoReadiness }), /service_recipe_invalid/));
+}
+test('automatic readiness refuses an accessor without evaluating it', () => {
+  let called = false; const value = { ...good }; Object.defineProperty(value, 'autoReadiness', { enumerable: true, get() { called = true; return true; } });
+  assert.throws(() => renderUserUnit(value), /service_recipe_invalid/); assert.equal(called, false);
+});
+test('read-only inspection reports configured readiness only and keeps default object order and values', () => fixture(async f => {
+  const value = { prefix: f.prefix, nodeExecutable: f.nodeExecutable }, before = await readFile(f.prefix + '/.alpha-install.json');
+  const ordinary = await inspectInstallation(value), explicitFalse = await inspectInstallation({ ...value, autoReadiness: false });
+  assert.equal(JSON.stringify(explicitFalse), JSON.stringify(ordinary));
+  const opted = await inspectInstallation({ ...value, autoReadiness: true });
+  assert.equal(opted.readinessAutomated, true); assert.equal(opted.startupHealthAccepted, false); assert.equal(opted.targetRuntimeAccepted, false); assert.equal(opted.serviceAccepted, false);
+  assert.deepEqual(await readFile(f.prefix + '/.alpha-install.json'), before);
+}));
+test('CLI opts into readiness only with the exact trailing flag and never executes synthetic node', () => fixture(async f => {
+  const args = ['--prefix', f.prefix, '--node', f.nodeExecutable, '--auto-readiness'];
+  const result = await main(args); assert.equal(result.ok, true); assert.equal(result.readinessAutomated, true); assert.equal(result.serviceAccepted, false);
+  assert.equal(result.unit, renderUserUnit({ prefix: f.prefix, nodeExecutable: f.nodeExecutable, autoReadiness: true }));
+  const { stdout, stderr } = await run(process.execPath, [cli, ...args], { timeout: 5000, maxBuffer: 65536 });
+  assert.equal(stderr, ''); assert.equal(stdout, result.unit);
+}));
+test('CLI readiness duplicates, values, reordered or extra flags refuse with sanitized errors', async () => {
+  for (const argv of [['--prefix', good.prefix, '--node', good.nodeExecutable, '--auto-readiness=true'],
+    ['--auto-readiness', '--prefix', good.prefix, '--node', good.nodeExecutable],
+    ['--prefix', good.prefix, '--node', good.nodeExecutable, '--auto-readiness', '--auto-readiness'],
+    ['--prefix', good.prefix, '--node', good.nodeExecutable, '--auto-readiness', 'true'],
+    ['--prefix', good.prefix, '--node', good.nodeExecutable, '--no-auto-readiness']]) {
+    const result = await main(argv); assert.equal(result.ok, false); assert.equal(result.code, 'service_recipe_invalid');
+    assert.doesNotMatch(JSON.stringify(result), /\/tmp\/|\/usr\//);
+  }
+});

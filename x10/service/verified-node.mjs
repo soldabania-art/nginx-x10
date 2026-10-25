@@ -296,7 +296,7 @@ export async function main(argv = process.argv.slice(2)) {
       const receipt = await regular(file, 32768, { uid: process.getuid() });
       if ((receipt.stat.mode & 0o7077) !== 0) refuse('runtime_retained_cleanup_unconfirmed');
       const e = JSON.parse(receipt.bytes);
-      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== 'a14e856bd0139d2a4d636ca061d1e28cc43646f1feca3ff70513c484391ac4a9') refuse('runtime_retained_cleanup_unconfirmed');
+      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '4511ad8d78815a323a74002f855f7c8a58b9a94eee5103f52313737ba12b768a') refuse('runtime_retained_cleanup_unconfirmed');
       const runtime = await inspectRuntime(prefix);
       if (e.runtimeNodeSha256 !== runtime.files['bin/node'].sha256 || e.runtimeInstallationId !== runtime.installationId) refuse('runtime_retained_cleanup_unconfirmed');
       await removeRuntime(prefix); result = { ok: true, code: 'verified_node_removed', runtimeRemoved: true };

@@ -413,3 +413,37 @@ Cleanup remained unconfirmed and private Node was retained. This evidence
 justifies testing the new known-owned equivalence rule; it does not accept
 service operation. Local owned filesystem and synthetic manager controls
 remain distinct from actual nonroot service CI, cleanup and Production V1.
+
+
+## Explicit automatic startup readiness
+
+The user-unit recipe has an explicit autoReadiness option. Missing or false
+retains the previous generated unit bytes. When selected, an ExecStartPost
+command invokes the pinned absolute Node and installed launcher wait-bind
+with its fixed10000ms budget. The manager start transaction must complete
+that installed command. The existing service ownership, identity, private
+control, timeout and cleanup rules remain required. To select this rendered
+recipe explicitly, append --auto-readiness to the existing user-unit CLI
+--prefix and --node arguments.
+
+The acceptance harness selects this option and no longer manually invokes
+wait-bind after starting the service. It independently inspects the installed
+bound session after successful manager start before native inventory, and
+retains the original fresh later bound status check after native observation.
+The readiness counter increments only at that original later check, before
+the existing proxy/upload/stream and stop/cleanup checks. readinessAutomated is set when the
+recipe is configured, before unit write, link or manager startup; automaticReadinessAccepted and full service
+or Production V1 acceptance remain separate evidence-based decisions.
+
+Both prior exactd119 jobs passed the narrower basic service fixture using
+manual installed readiness, two separate start/stop sessions and full owned
+service/private Node/bootstrap cleanup. This accepted basic path is not one
+manager restart, logging, adverse startup/cancel/drain/orphan acceptance or
+combined service TLS. The changed option requires its own exact actual
+nonroot CI; local controls and source review alone do not prove it ran.
+
+[systemd255 service semantics](https://github.com/systemd/systemd/blob/v255/man/systemd.service.xml)
+allow startup to fail on a failed or timed-out ExecStartPost before the unit
+is fully active; ExecStop can then be skipped. Actual failed-start and
+cancellation cleanup require separate acceptance, and uncertain service
+cleanup must retain the private Node needed by owned stop operations.
