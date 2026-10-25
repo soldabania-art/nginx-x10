@@ -2134,3 +2134,31 @@ passed45 proofs;523 unchanged file comparisons and15 structural checks are
 separate units. Actual journal/restart acceptance requires the resulting CI.
 Full G3/V1, adverse paths, combined TLS/service, package rollback/recovery,
 permanent distribution, security/soak and Continuum migration remain open.
+
+
+## Partial downstream HTTPS service candidate
+
+Both exact06e4 native workflows completed success on the scoped HTTP service
+path:three native/start-stop/readiness/proxy/upload/stream sessions, one
+manager restart, four retirement/replacement proofs, three bounded journal
+checks and complete owned service/private Node cleanup. The old a03 failure
+is appended to history before the active failure is cleared. Its raw rejected
+journal condition is still unknown; later success does not reconstruct it.
+
+The new candidate adds downstream HTTPS to the real operated service while
+keeping an HTTP application origin. Positive CA/hostname payload exchange,
+wrong-CA and wrong-host refusals, restart/journals and owned TLS-port/private
+PKI cleanup must be verified by exact resulting CI. Local contract or fixture
+checks cannot accept the actual nonroot service or its cleanup path.
+
+[Evidence](evidence/g3-service-https.json) keeps this partial milestone explicit.
+The unchanged RELEASE-CONTRACT/profile require both downstream HTTPS and a
+verified HTTPS origin; this candidate does not close that combined TLS gate.
+Full G3/V1, adverse recovery, package upgrade/rollback, permanent distribution,
+independent security,60-minute soak and semantic Continuum migration stay open.
+
+Local post-pin contracts passed384/384:267 lifecycle,45 journal,16 TLSfixture
+and56 dependency controls. Independent review135 proofs,521 unchanged-file
+comparisons, nine root integration and seven workflow checks remain separate
+units. The strengthened helper late-callback draft15PASS/1FAIL and final16/16
+are retained; actual managed-service TLS and both-leg acceptance stay pending.

@@ -198,7 +198,7 @@ export function cleanupEvidence(e) {
       || r.actualNonrootManagerObserved !== true || r.actualUnitStarted !== true
       || r.runtimeUnitLinked !== true || r.runtimeUnitRemoved !== true || r.unitEnabled !== false
       || r.readinessAutomated !== true || r.automaticReadinessAccepted !== false
-      || r.serviceAccepted !== false || r.productionAccepted !== false || r.subprocessOutputsPublished !== false
+      || r.tlsServiceAccepted !== false || r.serviceAccepted !== false || r.productionAccepted !== false || r.subprocessOutputsPublished !== false
       || r.primaryFailure !== null || !Array.isArray(r.cleanupFailures) || r.cleanupFailures.length !== 0
       || r.cleanupFailureCount !== 0 || r.cleanupFailuresTruncated !== false) return false;
   for (const k of ['explicitReadinessPasses', 'nativeSessionsStarted', 'nativeSessionsStopped', 'proxyBodyChecks', 'uploadChecks', 'streamChecks']) if (r[k] !== 3) return false;
@@ -212,7 +212,11 @@ export function cleanupEvidence(e) {
   if (!restart || typeof restart !== 'object' || Array.isArray(restart)
       || Object.keys(restart).length !== proofKeys.length
       || proofKeys.some(k => !Object.hasOwn(restart, k) || restart[k] !== true)) return false;
-  for (const k of ['managerStopped', 'launcherExited', 'nativeGroupsAbsent', 'listeningPortsClosed', 'controlSocketAbsent', 'runtimeLinkAbsent', 'installationRemoved', 'temporaryRootRemoved']) if (r.cleanup?.[k] !== true) return false;
+  if (r.downstreamTLSActivated !== true) return false;
+  for (const k of ['downstreamTLSSessionChecks', 'downstreamTLSUploadChecks', 'downstreamTLSStreamChecks',
+    'downstreamTLS12Checks', 'downstreamTLS13Checks', 'downstreamTLSWrongCARefusals', 'downstreamTLSWrongNameRefusals']) if (r[k] !== 3) return false;
+  if (r.downstreamTLSBodyChecks !== 6 || r.downstreamTLSCertificateChecks !== 12) return false;
+  for (const k of ['managerStopped', 'launcherExited', 'nativeGroupsAbsent', 'listeningPortsClosed', 'controlSocketAbsent', 'runtimeLinkAbsent', 'installationRemoved', 'temporaryRootRemoved', 'downstreamTLSPortClosed']) if (r.cleanup?.[k] !== true) return false;
   return r.cleanup.appSocketsRemaining === 0;
 }
 async function inspectRuntime(prefix) {
@@ -310,7 +314,7 @@ export async function main(argv = process.argv.slice(2)) {
       const receipt = await regular(file, 32768, { uid: process.getuid() });
       if ((receipt.stat.mode & 0o7077) !== 0) refuse('runtime_retained_cleanup_unconfirmed');
       const e = JSON.parse(receipt.bytes);
-      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '747c0e9a4a4fbacb76c83406b198f90efebcd1bb38e3e34d90b5acd3a666dbbf') refuse('runtime_retained_cleanup_unconfirmed');
+      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '60454daf9c04733bd25d2ac64c2688130169b37c24dfa3049731bcbfd726c226') refuse('runtime_retained_cleanup_unconfirmed');
       const runtime = await inspectRuntime(prefix);
       if (e.runtimeNodeSha256 !== runtime.files['bin/node'].sha256 || e.runtimeInstallationId !== runtime.installationId) refuse('runtime_retained_cleanup_unconfirmed');
       await removeRuntime(prefix); result = { ok: true, code: 'verified_node_removed', runtimeRemoved: true };

@@ -433,7 +433,7 @@ test('source-extracted automatic start retains the later fresh binding check bef
 
 const serviceCleanupNames = ['managerStopped', 'launcherExited', 'nativeGroupsAbsent', 'listeningPortsClosed', 'controlSocketAbsent'];
 const assertServiceCleanup = (report, expected) => { for (const name of serviceCleanupNames) assert.equal(report.cleanup[name], expected, name); };
-async function syntheticOwnedStop({ report, failure = null } = {}) {
+async function syntheticOwnedStop({ report, failure = null, tlsPort = undefined } = {}) {
   const source = await readFile(script, 'utf8');
   const reset = source.slice(source.indexOf('  function resetServiceCleanupEvidence()'), source.indexOf('  async function stopOwned()'));
   const body = source.slice(source.indexOf('  async function stopOwned()'), source.indexOf('  async function startAndServe()'));
@@ -448,11 +448,11 @@ async function syntheticOwnedStop({ report, failure = null } = {}) {
     if (failure === 'properties_before' && properties === 1 || failure === 'properties_after' && properties === 2) reject('unit_fragment_identity');
     return { MainPID: failure === 'launcher' && properties === 1 ? '123' : '0', ActiveState: failure === 'state_after' && properties === 2 ? 'active' : 'inactive', Result: 'success' };
   };
-  const factory = new Function('report', 'inventorySessions', 'ownedProperties', 'launcherIdentity', 'launcherIdentities', 'systemctl', 'unitName', 'until', 'exitedLauncher', 'sessions', 'nativeStopped', 'absent', 'prefix', 'closedPort', 'gatewayPort', 'healthPort', 'reject', `${reset}${body};return stopOwned;`);
+  const factory = new Function('report', 'inventorySessions', 'ownedProperties', 'launcherIdentity', 'launcherIdentities', 'systemctl', 'unitName', 'until', 'exitedLauncher', 'sessions', 'nativeStopped', 'absent', 'prefix', 'closedPort', 'gatewayPort', 'healthPort', 'reject', 'tlsPort', `${reset}${body};return stopOwned;`);
   const stop = factory(report, inventory, owned, async () => { reject('unit_launcher_identity'); }, [],
     async (args, timeout) => { calls.push('manager_stop'); assert.deepEqual(args, ['stop', 'fixture.service']); assert.equal(timeout, 35000); return { ok: failure !== 'manager_stop' }; },
     'fixture.service', async fn => { if (failure === 'absence_wait' || !await fn()) reject('observation_timeout'); }, async () => true, [], async () => true,
-    async () => failure !== 'control_socket', '/synthetic/prefix', async port => failure !== (port === 1 ? 'gateway_port' : 'health_port'), 1, 2, reject);
+    async () => failure !== 'control_socket', '/synthetic/prefix', async port => failure !== (port === 1 ? 'gateway_port' : port === 2 ? 'health_port' : 'tls_port'), 1, 2, reject, tlsPort);
   let code = null; try { await stop(); } catch (e) { code = e.code; }
   return { report, calls, code };
 }
@@ -749,4 +749,89 @@ for (const code of ['journal_empty', 'journal_record_limit', 'journal_unavailabl
 test('unknown journal error code remains fixed and cannot publish private text', async () => {
   const r = await syntheticJournalGuard({ response: { ok: false, code: 'private-untrusted-path-or-message' } });
   assert.equal(r.failure, 'journal_unconfirmed'); assert.equal(r.report.journalChecks, 0);
+});
+
+
+// Production orchestration is exercised with independent synthetic transports;
+// actual TLS handshakes and the real manager belong to separate required gates.
+async function syntheticDownstreamTLS(options = {}) {
+  const source = await readFile(script, 'utf8');
+  const same = source.slice(source.indexOf('  function sameLauncher('), source.indexOf('  async function ownedInvocation('));
+  const body = source.slice(source.indexOf('  async function verifyDownstreamTLS()'), source.indexOf("  process.once('SIGINT', cancel)"));
+  const report = { downstreamTLSActivated: true, downstreamTLSSessionChecks: 0, downstreamTLSBodyChecks: 0,
+    downstreamTLSUploadChecks: 0, downstreamTLSStreamChecks: 0, downstreamTLS12Checks: 0, downstreamTLS13Checks: 0,
+    downstreamTLSCertificateChecks: 0, downstreamTLSWrongCARefusals: 0, downstreamTLSWrongNameRefusals: 0 };
+  const sessions = [1, 2, 3].map(i => ({ id: 'session' + i, prefix: '/synthetic/runs/session' + i, identity: { synthetic: i } }));
+  const state = { index: 0, cancelled: false, probes: 0, refusals: 0, info: 0, invocations: 0 };
+  const tlsFixture = { ca: Buffer.from('synthetic CA'), wrongCA: Buffer.from('synthetic other CA'), expectedCertificate: Buffer.from('synthetic DER') };
+  const tlsSessions = new Set(options.duplicate ? ['session1'] : []), trace = [];
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  const identity = { pid: 3301, startTicks: '10', pidNamespace: 'synthetic-pid', networkNamespace: 'synthetic-net' };
+  const deps = { report, sessions, tlsFixture, tlsSessions, tlsPort: 10443, prefix: '/synthetic',
+    node: '/synthetic/node', launcher: '/synthetic/launcher', env: {}, reject, start: { step() {} },
+    checkCancelled: () => { if (state.cancelled) reject('cancelled'); },
+    cli: async () => { state.info++; trace.push('info'); return { stage: 'running',
+      session: options.changedSession && state.info % 2 === 0 ? 'foreign' : sessions[state.index].id,
+      sessionPrefix: sessions[state.index].prefix }; },
+    inspectMaster: async () => options.nativeMissing ? null : sessions[state.index].identity,
+    ownedInvocation: async () => { state.invocations++; return { id: options.changedInvocation && state.invocations % 2 === 0 ? 'b'.repeat(32) : 'a'.repeat(32), launcher: identity }; },
+    probeServiceTLS: async (port, route, value) => {
+      state.probes++; trace.push(route + ':' + value.version); assert.equal(port, 10443); assert.equal(value.ca, tlsFixture.ca);
+      assert.equal(value.expectedCertificate, tlsFixture.expectedCertificate); assert.equal(value.servername, 'localhost');
+      if (options.probeFailure === state.probes) reject('tls_probe_timeout');
+      if (options.cancelProbe === state.probes) state.cancelled = true;
+      const response = route === '/echo' ? value.body : route === '/stream' ? Buffer.alloc(65537, 0x62) : Buffer.from('service-fixture\n');
+      return { status: 200, body: options.badBody && state.probes === 1 ? Buffer.from('wrong') : response,
+        protocol: options.badProtocol && state.probes === 1 ? 'TLSv1.3' : value.version,
+        certificateMatched: options.badCertificate && state.probes === 1 ? false : true };
+    },
+    expectServiceTLSRefusal: async (_port, value) => {
+      state.refusals++; trace.push('refusal');
+      if (options.cancelRefusal === state.refusals) state.cancelled = true;
+      return { ok: true, code: options.falseRefusal ? 'ECONNREFUSED' : value.ca === tlsFixture.wrongCA ? 'tls_ca_refused' : 'tls_hostname_refused' };
+    },
+  };
+  const factory = new Function(...Object.keys(deps), `let lastSession = 'session1'; ${same}${body}; return { run: verifyDownstreamTLS, select(id) { lastSession = id; } };`);
+  const controller = factory(...Object.values(deps)); let failure = null;
+  try {
+    for (let i = 0; i < (options.rounds || 1); i++) { state.index = i; controller.select(sessions[i].id); await controller.run(); }
+  } catch (e) { failure = e.code; }
+  return { report, failure, trace, state };
+}
+test('downstream TLS counts exact handshakes across apply, next start and restart sessions', async () => {
+  const r = await syntheticDownstreamTLS({ rounds: 3 }); assert.equal(r.failure, null);
+  assert.deepEqual(r.report, { downstreamTLSActivated: true, downstreamTLSSessionChecks: 3, downstreamTLSBodyChecks: 6,
+    downstreamTLSUploadChecks: 3, downstreamTLSStreamChecks: 3, downstreamTLS12Checks: 3, downstreamTLS13Checks: 3,
+    downstreamTLSCertificateChecks: 12, downstreamTLSWrongCARefusals: 3, downstreamTLSWrongNameRefusals: 3 });
+  assert.equal(r.state.probes, 12); assert.equal(r.state.refusals, 6);
+});
+for (const [option, code] of [['duplicate', 'downstream_tls_session'], ['badBody', 'downstream_tls_body_mismatch'],
+  ['badProtocol', 'downstream_tls_unconfirmed'], ['badCertificate', 'downstream_tls_unconfirmed'],
+  ['changedSession', 'downstream_tls_session'], ['nativeMissing', 'downstream_tls_session'],
+  ['changedInvocation', 'unit_invocation_changed'], ['falseRefusal', 'downstream_tls_ca_unconfirmed']]) {
+  test(`downstream TLS refuses ${option} without a verified session`, async () => {
+    const r = await syntheticDownstreamTLS({ [option]: true }); assert.equal(r.failure, code); assert.equal(r.report.downstreamTLSSessionChecks, 0);
+    if (option === 'falseRefusal') assert.equal(r.report.downstreamTLSWrongCARefusals, 0);
+  });
+}
+for (const probeFailure of [1, 2, 3, 4]) test(`downstream TLS transport failure at probe${probeFailure} is not a negative trust PASS`, async () => {
+  const r = await syntheticDownstreamTLS({ probeFailure }); assert.equal(r.failure, 'tls_probe_timeout');
+  assert.equal(r.report.downstreamTLSSessionChecks, 0); assert.equal(r.report.downstreamTLSWrongCARefusals, 0); assert.equal(r.report.downstreamTLSWrongNameRefusals, 0);
+});
+for (const cancelProbe of [1, 2, 3, 4]) test(`downstream TLS cancellation after probe${cancelProbe} cannot count that certificate or session`, async () => {
+  const r = await syntheticDownstreamTLS({ cancelProbe }); assert.equal(r.failure, 'cancelled');
+  assert.equal(r.report.downstreamTLSCertificateChecks, cancelProbe - 1); assert.equal(r.report.downstreamTLSSessionChecks, 0);
+});
+for (const cancelRefusal of [1, 2]) test(`downstream TLS cancellation after refusal${cancelRefusal} cannot claim that refusal`, async () => {
+  const r = await syntheticDownstreamTLS({ cancelRefusal }); assert.equal(r.failure, 'cancelled'); assert.equal(r.report.downstreamTLSSessionChecks, 0);
+  assert.equal(cancelRefusal === 1 ? r.report.downstreamTLSWrongCARefusals : r.report.downstreamTLSWrongNameRefusals, 0);
+});
+test('TLS listener absence is a fresh cleanup confirmation after actual stop', async () => {
+  const r = await syntheticOwnedStop({ tlsPort: 3 }); assert.equal(r.code, null); assert.equal(r.report.cleanup.downstreamTLSPortClosed, true); assertServiceCleanup(r.report, true);
+});
+test('unknown or still-live TLS listener refuses cleanup and clears prior confirmations', async () => {
+  const prior = await syntheticOwnedStop({ tlsPort: 3 });
+  assert.equal(prior.report.cleanup.downstreamTLSPortClosed, true);
+  const r = await syntheticOwnedStop({ report: prior.report, tlsPort: 3, failure: 'tls_port' }); assert.equal(r.code, 'service_resources_live');
+  assert.equal(r.report.cleanup.downstreamTLSPortClosed, false); assertServiceCleanup(r.report, false);
 });

@@ -624,3 +624,51 @@ failure was recorded. Private Node/bootstrap were retained with no dependency
 cleanup receipt. Earlier401209 two-cycle success remains separately scoped.
 New exact CI must verify the parser with real journal/restart/cleanup evidence;
 Production V1, full G3, adverse recovery and package/release gates remain open.
+
+
+## Partial downstream HTTPS with a real operated service
+
+This bounded acceptance milestone exercises downstream HTTPS on the real
+nonroot operated gateway while its application origin remains HTTP. The
+unchanged release contract and profile require both downstream HTTPS and a
+verified HTTPS origin. This milestone therefore remains partial and cannot
+accept the full TLS service, G3 or Production V1. Neither contract nor profile
+is narrowed to relabel this intermediate result as complete.
+
+The candidate fixture prepares private test PKI and a high loopback HTTPS
+listener using existing installed management. It must exercise successful
+CA/hostname verification with exact payload exchange and explicit wrong-CA
+and wrong-host refusal across the three-session/one-manager-restart path.
+Trust verification must remain enabled; a successful TCP connection or a
+certificate file alone is not an accepted TLS exchange.
+
+The acceptance path retains exact unit/launcher/native identities, fresh
+replacement session/binding and bounded journal checks. Dependency cleanup
+requires the exact new TLS proof profile, closed owned TLS listener and
+confirmed private fixture/service/runtime cleanup. Unknown resource ownership
+or incomplete cleanup retains evidence and the runtime needed for inspection.
+Raw certificates/keys, runtime logs, process identities and host paths stay
+private; public evidence contains finite results and allowed counts/hashes.
+
+Exact06e4 had already passed the HTTP-only three-session manager-restart and
+journal path with complete owned cleanup. That narrow result does not accept
+this new downstream HTTPS path or the unchanged contract's combined TLS legs.
+New exact nonroot CI is required. Earlier a03 raw journal rejection remains
+unknown and preserved in history despite later scoped success.
+
+
+Local post-pin verification passed384 contracts:267 lifecycle,45 journal,
+16 TLS fixture and56 dependency controls, with no skips/failures and empty
+stderr. Independent review recorded135 separately classified proofs.
+The16 helper tests mix real owned Node HTTPS/PKI and synthetic event controls;
+they are not16 service installations. A stronger late-callback control first
+failed15PASS/1FAIL on duplicate cleanup; settled guards then passed16/16.
+No late promise success or managed-service failure was observed in that test.
+
+The required managed-service counters are three HTTPS sessions. Per session,
+one TLS1.2 and one TLS1.3 GET give six body checks and three version-specific
+GET checks per protocol. Three uploads and three streams use TLS1.3, producing
+12 verified positive certificate requests in total. Wrong-CA and wrong-host
+refusals are three each. These are distinct observation units, not counts of
+all handshakes or independent deployment scenarios. Actual service evidence
+requires the new exact nonroot CI; full both-leg TLS remains open.

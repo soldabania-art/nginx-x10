@@ -65,6 +65,8 @@ jobs:
         run: node --test --test-reporter=tap x10/service/lifecycle-check.test.mjs > x10/.build/ci-evidence/service-lifecycle-contract.tap
       - name: Validate bounded owned-service journal observations
         run: node --test --test-reporter=tap x10/service/journal-check.test.mjs > x10/.build/ci-evidence/service-journal-contract.tap
+      - name: Validate bounded downstream HTTPS fixture controls
+        run: node --test --test-reporter=tap x10/service/tls-fixture.test.mjs > x10/.build/ci-evidence/service-https-contract.tap
       - name: Validate authenticated Node dependency refusal controls
         run: node --test --test-reporter=tap x10/service/verified-node.test.mjs > x10/.build/ci-evidence/verified-node-contract.tap
       - name: Build dependencies and optional test clients
@@ -125,7 +127,7 @@ jobs:
           const evidence = 'x10/.build/ci-evidence';
           let root, prefix, archive, envelope;
           const source = 'x10/service/lifecycle-check.mjs';
-          const sourceSha = '747c0e9a4a4fbacb76c83406b198f90efebcd1bb38e3e34d90b5acd3a666dbbf';
+          const sourceSha = '60454daf9c04733bd25d2ac64c2688130169b37c24dfa3049731bcbfd726c226';
           const hash = b => createHash('sha256').update(b).digest('hex');
           const save = (name, report) => writeFile(evidence + '/' + name + '.json', JSON.stringify(report) + '\n');
           const status = { ok: false, stage: 'download', code: 'bootstrap_failed', runtimeRemoved: false,

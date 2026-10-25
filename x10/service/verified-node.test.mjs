@@ -18,13 +18,15 @@ const status = () => `[GNUPG:] PLAINTEXT 74 0 \n[GNUPG:] NEWSIG\n[GNUPG:] KEY_CO
 function receipt() {
   return { checkerExited:true, checkerExitCode:0, report:{ ok:true, code:'basic_lifecycle_verified', phase:'complete', actualNonrootManagerObserved:true, actualUnitStarted:true,
     runtimeUnitLinked:true, runtimeUnitRemoved:true, unitEnabled:false,
-    readinessAutomated:true, automaticReadinessAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
+    readinessAutomated:true, automaticReadinessAccepted:false, tlsServiceAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
     primaryFailure:null, cleanupFailures:[], cleanupFailureCount:0, cleanupFailuresTruncated:false,
     explicitReadinessPasses:3, nativeSessionsStarted:3, nativeSessionsStopped:3, proxyBodyChecks:3, uploadChecks:3, streamChecks:3,
     managerRestartCommands:1, completedManagerRestarts:1,
     restartProof:{oldLauncherExited:true,oldNativeGroupsAbsent:true,freshSession:true,freshInvocation:true},
     journalChecks:3,journalRecordsObserved:6,journalRunningMarkers:3,
-    cleanup:{ managerStopped:true, launcherExited:true, nativeGroupsAbsent:true, listeningPortsClosed:true, controlSocketAbsent:true, runtimeLinkAbsent:true, installationRemoved:true, temporaryRootRemoved:true, appSocketsRemaining:0 } } };
+    downstreamTLSActivated:true,downstreamTLSSessionChecks:3,downstreamTLSBodyChecks:6,downstreamTLSUploadChecks:3,downstreamTLSStreamChecks:3,
+    downstreamTLS12Checks:3,downstreamTLS13Checks:3,downstreamTLSCertificateChecks:12,downstreamTLSWrongCARefusals:3,downstreamTLSWrongNameRefusals:3,
+    cleanup:{ managerStopped:true, launcherExited:true, nativeGroupsAbsent:true, listeningPortsClosed:true, controlSocketAbsent:true, runtimeLinkAbsent:true, installationRemoved:true, temporaryRootRemoved:true, downstreamTLSPortClosed:true, appSocketsRemaining:0 } } };
 }
 test('synthetic tar selection is byte exact and never executes payload', () => {
   const r=parseTar(good()); assert.equal(r.node.toString(),'SYNTHETIC_NONEXECUTABLE'); assert.equal(r.license.toString(),'public license'); assert.deepEqual(Object.keys(r).sort(),['license','node']);
@@ -105,6 +107,31 @@ test('cleanup bounds journal evidence without accepting absent or inconsistent m
   const inconsistent=receipt();inconsistent.report.journalRecordsObserved=3;inconsistent.report.journalRunningMarkers=4;assert.equal(cleanupEvidence(inconsistent),false);
   for(const count of [3,384]){const e=receipt();e.report.journalRecordsObserved=count;e.report.journalRunningMarkers=count;assert.equal(cleanupEvidence(e),true);}
 });
+test('cleanup refuses the earlier HTTP-only three-session receipt even with a stale closed TLS port claim',()=>{
+  for(const claimedClosed of [undefined,true]){
+    const e=receipt();for(const k of Object.keys(e.report))if(k.startsWith('downstreamTLS'))delete e.report[k];
+    if(claimedClosed===undefined)delete e.report.cleanup.downstreamTLSPortClosed;
+    else e.report.cleanup.downstreamTLSPortClosed=claimedClosed;
+    assert.equal(cleanupEvidence(e),false);
+  }
+});
+test('cleanup requires exact downstream TLS protocol, certificate and refusal counts',()=>{
+  const expected={downstreamTLSSessionChecks:3,downstreamTLSBodyChecks:6,downstreamTLSUploadChecks:3,downstreamTLSStreamChecks:3,
+    downstreamTLS12Checks:3,downstreamTLS13Checks:3,downstreamTLSCertificateChecks:12,downstreamTLSWrongCARefusals:3,downstreamTLSWrongNameRefusals:3};
+  for(const [k,count] of Object.entries(expected))for(const value of [undefined,false,0,count-1,count+1,String(count),NaN,Infinity]){
+    const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);
+  }
+});
+test('cleanup requires observed TLS activation and keeps full TLS/service acceptance false',()=>{
+  for(const value of [undefined,false,1,'true']){const e=receipt();e.report.downstreamTLSActivated=value;assert.equal(cleanupEvidence(e),false);}
+  for(const value of [undefined,true,0,'false']){const e=receipt();e.report.tlsServiceAccepted=value;assert.equal(cleanupEvidence(e),false);}
+});
+test('cleanup requires the additional current-attempt TLS listener closure',()=>{
+  for(const value of [undefined,false,1,'true']){
+    const e=receipt();e.report.cleanup.downstreamTLSPortClosed=value;
+    assert.equal(e.report.cleanup.listeningPortsClosed,true);assert.equal(cleanupEvidence(e),false);
+  }
+});
 test('cleanup refuses mixed failure and broader acceptance claims despite successful cleanup booleans',()=>{
   const mutations=[
     e=>e.report.primaryFailure={phase:'restart',code:'unit_start_failed'},
@@ -143,6 +170,14 @@ test('cleanup refuses incomplete lifecycle evidence and retains arbitrary prefix
 test('cleanup preserves runtime contents when a complete-looking receipt lacks owned journal evidence',async()=>{
   const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});await writeFile(p+'/runtime/sentinel','preserve',{mode:0o600});
   const e=receipt();e.report.journalRunningMarkers=0;await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
+  try {const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.equal(await readFile(p+'/runtime/sentinel','utf8'),'preserve');assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);}
+  finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
+});
+test('cleanup preserves runtime contents when exact-source receipt has incomplete TLS refusal evidence',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});await writeFile(p+'/runtime/sentinel','preserve',{mode:0o600});
+  const e=receipt(),source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
+  e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];
+  e.report.downstreamTLSWrongCARefusals=2;await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
   try {const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.equal(await readFile(p+'/runtime/sentinel','utf8'),'preserve');assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);}
   finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
 });

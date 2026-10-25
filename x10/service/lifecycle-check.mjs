@@ -15,11 +15,12 @@ import { inspectInstallation, renderUserUnit } from './user-unit.mjs';
 import { verifyAlphaArchive, MAX_ARCHIVE_BYTES } from '../release/verify-alpha-archive.mjs';
 import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mjs';
 import { observeOwnedJournal, JOURNAL_RESULT_CODES } from './journal-check.mjs';
+import { createServicePKI, probeServiceTLS, expectServiceTLSRefusal, TLS_FIXTURE_ERROR_CODES } from './tls-fixture.mjs';
 
 const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 const HEX = /^[a-f0-9]{64}$/, TOKEN = /^[a-f0-9]{32}$/;
 const KEYS = ['LoadState', 'ActiveState', 'SubState', 'Result', 'FragmentPath', 'MainPID', 'ControlGroup'];
-const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES]);
+const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed"]);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const reject = code => { throw Object.assign(new Error(code), { code }); };
 export const LIMITATIONS = Object.freeze({ scope: 'ephemeral-user-service-basic-lifecycle',
@@ -124,8 +125,8 @@ export async function observeNodePrerequisites(prefix, nodeExecutable) {
   finally { if (handle) { try { await handle.close(); } catch { reject('recipe_diagnostic_failed'); } } }
 }
 // Diagnostic collectors have no I/O or lifecycle authority.
-export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'first_start', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
-export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'request_restart', 'old_retirement', 'invocation_identity', 'journal_read', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
+export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'first_start', 'tls_apply', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
+export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'request_restart', 'old_retirement', 'invocation_identity', 'journal_read', 'downstream_tls', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
 export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'temporary_root', 'final_assertion', 'unknown']);
 const pickEnum = (value, list, fallback = 'unknown') => typeof value === 'string' && list.includes(value) ? value : fallback;
 function ownData(record, key) {
@@ -354,11 +355,15 @@ export async function main(argv = process.argv.slice(2)) {
     managerRestartCommands: 0, completedManagerRestarts: 0,
     restartProof: { oldLauncherExited: false, oldNativeGroupsAbsent: false, freshSession: false, freshInvocation: false },
     journalChecks: 0, journalRecordsObserved: 0, journalRunningMarkers: 0,
+    downstreamTLSActivated: false, downstreamTLSSessionChecks: 0, downstreamTLSBodyChecks: 0,
+    downstreamTLSUploadChecks: 0, downstreamTLSStreamChecks: 0, downstreamTLS12Checks: 0, downstreamTLS13Checks: 0,
+    downstreamTLSCertificateChecks: 0, downstreamTLSWrongCARefusals: 0, downstreamTLSWrongNameRefusals: 0,
     readinessAutomated: false, runtimeUnitLinked: false, runtimeUnitRemoved: false, unitEnabled: false, subprocessOutputsPublished: false,
     cleanup: { managerStopped: false, launcherExited: false, nativeGroupsAbsent: false,
-      listeningPortsClosed: false, controlSocketAbsent: false, runtimeLinkAbsent: false,
+      listeningPortsClosed: false, controlSocketAbsent: false, downstreamTLSPortClosed: false, runtimeLinkAbsent: false,
       appSocketsRemaining: 0, installationRemoved: false, temporaryRootRemoved: false } };
-  let input, parent, prefix, node, launcher, unitFile, runtimeLink, unitName, env, app, appPort, gatewayPort, healthPort;
+  let input, parent, prefix, node, launcher, unitFile, runtimeLink, unitName, env, app, appPort, gatewayPort, healthPort, tlsPort, tlsFixture;
+  const tlsSessions = new Set();
   let linked = false, installed = false, safeToRemove = false, cancelled = false, startRequested = false, lastSession = null, inCleanup = false;
   const sessions = [], launcherIdentities = [], sockets = new Set();
   const failures = createFailureDiagnostics(), start = createStartDiagnostics(), fragments = createFragmentIdentityDiagnostics(), hooks = createHookStatusDiagnostics();
@@ -480,6 +485,7 @@ export async function main(argv = process.argv.slice(2)) {
   function resetServiceCleanupEvidence() {
     report.cleanup.managerStopped = false; report.cleanup.launcherExited = false; report.cleanup.nativeGroupsAbsent = false;
     report.cleanup.listeningPortsClosed = false; report.cleanup.controlSocketAbsent = false;
+    report.cleanup.downstreamTLSPortClosed = false;
   }
   async function stopOwned() {
     resetServiceCleanupEvidence();
@@ -497,6 +503,10 @@ export async function main(argv = process.argv.slice(2)) {
     await until(async () => { for (const identity of launcherIdentities) if (!await exitedLauncher(identity)) return false;
       for (const s of sessions) if (!await nativeStopped(s)) return false; return true; });
     if (!await absent(`${prefix}/control.sock`) || !await closedPort(gatewayPort) || !await closedPort(healthPort)) reject('service_resources_live');
+    if (typeof tlsPort === 'number') {
+      if (!await closedPort(tlsPort)) reject('service_resources_live');
+      report.cleanup.downstreamTLSPortClosed = true;
+    }
     report.cleanup.managerStopped = true; report.cleanup.launcherExited = true; report.cleanup.nativeGroupsAbsent = true;
     report.cleanup.listeningPortsClosed = true; report.cleanup.controlSocketAbsent = true;
   }
@@ -544,6 +554,7 @@ export async function main(argv = process.argv.slice(2)) {
     const stream = await request(gatewayPort, '/stream'); if (stream.status !== 200 || !stream.body.equals(Buffer.alloc(65537, 0x62))) reject('stream_mismatch'); report.streamChecks++;
     start.step('final_cancel_check');
     checkCancelled();
+    if (report.downstreamTLSActivated === true) await verifyDownstreamTLS();
     return s;
   }
   function sameLauncher(a, b) {
@@ -635,6 +646,84 @@ export async function main(argv = process.argv.slice(2)) {
     report.completedManagerRestarts++;
     start.step('complete');
   }
+  async function activateDownstreamTLS() {
+    // Applying a listener is a new attempt, including failures before activation.
+    resetServiceCleanupEvidence();
+    checkCancelled();
+    tlsFixture = await createServicePKI(parent);
+    checkCancelled();
+    do { tlsPort = await unusedPort(); } while ([appPort, gatewayPort, healthPort].includes(tlsPort));
+    checkCancelled();
+    const inputFile = `${parent}/downstream-tls-input.json`;
+    const input = { serverBody: `client_max_body_size 16m;\nlocation / { proxy_pass http://127.0.0.1:${appPort}; proxy_http_version 1.1; proxy_next_upstream off; }`,
+      healthURL: `http://127.0.0.1:${appPort}/ready`, healthExpectedStatus: 200, healthExpectedBody: 'ready\n',
+      https: { port: tlsPort, certificate: tlsFixture.certificate, certificateKey: tlsFixture.certificateKey } };
+    const file = await open(inputFile, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
+    try { await file.writeFile(JSON.stringify(input)); await file.sync(); } finally { await file.close(); }
+    const current = await cli(node, launcher, ['info'], env);
+    const known = sessions.find(s => s.id === lastSession);
+    if (!known || current.stage !== 'running' || current.session !== known.id || current.sessionPrefix !== known.prefix
+        || !await inspectMaster(`${prefix}/bin/nginx`, known.prefix, known.identity)) reject('downstream_tls_session');
+    const before = await ownedInvocation();
+    checkCancelled();
+    const applied = await cli(node, launcher, ['apply', '--file', inputFile], env);
+    if (applied.outcome !== 'applied') reject('downstream_tls_unconfirmed');
+    const after = await ownedInvocation();
+    if (before.id !== after.id || !sameLauncher(before.launcher, after.launcher)) reject('unit_invocation_changed');
+    checkCancelled();
+    report.downstreamTLSActivated = true;
+    await verifyDownstreamTLS();
+  }
+  async function verifyDownstreamTLS() {
+    start.step('downstream_tls');
+    checkCancelled();
+    if (!report.downstreamTLSActivated || !tlsFixture || !Number.isInteger(tlsPort)) reject('downstream_tls_unconfirmed');
+    const current = await cli(node, launcher, ['info'], env);
+    const known = sessions.find(s => s.id === lastSession);
+    if (!known || current.stage !== 'running' || current.session !== known.id || current.sessionPrefix !== known.prefix
+        || tlsSessions.has(known.id) || tlsSessions.size >= 3) reject('downstream_tls_session');
+    const before = await ownedInvocation();
+    async function checkedProbe(route, version, body = Buffer.alloc(0)) {
+      start.step('downstream_tls');
+      checkCancelled();
+      const response = await probeServiceTLS(tlsPort, route, { ca: tlsFixture.ca, expectedCertificate: tlsFixture.expectedCertificate,
+        servername: 'localhost', version, method: body.length ? 'POST' : 'GET', body });
+      checkCancelled();
+      if (!response || response.status !== 200 || !Buffer.isBuffer(response.body) || response.protocol !== version
+          || response.certificateMatched !== true) reject('downstream_tls_unconfirmed');
+      report.downstreamTLSCertificateChecks++;
+      return response;
+    }
+    for (const version of ['TLSv1.2', 'TLSv1.3']) {
+      const response = await checkedProbe('/', version);
+      if (response.body.toString() !== 'service-fixture\n') reject('downstream_tls_body_mismatch');
+      report.downstreamTLSBodyChecks++;
+      if (version === 'TLSv1.2') report.downstreamTLS12Checks++; else report.downstreamTLS13Checks++;
+    }
+    const upload = Buffer.alloc(65551, 0x61), echo = await checkedProbe('/echo', 'TLSv1.3', upload);
+    if (!echo.body.equals(upload)) reject('downstream_tls_upload_mismatch'); report.downstreamTLSUploadChecks++;
+    const stream = await checkedProbe('/stream', 'TLSv1.3');
+    if (!stream.body.equals(Buffer.alloc(65537, 0x62))) reject('downstream_tls_stream_mismatch'); report.downstreamTLSStreamChecks++;
+    checkCancelled();
+    const wrongCA = await expectServiceTLSRefusal(tlsPort, { ca: tlsFixture.wrongCA,
+      expectedCertificate: tlsFixture.expectedCertificate, servername: 'localhost' });
+    checkCancelled();
+    if (!wrongCA || wrongCA.ok !== true || wrongCA.code !== 'tls_ca_refused') reject('downstream_tls_ca_unconfirmed');
+    report.downstreamTLSWrongCARefusals++;
+    checkCancelled();
+    const wrongName = await expectServiceTLSRefusal(tlsPort, { ca: tlsFixture.ca,
+      expectedCertificate: tlsFixture.expectedCertificate, servername: 'wrong.invalid' });
+    checkCancelled();
+    if (!wrongName || wrongName.ok !== true || wrongName.code !== 'tls_hostname_refused') reject('downstream_tls_hostname_unconfirmed');
+    report.downstreamTLSWrongNameRefusals++;
+    const afterInfo = await cli(node, launcher, ['info'], env);
+    if (afterInfo.stage !== 'running' || afterInfo.session !== known.id || afterInfo.sessionPrefix !== known.prefix
+        || !await inspectMaster(`${prefix}/bin/nginx`, known.prefix, known.identity)) reject('downstream_tls_session');
+    const after = await ownedInvocation();
+    if (before.id !== after.id || !sameLauncher(before.launcher, after.launcher)) reject('unit_invocation_changed');
+    checkCancelled();
+    tlsSessions.add(known.id); report.downstreamTLSSessionChecks++;
+  }
   process.once('SIGINT', cancel); process.once('SIGTERM', cancel);
   try {
     input = parseArguments(argv); report.phase = 'preflight';
@@ -677,10 +766,12 @@ export async function main(argv = process.argv.slice(2)) {
     linked = !await absent(runtimeLink);
     if (!linkResult.ok) reject('unit_link_failed'); await linkAuthority(); linked = true; report.runtimeUnitLinked = true;
     report.phase = 'first_start'; await startAndServe(); await verifyJournalForInvocation(await ownedInvocation());
+    report.phase = 'tls_apply'; await activateDownstreamTLS();
     report.phase = 'first_stop'; await stopOwned(); report.nativeSessionsStopped++;
     report.phase = 'second_start'; await startAndServe();
     report.phase = 'manager_restart'; await restartAndServe();
     report.phase = 'third_stop'; await stopOwned(); report.nativeSessionsStopped++;
+    if (report.downstreamTLSSessionChecks !== 3) reject('downstream_tls_unconfirmed');
     report.phase = 'uninstall'; await cli(node, launcher, ['uninstall'], env); installed = false;
     if (!await absent(prefix)) reject('uninstall_incomplete'); report.cleanup.installationRemoved = true;
     report.ok = true; report.code = 'basic_lifecycle_verified'; report.phase = 'complete';
@@ -721,7 +812,7 @@ export async function main(argv = process.argv.slice(2)) {
     report.cleanup.appSocketsRemaining = sockets.size;
     safeToRemove = Boolean(parent && !installed && (!linked || report.runtimeUnitRemoved) && sockets.size === 0);
     if (safeToRemove) { try { await rm(parent, { recursive: true, force: true }); report.cleanup.temporaryRootRemoved = await absent(parent); } catch (error) { failures.cleanup(error, 'temporary_root'); report.ok = false; report.code = 'cleanup_unconfirmed'; } }
-    if (report.ok && (!report.cleanup.temporaryRootRemoved || !report.runtimeUnitRemoved || sockets.size)) { failures.cleanup(null, 'final_assertion'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
+    if (report.ok && (!report.cleanup.temporaryRootRemoved || !report.runtimeUnitRemoved || !report.cleanup.downstreamTLSPortClosed || sockets.size)) { failures.cleanup(null, 'final_assertion'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel);
   }
   return { ...report, ...failures.snapshot(), startDiagnostics: start.snapshot(), fragmentIdentityDiagnostics: fragments.snapshot(), hookStatusDiagnostics: hooks.snapshot() };
