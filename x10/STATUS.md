@@ -1897,3 +1897,33 @@ Local synthetic/refusal validation and independent review do not accept
 an actual service. The new exact CI is pending; native20 compatibility and
 research21/7/27/48 belong to the prior700 source. Earlier failures remain
 retained. Actual service operation/cleanup and Production V1 remain open.
+
+
+## Observe known owned service fragment identity
+
+Both exact7d1 jobs retain primary unit_fragment_identity at first_start /
+before_properties. Their actual parsed unit was loaded/inactive/dead with
+result success, no main PID or cgroup and a present FragmentPath. The current
+guard therefore rejected a literal mismatch with the expected unit path
+before its own start request. Actual path values, runtime-link alias or
+canonical equivalence versus another file remain unknown. The same cleanup
+code has no separate state snapshot, so its failing OR branch is unknown.
+
+[Evidence](evidence/g3-service-fragment-identity.json) preserves both actual
+failed workflows, their digest-verified artifacts and independent62 checks.
+Preceding native20/TLS18/16/preflight42/dependency46 passed separately; the
+service contract had85total/84PASS/1rootSKIP. Research PR actually ran
+21/7/27/48; push research was scope-only. Those counts belong to7d1.
+Service and dependency cleanup remain unconfirmed and the private runtime
+was retained. Original700/0ade primary causes remain unknown.
+
+The new checker adds fixed bounded match facts for only the already known
+owned unit and runtime-link paths. No admission, start, cleanup or runtime
+retention guard changes. Diagnostics do not accept a presumed alias or
+canonical identity. Local contracts and independent review do not prove
+an actual nonroot service or this changed source's hosted result.
+
+Next inspect exact new CI and identity facts, then make any reviewed identity
+correction justified by actual evidence. Service lifecycle, final cleanup,
+logging, restart, adverse cases, combined TLS, package rollback/recovery,
+permanent distribution, soak and Production V1 remain open.

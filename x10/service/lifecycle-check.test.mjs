@@ -4,7 +4,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES } from './lifecycle-check.mjs';
+import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics } from './lifecycle-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
 const transcript = (changes = {}) => Object.entries({ LoadState: 'loaded', ActiveState: 'active', SubState: 'running', Result: 'success',
@@ -198,4 +198,86 @@ test('primary system error class is a finite own-data actual-Error observation',
   const inherited = Object.create(Object.assign(new Error('private'), { code: 'EACCES' })); assert.equal(classifySystemError(inherited), 'unknown');
   let called = false; const getter = new Error('private'); Object.defineProperty(getter, 'code', { get() { called = true; return 'EACCES'; } });
   assert.equal(classifySystemError(getter), 'unknown'); assert.equal(called, false);
+});
+
+const fragmentKnownPaths = Object.freeze({ unitFile: '/tmp/owned-unit/fixture.service', runtimeLink: '/run/user/1000/systemd/user/fixture.service' });
+const fragmentLinkCheck = Object.freeze({ targetMatchesUnit: true, unitOwnedModeHash: true });
+const fragmentSummary = (FragmentPath, paths = fragmentKnownPaths, check = fragmentLinkCheck) => summarizeUnitFragmentIdentity({ LoadState: 'loaded', FragmentPath }, paths, check);
+test('baseline observations cannot distinguish owned runtime-link spelling from unrelated fragment', () => {
+  const alias = { LoadState: 'loaded', FragmentPath: fragmentKnownPaths.runtimeLink };
+  const other = { LoadState: 'loaded', FragmentPath: '/tmp/unrelated-unit/fixture.service' };
+  assert.deepEqual(summarizeUnitProperties(alias), summarizeUnitProperties(other));
+  assert.equal(summarizeUnitFragmentIdentity(alias, fragmentKnownPaths, fragmentLinkCheck).fragmentPathMatch, 'runtime_link');
+  assert.equal(summarizeUnitFragmentIdentity(other, fragmentKnownPaths, fragmentLinkCheck).fragmentPathMatch, 'other');
+  for (const record of [alias, other]) assert.notEqual(record.FragmentPath, fragmentKnownPaths.unitFile);
+  assert.equal(LIMITATIONS.serviceAccepted, false);
+});
+for (const [name, value, expected] of [
+  ['exact owned file', fragmentKnownPaths.unitFile, 'unit_file'],
+  ['exact known runtime link', fragmentKnownPaths.runtimeLink, 'runtime_link'],
+  ['unrelated absolute fragment', '/tmp/other/fixture.service', 'other'],
+  ['empty', '', 'empty'], ['missing', undefined, 'unknown'], ['relative', 'fixture.service', 'unknown'],
+  ['unnormalized', '/tmp/a/../fixture.service', 'unknown'], ['newline', fragmentKnownPaths.unitFile + '\n', 'unknown'],
+  ['buffer', Buffer.from(fragmentKnownPaths.unitFile), 'unknown'], ['oversized', '/' + 'x'.repeat(4096), 'unknown']]) {
+  test(`fragment comparison is fixed and diagnostic only: ${name}`, () => {
+    const result = fragmentSummary(value); assert.equal(result.fragmentPathMatch, expected);
+    assert.equal(result.canonicalIdentity, 'not_measured'); assert.equal(result.precedingLinkTargetMatchesUnit, 'verified');
+    assert.equal(result.precedingUnitOwnedModeHash, 'verified'); assert.equal(Object.hasOwn(result, 'accepted'), false);
+    const text = JSON.stringify(result); assert.equal(text.includes('/tmp/'), false); assert.equal(text.includes('/run/'), false);
+  });
+}
+test('fragment comparison does not normalize identical basename into an owned match', () => {
+  assert.equal(fragmentSummary('/tmp/foreign/fixture.service').fragmentPathMatch, 'other');
+  assert.equal(fragmentSummary('/run/user/1000/systemd/user/fixture.service.extra').fragmentPathMatch, 'other');
+});
+test('missing or ambiguous known paths cannot classify a positive owned match', () => {
+  for (const paths of [null, {}, { unitFile: fragmentKnownPaths.unitFile },
+    { ...fragmentKnownPaths, runtimeLink: fragmentKnownPaths.unitFile }, { ...fragmentKnownPaths, unitFile: '../fixture.service' }]) {
+    assert.equal(fragmentSummary(fragmentKnownPaths.runtimeLink, paths).fragmentPathMatch, 'unknown');
+  }
+});
+test('link and file facts require explicit own-data true and never invent canonical identity', () => {
+  for (const check of [undefined, null, {}, { targetMatchesUnit: false, unitOwnedModeHash: false },
+    { targetMatchesUnit: 1, unitOwnedModeHash: 'true' }, Object.create(fragmentLinkCheck)]) {
+    const result = summarizeUnitFragmentIdentity({ LoadState: 'loaded', FragmentPath: fragmentKnownPaths.runtimeLink }, fragmentKnownPaths, check);
+    assert.equal(result.precedingLinkTargetMatchesUnit, 'unknown'); assert.equal(result.precedingUnitOwnedModeHash, 'unknown');
+    assert.equal(result.canonicalIdentity, 'not_measured');
+  }
+});
+test('fragment diagnostics do not evaluate getters or coerce path objects', () => {
+  let called = false; const malicious = { toString() { called = true; return fragmentKnownPaths.unitFile; } };
+  const record = {}; Object.defineProperty(record, 'FragmentPath', { get() { called = true; return fragmentKnownPaths.unitFile; } });
+  const paths = {}; for (const k of ['unitFile', 'runtimeLink']) Object.defineProperty(paths, k, { get() { called = true; return '/private'; } });
+  const check = {}; for (const k of ['targetMatchesUnit', 'unitOwnedModeHash']) Object.defineProperty(check, k, { get() { called = true; return true; } });
+  assert.equal(summarizeUnitFragmentIdentity(record, paths, check).fragmentPathMatch, 'unknown');
+  assert.equal(fragmentSummary(malicious).fragmentPathMatch, 'unknown'); assert.equal(called, false);
+});
+test('fragment diagnostics discard inherited fields and hostile descriptor traps', () => {
+  const proxy = new Proxy({}, { getOwnPropertyDescriptor() { throw new Error('private/path pid=999'); } });
+  for (const record of [null, undefined, proxy, Object.create({ LoadState: 'loaded', FragmentPath: fragmentKnownPaths.unitFile })]) {
+    const result = summarizeUnitFragmentIdentity(record, proxy, proxy);
+    assert.equal(result.fragmentPathMatch, 'unknown'); assert.equal(result.loadState, 'unknown');
+    assert.equal(JSON.stringify(result).includes('private'), false);
+  }
+});
+test('fragment collector separates lifecycle and cleanup observations with bounded copies', () => {
+  const d = createFragmentIdentityDiagnostics();
+  d.observe({ LoadState: 'loaded', FragmentPath: fragmentKnownPaths.runtimeLink }, fragmentKnownPaths, fragmentLinkCheck, 'first_start', 'before_properties', false);
+  d.observe({ LoadState: 'not-found', FragmentPath: '' }, fragmentKnownPaths, fragmentLinkCheck, 'first_start', 'before_properties', true);
+  const s = d.snapshot(); assert.equal(s.observationCount, 2); assert.equal(s.observationsTruncated, false);
+  assert.equal(s.observations[0].context, 'lifecycle'); assert.equal(s.observations[0].subphase, 'before_properties');
+  assert.equal(s.observations[1].context, 'cleanup'); assert.equal(s.observations[1].subphase, 'not_applicable');
+  assert.equal(s.observations[1].loadState, 'not-found'); assert.equal(s.observations[1].fragmentPathMatch, 'empty');
+  s.observations[0].fragmentPathMatch = 'tampered'; s.observations.push({ secret: true });
+  assert.equal(d.snapshot().observations[0].fragmentPathMatch, 'runtime_link'); assert.equal(d.snapshot().observations.length, 2);
+});
+test('fragment collector retains first eight observations and explicitly caps counter at thirty-two', () => {
+  const d = createFragmentIdentityDiagnostics(); for (let i = 0; i < 40; i++) d.observe({}, {}, {}, 'first_start', 'before_properties', false);
+  const s = d.snapshot(); assert.equal(s.observationCount, 32); assert.equal(s.observations.length, 8); assert.equal(s.observationsTruncated, true);
+});
+test('fragment collector whitelists phase and subphase without carrying unknown context input', () => {
+  const d = createFragmentIdentityDiagnostics(); const hostile = { toString() { throw new Error('private'); } };
+  d.observe({}, {}, {}, hostile, hostile, false); d.observe({}, {}, {}, 'first_stop', 'before_properties', false);
+  const s = d.snapshot(); assert.equal(s.observations[0].phase, 'unknown'); assert.equal(s.observations[0].subphase, 'not_applicable');
+  assert.equal(s.observations[1].subphase, 'not_applicable'); assert.equal(JSON.stringify(s).includes('private'), false);
 });

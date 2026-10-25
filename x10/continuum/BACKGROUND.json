@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-fragment-identity-20261025T032900Z",
-    "owner": "codex-coordinator-fragment-identity",
-    "baseCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
-    "acquiredAtUTC": "2026-10-25T03:26:30.000Z",
-    "expiresAtUTC": "2026-10-25T04:06:30.000Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1501,12 +1495,12 @@
       "runId": "x10-first-start-20261025T021800Z",
       "sourceBase": "700dd97d5b70a5f979e28748fc27cb651ac81b30",
       "publicationParent": "7edd0dd770f89ca07760d3d992919e09e4914ec6",
-      "implementationCommit": null,
+      "implementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
       "implementationCommitLocator": "Current publication commit containing primary-failure observability and literal checker-pin propagation; exact new CI reconciled subsequently",
       "scope": "Additive bounded primary/cleanup/first-start diagnostics only; service authority, operations and success remain unchanged",
       "evidence": "x10/evidence/g3-service-primary-failure.json",
       "localAcceptance": "PRIMARY_FAILURE_AND_CLEANUP_OBSERVABILITY_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_PRIMARY_FAILURE_OBSERVABILITY",
+      "exactHostedAcceptance": "EXACT_PRIMARY_FAILURE_OBSERVED_FRAGMENT_IDENTITY_BEFORE_START_SERVICE_FAILED",
       "nativeRuntimeChanged": false,
       "controllerRuntimeChanged": false,
       "alphaRuntimeChanged": false,
@@ -1519,11 +1513,80 @@
       "actualServiceAcceptedLocally": false,
       "serviceAccepted": false,
       "productionAccepted": false,
-      "nextConcreteTask": "First verify exact resulting primary-failure observability implementation CI and actual service JSON on a fresh authorized nonroot host using the already pinned authenticated private Node. Require independent primaryFailure and bounded cleanupFailures plus first-start command/state observations, with no raw errors, paths or PIDs. These diagnostics confer no admission authority and do not prove service cleanup or physical start/absence. Preserve both exact700 service FAILs cleanup_unconfirmed/first_start with runtimeUnitLinkedtrue, actualUnitStartedfalse unconfirmed, retained private runtime and unknown original primary error. Node archive/signature/hash/version preparation passed narrowly in700, but whole service CI did not. Do not rerun unchanged failed CI or weaken any recipe, unit, launcher/native identity or cleanup guard. After diagnosis, complete actual basic service lifecycle/cleanup, logging, single manager restart, cancellation/failed-start/slow-drain/orphan and combined TLS/service, package upgrade/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Preserve earlier239 mode-policy refusal, old0ade unknown exception, Node24 local owner refusal, accepted376 fixture evidence and full deferred Continuum."
+      "nextConcreteTask": "First verify exact resulting primary-failure observability implementation CI and actual service JSON on a fresh authorized nonroot host using the already pinned authenticated private Node. Require independent primaryFailure and bounded cleanupFailures plus first-start command/state observations, with no raw errors, paths or PIDs. These diagnostics confer no admission authority and do not prove service cleanup or physical start/absence. Preserve both exact700 service FAILs cleanup_unconfirmed/first_start with runtimeUnitLinkedtrue, actualUnitStartedfalse unconfirmed, retained private runtime and unknown original primary error. Node archive/signature/hash/version preparation passed narrowly in700, but whole service CI did not. Do not rerun unchanged failed CI or weaken any recipe, unit, launcher/native identity or cleanup guard. After diagnosis, complete actual basic service lifecycle/cleanup, logging, single manager restart, cancellation/failed-start/slow-drain/orphan and combined TLS/service, package upgrade/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Preserve earlier239 mode-policy refusal, old0ade unknown exception, Node24 local owner refusal, accepted376 fixture evidence and full deferred Continuum.",
+      "hostedEvidence": "x10/evidence/g3-service-fragment-identity.json"
+    },
+    "servicePrimaryFailureHosted": {
+      "state": "EXACT_PRIMARY_FAILURE_OBSERVED_FRAGMENT_IDENTITY_BEFORE_START_SERVICE_FAILED",
+      "implementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+      "evidence": "x10/evidence/g3-service-fragment-identity.json",
+      "runId": "x10-fragment-identity-20261025T032900Z",
+      "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+      "nativeRunIds": [
+        40154695196,
+        40154700066
+      ],
+      "nativeJobIds": [
+        121053497340,
+        121053511202
+      ],
+      "researchRunIds": [
+        40154695181,
+        40154700058
+      ],
+      "authenticatedDependencyInstallationVerified": true,
+      "allSevenNodePrerequisitesTrue": true,
+      "bothRequiredServiceStepsFailed": true,
+      "failureCode": "cleanup_unconfirmed",
+      "failurePhase": "first_start",
+      "primaryFailureCode": "unit_fragment_identity",
+      "primaryFailureSubphase": "before_properties",
+      "parsedLoadState": "loaded",
+      "fragmentPathPresent": true,
+      "currentLiteralUnitPathMismatchProven": true,
+      "actualFragmentPathKnown": false,
+      "runtimeLinkAliasProven": false,
+      "canonicalFileEquivalenceProven": false,
+      "ownStartRequestReached": false,
+      "physicalUnitNeverStartedProven": false,
+      "cleanupFailedGuardBranchKnown": false,
+      "managerOrNativeCleanupVerified": false,
+      "privateDependencyRuntimeRetained": true,
+      "historical700PrimaryErrorKnown": false,
+      "historical0adeExceptionKnown": false,
+      "fullImplementationCIAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0
+    },
+    "serviceFragmentIdentityLocal": {
+      "runId": "x10-fragment-identity-20261025T032900Z",
+      "sourceBase": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+      "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit containing owned-fragment identity diagnostics; exact resulting CI must be reconciled separately",
+      "scope": "Diagnostic-only known owned unit/runtime-link fragment identity facts; all admission, start, cleanup and retention guards unchanged",
+      "evidence": "x10/evidence/g3-service-fragment-identity.json",
+      "localAcceptance": "OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "serviceSuccessCriteriaChanged": false,
+      "cleanupAuthorityChanged": false,
+      "verifiedNodeLogicChangedBeyondCheckerPin": false,
+      "workflowLogicChangedBeyondCheckerPin": false,
+      "actualServiceAcceptedLocally": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "nextConcreteTask": "First inspect exact resulting owned-fragment diagnostic implementation CI and actual bounded service JSON on a fresh authorized nonroot host. Distinguish the manager FragmentPath matching the exact owned unit path, known runtime-link path or neither, and inspect bounded facts about only the already known owned paths. Preserve the original loaded/fragment identity rejection and all start, cleanup and retention guards until the actual observations establish whether this is an equivalent owned alias or a different fragment. Do not accept a link alias or canonical identity by assumption, read arbitrary foreign paths, relax admission, force cleanup or rerun unchanged failed CI. After a reviewed actual identity correction, verify the basic real service lifecycle and cleanup, logging, single manager restart, failed-start/cancel/drain/orphan and combined TLS/service, then package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Keep exact7d1/700/239/0ade adverse evidence and full deferred Continuum separate."
     }
   },
   "pendingVerification": [
-    "First verify exact resulting primary-failure and cleanup observability source CI. The authenticated private Node preparation passed narrowly in both700 jobs, but actual service steps both failed cleanup_unconfirmed/first_start after confirmed runtime linking. New primaryFailure/cleanupFailures/bounded state facts are diagnostic only; no service authority or success guard changed. Both exact700 actual service steps failed cleanup_unconfirmed at first_start after confirmed runtimeUnitLinkedtrue. actualUnitStartedfalse is unconfirmed and does not prove the start command had no effect. The original primary error was overwritten and is unknown; no manager/unit/native physical state or final cleanup is proven. All service cleanup flags remained false except appSocketsRemaining0. The private authenticated Node runtime and bootstrap root were retained, with no dependency-cleanup report. Prior239 modeAllowedfalse/ownerAllowedtrue, old0ade hidden exception, localNode24 owner refusal, original9e63 wrong-CA expected1/actual0, shutdown143/cleanup uncertainty, local19/20 ESRCH uncertainty and accepted376 fixture evidence remain preserved.",
+    "First verify exact resulting owned-fragment identity diagnostic implementation CI; fixed match facts do not change any admission or cleanup authority. Both exact7d1 actual service steps failed cleanup_unconfirmed at first_start, preserving primaryFailure unit_fragment_identity at before_properties. The parsed unit was loaded/inactive/dead with result success, no main PID or cgroup and a present FragmentPath. In this current source guard, the loaded state plus that refusal establishes a literal FragmentPath mismatch with the expected unitFile, before the checker requests start. The actual paths, a runtime-link alias, canonical equivalence versus a different fragment, and physical service state are unknown. Cleanup independently recorded unit_fragment_identity without its own state snapshot, so its failed OR branch is unknown. Runtime linking was confirmed; service/dependency cleanup was unconfirmed and the private authenticated Node was retained. This does not reconstruct the original700 or0ade primary error.",
+    "Exact7d1 CI was reconciled from its actual steps, complete logs and digest-verified ZIPs: both required actual-service steps FAILED with preserved primary unit_fragment_identity at before_properties. Preceding native20, TLS18/16, preflight42, contract85total84PASS1rootSKIP and dependency46 passed separately; research PR actually ran21/7/27/48 and research push was scope-only. This is not whole implementation or service acceptance.",
     "Exact700 Node dependency archive/signature/hash/selected-payload/version preparation was actually verified in both jobs, with all seven Node prerequisites true. Both full native workflows still FAILED actual service first_start, cleanup was unconfirmed, and the dependency runtime was retained for possible ExecStop. The original primary failure and physical manager/native state remain unknown.",
     "Exact239 diagnostic source has real hosted refusal evidence: both actual service commands FAILED recipe_inspection/recipe_inspection_refused with selectedNodeModeAllowed:false and selectedNodeOwnerAllowed:true. Preceding native20/TLS18/frontend16/preflight42/contract67total66PASS1rootSKIP and required profiles passed separately. Specific mode bits and the exact old0ade exception remain unknown; full implementation CI/service acceptance stays false.",
     "OPEN actual service install failure: both exact0ade native jobs reached the mandatory real service command and failed at phase install/lifecycle_failed. Readonly nonroot manager prerequisites were observed, but no service lifecycle is accepted. Preceding native20/TLS18/frontend16/preflight42/contract49total48PASS1rootSKIP/required Unix/feature-off/package checks passed separately. The exact underlying historical exception is not recorded. Preserve real installation/temp-root removal and appSockets0; other false cleanup flags are not PASS. Diagnose/fix before actual service progression. Original9e63 native PR wrong-CA apply exit0 where1 was expected, exact historical interleaving/cause unknown; accepted376 candidate-bound fixture CI remains preserved. Earlier frontend push shutdown143/skipped frontend/absent artifact/unconfirmed final cleanup and local19/20 ESRCH captured-process/interleaving uncertainty remain retained. Later service evidence does not explain or erase these observations.",
@@ -1550,9 +1613,14 @@
   ],
   "nextTasks": [
     {
+      "id": "G3-service-fragment-identity-exact-CI",
+      "state": "pending-exact-resulting-owned-fragment-diagnostics",
+      "goal": "Observe exact owned unit/runtime-link match facts in actual CI without weakening the original guard; decide identity correction only after evidence and independent review."
+    },
+    {
       "id": "G3-primary-service-failure-exact-CI",
-      "state": "pending-exact-resulting-primary-observability",
-      "goal": "Verify primary failure is retained independently of cleanup, inspect bounded actual first-start outcomes, and then complete actual service operation/cleanup on the fresh target."
+      "state": "exact-diagnostic-observed-unit-fragment-refusal",
+      "goal": "Preserve current exact7d1 primary unit_fragment_identity before the checker requests start; canonical equivalence/runtime alias remains unknown and service cleanup remains unconfirmed."
     },
     {
       "id": "G3-verified-node-exact-CI",
@@ -1848,7 +1916,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First verify exact resulting primary-failure observability implementation CI and actual service JSON on a fresh authorized nonroot host using the already pinned authenticated private Node. Require independent primaryFailure and bounded cleanupFailures plus first-start command/state observations, with no raw errors, paths or PIDs. These diagnostics confer no admission authority and do not prove service cleanup or physical start/absence. Preserve both exact700 service FAILs cleanup_unconfirmed/first_start with runtimeUnitLinkedtrue, actualUnitStartedfalse unconfirmed, retained private runtime and unknown original primary error. Node archive/signature/hash/version preparation passed narrowly in700, but whole service CI did not. Do not rerun unchanged failed CI or weaken any recipe, unit, launcher/native identity or cleanup guard. After diagnosis, complete actual basic service lifecycle/cleanup, logging, single manager restart, cancellation/failed-start/slow-drain/orphan and combined TLS/service, package upgrade/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Preserve earlier239 mode-policy refusal, old0ade unknown exception, Node24 local owner refusal, accepted376 fixture evidence and full deferred Continuum.",
+  "nextConcreteTask": "First inspect exact resulting owned-fragment diagnostic implementation CI and actual bounded service JSON on a fresh authorized nonroot host. Distinguish the manager FragmentPath matching the exact owned unit path, known runtime-link path or neither, and inspect bounded facts about only the already known owned paths. Preserve the original loaded/fragment identity rejection and all start, cleanup and retention guards until the actual observations establish whether this is an equivalent owned alias or a different fragment. Do not accept a link alias or canonical identity by assumption, read arbitrary foreign paths, relax admission, force cleanup or rerun unchanged failed CI. After a reviewed actual identity correction, verify the basic real service lifecycle and cleanup, logging, single manager restart, failed-start/cancel/drain/orphan and combined TLS/service, then package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Keep exact7d1/700/239/0ade adverse evidence and full deferred Continuum separate.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -2056,7 +2124,7 @@
     "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G3_PRIMARY_SERVICE_FAILURE_OBSERVABILITY_EXACT_CI_PENDING_SERVICE_OPEN",
+    "currentGate": "G3_OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS_EXACT_CI_PENDING_SERVICE_OPEN",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -2090,18 +2158,20 @@
     "independentDependencyPreparationChangedByThisPublication": true,
     "servicePrimaryFailureEvidence": "x10/evidence/g3-service-primary-failure.json",
     "verifiedNodeDependencyHostedEvidence": "x10/evidence/g3-service-primary-failure.json",
-    "serviceObservabilityChangedByThisPublication": true
+    "serviceObservabilityChangedByThisPublication": true,
+    "serviceFragmentIdentityEvidence": "x10/evidence/g3-service-fragment-identity.json",
+    "servicePrimaryFailureHostedEvidence": "x10/evidence/g3-service-fragment-identity.json"
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-first-start-20261025T021800Z",
-    "sourceBase": "700dd97d5b70a5f979e28748fc27cb651ac81b30",
-    "publicationParent": "7edd0dd770f89ca07760d3d992919e09e4914ec6",
+    "runId": "x10-fragment-identity-20261025T032900Z",
+    "sourceBase": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+    "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
     "implementationCommit": null,
-    "implementationCommitLocator": "Current publication commit containing primary-failure observability and literal checker-pin propagation; exact new CI reconciled subsequently",
-    "scope": "Additive bounded primary/cleanup/first-start diagnostics only; service authority, operations and success remain unchanged",
-    "evidence": "x10/evidence/g3-service-primary-failure.json",
-    "localAcceptance": "PRIMARY_FAILURE_AND_CLEANUP_OBSERVABILITY_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_PRIMARY_FAILURE_OBSERVABILITY",
+    "implementationCommitLocator": "Current publication commit containing owned-fragment identity diagnostics; exact resulting CI must be reconciled separately",
+    "scope": "Diagnostic-only known owned unit/runtime-link fragment identity facts; all admission, start, cleanup and retention guards unchanged",
+    "evidence": "x10/evidence/g3-service-fragment-identity.json",
+    "localAcceptance": "OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS",
     "nativeRuntimeChanged": false,
     "controllerRuntimeChanged": false,
     "alphaRuntimeChanged": false,
@@ -2114,44 +2184,53 @@
     "actualServiceAcceptedLocally": false,
     "serviceAccepted": false,
     "productionAccepted": false,
-    "nextConcreteTask": "First verify exact resulting primary-failure observability implementation CI and actual service JSON on a fresh authorized nonroot host using the already pinned authenticated private Node. Require independent primaryFailure and bounded cleanupFailures plus first-start command/state observations, with no raw errors, paths or PIDs. These diagnostics confer no admission authority and do not prove service cleanup or physical start/absence. Preserve both exact700 service FAILs cleanup_unconfirmed/first_start with runtimeUnitLinkedtrue, actualUnitStartedfalse unconfirmed, retained private runtime and unknown original primary error. Node archive/signature/hash/version preparation passed narrowly in700, but whole service CI did not. Do not rerun unchanged failed CI or weaken any recipe, unit, launcher/native identity or cleanup guard. After diagnosis, complete actual basic service lifecycle/cleanup, logging, single manager restart, cancellation/failed-start/slow-drain/orphan and combined TLS/service, package upgrade/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Preserve earlier239 mode-policy refusal, old0ade unknown exception, Node24 local owner refusal, accepted376 fixture evidence and full deferred Continuum.",
-    "result": "Preserved first primary service failure independently of bounded cleanup failures and added allowlisted first-start outcomes/state observations. Propagated only the exact fixed checker-source pin into dependency cleanup/workflow. Both700 actual service failures remain retained; new diagnostics require exact resulting CI.",
-    "perFileLedger": "x10/review/g3-service-primary-failure-ledger.json",
+    "nextConcreteTask": "First inspect exact resulting owned-fragment diagnostic implementation CI and actual bounded service JSON on a fresh authorized nonroot host. Distinguish the manager FragmentPath matching the exact owned unit path, known runtime-link path or neither, and inspect bounded facts about only the already known owned paths. Preserve the original loaded/fragment identity rejection and all start, cleanup and retention guards until the actual observations establish whether this is an equivalent owned alias or a different fragment. Do not accept a link alias or canonical identity by assumption, read arbitrary foreign paths, relax admission, force cleanup or rerun unchanged failed CI. After a reviewed actual identity correction, verify the basic real service lifecycle and cleanup, logging, single manager restart, failed-start/cancel/drain/orphan and combined TLS/service, then package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Keep exact7d1/700/239/0ade adverse evidence and full deferred Continuum separate.",
+    "result": "Added bounded fixed identity facts distinguishing the manager fragment matching the exact owned unit, known runtime link or neither. Original rejection and all actions remain unchanged; actual alias or equivalence requires new exact hosted observations.",
+    "perFileLedger": "x10/review/g3-service-fragment-identity-ledger.json",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_PRIMARY_FAILURE_OBSERVABILITY"
+      "state": "PENDING_EXACT_RESULTING_OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS"
     },
     "newPurchases": false,
     "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
-    "state": "AUTHENTICATED_PRIVATE_NODE_VERIFIED_BOTH_SERVICE_FIRST_START_CLEANUP_FAILED",
-    "implementationCommit": "700dd97d5b70a5f979e28748fc27cb651ac81b30",
-    "evidence": "x10/evidence/g3-service-primary-failure.json",
-    "runId": "x10-first-start-20261025T021800Z",
-    "publicationParent": "7edd0dd770f89ca07760d3d992919e09e4914ec6",
+    "state": "EXACT_PRIMARY_FAILURE_OBSERVED_FRAGMENT_IDENTITY_BEFORE_START_SERVICE_FAILED",
+    "implementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+    "evidence": "x10/evidence/g3-service-fragment-identity.json",
+    "runId": "x10-fragment-identity-20261025T032900Z",
+    "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
     "nativeRunIds": [
-      40151457056,
-      40151460878
+      40154695196,
+      40154700066
     ],
     "nativeJobIds": [
-      121043726906,
-      121043733067
+      121053497340,
+      121053511202
     ],
     "researchRunIds": [
-      40151457069,
-      40151460850
+      40154695181,
+      40154700058
     ],
     "authenticatedDependencyInstallationVerified": true,
-    "preparedNodeVersionVerified": true,
     "allSevenNodePrerequisitesTrue": true,
     "bothRequiredServiceStepsFailed": true,
     "failureCode": "cleanup_unconfirmed",
     "failurePhase": "first_start",
-    "runtimeUnitLinkedConfirmed": true,
+    "primaryFailureCode": "unit_fragment_identity",
+    "primaryFailureSubphase": "before_properties",
+    "parsedLoadState": "loaded",
+    "fragmentPathPresent": true,
+    "currentLiteralUnitPathMismatchProven": true,
+    "actualFragmentPathKnown": false,
+    "runtimeLinkAliasProven": false,
+    "canonicalFileEquivalenceProven": false,
+    "ownStartRequestReached": false,
     "physicalUnitNeverStartedProven": false,
-    "primaryUnderlyingFailureKnown": false,
+    "cleanupFailedGuardBranchKnown": false,
     "managerOrNativeCleanupVerified": false,
     "privateDependencyRuntimeRetained": true,
+    "historical700PrimaryErrorKnown": false,
+    "historical0adeExceptionKnown": false,
     "fullImplementationCIAccepted": false,
     "serviceAccepted": false,
     "productionAccepted": false,
@@ -2747,6 +2826,77 @@
       },
       "newPurchases": false,
       "productionDeployChanged": false
+    },
+    {
+      "runId": "x10-first-start-20261025T021800Z",
+      "sourceBase": "700dd97d5b70a5f979e28748fc27cb651ac81b30",
+      "publicationParent": "7edd0dd770f89ca07760d3d992919e09e4914ec6",
+      "implementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+      "implementationCommitLocator": "Current publication commit containing primary-failure observability and literal checker-pin propagation; exact new CI reconciled subsequently",
+      "scope": "Additive bounded primary/cleanup/first-start diagnostics only; service authority, operations and success remain unchanged",
+      "evidence": "x10/evidence/g3-service-primary-failure.json",
+      "localAcceptance": "PRIMARY_FAILURE_AND_CLEANUP_OBSERVABILITY_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+      "exactHostedAcceptance": "EXACT_PRIMARY_FAILURE_OBSERVED_FRAGMENT_IDENTITY_BEFORE_START_SERVICE_FAILED",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "serviceSuccessCriteriaChanged": false,
+      "cleanupAuthorityChanged": false,
+      "verifiedNodeLogicChangedBeyondCheckerPin": false,
+      "workflowLogicChangedBeyondCheckerPin": false,
+      "actualServiceAcceptedLocally": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "nextConcreteTask": "First verify exact resulting primary-failure observability implementation CI and actual service JSON on a fresh authorized nonroot host using the already pinned authenticated private Node. Require independent primaryFailure and bounded cleanupFailures plus first-start command/state observations, with no raw errors, paths or PIDs. These diagnostics confer no admission authority and do not prove service cleanup or physical start/absence. Preserve both exact700 service FAILs cleanup_unconfirmed/first_start with runtimeUnitLinkedtrue, actualUnitStartedfalse unconfirmed, retained private runtime and unknown original primary error. Node archive/signature/hash/version preparation passed narrowly in700, but whole service CI did not. Do not rerun unchanged failed CI or weaken any recipe, unit, launcher/native identity or cleanup guard. After diagnosis, complete actual basic service lifecycle/cleanup, logging, single manager restart, cancellation/failed-start/slow-drain/orphan and combined TLS/service, package upgrade/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Preserve earlier239 mode-policy refusal, old0ade unknown exception, Node24 local owner refusal, accepted376 fixture evidence and full deferred Continuum.",
+      "result": "Preserved first primary service failure independently of bounded cleanup failures and added allowlisted first-start outcomes/state observations. Propagated only the exact fixed checker-source pin into dependency cleanup/workflow. Both700 actual service failures remain retained; new diagnostics require exact resulting CI.",
+      "perFileLedger": "x10/review/g3-service-primary-failure-ledger.json",
+      "hostedVerification": {
+        "state": "EXACT_PRIMARY_FAILURE_OBSERVED_FRAGMENT_IDENTITY_BEFORE_START_SERVICE_FAILED",
+        "implementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+        "evidence": "x10/evidence/g3-service-fragment-identity.json",
+        "runId": "x10-fragment-identity-20261025T032900Z",
+        "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+        "nativeRunIds": [
+          40154695196,
+          40154700066
+        ],
+        "nativeJobIds": [
+          121053497340,
+          121053511202
+        ],
+        "researchRunIds": [
+          40154695181,
+          40154700058
+        ],
+        "authenticatedDependencyInstallationVerified": true,
+        "allSevenNodePrerequisitesTrue": true,
+        "bothRequiredServiceStepsFailed": true,
+        "failureCode": "cleanup_unconfirmed",
+        "failurePhase": "first_start",
+        "primaryFailureCode": "unit_fragment_identity",
+        "primaryFailureSubphase": "before_properties",
+        "parsedLoadState": "loaded",
+        "fragmentPathPresent": true,
+        "currentLiteralUnitPathMismatchProven": true,
+        "actualFragmentPathKnown": false,
+        "runtimeLinkAliasProven": false,
+        "canonicalFileEquivalenceProven": false,
+        "ownStartRequestReached": false,
+        "physicalUnitNeverStartedProven": false,
+        "cleanupFailedGuardBranchKnown": false,
+        "managerOrNativeCleanupVerified": false,
+        "privateDependencyRuntimeRetained": true,
+        "historical700PrimaryErrorKnown": false,
+        "historical0adeExceptionKnown": false,
+        "fullImplementationCIAccepted": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "workflowRerunsRequested": 0
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
     }
   ],
   "v1VerificationReceiptHistory": [
@@ -3024,6 +3174,40 @@
       "serviceAccepted": false,
       "productionAccepted": false,
       "workflowRerunsRequested": 0
+    },
+    {
+      "state": "AUTHENTICATED_PRIVATE_NODE_VERIFIED_BOTH_SERVICE_FIRST_START_CLEANUP_FAILED",
+      "implementationCommit": "700dd97d5b70a5f979e28748fc27cb651ac81b30",
+      "evidence": "x10/evidence/g3-service-primary-failure.json",
+      "runId": "x10-first-start-20261025T021800Z",
+      "publicationParent": "7edd0dd770f89ca07760d3d992919e09e4914ec6",
+      "nativeRunIds": [
+        40151457056,
+        40151460878
+      ],
+      "nativeJobIds": [
+        121043726906,
+        121043733067
+      ],
+      "researchRunIds": [
+        40151457069,
+        40151460850
+      ],
+      "authenticatedDependencyInstallationVerified": true,
+      "preparedNodeVersionVerified": true,
+      "allSevenNodePrerequisitesTrue": true,
+      "bothRequiredServiceStepsFailed": true,
+      "failureCode": "cleanup_unconfirmed",
+      "failurePhase": "first_start",
+      "runtimeUnitLinkedConfirmed": true,
+      "physicalUnitNeverStartedProven": false,
+      "primaryUnderlyingFailureKnown": false,
+      "managerOrNativeCleanupVerified": false,
+      "privateDependencyRuntimeRetained": true,
+      "fullImplementationCIAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0
     }
   ],
   "currentNativeCIFailure": {
@@ -3048,34 +3232,43 @@
     "candidateExactNativeCIAccepted": true
   },
   "currentServiceLifecycleCIFailure": {
-    "state": "AUTHENTICATED_PRIVATE_NODE_VERIFIED_BOTH_SERVICE_FIRST_START_CLEANUP_FAILED",
-    "implementationCommit": "700dd97d5b70a5f979e28748fc27cb651ac81b30",
-    "evidence": "x10/evidence/g3-service-primary-failure.json",
-    "runId": "x10-first-start-20261025T021800Z",
-    "publicationParent": "7edd0dd770f89ca07760d3d992919e09e4914ec6",
+    "state": "EXACT_PRIMARY_FAILURE_OBSERVED_FRAGMENT_IDENTITY_BEFORE_START_SERVICE_FAILED",
+    "implementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+    "evidence": "x10/evidence/g3-service-fragment-identity.json",
+    "runId": "x10-fragment-identity-20261025T032900Z",
+    "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
     "nativeRunIds": [
-      40151457056,
-      40151460878
+      40154695196,
+      40154700066
     ],
     "nativeJobIds": [
-      121043726906,
-      121043733067
+      121053497340,
+      121053511202
     ],
     "researchRunIds": [
-      40151457069,
-      40151460850
+      40154695181,
+      40154700058
     ],
     "authenticatedDependencyInstallationVerified": true,
-    "preparedNodeVersionVerified": true,
     "allSevenNodePrerequisitesTrue": true,
     "bothRequiredServiceStepsFailed": true,
     "failureCode": "cleanup_unconfirmed",
     "failurePhase": "first_start",
-    "runtimeUnitLinkedConfirmed": true,
+    "primaryFailureCode": "unit_fragment_identity",
+    "primaryFailureSubphase": "before_properties",
+    "parsedLoadState": "loaded",
+    "fragmentPathPresent": true,
+    "currentLiteralUnitPathMismatchProven": true,
+    "actualFragmentPathKnown": false,
+    "runtimeLinkAliasProven": false,
+    "canonicalFileEquivalenceProven": false,
+    "ownStartRequestReached": false,
     "physicalUnitNeverStartedProven": false,
-    "primaryUnderlyingFailureKnown": false,
+    "cleanupFailedGuardBranchKnown": false,
     "managerOrNativeCleanupVerified": false,
     "privateDependencyRuntimeRetained": true,
+    "historical700PrimaryErrorKnown": false,
+    "historical0adeExceptionKnown": false,
     "fullImplementationCIAccepted": false,
     "serviceAccepted": false,
     "productionAccepted": false,
@@ -3137,6 +3330,40 @@
       "selectedNodeOwnerAllowed": true,
       "exactDisallowedModeBitsKnown": false,
       "historical0adeExceptionKnown": false,
+      "fullImplementationCIAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0
+    },
+    {
+      "state": "AUTHENTICATED_PRIVATE_NODE_VERIFIED_BOTH_SERVICE_FIRST_START_CLEANUP_FAILED",
+      "implementationCommit": "700dd97d5b70a5f979e28748fc27cb651ac81b30",
+      "evidence": "x10/evidence/g3-service-primary-failure.json",
+      "runId": "x10-first-start-20261025T021800Z",
+      "publicationParent": "7edd0dd770f89ca07760d3d992919e09e4914ec6",
+      "nativeRunIds": [
+        40151457056,
+        40151460878
+      ],
+      "nativeJobIds": [
+        121043726906,
+        121043733067
+      ],
+      "researchRunIds": [
+        40151457069,
+        40151460850
+      ],
+      "authenticatedDependencyInstallationVerified": true,
+      "preparedNodeVersionVerified": true,
+      "allSevenNodePrerequisitesTrue": true,
+      "bothRequiredServiceStepsFailed": true,
+      "failureCode": "cleanup_unconfirmed",
+      "failurePhase": "first_start",
+      "runtimeUnitLinkedConfirmed": true,
+      "physicalUnitNeverStartedProven": false,
+      "primaryUnderlyingFailureKnown": false,
+      "managerOrNativeCleanupVerified": false,
+      "privateDependencyRuntimeRetained": true,
       "fullImplementationCIAccepted": false,
       "serviceAccepted": false,
       "productionAccepted": false,

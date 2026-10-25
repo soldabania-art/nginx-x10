@@ -197,6 +197,37 @@ export function createStartDiagnostics() {
       observationsTruncated: truncated, observations: observations.map(x => ({ ...x })) }; },
   });
 }
+// Compare strings from the parsed response only. Never resolve or read a
+// manager-supplied path; these observations cannot admit a unit or clean it up.
+export function summarizeUnitFragmentIdentity(record, knownPaths, precedingLinkCheck) {
+  const fragment = ownData(record, 'FragmentPath'), unit = ownData(knownPaths, 'unitFile'), link = ownData(knownPaths, 'runtimeLink');
+  const validPath = value => typeof value === 'string' && value.length <= 4096
+    && /^\/[A-Za-z0-9_./+-]+$/.test(value) && !value.includes('\n') && path.posix.normalize(value) === value;
+  let fragmentPathMatch = 'unknown';
+  if (fragment === '') fragmentPathMatch = 'empty';
+  else if (validPath(fragment) && validPath(unit) && validPath(link) && unit !== link) {
+    fragmentPathMatch = fragment === unit ? 'unit_file' : fragment === link ? 'runtime_link' : 'other';
+  }
+  return { loadState: pickEnum(ownData(record, 'LoadState'), ['loaded', 'not-found']), fragmentPathMatch,
+    precedingLinkTargetMatchesUnit: ownData(precedingLinkCheck, 'targetMatchesUnit') === true ? 'verified' : 'unknown',
+    precedingUnitOwnedModeHash: ownData(precedingLinkCheck, 'unitOwnedModeHash') === true ? 'verified' : 'unknown',
+    canonicalIdentity: 'not_measured' };
+}
+export function createFragmentIdentityDiagnostics() {
+  let count = 0, truncated = false; const observations = [];
+  return Object.freeze({
+    observe(record, knownPaths, precedingLinkCheck, phase, subphase, inCleanup) {
+      if (count < 32) count++; else truncated = true;
+      const safePhase = pickEnum(phase, DIAGNOSTIC_PHASES);
+      const item = { phase: safePhase, subphase: inCleanup === true ? 'not_applicable'
+        : ['first_start', 'second_start'].includes(safePhase) ? pickEnum(subphase, START_SUBPHASES) : 'not_applicable',
+        context: inCleanup === true ? 'cleanup' : 'lifecycle',
+        ...summarizeUnitFragmentIdentity(record, knownPaths, precedingLinkCheck) };
+      if (observations.length < 8) observations.push(item); else truncated = true;
+    },
+    snapshot() { return { observationCount: count, observationsTruncated: truncated, observations: observations.map(x => ({ ...x })) }; },
+  });
+}
 async function archiveBytes(file) {
   const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
   try {
@@ -259,7 +290,7 @@ export async function main(argv = process.argv.slice(2)) {
   let input, parent, prefix, node, launcher, unitFile, runtimeLink, unitName, env, app, appPort, gatewayPort, healthPort;
   let linked = false, installed = false, safeToRemove = false, cancelled = false, startRequested = false, lastSession = null, inCleanup = false;
   const sessions = [], launcherIdentities = [], sockets = new Set();
-  const failures = createFailureDiagnostics(), start = createStartDiagnostics();
+  const failures = createFailureDiagnostics(), start = createStartDiagnostics(), fragments = createFragmentIdentityDiagnostics();
   const cancel = () => { cancelled = true; };
   const checkCancelled = () => { if (cancelled) reject('cancelled'); };
   const systemctl = (args, timeout = 10000) => command(TOOL, ['--user', '--no-pager', '--no-ask-password', ...args], env, timeout);
@@ -277,6 +308,7 @@ export async function main(argv = process.argv.slice(2)) {
     const actual = await lstat(unitFile);
     if (!actual.isFile() || actual.uid !== process.getuid() || (actual.mode & 0o7777) !== 0o600
         || digest(await readFile(unitFile)) !== report.unitSha256) reject('unit_file_identity');
+    return { targetMatchesUnit: true, unitOwnedModeHash: true };
   }
   async function properties() {
     const r = await systemctl(['show', unitName, ...KEYS.map(k => `--property=${k}`)], 2500);
@@ -289,7 +321,8 @@ export async function main(argv = process.argv.slice(2)) {
     return parsed;
   }
   async function ownedProperties() {
-    await linkAuthority(); const p = await properties();
+    const precedingLinkCheck = await linkAuthority(); const p = await properties();
+    fragments.observe(p, { unitFile, runtimeLink }, precedingLinkCheck, report.phase, start.snapshot().lastStep, inCleanup);
     if (p.LoadState !== 'loaded' || p.FragmentPath !== unitFile) reject('unit_fragment_identity');
     if (p.ControlGroup !== '' && !p.ControlGroup.startsWith(`/user.slice/user-${process.getuid()}.slice/user@${process.getuid()}.service/`)) reject('unit_cgroup_identity');
     if (p.ControlGroup !== '' && !p.ControlGroup.endsWith(`/${unitName}`)) reject('unit_cgroup_identity');
@@ -499,7 +532,7 @@ export async function main(argv = process.argv.slice(2)) {
     if (report.ok && (!report.cleanup.temporaryRootRemoved || !report.runtimeUnitRemoved || sockets.size)) { failures.cleanup(null, 'final_assertion'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel);
   }
-  return { ...report, ...failures.snapshot(), startDiagnostics: start.snapshot() };
+  return { ...report, ...failures.snapshot(), startDiagnostics: start.snapshot(), fragmentIdentityDiagnostics: fragments.snapshot() };
 }
 let invoked = false;
 try { invoked = Boolean(process.argv[1]) && await realpath(process.argv[1]) === await realpath(fileURLToPath(import.meta.url)); } catch { /* Import has no mutation authority. */ }

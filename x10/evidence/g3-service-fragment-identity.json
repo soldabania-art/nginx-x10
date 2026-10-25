@@ -1,0 +1,4539 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-fragment-identity-20261025T032900Z",
+  "sourceBase": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+  "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+  "implementationCommit": null,
+  "implementationCommitLocator": "Current publication commit containing owned-fragment identity diagnostics; exact resulting CI must be reconciled separately",
+  "scope": "Diagnostic-only known owned unit/runtime-link fragment identity facts; all admission, start, cleanup and retention guards unchanged",
+  "evidence": "x10/evidence/g3-service-fragment-identity.json",
+  "localAcceptance": "OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+  "exactHostedAcceptance": "PENDING_EXACT_RESULTING_OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS",
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "alphaRuntimeChanged": false,
+  "serviceRecipeChanged": false,
+  "preflightChanged": false,
+  "serviceSuccessCriteriaChanged": false,
+  "cleanupAuthorityChanged": false,
+  "verifiedNodeLogicChangedBeyondCheckerPin": false,
+  "workflowLogicChangedBeyondCheckerPin": false,
+  "actualServiceAcceptedLocally": false,
+  "serviceAccepted": false,
+  "productionAccepted": false,
+  "nextConcreteTask": "First inspect exact resulting owned-fragment diagnostic implementation CI and actual bounded service JSON on a fresh authorized nonroot host. Distinguish the manager FragmentPath matching the exact owned unit path, known runtime-link path or neither, and inspect bounded facts about only the already known owned paths. Preserve the original loaded/fragment identity rejection and all start, cleanup and retention guards until the actual observations establish whether this is an equivalent owned alias or a different fragment. Do not accept a link alias or canonical identity by assumption, read arbitrary foreign paths, relax admission, force cleanup or rerun unchanged failed CI. After a reviewed actual identity correction, verify the basic real service lifecycle and cleanup, logging, single manager restart, failed-start/cancel/drain/orphan and combined TLS/service, then package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Keep exact7d1/700/239/0ade adverse evidence and full deferred Continuum separate.",
+  "recordedAtUTC": "2026-10-25T03:31:36.561795Z",
+  "baselineImplementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+  "baselineImplementationTree": "057c203ffe33e78d71af24820a3caa9435fec54c",
+  "hostedNative": {
+    "schemaVersion": 1,
+    "scope": "Exact bounded first-start diagnostic observed primary refusal before properties guard; required real service and cleanup still failed",
+    "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+    "sourceTree": "057c203ffe33e78d71af24820a3caa9435fec54c",
+    "readOnly": true,
+    "runtimeRerunsRequested": 0,
+    "mergeIdentity": {
+      "sha": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+      "tree": "057c203ffe33e78d71af24820a3caa9435fec54c",
+      "parents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546"
+      ]
+    },
+    "runs": [
+      {
+        "run": {
+          "id": 40154695196,
+          "event": "push",
+          "head_sha": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+          "status": "completed",
+          "conclusion": "failure",
+          "run_attempt": 1,
+          "run_started_at": "2026-10-25T02:30:22Z",
+          "updated_at": "2026-10-25T02:35:42Z",
+          "html_url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40154695196"
+        },
+        "jobId": 121053497340,
+        "allActualJobStepsCompletedSuccess": false,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Validate release-record contract and refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Validate alpha archive refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Validate guarded user-service recipe",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Validate fail-closed user-manager preflight",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Validate actual-service harness refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Validate authenticated Node dependency refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Build dependencies and optional test clients",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Install pinned HTTP3 interoperability client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Install independent HTTP3 HEAD client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Compile native profile",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Native regressions and pinned official compatibility sample",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Verify installed HTTPS upstream trust and hostname",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Verify managed frontend HTTPS and certificate lifecycle",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Verify native tenant cache contract experiment",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Verify private Unix control transport",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Build profile without control API",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          },
+          {
+            "name": "Package local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20
+          },
+          {
+            "name": "Checksum local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21
+          },
+          {
+            "name": "Verify packed alpha before extraction",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22
+          },
+          {
+            "name": "Verify temporary user-service with authenticated private Node",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 23
+          },
+          {
+            "name": "Preserve JSON evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24
+          },
+          {
+            "name": "Preserve local Linux alpha",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 25
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 49
+          },
+          {
+            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 50
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 51
+          }
+        ],
+        "actualFullJobLog": {
+          "bytes": 359970,
+          "sha256": "51252ad8985a5ee06cc71c35ac4246fbfb799c5c686aadcb05007431c7e538ff",
+          "readCompletely": true,
+          "errorAnnotations": 1,
+          "nodeVersion": "v22.23.3",
+          "checkoutIdentityPresent": true
+        },
+        "artifact": {
+          "id": 12583633821,
+          "name": "x10-native-evidence",
+          "size_in_bytes": 101440,
+          "digest": "sha256:c737636880f82d3880c971bce4bebf08d8e995de0fc4a2c666543c8dceb9abbc",
+          "created_at": "2026-10-25T02:35:38Z",
+          "expires_at": "2026-11-08T02:35:37Z",
+          "expired": false
+        },
+        "actualZIP": {
+          "bytes": 101440,
+          "sha256": "c737636880f82d3880c971bce4bebf08d8e995de0fc4a2c666543c8dceb9abbc",
+          "matchesFreshAPIArtifactDigest": true,
+          "members": [
+            {
+              "name": "alpha-archive.json",
+              "bytes": 738,
+              "sha256": "67bd4f79d16305604d48782754637928e25a7020fb40132893c23cb1679ffeeb"
+            },
+            {
+              "name": "alpha-package.json",
+              "bytes": 324,
+              "sha256": "46d00765ef2fee32d0f870ab2fef56e0ed07ebae5ca2e69636b743f033acc013"
+            },
+            {
+              "name": "alpha-archive.tap",
+              "bytes": 2933,
+              "sha256": "7b655ca2655821c425a4c47a8c67d88018394ad9153e081576575ed389b98dfa"
+            },
+            {
+              "name": "alpha-tls.tap",
+              "bytes": 4169,
+              "sha256": "6027ea3f2c744af59bebf6ba7a87b35908e8d5d8142f1aed877f98b0c322aa85"
+            },
+            {
+              "name": "build.json",
+              "bytes": 7437,
+              "sha256": "2631b9ef9189b774609fe1251a84e062a22936d0e61bcff0173e28018f8c7187"
+            },
+            {
+              "name": "checks.json",
+              "bytes": 479041,
+              "sha256": "3aaeead48ad48f60af7a25f4b53e9dbde8c946597f27645ef85d5281d84e6c61"
+            },
+            {
+              "name": "control-api-unix.json",
+              "bytes": 15688,
+              "sha256": "f998ffe9def835aadf02ca63fa42d49224f51d92f1ec94613fac1dd9144223da"
+            },
+            {
+              "name": "control-disabled.json",
+              "bytes": 89148,
+              "sha256": "e74a68cbf00310e7520d53c8af5bbffbfb17d9f4d18ef13317eb27f692c142e4"
+            },
+            {
+              "name": "frontend-tls.tap",
+              "bytes": 4315,
+              "sha256": "cdae0dc4753210721d79160c9118ac757286f00e172cc6c41f0362947f628382"
+            },
+            {
+              "name": "generations-unix.json",
+              "bytes": 20928,
+              "sha256": "55df46bb630944e41f9e772e77db70a0f772230f961354517babfc49180b42e4"
+            },
+            {
+              "name": "guard-kernel.tap",
+              "bytes": 2103,
+              "sha256": "4d8b7106b7ce725cb9599ec645c93e81f1f0084f0f78aa1ce9521cb69e18a5e2"
+            },
+            {
+              "name": "operator-status-unix.tap",
+              "bytes": 5891,
+              "sha256": "6170f55972db02965802a4e4af75bb017a81b1563c59ad883f5788a36c90e8f3"
+            },
+            {
+              "name": "release-record.tap",
+              "bytes": 7248,
+              "sha256": "911638d829871561e540a49424db72facd1aeb8592bc2975b8a0ba198522299a"
+            },
+            {
+              "name": "service-lifecycle-contract.tap",
+              "bytes": 13633,
+              "sha256": "bdf546303d3766716379e82f9784bb9e2b7ee44906ec8cea99e5497f791e0446"
+            },
+            {
+              "name": "service-lifecycle.json",
+              "bytes": 2254,
+              "sha256": "c9a84a469ef66706751a21aed14de94ca96baa63da530ef8a391fb44a90ace38"
+            },
+            {
+              "name": "service-preflight.tap",
+              "bytes": 7844,
+              "sha256": "553689890c050992f0667e9de9166bcc92131f06897e3cd612c9607a6bcc6f8a"
+            },
+            {
+              "name": "user-unit.tap",
+              "bytes": 3116,
+              "sha256": "5c5b14b6e75577c0f7b234f28bf10abe86c22f91c77893e7bc04ec314b422a48"
+            },
+            {
+              "name": "verified-node-bootstrap.json",
+              "bytes": 208,
+              "sha256": "b8d076de242aa09b0d33547d4186435766644fd586d7f865df4bb478a63332ec"
+            },
+            {
+              "name": "verified-node-contract.tap",
+              "bytes": 6967,
+              "sha256": "efbee7700840afbb1a976f3e597e86dd446045c7a9562ba16806445259d1b0ea"
+            },
+            {
+              "name": "verified-node.json",
+              "bytes": 440,
+              "sha256": "f263c7c786b51b2ad40b1fc66fe3ac9ced27fd050d66897091e2ea0bafecca77"
+            }
+          ]
+        },
+        "identity": {
+          "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+          "implementationTree": "057c203ffe33e78d71af24820a3caa9435fec54c",
+          "actualBuildCheckout": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+          "trackedClean": true,
+          "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "binary": {
+            "sha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+            "bytes": 8553072,
+            "mode": "0755",
+            "executable": true
+          },
+          "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+          "compiledModules": 105,
+          "dependenciesFromHeaders": {
+            "pcre2": "10.42",
+            "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+            "zlib": "1.3"
+          },
+          "dependenciesFromPkgConfig": {
+            "libpcre2-8": "10.42",
+            "openssl": "3.0.13",
+            "zlib": "1.3"
+          },
+          "machine": "x86_64"
+        },
+        "upstreamTLS": {
+          "tap": {
+            "tests": 18,
+            "suites": 0,
+            "pass": 18,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "syntheticNestedCases": 7,
+          "installedNativeNestedCases": 9,
+          "wrappers": 2,
+          "cleanup": {
+            "suite": "alpha-tls-owned-cleanup",
+            "nativeStopped": true,
+            "launcherExited": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true,
+            "relay502Observations": 210,
+            "candidateTagsWithMatched502": 3,
+            "applicationPostRequests": 1
+          },
+          "actualWrongCAWrongHostnamePlaintextRefusalsPassed": true,
+          "historicalFailedCIInterleavingReproduced": false
+        },
+        "frontendTLS": {
+          "tap": {
+            "tests": 16,
+            "suites": 0,
+            "pass": 16,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanup": {
+            "suite": "frontend-tls-owned-cleanup",
+            "nativeStopped": true,
+            "nativeSessionsStopped": 2,
+            "launcherExited": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true,
+            "applicationPostRequests": 1
+          }
+        },
+        "preflight": {
+          "tap": {
+            "tests": 42,
+            "suites": 0,
+            "pass": 42,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "actualReadonlyObservation": {
+            "suite": "service-preflight-live-observation",
+            "nonroot": true,
+            "managerAvailable": true,
+            "probeExecuted": true,
+            "reason": null,
+            "serviceAccepted": false,
+            "productionAccepted": false
+          }
+        },
+        "nativeAggregate": {
+          "groupsPassed": 20,
+          "groupsTotal": 20,
+          "controller": {
+            "format": "node-test-tap",
+            "pass": 86,
+            "fail": 0,
+            "valid": true
+          },
+          "alphaLifecycle": {
+            "format": "node-test-tap",
+            "pass": 45,
+            "fail": 0,
+            "valid": true,
+            "total": 45,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "operatorStatus": {
+            "format": "node-test-tap",
+            "pass": 30,
+            "fail": 0,
+            "valid": true,
+            "total": 30,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "listenerObserver": {
+            "format": "node-test-tap",
+            "pass": 42,
+            "fail": 0,
+            "valid": true
+          },
+          "official": {
+            "files": 35,
+            "filesPassed": 34,
+            "filesSkipped": 1,
+            "filesFailed": 0,
+            "assertions": {
+              "run": 1131,
+              "passed": 1105,
+              "failed": 0,
+              "skipped": 25,
+              "todoFailed": 1,
+              "todoPassed": 0
+            }
+          },
+          "reloadListenerObservation": {
+            "cases": 7,
+            "cleanup": {
+              "nativeStopped": true,
+              "nativeExitCode": 0,
+              "nativeSignal": null,
+              "mode": "SIGQUIT",
+              "stoppedWorkerResumeRequested": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          }
+        },
+        "actualServiceLifecycle": {
+          "ok": false,
+          "code": "cleanup_unconfirmed",
+          "phase": "first_start",
+          "scope": "ephemeral-user-service-basic-lifecycle",
+          "automaticReadinessAccepted": false,
+          "failedStartAccepted": false,
+          "slowDrainAccepted": false,
+          "orphanRecoveryAccepted": false,
+          "tlsServiceAccepted": false,
+          "permanentDistributionAccepted": false,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "actualNonrootManagerObserved": true,
+          "actualUnitStarted": false,
+          "explicitReadinessPasses": 0,
+          "nativeSessionsStarted": 0,
+          "nativeSessionsStopped": 0,
+          "proxyBodyChecks": 0,
+          "uploadChecks": 0,
+          "streamChecks": 0,
+          "runtimeUnitLinked": true,
+          "runtimeUnitRemoved": false,
+          "unitEnabled": false,
+          "subprocessOutputsPublished": false,
+          "cleanup": {
+            "managerStopped": false,
+            "launcherExited": false,
+            "nativeGroupsAbsent": false,
+            "listeningPortsClosed": false,
+            "controlSocketAbsent": false,
+            "runtimeLinkAbsent": false,
+            "appSocketsRemaining": 0,
+            "installationRemoved": false,
+            "temporaryRootRemoved": false
+          },
+          "archiveSha256": "77e6c82f69ba36c18fae54f4771222a881cfcd17ed5c49ad5cdd4efeb178b9a9",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+          "nodePrerequisites": {
+            "selectedNodeRegular": true,
+            "selectedNodeCanonical": true,
+            "selectedNodeOwnerExecutable": true,
+            "selectedNodeModeAllowed": true,
+            "selectedNodeOwnerAllowed": true,
+            "recordedNodePathMatches": true,
+            "recordedNodeVersionSupported": true
+          },
+          "unitSha256": "3c1cdeb63e733471fa06839236db81b8688a55bfc9199175ca62c91c031b0866",
+          "primaryFailure": {
+            "phase": "first_start",
+            "subphase": "before_properties",
+            "code": "unit_fragment_identity",
+            "systemErrorClass": "unknown"
+          },
+          "cleanupFailures": [
+            {
+              "stage": "unit_cleanup",
+              "code": "unit_fragment_identity"
+            }
+          ],
+          "cleanupFailureCount": 1,
+          "cleanupFailuresTruncated": false,
+          "startDiagnostics": {
+            "attempts": 1,
+            "completedAttempts": 0,
+            "lastStep": "before_properties",
+            "observationCount": 2,
+            "observationsTruncated": false,
+            "observations": [
+              {
+                "attempt": 1,
+                "step": "before_properties",
+                "kind": "properties_command",
+                "outcome": "succeeded",
+                "exitCodeClass": "zero",
+                "termination": "none",
+                "stderrPresent": false
+              },
+              {
+                "attempt": 1,
+                "step": "before_properties",
+                "kind": "properties_state",
+                "loadState": "loaded",
+                "activeState": "inactive",
+                "subState": "dead",
+                "result": "success",
+                "mainPIDPresent": false,
+                "controlGroupPresent": false,
+                "fragmentPathPresent": true
+              }
+            ]
+          }
+        },
+        "serviceHarnessContractTAP": {
+          "tests": 85,
+          "suites": 0,
+          "pass": 84,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 1,
+          "todo": 0
+        },
+        "serviceCommandObservedInCompleteJobLog": true,
+        "basicServiceLifecycleVerified": false,
+        "requiredUnixAndOff": {
+          "control-api-unix.json": {
+            "tests": 9,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          },
+          "generations-unix.json": {
+            "tests": 10,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          },
+          "control-disabled.json": {
+            "tests": 4,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "temporaryRootRemoved": true,
+              "errors": [],
+              "activeChild": false,
+              "rootMakefileRestored": true
+            }
+          }
+        },
+        "unixOperatorTAP": {
+          "tests": 30,
+          "suites": 0,
+          "pass": 30,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "userRecipeTAP": {
+          "tests": 15,
+          "suites": 0,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "releaseRecordTAP": {
+          "tests": 35,
+          "suites": 0,
+          "pass": 35,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "archiveRefusalTAP": {
+          "tests": 15,
+          "suites": 0,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "guardKernelTAP": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "archiveVerification": {
+          "valid": true,
+          "code": "archive_consistent",
+          "archiveSha256": "77e6c82f69ba36c18fae54f4771222a881cfcd17ed5c49ad5cdd4efeb178b9a9",
+          "archiveBytes": 3975569,
+          "tarBytes": 8755200,
+          "payloadFiles": 13,
+          "directories": 5,
+          "bundleManifestSha256": "2b00d0c4baadb62ea7fbf1b9e28fe6ff6e22db1270ba27d2dd3e11913a9f135e",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+          "upstreamCommit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "machine": "x86_64",
+          "scope": "pre-extraction-consistency-only",
+          "evidenceAuthenticated": false,
+          "payloadExecuted": false,
+          "extracted": false,
+          "productionAccepted": false
+        },
+        "authenticatedNodeContractTAP": {
+          "tests": 46,
+          "suites": 0,
+          "pass": 46,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "actualAuthenticatedNodeInstall": {
+          "ok": true,
+          "code": "verified_node_installed",
+          "version": "v22.23.3",
+          "archiveSha256": "df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de",
+          "nodeSha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+          "installationId": "53d46ec1ac815b9bf2177dd00b6fb989",
+          "signatureVerified": true,
+          "selectedFiles": 2,
+          "runtimeVersionVerified": true,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "subprocessOutputsPublished": false
+        },
+        "actualBootstrap": {
+          "ok": false,
+          "stage": "actual_service",
+          "code": "bootstrap_stage_failed",
+          "runtimeRemoved": false,
+          "temporaryRootRemoved": false,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "subprocessOutputsPublished": false
+        },
+        "dependencyCleanupReportPresent": false,
+        "dependencyDeletionAuthorized": false,
+        "primaryRefusalObserved": {
+          "phase": "first_start",
+          "subphase": "before_properties",
+          "code": "unit_fragment_identity",
+          "systemErrorClass": "unknown"
+        },
+        "cleanupRefusalsObserved": [
+          {
+            "stage": "unit_cleanup",
+            "code": "unit_fragment_identity"
+          }
+        ],
+        "actualBoundedStartDiagnostics": {
+          "attempts": 1,
+          "completedAttempts": 0,
+          "lastStep": "before_properties",
+          "observationCount": 2,
+          "observationsTruncated": false,
+          "observations": [
+            {
+              "attempt": 1,
+              "step": "before_properties",
+              "kind": "properties_command",
+              "outcome": "succeeded",
+              "exitCodeClass": "zero",
+              "termination": "none",
+              "stderrPresent": false
+            },
+            {
+              "attempt": 1,
+              "step": "before_properties",
+              "kind": "properties_state",
+              "loadState": "loaded",
+              "activeState": "inactive",
+              "subState": "dead",
+              "result": "success",
+              "mainPIDPresent": false,
+              "controlGroupPresent": false,
+              "fragmentPathPresent": true
+            }
+          ]
+        },
+        "currentSourceFlowInference": {
+          "inferenceNotRawPathObservation": true,
+          "primaryUnitFragmentGuard": "p.LoadState !== loaded OR p.FragmentPath !== unitFile",
+          "observedLoadState": "loaded",
+          "thereforeCurrentFragmentPathComparisonMismatch": true,
+          "actualFragmentPathKnown": false,
+          "matchesRuntimeLinkKnown": false,
+          "aliasOrCanonicalIdentityKnown": false,
+          "sourceFlowRejectedBeforeStartRequestedAndSystemctlStart": true,
+          "physicalUnitNeverStartedProven": false,
+          "allPhysicalProcessesAbsentProven": false,
+          "initial700FailureCauseReconstructed": false
+        },
+        "actualServiceFailure": {
+          "finalCode": "cleanup_unconfirmed",
+          "primaryCode": "unit_fragment_identity",
+          "primaryPhase": "first_start",
+          "primarySubphase": "before_properties",
+          "currentManagerMetadataState": "loaded/inactive/dead/success snapshot only",
+          "managerOrNativeCleanupConfirmed": false,
+          "runtimeLinkRemovalConfirmed": false,
+          "dependencyDeletionConfirmed": false,
+          "providerFinalCleanupKnown": false,
+          "rerunRequested": false
+        }
+      },
+      {
+        "run": {
+          "id": 40154700066,
+          "event": "pull_request",
+          "head_sha": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+          "status": "completed",
+          "conclusion": "failure",
+          "run_attempt": 1,
+          "run_started_at": "2026-10-25T02:30:26Z",
+          "updated_at": "2026-10-25T02:36:24Z",
+          "html_url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40154700066"
+        },
+        "jobId": 121053511202,
+        "allActualJobStepsCompletedSuccess": false,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Validate release-record contract and refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Validate alpha archive refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Validate guarded user-service recipe",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Validate fail-closed user-manager preflight",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Validate actual-service harness refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Validate authenticated Node dependency refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Build dependencies and optional test clients",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Install pinned HTTP3 interoperability client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Install independent HTTP3 HEAD client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Compile native profile",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Native regressions and pinned official compatibility sample",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Verify installed HTTPS upstream trust and hostname",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Verify managed frontend HTTPS and certificate lifecycle",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Verify native tenant cache contract experiment",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Verify private Unix control transport",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Build profile without control API",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          },
+          {
+            "name": "Package local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20
+          },
+          {
+            "name": "Checksum local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21
+          },
+          {
+            "name": "Verify packed alpha before extraction",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22
+          },
+          {
+            "name": "Verify temporary user-service with authenticated private Node",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 23
+          },
+          {
+            "name": "Preserve JSON evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24
+          },
+          {
+            "name": "Preserve local Linux alpha",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 25
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 49
+          },
+          {
+            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 50
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 51
+          }
+        ],
+        "actualFullJobLog": {
+          "bytes": 376398,
+          "sha256": "6b335372c8e31efc71450c5a1f9d83fd3a2ceccc54473d0e988b1470d511b349",
+          "readCompletely": true,
+          "errorAnnotations": 1,
+          "nodeVersion": "v22.23.3",
+          "checkoutIdentityPresent": true
+        },
+        "artifact": {
+          "id": 12584052598,
+          "name": "x10-native-evidence",
+          "size_in_bytes": 101574,
+          "digest": "sha256:873fe42185ee7f2e5143ccbf9a4051c33ac413275fd35b8b21fe9241ee0ff2bd",
+          "created_at": "2026-10-25T02:36:22Z",
+          "expires_at": "2026-11-08T02:36:21Z",
+          "expired": false
+        },
+        "actualZIP": {
+          "bytes": 101574,
+          "sha256": "873fe42185ee7f2e5143ccbf9a4051c33ac413275fd35b8b21fe9241ee0ff2bd",
+          "matchesFreshAPIArtifactDigest": true,
+          "members": [
+            {
+              "name": "alpha-archive.json",
+              "bytes": 738,
+              "sha256": "aa1e4097e5dfce67a8cf4433eb1cd3592ff04c427f43ca2a6fd1f06b5c8c6365"
+            },
+            {
+              "name": "alpha-package.json",
+              "bytes": 324,
+              "sha256": "6117d0f2c5bc480bfc1c1e8064bb3137154b32df79d91eab1d551aa24282a17d"
+            },
+            {
+              "name": "alpha-archive.tap",
+              "bytes": 2934,
+              "sha256": "1dc3dff5c89df4b46f3fa8c9c4058ee968a338ca7436034926a3ed0499d0d79d"
+            },
+            {
+              "name": "alpha-tls.tap",
+              "bytes": 4171,
+              "sha256": "a25c79962e6eabe2c82f7613c09331d7132d5eec8e3afeaf6bfac032b8651ebf"
+            },
+            {
+              "name": "build.json",
+              "bytes": 7437,
+              "sha256": "177b4a1638d5c3603cd1119e36e3daa8b2464ad3f025faa9e95d9dfae257d5e7"
+            },
+            {
+              "name": "checks.json",
+              "bytes": 479331,
+              "sha256": "a41af5a510f7b14d47d1e8297669d2117613eac8a8d3552dfba74559c4e6168b"
+            },
+            {
+              "name": "control-disabled.json",
+              "bytes": 89148,
+              "sha256": "f4be0942dab19a3e73a79fb55541c09f52dfbb25230b7c48a312ba76d9ac0287"
+            },
+            {
+              "name": "control-api-unix.json",
+              "bytes": 15994,
+              "sha256": "00e3fafee339e545888f6722c10b08658ea2f6fbf9d91a836bd4a5ca03599597"
+            },
+            {
+              "name": "frontend-tls.tap",
+              "bytes": 4315,
+              "sha256": "3f71669f6771fa0dfbbef98a9f5b1e33a4422da56ebedca04e74fce48e947786"
+            },
+            {
+              "name": "generations-unix.json",
+              "bytes": 21374,
+              "sha256": "7cd771e72b531aa479e12b94feb17b8d3a32a57de8b6af2aaf0c7d7ef31c5e19"
+            },
+            {
+              "name": "guard-kernel.tap",
+              "bytes": 2103,
+              "sha256": "91624784e2711e47e516a7022af26e1012190e8b0bfff3adeb8bd6a1501f26d5"
+            },
+            {
+              "name": "operator-status-unix.tap",
+              "bytes": 5895,
+              "sha256": "db1c8bba3405cb156fd278a16dc99c926b6a1eb1123371b810938322fd30cb8d"
+            },
+            {
+              "name": "release-record.tap",
+              "bytes": 7254,
+              "sha256": "8b72df64b9012f0fcfa0df6a405422fefb333eeafe08bb71d07826fc5852b311"
+            },
+            {
+              "name": "service-lifecycle-contract.tap",
+              "bytes": 13640,
+              "sha256": "741a9f2c9b1c0b1175159941a51a178395e1ae88b2ad2a4aa16d4073fa246c0b"
+            },
+            {
+              "name": "service-lifecycle.json",
+              "bytes": 2254,
+              "sha256": "9d3e1967d05a769c66554d895a5eb3ea239c2d97b7649ae474456a2d36d9a19b"
+            },
+            {
+              "name": "service-preflight.tap",
+              "bytes": 7846,
+              "sha256": "06c0d13e3349eb87050d5f2a50074e83d0400f4df29fd982fb66a5f4bef09cd7"
+            },
+            {
+              "name": "user-unit.tap",
+              "bytes": 3119,
+              "sha256": "c9c400da27786122776753a4cb0e3cd701bd140bd4ed57b6bb6ee65b93f899bf"
+            },
+            {
+              "name": "verified-node-bootstrap.json",
+              "bytes": 208,
+              "sha256": "b8d076de242aa09b0d33547d4186435766644fd586d7f865df4bb478a63332ec"
+            },
+            {
+              "name": "verified-node-contract.tap",
+              "bytes": 6970,
+              "sha256": "e860eb9537b0f66ed79a84a3f933c70c4a1ab241f94d9c34b6e3e338207757fa"
+            },
+            {
+              "name": "verified-node.json",
+              "bytes": 440,
+              "sha256": "87b4d7fdc7dfc5ba9cf17c3c8861cedf202cdeebf22ec881795db0c8ca28f292"
+            }
+          ]
+        },
+        "identity": {
+          "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+          "implementationTree": "057c203ffe33e78d71af24820a3caa9435fec54c",
+          "actualBuildCheckout": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+          "trackedClean": true,
+          "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "binary": {
+            "sha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+            "bytes": 8553072,
+            "mode": "0755",
+            "executable": true
+          },
+          "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+          "compiledModules": 105,
+          "dependenciesFromHeaders": {
+            "pcre2": "10.42",
+            "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+            "zlib": "1.3"
+          },
+          "dependenciesFromPkgConfig": {
+            "libpcre2-8": "10.42",
+            "openssl": "3.0.13",
+            "zlib": "1.3"
+          },
+          "machine": "x86_64"
+        },
+        "upstreamTLS": {
+          "tap": {
+            "tests": 18,
+            "suites": 0,
+            "pass": 18,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "syntheticNestedCases": 7,
+          "installedNativeNestedCases": 9,
+          "wrappers": 2,
+          "cleanup": {
+            "suite": "alpha-tls-owned-cleanup",
+            "nativeStopped": true,
+            "launcherExited": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true,
+            "relay502Observations": 206,
+            "candidateTagsWithMatched502": 3,
+            "applicationPostRequests": 1
+          },
+          "actualWrongCAWrongHostnamePlaintextRefusalsPassed": true,
+          "historicalFailedCIInterleavingReproduced": false
+        },
+        "frontendTLS": {
+          "tap": {
+            "tests": 16,
+            "suites": 0,
+            "pass": 16,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanup": {
+            "suite": "frontend-tls-owned-cleanup",
+            "nativeStopped": true,
+            "nativeSessionsStopped": 2,
+            "launcherExited": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true,
+            "applicationPostRequests": 1
+          }
+        },
+        "preflight": {
+          "tap": {
+            "tests": 42,
+            "suites": 0,
+            "pass": 42,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "actualReadonlyObservation": {
+            "suite": "service-preflight-live-observation",
+            "nonroot": true,
+            "managerAvailable": true,
+            "probeExecuted": true,
+            "reason": null,
+            "serviceAccepted": false,
+            "productionAccepted": false
+          }
+        },
+        "nativeAggregate": {
+          "groupsPassed": 20,
+          "groupsTotal": 20,
+          "controller": {
+            "format": "node-test-tap",
+            "pass": 86,
+            "fail": 0,
+            "valid": true
+          },
+          "alphaLifecycle": {
+            "format": "node-test-tap",
+            "pass": 45,
+            "fail": 0,
+            "valid": true,
+            "total": 45,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "operatorStatus": {
+            "format": "node-test-tap",
+            "pass": 30,
+            "fail": 0,
+            "valid": true,
+            "total": 30,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "listenerObserver": {
+            "format": "node-test-tap",
+            "pass": 42,
+            "fail": 0,
+            "valid": true
+          },
+          "official": {
+            "files": 35,
+            "filesPassed": 34,
+            "filesSkipped": 1,
+            "filesFailed": 0,
+            "assertions": {
+              "run": 1131,
+              "passed": 1105,
+              "failed": 0,
+              "skipped": 25,
+              "todoFailed": 1,
+              "todoPassed": 0
+            }
+          },
+          "reloadListenerObservation": {
+            "cases": 7,
+            "cleanup": {
+              "nativeStopped": true,
+              "nativeExitCode": 0,
+              "nativeSignal": null,
+              "mode": "SIGQUIT",
+              "stoppedWorkerResumeRequested": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          }
+        },
+        "actualServiceLifecycle": {
+          "ok": false,
+          "code": "cleanup_unconfirmed",
+          "phase": "first_start",
+          "scope": "ephemeral-user-service-basic-lifecycle",
+          "automaticReadinessAccepted": false,
+          "failedStartAccepted": false,
+          "slowDrainAccepted": false,
+          "orphanRecoveryAccepted": false,
+          "tlsServiceAccepted": false,
+          "permanentDistributionAccepted": false,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "actualNonrootManagerObserved": true,
+          "actualUnitStarted": false,
+          "explicitReadinessPasses": 0,
+          "nativeSessionsStarted": 0,
+          "nativeSessionsStopped": 0,
+          "proxyBodyChecks": 0,
+          "uploadChecks": 0,
+          "streamChecks": 0,
+          "runtimeUnitLinked": true,
+          "runtimeUnitRemoved": false,
+          "unitEnabled": false,
+          "subprocessOutputsPublished": false,
+          "cleanup": {
+            "managerStopped": false,
+            "launcherExited": false,
+            "nativeGroupsAbsent": false,
+            "listeningPortsClosed": false,
+            "controlSocketAbsent": false,
+            "runtimeLinkAbsent": false,
+            "appSocketsRemaining": 0,
+            "installationRemoved": false,
+            "temporaryRootRemoved": false
+          },
+          "archiveSha256": "ba5262ad9f7dccacdf435374f582d19029419634ced552c92ef34ed8e66aae75",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+          "nodePrerequisites": {
+            "selectedNodeRegular": true,
+            "selectedNodeCanonical": true,
+            "selectedNodeOwnerExecutable": true,
+            "selectedNodeModeAllowed": true,
+            "selectedNodeOwnerAllowed": true,
+            "recordedNodePathMatches": true,
+            "recordedNodeVersionSupported": true
+          },
+          "unitSha256": "a862bdcfdf95593f6677d06a5762556595a7b4ec1ccb632fe6eb928899af6eb9",
+          "primaryFailure": {
+            "phase": "first_start",
+            "subphase": "before_properties",
+            "code": "unit_fragment_identity",
+            "systemErrorClass": "unknown"
+          },
+          "cleanupFailures": [
+            {
+              "stage": "unit_cleanup",
+              "code": "unit_fragment_identity"
+            }
+          ],
+          "cleanupFailureCount": 1,
+          "cleanupFailuresTruncated": false,
+          "startDiagnostics": {
+            "attempts": 1,
+            "completedAttempts": 0,
+            "lastStep": "before_properties",
+            "observationCount": 2,
+            "observationsTruncated": false,
+            "observations": [
+              {
+                "attempt": 1,
+                "step": "before_properties",
+                "kind": "properties_command",
+                "outcome": "succeeded",
+                "exitCodeClass": "zero",
+                "termination": "none",
+                "stderrPresent": false
+              },
+              {
+                "attempt": 1,
+                "step": "before_properties",
+                "kind": "properties_state",
+                "loadState": "loaded",
+                "activeState": "inactive",
+                "subState": "dead",
+                "result": "success",
+                "mainPIDPresent": false,
+                "controlGroupPresent": false,
+                "fragmentPathPresent": true
+              }
+            ]
+          }
+        },
+        "serviceHarnessContractTAP": {
+          "tests": 85,
+          "suites": 0,
+          "pass": 84,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 1,
+          "todo": 0
+        },
+        "serviceCommandObservedInCompleteJobLog": true,
+        "basicServiceLifecycleVerified": false,
+        "requiredUnixAndOff": {
+          "control-api-unix.json": {
+            "tests": 9,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          },
+          "generations-unix.json": {
+            "tests": 10,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          },
+          "control-disabled.json": {
+            "tests": 4,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "temporaryRootRemoved": true,
+              "errors": [],
+              "activeChild": false,
+              "rootMakefileRestored": true
+            }
+          }
+        },
+        "unixOperatorTAP": {
+          "tests": 30,
+          "suites": 0,
+          "pass": 30,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "userRecipeTAP": {
+          "tests": 15,
+          "suites": 0,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "releaseRecordTAP": {
+          "tests": 35,
+          "suites": 0,
+          "pass": 35,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "archiveRefusalTAP": {
+          "tests": 15,
+          "suites": 0,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "guardKernelTAP": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "archiveVerification": {
+          "valid": true,
+          "code": "archive_consistent",
+          "archiveSha256": "ba5262ad9f7dccacdf435374f582d19029419634ced552c92ef34ed8e66aae75",
+          "archiveBytes": 3975569,
+          "tarBytes": 8755200,
+          "payloadFiles": 13,
+          "directories": 5,
+          "bundleManifestSha256": "070e72eec77f900f1baba5c32753d7a1a481b26084f22f55366f5fc6d9047cb6",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+          "upstreamCommit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "machine": "x86_64",
+          "scope": "pre-extraction-consistency-only",
+          "evidenceAuthenticated": false,
+          "payloadExecuted": false,
+          "extracted": false,
+          "productionAccepted": false
+        },
+        "authenticatedNodeContractTAP": {
+          "tests": 46,
+          "suites": 0,
+          "pass": 46,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "actualAuthenticatedNodeInstall": {
+          "ok": true,
+          "code": "verified_node_installed",
+          "version": "v22.23.3",
+          "archiveSha256": "df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de",
+          "nodeSha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+          "installationId": "f7598a45998bb6c9a61657867f5dbb44",
+          "signatureVerified": true,
+          "selectedFiles": 2,
+          "runtimeVersionVerified": true,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "subprocessOutputsPublished": false
+        },
+        "actualBootstrap": {
+          "ok": false,
+          "stage": "actual_service",
+          "code": "bootstrap_stage_failed",
+          "runtimeRemoved": false,
+          "temporaryRootRemoved": false,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "subprocessOutputsPublished": false
+        },
+        "dependencyCleanupReportPresent": false,
+        "dependencyDeletionAuthorized": false,
+        "primaryRefusalObserved": {
+          "phase": "first_start",
+          "subphase": "before_properties",
+          "code": "unit_fragment_identity",
+          "systemErrorClass": "unknown"
+        },
+        "cleanupRefusalsObserved": [
+          {
+            "stage": "unit_cleanup",
+            "code": "unit_fragment_identity"
+          }
+        ],
+        "actualBoundedStartDiagnostics": {
+          "attempts": 1,
+          "completedAttempts": 0,
+          "lastStep": "before_properties",
+          "observationCount": 2,
+          "observationsTruncated": false,
+          "observations": [
+            {
+              "attempt": 1,
+              "step": "before_properties",
+              "kind": "properties_command",
+              "outcome": "succeeded",
+              "exitCodeClass": "zero",
+              "termination": "none",
+              "stderrPresent": false
+            },
+            {
+              "attempt": 1,
+              "step": "before_properties",
+              "kind": "properties_state",
+              "loadState": "loaded",
+              "activeState": "inactive",
+              "subState": "dead",
+              "result": "success",
+              "mainPIDPresent": false,
+              "controlGroupPresent": false,
+              "fragmentPathPresent": true
+            }
+          ]
+        },
+        "currentSourceFlowInference": {
+          "inferenceNotRawPathObservation": true,
+          "primaryUnitFragmentGuard": "p.LoadState !== loaded OR p.FragmentPath !== unitFile",
+          "observedLoadState": "loaded",
+          "thereforeCurrentFragmentPathComparisonMismatch": true,
+          "actualFragmentPathKnown": false,
+          "matchesRuntimeLinkKnown": false,
+          "aliasOrCanonicalIdentityKnown": false,
+          "sourceFlowRejectedBeforeStartRequestedAndSystemctlStart": true,
+          "physicalUnitNeverStartedProven": false,
+          "allPhysicalProcessesAbsentProven": false,
+          "initial700FailureCauseReconstructed": false
+        },
+        "actualServiceFailure": {
+          "finalCode": "cleanup_unconfirmed",
+          "primaryCode": "unit_fragment_identity",
+          "primaryPhase": "first_start",
+          "primarySubphase": "before_properties",
+          "currentManagerMetadataState": "loaded/inactive/dead/success snapshot only",
+          "managerOrNativeCleanupConfirmed": false,
+          "runtimeLinkRemovalConfirmed": false,
+          "dependencyDeletionConfirmed": false,
+          "providerFinalCleanupKnown": false,
+          "rerunRequested": false
+        }
+      }
+    ],
+    "historicalAdverseEvidenceRetained": {
+      "source9e63WrongCAApplyExit0": true,
+      "exactHistoricalInterleavingKnown": false,
+      "controllerOrNativeProductFixClaimed": false,
+      "earlierRunnerShutdownCauseKnown": false,
+      "earlierLocalESRCHCauseKnown": false,
+      "source700InitialExceptionCauseKnown": false,
+      "source239NodeModePolicyFalseOwnerPolicyTrue": true,
+      "source0adeUnderlyingExceptionKnown": false
+    },
+    "limits": [
+      "Artifact ZIP bytes downloaded and checked against fresh API SHA-256. Payloads were parsed as data only, never executed.",
+      "Published package replay and permanent release distribution are not accepted by this audit. The separate package archive itself was not downloaded here; CI archive-verifier receipts were checked.",
+      "Both current actual diagnostic attempts retained primaryFailure first_start/before_properties/unit_fragment_identity and a separate unit_cleanup/unit_fragment_identity cleanup failure. The successful manager-properties command observed loaded/inactive/dead/success with no main PID or control-group presence and a present fragment path. Given the unchanged guard disjunction and current observed loaded value, the current FragmentPath comparison to unitFile mismatched. Actual fragment path, matching to runtimeLink, alias/canonical identity and physical process absence were not exposed or proven. This is current logical source-flow inference only, not the reconstructed700 cause, a security bug or an accepted alias.",
+      "Current exact basic service lifecycle and compatibility do not reconstruct or erase the previous wrong-CA failure, runner shutdown or local ESRCH interleaving.",
+      "Aggregate groups, nested TAP tests, wrappers and official assertions remain separate units.",
+      "Both current authenticated Node installs verified the signed checksum, archive identity and v22.23.3 private runtime version. All seven current Node admission predicates passed. Current first-start diagnostic contract85 results contain84PASS and1 root-onlySKIP; Node contract46/46 passed separately.",
+      "The source flow rejected before its startRequested assignment and systemctl start call in this main attempt. This does not prove that the physical unit could never have started or that no other actor/process existed. Every service cleanup boolean remains false except appSocketsRemaining0. Bootstrap retains the private Node runtime; dependency-cleanup JSON is absent and provider final cleanup remains unknown.",
+      "New diagnostic observation does not repair or explain historical700/239/0ade/TLS/ESRCH observations. No unchanged workflow rerun, local service operation, Node permission/ownership change or identity-guard relaxation was performed by this audit."
+    ],
+    "actualServiceResult": "BOTH_PRIMARY_UNIT_FRAGMENT_IDENTITY_BEFORE_START_REQUEST_CLEANUP_UNCONFIRMED",
+    "fullImplementationCIAccepted": false,
+    "actualServiceLifecycleAccepted": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "authenticatedNodePin": {
+      "schemaVersion": 1,
+      "version": "v22.23.3",
+      "platform": "linux-x64-glibc",
+      "archive": {
+        "filename": "node-v22.23.3-linux-x64.tar.xz",
+        "url": "https://nodejs.org/download/release/v22.23.3/node-v22.23.3-linux-x64.tar.xz",
+        "sha256": "df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de",
+        "maxBytes": 67108864,
+        "rootDirectory": "node-v22.23.3-linux-x64",
+        "nodeMember": "node-v22.23.3-linux-x64/bin/node",
+        "licenseMember": "node-v22.23.3-linux-x64/LICENSE"
+      },
+      "signature": {
+        "path": "x10/service/keys/node-v22.23.3-SHASUMS256.asc",
+        "sha256": "e82087fe2cf383fce187b0789eb5ea50fd92f9b68afb4f4e174d65ec59acba4a",
+        "keyPath": "x10/service/keys/node-v22-release.asc",
+        "keySha256": "5115095e2f8010c75da052ecb1cfb3af630e084f0f8daa93a863557b01b0f90a",
+        "primaryFingerprint": "5BE8A3F6C8A5C01D106C0AD820B1A390B168D356"
+      },
+      "sources": {
+        "releaseDate": "2026-09-23",
+        "releaseAnnouncementURL": "https://nodejs.org/en/blog/release/v22.23.3",
+        "officialSignedChecksumsURL": "https://nodejs.org/download/release/v22.23.3/SHASUMS256.txt.asc",
+        "officialChecksumsURL": "https://nodejs.org/download/release/v22.23.3/SHASUMS256.txt",
+        "releaseKeysCommit": "481637f813e912c4aa3622d7964ab426c97b8e8d",
+        "releaseKeyURL": "https://raw.githubusercontent.com/nodejs/release-keys/481637f813e912c4aa3622d7964ab426c97b8e8d/keys/5BE8A3F6C8A5C01D106C0AD820B1A390B168D356.asc",
+        "authorisedFingerprintReferenceURL": "https://github.com/nodejs/node/blob/v22.23.3/README.md#release-keys",
+        "signedChecksumsMirrorCommit": "85a140781ef9b366ea84b3dbc0bdda995ef7b725",
+        "signedChecksumsMirrorURL": "https://raw.githubusercontent.com/nodejs/nodejs.org/85a140781ef9b366ea84b3dbc0bdda995ef7b725/apps/site/pages/en/blog/release/v22.23.3.md",
+        "signedChecksumsMirrorExtraction": "Exact ASCII clear-signed block between BEGIN PGP SIGNED MESSAGE and END PGP SIGNATURE, with terminal LF; signature verified before vendoring."
+      }
+    },
+    "sourceFreezeSha256": {
+      "x10/service/lifecycle-check.mjs": "8b75c2e0f47ec9b4578fd1a34ea6ad9e4b12e0de9b10743b2fbbbcd53fff4cc3",
+      "x10/service/lifecycle-check.test.mjs": "8594afd4fe0dad86ef528c3dfb6872bfbc28fc7cc7eef6b5d7141c8c43a2a3ca",
+      "x10/service/verified-node.mjs": "983657b57b6ebf513331df28d9a3c7f2f750239a9881306e884a37746c93251e",
+      ".github/workflows/x10-native.yml": "e06ad24f43f48e5438ea8e34bfa300101378ce3f187799f48c95d141ce83d0be"
+    }
+  },
+  "hostedResearch": {
+    "schemaVersion": 1,
+    "suite": "exact-first-start-diagnostics-research-ci-audit",
+    "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+    "sourceTree": "057c203ffe33e78d71af24820a3caa9435fec54c",
+    "recordedAtUTC": "2026-10-25 02:37:37 UTC",
+    "readOnly": true,
+    "runtimeTestsLocallyRerun": false,
+    "workflowRerunsRequested": 0,
+    "identity": {
+      "eventHead": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+      "prMergeCheckout": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+      "prMergeParents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546"
+      ],
+      "prMergeTree": "057c203ffe33e78d71af24820a3caa9435fec54c",
+      "sourceParent": [
+        "7edd0dd770f89ca07760d3d992919e09e4914ec6"
+      ],
+      "treeEqualsImplementation": true,
+      "verifiedBy": [
+        "fresh source and merge Git commit API",
+        "actual scope checkout and git log output",
+        "actual completed research checkout and git log output"
+      ]
+    },
+    "runs": [
+      {
+        "runId": 40154695181,
+        "event": "push",
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "scope": {
+          "jobId": 121053453443,
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "nodeVersion": "22.23.3",
+          "result": {
+            "native": true,
+            "research": false,
+            "reason": "classified_delta",
+            "changedFiles": 11,
+            "sourceSha": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546"
+          },
+          "actualLog": {
+            "decodedCharacters": 74786,
+            "decodedUTF8Bytes": 74788,
+            "sha256": "3729811c24974397c90fdb2210c009459ca1afe433c1e119c4234a6a717b4d77"
+          }
+        },
+        "runtime": {
+          "jobId": 121053500965,
+          "status": "completed",
+          "conclusion": "skipped",
+          "actualRuntimeVerified": false
+        },
+        "scopeOnly": true
+      },
+      {
+        "runId": 40154700058,
+        "event": "pull_request",
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "scope": {
+          "jobId": 121053466023,
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "nodeVersion": "22.23.3",
+          "result": {
+            "native": true,
+            "research": true,
+            "reason": "event_or_git_unavailable",
+            "changedFiles": null,
+            "sourceSha": null
+          },
+          "actualLog": {
+            "decodedCharacters": 91192,
+            "decodedUTF8Bytes": 91194,
+            "sha256": "5d885cc6b15ec2f404df4ae69a6c6d8ca3567fd37aa7cde5923d5df23bb38dbf"
+          }
+        },
+        "runtime": {
+          "jobId": 121053505246,
+          "status": "completed",
+          "conclusion": "success",
+          "actualRuntimeVerified": true,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Build dependencies for TLS interoperability and isolated source probe",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Independent record and state counterexamples",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Same TCP connection across research worker versions",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Real TLS handshake and independent record observer",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Pinned OpenSSL read-only state probe",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 16
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 17
+            }
+          ],
+          "suites": [
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-record-and-state-kernel",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "in-memory-record-and-state-only",
+              "liveTlsProcessHandover": false,
+              "counts": {
+                "tests": 21,
+                "suites": 0,
+                "pass": 21,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-real-handshake-and-record-observation",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "real-handshake-and-record-observation-only",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 27,
+                "suites": 0,
+                "pass": 27,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-pinned-openssl-state-probe",
+              "passed": true,
+              "testFiles": 1,
+              "scope": "pinned-openssl-read-only-state-observation",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 48,
+                "suites": 0,
+                "pass": 48,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            }
+          ],
+          "processHandover": {
+            "command": "node --test --test-reporter=tap x10/continuum/process-handover.test.mjs",
+            "tests": 7,
+            "pass": 7,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "actualLog": {
+            "decodedCharacters": 30359,
+            "decodedUTF8Bytes": 30361,
+            "sha256": "6e073556f95aeb5cbf67d8512ec43af42a290923c7da5101ccb0af7c3aa45810"
+          }
+        },
+        "scopeOnly": false,
+        "updatedAtUTC": "2026-10-25T02:36:27Z"
+      }
+    ],
+    "cla": {
+      "runId": 40154696698,
+      "jobId": 121053458056,
+      "status": "completed",
+      "conclusion": "failure",
+      "step": "Run F5 CLA assistant",
+      "actualDiagnostic": "Missing personal access token for signatures in the remote repository/organization; could not retrieve repository contents, status unknown.",
+      "actualLog": {
+        "decodedCharacters": 5243,
+        "decodedUTF8Bytes": 5250,
+        "sha256": "48c08eaedba30d24adb7c29791a3d0ad881343c395913b0e54d1cf1a6852b19d"
+      },
+      "agreementSigned": false,
+      "publisherCredentialsChanged": false,
+      "separateFromRuntimeAcceptance": true
+    },
+    "limits": [
+      "Push research success is scope-only; skipped runtime is not a new research execution.",
+      "PR source scope conservative fallback selected both profiles; underlying event_or_git_unavailable cause is not further established.",
+      "Actual7d1 PR runtime21/7/27/48 verified from its own complete logs and steps; no earlier source runtime counts borrowed.",
+      "C0 synthetic record/process, C1 handshake and C2a read-only probe remain separate scopes, not complete TLS migration or native NGINX continuation.",
+      "This research audit alone does not activate or accept an authenticated dependency runtime, service, package release or Production V1."
+    ],
+    "state": "EXACT_RESEARCH_PR_RUNTIME_VERIFIED_PUSH_SCOPE_ONLY",
+    "nodeVersion": "22.23.3"
+  },
+  "hostedBoundaryReview": {
+    "schemaVersion": 1,
+    "suite": "independent-exact-first-start-hosted-primary-boundary-review",
+    "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+    "sourceTree": "057c203ffe33e78d71af24820a3caa9435fec54c",
+    "sourceCheckerSha256": "8b75c2e0f47ec9b4578fd1a34ea6ad9e4b12e0de9b10743b2fbbbcd53fff4cc3",
+    "prMergeCheckout": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+    "freshGitMergeParents": [
+      "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+      "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546"
+    ],
+    "freshGitMergeTree": "057c203ffe33e78d71af24820a3caa9435fec54c",
+    "freshCompletedJobStepAPIsIndependentlyRead": true,
+    "freshArtifactDigestAPIsIndependentlyRead": true,
+    "checksPassed": 62,
+    "checks": [
+      {
+        "check": "freshExactHostedSource8b75",
+        "passed": true
+      },
+      {
+        "check": "freshPRMergeCheckoutTreeParents",
+        "passed": true
+      },
+      {
+        "check": "40154695196:freshAPIArtifactZIPDigest",
+        "passed": true
+      },
+      {
+        "check": "40154695196:freshExactCompletedJobFAIL",
+        "passed": true
+      },
+      {
+        "check": "40154695196:soleMandatoryServiceStep23FAIL",
+        "passed": true
+      },
+      {
+        "check": "40154695196:precedingRequiredStepsSucceeded",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actual20ZIPMembers",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actualCheckoutBuildSource",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actualAuthenticatedPrivateNodePASS",
+        "passed": true
+      },
+      {
+        "check": "40154695196:allSevenNodeFactsTrue",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actualPrimaryBeforePropertiesPreserved",
+        "passed": true
+      },
+      {
+        "check": "40154695196:topLevelCleanupRefusalUnchanged",
+        "passed": true
+      },
+      {
+        "check": "40154695196:independentCleanupFailurePreserved",
+        "passed": true
+      },
+      {
+        "check": "40154695196:boundedGenuineFirstStartObservation",
+        "passed": true
+      },
+      {
+        "check": "40154695196:queryCommandSucceededZeroNoStderr",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actualParsedUnitLoadedInactiveState",
+        "passed": true
+      },
+      {
+        "check": "40154695196:noConfirmedStartReadinessOrNativeSession",
+        "passed": true
+      },
+      {
+        "check": "40154695196:confirmedRuntimeLinkNotRemoval",
+        "passed": true
+      },
+      {
+        "check": "40154695196:cleanupRemainsUnconfirmed",
+        "passed": true
+      },
+      {
+        "check": "40154695196:dependencyRetainedNoCleanupReport",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actualTAP:service-lifecycle-contract.tap",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actualTAP:verified-node-contract.tap",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actualTAP:alpha-tls.tap",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actualTAP:frontend-tls.tap",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actualTAP:service-preflight.tap",
+        "passed": true
+      },
+      {
+        "check": "40154695196:precedingNative20SeparatePASS",
+        "passed": true
+      },
+      {
+        "check": "40154695196:serviceProductionStillFalse",
+        "passed": true
+      },
+      {
+        "check": "40154695196:diagnosticsNoRawRuntimeMetadata",
+        "passed": true
+      },
+      {
+        "check": "40154695196:actualLogCheckoutPresent",
+        "passed": true
+      },
+      {
+        "check": "40154700066:freshAPIArtifactZIPDigest",
+        "passed": true
+      },
+      {
+        "check": "40154700066:freshExactCompletedJobFAIL",
+        "passed": true
+      },
+      {
+        "check": "40154700066:soleMandatoryServiceStep23FAIL",
+        "passed": true
+      },
+      {
+        "check": "40154700066:precedingRequiredStepsSucceeded",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actual20ZIPMembers",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actualCheckoutBuildSource",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actualAuthenticatedPrivateNodePASS",
+        "passed": true
+      },
+      {
+        "check": "40154700066:allSevenNodeFactsTrue",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actualPrimaryBeforePropertiesPreserved",
+        "passed": true
+      },
+      {
+        "check": "40154700066:topLevelCleanupRefusalUnchanged",
+        "passed": true
+      },
+      {
+        "check": "40154700066:independentCleanupFailurePreserved",
+        "passed": true
+      },
+      {
+        "check": "40154700066:boundedGenuineFirstStartObservation",
+        "passed": true
+      },
+      {
+        "check": "40154700066:queryCommandSucceededZeroNoStderr",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actualParsedUnitLoadedInactiveState",
+        "passed": true
+      },
+      {
+        "check": "40154700066:noConfirmedStartReadinessOrNativeSession",
+        "passed": true
+      },
+      {
+        "check": "40154700066:confirmedRuntimeLinkNotRemoval",
+        "passed": true
+      },
+      {
+        "check": "40154700066:cleanupRemainsUnconfirmed",
+        "passed": true
+      },
+      {
+        "check": "40154700066:dependencyRetainedNoCleanupReport",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actualTAP:service-lifecycle-contract.tap",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actualTAP:verified-node-contract.tap",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actualTAP:alpha-tls.tap",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actualTAP:frontend-tls.tap",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actualTAP:service-preflight.tap",
+        "passed": true
+      },
+      {
+        "check": "40154700066:precedingNative20SeparatePASS",
+        "passed": true
+      },
+      {
+        "check": "40154700066:serviceProductionStillFalse",
+        "passed": true
+      },
+      {
+        "check": "40154700066:diagnosticsNoRawRuntimeMetadata",
+        "passed": true
+      },
+      {
+        "check": "40154700066:actualLogCheckoutPresent",
+        "passed": true
+      },
+      {
+        "check": "onlyFragmentIdentityRejectSite",
+        "passed": true
+      },
+      {
+        "check": "exactFragmentGuardOR",
+        "passed": true
+      },
+      {
+        "check": "startCheckPrecedesStartRequest",
+        "passed": true
+      },
+      {
+        "check": "propertiesStateObservedAfterAuthoritativeParse",
+        "passed": true
+      },
+      {
+        "check": "cleanupQueriesExcludedFromStartObservation",
+        "passed": true
+      },
+      {
+        "check": "primaryCapturedBeforeFinally",
+        "passed": true
+      }
+    ],
+    "runs": [
+      {
+        "runId": 40154695196,
+        "jobId": 121053497340,
+        "attempt": 1,
+        "conclusion": "failure",
+        "artifactId": 12583633821,
+        "zipBytes": 101440,
+        "zipSha256": "c737636880f82d3880c971bce4bebf08d8e995de0fc4a2c666543c8dceb9abbc",
+        "jobLogSha256": "51252ad8985a5ee06cc71c35ac4246fbfb799c5c686aadcb05007431c7e538ff",
+        "buildCheckout": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+        "actualAuthenticatedDependency": {
+          "ok": true,
+          "code": "verified_node_installed",
+          "version": "v22.23.3",
+          "archiveSha256": "df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de",
+          "nodeSha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+          "installationId": "53d46ec1ac815b9bf2177dd00b6fb989",
+          "signatureVerified": true,
+          "selectedFiles": 2,
+          "runtimeVersionVerified": true,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "subprocessOutputsPublished": false
+        },
+        "actualServiceObservation": {
+          "ok": false,
+          "code": "cleanup_unconfirmed",
+          "phase": "first_start",
+          "scope": "ephemeral-user-service-basic-lifecycle",
+          "automaticReadinessAccepted": false,
+          "failedStartAccepted": false,
+          "slowDrainAccepted": false,
+          "orphanRecoveryAccepted": false,
+          "tlsServiceAccepted": false,
+          "permanentDistributionAccepted": false,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "actualNonrootManagerObserved": true,
+          "actualUnitStarted": false,
+          "explicitReadinessPasses": 0,
+          "nativeSessionsStarted": 0,
+          "nativeSessionsStopped": 0,
+          "proxyBodyChecks": 0,
+          "uploadChecks": 0,
+          "streamChecks": 0,
+          "runtimeUnitLinked": true,
+          "runtimeUnitRemoved": false,
+          "unitEnabled": false,
+          "subprocessOutputsPublished": false,
+          "cleanup": {
+            "managerStopped": false,
+            "launcherExited": false,
+            "nativeGroupsAbsent": false,
+            "listeningPortsClosed": false,
+            "controlSocketAbsent": false,
+            "runtimeLinkAbsent": false,
+            "appSocketsRemaining": 0,
+            "installationRemoved": false,
+            "temporaryRootRemoved": false
+          },
+          "archiveSha256": "77e6c82f69ba36c18fae54f4771222a881cfcd17ed5c49ad5cdd4efeb178b9a9",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+          "nodePrerequisites": {
+            "selectedNodeRegular": true,
+            "selectedNodeCanonical": true,
+            "selectedNodeOwnerExecutable": true,
+            "selectedNodeModeAllowed": true,
+            "selectedNodeOwnerAllowed": true,
+            "recordedNodePathMatches": true,
+            "recordedNodeVersionSupported": true
+          },
+          "unitSha256": "3c1cdeb63e733471fa06839236db81b8688a55bfc9199175ca62c91c031b0866",
+          "primaryFailure": {
+            "phase": "first_start",
+            "subphase": "before_properties",
+            "code": "unit_fragment_identity",
+            "systemErrorClass": "unknown"
+          },
+          "cleanupFailures": [
+            {
+              "stage": "unit_cleanup",
+              "code": "unit_fragment_identity"
+            }
+          ],
+          "cleanupFailureCount": 1,
+          "cleanupFailuresTruncated": false,
+          "startDiagnostics": {
+            "attempts": 1,
+            "completedAttempts": 0,
+            "lastStep": "before_properties",
+            "observationCount": 2,
+            "observationsTruncated": false,
+            "observations": [
+              {
+                "attempt": 1,
+                "step": "before_properties",
+                "kind": "properties_command",
+                "outcome": "succeeded",
+                "exitCodeClass": "zero",
+                "termination": "none",
+                "stderrPresent": false
+              },
+              {
+                "attempt": 1,
+                "step": "before_properties",
+                "kind": "properties_state",
+                "loadState": "loaded",
+                "activeState": "inactive",
+                "subState": "dead",
+                "result": "success",
+                "mainPIDPresent": false,
+                "controlGroupPresent": false,
+                "fragmentPathPresent": true
+              }
+            ]
+          }
+        },
+        "actualBootstrapObservation": {
+          "ok": false,
+          "stage": "actual_service",
+          "code": "bootstrap_stage_failed",
+          "runtimeRemoved": false,
+          "temporaryRootRemoved": false,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "subprocessOutputsPublished": false
+        },
+        "TAPCounts": {
+          "service-lifecycle-contract.tap": {
+            "tests": 85,
+            "pass": 84,
+            "fail": 0,
+            "skipped": 1,
+            "cancelled": 0,
+            "todo": 0
+          },
+          "verified-node-contract.tap": {
+            "tests": 46,
+            "pass": 46,
+            "fail": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0
+          },
+          "alpha-tls.tap": {
+            "tests": 18,
+            "pass": 18,
+            "fail": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0
+          },
+          "frontend-tls.tap": {
+            "tests": 16,
+            "pass": 16,
+            "fail": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0
+          },
+          "service-preflight.tap": {
+            "tests": 42,
+            "pass": 42,
+            "fail": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0
+          }
+        },
+        "precedingNativeGroupsPassed": 20,
+        "fullImplementationCIAccepted": false
+      },
+      {
+        "runId": 40154700066,
+        "jobId": 121053511202,
+        "attempt": 1,
+        "conclusion": "failure",
+        "artifactId": 12584052598,
+        "zipBytes": 101574,
+        "zipSha256": "873fe42185ee7f2e5143ccbf9a4051c33ac413275fd35b8b21fe9241ee0ff2bd",
+        "jobLogSha256": "6b335372c8e31efc71450c5a1f9d83fd3a2ceccc54473d0e988b1470d511b349",
+        "buildCheckout": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+        "actualAuthenticatedDependency": {
+          "ok": true,
+          "code": "verified_node_installed",
+          "version": "v22.23.3",
+          "archiveSha256": "df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de",
+          "nodeSha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+          "installationId": "f7598a45998bb6c9a61657867f5dbb44",
+          "signatureVerified": true,
+          "selectedFiles": 2,
+          "runtimeVersionVerified": true,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "subprocessOutputsPublished": false
+        },
+        "actualServiceObservation": {
+          "ok": false,
+          "code": "cleanup_unconfirmed",
+          "phase": "first_start",
+          "scope": "ephemeral-user-service-basic-lifecycle",
+          "automaticReadinessAccepted": false,
+          "failedStartAccepted": false,
+          "slowDrainAccepted": false,
+          "orphanRecoveryAccepted": false,
+          "tlsServiceAccepted": false,
+          "permanentDistributionAccepted": false,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "actualNonrootManagerObserved": true,
+          "actualUnitStarted": false,
+          "explicitReadinessPasses": 0,
+          "nativeSessionsStarted": 0,
+          "nativeSessionsStopped": 0,
+          "proxyBodyChecks": 0,
+          "uploadChecks": 0,
+          "streamChecks": 0,
+          "runtimeUnitLinked": true,
+          "runtimeUnitRemoved": false,
+          "unitEnabled": false,
+          "subprocessOutputsPublished": false,
+          "cleanup": {
+            "managerStopped": false,
+            "launcherExited": false,
+            "nativeGroupsAbsent": false,
+            "listeningPortsClosed": false,
+            "controlSocketAbsent": false,
+            "runtimeLinkAbsent": false,
+            "appSocketsRemaining": 0,
+            "installationRemoved": false,
+            "temporaryRootRemoved": false
+          },
+          "archiveSha256": "ba5262ad9f7dccacdf435374f582d19029419634ced552c92ef34ed8e66aae75",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+          "nodePrerequisites": {
+            "selectedNodeRegular": true,
+            "selectedNodeCanonical": true,
+            "selectedNodeOwnerExecutable": true,
+            "selectedNodeModeAllowed": true,
+            "selectedNodeOwnerAllowed": true,
+            "recordedNodePathMatches": true,
+            "recordedNodeVersionSupported": true
+          },
+          "unitSha256": "a862bdcfdf95593f6677d06a5762556595a7b4ec1ccb632fe6eb928899af6eb9",
+          "primaryFailure": {
+            "phase": "first_start",
+            "subphase": "before_properties",
+            "code": "unit_fragment_identity",
+            "systemErrorClass": "unknown"
+          },
+          "cleanupFailures": [
+            {
+              "stage": "unit_cleanup",
+              "code": "unit_fragment_identity"
+            }
+          ],
+          "cleanupFailureCount": 1,
+          "cleanupFailuresTruncated": false,
+          "startDiagnostics": {
+            "attempts": 1,
+            "completedAttempts": 0,
+            "lastStep": "before_properties",
+            "observationCount": 2,
+            "observationsTruncated": false,
+            "observations": [
+              {
+                "attempt": 1,
+                "step": "before_properties",
+                "kind": "properties_command",
+                "outcome": "succeeded",
+                "exitCodeClass": "zero",
+                "termination": "none",
+                "stderrPresent": false
+              },
+              {
+                "attempt": 1,
+                "step": "before_properties",
+                "kind": "properties_state",
+                "loadState": "loaded",
+                "activeState": "inactive",
+                "subState": "dead",
+                "result": "success",
+                "mainPIDPresent": false,
+                "controlGroupPresent": false,
+                "fragmentPathPresent": true
+              }
+            ]
+          }
+        },
+        "actualBootstrapObservation": {
+          "ok": false,
+          "stage": "actual_service",
+          "code": "bootstrap_stage_failed",
+          "runtimeRemoved": false,
+          "temporaryRootRemoved": false,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "subprocessOutputsPublished": false
+        },
+        "TAPCounts": {
+          "service-lifecycle-contract.tap": {
+            "tests": 85,
+            "pass": 84,
+            "fail": 0,
+            "skipped": 1,
+            "cancelled": 0,
+            "todo": 0
+          },
+          "verified-node-contract.tap": {
+            "tests": 46,
+            "pass": 46,
+            "fail": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0
+          },
+          "alpha-tls.tap": {
+            "tests": 18,
+            "pass": 18,
+            "fail": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0
+          },
+          "frontend-tls.tap": {
+            "tests": 16,
+            "pass": 16,
+            "fail": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0
+          },
+          "service-preflight.tap": {
+            "tests": 42,
+            "pass": 42,
+            "fail": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0
+          }
+        },
+        "precedingNativeGroupsPassed": 20,
+        "fullImplementationCIAccepted": false
+      }
+    ],
+    "currentPrimaryObserved": {
+      "phase": "first_start",
+      "subphase": "before_properties",
+      "code": "unit_fragment_identity",
+      "systemErrorClass": "unknown"
+    },
+    "sourceFlowInference": {
+      "currentFirstStartFragmentStringDiffersFromExpectedUnitFile": true,
+      "reason": "The sole unit_fragment_identity throw is LoadState-not-loaded OR FragmentPath-not-equal-unitFile. Both actual pre-start state observations are parsed loaded; therefore the current comparison reached the FragmentPath string inequality branch.",
+      "exactManagerFragmentPathKnown": false,
+      "canonicalFragmentEquivalenceKnown": false,
+      "aliasOrSymlinkMechanismKnown": false,
+      "currentCheckerReachedExplicitStartCommand": false,
+      "physicalUnitNeverStartedProven": false,
+      "cleanupFragmentORBranchKnown": false,
+      "historical700PrimaryFailureKnown": false
+    },
+    "authenticatedPrivateNodeVerifiedNarrowly": true,
+    "bothRequiredActualServiceStepsFailed": true,
+    "runtimeRetainedForPossibleExecStop": true,
+    "managerNativeOrDependencyFinalCleanupVerified": false,
+    "fullImplementationCIAccepted": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "codeOrRefEdits": false,
+    "localRuntimeTestsExecuted": false,
+    "actualManagerCommandsExecutedByReview": 0,
+    "workflowRerunsRequested": 0,
+    "blockingFindings": [],
+    "nextBoundedDiagnostic": "Observe bounded fixed booleans for the current owned manager fragment relation to expected unit and runtime link, and canonical file identity, without publishing actual paths or weakening any guard; retain all failed observations and require a fresh changed-source exact CI before acceptance.",
+    "limits": [
+      "Current source diagnostics locate the present failure before the checker start-request line. This does not prove physical unit/native absence or explain the historical700 masked primary failure.",
+      "Loaded/inactive/dead/success with absent MainPID/cgroup are observations of the first-start query, not a complete physical process inventory.",
+      "FragmentPath comparator inequality is a source-flow inference. Actual path strings, canonical equivalence, aliases and underlying systemd behavior were not observed.",
+      "Cleanup recorded unit_fragment_identity separately but no cleanup query state was captured; its exact OR branch remains unknown.",
+      "All service cleanup flags remain false except appSocketsRemaining0. Private dependency runtime and bootstrap root were retained, and no dependency cleanup JSON exists. No final provider cleanup is claimed.",
+      "Both full native workflows failed the required actual service step. Preceding compatibility and authenticated Node installation success do not accept a service or Production V1.",
+      "Direct generic artifact-resource URL was unsupported by the connector; fresh supported workflow-artifact listing returned and verified both exact digests. No permissions, mode, owner, manager, CI retry or product changes were made."
+    ]
+  },
+  "freshHostedReconciliation": {
+    "schemaVersion": 1,
+    "scope": "read-only exact 7d1 CI reconciliation",
+    "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+    "sourceTree": "057c203ffe33e78d71af24820a3caa9435fec54c",
+    "freshReadAtUTC": "2026-10-25 03:28:22 UTC",
+    "merge": {
+      "sha": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+      "parents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546"
+      ],
+      "tree": "057c203ffe33e78d71af24820a3caa9435fec54c"
+    },
+    "runs": [
+      {
+        "event": "push",
+        "runId": 40154695196,
+        "jobId": 121053497340,
+        "status": "completed",
+        "conclusion": "failure",
+        "runAttempt": 1,
+        "headSha": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+        "requiredServiceStep": {
+          "name": "Verify temporary user-service with authenticated private Node",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 23
+        },
+        "artifact": {
+          "id": 12583633821,
+          "sha256": "c737636880f82d3880c971bce4bebf08d8e995de0fc4a2c666543c8dceb9abbc",
+          "bytes": 101440,
+          "expired": false
+        },
+        "freshFullJobLogRead": true,
+        "logContainsExactCheckout": true,
+        "actualArtifact": {
+          "serviceResult": {
+            "ok": false,
+            "code": "cleanup_unconfirmed",
+            "phase": "first_start",
+            "scope": "ephemeral-user-service-basic-lifecycle",
+            "automaticReadinessAccepted": false,
+            "failedStartAccepted": false,
+            "slowDrainAccepted": false,
+            "orphanRecoveryAccepted": false,
+            "tlsServiceAccepted": false,
+            "permanentDistributionAccepted": false,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "actualNonrootManagerObserved": true,
+            "actualUnitStarted": false,
+            "explicitReadinessPasses": 0,
+            "nativeSessionsStarted": 0,
+            "nativeSessionsStopped": 0,
+            "proxyBodyChecks": 0,
+            "uploadChecks": 0,
+            "streamChecks": 0,
+            "runtimeUnitLinked": true,
+            "runtimeUnitRemoved": false,
+            "unitEnabled": false,
+            "subprocessOutputsPublished": false,
+            "cleanup": {
+              "managerStopped": false,
+              "launcherExited": false,
+              "nativeGroupsAbsent": false,
+              "listeningPortsClosed": false,
+              "controlSocketAbsent": false,
+              "runtimeLinkAbsent": false,
+              "appSocketsRemaining": 0,
+              "installationRemoved": false,
+              "temporaryRootRemoved": false
+            },
+            "archiveSha256": "77e6c82f69ba36c18fae54f4771222a881cfcd17ed5c49ad5cdd4efeb178b9a9",
+            "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+            "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+            "nodePrerequisites": {
+              "selectedNodeRegular": true,
+              "selectedNodeCanonical": true,
+              "selectedNodeOwnerExecutable": true,
+              "selectedNodeModeAllowed": true,
+              "selectedNodeOwnerAllowed": true,
+              "recordedNodePathMatches": true,
+              "recordedNodeVersionSupported": true
+            },
+            "unitSha256": "3c1cdeb63e733471fa06839236db81b8688a55bfc9199175ca62c91c031b0866",
+            "primaryFailure": {
+              "phase": "first_start",
+              "subphase": "before_properties",
+              "code": "unit_fragment_identity",
+              "systemErrorClass": "unknown"
+            },
+            "cleanupFailures": [
+              {
+                "stage": "unit_cleanup",
+                "code": "unit_fragment_identity"
+              }
+            ],
+            "cleanupFailureCount": 1,
+            "cleanupFailuresTruncated": false,
+            "startDiagnostics": {
+              "attempts": 1,
+              "completedAttempts": 0,
+              "lastStep": "before_properties",
+              "observationCount": 2,
+              "observationsTruncated": false,
+              "observations": [
+                {
+                  "attempt": 1,
+                  "step": "before_properties",
+                  "kind": "properties_command",
+                  "outcome": "succeeded",
+                  "exitCodeClass": "zero",
+                  "termination": "none",
+                  "stderrPresent": false
+                },
+                {
+                  "attempt": 1,
+                  "step": "before_properties",
+                  "kind": "properties_state",
+                  "loadState": "loaded",
+                  "activeState": "inactive",
+                  "subState": "dead",
+                  "result": "success",
+                  "mainPIDPresent": false,
+                  "controlGroupPresent": false,
+                  "fragmentPathPresent": true
+                }
+              ]
+            }
+          },
+          "dependency": {
+            "ok": true,
+            "code": "verified_node_installed",
+            "version": "v22.23.3",
+            "archiveSha256": "df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de",
+            "nodeSha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+            "signatureVerified": true,
+            "selectedFiles": 2,
+            "runtimeVersionVerified": true,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "subprocessOutputsPublished": false
+          },
+          "bootstrap": {
+            "ok": false,
+            "stage": "actual_service",
+            "code": "bootstrap_stage_failed",
+            "runtimeRemoved": false,
+            "temporaryRootRemoved": false,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "subprocessOutputsPublished": false
+          },
+          "buildCheckout": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+          "precedingNativeAggregate": {
+            "success": true,
+            "groups": 20
+          },
+          "lifecycleContract": {
+            "tests": 85,
+            "pass": 84,
+            "fail": 0,
+            "skipped": 1,
+            "cancelled": 0,
+            "todo": 0
+          },
+          "dependencyContract": {
+            "tests": 46,
+            "pass": 46,
+            "fail": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0
+          }
+        }
+      },
+      {
+        "event": "pull_request",
+        "runId": 40154700066,
+        "jobId": 121053511202,
+        "status": "completed",
+        "conclusion": "failure",
+        "runAttempt": 1,
+        "headSha": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+        "requiredServiceStep": {
+          "name": "Verify temporary user-service with authenticated private Node",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 23
+        },
+        "artifact": {
+          "id": 12584052598,
+          "sha256": "873fe42185ee7f2e5143ccbf9a4051c33ac413275fd35b8b21fe9241ee0ff2bd",
+          "bytes": 101574,
+          "expired": false
+        },
+        "freshFullJobLogRead": true,
+        "logContainsExactCheckout": true,
+        "actualArtifact": {
+          "serviceResult": {
+            "ok": false,
+            "code": "cleanup_unconfirmed",
+            "phase": "first_start",
+            "scope": "ephemeral-user-service-basic-lifecycle",
+            "automaticReadinessAccepted": false,
+            "failedStartAccepted": false,
+            "slowDrainAccepted": false,
+            "orphanRecoveryAccepted": false,
+            "tlsServiceAccepted": false,
+            "permanentDistributionAccepted": false,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "actualNonrootManagerObserved": true,
+            "actualUnitStarted": false,
+            "explicitReadinessPasses": 0,
+            "nativeSessionsStarted": 0,
+            "nativeSessionsStopped": 0,
+            "proxyBodyChecks": 0,
+            "uploadChecks": 0,
+            "streamChecks": 0,
+            "runtimeUnitLinked": true,
+            "runtimeUnitRemoved": false,
+            "unitEnabled": false,
+            "subprocessOutputsPublished": false,
+            "cleanup": {
+              "managerStopped": false,
+              "launcherExited": false,
+              "nativeGroupsAbsent": false,
+              "listeningPortsClosed": false,
+              "controlSocketAbsent": false,
+              "runtimeLinkAbsent": false,
+              "appSocketsRemaining": 0,
+              "installationRemoved": false,
+              "temporaryRootRemoved": false
+            },
+            "archiveSha256": "ba5262ad9f7dccacdf435374f582d19029419634ced552c92ef34ed8e66aae75",
+            "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+            "sourceCommit": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+            "nodePrerequisites": {
+              "selectedNodeRegular": true,
+              "selectedNodeCanonical": true,
+              "selectedNodeOwnerExecutable": true,
+              "selectedNodeModeAllowed": true,
+              "selectedNodeOwnerAllowed": true,
+              "recordedNodePathMatches": true,
+              "recordedNodeVersionSupported": true
+            },
+            "unitSha256": "a862bdcfdf95593f6677d06a5762556595a7b4ec1ccb632fe6eb928899af6eb9",
+            "primaryFailure": {
+              "phase": "first_start",
+              "subphase": "before_properties",
+              "code": "unit_fragment_identity",
+              "systemErrorClass": "unknown"
+            },
+            "cleanupFailures": [
+              {
+                "stage": "unit_cleanup",
+                "code": "unit_fragment_identity"
+              }
+            ],
+            "cleanupFailureCount": 1,
+            "cleanupFailuresTruncated": false,
+            "startDiagnostics": {
+              "attempts": 1,
+              "completedAttempts": 0,
+              "lastStep": "before_properties",
+              "observationCount": 2,
+              "observationsTruncated": false,
+              "observations": [
+                {
+                  "attempt": 1,
+                  "step": "before_properties",
+                  "kind": "properties_command",
+                  "outcome": "succeeded",
+                  "exitCodeClass": "zero",
+                  "termination": "none",
+                  "stderrPresent": false
+                },
+                {
+                  "attempt": 1,
+                  "step": "before_properties",
+                  "kind": "properties_state",
+                  "loadState": "loaded",
+                  "activeState": "inactive",
+                  "subState": "dead",
+                  "result": "success",
+                  "mainPIDPresent": false,
+                  "controlGroupPresent": false,
+                  "fragmentPathPresent": true
+                }
+              ]
+            }
+          },
+          "dependency": {
+            "ok": true,
+            "code": "verified_node_installed",
+            "version": "v22.23.3",
+            "archiveSha256": "df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de",
+            "nodeSha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+            "signatureVerified": true,
+            "selectedFiles": 2,
+            "runtimeVersionVerified": true,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "subprocessOutputsPublished": false
+          },
+          "bootstrap": {
+            "ok": false,
+            "stage": "actual_service",
+            "code": "bootstrap_stage_failed",
+            "runtimeRemoved": false,
+            "temporaryRootRemoved": false,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "subprocessOutputsPublished": false
+          },
+          "buildCheckout": "ecf03747cbedf85ffd500084ea121e7da7c8af86",
+          "precedingNativeAggregate": {
+            "success": true,
+            "groups": 20
+          },
+          "lifecycleContract": {
+            "tests": 85,
+            "pass": 84,
+            "fail": 0,
+            "skipped": 1,
+            "cancelled": 0,
+            "todo": 0
+          },
+          "dependencyContract": {
+            "tests": 46,
+            "pass": 46,
+            "fail": 0,
+            "skipped": 0,
+            "cancelled": 0,
+            "todo": 0
+          }
+        }
+      }
+    ],
+    "research": {
+      "prRunId": 40154700058,
+      "jobId": 121053505246,
+      "status": "completed",
+      "conclusion": "success",
+      "freshFullJobLogRead": true,
+      "actualSuiteReports": [
+        {
+          "schemaVersion": 1,
+          "suite": "continuum-record-and-state-kernel",
+          "passed": true,
+          "testFiles": 2,
+          "scope": "in-memory-record-and-state-only",
+          "liveTlsProcessHandover": false,
+          "counts": {
+            "tests": 21,
+            "suites": 0,
+            "pass": 21,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "interrupted": false,
+          "runnerError": null
+        },
+        {
+          "schemaVersion": 1,
+          "suite": "continuum-real-handshake-and-record-observation",
+          "passed": true,
+          "testFiles": 2,
+          "scope": "real-handshake-and-record-observation-only",
+          "nativeNginxMigration": false,
+          "realSessionMigration": false,
+          "counts": {
+            "tests": 27,
+            "suites": 0,
+            "pass": 27,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "interrupted": false,
+          "runnerError": null
+        },
+        {
+          "schemaVersion": 1,
+          "suite": "continuum-pinned-openssl-state-probe",
+          "passed": true,
+          "testFiles": 1,
+          "scope": "pinned-openssl-read-only-state-observation",
+          "nativeNginxMigration": false,
+          "realSessionMigration": false,
+          "counts": {
+            "tests": 48,
+            "suites": 0,
+            "pass": 48,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "outputLimitExceeded": false,
+          "interrupted": false,
+          "runnerError": null
+        }
+      ],
+      "processTAP": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "skipped": 0
+      },
+      "pushRunId": 40154695181,
+      "pushRuntimeJobId": 121053500965,
+      "pushRuntimeSkipped": true,
+      "pushScopeTests": 7
+    },
+    "workflowRerunsRequested": 0,
+    "localRuntimeTestsExecuted": 0,
+    "trackedOrRefWrites": 0,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "sourceInference": {
+      "currentFirstPrimaryLiteralMismatchProven": true,
+      "reason": "The actual current parsed LoadState was loaded; the unchanged guarded OR condition rejected. Therefore parsed FragmentPath string differed from unitFile.",
+      "runtimeLinkAliasMatchKnown": false,
+      "canonicalSameFileKnown": false,
+      "historical700Or0adeCauseKnown": false,
+      "cleanupORBranchKnown": false,
+      "globalPhysicalUnitOrNativeAbsenceProven": false,
+      "serviceOrManagerOrDependencyCleanupConfirmed": false
+    },
+    "limits": [
+      "Actual digest-matched service JSON and fresh full checkout logs corroborate metadata.",
+      "actualUnitStarted false is unconfirmed, not proof of physical absence or accepted service lifecycle.",
+      "Actual FragmentPath spelling, runtimeLink alias equality, canonical equivalence, systemd root cause and security false positive remain unknown.",
+      "Cleanup has no separate property snapshot; which OR branch failed remains unknown.",
+      "No CI rerun, local actual service execution, production action, raw hostpaths/PIDs/sessionkeys or dependency installation identifiers published."
+    ],
+    "checks": [
+      {
+        "name": "40154695196: fresh API digest equals actual ZIP",
+        "passed": true
+      },
+      {
+        "name": "40154695196: fresh API byte count",
+        "passed": true
+      },
+      {
+        "name": "40154695196: exact source completed failure attempt1",
+        "passed": true
+      },
+      {
+        "name": "40154695196: required step23 failed",
+        "passed": true
+      },
+      {
+        "name": "40154695196: fresh full job checkout log",
+        "passed": true
+      },
+      {
+        "name": "40154695196: service actual checkout",
+        "passed": true
+      },
+      {
+        "name": "40154695196: actual build checkout",
+        "passed": true
+      },
+      {
+        "name": "40154695196: primary before_properties fragment refusal",
+        "passed": true
+      },
+      {
+        "name": "40154695196: loaded and fragment present",
+        "passed": true
+      },
+      {
+        "name": "40154695196: observed inactive dead success and no PID or group",
+        "passed": true
+      },
+      {
+        "name": "40154695196: one incomplete attempt zero service counters",
+        "passed": true
+      },
+      {
+        "name": "40154695196: cleanup same code retained",
+        "passed": true
+      },
+      {
+        "name": "40154695196: cleanup false except zero app sockets",
+        "passed": true
+      },
+      {
+        "name": "40154695196: dependency signature actual version",
+        "passed": true
+      },
+      {
+        "name": "40154695196: seven Node prerequisites",
+        "passed": true
+      },
+      {
+        "name": "40154695196: dependency retained no cleanup receipt",
+        "passed": true
+      },
+      {
+        "name": "40154695196: preceding native20 passed",
+        "passed": true
+      },
+      {
+        "name": "40154695196: lifecycle85total84pass1skip",
+        "passed": true
+      },
+      {
+        "name": "40154695196: dependency46pass",
+        "passed": true
+      },
+      {
+        "name": "40154700066: fresh API digest equals actual ZIP",
+        "passed": true
+      },
+      {
+        "name": "40154700066: fresh API byte count",
+        "passed": true
+      },
+      {
+        "name": "40154700066: exact source completed failure attempt1",
+        "passed": true
+      },
+      {
+        "name": "40154700066: required step23 failed",
+        "passed": true
+      },
+      {
+        "name": "40154700066: fresh full job checkout log",
+        "passed": true
+      },
+      {
+        "name": "40154700066: service actual checkout",
+        "passed": true
+      },
+      {
+        "name": "40154700066: actual build checkout",
+        "passed": true
+      },
+      {
+        "name": "40154700066: primary before_properties fragment refusal",
+        "passed": true
+      },
+      {
+        "name": "40154700066: loaded and fragment present",
+        "passed": true
+      },
+      {
+        "name": "40154700066: observed inactive dead success and no PID or group",
+        "passed": true
+      },
+      {
+        "name": "40154700066: one incomplete attempt zero service counters",
+        "passed": true
+      },
+      {
+        "name": "40154700066: cleanup same code retained",
+        "passed": true
+      },
+      {
+        "name": "40154700066: cleanup false except zero app sockets",
+        "passed": true
+      },
+      {
+        "name": "40154700066: dependency signature actual version",
+        "passed": true
+      },
+      {
+        "name": "40154700066: seven Node prerequisites",
+        "passed": true
+      },
+      {
+        "name": "40154700066: dependency retained no cleanup receipt",
+        "passed": true
+      },
+      {
+        "name": "40154700066: preceding native20 passed",
+        "passed": true
+      },
+      {
+        "name": "40154700066: lifecycle85total84pass1skip",
+        "passed": true
+      },
+      {
+        "name": "40154700066: dependency46pass",
+        "passed": true
+      },
+      {
+        "name": "merge tree exact implementation",
+        "passed": true
+      },
+      {
+        "name": "merge exact parents",
+        "passed": true
+      },
+      {
+        "name": "research actual PR suites",
+        "passed": true
+      },
+      {
+        "name": "research push skipped not counted runtime",
+        "passed": true
+      },
+      {
+        "name": "strict loaded OR literal fragment guard",
+        "passed": true
+      },
+      {
+        "name": "guard precedes own start command",
+        "passed": true
+      }
+    ],
+    "checksPassed": 44
+  },
+  "independentQA": {
+    "schemaVersion": 1,
+    "kind": "independent-source-wiring-qa",
+    "sourceBase": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+    "sourceCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+    "sourceSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "testSha256": "210887cf38fe1fe545376d5dec1712c551d7ab8069402921655c2e722c30b1e0",
+    "candidateModuleSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "baselineModuleSha256": "8b75c2e0f47ec9b4578fd1a34ea6ad9e4b12e0de9b10743b2fbbbcd53fff4cc3",
+    "harnessSha256": "0ac921927fb3d5da41616d8d441d32e02a8c76bf31f919389a1fbf1b698a775c",
+    "counts": {
+      "total": 29,
+      "passed": 29,
+      "failed": 0
+    },
+    "checksPassed": 29,
+    "checks": [
+      {
+        "name": "ownedProperties differs only by additive diagnostic capture and preceding return binding",
+        "passed": true
+      },
+      {
+        "name": "linkAuthority differs only by fixed success return after all unchanged guards",
+        "passed": true
+      },
+      {
+        "name": "module performs no new filesystem or manager calls in new diagnostics",
+        "passed": true
+      },
+      {
+        "name": "final report includes actual collector snapshot",
+        "passed": true
+      },
+      {
+        "name": "source closure lifecycle 1: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure lifecycle 2: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure lifecycle 3: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure lifecycle 4: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure lifecycle 5: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure lifecycle 6: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure lifecycle 7: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure lifecycle 8: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "upstream lifecycle link/unit_link_identity error identity preserved without observations",
+        "passed": true
+      },
+      {
+        "name": "upstream lifecycle link/unit_file_identity error identity preserved without observations",
+        "passed": true
+      },
+      {
+        "name": "upstream lifecycle properties/unit_query_failed error identity preserved without observations",
+        "passed": true
+      },
+      {
+        "name": "upstream lifecycle properties/unit_response_invalid error identity preserved without observations",
+        "passed": true
+      },
+      {
+        "name": "source closure cleanup 9: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure cleanup 10: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure cleanup 11: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure cleanup 12: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure cleanup 13: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure cleanup 14: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure cleanup 15: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "source closure cleanup 16: unchanged decision and ordered diagnostic",
+        "passed": true
+      },
+      {
+        "name": "upstream cleanup link/unit_link_identity error identity preserved without observations",
+        "passed": true
+      },
+      {
+        "name": "upstream cleanup link/unit_file_identity error identity preserved without observations",
+        "passed": true
+      },
+      {
+        "name": "upstream cleanup properties/unit_query_failed error identity preserved without observations",
+        "passed": true
+      },
+      {
+        "name": "upstream cleanup properties/unit_response_invalid error identity preserved without observations",
+        "passed": true
+      },
+      {
+        "name": "baseline counterexample: alias and foreign original refusal outputs are identical; candidate classes differ without accepting either",
+        "passed": true
+      }
+    ],
+    "matrix": [
+      {
+        "context": "lifecycle",
+        "fragmentClass": "unit_file",
+        "expectedDecision": "returned",
+        "candidateDecision": "returned"
+      },
+      {
+        "context": "lifecycle",
+        "fragmentClass": "runtime_link",
+        "expectedDecision": "unit_fragment_identity",
+        "candidateDecision": "unit_fragment_identity"
+      },
+      {
+        "context": "lifecycle",
+        "fragmentClass": "other",
+        "expectedDecision": "unit_fragment_identity",
+        "candidateDecision": "unit_fragment_identity"
+      },
+      {
+        "context": "lifecycle",
+        "fragmentClass": "empty",
+        "expectedDecision": "unit_fragment_identity",
+        "candidateDecision": "unit_fragment_identity"
+      },
+      {
+        "context": "lifecycle",
+        "fragmentClass": "unit_file",
+        "expectedDecision": "unit_fragment_identity",
+        "candidateDecision": "unit_fragment_identity"
+      },
+      {
+        "context": "lifecycle",
+        "fragmentClass": "unit_file",
+        "expectedDecision": "unit_cgroup_identity",
+        "candidateDecision": "unit_cgroup_identity"
+      },
+      {
+        "context": "lifecycle",
+        "fragmentClass": "unit_file",
+        "expectedDecision": "unit_cgroup_identity",
+        "candidateDecision": "unit_cgroup_identity"
+      },
+      {
+        "context": "lifecycle",
+        "fragmentClass": "unit_file",
+        "expectedDecision": "returned",
+        "candidateDecision": "returned"
+      },
+      {
+        "context": "cleanup",
+        "fragmentClass": "unit_file",
+        "expectedDecision": "returned",
+        "candidateDecision": "returned"
+      },
+      {
+        "context": "cleanup",
+        "fragmentClass": "runtime_link",
+        "expectedDecision": "unit_fragment_identity",
+        "candidateDecision": "unit_fragment_identity"
+      },
+      {
+        "context": "cleanup",
+        "fragmentClass": "other",
+        "expectedDecision": "unit_fragment_identity",
+        "candidateDecision": "unit_fragment_identity"
+      },
+      {
+        "context": "cleanup",
+        "fragmentClass": "empty",
+        "expectedDecision": "unit_fragment_identity",
+        "candidateDecision": "unit_fragment_identity"
+      },
+      {
+        "context": "cleanup",
+        "fragmentClass": "unit_file",
+        "expectedDecision": "unit_fragment_identity",
+        "candidateDecision": "unit_fragment_identity"
+      },
+      {
+        "context": "cleanup",
+        "fragmentClass": "unit_file",
+        "expectedDecision": "unit_cgroup_identity",
+        "candidateDecision": "unit_cgroup_identity"
+      },
+      {
+        "context": "cleanup",
+        "fragmentClass": "unit_file",
+        "expectedDecision": "unit_cgroup_identity",
+        "candidateDecision": "unit_cgroup_identity"
+      },
+      {
+        "context": "cleanup",
+        "fragmentClass": "unit_file",
+        "expectedDecision": "returned",
+        "candidateDecision": "returned"
+      }
+    ],
+    "blockingFindings": [],
+    "actualManagerCommandsExecuted": 0,
+    "actualServiceExecuted": false,
+    "nativeBuildOrAggregateRerun": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "baselineCounterexample": {
+      "synthetic": true,
+      "baselineRejectsBothSameCode": true,
+      "baselineRecordsNoFragmentIdentityObservation": true,
+      "candidateDistinguishesKnownRuntimeLinkFromOther": true,
+      "candidateStillRejectsBoth": true,
+      "actualHostedAliasProven": false
+    },
+    "boundaries": {
+      "sourceExtractedOwnedProperties": true,
+      "originalLinkAuthorityChecksByteEqualExceptFixedReturn": true,
+      "actualNonrootManagerInvoked": false,
+      "actualServiceInvoked": false,
+      "filesystemOrManagerReadsAddedToDiagnostics": false,
+      "foreignManagerPathsDereferenced": false,
+      "canonicalIdentityMeasured": false,
+      "productionAccepted": false,
+      "cleanupClaim": "No manager or native was started by this pure source-closure harness; no service cleanup acceptance inferred."
+    }
+  },
+  "author": {
+    "schemaVersion": 1,
+    "kind": "unit-fragment-identity-diagnostics-author-report",
+    "baseCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+    "leasedParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+    "runId": "x10-fragment-identity-20261025T032900Z",
+    "recordedAtUTC": "2026-10-25T03:30:19.400135+00:00",
+    "files": [
+      {
+        "path": "x10/service/lifecycle-check.mjs",
+        "sha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+        "bytes": 41558,
+        "beforeSha256": "8b75c2e0f47ec9b4578fd1a34ea6ad9e4b12e0de9b10743b2fbbbcd53fff4cc3"
+      },
+      {
+        "path": "x10/service/lifecycle-check.test.mjs",
+        "sha256": "210887cf38fe1fe545376d5dec1712c551d7ab8069402921655c2e722c30b1e0",
+        "bytes": 26665,
+        "beforeSha256": "8594afd4fe0dad86ef528c3dfb6872bfbc28fc7cc7eef6b5d7141c8c43a2a3ca"
+      }
+    ],
+    "userOutcome": "Distinguish the manager reported owned file, known runtime-link spelling and unrelated fragment without reading a manager-supplied path or admitting a previously refused unit.",
+    "behavior": "Only diagnostic functions/collector, a fixed successful linkAuthority return and ownedProperties observation were added. Removing those additions and the added return field produces the exact unchanged7d1 module bytes.",
+    "exactBaselineNormalization": {
+      "passed": true,
+      "normalizedSha256": "8b75c2e0f47ec9b4578fd1a34ea6ad9e4b12e0de9b10743b2fbbbcd53fff4cc3",
+      "originalSha256": "8b75c2e0f47ec9b4578fd1a34ea6ad9e4b12e0de9b10743b2fbbbcd53fff4cc3"
+    },
+    "diagnosticSchema": {
+      "fragmentIdentityDiagnostics": "Separate collector records first8 observations, count saturates32, truncation explicit. Existing startDiagnostics and all original bounds unchanged.",
+      "fragmentPathMatch": "unit_file/runtime_link/other/empty/unknown; primitive bounded normalized strings compared strictly, no path resolution or I/O.",
+      "precedingChecks": "precedingLinkTargetMatchesUnit/precedingUnitOwnedModeHash verified only for own-data literal true from the immediately preceding successful unchanged linkAuthority; otherwise unknown.",
+      "context": "Fixed phase/start subphase and lifecycle/cleanup context; cleanup subphase always not_applicable; independent cleanup observation does not erase original primary observation.",
+      "canonicalIdentity": "Always not_measured; no realpath or inode equivalence is added or inferred.",
+      "authorityBoundary": "Preceding checks are temporally separate snapshots of the existing link/file checks, not a simultaneous or kernel-enforced fence. Same-UID malicious interference is not isolated. Pure diagnostic records alone convey no authority."
+    },
+    "actualValidation": {
+      "syntax": {
+        "commands": [
+          "node --check x10/service/lifecycle-check.mjs",
+          "node --check x10/service/lifecycle-check.test.mjs"
+        ],
+        "exitCodes": [
+          0,
+          0
+        ]
+      },
+      "finalContracts": {
+        "command": "node --test --test-reporter=tap x10/service/lifecycle-check.test.mjs",
+        "exitCode": 0,
+        "path": ".build/fragment-author-contract.tap",
+        "sha256": "b1401234232d920138dd57397afb87d1dc1e52570642b39f4223d9ff413f539c",
+        "tests": 104,
+        "pass": 104,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "units": "104 pure/refusal contracts including actual child root/usage refusal; no actual nonroot manager/service execution"
+      },
+      "counterexample": {
+        "path": ".build/fragment-author-baseline-safe.json",
+        "sha256": "e3ebc00f726304d6eb1c14a3408b8780fab54dbd6add09aedc254288a1b54a9c",
+        "bytes": 1323,
+        "report": {
+          "kind": "exact-baseline-pure-fragment-observation-counterexample",
+          "baselineCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+          "baselineCheckerSha256": "8b75c2e0f47ec9b4578fd1a34ea6ad9e4b12e0de9b10743b2fbbbcd53fff4cc3",
+          "exactBaselineSummarizerExecuted": true,
+          "syntheticTranscriptsOnly": true,
+          "actualManagerOrServiceExecuted": false,
+          "baseline": {
+            "aliasAndForeignObservationsIdentical": true,
+            "fragmentMatchClassificationAvailable": false
+          },
+          "candidate": {
+            "observations": [
+              {
+                "loadState": "loaded",
+                "fragmentPathMatch": "runtime_link",
+                "precedingLinkTargetMatchesUnit": "verified",
+                "precedingUnitOwnedModeHash": "verified",
+                "canonicalIdentity": "not_measured"
+              },
+              {
+                "loadState": "loaded",
+                "fragmentPathMatch": "other",
+                "precedingLinkTargetMatchesUnit": "verified",
+                "precedingUnitOwnedModeHash": "verified",
+                "canonicalIdentity": "not_measured"
+              }
+            ],
+            "aliasAndForeignDistinguished": true
+          },
+          "originalStrictFileGuardStillRejectsBothSyntheticPaths": true,
+          "actual7d1ManagerFragmentMatchKnown": false,
+          "canonicalIdentityMeasured": false,
+          "physicalSameFileOrInodeMeasured": false,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "rawPathsPublished": false
+        }
+      },
+      "diffWhitespace": {
+        "command": "git diff --check",
+        "exitCode": 0
+      }
+    },
+    "unchangedProductInputs": [
+      {
+        "path": "x10/service/user-unit.mjs",
+        "sha256": "3fc67266e513a00803bbe450d23052fffd5f3b61bbb0dfaa90969841b1d9852a",
+        "unchanged": true
+      },
+      {
+        "path": "x10/service/preflight.mjs",
+        "sha256": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+        "unchanged": true
+      },
+      {
+        "path": "x10/alpha/cli.mjs",
+        "sha256": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+        "unchanged": true
+      },
+      {
+        "path": "x10/alpha/runtime.mjs",
+        "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51",
+        "unchanged": true
+      },
+      {
+        "path": "x10/control/manager.mjs",
+        "sha256": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822",
+        "unchanged": true
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c",
+        "unchanged": true
+      }
+    ],
+    "initialAdverseFindings": [
+      {
+        "kind": "test harness default argument error",
+        "observation": "First author run103PASS1FAIL: wrapper default replaced explicit undefined check input with a verified fixture, so a negative test expected unknown incorrectly.",
+        "correction": "Call the production summarizer directly for missing-check cases; production implementation unchanged; final104/104."
+      }
+    ],
+    "integrationBinding": "Only coordinator updates exact checker SHA literals in verified-node/workflow; author has no ownership of those files.",
+    "priorFailureScope": "Both exact7d1 actual hosted service steps failed unit_fragment_identity before own start request, with cleanup_unconfirmed. Their actual FragmentPath spelling and canonical equivalence are not yet measured by this new code; old700/0ade primary causes remain unknown.",
+    "cleanupThisLocalWork": {
+      "managerCommandsExecuted": 0,
+      "unitLinksCreated": 0,
+      "serviceOrServingNativeStarted": false,
+      "privateSyntheticCounterexampleOnly": true
+    },
+    "acceptance": {
+      "localDiagnosticContractsVerified": true,
+      "syntheticBaselineDiagnosticGapReproduced": true,
+      "actual7d1FragmentSpellingKnown": false,
+      "canonicalIdentityMeasured": false,
+      "newActualNonrootServiceExecuted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "exactResultingCI": "PENDING"
+    },
+    "limits": [
+      "No new manager commands, filesystem reads, signals, cleanup operations or success/admission guard changes.",
+      "The known link/file checks precede the manager response and do not prove atomic identity or physical same-file/inode equivalence.",
+      "No manager-reported FragmentPath is passed to I/O. No raw paths, PIDs, UID, stat/dev/inode values, argv, output or errors are returned.",
+      "Local tests do not prove current hosted runtime-link spelling, physical absence, service cleanup or Production V1.",
+      "No native build/aggregate or research rerun performed by this author; exact new CI remains required."
+    ]
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "role": "independent_security_diagnostic_review",
+    "sourceSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "testSha256": "210887cf38fe1fe545376d5dec1712c551d7ab8069402921655c2e722c30b1e0",
+    "checksPassed": 92,
+    "blockingFindings": [],
+    "heldout": {
+      "passed": 62,
+      "failed": 0,
+      "actualManagerExecuted": false,
+      "actualServiceExecuted": false,
+      "actualNativeAggregateExecuted": false,
+      "scope": "Pure diagnostic helper and collector held-outs only"
+    },
+    "claims": {
+      "canonicalIdentityMeasured": false,
+      "aliasEquivalenceProven": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "guardsNotExercisedByPureHeldouts": true
+    },
+    "heldoutChecks": [
+      {
+        "name": "invalid_fragment_1",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_2",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_3",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_4",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_5",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_6",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_7",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_8",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_9",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_10",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_11",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_12",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_13",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_14",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_15",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_16",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_17",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_18",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_19",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_20",
+        "passed": true
+      },
+      {
+        "name": "match_owned",
+        "passed": true
+      },
+      {
+        "name": "match_known_link",
+        "passed": true
+      },
+      {
+        "name": "match_different_directory",
+        "passed": true
+      },
+      {
+        "name": "match_different_suffix",
+        "passed": true
+      },
+      {
+        "name": "match_empty",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_1",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_2",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_3",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_4",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_5",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_6",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_7",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_8",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_9",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_10",
+        "passed": true
+      },
+      {
+        "name": "own_data_getters_not_called",
+        "passed": true
+      },
+      {
+        "name": "coercion_not_called",
+        "passed": true
+      },
+      {
+        "name": "descriptor_traps_caught",
+        "passed": true
+      },
+      {
+        "name": "revoked_proxy_caught",
+        "passed": true
+      },
+      {
+        "name": "inherited_fields_ignored",
+        "passed": true
+      },
+      {
+        "name": "facts_require_boolean_true",
+        "passed": true
+      },
+      {
+        "name": "one_fact_not_borrowed_for_other",
+        "passed": true
+      },
+      {
+        "name": "facts_not_borrowed_between_calls",
+        "passed": true
+      },
+      {
+        "name": "canonical_never_inferred",
+        "passed": true
+      },
+      {
+        "name": "exact_summary_allowlist_and_scalar_types",
+        "passed": true
+      },
+      {
+        "name": "summary_hides_paths_and_identifiers",
+        "passed": true
+      },
+      {
+        "name": "load_state_allowlist",
+        "passed": true
+      },
+      {
+        "name": "collector_empty_has_no_invented_observation",
+        "passed": true
+      },
+      {
+        "name": "collector_frozen_interface",
+        "passed": true
+      },
+      {
+        "name": "collector_lifecycle_context",
+        "passed": true
+      },
+      {
+        "name": "collector_cleanup_context_no_start_subphase",
+        "passed": true
+      },
+      {
+        "name": "collector_context_requires_primitive_true",
+        "passed": true
+      },
+      {
+        "name": "collector_unknown_enums_discarded",
+        "passed": true
+      },
+      {
+        "name": "collector_stop_subphase_not_applicable",
+        "passed": true
+      },
+      {
+        "name": "collector_exact_eight_no_truncation",
+        "passed": true
+      },
+      {
+        "name": "collector_ninth_explicit_truncation",
+        "passed": true
+      },
+      {
+        "name": "collector_counter_caps_at_32",
+        "passed": true
+      },
+      {
+        "name": "collector_retains_first_eight_in_order",
+        "passed": true
+      },
+      {
+        "name": "collector_snapshots_defensively_copied",
+        "passed": true
+      },
+      {
+        "name": "collector_input_mutation_not_retained",
+        "passed": true
+      },
+      {
+        "name": "collector_independent_instances",
+        "passed": true
+      },
+      {
+        "name": "collector_no_authority_output",
+        "passed": true
+      }
+    ],
+    "staticChecks": [
+      {
+        "name": "diagnostic_reduction_unique_1",
+        "passed": true
+      },
+      {
+        "name": "diagnostic_reduction_unique_2",
+        "passed": true
+      },
+      {
+        "name": "diagnostic_reduction_unique_3",
+        "passed": true
+      },
+      {
+        "name": "diagnostic_reduction_unique_4",
+        "passed": true
+      },
+      {
+        "name": "whole_normalized_source_equals_exact_7d1",
+        "passed": true
+      },
+      {
+        "name": "exact_normalized_baseline_hash",
+        "passed": true
+      },
+      {
+        "name": "no_filesystem_or_childprocess_calls_in_new_helpers",
+        "passed": true
+      },
+      {
+        "name": "no_new_imports",
+        "passed": true
+      },
+      {
+        "name": "unchanged_literal_fragment_guard",
+        "passed": true
+      },
+      {
+        "name": "new_observation_before_unchanged_guard",
+        "passed": true
+      },
+      {
+        "name": "fresh_link_result_local_to_each_ownedProperties_call",
+        "passed": true
+      },
+      {
+        "name": "link_result_only_after_original_hash_mode_owner_target_checks",
+        "passed": true
+      },
+      {
+        "name": "no_guard_uses_diagnostic_return_values",
+        "passed": true
+      },
+      {
+        "name": "no_added_reject_throw_signal_or_mutation_calls",
+        "passed": true
+      },
+      {
+        "name": "canonical_identity_always_explicit_not_measured",
+        "passed": true
+      },
+      {
+        "name": "finite_fragment_identity_enum",
+        "passed": true
+      },
+      {
+        "name": "no_input_object_spread_in_new_helpers",
+        "passed": true
+      },
+      {
+        "name": "collector_only_spreads_sanitized_summary",
+        "passed": true
+      },
+      {
+        "name": "collector_snapshot_copies_flat_records",
+        "passed": true
+      },
+      {
+        "name": "collector_bounds_eight_and_thirty_two",
+        "passed": true
+      },
+      {
+        "name": "new_helpers_have_no_logging",
+        "passed": true
+      },
+      {
+        "name": "start_collector_bytes_unchanged",
+        "passed": true
+      },
+      {
+        "name": "CLI_entrypoint_unchanged",
+        "passed": true
+      },
+      {
+        "name": "no_new_acceptance_claims",
+        "passed": true
+      },
+      {
+        "name": "all_previous_85_test_source_preserved",
+        "passed": true
+      },
+      {
+        "name": "native_controller_alpha_license_tracked_unchanged",
+        "passed": true
+      },
+      {
+        "name": "systemctl_command_sites_unchanged",
+        "passed": true
+      },
+      {
+        "name": "signal_sites_unchanged",
+        "passed": true
+      },
+      {
+        "name": "heldouts_source_hash_matches_final_review",
+        "passed": true
+      },
+      {
+        "name": "heldouts_test_hash_matches_final_review",
+        "passed": true
+      }
+    ],
+    "checks": [
+      {
+        "name": "diagnostic_reduction_unique_1",
+        "passed": true
+      },
+      {
+        "name": "diagnostic_reduction_unique_2",
+        "passed": true
+      },
+      {
+        "name": "diagnostic_reduction_unique_3",
+        "passed": true
+      },
+      {
+        "name": "diagnostic_reduction_unique_4",
+        "passed": true
+      },
+      {
+        "name": "whole_normalized_source_equals_exact_7d1",
+        "passed": true
+      },
+      {
+        "name": "exact_normalized_baseline_hash",
+        "passed": true
+      },
+      {
+        "name": "no_filesystem_or_childprocess_calls_in_new_helpers",
+        "passed": true
+      },
+      {
+        "name": "no_new_imports",
+        "passed": true
+      },
+      {
+        "name": "unchanged_literal_fragment_guard",
+        "passed": true
+      },
+      {
+        "name": "new_observation_before_unchanged_guard",
+        "passed": true
+      },
+      {
+        "name": "fresh_link_result_local_to_each_ownedProperties_call",
+        "passed": true
+      },
+      {
+        "name": "link_result_only_after_original_hash_mode_owner_target_checks",
+        "passed": true
+      },
+      {
+        "name": "no_guard_uses_diagnostic_return_values",
+        "passed": true
+      },
+      {
+        "name": "no_added_reject_throw_signal_or_mutation_calls",
+        "passed": true
+      },
+      {
+        "name": "canonical_identity_always_explicit_not_measured",
+        "passed": true
+      },
+      {
+        "name": "finite_fragment_identity_enum",
+        "passed": true
+      },
+      {
+        "name": "no_input_object_spread_in_new_helpers",
+        "passed": true
+      },
+      {
+        "name": "collector_only_spreads_sanitized_summary",
+        "passed": true
+      },
+      {
+        "name": "collector_snapshot_copies_flat_records",
+        "passed": true
+      },
+      {
+        "name": "collector_bounds_eight_and_thirty_two",
+        "passed": true
+      },
+      {
+        "name": "new_helpers_have_no_logging",
+        "passed": true
+      },
+      {
+        "name": "start_collector_bytes_unchanged",
+        "passed": true
+      },
+      {
+        "name": "CLI_entrypoint_unchanged",
+        "passed": true
+      },
+      {
+        "name": "no_new_acceptance_claims",
+        "passed": true
+      },
+      {
+        "name": "all_previous_85_test_source_preserved",
+        "passed": true
+      },
+      {
+        "name": "native_controller_alpha_license_tracked_unchanged",
+        "passed": true
+      },
+      {
+        "name": "systemctl_command_sites_unchanged",
+        "passed": true
+      },
+      {
+        "name": "signal_sites_unchanged",
+        "passed": true
+      },
+      {
+        "name": "heldouts_source_hash_matches_final_review",
+        "passed": true
+      },
+      {
+        "name": "heldouts_test_hash_matches_final_review",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_1",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_2",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_3",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_4",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_5",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_6",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_7",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_8",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_9",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_10",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_11",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_12",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_13",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_14",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_15",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_16",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_17",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_18",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_19",
+        "passed": true
+      },
+      {
+        "name": "invalid_fragment_20",
+        "passed": true
+      },
+      {
+        "name": "match_owned",
+        "passed": true
+      },
+      {
+        "name": "match_known_link",
+        "passed": true
+      },
+      {
+        "name": "match_different_directory",
+        "passed": true
+      },
+      {
+        "name": "match_different_suffix",
+        "passed": true
+      },
+      {
+        "name": "match_empty",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_1",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_2",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_3",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_4",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_5",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_6",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_7",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_8",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_9",
+        "passed": true
+      },
+      {
+        "name": "ambiguous_known_paths_10",
+        "passed": true
+      },
+      {
+        "name": "own_data_getters_not_called",
+        "passed": true
+      },
+      {
+        "name": "coercion_not_called",
+        "passed": true
+      },
+      {
+        "name": "descriptor_traps_caught",
+        "passed": true
+      },
+      {
+        "name": "revoked_proxy_caught",
+        "passed": true
+      },
+      {
+        "name": "inherited_fields_ignored",
+        "passed": true
+      },
+      {
+        "name": "facts_require_boolean_true",
+        "passed": true
+      },
+      {
+        "name": "one_fact_not_borrowed_for_other",
+        "passed": true
+      },
+      {
+        "name": "facts_not_borrowed_between_calls",
+        "passed": true
+      },
+      {
+        "name": "canonical_never_inferred",
+        "passed": true
+      },
+      {
+        "name": "exact_summary_allowlist_and_scalar_types",
+        "passed": true
+      },
+      {
+        "name": "summary_hides_paths_and_identifiers",
+        "passed": true
+      },
+      {
+        "name": "load_state_allowlist",
+        "passed": true
+      },
+      {
+        "name": "collector_empty_has_no_invented_observation",
+        "passed": true
+      },
+      {
+        "name": "collector_frozen_interface",
+        "passed": true
+      },
+      {
+        "name": "collector_lifecycle_context",
+        "passed": true
+      },
+      {
+        "name": "collector_cleanup_context_no_start_subphase",
+        "passed": true
+      },
+      {
+        "name": "collector_context_requires_primitive_true",
+        "passed": true
+      },
+      {
+        "name": "collector_unknown_enums_discarded",
+        "passed": true
+      },
+      {
+        "name": "collector_stop_subphase_not_applicable",
+        "passed": true
+      },
+      {
+        "name": "collector_exact_eight_no_truncation",
+        "passed": true
+      },
+      {
+        "name": "collector_ninth_explicit_truncation",
+        "passed": true
+      },
+      {
+        "name": "collector_counter_caps_at_32",
+        "passed": true
+      },
+      {
+        "name": "collector_retains_first_eight_in_order",
+        "passed": true
+      },
+      {
+        "name": "collector_snapshots_defensively_copied",
+        "passed": true
+      },
+      {
+        "name": "collector_input_mutation_not_retained",
+        "passed": true
+      },
+      {
+        "name": "collector_independent_instances",
+        "passed": true
+      },
+      {
+        "name": "collector_no_authority_output",
+        "passed": true
+      }
+    ],
+    "staticChecksPassed": 30,
+    "normalizedBaselineSha256": "8b75c2e0f47ec9b4578fd1a34ea6ad9e4b12e0de9b10743b2fbbbcd53fff4cc3",
+    "authorityBehaviorUnchanged": true,
+    "actualManagerCommandsExecuted": 0,
+    "actualServiceExecuted": false,
+    "nativeBuildOrAggregateRerun": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "baselineNormalization": "Removed only two pure diagnostic helpers, collector initialization/output, local return capture and sanitized preguard observation, and terminal fixed linkAuthority return; all remaining source bytes equal exact7d1 baseline. This establishes unchanged authority/action source, not physical service acceptance.",
+    "reviewerHarnessAdverse": [
+      {
+        "initialAttempt": "Explicit undefined knownPaths was unintentionally replaced by a reviewer wrapper default parameter; expectedunknown assertion failed against runtime_link.",
+        "resolution": "Corrected reviewer harness to call exported summary directly for ambiguous known paths; final62controls passed on unchanged candidate bytes.",
+        "productFailure": false
+      },
+      {
+        "initialAttempt": "Reviewer static no-authority-use matcher included pure helper branch assignments and falsely rejected the new helper.",
+        "resolution": "Scoped this matcher to main authority/action code; full byte-identical baseline normalization independently passed.",
+        "productFailure": false
+      }
+    ],
+    "limitations": [
+      "No actual nonroot user manager, service activation or native aggregate executed by this reviewer.",
+      "Known runtime-link spelling match is literal only, not canonical/inode equivalence or durable authority.",
+      "Fresh preceding link checks are observations before the manager query, not simultaneous or race-free ownership.",
+      "Historical700 and0ade primary causes remain unknown.",
+      "Bounded truncation and absent observations do not establish absence of operations or resources."
+    ]
+  },
+  "pinPropagation": {
+    "lifecycleSourceSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "changes": [
+      {
+        "file": "x10/service/verified-node.mjs",
+        "beforeSha256": "983657b57b6ebf513331df28d9a3c7f2f750239a9881306e884a37746c93251e",
+        "afterSha256": "154d6da14907e2e5ab2e71592820356a8c08d7c711cbdfe5007d717f5bc0a880",
+        "exactSingleCheckerDigestSubstitution": true
+      },
+      {
+        "file": ".github/workflows/x10-native.yml",
+        "beforeSha256": "e06ad24f43f48e5438ea8e34bfa300101378ce3f187799f48c95d141ce83d0be",
+        "afterSha256": "47c87093ac610e91cf78385e4816e4aef5b0a851e3496327a6c7d2a3fd8db006",
+        "exactSingleCheckerDigestSubstitution": true
+      }
+    ],
+    "yamlParsed": true,
+    "workflowNodeSyntaxExit": 0,
+    "syntaxDiagnosticsEmpty": true,
+    "serviceAuthorityBehaviorChanged": false,
+    "runtimeDownloadedOrServiceStartedLocally": false,
+    "exactNewCIPending": true,
+    "earlierRootValidationAttempt": {
+      "error": "YAML_job_key_assumption",
+      "trackedPinWritesAlreadyCompleted": true,
+      "correctedByEnumeratingActualJobs": true,
+      "runtimeExecuted": false
+    }
+  },
+  "reportSha256": {
+    "hostedNative": "ecf7f4ef02b0cb558315f89be7b1922083a4420a323cdfdca3e1745e451e762a",
+    "hostedResearch": "a39d561a3479dd0dda7704d9de89dd8e92333bcd726021a544651b3d2b451e37",
+    "hostedBoundaryReview": "fa7a614d69e4d74de78df41e8d0ce2f26ed9935a6bcce74b00d0655d195927a5",
+    "freshHostedReconciliation": "83ec40c3a991cd8338692b435256d90259d3aade9b25e9a313ad2b11bb46b7a2",
+    "independentQA": "ca848c46ecfdc1f6eb91a5c0c7d3f18cf0c63fcda754ef6d16aff6c33748f2d6",
+    "author": "febf9da334a650d98addb964d782c3020ea40b7e5ad1068ab735c31f02f5b6ae",
+    "independentReview": "8cb4b8ce3e41c80f2fdde8f155caa7cc05b99e3220fa28685b25c57ee1001685",
+    "pinPropagation": "e55d22dd3cb2e520a59ee73674b10f4949f5dd4502cd62666c232afe501c2e26"
+  },
+  "failedImplementationSourceSha256": {
+    "x10/service/lifecycle-check.mjs": "8b75c2e0f47ec9b4578fd1a34ea6ad9e4b12e0de9b10743b2fbbbcd53fff4cc3",
+    "x10/service/lifecycle-check.test.mjs": "8594afd4fe0dad86ef528c3dfb6872bfbc28fc7cc7eef6b5d7141c8c43a2a3ca",
+    "x10/service/verified-node.mjs": "983657b57b6ebf513331df28d9a3c7f2f750239a9881306e884a37746c93251e",
+    ".github/workflows/x10-native.yml": "e06ad24f43f48e5438ea8e34bfa300101378ce3f187799f48c95d141ce83d0be"
+  },
+  "candidateSourceSha256": {
+    "x10/service/lifecycle-check.mjs": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "x10/service/lifecycle-check.test.mjs": "210887cf38fe1fe545376d5dec1712c551d7ab8069402921655c2e722c30b1e0",
+    "x10/service/verified-node.mjs": "154d6da14907e2e5ab2e71592820356a8c08d7c711cbdfe5007d717f5bc0a880",
+    ".github/workflows/x10-native.yml": "47c87093ac610e91cf78385e4816e4aef5b0a851e3496327a6c7d2a3fd8db006"
+  },
+  "unchangedAuthoritySourceSha256": {
+    "x10/service/user-unit.mjs": "3fc67266e513a00803bbe450d23052fffd5f3b61bbb0dfaa90969841b1d9852a",
+    "x10/service/user-unit.test.mjs": "bf65c2e0b60a21d09d211c6eb869264674ffab9efdd5d9133143ee8f119a2287",
+    "x10/service/preflight.mjs": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+    "x10/service/preflight.test.mjs": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3",
+    "x10/service/verified-node.test.mjs": "5278923411404ab60806be890c81ae640b0f71139ee31bef9a9405ee5a2b2e07",
+    "x10/service/node-runtime-pin.json": "a6005d105d8b327f6d57118b1f674d1516a6bcfce0a162725b72250bec5fcbad",
+    "x10/service/keys/node-v22-release.asc": "5115095e2f8010c75da052ecb1cfb3af630e084f0f8daa93a863557b01b0f90a",
+    "x10/service/keys/node-v22.23.3-SHASUMS256.asc": "e82087fe2cf383fce187b0789eb5ea50fd92f9b68afb4f4e174d65ec59acba4a",
+    "x10/test/alpha-tls.test.mjs": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+    "x10/test/frontend-tls.test.mjs": "9d3168f14b8d7b8f6deeba1cc53bafe60a655786f00bd341a7354376a773cac9",
+    "x10/evidence/g3-service-primary-failure.json": "a79881f473b47234ae7226c22507993e3703a4b2307522fa27a6e2afe61e2fe1",
+    "x10/review/g3-service-primary-failure-ledger.json": "8541052c316cc72279dea68da4b6ccb3311125fceb9480e35e24b5021a7b1773"
+  },
+  "checkerPinBefore": "8b75c2e0f47ec9b4578fd1a34ea6ad9e4b12e0de9b10743b2fbbbcd53fff4cc3",
+  "checkerPinAfter": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+  "runtimeFilesUnchanged": 508,
+  "historicalObservationRetained": "Both exact7d1 actual service steps failed cleanup_unconfirmed at first_start, preserving primaryFailure unit_fragment_identity at before_properties. The parsed unit was loaded/inactive/dead with result success, no main PID or cgroup and a present FragmentPath. In this current source guard, the loaded state plus that refusal establishes a literal FragmentPath mismatch with the expected unitFile, before the checker requests start. The actual paths, a runtime-link alias, canonical equivalence versus a different fragment, and physical service state are unknown. Cleanup independently recorded unit_fragment_identity without its own state snapshot, so its failed OR branch is unknown. Runtime linking was confirmed; service/dependency cleanup was unconfirmed and the private authenticated Node was retained. This does not reconstruct the original700 or0ade primary error.",
+  "prior700EvidenceReferencedNotRecursivelyEmbedded": "x10/evidence/g3-service-primary-failure.json",
+  "newNativeBuildsOrAggregateRuns": 0,
+  "newWorkflowReruns": 0,
+  "actualServiceStartedLocally": false,
+  "actualServiceCleanupVerifiedLocally": false,
+  "newPurchases": false,
+  "productionDeployChanged": false,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "privateKeysPublished": false,
+  "limitations": [
+    "Both exact7d1 actual service steps failed cleanup_unconfirmed at first_start, preserving primaryFailure unit_fragment_identity at before_properties. The parsed unit was loaded/inactive/dead with result success, no main PID or cgroup and a present FragmentPath. In this current source guard, the loaded state plus that refusal establishes a literal FragmentPath mismatch with the expected unitFile, before the checker requests start. The actual paths, a runtime-link alias, canonical equivalence versus a different fragment, and physical service state are unknown. Cleanup independently recorded unit_fragment_identity without its own state snapshot, so its failed OR branch is unknown. Runtime linking was confirmed; service/dependency cleanup was unconfirmed and the private authenticated Node was retained. This does not reconstruct the original700 or0ade primary error.",
+    "New fixed owned-fragment facts are diagnostics, not identity admission authority, a canonical equivalence proof, an OS fence or an accepted service. No previous rejection or action is relaxed.",
+    "Known-owned-path observations must not read arbitrary manager-returned or foreign paths. No actual runtime-link alias or equivalent file has been established locally or by the earlier7d1 observations.",
+    "The original700/0ade primary errors remain unknown. New diagnostics cannot reconstruct either earlier error or current cleanup failed OR branch.",
+    "Both full7d1 native workflows FAILED although preceding native20/TLS18/16/preflight42/dependency46 and research PR21/7/27/48 passed separately. Those counts identify7d1 only; the changed checker requires new exact CI.",
+    "Private dependency runtime and bootstrap root were retained, all old service cleanup flags false except app sockets0; no manager/native/dependency final cleanup is claimed.",
+    "Only fixed checker-source digest literals are propagated in verified-node and workflow. Signature/dependency/timeout/permissions/cleanup authority remain unchanged.",
+    "Actual basic service acceptance, logging, restart, adverse cleanup, combined TLS/service, package update/rollback/recovery, permanent distribution, security/soak and Production V1 remain open."
+  ]
+}

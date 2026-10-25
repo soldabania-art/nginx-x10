@@ -356,3 +356,29 @@ compatibility. The new diagnostics require their own exact CI; local pure/
 synthetic tests and actual root refusal are separate evidence. Full service
 operation, logging, manager restart, adverse cleanup, TLS, package rollback,
 permanent distribution, soak and Production V1 remain open.
+
+
+## Known owned fragment identity diagnostics
+
+An authoritative manager property can name a fragment differently from the
+expected unit-file string. A mismatch alone does not establish whether the
+fragment is the known runtime link, an equivalent owned file or a different
+file. The original loaded/unit-fragment guard remains mandatory.
+
+Additional diagnostic match facts use fixed enums and booleans and refer
+only to the already known owned unit and runtime-link paths. No raw path,
+process identifier, file identity number, command output or exception is
+published. These observations do not grant authority, allow an alias, alter
+start or cleanup actions, or prove service absence and physical cleanup.
+A manager-returned foreign path must not become a path to inspect.
+
+Both prior exact7d1 jobs observed a loaded/inactive/dead unit with a present
+fragment and refused unit_fragment_identity before the checker's own start
+request. They did not expose actual paths or prove canonical equivalence.
+Cleanup retained the same refusal code but no separate state snapshot; its
+failed branch remains unknown. The private verified Node remains retained
+when service cleanup is uncertain. Original700/0ade errors remain separate.
+
+The new exact source requires its own actual nonroot CI. Local synthetic
+contracts, original-path/runtime-link/foreign-path refusal controls and
+independent review remain separate from service/Production V1 acceptance.
