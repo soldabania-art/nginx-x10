@@ -63,6 +63,8 @@ jobs:
         run: node --test --test-reporter=tap x10/service/preflight.test.mjs > x10/.build/ci-evidence/service-preflight.tap
       - name: Validate actual-service harness refusal controls
         run: node --test --test-reporter=tap x10/service/lifecycle-check.test.mjs > x10/.build/ci-evidence/service-lifecycle-contract.tap
+      - name: Validate authenticated Node dependency refusal controls
+        run: node --test --test-reporter=tap x10/service/verified-node.test.mjs > x10/.build/ci-evidence/verified-node-contract.tap
       - name: Build dependencies and optional test clients
         run: |
           sudo apt-get update
@@ -110,12 +112,93 @@ jobs:
           node x10/release/verify-alpha-archive.mjs \
             --archive x10/.build/dist/nginx-x10-linux-alpha.tar.gz \
             --sha256 "${checksum%% *}" > x10/.build/ci-evidence/alpha-archive.json
-      - name: Verify actual temporary nonroot user-service lifecycle
+      - name: Verify temporary user-service with authenticated private Node
         run: |
-          checksum=$(sha256sum x10/.build/dist/nginx-x10-linux-alpha.tar.gz)
-          node x10/service/lifecycle-check.mjs \
-            --archive x10/.build/dist/nginx-x10-linux-alpha.tar.gz \
-            --sha256 "${checksum%% *}" > x10/.build/ci-evidence/service-lifecycle.json
+          node --input-type=module <<'NODE'
+          import { mkdtemp, chmod, writeFile, readFile, readdir, unlink, rmdir } from 'node:fs/promises';
+          import { spawn } from 'node:child_process';
+          import { createHash } from 'node:crypto';
+          import path from 'node:path';
+          import os from 'node:os';
+          const evidence = 'x10/.build/ci-evidence';
+          let root, prefix, archive, envelope;
+          const source = 'x10/service/lifecycle-check.mjs';
+          const sourceSha = 'ef9828c659c028653ede3c983fb6eae9b69492432e47c19d550a6bee22129591';
+          const hash = b => createHash('sha256').update(b).digest('hex');
+          const save = (name, report) => writeFile(evidence + '/' + name + '.json', JSON.stringify(report) + '\n');
+          const status = { ok: false, stage: 'download', code: 'bootstrap_failed', runtimeRemoved: false,
+            temporaryRootRemoved: false, serviceAccepted: false, productionAccepted: false,
+            subprocessOutputsPublished: false };
+          async function run(exe, args, timeout) {
+            return new Promise(resolve => {
+              let child, bytes = 0, timedOut = false, fault = false, forced = false;
+              const output = []; let grace;
+              try { child = spawn(exe, args, { stdio: ['ignore', 'pipe', 'pipe'] }); }
+              catch { resolve({ code: null, output: '', failed: true }); return; }
+              const stop = () => { if (timedOut) return; timedOut = true; child.kill('SIGTERM');
+                grace = setTimeout(() => { forced = true; child.kill('SIGKILL'); }, 15000); };
+              const timer = setTimeout(stop, timeout);
+              child.once('error', () => { fault = true; });
+              child.stdout.on('data', b => { bytes += b.length;
+                if (bytes > 1024 * 1024) { fault = true; stop(); } else output.push(b); });
+              child.stderr.on('data', b => { bytes += b.length; if (bytes > 1024 * 1024) { fault = true; stop(); } });
+              child.once('close', (code, signal) => { clearTimeout(timer); clearTimeout(grace);
+                resolve({ code, output: Buffer.concat(output).toString('utf8'),
+                  failed: fault || timedOut || forced || Boolean(signal) }); });
+            });
+          }
+          async function jsonStep(name, exe, args, timeout) {
+            const result = await run(exe, args, timeout);
+            let report;
+            try { report = JSON.parse(result.output); } catch { report = { ok: false, code: 'bootstrap_child_report_invalid' }; }
+            if (result.failed || result.code !== 0 || report?.ok !== true) {
+              await save(name, report && typeof report === 'object' ? report : { ok: false, code: 'bootstrap_child_report_invalid' });
+              throw new Error('bootstrap_stage_failed');
+            }
+            await save(name, report); return report;
+          }
+          try {
+            root = await mkdtemp(path.join(os.tmpdir(), 'x10-node-bootstrap-'));
+            await chmod(root, 0o700);
+            prefix = root + '/runtime'; archive = root + '/node.tar.xz';
+            envelope = root + '/service-evidence.json';
+            const download = await run('/usr/bin/curl', ['--fail', '--silent', '--show-error',
+              '--proto', '=https', '--tlsv1.2', '--connect-timeout', '10', '--max-time', '60',
+              '--max-filesize', '67108864', '--retry', '2', '--retry-max-time', '120',
+              '--output', archive,
+              'https://nodejs.org/download/release/v22.23.3/node-v22.23.3-linux-x64.tar.xz'], 150000);
+            if (download.failed || download.code !== 0) throw new Error('download_failed');
+            status.stage = 'authenticated_install';
+            const installed = await jsonStep('verified-node', process.execPath,
+              ['x10/service/verified-node.mjs', '--archive', archive, '--prefix', prefix], 120000);
+            if (hash(await readFile(source)) !== sourceSha) throw new Error('checker_source_changed');
+            status.stage = 'actual_service';
+            const alpha = 'x10/.build/dist/nginx-x10-linux-alpha.tar.gz';
+            const report = await jsonStep('service-lifecycle', prefix + '/bin/node',
+              [source, '--archive', alpha, '--sha256', hash(await readFile(alpha))], 240000);
+            if (hash(await readFile(source)) !== sourceSha) throw new Error('checker_source_changed');
+            // This point is reached only after that exact checker child closed
+            // normally with code zero. Same-UID coordination is not OS fencing.
+            await writeFile(envelope, JSON.stringify({ checkerExited: true, checkerExitCode: 0,
+              runtimeInstallationId: installed.installationId, runtimeNodeSha256: installed.nodeSha256,
+              sourceLifecycleSha256: sourceSha, report }) + '\n', { mode: 0o600, flag: 'wx' });
+            status.stage = 'dependency_cleanup';
+            const cleanup = await jsonStep('verified-node-cleanup', process.execPath,
+              ['x10/service/verified-node.mjs', '--cleanup', '--prefix', prefix, '--service-evidence', envelope], 30000);
+            if (cleanup.runtimeRemoved !== true) throw new Error('runtime_retained');
+            status.runtimeRemoved = true;
+            if (JSON.stringify((await readdir(root)).sort()) !== JSON.stringify(['node.tar.xz', 'service-evidence.json'])) throw new Error('cleanup_inventory_unknown');
+            await unlink(archive); await unlink(envelope); await rmdir(root);
+            status.temporaryRootRemoved = true; status.ok = true; status.stage = 'complete';
+            status.code = 'authenticated_dependency_lifecycle_complete';
+          } catch {
+            // Preserve the runtime whenever service cleanup is unconfirmed:
+            // the generated unit's ExecStop may still require this exact Node.
+            status.code = 'bootstrap_stage_failed'; process.exitCode = 1;
+          }
+          try { await save('verified-node-bootstrap', status); }
+          catch { process.stdout.write('{"ok":false,"code":"bootstrap_evidence_write_failed"}\n'); process.exitCode = 1; }
+          NODE
       - name: Preserve JSON evidence
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6

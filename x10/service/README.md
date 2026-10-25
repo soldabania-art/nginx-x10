@@ -245,3 +245,72 @@ original49-test accounting above belongs to the preceding implementation.
 On a nonroot runner the current root-only refusal case is expected to skip:
 67total/66PASS/1SKIP. The separate real service command remains mandatory
 and a refusal or skip does not accept the service lifecycle.
+
+
+## Independently verified official Node dependency
+
+The supported service recipe continues to refuse unsafe selected Node
+ownership or modes. The current exact239 CI observed an unsatisfied mode
+predicate with accepted ownership and refused before service activation.
+Do not copy or chmod/chown that rejected global cache executable to obtain
+a PASS. The caller supplies the separately authenticated official archive to the
+new dependency tool, which prepares a new owned private prefix; all existing admission checks remain
+mandatory for the installed service.
+
+The exact Node version, archive hash/URL, public release key and signed
+checksum statement are pinned in `node-runtime-pin.json` and `keys/`. A
+version/key/pin update requires a separate provenance review and exact
+archive/runtime verification; it is not a cosmetic metadata update. Public
+PGP material is verification input, not a private key or login credential.
+Signature verification and byte checks are separate from actual extraction,
+Node execution, host ABI compatibility or service acceptance. No default
+keyring, keyserver, new account or global security setting is involved.
+
+The helper performs no network download. Its caller supplies the fixed
+official archive; the required CI downloads only the pinned official URL.
+The helper verifies the signed checksum statement and archive bytes before
+preparing only the selected Node executable and its LICENSE. It never
+materializes arbitrary archive links or modifies an existing cache.
+
+The prefix parent must already be canonical, owned by the current UID and
+private0700; the requested dependency prefix must not exist. Use explicit
+absolute paths with the trusted bootstrap Node:
+
+```sh
+node x10/service/verified-node.mjs \
+  --archive /absolute/private/node-v22.23.3-linux-x64.tar.xz \
+  --prefix /absolute/private/dependencies/node22
+```
+
+The dependency must remain available while the service is running. Cleanup
+requires the trusted coordinator to await the unchanged checker child and
+record its actual successful service cleanup, together with the prepared
+Node hash and installation identity. A fabricated JSON receipt is not
+verification. The receipt is a same-UID procedural assertion, not an OS
+process fence or protection from a malicious process with that UID.
+
+```sh
+node x10/service/verified-node.mjs --cleanup \
+  --prefix /absolute/private/dependencies/node22 \
+  --service-evidence /absolute/private/service-cleanup.json
+```
+
+On failed, cancelled, ambiguous or unconfirmed service cleanup, the
+dependency is retained. Remove no unknown prefix and do not signal broad
+process groups to force cleanup. The explicit cleanup command accepts only
+its exact recorded owned files and identities.
+
+Local validation has not downloaded or executed the official Node archive.
+The required exact CI must verify real archive bytes and the prepared Node,
+then invoke the unchanged service lifecycle checker with that Node. Unit
+status or a successful preparer alone cannot accept application readiness,
+service cleanup or Production V1. Keep owned dependency lifetime through
+service stop/cleanup; remove only verified owned files and retain diagnostic
+state on uncertain cleanup. Detailed invocation and actual evidence are
+recorded with the helper and [checkpoint](../evidence/g3-verified-node.json).
+
+Historical0ade install exception and local Node24 owner refusal remain
+separate from the current Node22 mode-policy observation. Logging, single
+manager restart, failed start, cancellation, slow drain, orphan recovery,
+combined TLS/service, package rollback, permanent distribution/replay, soak
+and final Production V1 remain open.

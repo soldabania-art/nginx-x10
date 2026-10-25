@@ -1316,3 +1316,26 @@ diagnostic source CI is pending. The final changed-source local contract
 passed67/67; those pure/refusal tests are separate from the old exact49TAP
 and from actual service execution. This is observability, not a product fix
 or accepted service lifecycle.
+
+
+## Independently verified official Node dependency candidate
+
+Both exact239 actual service attempts refused the selected Node at
+`recipe_inspection`: mode policy false, owner policy true. Native20/20,
+upstreamTLS18/frontendTLS16/preflight42, contract67total/66PASS/1rootSKIP
+and required compatibility steps passed separately; the whole CI remains
+FAILED. Specific prohibited mode bits and the original0ade exception are
+unknown. The local Node24 owner-policy refusal remains a different result.
+
+A new source tool prepares a pinned official Node release in a fresh owned
+private dependency prefix. Public release key and signed checksums are
+verified separately from archive bytes and execution. The rejected global
+cache is untouched; original inspector, recipe, preflight, lifecycle checker,
+alpha/controller/native sources and all admission checks remain unchanged.
+
+[Evidence](evidence/g3-verified-node.json) records actual local public-signature
+verification, authored contracts, independent trust/lifetime and archive/
+storage review. Actual official archive download/preparation/execution and
+nonroot service acceptance require the resulting exact CI. No new native
+aggregate or unchanged CI retry is borrowed as proof of this new dependency.
+Production V1, permanent release, package rollback and final soak remain open.

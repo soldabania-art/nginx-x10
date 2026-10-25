@@ -263,7 +263,7 @@
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "PARTIAL_SERVICE_DIAGNOSTICS_EXACT_CI_PENDING_SERVICE_OPEN",
+      "status": "PARTIAL_VERIFIED_NODE_DEPENDENCY_EXACT_CI_PENDING_SERVICE_OPEN",
       "depends_on": [
         "G2"
       ],
@@ -526,17 +526,72 @@
         "runId": "x10-service-diagnosis-20261025T005241Z",
         "sourceBase": "0ade140e41db6ee093f3de216aacca563ae9b2d2",
         "publicationParent": "7e0b0cfcb2c4d0ee3115f682b9d184e6c6ac7e5d",
-        "implementationCommit": null,
+        "implementationCommit": "239dd69c1a8f9c36175be2989d8707ad418178c7",
         "implementationCommitLocator": "Git commit containing observability-only checker changes; exact resulting CI reconciled subsequently",
         "scope": "Bounded service install/refusal observability only; authoritative inspector and all admission guards unchanged",
         "localEvidence": "x10/evidence/g3-service-lifecycle-hosted.json",
         "localAcceptance": "BOUNDED_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
-        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_DIAGNOSTIC_SOURCE",
+        "exactHostedAcceptance": "FAILED_BOTH_EXACT_239_SERVICE_RECIPE_INSPECTION_REFUSED",
         "historicalCIFailureCauseKnown": false,
         "productRuntimeFixClaimed": false,
         "serviceAccepted": false,
         "productionAccepted": false,
-        "nextConcreteTask": "First verify exact resulting observability-only service diagnostic source CI and its actual nonroot service result on a fresh runner. Then diagnose and correct the actual service installation/inspection guard without weakening ownership, integrity or identity checks. Both exact0ade native attempts FAILED the required actual service step at phase install with lifecycle_failed; nonroot manager prerequisites were observed but the exact underlying exception is not in the sanitized result. Keep full implementation CI and service acceptance false. A bounded local install-only counterexample may identify a mechanism without proving the exact historical CI exception; distinguish these claims. If source diagnostics or checker code changed, first verify exact resulting CI and actual nonroot service JSON on a fresh runner; do not rerun unchanged failed CI blindly or borrow predecessor green results. Preserve accepted376 fixture CI, original9e63 wrong-CA expected1/actual0/unknown cause, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. Actual logging, the single manager restart operation, failed-start/cancellation/slow-drain/orphan, combined TLS/service, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak, Production V1 and full semantic Continuum remain open."
+        "nextConcreteTask": "First verify exact resulting verified-Node dependency implementation CI on a fresh authorized nonroot Node22 test runner. Require actual fixed official archive download, public-signature/checksum validation, bounded selected-payload preparation in a new owned private dependency prefix, exact executable version/hash/ownership/mode identities plus the pinned official linux-x64 archive and host architecture guard, actual execution of the unchanged service checker using that prepared Node, and owned cleanup. Local unit/refusal/synthetic archive tests and actual public checksum signature verification do not prove the archive or binary was downloaded/executed or a service started. Keep full implementation CI/service/V1 acceptance pending until the required actual steps pass. Preserve both exact239 recipe_inspection_refused attempts with modeAllowedfalse/ownerAllowedtrue and unknown exact disallowed bits/throw branch; the old0ade exception remains unknown and the local UID0/Node24 ownerAllowedfalse case remains separate. Do not modify/copy/chmod/chown the rejected global Node cache or weaken any inspector/recipe/preflight/lifecycle guard. After actual narrow basic service acceptance, finish logging, single manager restart, cancellation/failed-start/slow-drain/orphan and combined TLS/service, package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Full native and deferred semantic Continuum remain open.",
+        "hostedEvidence": "x10/evidence/g3-verified-node.json"
+      },
+      "serviceInstallDiagnosticsHostedSubcheckpoint": {
+        "state": "FAILED_BOTH_EXACT_239_SERVICE_RECIPE_INSPECTION_REFUSED",
+        "implementationCommit": "239dd69c1a8f9c36175be2989d8707ad418178c7",
+        "evidence": "x10/evidence/g3-verified-node.json",
+        "runId": "x10-verified-node-20261025T012136Z",
+        "publicationParent": "d954b8a6798d1f75230658258b79329544c82f25",
+        "nativeRunIds": [
+          40149234141,
+          40149236708
+        ],
+        "nativeJobIds": [
+          121037082577,
+          121037092084
+        ],
+        "researchRunIds": [
+          40149234109,
+          40149236784
+        ],
+        "bothRequiredServiceStepsFailed": true,
+        "failureCode": "recipe_inspection_refused",
+        "failurePhase": "recipe_inspection",
+        "selectedNodeModeAllowed": false,
+        "selectedNodeOwnerAllowed": true,
+        "exactDisallowedModeBitsKnown": false,
+        "historical0adeExceptionKnown": false,
+        "fullImplementationCIAccepted": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "workflowRerunsRequested": 0
+      },
+      "verifiedNodeDependencySubcheckpoint": {
+        "runId": "x10-verified-node-20261025T012136Z",
+        "sourceBase": "239dd69c1a8f9c36175be2989d8707ad418178c7",
+        "publicationParent": "d954b8a6798d1f75230658258b79329544c82f25",
+        "implementationCommit": null,
+        "implementationCommitLocator": "Current publication commit containing independently verified Node dependency preparation; exact resulting CI reconciled subsequently",
+        "scope": "Official pinned Node dependency preparation in a new owned private prefix; unchanged service admission authority",
+        "evidence": "x10/evidence/g3-verified-node.json",
+        "localAcceptance": "PINNED_OFFICIAL_NODE_DEPENDENCY_LOCAL_CONTRACTS_VERIFIED_EXACT_CI_PENDING",
+        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_VERIFIED_NODE_DEPENDENCY",
+        "publicChecksumSignatureVerifiedLocally": true,
+        "actualOfficialArchiveDownloadedLocally": false,
+        "actualPreparedNodeExecutedLocally": false,
+        "actualNonrootServiceAccepted": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "nativeRuntimeChanged": false,
+        "controllerRuntimeChanged": false,
+        "alphaRuntimeChanged": false,
+        "serviceRecipeChanged": false,
+        "preflightChanged": false,
+        "serviceLifecycleCheckerChanged": false,
+        "nextConcreteTask": "First verify exact resulting verified-Node dependency implementation CI on a fresh authorized nonroot Node22 test runner. Require actual fixed official archive download, public-signature/checksum validation, bounded selected-payload preparation in a new owned private dependency prefix, exact executable version/hash/ownership/mode identities plus the pinned official linux-x64 archive and host architecture guard, actual execution of the unchanged service checker using that prepared Node, and owned cleanup. Local unit/refusal/synthetic archive tests and actual public checksum signature verification do not prove the archive or binary was downloaded/executed or a service started. Keep full implementation CI/service/V1 acceptance pending until the required actual steps pass. Preserve both exact239 recipe_inspection_refused attempts with modeAllowedfalse/ownerAllowedtrue and unknown exact disallowed bits/throw branch; the old0ade exception remains unknown and the local UID0/Node24 ownerAllowedfalse case remains separate. Do not modify/copy/chmod/chown the rejected global Node cache or weaken any inspector/recipe/preflight/lifecycle guard. After actual narrow basic service acceptance, finish logging, single manager restart, cancellation/failed-start/slow-drain/orphan and combined TLS/service, package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Full native and deferred semantic Continuum remain open."
       }
     },
     {
@@ -1156,16 +1211,71 @@
     "runId": "x10-service-diagnosis-20261025T005241Z",
     "sourceBase": "0ade140e41db6ee093f3de216aacca563ae9b2d2",
     "publicationParent": "7e0b0cfcb2c4d0ee3115f682b9d184e6c6ac7e5d",
-    "implementationCommit": null,
+    "implementationCommit": "239dd69c1a8f9c36175be2989d8707ad418178c7",
     "implementationCommitLocator": "Git commit containing observability-only checker changes; exact resulting CI reconciled subsequently",
     "scope": "Bounded service install/refusal observability only; authoritative inspector and all admission guards unchanged",
     "localEvidence": "x10/evidence/g3-service-lifecycle-hosted.json",
     "localAcceptance": "BOUNDED_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_DIAGNOSTIC_SOURCE",
+    "exactHostedAcceptance": "FAILED_BOTH_EXACT_239_SERVICE_RECIPE_INSPECTION_REFUSED",
     "historicalCIFailureCauseKnown": false,
     "productRuntimeFixClaimed": false,
     "serviceAccepted": false,
     "productionAccepted": false,
-    "nextConcreteTask": "First verify exact resulting observability-only service diagnostic source CI and its actual nonroot service result on a fresh runner. Then diagnose and correct the actual service installation/inspection guard without weakening ownership, integrity or identity checks. Both exact0ade native attempts FAILED the required actual service step at phase install with lifecycle_failed; nonroot manager prerequisites were observed but the exact underlying exception is not in the sanitized result. Keep full implementation CI and service acceptance false. A bounded local install-only counterexample may identify a mechanism without proving the exact historical CI exception; distinguish these claims. If source diagnostics or checker code changed, first verify exact resulting CI and actual nonroot service JSON on a fresh runner; do not rerun unchanged failed CI blindly or borrow predecessor green results. Preserve accepted376 fixture CI, original9e63 wrong-CA expected1/actual0/unknown cause, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. Actual logging, the single manager restart operation, failed-start/cancellation/slow-drain/orphan, combined TLS/service, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak, Production V1 and full semantic Continuum remain open."
+    "nextConcreteTask": "First verify exact resulting verified-Node dependency implementation CI on a fresh authorized nonroot Node22 test runner. Require actual fixed official archive download, public-signature/checksum validation, bounded selected-payload preparation in a new owned private dependency prefix, exact executable version/hash/ownership/mode identities plus the pinned official linux-x64 archive and host architecture guard, actual execution of the unchanged service checker using that prepared Node, and owned cleanup. Local unit/refusal/synthetic archive tests and actual public checksum signature verification do not prove the archive or binary was downloaded/executed or a service started. Keep full implementation CI/service/V1 acceptance pending until the required actual steps pass. Preserve both exact239 recipe_inspection_refused attempts with modeAllowedfalse/ownerAllowedtrue and unknown exact disallowed bits/throw branch; the old0ade exception remains unknown and the local UID0/Node24 ownerAllowedfalse case remains separate. Do not modify/copy/chmod/chown the rejected global Node cache or weaken any inspector/recipe/preflight/lifecycle guard. After actual narrow basic service acceptance, finish logging, single manager restart, cancellation/failed-start/slow-drain/orphan and combined TLS/service, package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Full native and deferred semantic Continuum remain open.",
+    "hostedEvidence": "x10/evidence/g3-verified-node.json"
+  },
+  "serviceInstallDiagnosticsHostedCheckpoint": {
+    "state": "FAILED_BOTH_EXACT_239_SERVICE_RECIPE_INSPECTION_REFUSED",
+    "implementationCommit": "239dd69c1a8f9c36175be2989d8707ad418178c7",
+    "evidence": "x10/evidence/g3-verified-node.json",
+    "runId": "x10-verified-node-20261025T012136Z",
+    "publicationParent": "d954b8a6798d1f75230658258b79329544c82f25",
+    "nativeRunIds": [
+      40149234141,
+      40149236708
+    ],
+    "nativeJobIds": [
+      121037082577,
+      121037092084
+    ],
+    "researchRunIds": [
+      40149234109,
+      40149236784
+    ],
+    "bothRequiredServiceStepsFailed": true,
+    "failureCode": "recipe_inspection_refused",
+    "failurePhase": "recipe_inspection",
+    "selectedNodeModeAllowed": false,
+    "selectedNodeOwnerAllowed": true,
+    "exactDisallowedModeBitsKnown": false,
+    "historical0adeExceptionKnown": false,
+    "fullImplementationCIAccepted": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "workflowRerunsRequested": 0
+  },
+  "verifiedNodeDependencyCheckpoint": {
+    "runId": "x10-verified-node-20261025T012136Z",
+    "sourceBase": "239dd69c1a8f9c36175be2989d8707ad418178c7",
+    "publicationParent": "d954b8a6798d1f75230658258b79329544c82f25",
+    "implementationCommit": null,
+    "implementationCommitLocator": "Current publication commit containing independently verified Node dependency preparation; exact resulting CI reconciled subsequently",
+    "scope": "Official pinned Node dependency preparation in a new owned private prefix; unchanged service admission authority",
+    "evidence": "x10/evidence/g3-verified-node.json",
+    "localAcceptance": "PINNED_OFFICIAL_NODE_DEPENDENCY_LOCAL_CONTRACTS_VERIFIED_EXACT_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_VERIFIED_NODE_DEPENDENCY",
+    "publicChecksumSignatureVerifiedLocally": true,
+    "actualOfficialArchiveDownloadedLocally": false,
+    "actualPreparedNodeExecutedLocally": false,
+    "actualNonrootServiceAccepted": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "nativeRuntimeChanged": false,
+    "controllerRuntimeChanged": false,
+    "alphaRuntimeChanged": false,
+    "serviceRecipeChanged": false,
+    "preflightChanged": false,
+    "serviceLifecycleCheckerChanged": false,
+    "nextConcreteTask": "First verify exact resulting verified-Node dependency implementation CI on a fresh authorized nonroot Node22 test runner. Require actual fixed official archive download, public-signature/checksum validation, bounded selected-payload preparation in a new owned private dependency prefix, exact executable version/hash/ownership/mode identities plus the pinned official linux-x64 archive and host architecture guard, actual execution of the unchanged service checker using that prepared Node, and owned cleanup. Local unit/refusal/synthetic archive tests and actual public checksum signature verification do not prove the archive or binary was downloaded/executed or a service started. Keep full implementation CI/service/V1 acceptance pending until the required actual steps pass. Preserve both exact239 recipe_inspection_refused attempts with modeAllowedfalse/ownerAllowedtrue and unknown exact disallowed bits/throw branch; the old0ade exception remains unknown and the local UID0/Node24 ownerAllowedfalse case remains separate. Do not modify/copy/chmod/chown the rejected global Node cache or weaken any inspector/recipe/preflight/lifecycle guard. After actual narrow basic service acceptance, finish logging, single manager restart, cancellation/failed-start/slow-drain/orphan and combined TLS/service, package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Full native and deferred semantic Continuum remain open."
   }
 }
