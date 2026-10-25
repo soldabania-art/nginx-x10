@@ -3,7 +3,27 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": null,
+  "executionLease": {
+    "runId": "x10-first-start-20261025T021800Z",
+    "owner": "codex-coordinator-first-start",
+    "baseCommit": "700dd97d5b70a5f979e28748fc27cb651ac81b30",
+    "acquiredAtUTC": "2026-10-25T02:16:47.000Z",
+    "expiresAtUTC": "2026-10-25T02:56:47.000Z",
+    "task": "Preserve primary service refusal separately from cleanup and bounded first-start observations",
+    "allowedFiles": [
+      "x10/service/lifecycle-check.mjs",
+      "x10/service/lifecycle-check.test.mjs",
+      "x10/service/verified-node.mjs",
+      ".github/workflows/x10-native.yml",
+      "x10/service/README.md",
+      "x10/STATUS.md",
+      "x10/PLAN.md",
+      "x10/continuum/BACKGROUND.json",
+      "x10/continuation-2026-10-24/GATES.json",
+      "x10/evidence/g3-service-primary-failure.json",
+      "x10/review/g3-service-primary-failure-ledger.json"
+    ]
+  },
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
