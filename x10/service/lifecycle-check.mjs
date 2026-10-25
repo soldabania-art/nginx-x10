@@ -3,7 +3,7 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { constants } from 'node:fs';
-import { chmod, lstat, mkdtemp, open, readFile, readlink, realpath, rm } from 'node:fs/promises';
+import { chmod, lstat, mkdtemp, mkdir, open, readFile, readlink, realpath, rm } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import http from 'node:http';
@@ -15,12 +15,13 @@ import { inspectInstallation, renderUserUnit } from './user-unit.mjs';
 import { verifyAlphaArchive, MAX_ARCHIVE_BYTES } from '../release/verify-alpha-archive.mjs';
 import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mjs';
 import { observeOwnedJournal, JOURNAL_RESULT_CODES } from './journal-check.mjs';
+import { createOriginFixture, ORIGIN_FIXTURE_ERROR_CODES } from './origin-fixture.mjs';
 import { createServicePKI, probeServiceTLS, expectServiceTLSRefusal, TLS_FIXTURE_ERROR_CODES } from './tls-fixture.mjs';
 
 const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 const HEX = /^[a-f0-9]{64}$/, TOKEN = /^[a-f0-9]{32}$/;
 const KEYS = ['LoadState', 'ActiveState', 'SubState', 'Result', 'FragmentPath', 'MainPID', 'ControlGroup'];
-const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed"]);
+const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed"]);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const reject = code => { throw Object.assign(new Error(code), { code }); };
 export const LIMITATIONS = Object.freeze({ scope: 'ephemeral-user-service-basic-lifecycle',
@@ -125,9 +126,9 @@ export async function observeNodePrerequisites(prefix, nodeExecutable) {
   finally { if (handle) { try { await handle.close(); } catch { reject('recipe_diagnostic_failed'); } } }
 }
 // Diagnostic collectors have no I/O or lifecycle authority.
-export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'first_start', 'tls_apply', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
-export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'request_restart', 'old_retirement', 'invocation_identity', 'journal_read', 'downstream_tls', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
-export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'temporary_root', 'final_assertion', 'unknown']);
+export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'first_start', 'tls_apply', 'origin_negative', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
+export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'request_restart', 'old_retirement', 'invocation_identity', 'journal_read', 'downstream_tls', 'upstream_tls', 'origin_negative', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
+export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'origin_close', 'temporary_root', 'final_assertion', 'unknown']);
 const pickEnum = (value, list, fallback = 'unknown') => typeof value === 'string' && list.includes(value) ? value : fallback;
 function ownData(record, key) {
   try { const d = record && Object.getOwnPropertyDescriptor(record, key); return d && Object.hasOwn(d, 'value') ? d.value : undefined; }
@@ -326,6 +327,19 @@ async function cli(node, launcher, args, env) {
   if (!value || value.ok !== true) reject('installed_command_failed');
   return value;
 }
+// Only a known installed apply's explicit rollback is an expected failure.
+// Raw reason/stdout, revision IDs and candidate tags stay private to this run.
+export function assessRejectedOriginApply(record, previousRevision) {
+  if (!record || record.ok !== false || record.exitCode !== 1 || record.termination !== 'exit_nonzero'
+      || record.stderr !== '' || typeof record.stdout !== 'string' || record.stdout.length > 256 * 1024
+      || !TOKEN.test(previousRevision || '')) reject('upstream_tls_rollback_unconfirmed');
+  let value; try { value = JSON.parse(record.stdout); } catch { reject('upstream_tls_rollback_unconfirmed'); }
+  if (!value || value.ok !== false || value.outcome !== 'rolled_back' || !TOKEN.test(value.revision || '')
+      || !TOKEN.test(value.failedRevision || '') || value.restoredContentFrom !== previousRevision
+      || value.revision === previousRevision || value.revision === value.failedRevision
+      || value.failedRevision === previousRevision) reject('upstream_tls_rollback_unconfirmed');
+  return { revision: value.revision, restoredContentFrom: value.restoredContentFrom };
+}
 async function listen(server) {
   await new Promise((resolve, fail) => { server.once('error', fail); server.listen(0, '127.0.0.1', () => { server.removeListener('error', fail); resolve(); }); });
   return server.address().port;
@@ -358,11 +372,18 @@ export async function main(argv = process.argv.slice(2)) {
     downstreamTLSActivated: false, downstreamTLSSessionChecks: 0, downstreamTLSBodyChecks: 0,
     downstreamTLSUploadChecks: 0, downstreamTLSStreamChecks: 0, downstreamTLS12Checks: 0, downstreamTLS13Checks: 0,
     downstreamTLSCertificateChecks: 0, downstreamTLSWrongCARefusals: 0, downstreamTLSWrongNameRefusals: 0,
+    upstreamTLSActivated: false, upstreamTLSSessionChecks: 0, upstreamTLSBodyChecks: 0,
+    upstreamTLSUploadChecks: 0, upstreamTLSStreamChecks: 0, upstreamTLSDirectChecks: 0,
+    upstreamTLSWrongCARefusals: 0, upstreamTLSWrongNameRefusals: 0, upstreamTLSPlaintextRefusals: 0,
+    upstreamTLSRollbackChecks: 0, upstreamTLSCandidate502Checks: 0, upstreamTLSNoPostReplayChecks: 0,
     readinessAutomated: false, runtimeUnitLinked: false, runtimeUnitRemoved: false, unitEnabled: false, subprocessOutputsPublished: false,
     cleanup: { managerStopped: false, launcherExited: false, nativeGroupsAbsent: false,
       listeningPortsClosed: false, controlSocketAbsent: false, downstreamTLSPortClosed: false, runtimeLinkAbsent: false,
+      upstreamTLSPortClosed: false, readinessRelayPortClosed: false, upstreamTLSOriginClosed: false, readinessRelayClosed: false,
       appSocketsRemaining: 0, installationRemoved: false, temporaryRootRemoved: false } };
-  let input, parent, prefix, node, launcher, unitFile, runtimeLink, unitName, env, app, appPort, gatewayPort, healthPort, tlsPort, tlsFixture;
+  let input, parent, prefix, node, launcher, unitFile, runtimeLink, unitName, env, app, appPort, gatewayPort, healthPort, tlsPort, tlsFixture, origin, goodOriginRevision;
+  let originCreationRequested = false, originCleanupSafe = true;
+  const originSessions = new Set();
   const tlsSessions = new Set();
   let linked = false, installed = false, safeToRemove = false, cancelled = false, startRequested = false, lastSession = null, inCleanup = false;
   const sessions = [], launcherIdentities = [], sockets = new Set();
@@ -555,6 +576,7 @@ export async function main(argv = process.argv.slice(2)) {
     start.step('final_cancel_check');
     checkCancelled();
     if (report.downstreamTLSActivated === true) await verifyDownstreamTLS();
+    if (report.upstreamTLSActivated === true) await verifyUpstreamTLS();
     return s;
   }
   function sameLauncher(a, b) {
@@ -655,9 +677,21 @@ export async function main(argv = process.argv.slice(2)) {
     do { tlsPort = await unusedPort(); } while ([appPort, gatewayPort, healthPort].includes(tlsPort));
     checkCancelled();
     const inputFile = `${parent}/downstream-tls-input.json`;
-    const input = { serverBody: `client_max_body_size 16m;\nlocation / { proxy_pass http://127.0.0.1:${appPort}; proxy_http_version 1.1; proxy_next_upstream off; }`,
-      healthURL: `http://127.0.0.1:${appPort}/ready`, healthExpectedStatus: 200, healthExpectedBody: 'ready\n',
-      https: { port: tlsPort, certificate: tlsFixture.certificate, certificateKey: tlsFixture.certificateKey } };
+    const originParent = `${parent}/origin`;
+    await mkdir(originParent, { mode: 0o700 });
+    checkCancelled(); originCreationRequested = true; originCleanupSafe = false;
+    origin = await createOriginFixture(originParent, { gatewayPort, body: Buffer.from('service-fixture\n'), stream: Buffer.alloc(65537, 0x62) });
+    checkCancelled();
+    if (!origin || [appPort, gatewayPort, healthPort, tlsPort].includes(origin.port)
+        || [appPort, gatewayPort, healthPort, tlsPort, origin.port].includes(origin.readyPort)) reject('upstream_tls_unconfirmed');
+    const direct = await probeServiceTLS(origin.port, '/', { ca: origin.ca, expectedCertificate: origin.expectedCertificate,
+      servername: 'localhost', version: 'TLSv1.3' });
+    checkCancelled();
+    if (direct.status !== 200 || direct.certificateMatched !== true || direct.protocol !== 'TLSv1.3'
+        || !Buffer.isBuffer(direct.body) || direct.body.toString() !== 'service-fixture\n') reject('upstream_tls_unconfirmed');
+    report.upstreamTLSDirectChecks++;
+    const input = origin.candidate({ tag: randomBytes(16).toString('hex') });
+    input.https = { port: tlsPort, certificate: tlsFixture.certificate, certificateKey: tlsFixture.certificateKey };
     const file = await open(inputFile, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
     try { await file.writeFile(JSON.stringify(input)); await file.sync(); } finally { await file.close(); }
     const current = await cli(node, launcher, ['info'], env);
@@ -667,12 +701,15 @@ export async function main(argv = process.argv.slice(2)) {
     const before = await ownedInvocation();
     checkCancelled();
     const applied = await cli(node, launcher, ['apply', '--file', inputFile], env);
-    if (applied.outcome !== 'applied') reject('downstream_tls_unconfirmed');
+    if (applied.outcome !== 'applied' || !TOKEN.test(applied.revision || '')) reject('downstream_tls_unconfirmed');
+    goodOriginRevision = applied.revision;
     const after = await ownedInvocation();
     if (before.id !== after.id || !sameLauncher(before.launcher, after.launcher)) reject('unit_invocation_changed');
     checkCancelled();
-    report.downstreamTLSActivated = true;
+    report.downstreamTLSActivated = true; report.upstreamTLSActivated = true;
     await verifyDownstreamTLS();
+    await verifyUpstreamTLS();
+    await verifyOriginRefusals();
   }
   async function verifyDownstreamTLS() {
     start.step('downstream_tls');
@@ -724,6 +761,77 @@ export async function main(argv = process.argv.slice(2)) {
     checkCancelled();
     tlsSessions.add(known.id); report.downstreamTLSSessionChecks++;
   }
+  async function verifyUpstreamTLS() {
+    start.step('upstream_tls'); checkCancelled();
+    if (!report.upstreamTLSActivated || !origin) reject('upstream_tls_unconfirmed');
+    const known = sessions.find(s => s.id === lastSession);
+    if (!known || originSessions.has(known.id) || originSessions.size >= 3) reject('upstream_tls_session');
+    const before = await currentOriginAuthority(known);
+    const body = await request(gatewayPort); checkCancelled();
+    if (body.status !== 200 || body.body.toString() !== 'service-fixture\n') reject('upstream_tls_unconfirmed');
+    report.upstreamTLSBodyChecks++;
+    const upload = Buffer.alloc(65551, 0x61), echo = await request(gatewayPort, '/echo', upload); checkCancelled();
+    if (echo.status !== 200 || !echo.body.equals(upload)) reject('upstream_tls_unconfirmed');
+    report.upstreamTLSUploadChecks++;
+    const stream = await request(gatewayPort, '/stream'); checkCancelled();
+    if (stream.status !== 200 || !stream.body.equals(Buffer.alloc(65537, 0x62))) reject('upstream_tls_unconfirmed');
+    report.upstreamTLSStreamChecks++;
+    const after = await currentOriginAuthority(known);
+    if (before.id !== after.id || !sameLauncher(before.launcher, after.launcher)) reject('unit_invocation_changed');
+    checkCancelled(); originSessions.add(known.id); report.upstreamTLSSessionChecks++;
+  }
+  async function currentOriginAuthority(known) {
+    checkCancelled();
+    const info = await cli(node, launcher, ['info'], env);
+    if (!known || info.stage !== 'running' || info.session !== known.id || info.sessionPrefix !== known.prefix
+        || !await inspectMaster(`${prefix}/bin/nginx`, known.prefix, known.identity)) reject('upstream_tls_session');
+    return ownedInvocation();
+  }
+  async function verifyOriginRefusals() {
+    report.phase = 'origin_negative'; start.step('origin_negative');
+    const known = sessions.find(s => s.id === lastSession);
+    for (const [kind, changed, counter] of [
+      ['wrong-ca', { trust: 'wrong' }, 'upstreamTLSWrongCARefusals'],
+      ['wrong-name', { name: 'wrong.invalid' }, 'upstreamTLSWrongNameRefusals'],
+      ['plaintext', { target: 'plaintext' }, 'upstreamTLSPlaintextRefusals']]) {
+      resetServiceCleanupEvidence(); checkCancelled();
+      const direct = await probeServiceTLS(origin.port, '/', { ca: origin.ca, expectedCertificate: origin.expectedCertificate,
+        servername: 'localhost', version: 'TLSv1.3' });
+      checkCancelled();
+      if (direct.status !== 200 || !Buffer.isBuffer(direct.body) || direct.body.toString() !== 'service-fixture\n'
+          || direct.certificateMatched !== true || direct.protocol !== 'TLSv1.3') reject('upstream_tls_unconfirmed');
+      const tag = randomBytes(16).toString('hex'), input = origin.candidate({ tag, ...changed });
+      input.https = { port: tlsPort, certificate: tlsFixture.certificate, certificateKey: tlsFixture.certificateKey };
+      const inputFile = `${parent}/origin-${kind}.json`;
+      const file = await open(inputFile, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
+      try { await file.writeFile(JSON.stringify(input)); await file.sync(); } finally { await file.close(); }
+      const before502 = origin.count502(tag), beforePosts = origin.counts().echoRequests;
+      const before = await currentOriginAuthority(known);
+      checkCancelled();
+      const result = await command(node, [launcher, 'apply', '--file', inputFile], env);
+      checkCancelled();
+      const rollback = assessRejectedOriginApply(result, goodOriginRevision);
+      const after = await currentOriginAuthority(known);
+      if (before.id !== after.id || !sameLauncher(before.launcher, after.launcher)) reject('unit_invocation_changed');
+      checkCancelled();
+      if (!Number.isInteger(before502) || before502 !== 0 || !Number.isInteger(origin.count502(tag))
+          || origin.count502(tag) <= before502) reject('upstream_tls_candidate_unconfirmed');
+      const status = await cli(node, launcher, ['status'], env); checkCancelled();
+      if (status.lastConfirmedRevision !== rollback.revision || !status.binding || status.runtime?.identityValid !== true) reject('upstream_tls_rollback_unconfirmed');
+      const restored = await request(gatewayPort); checkCancelled();
+      if (restored.status !== 200 || restored.body.toString() !== 'service-fixture\n') reject('upstream_tls_rollback_unconfirmed');
+      const secure = await probeServiceTLS(tlsPort, '/', { ca: tlsFixture.ca, expectedCertificate: tlsFixture.expectedCertificate,
+        servername: 'localhost', version: 'TLSv1.3' }); checkCancelled();
+      if (secure.status !== 200 || secure.certificateMatched !== true || secure.protocol !== 'TLSv1.3'
+          || !Buffer.isBuffer(secure.body) || secure.body.toString() !== 'service-fixture\n') reject('upstream_tls_rollback_unconfirmed');
+      if (!Number.isInteger(beforePosts) || origin.counts().echoRequests !== beforePosts) reject('upstream_tls_replay');
+      const final = await currentOriginAuthority(known);
+      if (before.id !== final.id || !sameLauncher(before.launcher, final.launcher)) reject('unit_invocation_changed');
+      checkCancelled();
+      goodOriginRevision = rollback.revision;
+      report[counter]++; report.upstreamTLSRollbackChecks++; report.upstreamTLSCandidate502Checks++; report.upstreamTLSNoPostReplayChecks++;
+    }
+  }
   process.once('SIGINT', cancel); process.once('SIGTERM', cancel);
   try {
     input = parseArguments(argv); report.phase = 'preflight';
@@ -772,6 +880,7 @@ export async function main(argv = process.argv.slice(2)) {
     report.phase = 'manager_restart'; await restartAndServe();
     report.phase = 'third_stop'; await stopOwned(); report.nativeSessionsStopped++;
     if (report.downstreamTLSSessionChecks !== 3) reject('downstream_tls_unconfirmed');
+    if (report.upstreamTLSSessionChecks !== 3 || report.upstreamTLSRollbackChecks !== 3) reject('upstream_tls_unconfirmed');
     report.phase = 'uninstall'; await cli(node, launcher, ['uninstall'], env); installed = false;
     if (!await absent(prefix)) reject('uninstall_incomplete'); report.cleanup.installationRemoved = true;
     report.ok = true; report.code = 'basic_lifecycle_verified'; report.phase = 'complete';
@@ -809,10 +918,27 @@ export async function main(argv = process.argv.slice(2)) {
       } catch (error) { closeError = error; }
       if (!closed) { failures.cleanup(closeError, 'app_close'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     }
+    if (origin) {
+      report.cleanup.upstreamTLSPortClosed = false; report.cleanup.readinessRelayPortClosed = false;
+      report.cleanup.upstreamTLSOriginClosed = false; report.cleanup.readinessRelayClosed = false;
+      originCleanupSafe = false;
+      try {
+        const closed = await origin.close();
+        if (!closed || closed.originClosed !== true || closed.relayClosed !== true
+            || closed.originPortClosed !== true || closed.relayPortClosed !== true
+            || !await closedPort(origin.port) || !await closedPort(origin.readyPort)) reject('service_resources_live');
+        report.cleanup.upstreamTLSPortClosed = true; report.cleanup.readinessRelayPortClosed = true;
+        report.cleanup.upstreamTLSOriginClosed = true; report.cleanup.readinessRelayClosed = true;
+        originCleanupSafe = true;
+      } catch (error) { failures.cleanup(error, 'origin_close'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
+    } else if (originCreationRequested) {
+      failures.cleanup(null, 'origin_close'); report.ok = false; report.code = 'cleanup_unconfirmed';
+    }
     report.cleanup.appSocketsRemaining = sockets.size;
-    safeToRemove = Boolean(parent && !installed && (!linked || report.runtimeUnitRemoved) && sockets.size === 0);
+    safeToRemove = Boolean(parent && !installed && (!linked || report.runtimeUnitRemoved) && sockets.size === 0 && originCleanupSafe);
     if (safeToRemove) { try { await rm(parent, { recursive: true, force: true }); report.cleanup.temporaryRootRemoved = await absent(parent); } catch (error) { failures.cleanup(error, 'temporary_root'); report.ok = false; report.code = 'cleanup_unconfirmed'; } }
-    if (report.ok && (!report.cleanup.temporaryRootRemoved || !report.runtimeUnitRemoved || !report.cleanup.downstreamTLSPortClosed || sockets.size)) { failures.cleanup(null, 'final_assertion'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
+    if (report.ok && (!report.cleanup.temporaryRootRemoved || !report.runtimeUnitRemoved || !report.cleanup.downstreamTLSPortClosed || !report.cleanup.upstreamTLSPortClosed || !report.cleanup.readinessRelayPortClosed
+        || !report.cleanup.upstreamTLSOriginClosed || !report.cleanup.readinessRelayClosed || sockets.size)) { failures.cleanup(null, 'final_assertion'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel);
   }
   return { ...report, ...failures.snapshot(), startDiagnostics: start.snapshot(), fragmentIdentityDiagnostics: fragments.snapshot(), hookStatusDiagnostics: hooks.snapshot() };

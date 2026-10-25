@@ -7,7 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
 import { digest } from '../alpha/runtime.mjs';
-import { parseArguments, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
+import { parseArguments, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
 import { JOURNAL_RESULT_CODES } from './journal-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
@@ -834,4 +834,172 @@ test('unknown or still-live TLS listener refuses cleanup and clears prior confir
   assert.equal(prior.report.cleanup.downstreamTLSPortClosed, true);
   const r = await syntheticOwnedStop({ report: prior.report, tlsPort: 3, failure: 'tls_port' }); assert.equal(r.code, 'service_resources_live');
   assert.equal(r.report.cleanup.downstreamTLSPortClosed, false); assertServiceCleanup(r.report, false);
+});
+
+const originRevision = 'c'.repeat(32), originRestored = 'd'.repeat(32), originFailed = 'e'.repeat(32);
+function rejectedOriginRecord(change = {}, value = {}) {
+  return { ok: false, exitCode: 1, termination: 'exit_nonzero', stderr: '',
+    stdout: JSON.stringify({ ok: false, outcome: 'rolled_back', revision: originRestored,
+      failedRevision: originFailed, restoredContentFrom: originRevision, reason: 'private reason not returned', ...value }), ...change };
+}
+test('expected-origin adapter accepts only explicit rollback and keeps raw details private', () => {
+  assert.deepEqual(assessRejectedOriginApply(rejectedOriginRecord(), originRevision), { revision: originRestored, restoredContentFrom: originRevision });
+});
+for (const [name, record] of Object.entries({ success: rejectedOriginRecord({ ok: true }), zero: rejectedOriginRecord({ exitCode: 0 }),
+  timeout: rejectedOriginRecord({ termination: 'timeout_or_killed' }), signal: rejectedOriginRecord({ termination: 'signal' }),
+  stderr: rejectedOriginRecord({ stderr: 'private' }), malformed: rejectedOriginRecord({ stdout: '{' }), huge: rejectedOriginRecord({ stdout: 'x'.repeat(262145) }),
+  rejected: rejectedOriginRecord({}, { outcome: 'rejected' }), noOutcome: rejectedOriginRecord({}, { outcome: undefined }), wrongPrior: rejectedOriginRecord({}, { restoredContentFrom: 'a'.repeat(32) }),
+  staleRevision: rejectedOriginRecord({}, { revision: originRevision }), sameFailed: rejectedOriginRecord({}, { revision: originFailed }),
+  missingFailed: rejectedOriginRecord({}, { failedRevision: undefined }), upperRevision: rejectedOriginRecord({}, { revision: originRestored.toUpperCase() }) })) {
+  test(`expected-origin adapter refuses ${name}`, () => assert.throws(() => assessRejectedOriginApply(record, originRevision), { code: 'upstream_tls_rollback_unconfirmed' }));
+}
+
+async function syntheticUpstreamSession(options = {}) {
+  const source = await readFile(script, 'utf8');
+  const body = source.slice(source.indexOf('  async function verifyUpstreamTLS()'), source.indexOf('  async function currentOriginAuthority('));
+  const same = source.slice(source.indexOf('  function sameLauncher('), source.indexOf('  async function ownedInvocation('));
+  const report = { upstreamTLSActivated: true, upstreamTLSSessionChecks: 0, upstreamTLSBodyChecks: 0, upstreamTLSUploadChecks: 0, upstreamTLSStreamChecks: 0 };
+  const sessions = [1, 2, 3].map(i => ({ id: 'session' + i })), originSessions = new Set(options.duplicate ? ['session1'] : []);
+  const state = { cancelled: false, requests: 0, authorities: 0, index: 0 };
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  const identity = { pid: 1, startTicks: '10', pidNamespace: 'p', networkNamespace: 'n' };
+  const deps = { report, sessions, originSessions, origin: {}, gatewayPort: 10080, start: { step() {} }, reject,
+    checkCancelled: () => { if (state.cancelled) reject('cancelled'); },
+    currentOriginAuthority: async () => { state.authorities++; if (options.authorityFailure) reject('unit_fragment_identity');
+      return { id: options.changedInvocation && state.authorities % 2 === 0 ? 'b' : 'a', launcher: identity }; },
+    request: async (_port, route = '/', body = Buffer.alloc(0)) => { state.requests++; if (options.cancelAt === state.requests) state.cancelled = true;
+      if (options.requestFailure === state.requests) reject('observation_timeout');
+      return { status: options.badStatus ? 502 : 200, body: options.badBody ? Buffer.from('wrong') : route === '/echo' ? body : route === '/stream' ? Buffer.alloc(65537, 0x62) : Buffer.from('service-fixture\n') }; },
+  };
+  const factory = new Function(...Object.keys(deps), `let lastSession = 'session1'; ${same}${body}; return { run: verifyUpstreamTLS, select(id) { lastSession = id; } };`);
+  const actual = factory(...Object.values(deps)); let failure = null;
+  try { for (let i = 0; i < (options.rounds || 1); i++) { actual.select(sessions[i].id); await actual.run(); } } catch (e) { failure = e.code; }
+  return { report, state, failure };
+}
+test('combined origin checks count exactly apply, next start and manager restart sessions', async () => {
+  const r = await syntheticUpstreamSession({ rounds: 3 }); assert.equal(r.failure, null);
+  assert.deepEqual(r.report, { upstreamTLSActivated: true, upstreamTLSSessionChecks: 3, upstreamTLSBodyChecks: 3, upstreamTLSUploadChecks: 3, upstreamTLSStreamChecks: 3 });
+  assert.equal(r.state.requests, 9);
+});
+for (const [option, code] of [['duplicate', 'upstream_tls_session'], ['badStatus', 'upstream_tls_unconfirmed'], ['badBody', 'upstream_tls_unconfirmed'],
+  ['changedInvocation', 'unit_invocation_changed'], ['authorityFailure', 'unit_fragment_identity']]) test(`combined origin session refuses ${option}`, async () => {
+  const r = await syntheticUpstreamSession({ [option]: true }); assert.equal(r.failure, code); assert.equal(r.report.upstreamTLSSessionChecks, 0);
+});
+for (const cancelAt of [1, 2, 3]) test(`combined origin cancel after I/O${cancelAt} does not count session or that operation`, async () => {
+  const r = await syntheticUpstreamSession({ cancelAt }); assert.equal(r.failure, 'cancelled'); assert.equal(r.report.upstreamTLSSessionChecks, 0);
+  assert.equal([r.report.upstreamTLSBodyChecks, r.report.upstreamTLSUploadChecks, r.report.upstreamTLSStreamChecks][cancelAt - 1], 0);
+});
+for (const requestFailure of [1, 2, 3]) test(`combined origin I/O${requestFailure} transport failure is not accepted`, async () => {
+  const r = await syntheticUpstreamSession({ requestFailure }); assert.equal(r.failure, 'observation_timeout'); assert.equal(r.report.upstreamTLSSessionChecks, 0);
+});
+
+async function syntheticOriginRefusals(options = {}) {
+  const source = await readFile(script, 'utf8');
+  const body = source.slice(source.indexOf('  async function verifyOriginRefusals()'), source.indexOf("  process.once('SIGINT', cancel)"));
+  const same = source.slice(source.indexOf('  function sameLauncher('), source.indexOf('  async function ownedInvocation('));
+  const report = { upstreamTLSWrongCARefusals: 0, upstreamTLSWrongNameRefusals: 0, upstreamTLSPlaintextRefusals: 0,
+    upstreamTLSRollbackChecks: 0, upstreamTLSCandidate502Checks: 0, upstreamTLSNoPostReplayChecks: 0 };
+  const state = { cancelled: false, commands: 0, probes: 0, requests: 0, guards: 0, writes: 0, reset: 0, tag: null, counted: new Set(), revision: originRevision };
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  const identity = { pid: 1, startTicks: '10', pidNamespace: 'p', networkNamespace: 'n' };
+  const origin = { port: 10444, ca: Buffer.from('originCA'), expectedCertificate: Buffer.from('originDER'),
+    candidate(value) { state.tag = value.tag; assert.match(value.tag, /^[a-f0-9]{32}$/); return { serverBody: 'synthetic input', healthURL: 'http://127.0.0.1:10081/tls-probe/' + value.tag }; },
+    count502(tag) { return options.stale502 ? 1 : state.counted.has(tag) ? 1 : 0; },
+    counts: () => ({ echoRequests: options.replay && state.commands > 0 ? 1 : 0 }) };
+  const deps = { report, origin, tlsFixture: { ca: Buffer.from('downstreamCA'), certificate: 'private cert', certificateKey: 'private key', expectedCertificate: Buffer.from('downstreamDER') },
+    tlsPort: 10443, gatewayPort: 10080, parent: '/synthetic', node: '/synthetic/node', launcher: '/synthetic/launcher', env: {},
+    sessions: [{ id: 'session1' }], lastSession: 'session1', start: { step() {} }, reject, constants: { O_WRONLY: 1, O_CREAT: 2, O_EXCL: 4, O_NOFOLLOW: 8 }, assessRejectedOriginApply,
+    resetServiceCleanupEvidence: () => { state.reset++; }, checkCancelled: () => { if (state.cancelled) reject('cancelled'); },
+    randomBytes: () => Buffer.alloc(16, state.commands + 1),
+    open: async (_file, flags, mode) => { assert.equal(flags, 15); assert.equal(mode, 0o600); state.writes++; return { async writeFile() {}, async sync() {}, async close() {} }; },
+    probeServiceTLS: async (port) => { state.probes++; if (options.cancelProbe === state.probes) state.cancelled = true;
+      if (options.originUnreachable && port === origin.port) reject('tls_probe_timeout');
+      return { status: options.restoredTLSBad && port === 10443 ? 502 : 200, body: Buffer.from('service-fixture\n'), certificateMatched: true, protocol: 'TLSv1.3' }; },
+    currentOriginAuthority: async () => { state.guards++; if (options.guardFailure) reject('unit_fragment_identity');
+      return { id: options.changedInvocation && state.guards === 2 ? 'changed' : 'same', launcher: identity }; },
+    command: async (_file, args) => { assert.deepEqual(args.slice(0, 3), ['/synthetic/launcher', 'apply', '--file']); state.commands++;
+      if (options.cancelCommand) state.cancelled = true;
+      if (!options.missing502) state.counted.add(state.tag);
+      const prior = state.revision; state.revision = String(state.commands + 3).repeat(32);
+      return rejectedOriginRecord(options.commandFailure ? { exitCode: null, termination: 'timeout_or_killed' } : {}, { revision: state.revision, restoredContentFrom: options.wrongPrior ? 'f'.repeat(32) : prior }); },
+    cli: async () => ({ lastConfirmedRevision: options.wrongStatus ? 'f'.repeat(32) : state.revision, binding: {}, runtime: { identityValid: true } }),
+    request: async () => { state.requests++; return { status: options.restoreBad ? 502 : 200, body: Buffer.from('service-fixture\n') }; },
+  };
+  const factory = new Function(...Object.keys(deps), `let goodOriginRevision = '${originRevision}'; ${same}${body}; return verifyOriginRefusals;`);
+  let failure = null; try { await factory(...Object.values(deps))(); } catch (e) { failure = e.code; }
+  return { report, state, failure };
+}
+test('three origin refusal classes require exact rollback plus matched502 and both restored paths', async () => {
+  const r = await syntheticOriginRefusals(); assert.equal(r.failure, null);
+  assert.deepEqual(r.report, { phase: 'origin_negative', upstreamTLSWrongCARefusals: 1, upstreamTLSWrongNameRefusals: 1, upstreamTLSPlaintextRefusals: 1,
+    upstreamTLSRollbackChecks: 3, upstreamTLSCandidate502Checks: 3, upstreamTLSNoPostReplayChecks: 3 });
+  assert.equal(r.state.commands, 3); assert.equal(r.state.probes, 6); assert.equal(r.state.requests, 3); assert.equal(r.state.reset, 3);
+});
+for (const [option, code] of [['originUnreachable', 'tls_probe_timeout'], ['guardFailure', 'unit_fragment_identity'],
+  ['commandFailure', 'upstream_tls_rollback_unconfirmed'], ['missing502', 'upstream_tls_candidate_unconfirmed'], ['stale502', 'upstream_tls_candidate_unconfirmed'],
+  ['wrongPrior', 'upstream_tls_rollback_unconfirmed'], ['wrongStatus', 'upstream_tls_rollback_unconfirmed'], ['restoreBad', 'upstream_tls_rollback_unconfirmed'],
+  ['restoredTLSBad', 'upstream_tls_rollback_unconfirmed'], ['replay', 'upstream_tls_replay'], ['changedInvocation', 'unit_invocation_changed'], ['cancelCommand', 'cancelled']]) {
+  test(`origin negative control refuses ${option} without counting trust failure`, async () => {
+    const r = await syntheticOriginRefusals({ [option]: true }); assert.equal(r.failure, code); assert.equal(r.report.upstreamTLSRollbackChecks, 0);
+    assert.equal(r.report.upstreamTLSWrongCARefusals, 0); if (['originUnreachable', 'guardFailure'].includes(option)) assert.equal(r.state.commands, 0);
+  });
+}
+for (const cancelProbe of [1, 2]) test(`origin negative cancel after probe${cancelProbe} cannot count rollback`, async () => {
+  const r = await syntheticOriginRefusals({ cancelProbe }); assert.equal(r.failure, 'cancelled'); assert.equal(r.report.upstreamTLSRollbackChecks, 0);
+  if (cancelProbe === 1) assert.equal(r.state.commands, 0);
+});
+
+async function syntheticOriginCleanup(options = {}) {
+  const source = await readFile(script, 'utf8');
+  const body = source.slice(source.indexOf('    if (origin) {\n      report.cleanup.upstreamTLSPortClosed'), source.indexOf('    report.cleanup.appSocketsRemaining = sockets.size;'));
+  const report = { ok: true, cleanup: { upstreamTLSPortClosed: true, readinessRelayPortClosed: true, upstreamTLSOriginClosed: true, readinessRelayClosed: true } };
+  const state = { errors: 0, ports: [] };
+  const deps = { report, originCreationRequested: options.creationFailed === true, reject: code => { throw Object.assign(new Error(code), { code }); },
+    failures: { cleanup() { state.errors++; } },
+    origin: options.creationFailed ? null : { port: 10444, readyPort: 10081, close: async () => {
+      if (options.closeThrow) throw Object.assign(new Error('private'), { code: 'origin_cleanup_unconfirmed' });
+      return { originClosed: !options.originLive, relayClosed: !options.relayLive, originPortClosed: !options.originPortLive, relayPortClosed: !options.relayPortLive }; } },
+    closedPort: async port => { state.ports.push(port); return port === 10444 ? !options.independentOriginLive : !options.independentRelayLive; } };
+  const f = new Function(...Object.keys(deps), `return (async () => { let originCleanupSafe = false; ${body}; return originCleanupSafe; })();`);
+  const safe = await f(...Object.values(deps));
+  // The extracted block contains awaits, so invoke it in its own async boundary.
+  return { report, state, safe };
+}
+
+test('owned origin and relay closure require both server and independent port observations', async () => {
+  const r = await syntheticOriginCleanup(); assert.equal(r.safe, true); assert.equal(r.state.errors, 0);
+  assert.deepEqual(r.state.ports, [10444, 10081]); assert.equal(Object.values(r.report.cleanup).every(v => v === true), true);
+});
+for (const option of ['originLive', 'relayLive', 'originPortLive', 'relayPortLive', 'independentOriginLive', 'independentRelayLive', 'closeThrow']) {
+  test(`origin closure refuses ${option} and clears stale cleanup proof`, async () => {
+    const r = await syntheticOriginCleanup({ [option]: true }); assert.equal(r.safe, false); assert.equal(r.state.errors, 1);
+    assert.equal(r.report.ok, false); assert.equal(Object.values(r.report.cleanup).every(v => v === false), true);
+  });
+}
+test('partial origin creation without confirmed handle retains private root', async () => {
+  const r = await syntheticOriginCleanup({ creationFailed: true }); assert.equal(r.safe, false); assert.equal(r.report.ok, false); assert.equal(r.state.errors, 1);
+});
+
+async function syntheticOriginAuthority(options = {}) {
+  const source = await readFile(script, 'utf8');
+  const body = source.slice(source.indexOf('  async function currentOriginAuthority('), source.indexOf('  async function verifyOriginRefusals('));
+  const known = { id: 'session1', prefix: '/synthetic/runs/session1', identity: { synthetic: true } };
+  const state = { cancelled: false, info: 0, native: 0, owned: 0 }, reject = code => { throw Object.assign(new Error(code), { code }); };
+  const deps = { prefix: '/synthetic', node: '/synthetic/node', launcher: '/synthetic/launcher', env: {}, reject,
+    checkCancelled: () => { if (state.cancelled || options.cancelBefore) reject('cancelled'); },
+    cli: async () => { state.info++; if (options.cancelInfo) state.cancelled = true; return { stage: options.wrongStage ? 'stopped' : 'running', session: options.wrongSession ? 'other' : known.id, sessionPrefix: options.wrongPrefix ? '/foreign' : known.prefix }; },
+    inspectMaster: async (binary, prefix, identity) => { state.native++; assert.equal(binary, '/synthetic/bin/nginx'); assert.equal(prefix, known.prefix); assert.equal(identity, known.identity);
+      if (options.cancelNative) state.cancelled = true; return options.nativeMissing ? null : known.identity; },
+    ownedInvocation: async () => { state.owned++; if (state.cancelled) reject('cancelled'); if (options.unitChanged) reject('unit_fragment_identity'); return { synthetic: true }; } };
+  const f = new Function(...Object.keys(deps), `${body}; return currentOriginAuthority;`);
+  let failure = null, result; try { result = await f(...Object.values(deps))(options.noKnown ? null : known); } catch (e) { failure = e.code; }
+  return { failure, result, state };
+}
+test('fresh origin authority checks exact current session/native then owned active invocation', async () => {
+  const r = await syntheticOriginAuthority(); assert.equal(r.failure, null); assert.deepEqual(r.result, { synthetic: true }); assert.equal(r.state.owned, 1);
+});
+for (const [option, code] of [['noKnown', 'upstream_tls_session'], ['wrongStage', 'upstream_tls_session'], ['wrongSession', 'upstream_tls_session'],
+  ['wrongPrefix', 'upstream_tls_session'], ['nativeMissing', 'upstream_tls_session'], ['cancelBefore', 'cancelled'], ['cancelInfo', 'cancelled'],
+  ['cancelNative', 'cancelled'], ['unitChanged', 'unit_fragment_identity']]) test(`fresh origin authority refuses ${option} before admitted mutation`, async () => {
+  const r = await syntheticOriginAuthority({ [option]: true }); assert.equal(r.failure, code); assert.equal(r.result, undefined);
 });

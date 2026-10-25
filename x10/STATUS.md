@@ -2162,3 +2162,51 @@ and56 dependency controls. Independent review135 proofs,521 unchanged-file
 comparisons, nine root integration and seven workflow checks remain separate
 units. The strengthened helper late-callback draft15PASS/1FAIL and final16/16
 are retained; actual managed-service TLS and both-leg acceptance stay pending.
+
+
+## G3 combined HTTPS-origin candidate; full V1 not accepted
+
+Prior exact1e6 push and PR native workflows passed the scoped downstream HTTPS service with HTTP
+origin. Each observed three TLS sessions, one real manager restart, three attributable journals,
+twelve verified positive certificate requests and three wrong-CA plus three wrong-name refusals.
+All nine service cleanup confirmations, private Node/bootstrap removal and zero remaining
+application sockets were observed. These are distinct request/session units, not twelve
+installations. Earlier HTTP-only06e4 acceptance and a03 unknown raw journal rejection remain
+unchanged in history.
+
+The new local candidate combines downstream HTTPS with a verified HTTPS origin. Its owned relay
+queries regular native HTTP /ready with an immutable per-candidate marker; it neither borrows
+direct-origin readiness nor native management self-health. Tags correlate the candidate input;
+they are not authentication, all-worker fencing or atomic cutover. Ordinary application traffic
+remains native NGINX. Existing release contract/profile, TLS helper,
+native/controller/alpha/recipe/preflight/journal sources are unchanged.
+
+Actual local combined tests:474/474 PASS, zero FAIL/SKIP/cancel/TODO and empty stderr:328
+lifecycle,45 journal,16 unchanged downstream TLS helper,23 new origin helper,62 dependency
+receipt controls. Independent review passed229 bounded controls:45 real owned Node origin
+TLS/fake-native relay,107 extracted harness,13 lifetime and64 boundary/receipt controls. Root
+checked10 source/pin/contract conditions and7 workflow conditions;518 other protected files were
+byte-identical. Proof units are separate from test counts and do not count installations.
+
+The managed-service candidate requires three distinct combined origin body/upload/stream
+sessions. Three separate bad upstream CA/name/plaintext candidates each require independent
+good-origin reachability, exact installed rollback, fresh candidate-tag native502, restored HTTP
+and downstream HTTPS payloads, and zero application POST replay. One direct-origin counter is
+the initial check; downstream twelve positive certificate requests exclude three additional
+restored-path probes. Four extra origin/relay server-and-port cleanup booleans augment prior
+cleanup guards. Direct helper exact-leaf checks do not claim native leaf pinning.
+
+Two initial test assertions failed and remain recorded:the harness expected object omitted
+origin_negative, and the missing-marker test helper defaulted undefined to a valid marker.
+Corrections changed test expectations/inputs without changing runtime admission. Final
+harness328/helper23 passed. A separate read-only unchanged-file inventory refused the already
+edited coordinator workflow; corrected518-file scope excludes it. These observations do not
+identify any historical managed-runtime failure cause.
+
+Local Node24 UID0 fixtures, pure contracts and source-extracted controls do not accept actual
+Node22 nonroot managed combined TLS. Exact resulting CI is pending and may fail. Require
+complete owned origin/downstream TLS/relay/PKI/service/private Node cleanup. Same-UID trust and
+user-space timeout limits remain; no complete secret-erasure claim. Full G3, adverse
+startup/drain/recovery, separate config/package rollback, permanent distribution, independent
+release acceptance,60-minute soak and Production V1 remain open. Deferred Continuum and full
+native roadmap remain preserved.

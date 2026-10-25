@@ -216,7 +216,12 @@ export function cleanupEvidence(e) {
   for (const k of ['downstreamTLSSessionChecks', 'downstreamTLSUploadChecks', 'downstreamTLSStreamChecks',
     'downstreamTLS12Checks', 'downstreamTLS13Checks', 'downstreamTLSWrongCARefusals', 'downstreamTLSWrongNameRefusals']) if (r[k] !== 3) return false;
   if (r.downstreamTLSBodyChecks !== 6 || r.downstreamTLSCertificateChecks !== 12) return false;
-  for (const k of ['managerStopped', 'launcherExited', 'nativeGroupsAbsent', 'listeningPortsClosed', 'controlSocketAbsent', 'runtimeLinkAbsent', 'installationRemoved', 'temporaryRootRemoved', 'downstreamTLSPortClosed']) if (r.cleanup?.[k] !== true) return false;
+  if (r.upstreamTLSActivated !== true) return false;
+  for (const k of ['upstreamTLSSessionChecks', 'upstreamTLSBodyChecks', 'upstreamTLSUploadChecks',
+    'upstreamTLSStreamChecks', 'upstreamTLSRollbackChecks', 'upstreamTLSCandidate502Checks', 'upstreamTLSNoPostReplayChecks']) if (r[k] !== 3) return false;
+  for (const k of ['upstreamTLSDirectChecks', 'upstreamTLSWrongCARefusals',
+    'upstreamTLSWrongNameRefusals', 'upstreamTLSPlaintextRefusals']) if (r[k] !== 1) return false;
+  for (const k of ['managerStopped', 'launcherExited', 'nativeGroupsAbsent', 'listeningPortsClosed', 'controlSocketAbsent', 'runtimeLinkAbsent', 'installationRemoved', 'temporaryRootRemoved', 'downstreamTLSPortClosed', 'upstreamTLSPortClosed', 'readinessRelayPortClosed', 'upstreamTLSOriginClosed', 'readinessRelayClosed']) if (r.cleanup?.[k] !== true) return false;
   return r.cleanup.appSocketsRemaining === 0;
 }
 async function inspectRuntime(prefix) {
@@ -314,7 +319,7 @@ export async function main(argv = process.argv.slice(2)) {
       const receipt = await regular(file, 32768, { uid: process.getuid() });
       if ((receipt.stat.mode & 0o7077) !== 0) refuse('runtime_retained_cleanup_unconfirmed');
       const e = JSON.parse(receipt.bytes);
-      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '60454daf9c04733bd25d2ac64c2688130169b37c24dfa3049731bcbfd726c226') refuse('runtime_retained_cleanup_unconfirmed');
+      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '98eebeea9d9c74d79142d1139762458e01bf32a3ccb23e39ab620093bf85cae1') refuse('runtime_retained_cleanup_unconfirmed');
       const runtime = await inspectRuntime(prefix);
       if (e.runtimeNodeSha256 !== runtime.files['bin/node'].sha256 || e.runtimeInstallationId !== runtime.installationId) refuse('runtime_retained_cleanup_unconfirmed');
       await removeRuntime(prefix); result = { ok: true, code: 'verified_node_removed', runtimeRemoved: true };

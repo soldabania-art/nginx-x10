@@ -26,7 +26,10 @@ function receipt() {
     journalChecks:3,journalRecordsObserved:6,journalRunningMarkers:3,
     downstreamTLSActivated:true,downstreamTLSSessionChecks:3,downstreamTLSBodyChecks:6,downstreamTLSUploadChecks:3,downstreamTLSStreamChecks:3,
     downstreamTLS12Checks:3,downstreamTLS13Checks:3,downstreamTLSCertificateChecks:12,downstreamTLSWrongCARefusals:3,downstreamTLSWrongNameRefusals:3,
-    cleanup:{ managerStopped:true, launcherExited:true, nativeGroupsAbsent:true, listeningPortsClosed:true, controlSocketAbsent:true, runtimeLinkAbsent:true, installationRemoved:true, temporaryRootRemoved:true, downstreamTLSPortClosed:true, appSocketsRemaining:0 } } };
+    upstreamTLSActivated:true,upstreamTLSSessionChecks:3,upstreamTLSBodyChecks:3,upstreamTLSUploadChecks:3,upstreamTLSStreamChecks:3,
+    upstreamTLSDirectChecks:1,upstreamTLSWrongCARefusals:1,upstreamTLSWrongNameRefusals:1,upstreamTLSPlaintextRefusals:1,
+    upstreamTLSRollbackChecks:3,upstreamTLSCandidate502Checks:3,upstreamTLSNoPostReplayChecks:3,
+    cleanup:{ managerStopped:true, launcherExited:true, nativeGroupsAbsent:true, listeningPortsClosed:true, controlSocketAbsent:true, runtimeLinkAbsent:true, installationRemoved:true, temporaryRootRemoved:true, downstreamTLSPortClosed:true, upstreamTLSPortClosed:true, readinessRelayPortClosed:true, upstreamTLSOriginClosed:true, readinessRelayClosed:true, appSocketsRemaining:0 } } };
 }
 test('synthetic tar selection is byte exact and never executes payload', () => {
   const r=parseTar(good()); assert.equal(r.node.toString(),'SYNTHETIC_NONEXECUTABLE'); assert.equal(r.license.toString(),'public license'); assert.deepEqual(Object.keys(r).sort(),['license','node']);
@@ -132,6 +135,40 @@ test('cleanup requires the additional current-attempt TLS listener closure',()=>
     assert.equal(e.report.cleanup.listeningPortsClosed,true);assert.equal(cleanupEvidence(e),false);
   }
 });
+test('cleanup refuses downstream-only receipts even with retained origin and relay closure claims',()=>{
+  for(const retainedClosure of [false,true]){
+    const e=receipt();for(const k of Object.keys(e.report))if(k.startsWith('upstreamTLS'))delete e.report[k];
+    if(!retainedClosure)for(const k of ['upstreamTLSPortClosed','readinessRelayPortClosed','upstreamTLSOriginClosed','readinessRelayClosed'])delete e.report.cleanup[k];
+    assert.equal(cleanupEvidence(e),false);
+  }
+});
+test('cleanup requires exact per-session origin IO, rollback, 502 and no-replay observations',()=>{
+  for(const k of ['upstreamTLSSessionChecks','upstreamTLSBodyChecks','upstreamTLSUploadChecks','upstreamTLSStreamChecks',
+    'upstreamTLSRollbackChecks','upstreamTLSCandidate502Checks','upstreamTLSNoPostReplayChecks']){
+    for(const value of [undefined,false,0,2,4,'3',NaN,Infinity]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
+  }
+});
+test('cleanup requires independently observed origin trust and plaintext refusals',()=>{
+  for(const k of ['upstreamTLSDirectChecks','upstreamTLSWrongCARefusals','upstreamTLSWrongNameRefusals','upstreamTLSPlaintextRefusals']){
+    for(const value of [undefined,false,0,2,3,'1',NaN,Infinity]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
+  }
+  for(const value of [undefined,false,1,'true']){const e=receipt();e.report.upstreamTLSActivated=value;assert.equal(cleanupEvidence(e),false);}
+});
+test('cleanup requires both owned server closures and separately observed origin and relay ports closed',()=>{
+  for(const k of ['upstreamTLSPortClosed','readinessRelayPortClosed','upstreamTLSOriginClosed','readinessRelayClosed']){
+    for(const value of [undefined,false,1,'true']){
+      const e=receipt();e.report.cleanup[k]=value;
+      assert.equal(e.report.cleanup.listeningPortsClosed,true);assert.equal(e.report.cleanup.downstreamTLSPortClosed,true);
+      assert.equal(cleanupEvidence(e),false,k);
+    }
+  }
+});
+test('cleanup refuses partial origin activation despite completed earlier session and cleanup claims',()=>{
+  const cases=[e=>e.report.upstreamTLSRollbackChecks=2,e=>e.report.upstreamTLSCandidate502Checks=2,
+    e=>e.report.upstreamTLSNoPostReplayChecks=2,e=>e.report.primaryFailure={phase:'first_start',code:'origin_apply_failed'},
+    e=>e.report.cleanupFailures=[{stage:'origin_cleanup',code:'origin_cleanup_unknown'}]];
+  for(const mutate of cases){const e=receipt();mutate(e);assert.equal(cleanupEvidence(e),false);}
+});
 test('cleanup refuses mixed failure and broader acceptance claims despite successful cleanup booleans',()=>{
   const mutations=[
     e=>e.report.primaryFailure={phase:'restart',code:'unit_start_failed'},
@@ -180,4 +217,19 @@ test('cleanup preserves runtime contents when exact-source receipt has incomplet
   e.report.downstreamTLSWrongCARefusals=2;await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
   try {const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.equal(await readFile(p+'/runtime/sentinel','utf8'),'preserve');assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);}
   finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
+});
+test('cleanup preserves runtime sentinel for exact-source incomplete origin and relay evidence',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});await writeFile(p+'/runtime/sentinel','preserve',{mode:0o600});
+  const source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
+  const mutations=[e=>e.report.upstreamTLSNoPostReplayChecks=2,e=>e.report.cleanup.readinessRelayClosed=false,
+    e=>e.report.cleanup.upstreamTLSOriginClosed=false];
+  try {
+    for(const mutate of mutations){
+      const e=receipt();e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];mutate(e);
+      await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
+      const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);
+      assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.equal(await readFile(p+'/runtime/sentinel','utf8'),'preserve');
+      assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);
+    }
+  } finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
 });
