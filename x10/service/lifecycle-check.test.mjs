@@ -7,7 +7,8 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
 import { digest } from '../alpha/runtime.mjs';
-import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
+import { parseArguments, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
+import { JOURNAL_RESULT_CODES } from './journal-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
 const transcript = (changes = {}) => Object.entries({ LoadState: 'loaded', ActiveState: 'active', SubState: 'running', Result: 'success',
@@ -604,4 +605,148 @@ for (const options of [{ collectorThrow: 'observe' }, { collectorThrow: 'unavail
 
 for (const [freshChange, expected] of [['ownership', 'unit_link_identity'], ['active', 'unit_not_stopped'], ['pid', 'unit_not_stopped'], ['cancel', 'cancelled']]) test(`fresh pre-action guard refuses ${freshChange} after diagnostics without any start`, async () => {
   const r = await syntheticHookFailure({ freshChange }); assert.equal(r.failure, expected); assert.equal(r.trace.includes('manager_start'), false); assertServiceCleanup(r.report, false);
+});
+
+
+// These controls execute the actual bounded restart orchestration with synthetic
+// observers. They do not activate a manager or grant process authority.
+test('invocation property parsing returns a private canonical nonzero correlation value', () => {
+  assert.equal(parseInvocationProperty('InvocationID=' + 'a'.repeat(32) + '\n'), 'a'.repeat(32));
+});
+for (const value of ['', 'InvocationID=\n', 'InvocationID=' + '0'.repeat(32) + '\n',
+  'InvocationID=' + 'A'.repeat(32) + '\n', 'InvocationID=' + 'a'.repeat(31) + '\n',
+  'InvocationID=' + 'a'.repeat(33) + '\n', 'InvocationID=' + 'a'.repeat(32),
+  'InvocationID=' + 'a'.repeat(32) + '\r\n', 'InvocationID=' + 'a'.repeat(32) + '\nOther=private\n',
+  Buffer.from('InvocationID=' + 'a'.repeat(32) + '\n'), { toString() { throw new Error('must not coerce'); } }]) {
+  test(`invocation property refusal ${typeof value} ${typeof value === 'string' ? value.length : 'nonprimitive'}`, () => {
+    assert.throws(() => parseInvocationProperty(value), { code: 'unit_invocation_invalid' });
+  });
+}
+async function syntheticRestart(options = {}) {
+  const source = await readFile(script, 'utf8');
+  const reset = source.slice(source.indexOf('  function resetServiceCleanupEvidence()'), source.indexOf('  async function stopOwned()'));
+  const same = source.slice(source.indexOf('  function sameLauncher('), source.indexOf('  async function ownedInvocation('));
+  const body = source.slice(source.indexOf('  async function restartAndServe()'), source.indexOf("  process.once('SIGINT', cancel)"));
+  const oldLauncher = { pid: 1101, startTicks: '100', pidNamespace: 'synthetic-pid', networkNamespace: 'synthetic-net' };
+  const newLauncher = { ...oldLauncher, pid: 1102, startTicks: '200' };
+  const oldSession = { id: 'old', prefix: '/synthetic/runs/old', identity: { synthetic: true } };
+  const report = { nativeSessionsStarted: 2, nativeSessionsStopped: 1, explicitReadinessPasses: 2,
+    proxyBodyChecks: 2, uploadChecks: 2, streamChecks: 2, managerRestartCommands: 0, completedManagerRestarts: 0,
+    journalChecks: 1, restartProof: { oldLauncherExited: false, oldNativeGroupsAbsent: false, freshSession: false, freshInvocation: false },
+    cleanup: Object.fromEntries(serviceCleanupNames.map(k => [k, true])) };
+  const trace = []; let cancelled = false, nativeReads = 0, journalReads = 0;
+  const event = name => { trace.push(name); if (options.cancelAt === name) cancelled = true; };
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  const checkCancelled = () => { if (cancelled) reject('cancelled'); };
+  const deps = {
+    report, checkCancelled, sessions: options.noSession ? [] : [oldSession], prefix: '/synthetic', reject,
+    node: '/synthetic/node', launcher: '/synthetic/launcher', env: {},
+    cli: async (node, launcher, args) => { event('old_session_info'); assert.deepEqual(args, ['info']);
+      return { stage: options.staleStage ? 'stopped' : 'running', session: options.staleCurrent ? 'changed' : 'old', sessionPrefix: options.stalePrefix ? '/synthetic/runs/changed' : oldSession.prefix }; },
+    start: { step() {} },
+    inspectMaster: async () => { event(++nativeReads === 1 ? 'native_initial' : 'native_final'); return options.missingNative ? null : oldSession.identity; },
+    ownedInvocation: async () => { event(report.managerRestartCommands ? 'new_invocation' : 'old_invocation');
+      return report.managerRestartCommands ? { id: (options.staleInvocation ? 'a' : 'b').repeat(32), launcher: newLauncher } : { id: 'a'.repeat(32), launcher: oldLauncher }; },
+    verifyJournalForInvocation: async () => { const at = ++journalReads === 1 ? 'journal_before' : 'journal_after'; event(at);
+      if (options.journalFailure === at) reject('journal_unconfirmed'); report.journalChecks++; },
+    ownedProperties: async () => { event(report.managerRestartCommands ? 'properties_after' : 'properties_final');
+      if (options.authorityFailure && !report.managerRestartCommands) reject('unit_link_identity');
+      return { ActiveState: options.inactive ? 'inactive' : 'active', SubState: 'running', Result: 'success' }; },
+    launcherIdentity: async () => { event(report.managerRestartCommands ? 'launcher_after' : 'launcher_final');
+      return report.managerRestartCommands ? (options.reusedLauncher ? oldLauncher : newLauncher) : (options.changedLauncher ? newLauncher : oldLauncher); },
+    unitName: 'fixture.service',
+    systemctl: async (args, timeout) => { event('restart_command'); assert.deepEqual(args, ['restart', 'fixture.service']); assert.equal(timeout, 35000); return { ok: options.restartOK !== false }; },
+    until: async fn => { event('retirement'); if (!await fn()) reject('observation_timeout'); },
+    exitedLauncher: async identity => { event('old_launcher_exit'); assert.deepEqual(identity, oldLauncher); return !options.oldLauncherLive; },
+    nativeStopped: async session => { event('old_native_exit'); assert.equal(session, oldSession); return !options.oldNativeLive; },
+    observeActiveAndServe: async () => { event('new_serving'); report.nativeSessionsStarted++; report.explicitReadinessPasses++;
+      report.proxyBodyChecks++; report.uploadChecks++; report.streamChecks++; return { id: options.reusedSession ? 'old' : 'new' }; },
+  };
+  const factory = new Function(...Object.keys(deps), `let lastSession = 'old'; ${reset}${same}${body}; return restartAndServe;`);
+  let failure = null; try { await factory(...Object.values(deps))(); } catch (e) { failure = e.code; }
+  return { report, failure, trace };
+}
+test('one manager restart verifies old retirement and fresh session before completion', async () => {
+  const r = await syntheticRestart(); assert.equal(r.failure, null);
+  assert.equal(r.report.managerRestartCommands, 1); assert.equal(r.report.completedManagerRestarts, 1);
+  assert.equal(r.report.nativeSessionsStarted, 3); assert.equal(r.report.nativeSessionsStopped, 2);
+  assert.equal(r.report.explicitReadinessPasses, 3); assert.equal(r.report.journalChecks, 3);
+  assert(Object.values(r.report.restartProof).every(x => x === true)); assertServiceCleanup(r.report, false);
+  assert(r.trace.indexOf('native_final') < r.trace.indexOf('properties_final'));
+  assert(r.trace.indexOf('old_native_exit') < r.trace.indexOf('new_serving'));
+  assert.equal(r.trace.filter(x => x === 'restart_command').length, 1);
+});
+for (const [option, expected] of [['noSession', 'restart_identity'], ['missingNative', 'restart_identity'],
+  ['authorityFailure', 'unit_link_identity'], ['changedLauncher', 'restart_identity'], ['inactive', 'restart_identity'],
+  ['staleCurrent', 'restart_identity'], ['staleStage', 'restart_identity'], ['stalePrefix', 'restart_identity']]) {
+  test(`restart refuses ${option} before the single mutating request`, async () => {
+    const r = await syntheticRestart({ [option]: true }); assert.equal(r.failure, expected);
+    assert.equal(r.report.managerRestartCommands, 0); assert.equal(r.report.completedManagerRestarts, 0); assertServiceCleanup(r.report, false);
+  });
+}
+for (const cancelAt of ['native_initial', 'journal_before', 'old_session_info', 'native_final', 'properties_final', 'launcher_final']) {
+  test(`restart cancellation at ${cancelAt} prevents mutation`, async () => {
+    const r = await syntheticRestart({ cancelAt }); assert.equal(r.failure, 'cancelled');
+    assert.equal(r.report.managerRestartCommands, 0); assert.equal(r.report.completedManagerRestarts, 0); assertServiceCleanup(r.report, false);
+  });
+}
+for (const cancelAt of ['restart_command', 'old_launcher_exit', 'new_serving', 'journal_after']) {
+  test(`restart cancellation at ${cancelAt} cannot claim completion or repeat restart`, async () => {
+    const r = await syntheticRestart({ cancelAt }); assert.equal(r.failure, 'cancelled');
+    assert.equal(r.report.managerRestartCommands, 1); assert.equal(r.report.completedManagerRestarts, 0); assertServiceCleanup(r.report, false);
+  });
+}
+for (const [options, code] of [[{ restartOK: false }, 'unit_restart_failed'], [{ oldLauncherLive: true }, 'observation_timeout'],
+  [{ oldNativeLive: true }, 'observation_timeout'], [{ reusedLauncher: true }, 'restart_identity'],
+  [{ reusedSession: true }, 'session_reused'], [{ staleInvocation: true }, 'unit_invocation_changed'],
+  [{ journalFailure: 'journal_before' }, 'journal_unconfirmed'], [{ journalFailure: 'journal_after' }, 'journal_unconfirmed']]) {
+  test(`restart incomplete refusal ${JSON.stringify(options)}`, async () => {
+    const r = await syntheticRestart(options); assert.equal(r.failure, code); assert.equal(r.report.completedManagerRestarts, 0);
+    assert(r.report.managerRestartCommands <= 1); assertServiceCleanup(r.report, false);
+    if (options.oldLauncherLive || options.oldNativeLive) { assert.equal(r.report.nativeSessionsStopped, 1); assert.equal(r.report.nativeSessionsStarted, 2); }
+  });
+}
+async function syntheticJournalGuard({ change = null, response = null, cancelled = false } = {}) {
+  const source = await readFile(script, 'utf8');
+  const same = source.slice(source.indexOf('  function sameLauncher('), source.indexOf('  async function ownedInvocation('));
+  const body = source.slice(source.indexOf('  async function verifyJournalForInvocation('), source.indexOf('  async function restartAndServe('));
+  const identity = { pid: 2201, startTicks: '10', pidNamespace: 'synthetic-pid', networkNamespace: 'synthetic-net' };
+  const expected = { id: 'a'.repeat(32), launcher: identity }; let reads = 0, queryCalls = 0, didCancel = false;
+  const report = { journalChecks: 0, journalRecordsObserved: 0, journalRunningMarkers: 0 };
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  const deps = { report, reject, JOURNAL_RESULT_CODES, unitName: 'fixture.service', process: { getuid: () => 1001 }, start: { step() {} },
+    checkCancelled: () => { if (didCancel) reject('cancelled'); },
+    ownedInvocation: async () => { reads++; return reads === 2 && change === 'invocation' ? { ...expected, id: 'b'.repeat(32) }
+      : reads === 2 && change === 'launcher' ? { ...expected, launcher: { ...identity, startTicks: '11' } } : expected; },
+    observeOwnedJournal: async () => { queryCalls++; didCancel = cancelled; return response || { ok: true, code: 'owned_journal_observed',
+      journalReadabilityObserved: true, queryAttempts: 1, recordsObserved: 3, runningMarkers: 1 }; },
+  };
+  const factory = new Function(...Object.keys(deps), `${same}${body}; return verifyJournalForInvocation;`);
+  let failure = null; try { await factory(...Object.values(deps))(expected); } catch (e) { failure = e.code; }
+  return { report, failure, queryCalls };
+}
+test('guarded journal increments finite counts only after unchanged current invocation', async () => {
+  const r = await syntheticJournalGuard(); assert.equal(r.failure, null); assert.deepEqual(r.report, { journalChecks: 1, journalRecordsObserved: 3, journalRunningMarkers: 1 });
+});
+for (const change of ['invocation', 'launcher']) test(`journal refuses changed ${change} after the read`, async () => {
+  const r = await syntheticJournalGuard({ change }); assert.equal(r.failure, 'unit_invocation_changed'); assert.equal(r.report.journalChecks, 0); assert.equal(r.queryCalls, 1);
+});
+test('journal cancellation after query cannot increment verified counts', async () => {
+  const r = await syntheticJournalGuard({ cancelled: true }); assert.equal(r.failure, 'cancelled'); assert.equal(r.report.journalChecks, 0);
+});
+for (const response of [{ ok: false }, { ok: true, code: 'wrong' },
+  { ok: true, code: 'owned_journal_observed', journalReadabilityObserved: true, queryAttempts: 1, recordsObserved: 129, runningMarkers: 1 },
+  { ok: true, code: 'owned_journal_observed', journalReadabilityObserved: true, queryAttempts: 1, recordsObserved: 1, runningMarkers: 2 }]) {
+  test(`journal malformed summary cannot claim observation ${JSON.stringify(response)}`, async () => {
+    const r = await syntheticJournalGuard({ response }); assert.equal(r.failure, 'journal_unconfirmed'); assert.equal(r.report.journalChecks, 0);
+  });
+}
+
+for (const code of ['journal_empty', 'journal_record_limit', 'journal_unavailable']) test(`finite journal failure ${code} remains diagnostic without accepting a query`, async () => {
+  const r = await syntheticJournalGuard({ response: { ok: false, code } });
+  assert.equal(r.failure, code); assert.equal(r.report.journalChecks, 0);
+});
+test('unknown journal error code remains fixed and cannot publish private text', async () => {
+  const r = await syntheticJournalGuard({ response: { ok: false, code: 'private-untrusted-path-or-message' } });
+  assert.equal(r.failure, 'journal_unconfirmed'); assert.equal(r.report.journalChecks, 0);
 });

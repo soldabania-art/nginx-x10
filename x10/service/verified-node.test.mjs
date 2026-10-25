@@ -18,7 +18,12 @@ const status = () => `[GNUPG:] PLAINTEXT 74 0 \n[GNUPG:] NEWSIG\n[GNUPG:] KEY_CO
 function receipt() {
   return { checkerExited:true, checkerExitCode:0, report:{ ok:true, code:'basic_lifecycle_verified', phase:'complete', actualNonrootManagerObserved:true, actualUnitStarted:true,
     runtimeUnitLinked:true, runtimeUnitRemoved:true, unitEnabled:false,
-    explicitReadinessPasses:2, nativeSessionsStarted:2, nativeSessionsStopped:2, proxyBodyChecks:2, uploadChecks:2, streamChecks:2,
+    readinessAutomated:true, automaticReadinessAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
+    primaryFailure:null, cleanupFailures:[], cleanupFailureCount:0, cleanupFailuresTruncated:false,
+    explicitReadinessPasses:3, nativeSessionsStarted:3, nativeSessionsStopped:3, proxyBodyChecks:3, uploadChecks:3, streamChecks:3,
+    managerRestartCommands:1, completedManagerRestarts:1,
+    restartProof:{oldLauncherExited:true,oldNativeGroupsAbsent:true,freshSession:true,freshInvocation:true},
+    journalChecks:3,journalRecordsObserved:6,journalRunningMarkers:3,
     cleanup:{ managerStopped:true, launcherExited:true, nativeGroupsAbsent:true, listeningPortsClosed:true, controlSocketAbsent:true, runtimeLinkAbsent:true, installationRemoved:true, temporaryRootRemoved:true, appSocketsRemaining:0 } } };
 }
 test('synthetic tar selection is byte exact and never executes payload', () => {
@@ -80,6 +85,37 @@ test('cleanup evidence requires exited checker and every exact confirmation',()=
   for(const k of ['checkerExited','checkerExitCode']) {const e=receipt();e[k]=k==='checkerExited'?false:1;assert.equal(cleanupEvidence(e),false);}
   for(const k of ['nativeSessionsStopped','explicitReadinessPasses','proxyBodyChecks']){const e=receipt();e.report[k]=1;assert.equal(cleanupEvidence(e),false);}
 });
+test('cleanup refuses the stale two-session profile and mixed session counts',()=>{
+  const counters=['explicitReadinessPasses','nativeSessionsStarted','nativeSessionsStopped','proxyBodyChecks','uploadChecks','streamChecks'];
+  const old=receipt();for(const k of counters)old.report[k]=2;
+  delete old.report.restartProof;delete old.report.managerRestartCommands;delete old.report.completedManagerRestarts;
+  delete old.report.journalChecks;delete old.report.journalRecordsObserved;delete old.report.journalRunningMarkers;
+  assert.equal(cleanupEvidence(old),false);
+  for(const k of counters)for(const value of [undefined,2,4,'3',NaN]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
+});
+test('cleanup requires exactly one completed restart and all four own exit/freshness proofs',()=>{
+  for(const k of ['managerRestartCommands','completedManagerRestarts'])for(const value of [undefined,0,2,'1',true]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
+  for(const k of Object.keys(receipt().report.restartProof))for(const value of [undefined,false,1,'true']){const e=receipt();e.report.restartProof[k]=value;assert.equal(cleanupEvidence(e),false,k);}
+  for(const value of [null,[],true,{},Object.create(receipt().report.restartProof)]){const e=receipt();e.report.restartProof=value;assert.equal(cleanupEvidence(e),false);}
+  const extra=receipt();extra.report.restartProof.unverified=true;assert.equal(cleanupEvidence(extra),false);
+});
+test('cleanup bounds journal evidence without accepting absent or inconsistent markers',()=>{
+  for(const value of [undefined,0,2,4,'3',true]){const e=receipt();e.report.journalChecks=value;assert.equal(cleanupEvidence(e),false);}
+  for(const k of ['journalRecordsObserved','journalRunningMarkers'])for(const value of [undefined,0,2,385,3.5,'3',NaN,Infinity]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
+  const inconsistent=receipt();inconsistent.report.journalRecordsObserved=3;inconsistent.report.journalRunningMarkers=4;assert.equal(cleanupEvidence(inconsistent),false);
+  for(const count of [3,384]){const e=receipt();e.report.journalRecordsObserved=count;e.report.journalRunningMarkers=count;assert.equal(cleanupEvidence(e),true);}
+});
+test('cleanup refuses mixed failure and broader acceptance claims despite successful cleanup booleans',()=>{
+  const mutations=[
+    e=>e.report.primaryFailure={phase:'restart',code:'unit_start_failed'},
+    e=>e.report.cleanupFailures=[{stage:'unit_cleanup',code:'native_cleanup_unknown'}],
+    e=>e.report.cleanupFailureCount=1,e=>e.report.cleanupFailuresTruncated=true,
+    e=>e.report.readinessAutomated=false,e=>e.report.automaticReadinessAccepted=true,
+    e=>e.report.serviceAccepted=true,e=>e.report.productionAccepted=true,e=>e.report.subprocessOutputsPublished=true,
+  ];
+  for(const mutate of mutations){const e=receipt();mutate(e);assert.equal(cleanupEvidence(e),false);}
+  for(const k of ['primaryFailure','cleanupFailures','cleanupFailureCount','cleanupFailuresTruncated','readinessAutomated','automaticReadinessAccepted','serviceAccepted','productionAccepted','subprocessOutputsPublished']){const e=receipt();delete e.report[k];assert.equal(cleanupEvidence(e),false,k);}
+});
 test('public usage refusals publish no paths or exception data',async()=>{
   const r=await main(['--archive','/private/secret','--prefix','/private/secret','--trust-key','forged']);
   assert.equal(r.code,'usage_invalid');assert.equal(JSON.stringify(r).includes('/private'),false);
@@ -103,4 +139,10 @@ test('cleanup refuses incomplete lifecycle evidence and retains arbitrary prefix
   const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});await writeFile(p+'/receipt.json',JSON.stringify({checkerExited:true,checkerExitCode:0,report:{ok:true}}),{mode:0o600});
   try {const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.ok((await lstat(p+'/runtime')).isDirectory());}
   finally {await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
+});
+test('cleanup preserves runtime contents when a complete-looking receipt lacks owned journal evidence',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});await writeFile(p+'/runtime/sentinel','preserve',{mode:0o600});
+  const e=receipt();e.report.journalRunningMarkers=0;await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
+  try {const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.equal(await readFile(p+'/runtime/sentinel','utf8'),'preserve');assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);}
+  finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
 });

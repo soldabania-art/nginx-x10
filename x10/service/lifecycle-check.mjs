@@ -14,11 +14,12 @@ import { preflight } from './preflight.mjs';
 import { inspectInstallation, renderUserUnit } from './user-unit.mjs';
 import { verifyAlphaArchive, MAX_ARCHIVE_BYTES } from '../release/verify-alpha-archive.mjs';
 import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mjs';
+import { observeOwnedJournal, JOURNAL_RESULT_CODES } from './journal-check.mjs';
 
 const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 const HEX = /^[a-f0-9]{64}$/, TOKEN = /^[a-f0-9]{32}$/;
 const KEYS = ['LoadState', 'ActiveState', 'SubState', 'Result', 'FragmentPath', 'MainPID', 'ControlGroup'];
-const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid"]);
+const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES]);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const reject = code => { throw Object.assign(new Error(code), { code }); };
 export const LIMITATIONS = Object.freeze({ scope: 'ephemeral-user-service-basic-lifecycle',
@@ -51,6 +52,13 @@ export function parseUnitProperties(text) {
       || (result.FragmentPath !== '' && (!/^\/[A-Za-z0-9_./+-]+$/.test(result.FragmentPath) || path.posix.normalize(result.FragmentPath) !== result.FragmentPath))
       || (result.ControlGroup !== '' && !/^\/[A-Za-z0-9_./@+-]+$/.test(result.ControlGroup))) reject('unit_response_invalid');
   return result;
+}
+// A parsed invocation is a private correlation value, never unit authority.
+export function parseInvocationProperty(text) {
+  if (typeof text !== 'string' || !/^InvocationID=[a-f0-9]{32}\n$/.test(text)) reject('unit_invocation_invalid');
+  const value = text.slice(13, -1);
+  if (value === '0'.repeat(32)) reject('unit_invocation_invalid');
+  return value;
 }
 export function managerEnvironment(uid) {
   if (!Number.isSafeInteger(uid) || uid < 1 || uid > 4294967294) reject('nonroot_required');
@@ -116,8 +124,8 @@ export async function observeNodePrerequisites(prefix, nodeExecutable) {
   finally { if (handle) { try { await handle.close(); } catch { reject('recipe_diagnostic_failed'); } } }
 }
 // Diagnostic collectors have no I/O or lifecycle authority.
-export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'first_start', 'first_stop', 'second_start', 'second_stop', 'uninstall', 'complete', 'unknown']);
-export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
+export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'first_start', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
+export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'request_restart', 'old_retirement', 'invocation_identity', 'journal_read', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
 export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'temporary_root', 'final_assertion', 'unknown']);
 const pickEnum = (value, list, fallback = 'unknown') => typeof value === 'string' && list.includes(value) ? value : fallback;
 function ownData(record, key) {
@@ -140,7 +148,7 @@ export function createFailureDiagnostics() {
     primary(error, phase, subphase) {
       if (primary) return;
       const safePhase = pickEnum(phase, DIAGNOSTIC_PHASES);
-      primary = { phase: safePhase, subphase: ['first_start', 'second_start'].includes(safePhase)
+      primary = { phase: safePhase, subphase: ['first_start', 'second_start', 'manager_restart'].includes(safePhase)
         ? pickEnum(subphase, START_SUBPHASES) : 'not_applicable', code: classifyLifecycleError(error, safePhase), systemErrorClass: classifySystemError(error) };
     },
     cleanup(error, stage) {
@@ -240,7 +248,7 @@ export function createFragmentIdentityDiagnostics() {
       if (count < 32) count++; else truncated = true;
       const safePhase = pickEnum(phase, DIAGNOSTIC_PHASES);
       const item = { phase: safePhase, subphase: inCleanup === true ? 'not_applicable'
-        : ['first_start', 'second_start'].includes(safePhase) ? pickEnum(subphase, START_SUBPHASES) : 'not_applicable',
+        : ['first_start', 'second_start', 'manager_restart'].includes(safePhase) ? pickEnum(subphase, START_SUBPHASES) : 'not_applicable',
         context: inCleanup === true ? 'cleanup' : 'lifecycle',
         ...summarizeUnitFragmentIdentity(record, knownPaths, precedingLinkCheck) };
       if (observations.length < 8) observations.push(item); else truncated = true;
@@ -343,6 +351,9 @@ export async function main(argv = process.argv.slice(2)) {
   const report = { ok: false, code: 'not_started', phase: 'arguments', ...LIMITATIONS,
     actualNonrootManagerObserved: false, actualUnitStarted: false, explicitReadinessPasses: 0,
     nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
+    managerRestartCommands: 0, completedManagerRestarts: 0,
+    restartProof: { oldLauncherExited: false, oldNativeGroupsAbsent: false, freshSession: false, freshInvocation: false },
+    journalChecks: 0, journalRecordsObserved: 0, journalRunningMarkers: 0,
     readinessAutomated: false, runtimeUnitLinked: false, runtimeUnitRemoved: false, unitEnabled: false, subprocessOutputsPublished: false,
     cleanup: { managerStopped: false, launcherExited: false, nativeGroupsAbsent: false,
       listeningPortsClosed: false, controlSocketAbsent: false, runtimeLinkAbsent: false,
@@ -372,10 +383,10 @@ export async function main(argv = process.argv.slice(2)) {
   }
   async function properties(observe = true) {
     const r = await systemctl(['show', unitName, ...KEYS.map(k => `--property=${k}`)], 2500);
-    if (observe && !inCleanup && ['first_start', 'second_start'].includes(report.phase)) start.observe('properties_command', r);
+    if (observe && !inCleanup && ['first_start', 'second_start', 'manager_restart'].includes(report.phase)) start.observe('properties_command', r);
     if (![0, 1].includes(r.exitCode)) reject('unit_query_failed');
     const parsed = parseUnitProperties(r.stdout);
-    if (observe && !inCleanup && ['first_start', 'second_start'].includes(report.phase)) start.observe('properties_state', parsed);
+    if (observe && !inCleanup && ['first_start', 'second_start', 'manager_restart'].includes(report.phase)) start.observe('properties_state', parsed);
     if (parsed.LoadState === 'loaded' && (!r.ok || r.stderr)) reject('unit_query_failed');
     if (parsed.LoadState === 'not-found' && (parsed.MainPID !== '0' || parsed.FragmentPath !== '' || parsed.ControlGroup !== '' || parsed.ActiveState !== 'inactive')) reject('unit_response_invalid');
     return parsed;
@@ -506,6 +517,10 @@ export async function main(argv = process.argv.slice(2)) {
     if (!started.ok) { await observeStartPost('failed_start'); reject('unit_start_failed'); }
     start.step('after_properties');
     const active = await ownedProperties(); if (active.ActiveState !== 'active' || active.SubState !== 'running') reject('unit_not_active');
+    await observeActiveAndServe(active);
+    start.complete();
+  }
+  async function observeActiveAndServe(active) {
     start.step('launcher_identity');
     launcherIdentities.push(await launcherIdentity(active)); report.actualUnitStarted = true;
     start.step('binding_status');
@@ -529,7 +544,96 @@ export async function main(argv = process.argv.slice(2)) {
     const stream = await request(gatewayPort, '/stream'); if (stream.status !== 200 || !stream.body.equals(Buffer.alloc(65537, 0x62))) reject('stream_mismatch'); report.streamChecks++;
     start.step('final_cancel_check');
     checkCancelled();
-    start.complete();
+    return s;
+  }
+  function sameLauncher(a, b) {
+    return Boolean(a && b && a.pid === b.pid && a.startTicks === b.startTicks
+      && a.pidNamespace === b.pidNamespace && a.networkNamespace === b.networkNamespace);
+  }
+  async function ownedInvocation() {
+    start.step('invocation_identity');
+    checkCancelled();
+    const before = await ownedProperties(false);
+    if (before.ActiveState !== 'active' || before.SubState !== 'running' || before.Result !== 'success') reject('unit_not_active');
+    const identity = await launcherIdentity(before);
+    if (!launcherIdentities.some(v => sameLauncher(v, identity))) reject('unit_launcher_identity');
+    checkCancelled();
+    const query = await systemctl(['show', unitName, '--property=InvocationID'], 2500);
+    const after = await ownedProperties(false);
+    const afterIdentity = await launcherIdentity(after);
+    if (after.ActiveState !== 'active' || after.SubState !== 'running' || after.Result !== 'success'
+        || !sameLauncher(identity, afterIdentity)) reject('unit_invocation_changed');
+    checkCancelled();
+    if (!query.ok || query.exitCode !== 0 || query.stderr !== '') reject('unit_invocation_invalid');
+    return { id: parseInvocationProperty(query.stdout), launcher: identity };
+  }
+  async function verifyJournalForInvocation(expected) {
+    const before = await ownedInvocation();
+    if (before.id !== expected.id || !sameLauncher(before.launcher, expected.launcher)) reject('unit_invocation_changed');
+    checkCancelled();
+    start.step('journal_read');
+    const observed = await observeOwnedJournal({ unitName, uid: process.getuid(), invocationId: expected.id });
+    const after = await ownedInvocation();
+    if (after.id !== expected.id || !sameLauncher(after.launcher, expected.launcher)) reject('unit_invocation_changed');
+    checkCancelled();
+    start.step('journal_read');
+    if (observed && observed.ok === false && typeof observed.code === 'string'
+        && JOURNAL_RESULT_CODES.includes(observed.code)) reject(observed.code);
+    if (!observed || observed.ok !== true || observed.code !== 'owned_journal_observed'
+        || observed.journalReadabilityObserved !== true || !Number.isInteger(observed.queryAttempts)
+        || observed.queryAttempts < 1 || observed.queryAttempts > 3
+        || !Number.isInteger(observed.recordsObserved) || observed.recordsObserved < 1 || observed.recordsObserved > 128
+        || !Number.isInteger(observed.runningMarkers) || observed.runningMarkers < 1
+        || observed.runningMarkers > observed.recordsObserved) reject('journal_unconfirmed');
+    report.journalChecks++;
+    report.journalRecordsObserved += observed.recordsObserved;
+    report.journalRunningMarkers += observed.runningMarkers;
+  }
+  async function restartAndServe() {
+    // Prior stop confirmations cannot describe this new mutating attempt.
+    resetServiceCleanupEvidence();
+    checkCancelled();
+    const oldSession = sessions.find(s => s.id === lastSession);
+    if (!oldSession || !await inspectMaster(`${prefix}/bin/nginx`, oldSession.prefix, oldSession.identity)) reject('restart_identity');
+    const oldInvocation = await ownedInvocation();
+    await verifyJournalForInvocation(oldInvocation);
+    // Confirm the captured session is still current, then repeat the native
+    // and owned-unit checks after these journal and installed-CLI awaits.
+    const current = await cli(node, launcher, ['info'], env);
+    if (current.stage !== 'running' || current.session !== oldSession.id || current.sessionPrefix !== oldSession.prefix) reject('restart_identity');
+    if (!await inspectMaster(`${prefix}/bin/nginx`, oldSession.prefix, oldSession.identity)) reject('restart_identity');
+    const fresh = await ownedProperties(false);
+    const freshLauncher = await launcherIdentity(fresh);
+    if (fresh.ActiveState !== 'active' || fresh.SubState !== 'running' || fresh.Result !== 'success'
+        || !sameLauncher(oldInvocation.launcher, freshLauncher)) reject('restart_identity');
+    checkCancelled();
+    start.step('request_restart');
+    report.managerRestartCommands++;
+    const restarted = await systemctl(['restart', unitName], 35000);
+    if (!restarted.ok) reject('unit_restart_failed');
+    checkCancelled();
+    start.step('old_retirement');
+    await until(async () => { checkCancelled(); return await exitedLauncher(oldInvocation.launcher) && await nativeStopped(oldSession); });
+    checkCancelled();
+    report.restartProof.oldLauncherExited = true;
+    report.restartProof.oldNativeGroupsAbsent = true;
+    report.nativeSessionsStopped++;
+    checkCancelled();
+    start.step('after_properties');
+    const active = await ownedProperties(false);
+    if (active.ActiveState !== 'active' || active.SubState !== 'running' || active.Result !== 'success') reject('unit_not_active');
+    const newLauncher = await launcherIdentity(active);
+    if (sameLauncher(oldInvocation.launcher, newLauncher)) reject('restart_identity');
+    const newSession = await observeActiveAndServe(active);
+    if (newSession.id === oldSession.id) reject('session_reused');
+    report.restartProof.freshSession = true;
+    const newInvocation = await ownedInvocation();
+    if (newInvocation.id === oldInvocation.id || !sameLauncher(newLauncher, newInvocation.launcher)) reject('unit_invocation_changed');
+    report.restartProof.freshInvocation = true;
+    await verifyJournalForInvocation(newInvocation);
+    checkCancelled();
+    report.completedManagerRestarts++;
+    start.step('complete');
   }
   process.once('SIGINT', cancel); process.once('SIGTERM', cancel);
   try {
@@ -572,10 +676,11 @@ export async function main(argv = process.argv.slice(2)) {
     const linkResult = await systemctl(['--runtime', 'link', unitFile]);
     linked = !await absent(runtimeLink);
     if (!linkResult.ok) reject('unit_link_failed'); await linkAuthority(); linked = true; report.runtimeUnitLinked = true;
-    report.phase = 'first_start'; await startAndServe();
+    report.phase = 'first_start'; await startAndServe(); await verifyJournalForInvocation(await ownedInvocation());
     report.phase = 'first_stop'; await stopOwned(); report.nativeSessionsStopped++;
     report.phase = 'second_start'; await startAndServe();
-    report.phase = 'second_stop'; await stopOwned(); report.nativeSessionsStopped++;
+    report.phase = 'manager_restart'; await restartAndServe();
+    report.phase = 'third_stop'; await stopOwned(); report.nativeSessionsStopped++;
     report.phase = 'uninstall'; await cli(node, launcher, ['uninstall'], env); installed = false;
     if (!await absent(prefix)) reject('uninstall_incomplete'); report.cleanup.installationRemoved = true;
     report.ok = true; report.code = 'basic_lifecycle_verified'; report.phase = 'complete';

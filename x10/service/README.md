@@ -556,3 +556,43 @@ Their post-failure hook record showed exit1 with unknown freshness/invocation;
 the semantic cause and actual failing cleanup inventory record remain unknown.
 The new recipe and installed command require exact new nonroot CI before
 repeated automatic startup or complete owned cleanup can be accepted.
+
+
+## One manager restart and bounded owned journal observations
+
+The actual service checker now extends the two-cycle baseline with one
+systemctl restart while the second service session is active. Fresh owned
+unit authority and cancellation are checked before the manager mutation.
+The retired launcher and recorded native master/group must be observed gone,
+and the replacement must establish a distinct session and current binding
+before its readiness/proxy/upload/stream checks can count as complete.
+A stop followed by start is not substituted for this manager restart.
+
+Journal verification reads only already-readable records with three exact
+conjunctive UID, private user-unit and current-invocation field matches.
+It adds no ACL/group/configuration changes or unfiltered fallback. Records must have matching
+attribution and include a recognized launcher
+marker; malformed, foreign, missing, over-limit or timed-out output refuses.
+Raw journal records, messages, invocation IDs, process IDs, host paths,
+timestamps and sensitive fingerprints are not published. Private invocation
+values are observation inputs, not an OS fence against another same-UID
+process or evidence of complete audit-history coverage. Journal metadata
+can be cached and stale; the caller revalidates live authority around reads.
+
+The Node cleanup receipt requires the exact new checker profile and complete
+owned cleanup. A timeout, incomplete replacement, uncertain old-process exit,
+missing journal proof or unconfirmed cleanup retains the runtime needed for
+safe inspection. This does not introduce forced cleanup or persistent units.
+
+Both exact401209 workflows had already passed two automatic basic sessions
+and complete service/private Node cleanup. That narrow result remains
+separate from this new restart/journal implementation, whose exact resulting
+nonroot CI must still be reconciled. Earlier startup failures and unknown
+historical causes are retained; later success does not reconstruct them.
+Full G3, adverse paths, combined service/TLS, package rollback/recovery,
+permanent distribution, security/soak and Production V1 remain open.
+
+Local post-pin verification passed333 contract tests:246 lifecycle,36 journal
+and51 cleanup-receipt controls, separately from191 independent source proofs.
+These are not actual manager restarts or target-host acceptance. New exact
+nonroot CI must establish the changed operational path and complete owned cleanup.

@@ -196,8 +196,22 @@ export function cleanupEvidence(e) {
   if (e?.checkerExited !== true || e.checkerExitCode !== 0 || r?.ok !== true
       || r.code !== 'basic_lifecycle_verified' || r.phase !== 'complete'
       || r.actualNonrootManagerObserved !== true || r.actualUnitStarted !== true
-      || r.runtimeUnitLinked !== true || r.runtimeUnitRemoved !== true || r.unitEnabled !== false) return false;
-  for (const k of ['explicitReadinessPasses', 'nativeSessionsStarted', 'nativeSessionsStopped', 'proxyBodyChecks', 'uploadChecks', 'streamChecks']) if (r[k] !== 2) return false;
+      || r.runtimeUnitLinked !== true || r.runtimeUnitRemoved !== true || r.unitEnabled !== false
+      || r.readinessAutomated !== true || r.automaticReadinessAccepted !== false
+      || r.serviceAccepted !== false || r.productionAccepted !== false || r.subprocessOutputsPublished !== false
+      || r.primaryFailure !== null || !Array.isArray(r.cleanupFailures) || r.cleanupFailures.length !== 0
+      || r.cleanupFailureCount !== 0 || r.cleanupFailuresTruncated !== false) return false;
+  for (const k of ['explicitReadinessPasses', 'nativeSessionsStarted', 'nativeSessionsStopped', 'proxyBodyChecks', 'uploadChecks', 'streamChecks']) if (r[k] !== 3) return false;
+  if (r.managerRestartCommands !== 1 || r.completedManagerRestarts !== 1
+      || r.journalChecks !== 3 || !Number.isInteger(r.journalRecordsObserved)
+      || r.journalRecordsObserved < 3 || r.journalRecordsObserved > 384
+      || !Number.isInteger(r.journalRunningMarkers) || r.journalRunningMarkers < 3
+      || r.journalRunningMarkers > r.journalRecordsObserved) return false;
+  const restart = r.restartProof;
+  const proofKeys = ['oldLauncherExited', 'oldNativeGroupsAbsent', 'freshSession', 'freshInvocation'];
+  if (!restart || typeof restart !== 'object' || Array.isArray(restart)
+      || Object.keys(restart).length !== proofKeys.length
+      || proofKeys.some(k => !Object.hasOwn(restart, k) || restart[k] !== true)) return false;
   for (const k of ['managerStopped', 'launcherExited', 'nativeGroupsAbsent', 'listeningPortsClosed', 'controlSocketAbsent', 'runtimeLinkAbsent', 'installationRemoved', 'temporaryRootRemoved']) if (r.cleanup?.[k] !== true) return false;
   return r.cleanup.appSocketsRemaining === 0;
 }
@@ -296,7 +310,7 @@ export async function main(argv = process.argv.slice(2)) {
       const receipt = await regular(file, 32768, { uid: process.getuid() });
       if ((receipt.stat.mode & 0o7077) !== 0) refuse('runtime_retained_cleanup_unconfirmed');
       const e = JSON.parse(receipt.bytes);
-      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '40b603eea19fdee25eafe5f2d041a8443075f2ffcc2b9866cd4f53ba79796ac2') refuse('runtime_retained_cleanup_unconfirmed');
+      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '747c0e9a4a4fbacb76c83406b198f90efebcd1bb38e3e34d90b5acd3a666dbbf') refuse('runtime_retained_cleanup_unconfirmed');
       const runtime = await inspectRuntime(prefix);
       if (e.runtimeNodeSha256 !== runtime.files['bin/node'].sha256 || e.runtimeInstallationId !== runtime.installationId) refuse('runtime_retained_cleanup_unconfirmed');
       await removeRuntime(prefix); result = { ok: true, code: 'verified_node_removed', runtimeRemoved: true };

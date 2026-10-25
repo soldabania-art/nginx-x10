@@ -2078,3 +2078,34 @@ failure. Exact new CI, repeated automatic service cycles and complete owned
 service/private Node cleanup are required before scoped service acceptance.
 Logging, one manager restart, adverse paths, combined TLS/service, package
 rollback/recovery, permanent release, security/soak and Production V1 stay open.
+
+
+## One manager restart and bounded journal verification
+
+Exact401209 native push40173329359 and PR40173331990 both completed success.
+Each actual nonroot service report recorded two automatic start/stop sessions,
+readiness/proxy/upload/stream twice and complete owned service/private Node
+cleanup. Native20/alpha62/recipe28 and lifecycle194PASS/1rootSKIP passed
+separately. Research PR actually ran21/7/27/48; push runtime was skipped.
+This accepts the narrow two-cycle basic path, not a manager restart or full V1.
+The earlier ee464 failure is preserved in history and cleared as the active
+service failure; the current service CI state records the exact401209 result.
+
+The new acceptance checker adds one manager restart from an active second
+session, exact old launcher/native retirement, distinct replacement identity
+and bounded current-invocation journal observations. New cleanup receipts
+require that profile; runtime retention and all existing identity/refusal
+rules remain mandatory. Native/alpha/controller/recipe runtime is unchanged.
+Local synthetic and contract tests do not accept a nonroot manager or journals.
+
+[Evidence](evidence/g3-restart-journal.json) records actual prior CI, source
+identities and separate local verification. The resulting restart/journal
+CI is pending. Adverse startup/cancel/drain/orphan, combined service/TLS,
+package upgrade/rollback/recovery, permanent release/provenance, security and
+60-minute soak remain open. Production V1 and semantic Continuum migration
+are not accepted; the next portfolio project remains waiting.
+
+Local post-pin contracts passed333/333 with no skips/failures:246 lifecycle,
+36 journal and51 cleanup-receipt controls. Independent source review passed191
+proofs. These units are separate from513 unchanged source/license comparisons
+and do not accept real manager/service behavior.
