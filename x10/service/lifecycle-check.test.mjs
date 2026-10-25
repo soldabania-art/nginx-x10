@@ -7,7 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
 import { digest } from '../alpha/runtime.mjs';
-import { parseArguments, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
+import { parseArguments, assessInterruptedRecovery, assessInterruptedProbeHold, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
 import { JOURNAL_RESULT_CODES } from './journal-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
@@ -1111,4 +1111,47 @@ test('controlled drain rejects a queued continuation after its successful observ
   await assert.rejects(verify(), { code: 'controlled_drain_unconfirmed' });
   assert.equal(releaseCalls, 0); assert.equal(resumeCalls, 0); assert.equal(report.controlledSlowDrainChecks, 0);
   assert.equal(stopCalls, 1); assert.equal(stopTerminal, true); assert.equal(aborted, true); assert.equal(cancelled, true);
+});
+
+const interruptionHold = { held: true, requested: true, candidateReadyObserved: true, nativeProbeChecks: 1, heldResponses: 1, aborted: false, closed: false, released: false };
+const interruptedPrevious = '1'.repeat(32), interruptedCandidate = '2'.repeat(32), interruptedRestored = '3'.repeat(32);
+const recoveredInterruption = change => ({ ok: false, exitCode: 1, termination: 'exit_nonzero', stderr: '', stdout: JSON.stringify({ ok: false, outcome: 'rolled_back', reason: 'explicit_recovery', failedRevision: interruptedCandidate, restoredContentFrom: interruptedPrevious, revision: interruptedRestored, ...change }) });
+test('interrupted operator recovery accepts only explicit failed apply rollback relationship', () => {
+  assert.deepEqual(assessInterruptedRecovery(recoveredInterruption(), interruptedPrevious, interruptedCandidate), { revision: interruptedRestored });
+  assert.equal(assessInterruptedProbeHold(interruptionHold), true);
+});
+for (const key of ['held', 'requested', 'candidateReadyObserved', 'aborted', 'closed', 'released']) {
+  test(`interrupted operator refuses readiness hold ${key} drift`, () => {
+    for (const value of [!interruptionHold[key], undefined, null, 1, 'true']) assert.throws(() => assessInterruptedProbeHold({ ...interruptionHold, [key]: value }), { code: 'operator_interruption_unconfirmed' });
+  });
+}
+for (const key of ['nativeProbeChecks', 'heldResponses']) {
+  test(`interrupted operator refuses readiness hold ${key} unknown or bounds`, () => {
+    for (const value of [0, 9, -1, 1.5, undefined, null, '1']) assert.throws(() => assessInterruptedProbeHold({ ...interruptionHold, [key]: value }), { code: 'operator_interruption_unconfirmed' });
+  });
+}
+for (const [name, change] of Object.entries({ successfulApply: { ok: true, outcome: 'applied' }, missingReason: { reason: undefined }, timeoutReason: { reason: 'timeout' }, reconciled: { outcome: 'reconciled' }, wrongCandidate: { failedRevision: '4'.repeat(32) }, wrongContent: { restoredContentFrom: interruptedCandidate }, oldRevision: { revision: interruptedPrevious }, candidateRevision: { revision: interruptedCandidate }, malformedRevision: { revision: 'unknown' } })) {
+  test(`interrupted operator refuses recovery ${name}`, () => assert.throws(() => assessInterruptedRecovery(recoveredInterruption(change), interruptedPrevious, interruptedCandidate), { code: 'operator_interruption_unconfirmed' }));
+}
+for (const [name, change] of Object.entries({ zeroExit: { exitCode: 0 }, unknownExit: { exitCode: null }, wrongExit: { exitCode: 2 }, timeout: { termination: 'timeout_or_killed' }, killed: { termination: 'signal' }, unknown: { termination: 'unknown' }, stderr: { stderr: 'diagnostic' }, missing: { stdout: '' }, badJSON: { stdout: '{' } })) {
+  test(`interrupted operator refuses command ${name}`, () => assert.throws(() => assessInterruptedRecovery({ ...recoveredInterruption(), ...change }, interruptedPrevious, interruptedCandidate), { code: 'operator_interruption_unconfirmed' }));
+}
+test('interrupted operator pure assessors do not invoke hostile getters', () => {
+  let called = false; const hold = { ...interruptionHold }; Object.defineProperty(hold, 'held', { get() { called = true; return true; } });
+  assert.throws(() => assessInterruptedProbeHold(hold), { code: 'operator_interruption_unconfirmed' }); assert.equal(called, false);
+});
+
+test('interrupted apply does not renew held-probe authority through a late queued continuation', async () => {
+  const source = await readFile(script, 'utf8');
+  const fn = source.slice(source.indexOf('  async function verifyOperatorInterruption()'), source.indexOf('  async function verifyControlledSlowDrain()'));
+  const isHeld = fn.slice(fn.indexOf('    const isHeld ='), fn.indexOf('    try {', fn.indexOf('    const isHeld =')));
+  const observation = fn.slice(fn.indexOf('      await until('), fn.indexOf('      if (!captured ||', fn.indexOf('      await until(')));
+  let clock = 0, captureCalls = 0;
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  const env = { held: { snapshot: () => ({ ...interruptionHold }) }, checkCancelled() {}, assessInterruptedProbeHold,
+    performance: { now: () => clock }, reject,
+    until: async (callback, budget) => { assert.equal(budget, 2000); assert.equal(await callback(), true); queueMicrotask(() => { clock = 1001; }); },
+    operator: { async captureLocks() { captureCalls++; return {}; } } };
+  const run = new Function(...Object.keys(env), `return async () => { let heldDeadline = 0; ${isHeld}${observation} };`)(...Object.values(env));
+  await assert.rejects(run(), { code: 'operator_interruption_unconfirmed' }); assert.equal(captureCalls, 0);
 });

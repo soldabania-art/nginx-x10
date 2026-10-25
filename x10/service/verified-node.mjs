@@ -198,7 +198,7 @@ export function cleanupEvidence(e) {
       || r.actualNonrootManagerObserved !== true || r.actualUnitStarted !== true
       || r.runtimeUnitLinked !== true || r.runtimeUnitRemoved !== true || r.unitEnabled !== false
       || r.readinessAutomated !== true || r.automaticReadinessAccepted !== false
-      || r.failedStartAccepted !== false || r.slowDrainAccepted !== false
+      || r.failedStartAccepted !== false || r.slowDrainAccepted !== false || r.orphanRecoveryAccepted !== false
       || r.tlsServiceAccepted !== false || r.serviceAccepted !== false || r.productionAccepted !== false || r.subprocessOutputsPublished !== false
       || r.primaryFailure !== null || !Array.isArray(r.cleanupFailures) || r.cleanupFailures.length !== 0
       || r.cleanupFailureCount !== 0 || r.cleanupFailuresTruncated !== false) return false;
@@ -223,6 +223,18 @@ export function cleanupEvidence(e) {
       || Reflect.ownKeys(drain).length !== drainKeys.length
       || drainKeys.some(k => {
         const d = Object.getOwnPropertyDescriptor(drain, k);
+        return !d || !Object.hasOwn(d, 'value') || d.value !== true;
+      })) return false;
+  if (r.operatorInterruptionChecks !== 1) return false;
+  const interrupted = r.operatorInterruptionProof;
+  const interruptedKeys = ['candidateProbeHeld', 'pendingReloadObserved', 'lastConfirmedPreserved',
+    'sameServiceObserved', 'ownedOperatorTerminated', 'staleLocksPreserved', 'lockedRecoveryRefused',
+    'exactLockRemovalConfirmed', 'explicitRollbackObserved', 'pendingCleared', 'restoredContentVerified',
+    'noPostReplay', 'sameServiceAfterRecovery', 'repeatedRecoveryIdempotent'];
+  if (!interrupted || typeof interrupted !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(interrupted))
+      || Reflect.ownKeys(interrupted).length !== interruptedKeys.length
+      || interruptedKeys.some(k => {
+        const d = Object.getOwnPropertyDescriptor(interrupted, k);
         return !d || !Object.hasOwn(d, 'value') || d.value !== true;
       })) return false;
   for (const k of ['explicitReadinessPasses', 'nativeSessionsStarted', 'nativeSessionsStopped', 'proxyBodyChecks', 'uploadChecks', 'streamChecks']) if (r[k] !== 3) return false;
@@ -343,7 +355,7 @@ export async function main(argv = process.argv.slice(2)) {
       const receipt = await regular(file, 32768, { uid: process.getuid() });
       if ((receipt.stat.mode & 0o7077) !== 0) refuse('runtime_retained_cleanup_unconfirmed');
       const e = JSON.parse(receipt.bytes);
-      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '63fff9123b4d4d87c52b4db449f0f13ce45ea8b40f3e804c44a3e142b6eaf872') refuse('runtime_retained_cleanup_unconfirmed');
+      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '5bc6a3b2bd4ac783ae15532ee6bd6d7015e64d1dc6c91f69ee76c3e4b6a9aef9') refuse('runtime_retained_cleanup_unconfirmed');
       const runtime = await inspectRuntime(prefix);
       if (e.runtimeNodeSha256 !== runtime.files['bin/node'].sha256 || e.runtimeInstallationId !== runtime.installationId) refuse('runtime_retained_cleanup_unconfirmed');
       await removeRuntime(prefix); result = { ok: true, code: 'verified_node_removed', runtimeRemoved: true };

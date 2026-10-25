@@ -18,7 +18,7 @@ const status = () => `[GNUPG:] PLAINTEXT 74 0 \n[GNUPG:] NEWSIG\n[GNUPG:] KEY_CO
 function receipt() {
   return { checkerExited:true, checkerExitCode:0, report:{ ok:true, code:'basic_lifecycle_verified', phase:'complete', actualNonrootManagerObserved:true, actualUnitStarted:true,
     runtimeUnitLinked:true, runtimeUnitRemoved:true, unitEnabled:false,
-    readinessAutomated:true, automaticReadinessAccepted:false, failedStartAccepted:false, slowDrainAccepted:false, tlsServiceAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
+    readinessAutomated:true, automaticReadinessAccepted:false, failedStartAccepted:false, slowDrainAccepted:false, orphanRecoveryAccepted:false, tlsServiceAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
     primaryFailure:null, cleanupFailures:[], cleanupFailureCount:0, cleanupFailuresTruncated:false,
     explicitReadinessPasses:3, nativeSessionsStarted:3, nativeSessionsStopped:3, proxyBodyChecks:3, uploadChecks:3, streamChecks:3,
     managerRestartCommands:1, completedManagerRestarts:1,
@@ -31,6 +31,11 @@ function receipt() {
     controlledSlowDrainProof:{clientPaused:true,originResponseHeld:true,sameSessionObserved:true,managerStopPending:true,
       nativeGroupLiveDuringStop:true,unitDeactivatingObserved:true,incompleteResponseObserved:true,payloadCompleted:true,
       tlsVerified:true,managerStopCompleted:true,launcherExited:true,nativeGroupsAbsent:true,listeningPortsClosed:true,controlSocketAbsent:true},
+    operatorInterruptionChecks:1,
+    operatorInterruptionProof:{candidateProbeHeld:true,pendingReloadObserved:true,lastConfirmedPreserved:true,sameServiceObserved:true,
+      ownedOperatorTerminated:true,staleLocksPreserved:true,lockedRecoveryRefused:true,exactLockRemovalConfirmed:true,
+      explicitRollbackObserved:true,pendingCleared:true,restoredContentVerified:true,noPostReplay:true,
+      sameServiceAfterRecovery:true,repeatedRecoveryIdempotent:true},
     journalChecks:3,journalRecordsObserved:6,journalRunningMarkers:3,
     downstreamTLSActivated:true,downstreamTLSSessionChecks:3,downstreamTLSBodyChecks:6,downstreamTLSUploadChecks:3,downstreamTLSStreamChecks:3,
     downstreamTLS12Checks:3,downstreamTLS13Checks:3,downstreamTLSCertificateChecks:12,downstreamTLSWrongCARefusals:3,downstreamTLSWrongNameRefusals:3,
@@ -181,6 +186,44 @@ test('cleanup accepts an exact null-prototype controlled-drain data record',()=>
   const e=receipt();e.report.controlledSlowDrainProof=Object.assign(Object.create(null),e.report.controlledSlowDrainProof);
   assert.equal(cleanupEvidence(e),true);
 });
+test('cleanup refuses the prior drain-only receipt without operator interruption evidence',()=>{
+  const e=receipt();delete e.report.operatorInterruptionChecks;delete e.report.operatorInterruptionProof;
+  assert.equal(cleanupEvidence(e),false);
+});
+test('cleanup requires one inspected operator interruption without accepting broad orphan recovery',()=>{
+  for(const value of [undefined,null,0,2,'1',true,NaN]){
+    const e=receipt();e.report.operatorInterruptionChecks=value;assert.equal(cleanupEvidence(e),false);
+  }
+  for(const value of [undefined,null,true,0,'false']){
+    const e=receipt();e.report.orphanRecoveryAccepted=value;assert.equal(cleanupEvidence(e),false);
+  }
+});
+test('cleanup refuses each missing or partial operator, lock and recovery proof',()=>{
+  for(const k of Object.keys(receipt().report.operatorInterruptionProof)){
+    for(const value of [false,undefined,null,0,1,'true']){
+      const e=receipt();e.report.operatorInterruptionProof[k]=value;assert.equal(cleanupEvidence(e),false,k);
+    }
+    const e=receipt();delete e.report.operatorInterruptionProof[k];assert.equal(cleanupEvidence(e),false,k);
+  }
+});
+test('cleanup rejects inherited, extra and accessor interruption authority without getter evaluation',()=>{
+  for(const value of [undefined,null,[],{},true,Object.create(receipt().report.operatorInterruptionProof)]){
+    const e=receipt();e.report.operatorInterruptionProof=value;assert.equal(cleanupEvidence(e),false);
+  }
+  for(const k of ['unverified',Symbol('extra')]){
+    const e=receipt();e.report.operatorInterruptionProof[k]=true;assert.equal(cleanupEvidence(e),false);
+  }
+  let reads=0;
+  for(const k of Object.keys(receipt().report.operatorInterruptionProof)){
+    const e=receipt();Object.defineProperty(e.report.operatorInterruptionProof,k,{get(){reads++;return true;}});
+    assert.equal(cleanupEvidence(e),false);
+  }
+  assert.equal(reads,0);
+});
+test('cleanup accepts the exact null-prototype interruption data record',()=>{
+  const e=receipt();e.report.operatorInterruptionProof=Object.assign(Object.create(null),e.report.operatorInterruptionProof);
+  assert.equal(cleanupEvidence(e),true);
+});
 test('cleanup refuses the stale two-session profile and mixed session counts',()=>{
   const counters=['explicitReadinessPasses','nativeSessionsStarted','nativeSessionsStopped','proxyBodyChecks','uploadChecks','streamChecks'];
   const old=receipt();for(const k of counters)old.report[k]=2;
@@ -328,6 +371,20 @@ test('cleanup retains private runtime for exact-source missing, early-completion
   try {
     for(const mutate of [e=>{delete e.report.controlledSlowDrainProof;},e=>{e.report.controlledSlowDrainProof.managerStopPending=false;},
       e=>{e.report.controlledSlowDrainProof.payloadCompleted=false;},e=>{e.report.controlledSlowDrainProof.nativeGroupsAbsent=false;}]){
+      const e=receipt();e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];mutate(e);
+      await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
+      const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);
+      assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.equal(await readFile(p+'/runtime/sentinel','utf8'),'preserve');
+      assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);
+    }
+  } finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
+});
+test('cleanup retains runtime when inspected-lock removal or explicit recovery remains unconfirmed',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});await writeFile(p+'/runtime/sentinel','preserve',{mode:0o600});
+  const source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
+  try {
+    for(const mutate of [e=>{delete e.report.operatorInterruptionProof;},e=>{e.report.operatorInterruptionProof.exactLockRemovalConfirmed=false;},
+      e=>{e.report.operatorInterruptionProof.ownedOperatorTerminated=false;},e=>{e.report.operatorInterruptionProof.explicitRollbackObserved=false;}]){
       const e=receipt();e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];mutate(e);
       await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
       const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);

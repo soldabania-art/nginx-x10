@@ -16,13 +16,14 @@ import { verifyAlphaArchive, MAX_ARCHIVE_BYTES } from '../release/verify-alpha-a
 import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mjs';
 import { observeOwnedJournal, JOURNAL_RESULT_CODES } from './journal-check.mjs';
 import { createOriginFixture, ORIGIN_FIXTURE_ERROR_CODES } from './origin-fixture.mjs';
+import { startOwnedOperator, INTERRUPTED_OPERATOR_ERROR_CODES } from './interrupted-operator.mjs';
 import { createPausedTLSClient, SLOW_CLIENT_ERROR_CODES } from './slow-client.mjs';
 import { createServicePKI, probeServiceTLS, expectServiceTLSRefusal, TLS_FIXTURE_ERROR_CODES } from './tls-fixture.mjs';
 
 const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 const HEX = /^[a-f0-9]{64}$/, TOKEN = /^[a-f0-9]{32}$/;
 const KEYS = ['LoadState', 'ActiveState', 'SubState', 'Result', 'FragmentPath', 'MainPID', 'ControlGroup'];
-const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed", "failed_start_unconfirmed", "controlled_drain_unconfirmed", ...SLOW_CLIENT_ERROR_CODES]);
+const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed", "failed_start_unconfirmed", "controlled_drain_unconfirmed", "operator_interruption_unconfirmed", ...SLOW_CLIENT_ERROR_CODES, ...INTERRUPTED_OPERATOR_ERROR_CODES]);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const reject = code => { throw Object.assign(new Error(code), { code }); };
 export const LIMITATIONS = Object.freeze({ scope: 'ephemeral-user-service-basic-lifecycle',
@@ -127,9 +128,9 @@ export async function observeNodePrerequisites(prefix, nodeExecutable) {
   finally { if (handle) { try { await handle.close(); } catch { reject('recipe_diagnostic_failed'); } } }
 }
 // Diagnostic collectors have no I/O or lifecycle authority.
-export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'failed_start', 'first_start', 'tls_apply', 'origin_negative', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'controlled_drain', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
+export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'failed_start', 'first_start', 'tls_apply', 'origin_negative', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'operator_interruption', 'controlled_drain', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
 export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'request_restart', 'old_retirement', 'invocation_identity', 'journal_read', 'downstream_tls', 'upstream_tls', 'origin_negative', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
-export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'drain_close', 'origin_close', 'temporary_root', 'final_assertion', 'unknown']);
+export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'operator_close', 'drain_close', 'origin_close', 'temporary_root', 'final_assertion', 'unknown']);
 const pickEnum = (value, list, fallback = 'unknown') => typeof value === 'string' && list.includes(value) ? value : fallback;
 function ownData(record, key) {
   try { const d = record && Object.getOwnPropertyDescriptor(record, key); return d && Object.hasOwn(d, 'value') ? d.value : undefined; }
@@ -353,6 +354,42 @@ export function assessControlledDrainResult(result) {
   return true;
 }
 
+export function assessInterruptedRecovery(record, previousRevision, failedRevision) {
+  if (ownData(record, 'ok') !== false || ownData(record, 'exitCode') !== 1
+      || ownData(record, 'termination') !== 'exit_nonzero' || ownData(record, 'stderr') !== ''
+      || typeof ownData(record, 'stdout') !== 'string' || Buffer.byteLength(ownData(record, 'stdout')) > 256 * 1024
+      || !TOKEN.test(previousRevision || '') || !TOKEN.test(failedRevision || '') || previousRevision === failedRevision) reject('operator_interruption_unconfirmed');
+  let value; try { value = JSON.parse(ownData(record, 'stdout')); } catch { reject('operator_interruption_unconfirmed'); }
+  if (ownData(value, 'ok') !== false || ownData(value, 'outcome') !== 'rolled_back'
+      || ownData(value, 'reason') !== 'explicit_recovery' || ownData(value, 'failedRevision') !== failedRevision
+      || ownData(value, 'restoredContentFrom') !== previousRevision || !TOKEN.test(ownData(value, 'revision') || '')
+      || value.revision === previousRevision || value.revision === failedRevision) reject('operator_interruption_unconfirmed');
+  return { revision: value.revision };
+}
+export function assessInterruptedProbeHold(value) {
+  if (ownData(value, 'held') !== true || ownData(value, 'requested') !== true || ownData(value, 'candidateReadyObserved') !== true
+      || ownData(value, 'aborted') !== false || ownData(value, 'closed') !== false || ownData(value, 'released') !== false
+      || !Number.isInteger(ownData(value, 'nativeProbeChecks')) || value.nativeProbeChecks < 1 || value.nativeProbeChecks > 8
+      || !Number.isInteger(ownData(value, 'heldResponses')) || value.heldResponses < 1 || value.heldResponses > 8) reject('operator_interruption_unconfirmed');
+  return true;
+}
+// Only exact known private fixture paths reach this reader. Raw state stays local.
+async function interruptionFile(file, parse = true) {
+  const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+  try {
+    const st = await handle.stat();
+    if (!st.isFile() || st.uid !== process.getuid() || (st.mode & 0o7077) !== 0 || st.nlink !== 1
+        || st.size < 1 || st.size > 2 * 1024 * 1024 || await realpath(file) !== file) reject('operator_interruption_unconfirmed');
+    const bytes = Buffer.alloc(st.size + 1); let used = 0;
+    while (used < bytes.length) { const read = await handle.read(bytes, used, bytes.length - used, null); if (!read.bytesRead) break; used += read.bytesRead; }
+    const after = await handle.stat();
+    if (used !== st.size || after.size !== st.size || after.dev !== st.dev || after.ino !== st.ino
+        || after.mtimeMs !== st.mtimeMs || after.ctimeMs !== st.ctimeMs) reject('operator_interruption_unconfirmed');
+    const data = bytes.subarray(0, used), value = parse ? JSON.parse(data.toString('utf8')) : null;
+    return { bytes: data, sha256: digest(data), value };
+  } finally { await handle.close(); }
+}
+
 async function archiveBytes(file) {
   const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
   try {
@@ -421,6 +458,7 @@ export async function main(argv = process.argv.slice(2)) {
   const report = { ok: false, code: 'not_started', phase: 'arguments', ...LIMITATIONS,
     actualNonrootManagerObserved: false, actualUnitStarted: false, explicitReadinessPasses: 0,
     nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
+    operatorInterruptionChecks: 0, operatorInterruptionProof: { candidateProbeHeld: false, pendingReloadObserved: false, lastConfirmedPreserved: false, sameServiceObserved: false, ownedOperatorTerminated: false, staleLocksPreserved: false, lockedRecoveryRefused: false, exactLockRemovalConfirmed: false, explicitRollbackObserved: false, pendingCleared: false, restoredContentVerified: false, noPostReplay: false, sameServiceAfterRecovery: false, repeatedRecoveryIdempotent: false },
     controlledSlowDrainChecks: 0, controlledSlowDrainProof: { clientPaused: false, originResponseHeld: false, sameSessionObserved: false, managerStopPending: false, nativeGroupLiveDuringStop: false, unitDeactivatingObserved: false, incompleteResponseObserved: false, payloadCompleted: false, tlsVerified: false, managerStopCompleted: false, launcherExited: false, nativeGroupsAbsent: false, listeningPortsClosed: false, controlSocketAbsent: false },
     failedStartChecks: 0, failedStartProof: { unhealthyReadinessObserved: false, managerRefused: false, hookExitObserved: false, bindingAbsent: false, launcherExited: false, nativeGroupsAbsent: false, listeningPortsClosed: false, controlSocketAbsent: false, failedSessionStopped: false, managerResetConfirmed: false, healthyRestartFresh: false },
     managerRestartCommands: 0, completedManagerRestarts: 0,
@@ -982,6 +1020,142 @@ export async function main(argv = process.argv.slice(2)) {
       report[counter]++; report.upstreamTLSRollbackChecks++; report.upstreamTLSCandidate502Checks++; report.upstreamTLSNoPostReplayChecks++;
     }
   }
+  async function verifyOperatorInterruption() {
+    checkCancelled();
+    if (!origin || !tlsFixture || !report.upstreamTLSActivated || !report.downstreamTLSActivated) reject('operator_interruption_unconfirmed');
+    const known = sessions.find(session => session.id === lastSession);
+    if (!known) reject('operator_interruption_unconfirmed');
+    const before = await currentOriginAuthority(known), initialStatus = await cli(node, launcher, ['status'], env);
+    checkCancelled();
+    if (!TOKEN.test(initialStatus.lastConfirmedRevision || '') || !initialStatus.binding || initialStatus.pending !== null
+        || initialStatus.runtime?.identityValid !== true || initialStatus.configUnchanged !== true
+        || initialStatus.fragmentMatchesLastConfirmed !== true || initialStatus.history?.integrity !== true) reject('operator_interruption_unconfirmed');
+    const statePath = `${known.prefix}/.x10-control`, previousRevision = initialStatus.lastConfirmedRevision;
+    const originalState = await interruptionFile(`${statePath}/state.json`), originalHistory = await interruptionFile(`${statePath}/history.jsonl`, false);
+    const previous = await interruptionFile(`${statePath}/revisions/${previousRevision}.json`);
+    const { recordSha256: oldRecordHash, ...oldRevision } = previous.value;
+    if (oldRecordHash !== digest(JSON.stringify(oldRevision)) || previous.value.id !== previousRevision
+        || previous.value.inputSha256 !== digest(JSON.stringify(previous.value.input))) reject('operator_interruption_unconfirmed');
+    if (originalState.value.activeRevision !== previousRevision || JSON.stringify(originalState.value.binding) !== JSON.stringify(initialStatus.binding)) reject('operator_interruption_unconfirmed');
+    const tag = randomBytes(16).toString('hex'), input = origin.candidate({ tag });
+    input.https = { port: tlsPort, certificate: tlsFixture.certificate, certificateKey: tlsFixture.certificateKey };
+    const inputFile = `${parent}/interrupted-input.json`, file = await open(inputFile, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
+    try { await file.writeFile(JSON.stringify(input)); await file.sync(); } finally { await file.close(); }
+    let held, operator, snapshot, heldDeadline = 0, primary = null;
+    const beforePosts = origin.counts().echoRequests;
+    async function sameServiceNoCLI() {
+      const p = await ownedProperties(false); checkCancelled();
+      if (p.ActiveState !== 'active' || p.SubState !== 'running' || p.Result !== 'success'
+          || !sameLauncher(await launcherIdentity(p), before.launcher)) reject('unit_launcher_identity');
+      const query = await systemctl(['show', unitName, '--property=InvocationID'], 2500); checkCancelled();
+      if (!query.ok || query.stderr !== '' || parseInvocationProperty(query.stdout) !== before.id
+          || !await inspectMaster(`${prefix}/bin/nginx`, known.prefix, known.identity)) reject('unit_invocation_changed');
+      const registry = await checkedRecord(`${prefix}/.alpha-registry.json`), life = await checkedRecord(`${known.prefix}/lifecycle.json`);
+      if (registry.current !== known.id || life.session !== known.id || life.stage !== 'running'
+          || JSON.stringify(life.runtime) !== JSON.stringify(known.identity)) reject('operator_interruption_unconfirmed');
+      checkCancelled();
+    }
+    async function capturePending() {
+      const pending = await interruptionFile(`${statePath}/pending.json`), state = await interruptionFile(`${statePath}/state.json`);
+      if (pending.value.schemaVersion !== 1 || pending.value.stage !== 'reload_requested' || pending.value.previous !== previousRevision
+          || !TOKEN.test(pending.value.candidate || '') || pending.value.candidate === previousRevision
+          || state.value.activeRevision !== previousRevision || JSON.stringify(state.value.binding) !== JSON.stringify(originalState.value.binding)
+          || JSON.stringify({ ...state.value, historyHead: originalState.value.historyHead }) !== JSON.stringify(originalState.value)
+          || !await absent(`${statePath}/event-commit.json`)) reject('operator_interruption_unconfirmed');
+      const candidate = await interruptionFile(`${statePath}/revisions/${pending.value.candidate}.json`);
+      const { recordSha256, ...revision } = candidate.value;
+      const fragment = await interruptionFile(`${known.prefix}/managed.conf`, false), history = await interruptionFile(`${statePath}/history.jsonl`, false);
+      if (recordSha256 !== digest(JSON.stringify(revision)) || candidate.value.id !== pending.value.candidate
+          || candidate.value.parent !== previousRevision || candidate.value.sourceRevision !== null
+          || candidate.value.inputSha256 !== digest(JSON.stringify(input)) || JSON.stringify(candidate.value.input) !== JSON.stringify(input)
+          || candidate.value.fragmentSha256 !== fragment.sha256 || !history.bytes.subarray(0, originalHistory.bytes.length).equals(originalHistory.bytes)) reject('operator_interruption_unconfirmed');
+      const appended = history.bytes.subarray(originalHistory.bytes.length).toString('utf8');
+      if (!appended.endsWith('\n') || appended.split('\n').length !== 2) reject('operator_interruption_unconfirmed');
+      const event = JSON.parse(appended), { hash, ...eventBody } = event;
+      if (event.sequence !== originalHistory.bytes.toString('utf8').split('\n').length
+          || event.type !== 'apply_started' || event.details?.revision !== candidate.value.id || event.details?.previous !== previousRevision
+          || event.previousHash !== originalState.value.historyHead || hash !== digest(JSON.stringify(eventBody)) || state.value.historyHead !== hash) reject('operator_interruption_unconfirmed');
+      return { pending, state, candidate, fragment, history, failedRevision: candidate.value.id };
+    }
+    async function unchangedPending(expected) {
+      const actual = await capturePending();
+      for (const key of ['pending', 'state', 'candidate', 'fragment', 'history']) if (actual[key].sha256 !== expected[key].sha256) reject('operator_interruption_unconfirmed');
+      return actual;
+    }
+    const isHeld = () => { checkCancelled(); assessInterruptedProbeHold(held?.snapshot()); return heldDeadline > 0 && performance.now() < heldDeadline; };
+    try {
+      held = origin.prepareReadinessHold(tag); checkCancelled();
+      operator = await startOwnedOperator({ node, launcher, prefix, sessionPrefix: known.prefix, inputFile, env, isHeld, checkCancelled });
+      checkCancelled();
+      await until(async () => { checkCancelled(); const value = held.snapshot();
+        if (value.held !== true || value.candidateReadyObserved !== true) return false;
+        if (!heldDeadline) heldDeadline = performance.now() + 1000;
+        return true;
+      }, 2000);
+      if (!isHeld()) reject('operator_interruption_unconfirmed');
+      const captured = await operator.captureLocks(); checkCancelled();
+      if (!captured || captured.ok !== true || captured.alphaCaptured !== true || captured.controllerCaptured !== true || captured.pendingCaptured !== true) reject('operator_interruption_unconfirmed');
+      snapshot = await capturePending(); await sameServiceNoCLI();
+      await unchangedPending(snapshot); checkCancelled();
+      if (!isHeld()) reject('operator_interruption_unconfirmed');
+      report.operatorInterruptionProof.candidateProbeHeld = true; report.operatorInterruptionProof.pendingReloadObserved = true;
+      report.operatorInterruptionProof.lastConfirmedPreserved = true; report.operatorInterruptionProof.sameServiceObserved = true;
+      const terminated = await operator.terminate(); checkCancelled();
+      if (!terminated || terminated.ok !== true || terminated.wrapperExited !== true || terminated.controllerExited !== true || terminated.groupAbsent !== true) reject('operator_interruption_unconfirmed');
+      report.operatorInterruptionProof.ownedOperatorTerminated = true;
+      if (await held.abort() !== true) reject('operator_interruption_unconfirmed'); checkCancelled();
+      await unchangedPending(snapshot); await sameServiceNoCLI(); checkCancelled();
+      const blocked = await command(node, [launcher, 'recover'], env); checkCancelled();
+      let blockedValue; try { blockedValue = JSON.parse(blocked.stdout); } catch { reject('operator_interruption_unconfirmed'); }
+      if (blocked.ok !== false || blocked.exitCode !== 1 || blocked.termination !== 'exit_nonzero' || blocked.stderr !== ''
+          || blockedValue.ok !== false || blockedValue.code !== 'alpha_locked') reject('operator_interruption_unconfirmed');
+      await unchangedPending(snapshot); checkCancelled();
+      report.operatorInterruptionProof.staleLocksPreserved = true; report.operatorInterruptionProof.lockedRecoveryRefused = true;
+      const retired = await operator.removeCapturedLocks(); checkCancelled();
+      if (!retired || retired.ok !== true || retired.alphaRemoved !== true || retired.controllerRemoved !== true) reject('operator_interruption_unconfirmed');
+      report.operatorInterruptionProof.exactLockRemovalConfirmed = true;
+      await unchangedPending(snapshot); await sameServiceNoCLI(); checkCancelled();
+      const recovered = await command(node, [launcher, 'recover'], env); checkCancelled();
+      const recovery = assessInterruptedRecovery(recovered, previousRevision, snapshot.failedRevision);
+      report.operatorInterruptionProof.explicitRollbackObserved = true;
+      const restored = await interruptionFile(`${statePath}/revisions/${recovery.revision}.json`), { recordSha256, ...revision } = restored.value;
+      const recoveredStatus = await cli(node, launcher, ['status'], env); checkCancelled();
+      if (recordSha256 !== digest(JSON.stringify(revision)) || restored.value.id !== recovery.revision
+          || restored.value.parent !== previousRevision || restored.value.sourceRevision !== previousRevision
+          || restored.value.inputSha256 !== previous.value.inputSha256 || JSON.stringify(restored.value.input) !== JSON.stringify(previous.value.input)
+          || !await absent(`${statePath}/pending.json`) || recoveredStatus.pending !== null || recoveredStatus.lastConfirmedRevision !== recovery.revision
+          || JSON.stringify(recoveredStatus.binding) !== JSON.stringify(originalState.value.binding) || recoveredStatus.runtime?.identityValid !== true
+          || recoveredStatus.configUnchanged !== true || recoveredStatus.fragmentMatchesLastConfirmed !== true || recoveredStatus.history?.integrity !== true) reject('operator_interruption_unconfirmed');
+      report.operatorInterruptionProof.pendingCleared = true;
+      const body = await request(gatewayPort); checkCancelled();
+      const secure = await probeServiceTLS(tlsPort, '/', { ca: tlsFixture.ca, expectedCertificate: tlsFixture.expectedCertificate, servername: 'localhost', version: 'TLSv1.3' }); checkCancelled();
+      if (body.status !== 200 || body.body.toString() !== 'service-fixture\n' || secure.status !== 200 || secure.certificateMatched !== true
+          || secure.protocol !== 'TLSv1.3' || !Buffer.isBuffer(secure.body) || secure.body.toString() !== 'service-fixture\n') reject('operator_interruption_unconfirmed');
+      report.operatorInterruptionProof.restoredContentVerified = true;
+      if (!Number.isInteger(beforePosts) || origin.counts().echoRequests !== beforePosts) reject('upstream_tls_replay');
+      report.operatorInterruptionProof.noPostReplay = true;
+      const final = await currentOriginAuthority(known); checkCancelled();
+      if (final.id !== before.id || !sameLauncher(final.launcher, before.launcher)) reject('unit_invocation_changed');
+      report.operatorInterruptionProof.sameServiceAfterRecovery = true;
+      const confirmedState = await interruptionFile(`${statePath}/state.json`), confirmedHistory = await interruptionFile(`${statePath}/history.jsonl`, false);
+      checkCancelled();
+      const repeated = await cli(node, launcher, ['recover'], env); checkCancelled();
+      if (repeated.outcome !== 'nothing_pending' || !await absent(`${statePath}/pending.json`)
+          || (await interruptionFile(`${statePath}/state.json`)).sha256 !== confirmedState.sha256
+          || (await interruptionFile(`${statePath}/history.jsonl`, false)).sha256 !== confirmedHistory.sha256) reject('operator_interruption_unconfirmed');
+      await sameServiceNoCLI(); checkCancelled();
+      report.operatorInterruptionProof.repeatedRecoveryIdempotent = true;
+      goodOriginRevision = recovery.revision;
+    } catch (error) { primary = error; }
+    finally {
+      try { if (operator && await operator.close() !== true) reject('operator_interruption_unconfirmed'); } catch (error) { failures.cleanup(error, 'operator_close'); if (!primary) primary = error; }
+      try { if (held && await held.abort() !== true) reject('operator_interruption_unconfirmed'); } catch (error) { failures.cleanup(error, 'operator_close'); if (!primary) primary = error; }
+    }
+    if (primary) throw primary;
+    checkCancelled();
+    if (Object.values(report.operatorInterruptionProof).some(value => value !== true)) reject('operator_interruption_unconfirmed');
+    report.operatorInterruptionChecks++;
+  }
   async function verifyControlledSlowDrain() {
     checkCancelled();
     if (!origin || !tlsFixture || !report.upstreamTLSActivated || !report.downstreamTLSActivated) reject('controlled_drain_unconfirmed');
@@ -1113,7 +1287,9 @@ export async function main(argv = process.argv.slice(2)) {
     report.phase = 'first_stop'; await stopOwned(); report.nativeSessionsStopped++;
     report.phase = 'second_start'; await startAndServe();
     report.phase = 'manager_restart'; await restartAndServe();
+    report.phase = 'operator_interruption'; await verifyOperatorInterruption();
     report.phase = 'controlled_drain'; await verifyControlledSlowDrain(); report.nativeSessionsStopped++;
+    if (report.operatorInterruptionChecks !== 1) reject('operator_interruption_unconfirmed');
     if (report.controlledSlowDrainChecks !== 1) reject('controlled_drain_unconfirmed');
     if (report.failedStartChecks !== 1 || Object.values(report.failedStartProof).some(value => value !== true)) reject('failed_start_unconfirmed');
     if (report.downstreamTLSSessionChecks !== 3) reject('downstream_tls_unconfirmed');

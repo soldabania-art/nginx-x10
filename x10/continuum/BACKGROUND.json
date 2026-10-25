@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-operator-cancel-20261025T153430Z",
-    "owner": "codex-coordinator-operator-cancel",
-    "baseCommit": "f9fb74307451e75ff849ba7eeca0cfefd61a7d36",
-    "acquiredAtUTC": "2026-10-25T15:34:30.788Z",
-    "expiresAtUTC": "2026-10-25T16:18:30.788Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -2853,14 +2847,14 @@
       "runId": "x10-drain-resume-20261025T150742Z",
       "sourceBase": "13d62d170f2415158988d6afade59024c3a12e7f",
       "publicationParent": "c4132a80d7731ea20d770ca2201d0aeeb338be73",
-      "implementationCommit": null,
+      "implementationCommit": "f9fb74307451e75ff849ba7eeca0cfefd61a7d36",
       "implementationCommitLocator": "Current publication commit; exact resulting CI required",
       "scope": "Controlled held-HTTPS-origin response and paused verified-TLS client graceful-stop acceptance candidate",
       "result": "Added a bounded same-session held-response graceful-stop control with exact payload completion, retirement and cleanup requirements; actual new service CI pending.",
       "evidence": "x10/evidence/g3-service-slow-drain.json",
       "perFileLedger": "x10/review/g3-service-slow-drain-ledger.json",
       "localAcceptance": "LOCAL_CONTROLLED_HELD_RESPONSE_DRAIN_CONTRACTS_FIXTURES_VERIFIED_EXACT_SERVICE_CI_PENDING",
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_CONTROLLED_SLOW_DRAIN_SERVICE",
+      "exactHostedAcceptance": "EXACT_CONTROLLED_HELD_RESPONSE_DRAIN_COMBINED_TLS_AND_CLEANUP_VERIFIED",
       "nativeRuntimeChanged": false,
       "controllerRuntimeChanged": false,
       "alphaRuntimeChanged": false,
@@ -2878,14 +2872,210 @@
       "actualHistoricalCauseProven": false,
       "nextConcreteTask": "First reconcile exact resulting controlled held-HTTPS-origin response and paused verified TLS-client graceful-stop service CI. Require all14 narrow controlledSlowDrainProof facts: same owned session/invocation/launcher, one pending manager stop, deactivating unit and live owned native group while the exact response remains incomplete, then explicit origin release and client resume, exact full verified-TLS payload, completed stop and fresh owned resource absence. Timeout, cancellation, malformed/foreign/stale identity, premature close or unknown cleanup must fail closed and retain private runtime. Preserve the accepted13d startup-refusal and combined TLS/restart/journal scopes without unchanged reruns. This controlled response hold and client pause do not establish pure network backpressure, all slow-client cases or60-minute soak. FullG3/Production V1, abnormal/orphan recovery, distinct package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and semantic Continuum remain open.",
       "hostedVerification": {
-        "state": "PENDING_EXACT_RESULTING_CONTROLLED_SLOW_DRAIN_SERVICE"
+        "state": "EXACT_CONTROLLED_HELD_RESPONSE_DRAIN_COMBINED_TLS_AND_CLEANUP_VERIFIED",
+        "evidence": "x10/evidence/g3-service-operator-interruption.json"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false,
+      "hostedEvidence": "x10/evidence/g3-service-operator-interruption.json"
+    },
+    "serviceSlowDrainHosted": {
+      "state": "EXACT_CONTROLLED_HELD_RESPONSE_DRAIN_COMBINED_TLS_AND_CLEANUP_VERIFIED",
+      "implementationCommit": "f9fb74307451e75ff849ba7eeca0cfefd61a7d36",
+      "implementationTree": "c9db39332459806d73c82af5ed866f775e24892b",
+      "evidence": "x10/evidence/g3-service-operator-interruption.json",
+      "nativeRunIds": [
+        40206143958,
+        40206147728
+      ],
+      "nativeJobIds": [
+        121207436129,
+        121207440449
+      ],
+      "researchPRRunId": 40206147724,
+      "researchPRJobId": 121207450091,
+      "actualPRMergeCheckout": "4f25268fa2ef0c2e41d89d052b259c5bb48bdaca",
+      "bothExactNativeWorkflowsSuccessful": true,
+      "actualNonrootManagerObserved": true,
+      "threeNativeStartStopReadinessAndIOPhasesPerRun": true,
+      "actualManagerRestartCommands": 1,
+      "completedManagerRestarts": 1,
+      "oldLauncherExited": true,
+      "oldNativeGroupsAbsent": true,
+      "freshSession": true,
+      "freshInvocation": true,
+      "boundedJournalChecksPerRun": 3,
+      "journalRecordsObservedPerRun": 99,
+      "journalRunningMarkersPerRun": 3,
+      "downstreamTLSActivated": true,
+      "downstreamTLSSessionChecks": 3,
+      "downstreamTLSBodyChecks": 6,
+      "downstreamTLSUploadChecks": 3,
+      "downstreamTLSStreamChecks": 3,
+      "downstreamTLS12Checks": 3,
+      "downstreamTLS13Checks": 3,
+      "downstreamTLSCertificateChecks": 12,
+      "downstreamTLSWrongCARefusals": 3,
+      "downstreamTLSWrongNameRefusals": 3,
+      "appSocketsRemaining": 0,
+      "runtimeUnitRemoved": true,
+      "unitEnabled": false,
+      "privateDependencyRuntimeRemoved": true,
+      "bootstrapRuntimeRemoved": true,
+      "bootstrapTemporaryRootRemoved": true,
+      "primaryFailure": null,
+      "cleanupFailures": [],
+      "nativeGroupsPassed": 20,
+      "alphaTestsPassed": 62,
+      "recipeTestsPassed": 28,
+      "lifecycleContractPassed": 387,
+      "lifecycleContractRootSkipped": 1,
+      "journalContractPassed": 45,
+      "tlsFixtureContractPassed": 16,
+      "dependencyContractPassed": 75,
+      "hostedOfficial": {
+        "files": 35,
+        "filesPassed": 34,
+        "filesSkipped": 1,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1131,
+          "passed": 1105,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "researchPRActualSuites": [
+        21,
+        7,
+        27,
+        48
+      ],
+      "researchPushRuntimeSkipped": true,
+      "historicalA03RawRejectionConditionKnown": false,
+      "completeAuditHistoryAccepted": false,
+      "originTransport": "VERIFIED_HTTPS",
+      "downstreamHttpsServiceAccepted": true,
+      "verifiedHttpsOriginServiceAccepted": true,
+      "combinedBothLegsTlsServiceAccepted": false,
+      "fullG3ServiceAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0,
+      "allThirteenOwnedServiceCleanupConfirmations": true,
+      "originFixtureContractPassed": 29,
+      "combinedHttpsServicePathObserved": true,
+      "broaderTlsServiceContractAccepted": false,
+      "failedStartAccepted": false,
+      "upstreamTLSSessionChecks": 3,
+      "upstreamTLSBodyChecks": 3,
+      "upstreamTLSUploadChecks": 3,
+      "upstreamTLSStreamChecks": 3,
+      "upstreamTLSRollbackChecks": 3,
+      "upstreamTLSCandidate502Checks": 3,
+      "upstreamTLSNoPostReplayChecks": 3,
+      "upstreamTLSDirectChecks": 1,
+      "upstreamTLSWrongCARefusals": 1,
+      "upstreamTLSWrongNameRefusals": 1,
+      "upstreamTLSPlaintextRefusals": 1,
+      "upstreamTLSActivated": true,
+      "nativeArtifacts": [
+        {
+          "runId": 40206143958,
+          "artifactId": 12603209658,
+          "zipBytes": 119080,
+          "zipSha256": "e3dee78a6ced6763a1547394fd7bc202f3f9773c3a71db6847f1f3b93280c7c8"
+        },
+        {
+          "runId": 40206147728,
+          "artifactId": 12604180289,
+          "zipBytes": 118946,
+          "zipSha256": "599da3d9782302279573044d6da698c03c55e0ca11ef9b11e84f50646674d884"
+        }
+      ],
+      "failedStartChecks": 1,
+      "failedStartProof": {
+        "unhealthyReadinessObserved": true,
+        "managerRefused": true,
+        "hookExitObserved": true,
+        "bindingAbsent": true,
+        "launcherExited": true,
+        "nativeGroupsAbsent": true,
+        "listeningPortsClosed": true,
+        "controlSocketAbsent": true,
+        "failedSessionStopped": true,
+        "managerResetConfirmed": true,
+        "healthyRestartFresh": true
+      },
+      "controlledUnhealthyStartupRefusalObserved": true,
+      "healthyRecoveryWithFreshIdentityObserved": true,
+      "slowDrainAccepted": false,
+      "slowClientContractPassed": 27,
+      "controlledSlowDrainChecks": 1,
+      "controlledSlowDrainProof": {
+        "clientPaused": true,
+        "originResponseHeld": true,
+        "sameSessionObserved": true,
+        "managerStopPending": true,
+        "nativeGroupLiveDuringStop": true,
+        "unitDeactivatingObserved": true,
+        "incompleteResponseObserved": true,
+        "payloadCompleted": true,
+        "tlsVerified": true,
+        "managerStopCompleted": true,
+        "launcherExited": true,
+        "nativeGroupsAbsent": true,
+        "listeningPortsClosed": true,
+        "controlSocketAbsent": true
+      },
+      "controlledHeldResponseDrainObserved": true,
+      "operatorInterruptionAccepted": false,
+      "freshAuditReference": {
+        "sha256": "e8a4fc1e1a2383c2dfe86e964f475df8ba1fa2e8ff7b9cab433e9f5a8b857b52",
+        "bytes": 31141
+      }
+    },
+    "serviceOperatorInterruptionLocal": {
+      "runId": "x10-operator-cancel-20261025T153430Z",
+      "sourceBase": "f9fb74307451e75ff849ba7eeca0cfefd61a7d36",
+      "publicationParent": "8d357d82eb27621265dbb9e40bfbe2d882f2d449",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+      "scope": "Controlled installed APPLY CLI interruption and explicit trusted-operator fixture recovery candidate",
+      "result": "Added one candidate-bound installed APPLY CLI interruption control, exact operator and manual fixture-lock inspection, explicit rollback and unchanged-service/content requirements; actual new service CI pending.",
+      "evidence": "x10/evidence/g3-service-operator-interruption.json",
+      "perFileLedger": "x10/review/g3-service-operator-interruption-ledger.json",
+      "localAcceptance": "PARTIAL_CONTRACTS_PASS_LOCAL_OPERATOR_PROFILE_UNAVAILABLE_PRIOR_CLEANUP_FAIL_UNKNOWN_EXACT_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_OPERATOR_INTERRUPTION_RECOVERY_SERVICE",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "acceptanceHarnessChanged": true,
+      "dependencyCleanupReceiptProfileChanged": true,
+      "knownGuardsPreserved": true,
+      "releaseContractOrProfileChanged": false,
+      "releaseContractNarrowed": false,
+      "failedStartAccepted": false,
+      "slowDrainAccepted": false,
+      "operatorInterruptionAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "actualHistoricalCauseProven": false,
+      "nextConcreteTask": "First reconcile exact resulting installed operator-APPLY CLI interruption and explicit recovery service CI. Require one candidate-bound held readiness probe and reload_requested pending record, exact own operator process-group termination, both stale locks preserved and recovery refused while locked. Fixture-only manual removal of those same two captured lock inodes requires recorded owners and their process group absent. Then require explicit recover exit1/rolled_back/explicit_recovery, preserved last-confirmed revision, pending cleared, restored HTTP/HTTPS bytes, no POST replay, same live owned service and idempotent repeated recovery. Timeout, cancellation, foreign/stale identity or unknown cleanup remains failure with private runtime retained. This is not automatic production lock cleanup, all crash points or binary/package rollback. Preserve exactf9 controlled-drain/startup/TLS/restart/journal scopes without unchanged reruns. FullG3/V1, abnormal/orphan recovery, package upgrade/rollback/backup restore, permanent distribution, independent release acceptance,60-minute soak and semantic Continuum remain open.",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_OPERATOR_INTERRUPTION_RECOVERY_SERVICE"
       },
       "newPurchases": false,
       "productionDeployChanged": false
     }
   },
   "pendingVerification": [
-    "First reconcile exact resulting controlled held-HTTPS-origin response and paused verified TLS-client graceful-stop service CI. Require all14 narrow controlledSlowDrainProof facts: same owned session/invocation/launcher, one pending manager stop, deactivating unit and live owned native group while the exact response remains incomplete, then explicit origin release and client resume, exact full verified-TLS payload, completed stop and fresh owned resource absence. Timeout, cancellation, malformed/foreign/stale identity, premature close or unknown cleanup must fail closed and retain private runtime. Preserve the accepted13d startup-refusal and combined TLS/restart/journal scopes without unchanged reruns. This controlled response hold and client pause do not establish pure network backpressure, all slow-client cases or60-minute soak. FullG3/Production V1, abnormal/orphan recovery, distinct package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and semantic Continuum remain open.",
+    "First reconcile exact resulting installed operator-APPLY CLI interruption and explicit recovery service CI. Require one candidate-bound held readiness probe and reload_requested pending record, exact own operator process-group termination, both stale locks preserved and recovery refused while locked. Fixture-only manual removal of those same two captured lock inodes requires recorded owners and their process group absent. Then require explicit recover exit1/rolled_back/explicit_recovery, preserved last-confirmed revision, pending cleared, restored HTTP/HTTPS bytes, no POST replay, same live owned service and idempotent repeated recovery. Timeout, cancellation, foreign/stale identity or unknown cleanup remains failure with private runtime retained. This is not automatic production lock cleanup, all crash points or binary/package rollback. Preserve exactf9 controlled-drain/startup/TLS/restart/journal scopes without unchanged reruns. FullG3/V1, abnormal/orphan recovery, package upgrade/rollback/backup restore, permanent distribution, independent release acceptance,60-minute soak and semantic Continuum remain open.",
+    "Both exactf9 native workflows completed success with all32 actual required steps. Each observed one controlled held-HTTPS-origin response and paused verified-TLS client graceful stop, all14 narrow drain proofs, exact payload completion and owned retirement. Prior unhealthy startup-refusal/all11 proofs, three healthy combined TLS sessions, one manager restart, three attributable journal checks and all13 final cleanup confirmations plus private dependency/bootstrap removal also passed. Research PR actually ran21/7/27/48; research push runtime was skipped. Controlled held response and client pause do not establish pure network backpressure, the full slow-client/drain matrix or60-minute soak. BroadG3/Production V1 and historical internal failure causes remain unaccepted/unknown.",
     "Both exact13d native workflows completed success with actual required steps. Each observed one deliberately unhealthy503 startup refusal with all11 current owned-attempt/retirement/recovery proofs, then three healthy combined downstream HTTPS and verified HTTPS-origin sessions, one manager restart, three attributable journal checks and all13 owned cleanup confirmations plus private dependency/bootstrap removal. Research PR actually ran21/7/27/48; research push runtime was skipped. This is a scoped controlled startup-refusal path, not broad failure recovery or Production V1. Earlier adverse history and unknown historical internal causes remain preserved.",
     "Both exactdd6c native workflows completed success with actual required steps. Each nonroot managed service observed three combined downstream HTTPS and verified HTTPS-origin sessions, one manager restart, strict retirement/replacement proofs, three bounded attributable journal checks, explicit bad upstream CA/name/plaintext refusal with rollback and complete owned service/fixture/private dependency cleanup. This accepts that scoped positive and configuration-refusal path only. Earlier a03 raw journal rejection cause and other historical failure interleavings remain unknown and are preserved. Broader failed-start, cancellation, slow-drain, abnormal/orphan recovery, package update and Production V1 remain unaccepted.",
     "Both exact1e6 native workflows completed success with all actual required steps. The real nonroot managed service used downstream HTTPS with an HTTP origin for three native/readiness/I/O sessions, one manager restart, strict retirement/replacement proofs and bounded attributable journal observations. Downstream positive TLS1.2/1.3 CA/hostname payload checks and explicit wrong-CA/wrong-name refusals passed, with complete owned TLS/service/private dependency cleanup. This accepted prior scope does not establish combined verified HTTPS origin. Earlier exact06e4 HTTP-only success and exacta03 failure with unknown raw journal rejection cause are retained without rewriting their evidence.",
@@ -2924,9 +3114,14 @@
   ],
   "nextTasks": [
     {
+      "id": "G3-service-operator-interruption-exact-CI",
+      "state": "pending-exact-resulting-operator-interruption-recovery",
+      "goal": "First reconcile exact resulting installed operator-APPLY CLI interruption and explicit recovery service CI. Require one candidate-bound held readiness probe and reload_requested pending record, exact own operator process-group termination, both stale locks preserved and recovery refused while locked. Fixture-only manual removal of those same two captured lock inodes requires recorded owners and their process group absent. Then require explicit recover exit1/rolled_back/explicit_recovery, preserved last-confirmed revision, pending cleared, restored HTTP/HTTPS bytes, no POST replay, same live owned service and idempotent repeated recovery. Timeout, cancellation, foreign/stale identity or unknown cleanup remains failure with private runtime retained. This is not automatic production lock cleanup, all crash points or binary/package rollback. Preserve exactf9 controlled-drain/startup/TLS/restart/journal scopes without unchanged reruns. FullG3/V1, abnormal/orphan recovery, package upgrade/rollback/backup restore, permanent distribution, independent release acceptance,60-minute soak and semantic Continuum remain open."
+    },
+    {
       "id": "G3-service-slow-drain-exact-CI",
-      "state": "pending-exact-resulting-controlled-slow-drain",
-      "goal": "First reconcile exact resulting controlled held-HTTPS-origin response and paused verified TLS-client graceful-stop service CI. Require all14 narrow controlledSlowDrainProof facts: same owned session/invocation/launcher, one pending manager stop, deactivating unit and live owned native group while the exact response remains incomplete, then explicit origin release and client resume, exact full verified-TLS payload, completed stop and fresh owned resource absence. Timeout, cancellation, malformed/foreign/stale identity, premature close or unknown cleanup must fail closed and retain private runtime. Preserve the accepted13d startup-refusal and combined TLS/restart/journal scopes without unchanged reruns. This controlled response hold and client pause do not establish pure network backpressure, all slow-client cases or60-minute soak. FullG3/Production V1, abnormal/orphan recovery, distinct package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and semantic Continuum remain open."
+      "state": "exact-controlled-held-response-drain-combined-tls-cleanup-verified",
+      "goal": "Both exactf9 native workflows completed success with all32 actual required steps. Each observed one controlled held-HTTPS-origin response and paused verified-TLS client graceful stop, all14 narrow drain proofs, exact payload completion and owned retirement. Prior unhealthy startup-refusal/all11 proofs, three healthy combined TLS sessions, one manager restart, three attributable journal checks and all13 final cleanup confirmations plus private dependency/bootstrap removal also passed. Research PR actually ran21/7/27/48; research push runtime was skipped. Controlled held response and client pause do not establish pure network backpressure, the full slow-client/drain matrix or60-minute soak. BroadG3/Production V1 and historical internal failure causes remain unaccepted/unknown."
     },
     {
       "id": "G3-service-failed-start-exact-CI",
@@ -3282,7 +3477,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First reconcile exact resulting controlled held-HTTPS-origin response and paused verified TLS-client graceful-stop service CI. Require all14 narrow controlledSlowDrainProof facts: same owned session/invocation/launcher, one pending manager stop, deactivating unit and live owned native group while the exact response remains incomplete, then explicit origin release and client resume, exact full verified-TLS payload, completed stop and fresh owned resource absence. Timeout, cancellation, malformed/foreign/stale identity, premature close or unknown cleanup must fail closed and retain private runtime. Preserve the accepted13d startup-refusal and combined TLS/restart/journal scopes without unchanged reruns. This controlled response hold and client pause do not establish pure network backpressure, all slow-client cases or60-minute soak. FullG3/Production V1, abnormal/orphan recovery, distinct package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and semantic Continuum remain open.",
+  "nextConcreteTask": "First reconcile exact resulting installed operator-APPLY CLI interruption and explicit recovery service CI. Require one candidate-bound held readiness probe and reload_requested pending record, exact own operator process-group termination, both stale locks preserved and recovery refused while locked. Fixture-only manual removal of those same two captured lock inodes requires recorded owners and their process group absent. Then require explicit recover exit1/rolled_back/explicit_recovery, preserved last-confirmed revision, pending cleared, restored HTTP/HTTPS bytes, no POST replay, same live owned service and idempotent repeated recovery. Timeout, cancellation, foreign/stale identity or unknown cleanup remains failure with private runtime retained. This is not automatic production lock cleanup, all crash points or binary/package rollback. Preserve exactf9 controlled-drain/startup/TLS/restart/journal scopes without unchanged reruns. FullG3/V1, abnormal/orphan recovery, package upgrade/rollback/backup restore, permanent distribution, independent release acceptance,60-minute soak and semantic Continuum remain open.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -3490,7 +3685,7 @@
     "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "CONTROLLED_SLOW_DRAIN_LOCAL_CONTROLS_VERIFIED_EXACT_SERVICE_CI_PENDING",
+    "currentGate": "OPERATOR_INTERRUPTION_LOCAL_CONTROLS_VERIFIED_EXACT_SERVICE_CI_PENDING",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -3559,20 +3754,22 @@
     "serviceFailedStartEvidence": "x10/evidence/g3-service-failed-start.json",
     "serviceOriginHttpsHostedEvidence": "x10/evidence/g3-service-failed-start.json",
     "serviceSlowDrainEvidence": "x10/evidence/g3-service-slow-drain.json",
-    "serviceFailedStartHostedEvidence": "x10/evidence/g3-service-slow-drain.json"
+    "serviceFailedStartHostedEvidence": "x10/evidence/g3-service-slow-drain.json",
+    "serviceOperatorInterruptionEvidence": "x10/evidence/g3-service-operator-interruption.json",
+    "serviceSlowDrainHostedEvidence": "x10/evidence/g3-service-operator-interruption.json"
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-drain-resume-20261025T150742Z",
-    "sourceBase": "13d62d170f2415158988d6afade59024c3a12e7f",
-    "publicationParent": "c4132a80d7731ea20d770ca2201d0aeeb338be73",
+    "runId": "x10-operator-cancel-20261025T153430Z",
+    "sourceBase": "f9fb74307451e75ff849ba7eeca0cfefd61a7d36",
+    "publicationParent": "8d357d82eb27621265dbb9e40bfbe2d882f2d449",
     "implementationCommit": null,
     "implementationCommitLocator": "Current publication commit; exact resulting CI required",
-    "scope": "Controlled held-HTTPS-origin response and paused verified-TLS client graceful-stop acceptance candidate",
-    "result": "Added a bounded same-session held-response graceful-stop control with exact payload completion, retirement and cleanup requirements; actual new service CI pending.",
-    "evidence": "x10/evidence/g3-service-slow-drain.json",
-    "perFileLedger": "x10/review/g3-service-slow-drain-ledger.json",
-    "localAcceptance": "LOCAL_CONTROLLED_HELD_RESPONSE_DRAIN_CONTRACTS_FIXTURES_VERIFIED_EXACT_SERVICE_CI_PENDING",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_CONTROLLED_SLOW_DRAIN_SERVICE",
+    "scope": "Controlled installed APPLY CLI interruption and explicit trusted-operator fixture recovery candidate",
+    "result": "Added one candidate-bound installed APPLY CLI interruption control, exact operator and manual fixture-lock inspection, explicit rollback and unchanged-service/content requirements; actual new service CI pending.",
+    "evidence": "x10/evidence/g3-service-operator-interruption.json",
+    "perFileLedger": "x10/review/g3-service-operator-interruption-ledger.json",
+    "localAcceptance": "PARTIAL_CONTRACTS_PASS_LOCAL_OPERATOR_PROFILE_UNAVAILABLE_PRIOR_CLEANUP_FAIL_UNKNOWN_EXACT_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_OPERATOR_INTERRUPTION_RECOVERY_SERVICE",
     "nativeRuntimeChanged": false,
     "controllerRuntimeChanged": false,
     "alphaRuntimeChanged": false,
@@ -3585,32 +3782,33 @@
     "releaseContractNarrowed": false,
     "failedStartAccepted": false,
     "slowDrainAccepted": false,
+    "operatorInterruptionAccepted": false,
     "serviceAccepted": false,
     "productionAccepted": false,
     "actualHistoricalCauseProven": false,
-    "nextConcreteTask": "First reconcile exact resulting controlled held-HTTPS-origin response and paused verified TLS-client graceful-stop service CI. Require all14 narrow controlledSlowDrainProof facts: same owned session/invocation/launcher, one pending manager stop, deactivating unit and live owned native group while the exact response remains incomplete, then explicit origin release and client resume, exact full verified-TLS payload, completed stop and fresh owned resource absence. Timeout, cancellation, malformed/foreign/stale identity, premature close or unknown cleanup must fail closed and retain private runtime. Preserve the accepted13d startup-refusal and combined TLS/restart/journal scopes without unchanged reruns. This controlled response hold and client pause do not establish pure network backpressure, all slow-client cases or60-minute soak. FullG3/Production V1, abnormal/orphan recovery, distinct package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and semantic Continuum remain open.",
+    "nextConcreteTask": "First reconcile exact resulting installed operator-APPLY CLI interruption and explicit recovery service CI. Require one candidate-bound held readiness probe and reload_requested pending record, exact own operator process-group termination, both stale locks preserved and recovery refused while locked. Fixture-only manual removal of those same two captured lock inodes requires recorded owners and their process group absent. Then require explicit recover exit1/rolled_back/explicit_recovery, preserved last-confirmed revision, pending cleared, restored HTTP/HTTPS bytes, no POST replay, same live owned service and idempotent repeated recovery. Timeout, cancellation, foreign/stale identity or unknown cleanup remains failure with private runtime retained. This is not automatic production lock cleanup, all crash points or binary/package rollback. Preserve exactf9 controlled-drain/startup/TLS/restart/journal scopes without unchanged reruns. FullG3/V1, abnormal/orphan recovery, package upgrade/rollback/backup restore, permanent distribution, independent release acceptance,60-minute soak and semantic Continuum remain open.",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_CONTROLLED_SLOW_DRAIN_SERVICE"
+      "state": "PENDING_EXACT_RESULTING_OPERATOR_INTERRUPTION_RECOVERY_SERVICE"
     },
     "newPurchases": false,
     "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
-    "state": "EXACT_UNHEALTHY_START_REFUSAL_SAFE_RECOVERY_COMBINED_TLS_AND_CLEANUP_VERIFIED",
-    "implementationCommit": "13d62d170f2415158988d6afade59024c3a12e7f",
-    "implementationTree": "56f62105c38d6f7afa25d11d1c798fede10ed752",
-    "evidence": "x10/evidence/g3-service-slow-drain.json",
+    "state": "EXACT_CONTROLLED_HELD_RESPONSE_DRAIN_COMBINED_TLS_AND_CLEANUP_VERIFIED",
+    "implementationCommit": "f9fb74307451e75ff849ba7eeca0cfefd61a7d36",
+    "implementationTree": "c9db39332459806d73c82af5ed866f775e24892b",
+    "evidence": "x10/evidence/g3-service-operator-interruption.json",
     "nativeRunIds": [
-      40189483752,
-      40189486360
+      40206143958,
+      40206147728
     ],
     "nativeJobIds": [
-      121157265783,
-      121157272135
+      121207436129,
+      121207440449
     ],
-    "researchPRRunId": 40189486361,
-    "researchPRJobId": 121157293561,
-    "actualPRMergeCheckout": "c3212f21d16379e498fed09ae95be9f38d0ea944",
+    "researchPRRunId": 40206147724,
+    "researchPRJobId": 121207450091,
+    "actualPRMergeCheckout": "4f25268fa2ef0c2e41d89d052b259c5bb48bdaca",
     "bothExactNativeWorkflowsSuccessful": true,
     "actualNonrootManagerObserved": true,
     "threeNativeStartStopReadinessAndIOPhasesPerRun": true,
@@ -3644,11 +3842,11 @@
     "nativeGroupsPassed": 20,
     "alphaTestsPassed": 62,
     "recipeTestsPassed": 28,
-    "lifecycleContractPassed": 364,
+    "lifecycleContractPassed": 387,
     "lifecycleContractRootSkipped": 1,
     "journalContractPassed": 45,
     "tlsFixtureContractPassed": 16,
-    "dependencyContractPassed": 69,
+    "dependencyContractPassed": 75,
     "hostedOfficial": {
       "files": 35,
       "filesPassed": 34,
@@ -3681,7 +3879,7 @@
     "productionAccepted": false,
     "workflowRerunsRequested": 0,
     "allThirteenOwnedServiceCleanupConfirmations": true,
-    "originFixtureContractPassed": 23,
+    "originFixtureContractPassed": 29,
     "combinedHttpsServicePathObserved": true,
     "broaderTlsServiceContractAccepted": false,
     "failedStartAccepted": false,
@@ -3699,16 +3897,16 @@
     "upstreamTLSActivated": true,
     "nativeArtifacts": [
       {
-        "runId": 40189483752,
-        "artifactId": 12597569151,
-        "zipBytes": 116413,
-        "zipSha256": "4b6246f5e1a9c34dd5a0b84997579e91e7e5f031817323895a0cadf84e5a502f"
+        "runId": 40206143958,
+        "artifactId": 12603209658,
+        "zipBytes": 119080,
+        "zipSha256": "e3dee78a6ced6763a1547394fd7bc202f3f9773c3a71db6847f1f3b93280c7c8"
       },
       {
-        "runId": 40189486360,
-        "artifactId": 12597049980,
-        "zipBytes": 116104,
-        "zipSha256": "f416a3162da9e1c34ceeebbdb56a5bc154617ee92ba6b96448a3bc497d20bae0"
+        "runId": 40206147728,
+        "artifactId": 12604180289,
+        "zipBytes": 118946,
+        "zipSha256": "599da3d9782302279573044d6da698c03c55e0ca11ef9b11e84f50646674d884"
       }
     ],
     "failedStartChecks": 1,
@@ -3728,9 +3926,29 @@
     "controlledUnhealthyStartupRefusalObserved": true,
     "healthyRecoveryWithFreshIdentityObserved": true,
     "slowDrainAccepted": false,
+    "slowClientContractPassed": 27,
+    "controlledSlowDrainChecks": 1,
+    "controlledSlowDrainProof": {
+      "clientPaused": true,
+      "originResponseHeld": true,
+      "sameSessionObserved": true,
+      "managerStopPending": true,
+      "nativeGroupLiveDuringStop": true,
+      "unitDeactivatingObserved": true,
+      "incompleteResponseObserved": true,
+      "payloadCompleted": true,
+      "tlsVerified": true,
+      "managerStopCompleted": true,
+      "launcherExited": true,
+      "nativeGroupsAbsent": true,
+      "listeningPortsClosed": true,
+      "controlSocketAbsent": true
+    },
+    "controlledHeldResponseDrainObserved": true,
+    "operatorInterruptionAccepted": false,
     "freshAuditReference": {
-      "sha256": "acf90737c21557f62f8094a21820df499b260e0d674c920f2ea84d96ab07604e",
-      "bytes": 27296
+      "sha256": "e8a4fc1e1a2383c2dfe86e964f475df8ba1fa2e8ff7b9cab433e9f5a8b857b52",
+      "bytes": 31141
     }
   },
   "v1DevelopmentPassHistory": [
@@ -4922,6 +5140,40 @@
       },
       "newPurchases": false,
       "productionDeployChanged": false
+    },
+    {
+      "runId": "x10-drain-resume-20261025T150742Z",
+      "sourceBase": "13d62d170f2415158988d6afade59024c3a12e7f",
+      "publicationParent": "c4132a80d7731ea20d770ca2201d0aeeb338be73",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+      "scope": "Controlled held-HTTPS-origin response and paused verified-TLS client graceful-stop acceptance candidate",
+      "result": "Added a bounded same-session held-response graceful-stop control with exact payload completion, retirement and cleanup requirements; actual new service CI pending.",
+      "evidence": "x10/evidence/g3-service-slow-drain.json",
+      "perFileLedger": "x10/review/g3-service-slow-drain-ledger.json",
+      "localAcceptance": "LOCAL_CONTROLLED_HELD_RESPONSE_DRAIN_CONTRACTS_FIXTURES_VERIFIED_EXACT_SERVICE_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_CONTROLLED_SLOW_DRAIN_SERVICE",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "acceptanceHarnessChanged": true,
+      "dependencyCleanupReceiptProfileChanged": true,
+      "knownGuardsPreserved": true,
+      "releaseContractOrProfileChanged": false,
+      "releaseContractNarrowed": false,
+      "failedStartAccepted": false,
+      "slowDrainAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "actualHistoricalCauseProven": false,
+      "nextConcreteTask": "First reconcile exact resulting controlled held-HTTPS-origin response and paused verified TLS-client graceful-stop service CI. Require all14 narrow controlledSlowDrainProof facts: same owned session/invocation/launcher, one pending manager stop, deactivating unit and live owned native group while the exact response remains incomplete, then explicit origin release and client resume, exact full verified-TLS payload, completed stop and fresh owned resource absence. Timeout, cancellation, malformed/foreign/stale identity, premature close or unknown cleanup must fail closed and retain private runtime. Preserve the accepted13d startup-refusal and combined TLS/restart/journal scopes without unchanged reruns. This controlled response hold and client pause do not establish pure network backpressure, all slow-client cases or60-minute soak. FullG3/Production V1, abnormal/orphan recovery, distinct package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and semantic Continuum remain open.",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_CONTROLLED_SLOW_DRAIN_SERVICE"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
     }
   ],
   "v1VerificationReceiptHistory": [
@@ -5896,6 +6148,144 @@
         "sha256": "821ffb4e2275980adc6282afde998b712e2f085e0c08ec6bf58320d2e5266cff",
         "bytes": 25036
       }
+    },
+    {
+      "state": "EXACT_UNHEALTHY_START_REFUSAL_SAFE_RECOVERY_COMBINED_TLS_AND_CLEANUP_VERIFIED",
+      "implementationCommit": "13d62d170f2415158988d6afade59024c3a12e7f",
+      "implementationTree": "56f62105c38d6f7afa25d11d1c798fede10ed752",
+      "evidence": "x10/evidence/g3-service-slow-drain.json",
+      "nativeRunIds": [
+        40189483752,
+        40189486360
+      ],
+      "nativeJobIds": [
+        121157265783,
+        121157272135
+      ],
+      "researchPRRunId": 40189486361,
+      "researchPRJobId": 121157293561,
+      "actualPRMergeCheckout": "c3212f21d16379e498fed09ae95be9f38d0ea944",
+      "bothExactNativeWorkflowsSuccessful": true,
+      "actualNonrootManagerObserved": true,
+      "threeNativeStartStopReadinessAndIOPhasesPerRun": true,
+      "actualManagerRestartCommands": 1,
+      "completedManagerRestarts": 1,
+      "oldLauncherExited": true,
+      "oldNativeGroupsAbsent": true,
+      "freshSession": true,
+      "freshInvocation": true,
+      "boundedJournalChecksPerRun": 3,
+      "journalRecordsObservedPerRun": 99,
+      "journalRunningMarkersPerRun": 3,
+      "downstreamTLSActivated": true,
+      "downstreamTLSSessionChecks": 3,
+      "downstreamTLSBodyChecks": 6,
+      "downstreamTLSUploadChecks": 3,
+      "downstreamTLSStreamChecks": 3,
+      "downstreamTLS12Checks": 3,
+      "downstreamTLS13Checks": 3,
+      "downstreamTLSCertificateChecks": 12,
+      "downstreamTLSWrongCARefusals": 3,
+      "downstreamTLSWrongNameRefusals": 3,
+      "appSocketsRemaining": 0,
+      "runtimeUnitRemoved": true,
+      "unitEnabled": false,
+      "privateDependencyRuntimeRemoved": true,
+      "bootstrapRuntimeRemoved": true,
+      "bootstrapTemporaryRootRemoved": true,
+      "primaryFailure": null,
+      "cleanupFailures": [],
+      "nativeGroupsPassed": 20,
+      "alphaTestsPassed": 62,
+      "recipeTestsPassed": 28,
+      "lifecycleContractPassed": 364,
+      "lifecycleContractRootSkipped": 1,
+      "journalContractPassed": 45,
+      "tlsFixtureContractPassed": 16,
+      "dependencyContractPassed": 69,
+      "hostedOfficial": {
+        "files": 35,
+        "filesPassed": 34,
+        "filesSkipped": 1,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1131,
+          "passed": 1105,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "researchPRActualSuites": [
+        21,
+        7,
+        27,
+        48
+      ],
+      "researchPushRuntimeSkipped": true,
+      "historicalA03RawRejectionConditionKnown": false,
+      "completeAuditHistoryAccepted": false,
+      "originTransport": "VERIFIED_HTTPS",
+      "downstreamHttpsServiceAccepted": true,
+      "verifiedHttpsOriginServiceAccepted": true,
+      "combinedBothLegsTlsServiceAccepted": false,
+      "fullG3ServiceAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0,
+      "allThirteenOwnedServiceCleanupConfirmations": true,
+      "originFixtureContractPassed": 23,
+      "combinedHttpsServicePathObserved": true,
+      "broaderTlsServiceContractAccepted": false,
+      "failedStartAccepted": false,
+      "upstreamTLSSessionChecks": 3,
+      "upstreamTLSBodyChecks": 3,
+      "upstreamTLSUploadChecks": 3,
+      "upstreamTLSStreamChecks": 3,
+      "upstreamTLSRollbackChecks": 3,
+      "upstreamTLSCandidate502Checks": 3,
+      "upstreamTLSNoPostReplayChecks": 3,
+      "upstreamTLSDirectChecks": 1,
+      "upstreamTLSWrongCARefusals": 1,
+      "upstreamTLSWrongNameRefusals": 1,
+      "upstreamTLSPlaintextRefusals": 1,
+      "upstreamTLSActivated": true,
+      "nativeArtifacts": [
+        {
+          "runId": 40189483752,
+          "artifactId": 12597569151,
+          "zipBytes": 116413,
+          "zipSha256": "4b6246f5e1a9c34dd5a0b84997579e91e7e5f031817323895a0cadf84e5a502f"
+        },
+        {
+          "runId": 40189486360,
+          "artifactId": 12597049980,
+          "zipBytes": 116104,
+          "zipSha256": "f416a3162da9e1c34ceeebbdb56a5bc154617ee92ba6b96448a3bc497d20bae0"
+        }
+      ],
+      "failedStartChecks": 1,
+      "failedStartProof": {
+        "unhealthyReadinessObserved": true,
+        "managerRefused": true,
+        "hookExitObserved": true,
+        "bindingAbsent": true,
+        "launcherExited": true,
+        "nativeGroupsAbsent": true,
+        "listeningPortsClosed": true,
+        "controlSocketAbsent": true,
+        "failedSessionStopped": true,
+        "managerResetConfirmed": true,
+        "healthyRestartFresh": true
+      },
+      "controlledUnhealthyStartupRefusalObserved": true,
+      "healthyRecoveryWithFreshIdentityObserved": true,
+      "slowDrainAccepted": false,
+      "freshAuditReference": {
+        "sha256": "acf90737c21557f62f8094a21820df499b260e0d674c920f2ea84d96ab07604e",
+        "bytes": 27296
+      }
     }
   ],
   "currentNativeCIFailure": {
@@ -6294,21 +6684,21 @@
     }
   ],
   "currentServiceLifecycleCIState": {
-    "state": "EXACT_UNHEALTHY_START_REFUSAL_SAFE_RECOVERY_COMBINED_TLS_AND_CLEANUP_VERIFIED",
-    "implementationCommit": "13d62d170f2415158988d6afade59024c3a12e7f",
-    "implementationTree": "56f62105c38d6f7afa25d11d1c798fede10ed752",
-    "evidence": "x10/evidence/g3-service-slow-drain.json",
+    "state": "EXACT_CONTROLLED_HELD_RESPONSE_DRAIN_COMBINED_TLS_AND_CLEANUP_VERIFIED",
+    "implementationCommit": "f9fb74307451e75ff849ba7eeca0cfefd61a7d36",
+    "implementationTree": "c9db39332459806d73c82af5ed866f775e24892b",
+    "evidence": "x10/evidence/g3-service-operator-interruption.json",
     "nativeRunIds": [
-      40189483752,
-      40189486360
+      40206143958,
+      40206147728
     ],
     "nativeJobIds": [
-      121157265783,
-      121157272135
+      121207436129,
+      121207440449
     ],
-    "researchPRRunId": 40189486361,
-    "researchPRJobId": 121157293561,
-    "actualPRMergeCheckout": "c3212f21d16379e498fed09ae95be9f38d0ea944",
+    "researchPRRunId": 40206147724,
+    "researchPRJobId": 121207450091,
+    "actualPRMergeCheckout": "4f25268fa2ef0c2e41d89d052b259c5bb48bdaca",
     "bothExactNativeWorkflowsSuccessful": true,
     "actualNonrootManagerObserved": true,
     "threeNativeStartStopReadinessAndIOPhasesPerRun": true,
@@ -6342,11 +6732,11 @@
     "nativeGroupsPassed": 20,
     "alphaTestsPassed": 62,
     "recipeTestsPassed": 28,
-    "lifecycleContractPassed": 364,
+    "lifecycleContractPassed": 387,
     "lifecycleContractRootSkipped": 1,
     "journalContractPassed": 45,
     "tlsFixtureContractPassed": 16,
-    "dependencyContractPassed": 69,
+    "dependencyContractPassed": 75,
     "hostedOfficial": {
       "files": 35,
       "filesPassed": 34,
@@ -6379,7 +6769,7 @@
     "productionAccepted": false,
     "workflowRerunsRequested": 0,
     "allThirteenOwnedServiceCleanupConfirmations": true,
-    "originFixtureContractPassed": 23,
+    "originFixtureContractPassed": 29,
     "combinedHttpsServicePathObserved": true,
     "broaderTlsServiceContractAccepted": false,
     "failedStartAccepted": false,
@@ -6397,16 +6787,16 @@
     "upstreamTLSActivated": true,
     "nativeArtifacts": [
       {
-        "runId": 40189483752,
-        "artifactId": 12597569151,
-        "zipBytes": 116413,
-        "zipSha256": "4b6246f5e1a9c34dd5a0b84997579e91e7e5f031817323895a0cadf84e5a502f"
+        "runId": 40206143958,
+        "artifactId": 12603209658,
+        "zipBytes": 119080,
+        "zipSha256": "e3dee78a6ced6763a1547394fd7bc202f3f9773c3a71db6847f1f3b93280c7c8"
       },
       {
-        "runId": 40189486360,
-        "artifactId": 12597049980,
-        "zipBytes": 116104,
-        "zipSha256": "f416a3162da9e1c34ceeebbdb56a5bc154617ee92ba6b96448a3bc497d20bae0"
+        "runId": 40206147728,
+        "artifactId": 12604180289,
+        "zipBytes": 118946,
+        "zipSha256": "599da3d9782302279573044d6da698c03c55e0ca11ef9b11e84f50646674d884"
       }
     ],
     "failedStartChecks": 1,
@@ -6426,9 +6816,29 @@
     "controlledUnhealthyStartupRefusalObserved": true,
     "healthyRecoveryWithFreshIdentityObserved": true,
     "slowDrainAccepted": false,
+    "slowClientContractPassed": 27,
+    "controlledSlowDrainChecks": 1,
+    "controlledSlowDrainProof": {
+      "clientPaused": true,
+      "originResponseHeld": true,
+      "sameSessionObserved": true,
+      "managerStopPending": true,
+      "nativeGroupLiveDuringStop": true,
+      "unitDeactivatingObserved": true,
+      "incompleteResponseObserved": true,
+      "payloadCompleted": true,
+      "tlsVerified": true,
+      "managerStopCompleted": true,
+      "launcherExited": true,
+      "nativeGroupsAbsent": true,
+      "listeningPortsClosed": true,
+      "controlSocketAbsent": true
+    },
+    "controlledHeldResponseDrainObserved": true,
+    "operatorInterruptionAccepted": false,
     "freshAuditReference": {
-      "sha256": "acf90737c21557f62f8094a21820df499b260e0d674c920f2ea84d96ab07604e",
-      "bytes": 27296
+      "sha256": "e8a4fc1e1a2383c2dfe86e964f475df8ba1fa2e8ff7b9cab433e9f5a8b857b52",
+      "bytes": 31141
     }
   }
 }

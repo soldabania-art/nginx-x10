@@ -1772,3 +1772,69 @@ PID-to-signal races remain explicit. Earlier adverse evidence and unknown raw
 historical causes are preserved. Distinct package upgrade/rollback/backup restore,
 permanent distribution, independent release acceptance, full G3/V1 and semantic
 Continuum remain open; the next portfolio project remains waiting.
+
+
+## G3 operator interruption requires exact locks and explicit recovery
+
+Both exactf9 native workflows completed success with all32 required actual steps.
+Each observed one controlled held-HTTPS-origin response and paused verified-TLS
+client graceful stop, all14 narrow drain proofs and exact payload completion.
+The prior startup refusal/all11 proofs, three healthy combined TLS sessions, one
+manager restart, three attributable journal checks and all13 final cleanup
+confirmations also passed, including private Node/bootstrap removal. Fresh86-proof
+review reused approved archives and logs; research PR actually ran21/7/27/48,
+while push runtime was skipped. These scoped observations do not accept every
+slow-client state, network backpressure, recovery failure or Production V1.
+
+The new candidate interrupts one installed APPLY CLI while a unique candidate's
+native readiness probe is held and its durable transaction is reload_requested.
+Before signalling, it must match the fresh current last-confirmed revision,
+candidate/input/fragment/history relation, service/native/session/invocation and
+the two exact owned operator processes plus their two captured lock inodes.
+Only the captured operator process group receives SIGTERM; the service continues.
+A timeout or broad process search is not accepted as confirmed interruption.
+
+Both stale locks must remain after those operators exit. Installed recover must
+first refuse alpha_locked without changing the transaction. The test helper then
+models the existing documented trusted-operator manual-inspection step: after
+confirming the recorded lock owners and their process group absent, remove only
+the same two inspected fixture-owned lock inodes. This helper action is confined
+to its disposable installation; no installed automatic lock-reaping API is added.
+An unknown, replaced, foreign or still-owned lock must remain untouched.
+
+Explicit installed recover must return exit1/rolled_back/explicit_recovery with
+the expected candidate/previous-revision relation, clear pending and restore
+exact HTTP and verified HTTPS content. The same live owned service/session/
+invocation must remain, application POST counts must not advance, and repeated
+recover must return nothing_pending. A report requires operatorInterruptionChecks1
+and all14 narrow operatorInterruptionProof booleans; strict dependency cleanup
+must refuse prior, missing or partial interruption receipts. Previous failed-start,
+controlled drain, combined TLS/restart/journal and final cleanup guards remain.
+Final hashes, actual local counts, independent reviews and adverse drafts are in
+[interruption evidence](evidence/g3-service-operator-interruption.json).
+
+This is one controlled APPLY-CLI interruption and explicit recovery scenario.
+It does not establish automatic production stale-lock cleanup, all crash/storage/
+orphan states, binary/package rollback, all-traffic atomic cutover or reversal
+of application side effects. Local root contracts and loopback/helper checks do
+not execute the actual nonroot managed native service; exact resulting CI remains
+pending and may fail. Broad operatorInterruptionAccepted, serviceAccepted and
+productionAccepted remain false.
+
+Native/controller/alpha, unit recipe, prior slow-client/journal/downstream TLS
+helpers and release contract/profile remain unchanged. The manual-inspection
+rules in alpha/control documentation still apply to real operators. Same-UID
+trust, user-space timeout limits and PID-to-signal races remain explicit. Earlier
+adverse evidence, unknown historical causes and the prior expired-lease safe
+resume record are preserved. Full G3/V1, abnormal/orphan recovery, distinct package
+upgrade/rollback/backup restore, permanent distribution, independent release
+acceptance,60-minute soak and semantic Continuum remain open.
+
+
+A local process-fixture draft timed out because its PID namespace and mounted
+/proc view differ. Some own private fixture prefixes were removed before process
+absence was proven; old cleanup remains FAIL/UNKNOWN. The final helper refuses
+this profile before any spawn. Nine physical group cases are SKIP locally, not
+PASS; exact supported-host CI must run all18 without skips. No namespace entry,
+host-PID signals or permission changes were used. Later CI success cannot erase
+this earlier local cleanup uncertainty.

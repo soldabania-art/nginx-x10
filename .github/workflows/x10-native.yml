@@ -71,6 +71,8 @@ jobs:
         run: node --test --test-reporter=tap x10/service/origin-fixture.test.mjs > x10/.build/ci-evidence/service-origin-contract.tap
       - name: Validate bounded paused TLS client controls
         run: node --test --test-reporter=tap x10/service/slow-client.test.mjs > x10/.build/ci-evidence/service-slow-client-contract.tap
+      - name: Validate owned operator interruption controls
+        run: node --test --test-reporter=tap x10/service/interrupted-operator.test.mjs > x10/.build/ci-evidence/service-interrupted-operator-contract.tap
       - name: Validate authenticated Node dependency refusal controls
         run: node --test --test-reporter=tap x10/service/verified-node.test.mjs > x10/.build/ci-evidence/verified-node-contract.tap
       - name: Build dependencies and optional test clients
@@ -131,7 +133,7 @@ jobs:
           const evidence = 'x10/.build/ci-evidence';
           let root, prefix, archive, envelope;
           const source = 'x10/service/lifecycle-check.mjs';
-          const sourceSha = '63fff9123b4d4d87c52b4db449f0f13ce45ea8b40f3e804c44a3e142b6eaf872';
+          const sourceSha = '5bc6a3b2bd4ac783ae15532ee6bd6d7015e64d1dc6c91f69ee76c3e4b6a9aef9';
           const hash = b => createHash('sha256').update(b).digest('hex');
           const save = (name, report) => writeFile(evidence + '/' + name + '.json', JSON.stringify(report) + '\n');
           const status = { ok: false, stage: 'download', code: 'bootstrap_failed', runtimeRemoved: false,

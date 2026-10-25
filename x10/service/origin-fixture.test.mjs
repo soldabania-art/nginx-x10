@@ -7,6 +7,7 @@ import { EventEmitter } from 'node:events';
 import { chmod, mkdtemp, readFile, rm, lstat } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { X509Certificate } from 'node:crypto';
 import { createOriginFixture, routeOriginReadiness, queryOriginReadiness, originPortClosed,
   ORIGIN_FIXTURE_ERROR_CODES } from './origin-fixture.mjs';
 import { probeServiceTLS, expectServiceTLSRefusal } from './tls-fixture.mjs';
@@ -87,7 +88,7 @@ test('source-extracted close waits for pending request and socket close events',
   assert(start>0&&end>start);const pending=new Set(),originSockets=new Set([{}]),relaySockets=new Set([{}]);
   const request={destroy(){setTimeout(()=>{pending.delete(request);originSockets.clear();relaySockets.clear();},30);}};pending.add(request);
   const fn=new Function('pending','originSockets','relaySockets','closeServer','originPortClosed','fail',
-    'let closing=false;let origin,relay,port,readyPort,drain=null;const abortDrain=()=>{};'+source.slice(start,end)+';return close;')(pending,originSockets,relaySockets,async()=>true,async()=>true,c=>{throw Object.assign(new Error(c),{code:c});});
+    'let closing=false;let origin,relay,port,readyPort,drain=null,readinessHold=null;const abortDrain=()=>{};const abortReadinessHold=()=>{};const readinessHoldClosed=()=>true;'+source.slice(start,end)+';return close;')(pending,originSockets,relaySockets,async()=>true,async()=>true,c=>{throw Object.assign(new Error(c),{code:c});});
   const before=performance.now();assert.deepEqual(await fn(),{originClosed:true,relayClosed:true,originPortClosed:true,relayPortClosed:true});assert(performance.now()-before>=20);assert.equal(pending.size,0);assert.equal(originSockets.size,0);assert.equal(relaySockets.size,0);
 });
 test('source-extracted close refuses missing owned request close confirmation', async () => {
@@ -95,7 +96,7 @@ test('source-extracted close refuses missing owned request close confirmation', 
   const start=source.indexOf('  async function close() {'),end=source.indexOf('\n  try {\n    pki =',start);
   const pending=new Set([{destroy(){}}]);
   const fn=new Function('pending','originSockets','relaySockets','closeServer','originPortClosed','fail',
-    'let closing=false;let origin,relay,port,readyPort,drain=null;const abortDrain=()=>{};'+source.slice(start,end)+';return close;')(pending,new Set(),new Set(),async()=>true,async()=>true,c=>{throw Object.assign(new Error(c),{code:c});});
+    'let closing=false;let origin,relay,port,readyPort,drain=null,readinessHold=null;const abortDrain=()=>{};const abortReadinessHold=()=>{};const readinessHoldClosed=()=>true;'+source.slice(start,end)+';return close;')(pending,new Set(),new Set(),async()=>true,async()=>true,c=>{throw Object.assign(new Error(c),{code:c});});
   await assert.rejects(fn(),{code:'origin_cleanup_unconfirmed'});assert.equal(pending.size,1);
 });
 
@@ -217,4 +218,106 @@ test('peer disconnect while held cannot grant completion or revive the handle', 
   const deadline=performance.now()+1000;while(!cap.snapshot().closed&&performance.now()<deadline)await later(10);
   assert.deepEqual(cap.snapshot(),{held:false,requested:true,released:false,completed:false,aborted:true,closed:true});
   assert.throws(()=>cap.release(),{code:'origin_fixture_invalid'});assert.equal(await cap.abort(),true);
+}));
+
+function verifiedOriginReady(fixture) {
+  return new Promise((resolve,reject)=>{
+    const req=https.get({host:'127.0.0.1',port:fixture.port,path:'/ready',servername:'localhost',ca:fixture.ca,
+      minVersion:'TLSv1.3',maxVersion:'TLSv1.3',agent:false},res=>{
+      if(!res.socket.authorized||!res.socket.getPeerCertificate(true).raw.equals(new X509Certificate(fixture.expectedCertificate).raw)){
+        res.destroy(new Error('fixed origin leaf mismatch'));return;
+      }
+      const chunks=[];let bytes=0;res.on('data',b=>{bytes+=b.length;if(bytes>4096)res.destroy(new Error('fixed origin ready bound'));else chunks.push(b);});
+      res.once('end',()=>resolve({status:res.statusCode,body:Buffer.concat(chunks)}));res.once('error',reject);
+    });req.setTimeout(1000,()=>req.destroy(new Error('fixed origin ready deadline')));req.once('error',reject);
+  });
+}
+async function withReadinessFixture(fn) {
+  const parent=await mkdtemp(path.join(os.tmpdir(),'x10-origin-ready-hold-'));await chmod(parent,0o700);let fixture;
+  const control={marker:tag,status:200,body:'ready\n',requests:0,delay:false,delayed:[]};
+  const native=http.createServer(async(req,res)=>{
+    control.requests++;assert.equal(req.url,'/ready');
+    try{
+      const upstream=await verifiedOriginReady(fixture);assert.equal(upstream.status,200);assert.equal(upstream.body.toString(),'ready\n');
+      if(control.delay){control.delayed.push(res);return;}
+      if(!res.destroyed){res.setHeader('X-X10-TLS-Probe',control.marker);res.writeHead(control.status);res.end(control.body);}
+    }catch{res.destroy();}
+  });
+  try{const gatewayPort=await listen(native);fixture=await createOriginFixture(parent,{gatewayPort});await fn(fixture,control);}
+  finally{if(fixture)await fixture.close();await close(native);await rm(parent,{recursive:true});}
+}
+function startHeldReadinessRequest(fixture,candidateTag) {
+  let headers=false,ended=false;let resolveDone,rejectDone;
+  const done=new Promise((resolve,reject)=>{resolveDone=resolve;rejectDone=reject;});done.catch(()=>{});
+  const req=http.get({host:'127.0.0.1',port:fixture.readyPort,path:`/tls-probe/${candidateTag}`,agent:false},res=>{
+    headers=true;const chunks=[];res.on('data',b=>chunks.push(b));res.once('error',rejectDone);
+    res.once('end',()=>{ended=true;resolveDone({status:res.statusCode,body:Buffer.concat(chunks)});});
+  });req.setTimeout(10000,()=>req.destroy(new Error('fixed readiness hold deadline')));req.once('error',rejectDone);
+  return {done,snapshot:()=>({headers,ended}),cancel:()=>req.destroy()};
+}
+async function waitFor(fn){const deadline=performance.now()+1500;while(performance.now()<deadline){if(fn())return;await later(10);}assert.fail('fixed fixture observation deadline');}
+
+test('readiness hold requires one newly registered never-queried candidate', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  assert.throws(()=>fixture.prepareReadinessHold(tag),{code:'origin_fixture_invalid'});
+  fixture.candidate({tag:otherTag});control.marker=otherTag;assert.equal((await request(fixture.readyPort,`/tls-probe/${otherTag}`)).status,200);
+  assert.throws(()=>fixture.prepareReadinessHold(otherTag),{code:'origin_fixture_invalid'});
+  fixture.candidate({tag});for(const input of [undefined,'',Buffer.from(tag),{toString:()=>tag},'f'.repeat(32)])assert.throws(()=>fixture.prepareReadinessHold(input),{code:'origin_fixture_invalid'});
+  assert.throws(()=>fixture.prepareReadinessHold(tag,{}),{code:'origin_fixture_invalid'});
+  const cap=fixture.prepareReadinessHold(tag);assert(Object.isFrozen(cap));assert.deepEqual(cap.snapshot(),{held:false,requested:false,candidateReadyObserved:false,nativeProbeChecks:0,heldResponses:0,aborted:false,closed:false,released:false});
+  assert.throws(()=>cap.release(),{code:'origin_fixture_invalid'});assert.throws(()=>fixture.prepareReadinessHold(tag),{code:'origin_fixture_invalid'});
+  assert.equal(await cap.abort(),true);assert.equal(await cap.abort(),true);assert.equal(cap.snapshot().closed,true);assert.equal(cap.snapshot().nativeProbeChecks,0);
+}));
+
+test('readiness hold observes real verified origin route before withholding all healthy HTTP response', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  fixture.candidate({tag:otherTag});fixture.candidate({tag});const cap=fixture.prepareReadinessHold(tag);
+  const client=startHeldReadinessRequest(fixture,tag);await waitFor(()=>cap.snapshot().held);
+  const snapshot=cap.snapshot();assert.deepEqual(snapshot,{held:true,requested:true,candidateReadyObserved:true,nativeProbeChecks:1,heldResponses:1,aborted:false,closed:false,released:false});
+  snapshot.aborted=true;snapshot.held=false;assert.equal(cap.snapshot().held,true);
+  await later(100);assert.deepEqual(client.snapshot(),{headers:false,ended:false});assert.throws(()=>cap.release(),{code:'origin_fixture_invalid'});
+  control.marker=otherTag;assert.equal((await request(fixture.readyPort,`/tls-probe/${otherTag}`)).status,200);assert.equal(cap.snapshot().held,true);
+  assert.equal(await cap.abort(),true);await assert.rejects(client.done);assert.equal(cap.snapshot().closed,true);assert.equal(cap.snapshot().heldResponses,0);assert.equal(cap.snapshot().released,false);
+  const before=control.requests;assert.equal((await request(fixture.readyPort,`/tls-probe/${tag}`)).status,503);assert.equal(control.requests,before);
+  assert.equal((await request(fixture.readyPort,`/tls-probe/${otherTag}`)).status,200);
+  const stream=fixture.prepareDrain();assert.equal(await stream.abort(),true);
+}));
+
+test('stale marker, wrong readiness body and failed status never grant held authority', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  fixture.candidate({tag});const cap=fixture.prepareReadinessHold(tag);
+  for(const change of [{marker:otherTag,status:200,body:'ready\n'},{marker:tag,status:200,body:'wrong\n'},{marker:tag,status:503,body:'ready\n'}]){
+    Object.assign(control,change);assert.equal((await request(fixture.readyPort,`/tls-probe/${tag}`)).status,503);
+    assert.equal(cap.snapshot().held,false);assert.equal(cap.snapshot().candidateReadyObserved,false);assert.equal(cap.snapshot().nativeProbeChecks,0);
+  }
+  assert.equal(await cap.abort(),true);assert.equal(cap.snapshot().closed,true);
+}));
+
+test('readiness hold caps eight validated responses and rejects overflow without querying native', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  fixture.candidate({tag});const cap=fixture.prepareReadinessHold(tag),clients=Array.from({length:8},()=>startHeldReadinessRequest(fixture,tag));
+  await waitFor(()=>cap.snapshot().heldResponses===8);assert.equal(cap.snapshot().nativeProbeChecks,8);assert.equal(control.requests,8);
+  assert.equal((await request(fixture.readyPort,`/tls-probe/${tag}`)).status,503);assert.equal(control.requests,8);
+  for(const client of clients)assert.deepEqual(client.snapshot(),{headers:false,ended:false});
+  assert.equal(await cap.abort(),true);await Promise.all(clients.map(client=>assert.rejects(client.done)));
+  assert.equal(cap.snapshot().closed,true);assert.equal(cap.snapshot().heldResponses,0);assert.throws(()=>cap.release(),{code:'origin_fixture_invalid'});
+}));
+
+test('aborted pending native query cannot gain authority when its late response arrives', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  fixture.candidate({tag});control.delay=true;const cap=fixture.prepareReadinessHold(tag),client=startHeldReadinessRequest(fixture,tag);
+  await waitFor(()=>control.delayed.length===1);assert.equal(cap.snapshot().held,false);assert.equal(cap.snapshot().nativeProbeChecks,0);
+  assert.equal(await cap.abort(),true);await assert.rejects(client.done);
+  for(const res of control.delayed){res.setHeader('X-X10-TLS-Probe',tag);res.writeHead(200);res.end('ready\n');}
+  await later(50);assert.deepEqual(cap.snapshot(),{held:false,requested:true,candidateReadyObserved:false,nativeProbeChecks:0,heldResponses:0,aborted:true,closed:true,released:false});
+  assert.throws(()=>cap.release(),{code:'origin_fixture_invalid'});
+}));
+
+test('readiness hold expires by abort only and never supplies a healthy reply', {timeout:15000},async()=>withReadinessFixture(async(fixture)=>{
+  fixture.candidate({tag});const cap=fixture.prepareReadinessHold(tag),client=startHeldReadinessRequest(fixture,tag);await waitFor(()=>cap.snapshot().held);
+  await assert.rejects(client.done);assert.deepEqual(client.snapshot(),{headers:false,ended:false});assert.equal(await cap.abort(),true);
+  assert.equal(cap.snapshot().aborted,true);assert.equal(cap.snapshot().closed,true);assert.equal(cap.snapshot().held,false);assert.equal(cap.snapshot().released,false);
+  assert.throws(()=>cap.release(),{code:'origin_fixture_invalid'});
+}));
+
+test('origin close drains held readiness responses and refuses every late action', {timeout:15000},async()=>withReadinessFixture(async(fixture)=>{
+  fixture.candidate({tag});const cap=fixture.prepareReadinessHold(tag),client=startHeldReadinessRequest(fixture,tag);await waitFor(()=>cap.snapshot().held);
+  assert.deepEqual(await fixture.close(),{originClosed:true,relayClosed:true,originPortClosed:true,relayPortClosed:true});await assert.rejects(client.done);
+  assert.equal(cap.snapshot().aborted,true);assert.equal(cap.snapshot().closed,true);assert.equal(await cap.abort(),true);
+  assert.throws(()=>cap.release(),{code:'origin_fixture_invalid'});assert.throws(()=>fixture.prepareReadinessHold(tag),{code:'origin_fixture_invalid'});
 }));

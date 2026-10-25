@@ -124,8 +124,8 @@ export async function createOriginFixture(parent, options) {
   if (!validPort(gatewayPort) || !Buffer.isBuffer(body) || body.length < 1 || body.length > 4096
       || !Buffer.isBuffer(stream) || stream.length < 1 || stream.length > 1024 * 1024) fail('origin_fixture_invalid');
   const responseBody = Buffer.from(body), responseStream = Buffer.from(stream), originSockets = new Set(), relaySockets = new Set(), pending = new Set();
-  let origin, relay, port, readyPort, closing = false, echoRequests = 0, relay502 = 0, pki, drain = null;
-  const byTag = new Map();
+  let origin, relay, port, readyPort, closing = false, echoRequests = 0, relay502 = 0, pki, drain = null, readinessHold = null;
+  const byTag = new Map(), readinessQueried = new Set();
   // One private capability per fixture. Its expiry only aborts; it never sends
   // the remainder or grants completed-stream evidence.
   function abortDrain() {
@@ -137,16 +137,33 @@ export async function createOriginFixture(parent, options) {
   function expireDrain() {
     if (drain && !drain.released && !drain.completed && performance.now() >= drain.deadline) abortDrain();
   }
+  function readinessHoldClosed() {
+    if (readinessHold && readinessHold.aborted && !readinessHold.responses.size && !readinessHold.pending.size) readinessHold.closed = true;
+    return readinessHold?.closed === true;
+  }
+  function abortReadinessHold() {
+    if (!readinessHold) return;
+    readinessHold.aborted = true; clearTimeout(readinessHold.timer);
+    for (const response of readinessHold.responses) response.destroy();
+    for (const request of readinessHold.pending) request.destroy();
+    readinessHoldClosed();
+  }
+  function expireReadinessHold() {
+    if (readinessHold && performance.now() >= readinessHold.deadline) abortReadinessHold();
+  }
   const track = (server, sockets) => { server.on('connection', socket => { sockets.add(socket); socket.once('close', () => sockets.delete(socket)); });
     server.on('clientError', (_error, socket) => socket.destroy()); server.requestTimeout = 4000; server.headersTimeout = 4000; };
   async function close() {
-    closing = true; abortDrain(); for (const request of pending) request.destroy();
+    closing = true; abortDrain(); abortReadinessHold(); for (const request of pending) request.destroy();
     const [originClosed, relayClosed] = await Promise.all([closeServer(origin, originSockets), closeServer(relay, relaySockets)]);
     const [originPortClosedProof, relayPortClosedProof] = await Promise.all([port ? originPortClosed(port) : true, readyPort ? originPortClosed(readyPort) : true]);
     const end = performance.now() + 2500;
-    while ((pending.size || originSockets.size || relaySockets.size || (drain?.response && !drain.closed)) && performance.now() < end) await new Promise(resolve => setTimeout(resolve, 10));
+    while ((pending.size || originSockets.size || relaySockets.size || (drain?.response && !drain.closed)
+        || (readinessHold && (readinessHold.responses.size || readinessHold.pending.size))) && performance.now() < end) await new Promise(resolve => setTimeout(resolve, 10));
+    readinessHoldClosed();
     if (!originClosed || !relayClosed || !originPortClosedProof || !relayPortClosedProof
-        || pending.size || originSockets.size || relaySockets.size || (drain?.response && !drain.closed)) fail('origin_cleanup_unconfirmed');
+        || pending.size || originSockets.size || relaySockets.size || (drain?.response && !drain.closed)
+        || (readinessHold && !readinessHold.closed)) fail('origin_cleanup_unconfirmed');
     return { originClosed, relayClosed, originPortClosed: originPortClosedProof, relayPortClosed: relayPortClosedProof };
   }
   try {
@@ -187,16 +204,53 @@ export async function createOriginFixture(parent, options) {
       if (req.method === 'GET' && ['/', '/ready'].includes(req.url)) { res.end('ready\n'); return; }
       const match = req.method === 'GET' && /^\/tls-probe\/([a-f0-9]{32})$/.exec(req.url);
       if (!match || !byTag.has(match[1])) { res.writeHead(503); res.end('route not ready\n'); return; }
+      expireReadinessHold();
+      const heldCandidate = readinessHold && match[1] === readinessHold.tag;
+      if (heldCandidate && (readinessHold.aborted || readinessHold.admitted >= 8)) { res.writeHead(503); res.end('route not ready\n'); return; }
+      readinessQueried.add(match[1]);
+      if (heldCandidate) {
+        readinessHold.admitted++; readinessHold.responses.add(res);
+        res.once('close', () => { readinessHold.responses.delete(res); readinessHold.held.delete(res); readinessHoldClosed(); });
+      }
       try {
-        const observed = await queryOriginReadiness(gatewayPort, pending);
-        if (closing || res.destroyed) { res.destroy(); return; }
+        const observed = await queryOriginReadiness(gatewayPort, heldCandidate ? readinessHold.pending : pending);
+        expireReadinessHold();
+        if (closing || res.destroyed || (heldCandidate && readinessHold.aborted)) { res.destroy(); return; }
         const result = routeOriginReadiness(observed, match[1]);
         if (result.status === 502) { relay502++; byTag.set(match[1], (byTag.get(match[1]) || 0) + 1); }
+        if (heldCandidate) {
+          if (result.status === 200 && result.body.equals(Buffer.from('ready\n'))) {
+            readinessHold.validated++; readinessHold.held.add(res); return;
+          }
+          res.writeHead(503); res.end('route not ready\n'); return;
+        }
         res.writeHead(result.status); res.end(result.body);
-      } catch { if (!closing && !res.destroyed) { res.writeHead(503); res.end('not ready\n'); } else res.destroy(); }
+      } catch { if (!closing && !res.destroyed && !(heldCandidate && readinessHold.aborted)) { res.writeHead(503); res.end('not ready\n'); } else res.destroy(); }
     });
     track(relay, relaySockets); readyPort = await listen(relay);
     return { port, readyPort, ...pki,
+      prepareReadinessHold(tag, ...args) {
+        if (args.length || closing || readinessHold || !validTag(tag) || !byTag.has(tag) || readinessQueried.has(tag)) fail('origin_fixture_invalid');
+        readinessHold = { tag, admitted: 0, validated: 0, aborted: false, closed: false,
+          deadline: performance.now() + 8000, responses: new Set(), held: new Set(), pending: new Set() };
+        readinessHold.timer = setTimeout(abortReadinessHold, 8000);
+        return Object.freeze({
+          snapshot() {
+            expireReadinessHold(); readinessHoldClosed();
+            const active = [...readinessHold.held].filter(response => !response.destroyed && !response.writableEnded).length;
+            return { held: !closing && !readinessHold.aborted && active > 0, requested: readinessHold.admitted > 0,
+              candidateReadyObserved: readinessHold.validated > 0, nativeProbeChecks: readinessHold.validated,
+              heldResponses: active, aborted: readinessHold.aborted, closed: readinessHold.closed, released: false };
+          },
+          release() { expireReadinessHold(); fail('origin_fixture_invalid'); },
+          async abort() {
+            abortReadinessHold();
+            const end = performance.now() + 1000;
+            while (!readinessHoldClosed() && performance.now() < end) await new Promise(resolve => setTimeout(resolve, 10));
+            return readinessHoldClosed();
+          },
+        });
+      },
       prepareDrain(...args) {
         if (args.length || closing || drain) fail('origin_fixture_invalid');
         drain = { path: `/slow-stream/${randomBytes(16).toString('hex')}`, response: null,
