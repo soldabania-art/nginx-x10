@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-owned-fragment-fix-20261025T034200Z",
-    "owner": "codex-coordinator-owned-fragment",
-    "baseCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
-    "acquiredAtUTC": "2026-10-25T03:41:50.000Z",
-    "expiresAtUTC": "2026-10-25T04:21:50.000Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -1569,12 +1563,12 @@
       "runId": "x10-fragment-identity-20261025T032900Z",
       "sourceBase": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
       "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
-      "implementationCommit": null,
+      "implementationCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
       "implementationCommitLocator": "Current publication commit containing owned-fragment identity diagnostics; exact resulting CI must be reconciled separately",
       "scope": "Diagnostic-only known owned unit/runtime-link fragment identity facts; all admission, start, cleanup and retention guards unchanged",
       "evidence": "x10/evidence/g3-service-fragment-identity.json",
       "localAcceptance": "OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS",
+      "exactHostedAcceptance": "EXACT_KNOWN_RUNTIME_LINK_SPELLING_OBSERVED_BOTH_SERVICE_STEPS_FAILED",
       "nativeRuntimeChanged": false,
       "controllerRuntimeChanged": false,
       "alphaRuntimeChanged": false,
@@ -1587,11 +1581,81 @@
       "actualServiceAcceptedLocally": false,
       "serviceAccepted": false,
       "productionAccepted": false,
-      "nextConcreteTask": "First inspect exact resulting owned-fragment diagnostic implementation CI and actual bounded service JSON on a fresh authorized nonroot host. Distinguish the manager FragmentPath matching the exact owned unit path, known runtime-link path or neither, and inspect bounded facts about only the already known owned paths. Preserve the original loaded/fragment identity rejection and all start, cleanup and retention guards until the actual observations establish whether this is an equivalent owned alias or a different fragment. Do not accept a link alias or canonical identity by assumption, read arbitrary foreign paths, relax admission, force cleanup or rerun unchanged failed CI. After a reviewed actual identity correction, verify the basic real service lifecycle and cleanup, logging, single manager restart, failed-start/cancel/drain/orphan and combined TLS/service, then package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Keep exact7d1/700/239/0ade adverse evidence and full deferred Continuum separate."
+      "nextConcreteTask": "First inspect exact resulting owned-fragment diagnostic implementation CI and actual bounded service JSON on a fresh authorized nonroot host. Distinguish the manager FragmentPath matching the exact owned unit path, known runtime-link path or neither, and inspect bounded facts about only the already known owned paths. Preserve the original loaded/fragment identity rejection and all start, cleanup and retention guards until the actual observations establish whether this is an equivalent owned alias or a different fragment. Do not accept a link alias or canonical identity by assumption, read arbitrary foreign paths, relax admission, force cleanup or rerun unchanged failed CI. After a reviewed actual identity correction, verify the basic real service lifecycle and cleanup, logging, single manager restart, failed-start/cancel/drain/orphan and combined TLS/service, then package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Keep exact7d1/700/239/0ade adverse evidence and full deferred Continuum separate.",
+      "hostedEvidence": "x10/evidence/g3-owned-fragment-equivalence.json"
+    },
+    "serviceFragmentIdentityHosted": {
+      "state": "EXACT_KNOWN_RUNTIME_LINK_SPELLING_OBSERVED_BOTH_SERVICE_STEPS_FAILED",
+      "implementationCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+      "evidence": "x10/evidence/g3-owned-fragment-equivalence.json",
+      "runId": "x10-owned-fragment-fix-20261025T034200Z",
+      "publicationParent": "e8364f0ad3c7cc2fa7e7b1d89f6acfa50eade58a",
+      "nativeRunIds": [
+        40158669450,
+        40158672063
+      ],
+      "nativeJobIds": [
+        121065411190,
+        121065429322
+      ],
+      "researchRunIds": [
+        40158669261,
+        40158671993
+      ],
+      "authenticatedDependencyInstallationVerified": true,
+      "allSevenNodePrerequisitesTrue": true,
+      "bothRequiredServiceStepsFailed": true,
+      "failureCode": "cleanup_unconfirmed",
+      "failurePhase": "first_start",
+      "primaryFailureCode": "unit_fragment_identity",
+      "primaryFailureSubphase": "before_properties",
+      "lifecycleAndCleanupFragmentMatches": "runtime_link",
+      "precedingLinkTargetMatchesUnit": "verified",
+      "precedingUnitOwnedModeHash": "verified",
+      "canonicalIdentityMeasuredInBaseline": false,
+      "sameFileInodeMeasured": false,
+      "ownStartRequestReached": false,
+      "physicalUnitNeverStartedProven": false,
+      "managerOrNativeCleanupVerified": false,
+      "privateDependencyRuntimeRetained": true,
+      "historical7d1SpellingKnown": false,
+      "historical700PrimaryErrorKnown": false,
+      "historical0adeExceptionKnown": false,
+      "fullImplementationCIAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0
+    },
+    "ownedFragmentEquivalenceLocal": {
+      "runId": "x10-owned-fragment-fix-20261025T034200Z",
+      "sourceBase": "f434807e757ae4f946f46e21a264529b6b47e37d",
+      "publicationParent": "e8364f0ad3c7cc2fa7e7b1d89f6acfa50eade58a",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit containing known-owned fragment equivalence verification; exact resulting CI must be reconciled separately",
+      "scope": "Accept only the loaded exact owned unit spelling or exact known runtime-link spelling with canonical checks of known paths and a fresh post-query execution of all original owned link/file authority checks",
+      "evidence": "x10/evidence/g3-owned-fragment-equivalence.json",
+      "localAcceptance": "KNOWN_OWNED_FRAGMENT_EQUIVALENCE_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_KNOWN_OWNED_FRAGMENT_EQUIVALENCE",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "serviceFragmentIdentityRuleChanged": true,
+      "postQueryOwnedAuthorityRecheckAdded": true,
+      "arbitraryManagerPathInspectionAdded": false,
+      "sameUIDOSFenceClaimed": false,
+      "verifiedNodeLogicChangedBeyondCheckerPin": false,
+      "workflowLogicChangedBeyondCheckerPin": false,
+      "actualServiceAcceptedLocally": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "nextConcreteTask": "First verify exact resulting known-owned fragment equivalence implementation CI and actual service/cleanup reports on the supported fresh authorized nonroot host. Require the candidate to retain loaded-state and exact owned-unit or known-runtime-link spelling checks, canonical checks of only the two known paths for a runtime-link spelling, and a fresh post-query execution of all original link/owned-file authority checks before any subsequent action. Do not inspect arbitrary manager-supplied paths or accept unrelated/equivalent-looking names. The earlier diagnostic snapshot remains pre-validation canonicalIdentity:not_measured; it does not describe whether later canonical verification ran. Source ordering and subsequent successful actions may establish that the new guard completed in that exact run, but local contracts alone cannot. Verify actual startup, readiness, proxy/upload/stream, separate stop/start sessions, owned cleanup and private Node removal before scoped service acceptance. Preserve both exactf434 failed workflows and all older adverse evidence. Then complete logging, single manager restart, failed-start/cancel/drain/orphan, combined TLS/service, package update/rollback/recovery, permanent distribution/replay, security/soak and G4-G8 Production V1; full deferred Continuum remains open."
     }
   },
   "pendingVerification": [
-    "First verify exact resulting owned-fragment identity diagnostic implementation CI; fixed match facts do not change any admission or cleanup authority. Both exact7d1 actual service steps failed cleanup_unconfirmed at first_start, preserving primaryFailure unit_fragment_identity at before_properties. The parsed unit was loaded/inactive/dead with result success, no main PID or cgroup and a present FragmentPath. In this current source guard, the loaded state plus that refusal establishes a literal FragmentPath mismatch with the expected unitFile, before the checker requests start. The actual paths, a runtime-link alias, canonical equivalence versus a different fragment, and physical service state are unknown. Cleanup independently recorded unit_fragment_identity without its own state snapshot, so its failed OR branch is unknown. Runtime linking was confirmed; service/dependency cleanup was unconfirmed and the private authenticated Node was retained. This does not reconstruct the original700 or0ade primary error.",
+    "First verify exact resulting known-owned fragment equivalence implementation CI and actual service cleanup, with all original owned-path authority checks freshly repeated after the manager response. Both exactf434 actual service steps failed cleanup_unconfirmed/first_start with primary unit_fragment_identity at before_properties. New bounded observations in both lifecycle and cleanup showed loaded state and FragmentPath exactly equal to the already known runtimeLink, with preceding link-target equality and owned unit mode/hash checks verified. canonicalIdentity was explicitly not_measured, not a same-file/inode or race-free proof. No physical service absence or manager/native/dependency final cleanup was established; the private verified Node and bootstrap root were retained. This current spelling observation does not establish historical7d1 spelling, original700 primary error or0ade exception.",
+    "Exactf434 CI reconciled actual lifecycle and cleanup observations: loaded/runtime_link with preceding owned target/mode/hash verified in both contexts; canonicalIdentity:not_measured. Both required actual-service steps remained FAILED. Preceding native20/TLS18/16/preflight42, lifecycle104total103PASS1rootSKIP and dependency46 passed separately; research PR actually ran21/7/27/48 and push was scope-only. These original diagnostic observations do not accept the new equivalence guard or an actual service.",
     "Exact7d1 CI was reconciled from its actual steps, complete logs and digest-verified ZIPs: both required actual-service steps FAILED with preserved primary unit_fragment_identity at before_properties. Preceding native20, TLS18/16, preflight42, contract85total84PASS1rootSKIP and dependency46 passed separately; research PR actually ran21/7/27/48 and research push was scope-only. This is not whole implementation or service acceptance.",
     "Exact700 Node dependency archive/signature/hash/selected-payload/version preparation was actually verified in both jobs, with all seven Node prerequisites true. Both full native workflows still FAILED actual service first_start, cleanup was unconfirmed, and the dependency runtime was retained for possible ExecStop. The original primary failure and physical manager/native state remain unknown.",
     "Exact239 diagnostic source has real hosted refusal evidence: both actual service commands FAILED recipe_inspection/recipe_inspection_refused with selectedNodeModeAllowed:false and selectedNodeOwnerAllowed:true. Preceding native20/TLS18/frontend16/preflight42/contract67total66PASS1rootSKIP and required profiles passed separately. Specific mode bits and the exact old0ade exception remain unknown; full implementation CI/service acceptance stays false.",
@@ -1619,9 +1683,14 @@
   ],
   "nextTasks": [
     {
+      "id": "G3-owned-fragment-equivalence-exact-CI",
+      "state": "pending-exact-resulting-owned-equivalence",
+      "goal": "Verify new exact loaded/owned-spelling/canonical-known-path/post-query-original-authority guard on the actual supported nonroot service host; require full start/stop/proxy/upload/stream/owned-cleanup results."
+    },
+    {
       "id": "G3-service-fragment-identity-exact-CI",
-      "state": "pending-exact-resulting-owned-fragment-diagnostics",
-      "goal": "Observe exact owned unit/runtime-link match facts in actual CI without weakening the original guard; decide identity correction only after evidence and independent review."
+      "state": "exact-known-runtime-link-spelling-observed-service-failed",
+      "goal": "Preserve actualf434 loaded/runtime_link facts in both lifecycle/cleanup, preceding owned checks and canonical-not-measured scope; verify new reviewed owned-equivalence guard separately."
     },
     {
       "id": "G3-primary-service-failure-exact-CI",
@@ -1922,7 +1991,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First inspect exact resulting owned-fragment diagnostic implementation CI and actual bounded service JSON on a fresh authorized nonroot host. Distinguish the manager FragmentPath matching the exact owned unit path, known runtime-link path or neither, and inspect bounded facts about only the already known owned paths. Preserve the original loaded/fragment identity rejection and all start, cleanup and retention guards until the actual observations establish whether this is an equivalent owned alias or a different fragment. Do not accept a link alias or canonical identity by assumption, read arbitrary foreign paths, relax admission, force cleanup or rerun unchanged failed CI. After a reviewed actual identity correction, verify the basic real service lifecycle and cleanup, logging, single manager restart, failed-start/cancel/drain/orphan and combined TLS/service, then package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Keep exact7d1/700/239/0ade adverse evidence and full deferred Continuum separate.",
+  "nextConcreteTask": "First verify exact resulting known-owned fragment equivalence implementation CI and actual service/cleanup reports on the supported fresh authorized nonroot host. Require the candidate to retain loaded-state and exact owned-unit or known-runtime-link spelling checks, canonical checks of only the two known paths for a runtime-link spelling, and a fresh post-query execution of all original link/owned-file authority checks before any subsequent action. Do not inspect arbitrary manager-supplied paths or accept unrelated/equivalent-looking names. The earlier diagnostic snapshot remains pre-validation canonicalIdentity:not_measured; it does not describe whether later canonical verification ran. Source ordering and subsequent successful actions may establish that the new guard completed in that exact run, but local contracts alone cannot. Verify actual startup, readiness, proxy/upload/stream, separate stop/start sessions, owned cleanup and private Node removal before scoped service acceptance. Preserve both exactf434 failed workflows and all older adverse evidence. Then complete logging, single manager restart, failed-start/cancel/drain/orphan, combined TLS/service, package update/rollback/recovery, permanent distribution/replay, security/soak and G4-G8 Production V1; full deferred Continuum remains open.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -2130,7 +2199,7 @@
     "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G3_OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS_EXACT_CI_PENDING_SERVICE_OPEN",
+    "currentGate": "G3_KNOWN_OWNED_FRAGMENT_EQUIVALENCE_EXACT_CI_PENDING_SERVICE_OPEN",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -2166,56 +2235,61 @@
     "verifiedNodeDependencyHostedEvidence": "x10/evidence/g3-service-primary-failure.json",
     "serviceObservabilityChangedByThisPublication": true,
     "serviceFragmentIdentityEvidence": "x10/evidence/g3-service-fragment-identity.json",
-    "servicePrimaryFailureHostedEvidence": "x10/evidence/g3-service-fragment-identity.json"
+    "servicePrimaryFailureHostedEvidence": "x10/evidence/g3-service-fragment-identity.json",
+    "ownedFragmentEquivalenceEvidence": "x10/evidence/g3-owned-fragment-equivalence.json",
+    "serviceFragmentIdentityHostedEvidence": "x10/evidence/g3-owned-fragment-equivalence.json",
+    "serviceIdentityAdmissionChangedByThisPublication": true
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-fragment-identity-20261025T032900Z",
-    "sourceBase": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
-    "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+    "runId": "x10-owned-fragment-fix-20261025T034200Z",
+    "sourceBase": "f434807e757ae4f946f46e21a264529b6b47e37d",
+    "publicationParent": "e8364f0ad3c7cc2fa7e7b1d89f6acfa50eade58a",
     "implementationCommit": null,
-    "implementationCommitLocator": "Current publication commit containing owned-fragment identity diagnostics; exact resulting CI must be reconciled separately",
-    "scope": "Diagnostic-only known owned unit/runtime-link fragment identity facts; all admission, start, cleanup and retention guards unchanged",
-    "evidence": "x10/evidence/g3-service-fragment-identity.json",
-    "localAcceptance": "OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS",
+    "implementationCommitLocator": "Current publication commit containing known-owned fragment equivalence verification; exact resulting CI must be reconciled separately",
+    "scope": "Accept only the loaded exact owned unit spelling or exact known runtime-link spelling with canonical checks of known paths and a fresh post-query execution of all original owned link/file authority checks",
+    "evidence": "x10/evidence/g3-owned-fragment-equivalence.json",
+    "localAcceptance": "KNOWN_OWNED_FRAGMENT_EQUIVALENCE_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_KNOWN_OWNED_FRAGMENT_EQUIVALENCE",
     "nativeRuntimeChanged": false,
     "controllerRuntimeChanged": false,
     "alphaRuntimeChanged": false,
     "serviceRecipeChanged": false,
     "preflightChanged": false,
-    "serviceSuccessCriteriaChanged": false,
-    "cleanupAuthorityChanged": false,
+    "serviceFragmentIdentityRuleChanged": true,
+    "postQueryOwnedAuthorityRecheckAdded": true,
+    "arbitraryManagerPathInspectionAdded": false,
+    "sameUIDOSFenceClaimed": false,
     "verifiedNodeLogicChangedBeyondCheckerPin": false,
     "workflowLogicChangedBeyondCheckerPin": false,
     "actualServiceAcceptedLocally": false,
     "serviceAccepted": false,
     "productionAccepted": false,
-    "nextConcreteTask": "First inspect exact resulting owned-fragment diagnostic implementation CI and actual bounded service JSON on a fresh authorized nonroot host. Distinguish the manager FragmentPath matching the exact owned unit path, known runtime-link path or neither, and inspect bounded facts about only the already known owned paths. Preserve the original loaded/fragment identity rejection and all start, cleanup and retention guards until the actual observations establish whether this is an equivalent owned alias or a different fragment. Do not accept a link alias or canonical identity by assumption, read arbitrary foreign paths, relax admission, force cleanup or rerun unchanged failed CI. After a reviewed actual identity correction, verify the basic real service lifecycle and cleanup, logging, single manager restart, failed-start/cancel/drain/orphan and combined TLS/service, then package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Keep exact7d1/700/239/0ade adverse evidence and full deferred Continuum separate.",
-    "result": "Added bounded fixed identity facts distinguishing the manager fragment matching the exact owned unit, known runtime link or neither. Original rejection and all actions remain unchanged; actual alias or equivalence requires new exact hosted observations.",
-    "perFileLedger": "x10/review/g3-service-fragment-identity-ledger.json",
+    "nextConcreteTask": "First verify exact resulting known-owned fragment equivalence implementation CI and actual service/cleanup reports on the supported fresh authorized nonroot host. Require the candidate to retain loaded-state and exact owned-unit or known-runtime-link spelling checks, canonical checks of only the two known paths for a runtime-link spelling, and a fresh post-query execution of all original link/owned-file authority checks before any subsequent action. Do not inspect arbitrary manager-supplied paths or accept unrelated/equivalent-looking names. The earlier diagnostic snapshot remains pre-validation canonicalIdentity:not_measured; it does not describe whether later canonical verification ran. Source ordering and subsequent successful actions may establish that the new guard completed in that exact run, but local contracts alone cannot. Verify actual startup, readiness, proxy/upload/stream, separate stop/start sessions, owned cleanup and private Node removal before scoped service acceptance. Preserve both exactf434 failed workflows and all older adverse evidence. Then complete logging, single manager restart, failed-start/cancel/drain/orphan, combined TLS/service, package update/rollback/recovery, permanent distribution/replay, security/soak and G4-G8 Production V1; full deferred Continuum remains open.",
+    "result": "Verified only the exact known runtime-link alias using canonical checks of the known link/unit paths and reobserved all original ownership/mode/hash/link checks after manager response. Unrelated or unsupported fragments remain refused. Actual service CI remains pending.",
+    "perFileLedger": "x10/review/g3-owned-fragment-equivalence-ledger.json",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS"
+      "state": "PENDING_EXACT_RESULTING_KNOWN_OWNED_FRAGMENT_EQUIVALENCE"
     },
     "newPurchases": false,
     "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
-    "state": "EXACT_PRIMARY_FAILURE_OBSERVED_FRAGMENT_IDENTITY_BEFORE_START_SERVICE_FAILED",
-    "implementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
-    "evidence": "x10/evidence/g3-service-fragment-identity.json",
-    "runId": "x10-fragment-identity-20261025T032900Z",
-    "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+    "state": "EXACT_KNOWN_RUNTIME_LINK_SPELLING_OBSERVED_BOTH_SERVICE_STEPS_FAILED",
+    "implementationCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+    "evidence": "x10/evidence/g3-owned-fragment-equivalence.json",
+    "runId": "x10-owned-fragment-fix-20261025T034200Z",
+    "publicationParent": "e8364f0ad3c7cc2fa7e7b1d89f6acfa50eade58a",
     "nativeRunIds": [
-      40154695196,
-      40154700066
+      40158669450,
+      40158672063
     ],
     "nativeJobIds": [
-      121053497340,
-      121053511202
+      121065411190,
+      121065429322
     ],
     "researchRunIds": [
-      40154695181,
-      40154700058
+      40158669261,
+      40158671993
     ],
     "authenticatedDependencyInstallationVerified": true,
     "allSevenNodePrerequisitesTrue": true,
@@ -2224,17 +2298,16 @@
     "failurePhase": "first_start",
     "primaryFailureCode": "unit_fragment_identity",
     "primaryFailureSubphase": "before_properties",
-    "parsedLoadState": "loaded",
-    "fragmentPathPresent": true,
-    "currentLiteralUnitPathMismatchProven": true,
-    "actualFragmentPathKnown": false,
-    "runtimeLinkAliasProven": false,
-    "canonicalFileEquivalenceProven": false,
+    "lifecycleAndCleanupFragmentMatches": "runtime_link",
+    "precedingLinkTargetMatchesUnit": "verified",
+    "precedingUnitOwnedModeHash": "verified",
+    "canonicalIdentityMeasuredInBaseline": false,
+    "sameFileInodeMeasured": false,
     "ownStartRequestReached": false,
     "physicalUnitNeverStartedProven": false,
-    "cleanupFailedGuardBranchKnown": false,
     "managerOrNativeCleanupVerified": false,
     "privateDependencyRuntimeRetained": true,
+    "historical7d1SpellingKnown": false,
     "historical700PrimaryErrorKnown": false,
     "historical0adeExceptionKnown": false,
     "fullImplementationCIAccepted": false,
@@ -2903,6 +2976,76 @@
       },
       "newPurchases": false,
       "productionDeployChanged": false
+    },
+    {
+      "runId": "x10-fragment-identity-20261025T032900Z",
+      "sourceBase": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+      "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+      "implementationCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+      "implementationCommitLocator": "Current publication commit containing owned-fragment identity diagnostics; exact resulting CI must be reconciled separately",
+      "scope": "Diagnostic-only known owned unit/runtime-link fragment identity facts; all admission, start, cleanup and retention guards unchanged",
+      "evidence": "x10/evidence/g3-service-fragment-identity.json",
+      "localAcceptance": "OWNED_FRAGMENT_IDENTITY_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+      "exactHostedAcceptance": "EXACT_KNOWN_RUNTIME_LINK_SPELLING_OBSERVED_BOTH_SERVICE_STEPS_FAILED",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "serviceSuccessCriteriaChanged": false,
+      "cleanupAuthorityChanged": false,
+      "verifiedNodeLogicChangedBeyondCheckerPin": false,
+      "workflowLogicChangedBeyondCheckerPin": false,
+      "actualServiceAcceptedLocally": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "nextConcreteTask": "First inspect exact resulting owned-fragment diagnostic implementation CI and actual bounded service JSON on a fresh authorized nonroot host. Distinguish the manager FragmentPath matching the exact owned unit path, known runtime-link path or neither, and inspect bounded facts about only the already known owned paths. Preserve the original loaded/fragment identity rejection and all start, cleanup and retention guards until the actual observations establish whether this is an equivalent owned alias or a different fragment. Do not accept a link alias or canonical identity by assumption, read arbitrary foreign paths, relax admission, force cleanup or rerun unchanged failed CI. After a reviewed actual identity correction, verify the basic real service lifecycle and cleanup, logging, single manager restart, failed-start/cancel/drain/orphan and combined TLS/service, then package update/rollback/recovery, permanent distribution/replay, security/soak and final G4-G8 Production V1. Keep exact7d1/700/239/0ade adverse evidence and full deferred Continuum separate.",
+      "result": "Added bounded fixed identity facts distinguishing the manager fragment matching the exact owned unit, known runtime link or neither. Original rejection and all actions remain unchanged; actual alias or equivalence requires new exact hosted observations.",
+      "perFileLedger": "x10/review/g3-service-fragment-identity-ledger.json",
+      "hostedVerification": {
+        "state": "EXACT_KNOWN_RUNTIME_LINK_SPELLING_OBSERVED_BOTH_SERVICE_STEPS_FAILED",
+        "implementationCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+        "evidence": "x10/evidence/g3-owned-fragment-equivalence.json",
+        "runId": "x10-owned-fragment-fix-20261025T034200Z",
+        "publicationParent": "e8364f0ad3c7cc2fa7e7b1d89f6acfa50eade58a",
+        "nativeRunIds": [
+          40158669450,
+          40158672063
+        ],
+        "nativeJobIds": [
+          121065411190,
+          121065429322
+        ],
+        "researchRunIds": [
+          40158669261,
+          40158671993
+        ],
+        "authenticatedDependencyInstallationVerified": true,
+        "allSevenNodePrerequisitesTrue": true,
+        "bothRequiredServiceStepsFailed": true,
+        "failureCode": "cleanup_unconfirmed",
+        "failurePhase": "first_start",
+        "primaryFailureCode": "unit_fragment_identity",
+        "primaryFailureSubphase": "before_properties",
+        "lifecycleAndCleanupFragmentMatches": "runtime_link",
+        "precedingLinkTargetMatchesUnit": "verified",
+        "precedingUnitOwnedModeHash": "verified",
+        "canonicalIdentityMeasuredInBaseline": false,
+        "sameFileInodeMeasured": false,
+        "ownStartRequestReached": false,
+        "physicalUnitNeverStartedProven": false,
+        "managerOrNativeCleanupVerified": false,
+        "privateDependencyRuntimeRetained": true,
+        "historical7d1SpellingKnown": false,
+        "historical700PrimaryErrorKnown": false,
+        "historical0adeExceptionKnown": false,
+        "fullImplementationCIAccepted": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "workflowRerunsRequested": 0
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
     }
   ],
   "v1VerificationReceiptHistory": [
@@ -3214,6 +3357,49 @@
       "serviceAccepted": false,
       "productionAccepted": false,
       "workflowRerunsRequested": 0
+    },
+    {
+      "state": "EXACT_PRIMARY_FAILURE_OBSERVED_FRAGMENT_IDENTITY_BEFORE_START_SERVICE_FAILED",
+      "implementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+      "evidence": "x10/evidence/g3-service-fragment-identity.json",
+      "runId": "x10-fragment-identity-20261025T032900Z",
+      "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+      "nativeRunIds": [
+        40154695196,
+        40154700066
+      ],
+      "nativeJobIds": [
+        121053497340,
+        121053511202
+      ],
+      "researchRunIds": [
+        40154695181,
+        40154700058
+      ],
+      "authenticatedDependencyInstallationVerified": true,
+      "allSevenNodePrerequisitesTrue": true,
+      "bothRequiredServiceStepsFailed": true,
+      "failureCode": "cleanup_unconfirmed",
+      "failurePhase": "first_start",
+      "primaryFailureCode": "unit_fragment_identity",
+      "primaryFailureSubphase": "before_properties",
+      "parsedLoadState": "loaded",
+      "fragmentPathPresent": true,
+      "currentLiteralUnitPathMismatchProven": true,
+      "actualFragmentPathKnown": false,
+      "runtimeLinkAliasProven": false,
+      "canonicalFileEquivalenceProven": false,
+      "ownStartRequestReached": false,
+      "physicalUnitNeverStartedProven": false,
+      "cleanupFailedGuardBranchKnown": false,
+      "managerOrNativeCleanupVerified": false,
+      "privateDependencyRuntimeRetained": true,
+      "historical700PrimaryErrorKnown": false,
+      "historical0adeExceptionKnown": false,
+      "fullImplementationCIAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0
     }
   ],
   "currentNativeCIFailure": {
@@ -3238,22 +3424,22 @@
     "candidateExactNativeCIAccepted": true
   },
   "currentServiceLifecycleCIFailure": {
-    "state": "EXACT_PRIMARY_FAILURE_OBSERVED_FRAGMENT_IDENTITY_BEFORE_START_SERVICE_FAILED",
-    "implementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
-    "evidence": "x10/evidence/g3-service-fragment-identity.json",
-    "runId": "x10-fragment-identity-20261025T032900Z",
-    "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+    "state": "EXACT_KNOWN_RUNTIME_LINK_SPELLING_OBSERVED_BOTH_SERVICE_STEPS_FAILED",
+    "implementationCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+    "evidence": "x10/evidence/g3-owned-fragment-equivalence.json",
+    "runId": "x10-owned-fragment-fix-20261025T034200Z",
+    "publicationParent": "e8364f0ad3c7cc2fa7e7b1d89f6acfa50eade58a",
     "nativeRunIds": [
-      40154695196,
-      40154700066
+      40158669450,
+      40158672063
     ],
     "nativeJobIds": [
-      121053497340,
-      121053511202
+      121065411190,
+      121065429322
     ],
     "researchRunIds": [
-      40154695181,
-      40154700058
+      40158669261,
+      40158671993
     ],
     "authenticatedDependencyInstallationVerified": true,
     "allSevenNodePrerequisitesTrue": true,
@@ -3262,17 +3448,16 @@
     "failurePhase": "first_start",
     "primaryFailureCode": "unit_fragment_identity",
     "primaryFailureSubphase": "before_properties",
-    "parsedLoadState": "loaded",
-    "fragmentPathPresent": true,
-    "currentLiteralUnitPathMismatchProven": true,
-    "actualFragmentPathKnown": false,
-    "runtimeLinkAliasProven": false,
-    "canonicalFileEquivalenceProven": false,
+    "lifecycleAndCleanupFragmentMatches": "runtime_link",
+    "precedingLinkTargetMatchesUnit": "verified",
+    "precedingUnitOwnedModeHash": "verified",
+    "canonicalIdentityMeasuredInBaseline": false,
+    "sameFileInodeMeasured": false,
     "ownStartRequestReached": false,
     "physicalUnitNeverStartedProven": false,
-    "cleanupFailedGuardBranchKnown": false,
     "managerOrNativeCleanupVerified": false,
     "privateDependencyRuntimeRetained": true,
+    "historical7d1SpellingKnown": false,
     "historical700PrimaryErrorKnown": false,
     "historical0adeExceptionKnown": false,
     "fullImplementationCIAccepted": false,
@@ -3370,6 +3555,49 @@
       "primaryUnderlyingFailureKnown": false,
       "managerOrNativeCleanupVerified": false,
       "privateDependencyRuntimeRetained": true,
+      "fullImplementationCIAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0
+    },
+    {
+      "state": "EXACT_PRIMARY_FAILURE_OBSERVED_FRAGMENT_IDENTITY_BEFORE_START_SERVICE_FAILED",
+      "implementationCommit": "7d1fc420ec8ae6499e70f9adec4cdc826e8ac546",
+      "evidence": "x10/evidence/g3-service-fragment-identity.json",
+      "runId": "x10-fragment-identity-20261025T032900Z",
+      "publicationParent": "28627463da7a33ce508dc8accf3cd2f7c22ddaa8",
+      "nativeRunIds": [
+        40154695196,
+        40154700066
+      ],
+      "nativeJobIds": [
+        121053497340,
+        121053511202
+      ],
+      "researchRunIds": [
+        40154695181,
+        40154700058
+      ],
+      "authenticatedDependencyInstallationVerified": true,
+      "allSevenNodePrerequisitesTrue": true,
+      "bothRequiredServiceStepsFailed": true,
+      "failureCode": "cleanup_unconfirmed",
+      "failurePhase": "first_start",
+      "primaryFailureCode": "unit_fragment_identity",
+      "primaryFailureSubphase": "before_properties",
+      "parsedLoadState": "loaded",
+      "fragmentPathPresent": true,
+      "currentLiteralUnitPathMismatchProven": true,
+      "actualFragmentPathKnown": false,
+      "runtimeLinkAliasProven": false,
+      "canonicalFileEquivalenceProven": false,
+      "ownStartRequestReached": false,
+      "physicalUnitNeverStartedProven": false,
+      "cleanupFailedGuardBranchKnown": false,
+      "managerOrNativeCleanupVerified": false,
+      "privateDependencyRuntimeRetained": true,
+      "historical700PrimaryErrorKnown": false,
+      "historical0adeExceptionKnown": false,
       "fullImplementationCIAccepted": false,
       "serviceAccepted": false,
       "productionAccepted": false,

@@ -213,6 +213,26 @@ export function summarizeUnitFragmentIdentity(record, knownPaths, precedingLinkC
     precedingUnitOwnedModeHash: ownData(precedingLinkCheck, 'unitOwnedModeHash') === true ? 'verified' : 'unknown',
     canonicalIdentity: 'not_measured' };
 }
+// This checks only the parsed spelling and the two already known paths.
+// Ownership, mode, bytes and runtime parents still require linkAuthority.
+export async function verifyKnownUnitFragmentPaths(record, knownPaths) {
+  try {
+    if (!record || typeof record !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(record))
+        || !knownPaths || typeof knownPaths !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(knownPaths))) reject('unit_fragment_identity');
+  } catch { reject('unit_fragment_identity'); }
+  const load = ownData(record, 'LoadState'), fragment = ownData(record, 'FragmentPath');
+  const unit = ownData(knownPaths, 'unitFile'), link = ownData(knownPaths, 'runtimeLink');
+  const validPath = value => typeof value === 'string' && value.length <= 4096
+    && /^\/[A-Za-z0-9_./+-]+$/.test(value) && !value.includes('\n') && path.posix.normalize(value) === value;
+  if (load !== 'loaded' || !validPath(fragment) || !validPath(unit) || !validPath(link) || unit === link
+      || (fragment !== unit && fragment !== link)) reject('unit_fragment_identity');
+  if (fragment === link) {
+    try {
+      if (await realpath(unit) !== unit || await realpath(link) !== unit) reject('unit_fragment_identity');
+    } catch { reject('unit_fragment_identity'); }
+  }
+  return true;
+}
 export function createFragmentIdentityDiagnostics() {
   let count = 0, truncated = false; const observations = [];
   return Object.freeze({
@@ -323,7 +343,8 @@ export async function main(argv = process.argv.slice(2)) {
   async function ownedProperties() {
     const precedingLinkCheck = await linkAuthority(); const p = await properties();
     fragments.observe(p, { unitFile, runtimeLink }, precedingLinkCheck, report.phase, start.snapshot().lastStep, inCleanup);
-    if (p.LoadState !== 'loaded' || p.FragmentPath !== unitFile) reject('unit_fragment_identity');
+    await verifyKnownUnitFragmentPaths(p, { unitFile, runtimeLink });
+    await linkAuthority();
     if (p.ControlGroup !== '' && !p.ControlGroup.startsWith(`/user.slice/user-${process.getuid()}.slice/user@${process.getuid()}.service/`)) reject('unit_cgroup_identity');
     if (p.ControlGroup !== '' && !p.ControlGroup.endsWith(`/${unitName}`)) reject('unit_cgroup_identity');
     return p;

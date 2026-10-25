@@ -1927,3 +1927,33 @@ Next inspect exact new CI and identity facts, then make any reviewed identity
 correction justified by actual evidence. Service lifecycle, final cleanup,
 logging, restart, adverse cases, combined TLS, package rollback/recovery,
 permanent distribution, soak and Production V1 remain open.
+
+
+## Verify the exact known owned unit fragment
+
+Both exactf434 hosted service attempts observed loaded/runtime_link in
+both lifecycle and cleanup, with preceding link target and owned unit
+mode/hash checks verified. Canonical identity was explicitly not measured.
+The original strict unit-file string guard refused both attempts; actual
+service and cleanup remained FAILED and private Node was retained.
+
+[Evidence](evidence/g3-owned-fragment-equivalence.json) preserves actual
+artifacts and96 native/13 research/32 independent baseline proofs once.
+Preceding native20/TLS18/16/preflight42/dependency46 and lifecycle104total/
+103PASS/1rootSKIP passed separately; research PR actually ran21/7/27/48,
+push research was scope-only. Those counts belong to the exactf434 source.
+Earlier7d1 spelling and700/0ade primary causes remain unknown.
+
+The new guard deliberately accepts only the loaded exact owned unit or
+known runtime-link spelling. Runtime-link spelling requires canonical checks
+of the two already known owned paths. Both spellings then repeat every
+original link/file owner, mode, hash and target check after manager query.
+Foreign manager-returned paths never become filesystem inputs. This is a
+reviewed identity rule change, not blanket alias permission or OS fencing.
+
+The pre-validation diagnostic snapshot still says canonicalIdentity:
+not_measured; it does not describe later canonical verification. New local
+owned-file and synthetic manager controls do not prove actual nonroot
+service operation or cleanup. Exact new CI is pending. Service lifecycle,
+logging, manager restart, adverse cases, combined TLS/service, package
+rollback/recovery, permanent distribution, soak and Production V1 stay open.

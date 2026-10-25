@@ -382,3 +382,34 @@ when service cleanup is uncertain. Original700/0ade errors remain separate.
 The new exact source requires its own actual nonroot CI. Local synthetic
 contracts, original-path/runtime-link/foreign-path refusal controls and
 independent review remain separate from service/Production V1 acceptance.
+
+
+## Verified known owned fragment spelling
+
+The service checker requires loaded state and exactly either the owned
+unitFile path or the already known runtimeLink path. Unrelated paths are
+refused before additional filesystem access; no manager-supplied path is
+passed into a filesystem operation. This is a narrow identity admission
+rule, not permission to trust arbitrary aliases.
+
+For the exact runtime-link spelling only, the checker resolves the already
+known owned unit and known link. The unit must be canonical and the link
+must resolve to that exact owned unit. For both accepted spellings, every
+original runtime-parent, symlink owner/target and unit owner/mode/content
+hash check runs freshly again after the manager property response and
+fragment verification. No device/inode/link-count policy or atomic OS fence
+is added. Trusted same-UID operator limitations remain.
+
+The bounded fragmentIdentityDiagnostics observation precedes this added
+canonical verification. Its canonicalIdentity:not_measured describes the
+pre-validation snapshot. It must not be interpreted as evidence that the
+later check ran, failed, or was absent for the entire new service attempt.
+The fixed diagnostics schema and privacy bounds remain unchanged.
+
+Both original exactf434 service attempts showed loaded/runtime_link in
+lifecycle and cleanup with preceding owned checks verified, but canonical
+identity was not measured and the old strict spelling guard refused.
+Cleanup remained unconfirmed and private Node was retained. This evidence
+justifies testing the new known-owned equivalence rule; it does not accept
+service operation. Local owned filesystem and synthetic manager controls
+remain distinct from actual nonroot service CI, cleanup and Production V1.

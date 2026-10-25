@@ -4,7 +4,10 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics } from './lifecycle-check.mjs';
+import os from 'node:os';
+import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
+import { digest } from '../alpha/runtime.mjs';
+import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths } from './lifecycle-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
 const transcript = (changes = {}) => Object.entries({ LoadState: 'loaded', ActiveState: 'active', SubState: 'running', Result: 'success',
@@ -280,4 +283,106 @@ test('fragment collector whitelists phase and subphase without carrying unknown 
   d.observe({}, {}, {}, hostile, hostile, false); d.observe({}, {}, {}, 'first_stop', 'before_properties', false);
   const s = d.snapshot(); assert.equal(s.observations[0].phase, 'unknown'); assert.equal(s.observations[0].subphase, 'not_applicable');
   assert.equal(s.observations[1].subphase, 'not_applicable'); assert.equal(JSON.stringify(s).includes('private'), false);
+});
+
+async function ownedFragmentFixture(t) {
+  const root = await mkdtemp(path.join(await realpath(os.tmpdir()), 'x10-unit-paths-'));
+  t.after(async () => { await rm(root, { recursive: true, force: true }); });
+  const runtime = `${root}/runtime`; await mkdir(`${runtime}/systemd/user`, { recursive: true, mode: 0o700 });
+  const unitFile = `${root}/fixture.service`, runtimeLink = `${runtime}/systemd/user/fixture.service`;
+  const bytes = '[Service]\nType=exec\nExecStart=/usr/bin/false\n';
+  await writeFile(unitFile, bytes, { mode: 0o600 }); await symlink(unitFile, runtimeLink);
+  return { root, runtime, unitFile, runtimeLink, bytes };
+}
+async function extractedOwnedProperties(fixture, properties) {
+  const source = await readFile(script, 'utf8');
+  const authority = source.slice(source.indexOf('  async function runtimeParents()'), source.indexOf('  async function properties()'));
+  const owned = source.slice(source.indexOf('  async function ownedProperties()'), source.indexOf('  async function launcherIdentity('));
+  const rejectCode = code => { throw Object.assign(new Error(code), { code }); };
+  const absent = async file => { try { await lstat(file); return false; } catch (e) { if (e.code === 'ENOENT') return true; throw e; } };
+  const factory = new Function('env', 'lstat', 'process', 'readlink', 'realpath', 'readFile', 'digest', 'report', 'unitFile', 'runtimeLink', 'unitName', 'properties', 'fragments', 'start', 'inCleanup', 'verifyKnownUnitFragmentPaths', 'reject', 'absent', `${authority}${owned}; return ownedProperties;`);
+  return factory({ XDG_RUNTIME_DIR: fixture.runtime }, lstat, process, readlink, realpath, readFile, digest,
+    { unitSha256: digest(fixture.bytes), phase: 'first_start' }, fixture.unitFile, fixture.runtimeLink, 'fixture.service',
+    properties, createFragmentIdentityDiagnostics(), { snapshot: () => ({ lastStep: 'before_properties' }) }, false,
+    verifyKnownUnitFragmentPaths, rejectCode, absent);
+}
+const ownedResponse = fragment => ({ LoadState: 'loaded', FragmentPath: fragment, ControlGroup: '' });
+test('actual private owned symlink reproduces baseline literal refusal and passes known canonical paths', async t => {
+  const f = await ownedFragmentFixture(t);
+  assert.notEqual(f.runtimeLink, f.unitFile);
+  assert.equal(await verifyKnownUnitFragmentPaths(ownedResponse(f.runtimeLink), f), true);
+  assert.equal(await verifyKnownUnitFragmentPaths(ownedResponse(f.unitFile), f), true);
+  const owned = await extractedOwnedProperties(f, async () => ownedResponse(f.runtimeLink));
+  assert.equal((await owned()).LoadState, 'loaded');
+});
+for (const change of ['missing', 'broken', 'cycle', 'regular', 'hardlink', 'retarget']) {
+  test(`known runtime alias rejects actual owned fixture change: ${change}`, async t => {
+    const f = await ownedFragmentFixture(t); await rm(f.runtimeLink);
+    if (change === 'broken') await symlink(`${f.root}/absent.service`, f.runtimeLink);
+    if (change === 'cycle') await symlink(f.runtimeLink, f.runtimeLink);
+    if (change === 'regular') await writeFile(f.runtimeLink, f.bytes, { mode: 0o600 });
+    if (change === 'hardlink') await link(f.unitFile, f.runtimeLink);
+    if (change === 'retarget') { const duplicate = `${f.root}/duplicate.service`; await writeFile(duplicate, f.bytes, { mode: 0o600 }); await symlink(duplicate, f.runtimeLink); }
+    await assert.rejects(verifyKnownUnitFragmentPaths(ownedResponse(f.runtimeLink), f), { code: 'unit_fragment_identity' });
+  });
+}
+test('foreign duplicate and hardlink manager spellings remain outside the exact allowlist', async t => {
+  const f = await ownedFragmentFixture(t), duplicate = `${f.root}/duplicate.service`, hard = `${f.root}/hard.service`;
+  await writeFile(duplicate, f.bytes, { mode: 0o600 }); await link(f.unitFile, hard);
+  for (const fragment of [duplicate, hard, `${f.root}/absent.service`]) await assert.rejects(verifyKnownUnitFragmentPaths(ownedResponse(fragment), f), { code: 'unit_fragment_identity' });
+});
+test('canonical alias check rejects a noncanonical known unit parent', async t => {
+  const f = await ownedFragmentFixture(t), alias = `${f.root}/parent-alias`; await symlink(f.root, alias);
+  const unitFile = `${alias}/fixture.service`; await rm(f.runtimeLink); await symlink(unitFile, f.runtimeLink);
+  await assert.rejects(verifyKnownUnitFragmentPaths(ownedResponse(f.runtimeLink), { ...f, unitFile }), { code: 'unit_fragment_identity' });
+});
+test('known-path verifier rejects invalid metadata without getter evaluation or coercion', async () => {
+  let called = false; const getter = {}; for (const key of ['LoadState', 'FragmentPath', 'unitFile', 'runtimeLink']) Object.defineProperty(getter, key, { get() { called = true; return 'loaded'; } });
+  const hostile = { toString() { called = true; return fragmentKnownPaths.runtimeLink; } };
+  for (const [record, paths] of [[getter, getter], [ownedResponse(hostile), fragmentKnownPaths],
+    [ownedResponse(fragmentKnownPaths.runtimeLink), { ...fragmentKnownPaths, unitFile: '../bad' }],
+    [{ LoadState: 'not-found', FragmentPath: fragmentKnownPaths.unitFile }, fragmentKnownPaths],
+    [ownedResponse(''), fragmentKnownPaths], [ownedResponse('/tmp/foreign'), fragmentKnownPaths],
+    [ownedResponse(fragmentKnownPaths.runtimeLink + '\n'), fragmentKnownPaths]]) {
+    await assert.rejects(verifyKnownUnitFragmentPaths(record, paths), { code: 'unit_fragment_identity' });
+  }
+  assert.equal(called, false);
+});
+test('post-query owned checks reject changed mode and hash for either accepted spelling', async t => {
+  for (const change of ['mode', 'hash']) for (const spelling of ['unitFile', 'runtimeLink']) {
+    const f = await ownedFragmentFixture(t), owned = await extractedOwnedProperties(f, async () => {
+      if (change === 'mode') await chmod(f.unitFile, 0o644); else await writeFile(f.unitFile, 'changed');
+      return ownedResponse(f[spelling]);
+    });
+    await assert.rejects(owned(), { code: 'unit_file_identity' });
+  }
+});
+test('post-query owned checks reject a retargeted exact file spelling and changed runtime parent', async t => {
+  for (const change of ['link', 'parent']) {
+    const f = await ownedFragmentFixture(t), duplicate = `${f.root}/duplicate.service`; await writeFile(duplicate, f.bytes, { mode: 0o600 });
+    const owned = await extractedOwnedProperties(f, async () => {
+      if (change === 'link') { await rm(f.runtimeLink); await symlink(duplicate, f.runtimeLink); }
+      else await chmod(`${f.runtime}/systemd/user`, 0o777);
+      return ownedResponse(f.unitFile);
+    });
+    await assert.rejects(owned(), { code: change === 'link' ? 'unit_link_identity' : 'unit_directory_identity' });
+  }
+});
+test('post-query canonical and cgroup refusals retain the exact owned guard boundary', async t => {
+  const f = await ownedFragmentFixture(t);
+  const badGroup = await extractedOwnedProperties(f, async () => ({ ...ownedResponse(f.runtimeLink), ControlGroup: '/foreign' }));
+  await assert.rejects(badGroup(), { code: 'unit_cgroup_identity' });
+  const wrongLoad = await extractedOwnedProperties(f, async () => ({ ...ownedResponse(f.unitFile), LoadState: 'not-found' }));
+  await assert.rejects(wrongLoad(), { code: 'unit_fragment_identity' });
+});
+
+test('known-path verifier refuses non-record containers and hostile prototype traps', async () => {
+  const fields = ownedResponse(fragmentKnownPaths.unitFile);
+  const proxy = new Proxy({}, { getPrototypeOf() { throw new Error('private'); } });
+  for (const record of [Object.assign([], fields), Object.assign(() => {}, fields), Object.assign(Object.create({}), fields), proxy]) {
+    await assert.rejects(verifyKnownUnitFragmentPaths(record, fragmentKnownPaths), { code: 'unit_fragment_identity' });
+  }
+  for (const paths of [Object.assign([], fragmentKnownPaths), Object.assign(() => {}, fragmentKnownPaths), Object.assign(Object.create({}), fragmentKnownPaths), proxy]) {
+    await assert.rejects(verifyKnownUnitFragmentPaths(fields, paths), { code: 'unit_fragment_identity' });
+  }
 });
