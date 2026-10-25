@@ -7,7 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
 import { digest } from '../alpha/runtime.mjs';
-import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths } from './lifecycle-check.mjs';
+import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
 const transcript = (changes = {}) => Object.entries({ LoadState: 'loaded', ActiveState: 'active', SubState: 'running', Result: 'success',
@@ -296,8 +296,8 @@ async function ownedFragmentFixture(t) {
 }
 async function extractedOwnedProperties(fixture, properties) {
   const source = await readFile(script, 'utf8');
-  const authority = source.slice(source.indexOf('  async function runtimeParents()'), source.indexOf('  async function properties()'));
-  const owned = source.slice(source.indexOf('  async function ownedProperties()'), source.indexOf('  async function launcherIdentity('));
+  const authority = source.slice(source.indexOf('  async function runtimeParents()'), source.indexOf('  async function properties('));
+  const owned = source.slice(source.indexOf('  async function ownedProperties('), source.indexOf('  async function launcherIdentity('));
   const rejectCode = code => { throw Object.assign(new Error(code), { code }); };
   const absent = async file => { try { await lstat(file); return false; } catch (e) { if (e.code === 'ENOENT') return true; throw e; } };
   const factory = new Function('env', 'lstat', 'process', 'readlink', 'realpath', 'readFile', 'digest', 'report', 'unitFile', 'runtimeLink', 'unitName', 'properties', 'fragments', 'start', 'inCleanup', 'verifyKnownUnitFragmentPaths', 'reject', 'absent', `${authority}${owned}; return ownedProperties;`);
@@ -392,17 +392,17 @@ async function syntheticAutomaticStart({ binding = true, lateBinding = binding, 
   const reset = source.slice(source.indexOf('  function resetServiceCleanupEvidence()'), source.indexOf('  async function stopOwned()'));
   const calls = [], report = priorReport || { explicitReadinessPasses: 0, nativeSessionsStarted: priorStopped, nativeSessionsStopped: priorStopped, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
     cleanup: { managerStopped: true, launcherExited: true, nativeGroupsAbsent: true, listeningPortsClosed: true, controlSocketAbsent: true, runtimeLinkAbsent: true, installationRemoved: false, temporaryRootRemoved: false, appSocketsRemaining: 0 } }, sessions = Array.from({ length: priorStopped }, () => ({}));
-  let observations = 0, cancelChecks = 0, statusObservations = 0;
+  let observations = 0, cancelChecks = 0, statusObservations = 0, managerStarted = false;
   const reject = code => { throw Object.assign(new Error(code), { code }); };
-  const own = async () => { calls.push('properties'); return ++observations === 1 ? { ActiveState: 'inactive', MainPID: '0' } : { ActiveState: 'active', SubState: 'running' }; };
+  const own = async () => { calls.push('properties'); observations++; return !managerStarted ? { ActiveState: 'inactive', MainPID: '0' } : { ActiveState: 'active', SubState: 'running' }; };
   const cli = async (_node, _launcher, args) => { calls.push(`cli_${args[0]}`); assert.equal(args[0], 'status'); return { binding: ++statusObservations === 1 ? binding : lateBinding, runtime: { identityValid } }; };
-  const factory = new Function('start', 'checkCancelled', 'ownedProperties', 'systemctl', 'unitName', 'launcherIdentities', 'launcherIdentity', 'report', 'cli', 'node', 'launcher', 'env', 'until', 'inventorySessions', 'sessions', 'observeNative', 'request', 'gatewayPort', 'reject', `let startRequested = false, lastSession = null; ${reset}${body}; return startAndServe;`);
+  const factory = new Function('start', 'checkCancelled', 'ownedProperties', 'systemctl', 'unitName', 'launcherIdentities', 'launcherIdentity', 'report', 'cli', 'node', 'launcher', 'env', 'until', 'inventorySessions', 'sessions', 'observeNative', 'request', 'gatewayPort', 'reject', 'observeStartPost', `let startRequested = false, lastSession = null; ${reset}${body}; return startAndServe;`);
   const start = factory(createStartDiagnostics(), () => { if (++cancelChecks === cancelAt) reject('cancelled'); }, own,
-    async (args, timeout) => { calls.push('manager_start'); assert.deepEqual(args, ['start', 'fixture.service']); assert.equal(timeout, 15000); return { ok: startOK }; },
+    async (args, timeout) => { calls.push('manager_start'); managerStarted = true; assert.deepEqual(args, ['start', 'fixture.service']); assert.equal(timeout, 15000); return { ok: startOK }; },
     'fixture.service', [], async () => { calls.push('launcher'); return {}; }, report, cli, '/synthetic/node', '/synthetic/launcher', {},
     async fn => { assert.equal(await fn(), true); }, async () => { calls.push('inventory'); sessions.push({}); }, sessions,
     async () => { calls.push('native'); report.nativeSessionsStarted++; return { id: 'one' }; },
-    async (_port, route = '/', body) => { calls.push(`request_${route}`); return { status: 200, body: route === '/echo' ? body : route === '/stream' ? Buffer.alloc(65537, 0x62) : Buffer.from('service-fixture\n') }; }, 0, reject);
+    async (_port, route = '/', body) => { calls.push(`request_${route}`); return { status: 200, body: route === '/echo' ? body : route === '/stream' ? Buffer.alloc(65537, 0x62) : Buffer.from('service-fixture\n') }; }, 0, reject, async () => {});
   let failure = null; try { await start(); } catch (e) { failure = e.code; }
   return { calls, report, failure };
 }
@@ -483,4 +483,125 @@ test('freshly completed stop restores all five confirmations only after the unch
   const result = await syntheticOwnedStop(); assert.equal(result.code, null); assertServiceCleanup(result.report, true);
   assert.equal(result.report.nativeSessionsStarted, 1); assert.equal(result.report.nativeSessionsStopped, 1);
   assert.equal(result.report.cleanup.runtimeLinkAbsent, true); assert.equal(result.report.cleanup.appSocketsRemaining, 0);
+});
+
+const hookExpected = Object.freeze({ nodeExecutable: '/synthetic/node', launcher: '/synthetic/install/bin/x10' });
+const hookText = (change = {}) => {
+  const r = { path: hookExpected.nodeExecutable, argv: `${hookExpected.nodeExecutable} ${hookExpected.launcher} wait-bind --timeout-ms 10000`, ignore: 'no',
+    start: 'Sun 2026-10-25 06:00:00 UTC', stop: 'Sun 2026-10-25 06:00:01 UTC', pid: '4321', code: 'exited', status: '1', ...change };
+  return `ExecStartPost={ path=${r.path} ; argv[]=${r.argv} ; ignore_errors=${r.ignore} ; start_time=[${r.start}] ; stop_time=[${r.stop}] ; pid=${r.pid} ; code=${r.code} ; status=${r.status} }\n`;
+};
+const observedHook = text => { const d = createHookStatusDiagnostics(); d.observe(1, 'before_start', text, hookExpected); return d.snapshot().observations[0]; };
+for (const status of ['0', '1', '255']) test(`hook observation permits only the bounded exited status ${status}`, () => {
+  const r = observedHook(hookText({ status })); assert.equal(r.state, 'completed'); assert.equal(r.codeClass, 'exited'); assert.equal(r.exitStatus, Number(status));
+  assert.equal(r.recordChangedSincePreStart, 'unknown'); assert.equal(r.signalClass, 'none');
+});
+for (const [code, status] of [['killed', '15/TERM'], ['dumped', '11/SEGV']]) test(`hook observation exposes only generic signal class ${code}`, () => {
+  const r = observedHook(hookText({ code, status })); assert.equal(r.codeClass, 'signal'); assert.equal(r.signalClass, code); assert.equal(r.exitStatus, null);
+  assert.equal(JSON.stringify(r).includes(status), false);
+});
+for (const [name, text] of Object.entries({ empty: '', missingLF: hookText().slice(0, -1), extraLF: hookText() + '\n', duplicate: hookText() + hookText(),
+  field: hookText().replace(' ; pid=', ' ; other=value ; pid='), duplicateField: hookText().replace(' ; pid=', ' ; code=exited ; pid='),
+  wrongPath: hookText({ path: '/other/node' }), extraArg: hookText({ argv: `${hookExpected.nodeExecutable} ${hookExpected.launcher} wait-bind --timeout-ms 10000 --other` }),
+  wrongLauncher: hookText({ argv: `${hookExpected.nodeExecutable} /other/launcher wait-bind --timeout-ms 10000` }), ignoredFailure: hookText({ ignore: 'yes' }),
+  CRLF: hookText().replaceAll('\n', '\r\n'), nonASCII: hookText({ start: 'private-é' }), escape: hookText().replace('ExecStartPost=', '\u001bExecStartPost='), oversized: 'x'.repeat(16385),
+  noProperty: hookText().replace('ExecStartPost=', ''), foreignProperty: hookText().replace('ExecStartPost=', 'ExecMain='), leadingSpace: ' ' + hookText(), trailingText: hookText() + 'private' })) {
+  test(`hook parser refuses ${name} without returning raw data`, () => { const r = observedHook(text); assert.equal(r.state, 'unknown'); assert.equal(r.diagnosticResult, 'parse_refused'); assert.equal(r.exitStatus, null); });
+}
+for (const [name, change] of Object.entries({ unexecuted: { pid: '0', start: 'n/a', stop: 'n/a', code: '(null)', status: '0' },
+  noStop: { stop: 'n/a' }, badTime: { start: 'private' }, pidOverflow: { pid: '2147483648' }, unknownCode: { code: 'private' },
+  negativeExit: { status: '-1' }, largeExit: { status: '256' }, exitedSignalSuffix: { status: '1/HUP' }, signalWithoutSuffix: { code: 'killed', status: '15' },
+  zeroSignal: { code: 'killed', status: '0/TERM' }, largeSignal: { code: 'killed', status: '65/TERM' } })) {
+  test(`hook record remains unknown for ${name}`, () => { const r = observedHook(hookText(change)); assert.equal(r.state, 'unknown'); assert.equal(r.exitStatus, null); assert.equal(r.recordChangedSincePreStart, 'unknown'); });
+}
+test('hook snapshots reveal no raw paths, PID, time, command or invocation authority', () => {
+  const d = createHookStatusDiagnostics(); d.observe(1, 'before_start', hookText(), hookExpected); d.observe(1, 'failed_start', hookText({ status: '2' }), hookExpected);
+  const output = JSON.stringify(d.snapshot()); for (const secret of ['/synthetic', '4321', 'Sun 2026', 'wait-bind', 'nodeExecutable', 'startTime', 'currentInvocationVerified']) assert.equal(output.includes(secret), false);
+  assert.equal(d.snapshot().observations[1].recordChangedSincePreStart, false);
+});
+test('hook record comparison observes only private PID and start-time tuple changes', () => {
+  for (const change of [{ pid: '4322' }, { start: 'Sun 2026-10-25 06:00:02 UTC' }]) {
+    const d = createHookStatusDiagnostics(); d.observe(1, 'before_start', hookText(), hookExpected); d.observe(1, 'failed_start', hookText(change), hookExpected);
+    assert.equal(d.snapshot().observations[1].recordChangedSincePreStart, true);
+  }
+  const d = createHookStatusDiagnostics(); d.observe(1, 'before_start', hookText({ pid: '0', start: 'n/a', stop: 'n/a', code: '(null)', status: '0' }), hookExpected); d.observe(1, 'failed_start', hookText(), hookExpected);
+  assert.equal(d.snapshot().observations[1].recordChangedSincePreStart, 'unknown');
+});
+test('hook collector ignores getters, coercion and throwing expected-record descriptors', () => {
+  let called = false; const expected = {}; for (const k of ['nodeExecutable', 'launcher']) Object.defineProperty(expected, k, { get() { called = true; return 'private'; } });
+  const d = createHookStatusDiagnostics(); d.observe(1, 'before_start', hookText(), expected);
+  d.observe(1, 'failed_start', { toString() { called = true; return hookText(); } }, hookExpected);
+  assert.equal(called, false); assert(d.snapshot().observations.every(x => x.state === 'unknown'));
+  const proxy = new Proxy({}, { getOwnPropertyDescriptor() { throw new Error('private'); } }); const other = createHookStatusDiagnostics(); other.observe(1, 'before_start', hookText(), proxy);
+  assert.equal(other.snapshot().observations[0].state, 'unknown');
+});
+test('hook collector bounds four records and two attempts with defensive snapshots', () => {
+  const d = createHookStatusDiagnostics(); for (const attempt of [1, 2]) for (const stage of ['before_start', 'failed_start']) d.observe(attempt, stage, hookText(), hookExpected);
+  d.observe(3, 'before_start', hookText(), hookExpected); d.observe(1, 'failed_start', hookText(), hookExpected);
+  const first = d.snapshot(); first.observations[0].exitStatus = 99; first.observations.push({ private: true });
+  const s = d.snapshot(); assert.equal(s.observationCount, 4); assert.equal(s.observations.length, 4); assert.equal(s.observationsTruncated, true); assert.equal(s.observations[0].exitStatus, 1);
+});
+test('duplicate diagnostic stages invalidate a private comparison anchor', () => {
+  const d = createHookStatusDiagnostics(); d.observe(1, 'before_start', hookText(), hookExpected); d.observe(1, 'before_start', hookText({ pid: '4322' }), hookExpected); d.observe(1, 'failed_start', hookText({ pid: '4323' }), hookExpected);
+  const s = d.snapshot(); assert.equal(s.observations[1].state, 'unknown'); assert.equal(s.observations[2].recordChangedSincePreStart, 'unknown');
+});
+async function syntheticHookFailure({ query = 'valid', authorityFailure = 0, cancelQuery = 0, collectorThrow = null, snapshotThrow = false, freshChange = null } = {}) {
+  const source = await readFile(script, 'utf8');
+  const observer = source.slice(source.indexOf('  async function observeStartPost('), source.indexOf('  async function launcherIdentity('));
+  const reset = source.slice(source.indexOf('  function resetServiceCleanupEvidence()'), source.indexOf('  async function stopOwned()'));
+  const body = source.slice(source.indexOf('  async function startAndServe()'), source.indexOf("  process.once('SIGINT', cancel)"));
+  const trace = [], report = { nativeSessionsStarted: 0, nativeSessionsStopped: 0, cleanup: Object.fromEntries(serviceCleanupNames.map(k => [k, true])) };
+  let guards = 0, queries = 0, controller; const original = createHookStatusDiagnostics();
+  const hooks = { observe(...args) { if (collectorThrow === 'observe') throw new Error('private'); original.observe(...args); }, unavailable(...args) { if (collectorThrow === 'unavailable') throw new Error('private'); original.unavailable(...args); } };
+  const start = createStartDiagnostics(), originalSnapshot = start.snapshot;
+  const startAdapter = { ...start, snapshot() { if (snapshotThrow && trace.includes('manager_start')) throw new Error('private'); return originalSnapshot(); } };
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  const own = async observe => { trace.push(observe === false ? 'guard_diagnostic' : 'guard_lifecycle');
+    if (observe === false) {
+      guards++; if (guards === authorityFailure) throw new Error('private');
+      if (guards === 3) {
+        if (freshChange === 'ownership') reject('unit_link_identity');
+        if (freshChange === 'active') return { ActiveState: 'active', MainPID: '0' };
+        if (freshChange === 'pid') return { ActiveState: 'inactive', MainPID: '123' };
+        if (freshChange === 'cancel') controller.cancel();
+      }
+    }
+    return { ActiveState: 'inactive', MainPID: '0' };
+  };
+  const systemctl = async (args, timeout) => {
+    if (args[0] === 'start') { trace.push('manager_start'); assert.equal(timeout, 15000); return { ok: false, exitCode: 1, stderr: '', termination: 'exit_nonzero' }; }
+    trace.push('hook_query'); queries++; assert.deepEqual(args, ['show', 'fixture.service', '--property=ExecStartPost']); assert.equal(timeout, 2500);
+    if (queries === cancelQuery) controller.cancel();
+    if (query === 'throw') throw new Error('private');
+    return { ok: query !== 'failed', exitCode: query === 'failed' ? 1 : 0, stderr: query === 'stderr' ? 'private' : '', stdout: query === 'malformed' ? 'private' : hookText({ pid: String(4320 + queries) }) };
+  };
+  const factory = new Function('start', 'hooks', 'ownedProperties', 'systemctl', 'unitName', 'node', 'launcher', 'report', 'checkFailure', 'reject', `${reset}${observer}${body}; let cancelled = false, startRequested = false; const checkCancelled = () => { if (cancelled) reject('cancelled'); }; return { run: startAndServe, cancel() { cancelled = true; } };`);
+  controller = factory(startAdapter, hooks, own, systemctl, 'fixture.service', hookExpected.nodeExecutable, hookExpected.launcher, report, null, reject);
+  let failure = null; try { await controller.run(); } catch (e) { failure = e.code; }
+  return { failure, trace, report, diagnostics: original.snapshot(), queries };
+}
+test('owned read-only hook queries bracket before and failed-after start without replacing the refusal', async () => {
+  const result = await syntheticHookFailure(); assert.equal(result.failure, 'unit_start_failed'); assert.equal(result.queries, 2);
+  assert.deepEqual(result.trace, ['guard_lifecycle', 'guard_diagnostic', 'hook_query', 'guard_diagnostic', 'guard_diagnostic', 'manager_start', 'guard_diagnostic', 'hook_query', 'guard_diagnostic']);
+  assert.equal(result.diagnostics.observations[1].exitStatus, 1); assert.equal(result.diagnostics.observations[1].recordChangedSincePreStart, true); assertServiceCleanup(result.report, false);
+});
+for (const query of ['failed', 'stderr', 'malformed', 'throw']) test(`diagnostic ${query} preserves primary start failure`, async () => {
+  const r = await syntheticHookFailure({ query }); assert.equal(r.failure, 'unit_start_failed'); assert.equal(r.trace.filter(s => s === 'manager_start').length, 1);
+  assert(r.diagnostics.observations.every(o => o.state === 'unknown')); assertServiceCleanup(r.report, false);
+});
+for (const authorityFailure of [1, 2, 4, 5]) test(`diagnostic owned guard failure ${authorityFailure} has no lifecycle authority`, async () => {
+  const r = await syntheticHookFailure({ authorityFailure }); assert.equal(r.failure, 'unit_start_failed'); assert.equal(r.trace.filter(s => s === 'manager_start').length, 1); assertServiceCleanup(r.report, false);
+});
+test('cancellation during the new pre-start query prevents any mutating start', async () => {
+  const r = await syntheticHookFailure({ cancelQuery: 1 }); assert.equal(r.failure, 'cancelled'); assert.equal(r.trace.includes('manager_start'), false); assert.equal(r.queries, 1); assertServiceCleanup(r.report, false);
+});
+test('cancellation during failed-start diagnostics cannot replace unit_start_failed', async () => {
+  const r = await syntheticHookFailure({ cancelQuery: 2 }); assert.equal(r.failure, 'unit_start_failed'); assert.equal(r.trace.filter(s => s === 'manager_start').length, 1); assertServiceCleanup(r.report, false);
+});
+for (const options of [{ collectorThrow: 'observe' }, { collectorThrow: 'unavailable', query: 'failed' }, { snapshotThrow: true }]) test(`all diagnostic collector failures remain non-authoritative ${JSON.stringify(options)}`, async () => {
+  const r = await syntheticHookFailure(options); assert.equal(r.failure, 'unit_start_failed'); assertServiceCleanup(r.report, false);
+});
+
+for (const [freshChange, expected] of [['ownership', 'unit_link_identity'], ['active', 'unit_not_stopped'], ['pid', 'unit_not_stopped'], ['cancel', 'cancelled']]) test(`fresh pre-action guard refuses ${freshChange} after diagnostics without any start`, async () => {
+  const r = await syntheticHookFailure({ freshChange }); assert.equal(r.failure, expected); assert.equal(r.trace.includes('manager_start'), false); assertServiceCleanup(r.report, false);
 });

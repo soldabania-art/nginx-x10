@@ -473,3 +473,55 @@ must not be exposed. Further diagnosis needs bounded direct installed-hook
 outcomes and an owned startup rendezvous, with unknown-state retention.
 Actual repeated automatic lifecycle and final cleanup require exact new
 CI; local freshness controls do not accept an actual service or V1.
+
+
+## Bounded owned post-start record observations
+
+The checker observes the already known owned unit ExecStartPost property
+before attempting startup and after a failed manager start. Owned-unit and
+link checks guard the bounded read before and after it. Parsing accepts only
+the expected pinned installed Node, launcher and argv grammar. Public output
+contains finite allowlisted classifications, never raw serialized records,
+command/error output, process identifiers, start-time values or host paths.
+
+hookStatusDiagnostics retains at most4 attempt/stage observations, with
+explicit truncation. Unsupported, malformed, ambiguous, never-run and
+incomplete records remain unknown. Accepted exited records expose only
+a finite exitStatus0..255; signal records expose a fixed signal class.
+
+recordChangedSincePreStart compares only the private PID/start-time tuple
+and returns true, false or unknown. It does not compare the entire command
+record or its outcome. It is not a fresh invocation ID or proof that
+this attempt invoked, owns or observed completion of that hook. A matched
+command record or changed process/time metadata does not confer authority.
+Main-process exit metadata cannot substitute for the post-start command.
+
+All property-query, parsing and diagnostic ownership-check failures are
+best-effort unknown observations; they cannot replace the primary startup
+error or cleanup result, authorize actions, or delete an uncertain runtime.
+After the diagnostic await, normal full ownedProperties(false) checks run
+again and require inactive state with MainPID0. This is a real admission
+gate; its errors are not best-effort diagnostic failures. Cancellation is
+then checked after that awaited revalidation and before manager start.
+Cancellation while observing an already failed start must not overwrite that original unit_start_failed error. These added
+authority/state and cancellation gates protect the new await window. Added
+recheck queries suppress collector observations only; authority checks and
+existing collector bounds remain required, as do normal mutating commands
+and cleanup rules.
+
+Accepted property text is limited to16384 bytes; the existing execFile
+maxBuffer remains256KiB. Each complete observation has two owned property
+queries plus one hook-property query, each with2500ms configured timeout.
+Two pre-start observations, one failed-start observation and two mandatory
+post-observation authority rechecks add up to11 manager queries and27.5s
+summed configured timeouts in that flow. Filesystem work and scheduling
+are additional; this is not measured latency or a hard wall-clock limit.
+
+
+Both prior exactd697 runs completed one first automatic cycle, then failed
+the second manager start. Their five cleanup confirmations were false,
+correctly unconfirmed, and Node/bootstrap remained retained. Hook cause and
+failing inventory record remain unknown. The new record observations are
+diagnostics, not startup repair. Actual hook-query evidence and full repeated
+automatic lifecycle require exact new CI; an owned installed-hook outcome or
+rendezvous mechanism and complete service/V1 gates remain separate work.

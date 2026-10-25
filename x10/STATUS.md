@@ -2017,3 +2017,38 @@ and raw ExecStartPost serialization is unsafe evidence. Preserve the unknown
 cause, original first-cycle progress and earlier adverse history. Automatic
 two-cycle service, logging/restart/adverse/TLS, package recovery, permanent
 distribution, soak and Production V1 remain open.
+
+
+## Bounded owned post-start status observations
+
+Both exactd697 workflows still FAILED second_start/request_start with
+primary unit_start_failed and separate cleanup native_cleanup_unknown.
+One first automatic cycle passed per run. The five current-attempt cleanup
+confirmations are now false in both actual reports, narrowly verifying
+cleanup-evidence freshness. False is unconfirmed, not physical presence;
+final cleanup and hook/native/manager cause remain unknown. Private Node
+and bootstrap were retained without a dependency-cleanup receipt.
+
+[Evidence](evidence/g3-hook-status.json) retains the current actual native52,
+research14 and independent66 audits plus fresh47 CI checks once. Native20,
+recipe28, lifecycle138total137PASS/1rootSKIP, dependency46/preflight42 and
+TLS18/16 passed separately; research PR ran21/7/27/48, push runtime skipped.
+Matching outer failures do not prove the same historical cause or timing.
+
+New best-effort observations query the known owned post-start property
+before startup and after failed startup, publish finite classifications
+and keep raw process/time identity private. recordChangedSincePreStart
+is a tri-state record comparison only, never fresh invocation authority.
+Guard/query/parse failures cannot overwrite primary errors or cleanup.
+No startup repair or new service acceptance is claimed.
+
+After the diagnostic await, normal full ownedProperties(false) authority
+is checked again and requires inactive/MainPID0, then cancellation is
+rechecked before start. Real state/authority refusals from that gate remain
+mandatory; only the diagnostic itself is best-effort. A signal during the
+failed-start observation does not replace the original unit_start_failed
+primary. Existing normal command arguments, identity-check implementations,
+counters, cleanup resets and runtime retention remain; admission now also
+revalidates authority/state after the diagnostic await. Exact new CI is
+pending; direct owned-hook outcome/rendezvous evidence and broader G3/V1
+acceptance remain open.

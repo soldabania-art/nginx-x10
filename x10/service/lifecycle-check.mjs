@@ -248,6 +248,46 @@ export function createFragmentIdentityDiagnostics() {
     snapshot() { return { observationCount: count, observationsTruncated: truncated, observations: observations.map(x => ({ ...x })) }; },
   });
 }
+// ExecStartPost diagnostics are bounded observations, never lifecycle authority.
+// Raw execution identity stays inside this collector and is never returned.
+export function createHookStatusDiagnostics() {
+  let count = 0, truncated = false; const observations = [], before = new Map(), seen = new Set();
+  const unknown = result => ({ diagnosticResult: result, state: 'unknown', codeClass: 'unknown', exitStatus: null, signalClass: 'unknown' });
+  function parse(text, expected) {
+    const node = ownData(expected, 'nodeExecutable'), launcher = ownData(expected, 'launcher');
+    const simple = value => typeof value === 'string' && value.length <= 4096 && /^\/[A-Za-z0-9_./+-]+$/.test(value)
+      && !value.includes('\n') && path.posix.normalize(value) === value;
+    if (!simple(node) || !simple(launcher) || typeof text !== 'string' || Buffer.byteLength(text) > 16384
+        || /[^\x20-\x7e\n]/.test(text)) return { safe: unknown('parse_refused'), identity: null };
+    const match = /^ExecStartPost=\{ path=([^;{}\n]{1,4096}) ; argv\[\]=([^;{}\n]{1,8192}) ; ignore_errors=no ; start_time=\[([^\]\n]{1,128})\] ; stop_time=\[([^\]\n]{1,128})\] ; pid=(0|[1-9][0-9]{0,9}) ; code=([a-z]+|\(null\)|n\/a) ; status=(-?(?:0|[1-9][0-9]{0,9}))(?:\/([A-Z][A-Z0-9+-]{0,15}))? \}\n$/.exec(text);
+    if (!match || match[0] !== text || match[1] !== node || match[2] !== `${node} ${launcher} wait-bind --timeout-ms 10000`) return { safe: unknown('parse_refused'), identity: null };
+    const [, , , startTime, stopTime, pid, code, status, signal] = match;
+    const timestamp = /^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) [0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01]) (?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\.[0-9]{1,6})? (?:[A-Z]{1,8}|[+-][0-9]{4})$/;
+    if (!timestamp.test(startTime) || !timestamp.test(stopTime) || Number(pid) < 2 || Number(pid) > 2147483647) return { safe: unknown('unresolved_record'), identity: null };
+    const identity = { pid, startTime };
+    if (code === 'exited' && !signal && /^(?:0|[1-9][0-9]{0,2})$/.test(status) && Number(status) <= 255)
+      return { safe: { diagnosticResult: 'observed', state: 'completed', codeClass: 'exited', exitStatus: Number(status), signalClass: 'none' }, identity };
+    if (['killed', 'dumped'].includes(code) && signal && /^[1-9][0-9]?$/.test(status) && Number(status) <= 64)
+      return { safe: { diagnosticResult: 'observed', state: 'completed', codeClass: 'signal', exitStatus: null, signalClass: code }, identity };
+    return { safe: unknown('unresolved_record'), identity: null };
+  }
+  function add(attempt, stage, parsed) {
+    if (![1, 2].includes(attempt) || !['before_start', 'failed_start'].includes(stage)) { truncated = true; return; }
+    if (count >= 4) { truncated = true; return; } count++;
+    const key = `${attempt}:${stage}`;
+    if (seen.has(key)) { before.delete(attempt); parsed = { safe: unknown('parse_refused'), identity: null }; }
+    seen.add(key);
+    let changed = 'unknown';
+    if (stage === 'before_start') { if (!before.has(attempt)) before.set(attempt, parsed.identity); }
+    else { const prior = before.get(attempt); if (prior && parsed.identity) changed = prior.pid !== parsed.identity.pid || prior.startTime !== parsed.identity.startTime; }
+    observations.push({ attempt, stage, ...parsed.safe, recordChangedSincePreStart: changed });
+  }
+  return Object.freeze({
+    observe(attempt, stage, text, expected) { let parsed; try { parsed = parse(text, expected); } catch { parsed = { safe: unknown('parse_refused'), identity: null }; } add(attempt, stage, parsed); },
+    unavailable(attempt, stage, result) { add(attempt, stage, { safe: unknown(pickEnum(result, ['unavailable', 'query_refused', 'parse_refused', 'cancelled'], 'unavailable')), identity: null }); },
+    snapshot() { return { observationCount: count, observationsTruncated: truncated, observations: observations.map(item => ({ ...item })) }; },
+  });
+}
 async function archiveBytes(file) {
   const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
   try {
@@ -310,7 +350,7 @@ export async function main(argv = process.argv.slice(2)) {
   let input, parent, prefix, node, launcher, unitFile, runtimeLink, unitName, env, app, appPort, gatewayPort, healthPort;
   let linked = false, installed = false, safeToRemove = false, cancelled = false, startRequested = false, lastSession = null, inCleanup = false;
   const sessions = [], launcherIdentities = [], sockets = new Set();
-  const failures = createFailureDiagnostics(), start = createStartDiagnostics(), fragments = createFragmentIdentityDiagnostics();
+  const failures = createFailureDiagnostics(), start = createStartDiagnostics(), fragments = createFragmentIdentityDiagnostics(), hooks = createHookStatusDiagnostics();
   const cancel = () => { cancelled = true; };
   const checkCancelled = () => { if (cancelled) reject('cancelled'); };
   const systemctl = (args, timeout = 10000) => command(TOOL, ['--user', '--no-pager', '--no-ask-password', ...args], env, timeout);
@@ -330,24 +370,40 @@ export async function main(argv = process.argv.slice(2)) {
         || digest(await readFile(unitFile)) !== report.unitSha256) reject('unit_file_identity');
     return { targetMatchesUnit: true, unitOwnedModeHash: true };
   }
-  async function properties() {
+  async function properties(observe = true) {
     const r = await systemctl(['show', unitName, ...KEYS.map(k => `--property=${k}`)], 2500);
-    if (!inCleanup && ['first_start', 'second_start'].includes(report.phase)) start.observe('properties_command', r);
+    if (observe && !inCleanup && ['first_start', 'second_start'].includes(report.phase)) start.observe('properties_command', r);
     if (![0, 1].includes(r.exitCode)) reject('unit_query_failed');
     const parsed = parseUnitProperties(r.stdout);
-    if (!inCleanup && ['first_start', 'second_start'].includes(report.phase)) start.observe('properties_state', parsed);
+    if (observe && !inCleanup && ['first_start', 'second_start'].includes(report.phase)) start.observe('properties_state', parsed);
     if (parsed.LoadState === 'loaded' && (!r.ok || r.stderr)) reject('unit_query_failed');
     if (parsed.LoadState === 'not-found' && (parsed.MainPID !== '0' || parsed.FragmentPath !== '' || parsed.ControlGroup !== '' || parsed.ActiveState !== 'inactive')) reject('unit_response_invalid');
     return parsed;
   }
-  async function ownedProperties() {
-    const precedingLinkCheck = await linkAuthority(); const p = await properties();
-    fragments.observe(p, { unitFile, runtimeLink }, precedingLinkCheck, report.phase, start.snapshot().lastStep, inCleanup);
+  async function ownedProperties(observe = true) {
+    const precedingLinkCheck = await linkAuthority(); const p = await properties(observe);
+    if (observe) fragments.observe(p, { unitFile, runtimeLink }, precedingLinkCheck, report.phase, start.snapshot().lastStep, inCleanup);
     await verifyKnownUnitFragmentPaths(p, { unitFile, runtimeLink });
     await linkAuthority();
     if (p.ControlGroup !== '' && !p.ControlGroup.startsWith(`/user.slice/user-${process.getuid()}.slice/user@${process.getuid()}.service/`)) reject('unit_cgroup_identity');
     if (p.ControlGroup !== '' && !p.ControlGroup.endsWith(`/${unitName}`)) reject('unit_cgroup_identity');
     return p;
+  }
+  async function observeStartPost(stage) {
+    let attempt;
+    try {
+      attempt = start.snapshot().attempts;
+      if (cancelled) { hooks.unavailable(attempt, stage, 'cancelled'); return; }
+      await ownedProperties(false);
+      if (cancelled) { hooks.unavailable(attempt, stage, 'cancelled'); return; }
+      const result = await systemctl(['show', unitName, '--property=ExecStartPost'], 2500);
+      await ownedProperties(false);
+      if (cancelled) { hooks.unavailable(attempt, stage, 'cancelled'); return; }
+      if (!result.ok || result.exitCode !== 0 || result.stderr !== '') hooks.unavailable(attempt, stage, 'query_refused');
+      else hooks.observe(attempt, stage, result.stdout, { nodeExecutable: node, launcher });
+    } catch {
+      try { hooks.unavailable(attempt, stage, 'unavailable'); } catch { /* Diagnostics never acquire lifecycle authority. */ }
+    }
   }
   async function launcherIdentity(p) {
     const pid = Number(p.MainPID);
@@ -439,12 +495,15 @@ export async function main(argv = process.argv.slice(2)) {
     checkCancelled();
     start.step('before_properties');
     const before = await ownedProperties(); if (before.ActiveState !== 'inactive' || Number(before.MainPID) !== 0) reject('unit_not_stopped');
+    await observeStartPost('before_start');
+    const fresh = await ownedProperties(false); if (fresh.ActiveState !== 'inactive' || Number(fresh.MainPID) !== 0) reject('unit_not_stopped');
+    checkCancelled();
     start.step('request_start');
     startRequested = true;
     const started = await systemctl(['start', unitName], 15000);
     start.observe('start_command', started);
     // Any timeout is diagnosed in finally; no second start is attempted blindly.
-    if (!started.ok) reject('unit_start_failed');
+    if (!started.ok) { await observeStartPost('failed_start'); reject('unit_start_failed'); }
     start.step('after_properties');
     const active = await ownedProperties(); if (active.ActiveState !== 'active' || active.SubState !== 'running') reject('unit_not_active');
     start.step('launcher_identity');
@@ -560,7 +619,7 @@ export async function main(argv = process.argv.slice(2)) {
     if (report.ok && (!report.cleanup.temporaryRootRemoved || !report.runtimeUnitRemoved || sockets.size)) { failures.cleanup(null, 'final_assertion'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel);
   }
-  return { ...report, ...failures.snapshot(), startDiagnostics: start.snapshot(), fragmentIdentityDiagnostics: fragments.snapshot() };
+  return { ...report, ...failures.snapshot(), startDiagnostics: start.snapshot(), fragmentIdentityDiagnostics: fragments.snapshot(), hookStatusDiagnostics: hooks.snapshot() };
 }
 let invoked = false;
 try { invoked = Boolean(process.argv[1]) && await realpath(process.argv[1]) === await realpath(fileURLToPath(import.meta.url)); } catch { /* Import has no mutation authority. */ }
