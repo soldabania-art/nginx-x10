@@ -9,7 +9,7 @@ export const JOURNAL_MAX_RECORDS = 128;
 export const JOURNAL_MAX_ATTEMPTS = 3;
 const TOOL = '/usr/bin/journalctl';
 const KEYS = ['MESSAGE', '_UID', '_SYSTEMD_USER_UNIT', '_SYSTEMD_INVOCATION_ID'];
-const METADATA = ['__CURSOR', '__REALTIME_TIMESTAMP', '__MONOTONIC_TIMESTAMP', '_BOOT_ID'];
+const METADATA = ['__CURSOR', '__REALTIME_TIMESTAMP', '__MONOTONIC_TIMESTAMP', '_BOOT_ID', '__SEQNUM', '__SEQNUM_ID'];
 const LIMITATIONS = Object.freeze({ scope: 'owned-user-unit-journal-readability',
   serviceAccepted: false, productionAccepted: false });
 const validUid = uid => Number.isSafeInteger(uid) && uid > 0 && uid <= 4294967294;

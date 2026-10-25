@@ -596,3 +596,31 @@ Local post-pin verification passed333 contract tests:246 lifecycle,36 journal
 and51 cleanup-receipt controls, separately from191 independent source proofs.
 These are not actual manager restarts or target-host acceptance. New exact
 nonroot CI must establish the changed operational path and complete owned cleanup.
+
+
+## Journal formatter sequence metadata compatibility
+
+The bounded journal parser now recognizes the optional __SEQNUM and
+__SEQNUM_ID metadata names emitted automatically by the public systemd255
+JSON formatter. They use the same existing scalar metadata shape/bounds
+checks and remain ignored private formatting data. Required UID/user-unit/
+invocation/message attribution, duplicate and unknown-field refusals, raw
+record privacy, query arguments, retry limits and live authority checks are
+unchanged. The entire module restores its baseline by removing only these
+two literal names. No checker pin or workflow adjustment is part of this fix.
+
+Before the edit, a fixed synthetic attributed running transcript containing
+all six standard formatter metadata fields refused journal_response_invalid.
+The candidate accepts that transcript while preserving malformed/foreign/
+unknown/oversized controls. The actual rejected raw record from earlier CI
+was not captured: this counterexample does not establish which field or
+condition caused either historical journal refusal.
+
+Both exacta03 native workflows failed at first_start/journal_read after one
+observed startup/readiness/proxy/upload/stream pass, before any restart or
+journal acceptance. Six process/socket/link cleanup confirmations and unit
+removal were true; installation and temporary roots were retained. No cleanup
+failure was recorded. Private Node/bootstrap were retained with no dependency
+cleanup receipt. Earlier401209 two-cycle success remains separately scoped.
+New exact CI must verify the parser with real journal/restart/cleanup evidence;
+Production V1, full G3, adverse recovery and package/release gates remain open.

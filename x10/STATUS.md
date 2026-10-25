@@ -2109,3 +2109,28 @@ Local post-pin contracts passed333/333 with no skips/failures:246 lifecycle,
 36 journal and51 cleanup-receipt controls. Independent source review passed191
 proofs. These units are separate from513 unchanged source/license comparisons
 and do not accept real manager/service behavior.
+
+
+## Journal formatter sequence metadata compatibility
+
+Both exacta03 native workflows FAILED first_start/journal_read with primary
+journal_response_invalid. Startup/readiness/proxy/upload/stream each reached
+one observation; restart commands and accepted journal checks remained zero.
+Six process/socket/link cleanup flags and runtime unit removal were true;
+installation/temp roots and private Node were retained, with no cleanup failure
+or dependency-cleanup receipt. The actual rejected raw field/cause is unknown.
+
+The journal parser now names the two optional standard systemd255 formatter
+fields __SEQNUM and __SEQNUM_ID as ignored private metadata under the existing
+shape/bounds rules. Required attribution, query/authority logic, checker pins,
+workflow and all native/alpha/controller runtime remain unchanged. A fixed
+public-formatter synthetic baseline refusal motivates the narrow change,
+not a reconstruction of the historical raw CI condition.
+
+[Evidence](evidence/g3-journal-format.json) preserves exacta03 failure and the
+separate prior401209 scoped success. Local post-integration contracts passed
+342/342:246 lifecycle,45 journal and51 dependency controls. Independent review
+passed45 proofs;523 unchanged file comparisons and15 structural checks are
+separate units. Actual journal/restart acceptance requires the resulting CI.
+Full G3/V1, adverse paths, combined TLS/service, package rollback/recovery,
+permanent distribution, security/soak and Continuum migration remain open.

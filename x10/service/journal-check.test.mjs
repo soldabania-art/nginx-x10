@@ -153,3 +153,43 @@ test('actual wrapper refuses a mismatched local UID before reading any journal',
   refused({ ...value, queryAttempts: 1 }, 'journal_local_prerequisites_unavailable');
   assert.equal(value.queryAttempts, 0);
 });
+
+// Official systemd v255 logs-show.c::output_json inserts these two fields
+// unconditionally, although that version's manual lists only four metadata
+// fields. The unchanged four-field parser refuses this valid transcript.
+const sequenceMetadata = { __SEQNUM: '17', __SEQNUM_ID: 'd'.repeat(32) };
+test('public v255 six-field metadata and the old four-field format yield the same finite observation', () => {
+  const oldFormat = assess(row()), publicV255 = assess(row(sequenceMetadata));
+  assert.equal(oldFormat.ok, true); assert.deepEqual(publicV255, oldFormat);
+  const serialized = JSON.stringify(publicV255);
+  for (const privateValue of Object.values(sequenceMetadata)) assert(!serialized.includes(privateValue));
+});
+for (const field of ['__SEQNUM', '__SEQNUM_ID']) {
+  test(`sequence metadata ${field} remains optional and string-only`, () => {
+    assert.equal(assess(row({ [field]: sequenceMetadata[field] })).ok, true);
+    for (const value of [null, [sequenceMetadata[field]], [1, 2], 17, {}, true])
+      refused(assess(row({ ...sequenceMetadata, [field]: value })), 'journal_response_invalid');
+    for (const value of ['x'.repeat(4097), 'private\nmetadata', '\u0000'])
+      refused(assess(row({ ...sequenceMetadata, [field]: value })), 'journal_response_invalid');
+  });
+  test(`duplicate or noncanonical escaped ${field} is not tolerated`, () => {
+    const text = JSON.stringify(row(sequenceMetadata));
+    const duplicate = text.replace('{', `{${JSON.stringify(field)}:"private-duplicate",`);
+    const escaped = text.replace(JSON.stringify(field) + ':', '"\\u005f' + field.slice(1) + '":');
+    refused(assessJournalQuery(record(duplicate + '\n'), known), 'journal_response_invalid');
+    refused(assessJournalQuery(record(escaped + '\n'), known), 'journal_response_invalid');
+  });
+}
+for (const field of ['_UID', '_SYSTEMD_USER_UNIT', '_SYSTEMD_INVOCATION_ID']) {
+  test(`standard sequence metadata cannot excuse foreign ${field}`, () => {
+    refused(assess(row({ ...sequenceMetadata, [field]: 'foreign-private-value' })), 'journal_identity_mismatch');
+    const missing = row(sequenceMetadata); delete missing[field];
+    refused(assess(missing), 'journal_response_invalid');
+  });
+}
+test('sequence metadata neither broadens unknown fields nor supplies a running marker', () => {
+  refused(assess(row({ ...sequenceMetadata, __UNRELATED: 'private-unknown' })), 'journal_response_invalid');
+  refused(assess(row({ ...sequenceMetadata, MESSAGE: 'not a running marker' })), 'journal_running_marker_missing');
+  const missing = row(sequenceMetadata); delete missing.MESSAGE;
+  refused(assess(missing), 'journal_response_invalid');
+});
