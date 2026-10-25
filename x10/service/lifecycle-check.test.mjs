@@ -4,7 +4,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS } from './lifecycle-check.mjs';
+import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError } from './lifecycle-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
 const transcript = (changes = {}) => Object.entries({ LoadState: 'loaded', ActiveState: 'active', SubState: 'running', Result: 'success',
@@ -68,4 +68,37 @@ test('actual root CLI refuses before archive read or mutation; nonroot observati
     assert.equal(r.actualUnitStarted, false); assert.equal(r.runtimeUnitLinked, false); assert.equal(r.nativeSessionsStarted, 0);
     assert.equal(r.cleanup.temporaryRootRemoved, false); assert.equal(r.serviceAccepted, false); return true;
   });
+});
+
+const nodeFacts = { regular: true, canonical: true, ownerAllowed: true, mode: 0o755, recordedPathMatches: true, recordedVersion: 'v22.23.3' };
+test('node prerequisite assessment emits only seven booleans and never service authority', () => {
+  const r = assessNodePrerequisites(nodeFacts);
+  assert.equal(Object.keys(r).length, 7); assert(Object.values(r).every(v => v === true));
+  assert.equal(Object.hasOwn(r, 'serviceAccepted'), false); assert.equal(Object.hasOwn(r, 'uid'), false); assert.equal(Object.hasOwn(r, 'mode'), false);
+});
+test('unsafe Node metadata stays diagnostic false without granting authority', () => {
+  const r = assessNodePrerequisites({ ...nodeFacts, regular: false, canonical: false, ownerAllowed: false, mode: 0o666, recordedPathMatches: false, recordedVersion: 'v21.9.0' });
+  assert(Object.values(r).every(v => v === false)); assert.equal(LIMITATIONS.serviceAccepted, false);
+});
+for (const [name, value] of Object.entries({ boolCoercion: { ...nodeFacts, ownerAllowed: 1 }, modeString: { ...nodeFacts, mode: '0755' }, modeNegative: { ...nodeFacts, mode: -1 }, modeHuge: { ...nodeFacts, mode: 0o10000 }, modeFraction: { ...nodeFacts, mode: 1.5 }, versionBuffer: { ...nodeFacts, recordedVersion: Buffer.from('v22.23.3') }, versionObject: { ...nodeFacts, recordedVersion: { toString: () => 'v22.23.3' } }, versionHuge: { ...nodeFacts, recordedVersion: 'x'.repeat(129) }, extraUID: { ...nodeFacts, uid: 0 }, extraPath: { ...nodeFacts, executable: '/private/path' }, missing: { regular: true }, array: [], foreignPrototype: Object.assign(Object.create({}), nodeFacts) })) {
+  test(`node diagnostic refuses ${name}`, () => assert.throws(() => assessNodePrerequisites(value), { code: 'recipe_diagnostic_failed' }));
+}
+test('node prerequisite getters are refused without evaluation', () => {
+  let called = false; const value = { ...nodeFacts }; Object.defineProperty(value, 'ownerAllowed', { get() { called = true; return true; } });
+  assert.throws(() => assessNodePrerequisites(value), { code: 'recipe_diagnostic_failed' }); assert.equal(called, false);
+});
+test('exact recipe refusal receives a fixed code only at recipe inspection', () => {
+  const e = new Error('service_recipe_invalid');
+  assert.equal(classifyLifecycleError(e, 'recipe_inspection'), 'recipe_inspection_refused');
+  assert.equal(classifyLifecycleError(e, 'install'), 'lifecycle_failed');
+  assert.equal(classifyLifecycleError(new TypeError('service_recipe_invalid'), 'recipe_inspection'), 'lifecycle_failed');
+  assert.equal(classifyLifecycleError({ message: 'service_recipe_invalid' }, 'recipe_inspection'), 'lifecycle_failed');
+});
+test('arbitrary messages and accessor codes never reach diagnostics', () => {
+  assert.equal(classifyLifecycleError(new Error('/private/path uid=999 pid=999'), 'recipe_inspection'), 'lifecycle_failed');
+  assert.equal(classifyLifecycleError(Object.assign(new Error('private'), { code: 'private_runtime_secret_abc' }), 'recipe_inspection'), 'lifecycle_failed');
+  assert.equal(classifyLifecycleError(Object.assign(new Error('private'), { code: 'EACCES' }), 'recipe_inspection'), 'lifecycle_failed');
+  let called = false; const e = new Error('private'); Object.defineProperty(e, 'code', { get() { called = true; return 'private'; } });
+  assert.equal(classifyLifecycleError(e, 'recipe_inspection'), 'lifecycle_failed'); assert.equal(called, false);
+  assert.equal(classifyLifecycleError(Object.assign(new Error('private'), { code: 'unit_query_failed' }), 'unit_preparation'), 'unit_query_failed');
 });

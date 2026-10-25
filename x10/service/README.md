@@ -205,3 +205,43 @@ that narrow lifecycle is accepted. Actual logging, the manager restart
 operation, failed-start, cancellation, slow drain,
 orphan recovery, operated TLS, package upgrade/rollback, permanent release/
 replay, soak and Production V1 remain separate open gates.
+
+
+## Exact basic lifecycle attempt: installation failed
+
+Both actual mandatory CI service attempts for `0ade140e` failed at phase
+`install` with fixed code `lifecycle_failed`; readonly nonroot manager
+prerequisites passed. The sanitized result hides the underlying exception,
+so no exact inspection/ACL guard or service repair is established by it.
+The [receipt](../evidence/g3-service-lifecycle-hosted.json) retains preceding
+compatibility PASS separately from the required service FAIL. Do not retry
+unchanged CI blindly or weaken ownership/integrity checks to get past it.
+Any bounded local install-only diagnosis and resulting source change need
+independent review and exact new CI; no local UID0 result accepts a nonroot
+manager/service. Start/link false flags are unconfirmed status generally,
+not proof no ambiguous action occurred. Only exact control flow supports
+the narrower pre-link inference here. Actual logging, restart, adverse
+lifecycle, combined TLS, package recovery and Production V1 remain open.
+
+
+## Bounded recipe-inspection diagnostics
+
+The checker distinguishes a fixed recipe-inspection refusal from a generic
+install failure and can report bounded allowlisted selected-Node prerequisite
+booleans. These observations are diagnostic only. They cannot accept an
+installation, replace the authoritative recipe inspector, or justify
+copying/chmod/chowning Node to bypass its checks. Original ownership,
+integrity, identity and admission guards remain mandatory.
+
+An actual local UID0/Node24 install-only diagnostic found the selected Node
+owner outside root/currentUID while30 other checks passed; the unchanged
+inspector correctly refused. No manager, unit or serving native process ran.
+Pack/install -V/config validation is separate from serving. This does not
+identify the exact prior nonroot Node22 CI exception. The new diagnostic
+source still requires exact hosted verification and actual service evidence.
+
+The current diagnostic contract has67 tests locally, all passing. The
+original49-test accounting above belongs to the preceding implementation.
+On a nonroot runner the current root-only refusal case is expected to skip:
+67total/66PASS/1SKIP. The separate real service command remains mandatory
+and a refusal or skip does not accept the service lifecycle.

@@ -18,6 +18,7 @@ import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mj
 const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 const HEX = /^[a-f0-9]{64}$/, TOKEN = /^[a-f0-9]{32}$/;
 const KEYS = ['LoadState', 'ActiveState', 'SubState', 'Result', 'FragmentPath', 'MainPID', 'ControlGroup'];
+const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid"]);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const reject = code => { throw Object.assign(new Error(code), { code }); };
 export const LIMITATIONS = Object.freeze({ scope: 'ephemeral-user-service-basic-lifecycle',
@@ -56,6 +57,63 @@ export function managerEnvironment(uid) {
   const runtime = `/run/user/${uid}`;
   return { PATH: '/usr/bin:/bin', LANG: 'C', LC_ALL: 'C', XDG_RUNTIME_DIR: runtime,
     DBUS_SESSION_BUS_ADDRESS: `unix:path=${runtime}/bus` };
+}
+// These facts are diagnostic only. The unchanged inspector remains mandatory.
+export function assessNodePrerequisites(value) {
+  const names = ['regular', 'canonical', 'ownerAllowed', 'mode', 'recordedPathMatches', 'recordedVersion'];
+  try {
+    if (!value || typeof value !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(value))) reject('recipe_diagnostic_failed');
+    const keys = Reflect.ownKeys(value);
+    if (keys.length !== names.length || keys.some(k => typeof k !== 'string' || !names.includes(k))) reject('recipe_diagnostic_failed');
+    const fields = Object.create(null);
+    for (const name of names) {
+      const d = Object.getOwnPropertyDescriptor(value, name);
+      if (!d || !Object.hasOwn(d, 'value')) reject('recipe_diagnostic_failed'); fields[name] = d.value;
+    }
+    if (!['regular', 'canonical', 'ownerAllowed', 'recordedPathMatches'].every(k => typeof fields[k] === 'boolean')
+        || !Number.isInteger(fields.mode) || fields.mode < 0 || fields.mode > 0o7777
+        || typeof fields.recordedVersion !== 'string' || fields.recordedVersion.length > 128) reject('recipe_diagnostic_failed');
+    return { selectedNodeRegular: fields.regular, selectedNodeCanonical: fields.canonical,
+      selectedNodeOwnerExecutable: (fields.mode & 0o100) !== 0,
+      selectedNodeModeAllowed: (fields.mode & 0o7022) === 0,
+      selectedNodeOwnerAllowed: fields.ownerAllowed, recordedNodePathMatches: fields.recordedPathMatches,
+      recordedNodeVersionSupported: /^v(?:2[2-9]|[3-9][0-9])\.[0-9]+\.[0-9]+$/.test(fields.recordedVersion) };
+  } catch { reject('recipe_diagnostic_failed'); }
+}
+export function classifyLifecycleError(error, phase) {
+  try {
+    const message = error && Object.getOwnPropertyDescriptor(error, 'message');
+    if (phase === 'recipe_inspection' && error instanceof Error && Object.getPrototypeOf(error) === Error.prototype
+        && message && Object.hasOwn(message, 'value') && message.value === 'service_recipe_invalid') return 'recipe_inspection_refused';
+    const code = error && Object.getOwnPropertyDescriptor(error, 'code');
+    return code && Object.hasOwn(code, 'value') && typeof code.value === 'string' && ERROR_CODES.has(code.value)
+      ? code.value : 'lifecycle_failed';
+  } catch { return 'lifecycle_failed'; }
+}
+export async function observeNodePrerequisites(prefix, nodeExecutable) {
+  let handle;
+  try {
+    if (typeof prefix !== 'string' || typeof nodeExecutable !== 'string' || !/^\/[A-Za-z0-9_./+-]+$/.test(prefix)
+        || !/^\/[A-Za-z0-9_./+-]+$/.test(nodeExecutable) || prefix.length > 4096 || nodeExecutable.length > 4096
+        || path.posix.normalize(prefix) !== prefix || path.posix.normalize(nodeExecutable) !== nodeExecutable) reject('recipe_diagnostic_failed');
+    const directory = await lstat(prefix);
+    if (!directory.isDirectory() || directory.uid !== process.getuid() || (directory.mode & 0o7777) !== 0o700 || await realpath(prefix) !== prefix) reject('recipe_diagnostic_failed');
+    handle = await open(`${prefix}/.alpha-install.json`, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+    const st = await handle.stat();
+    if (!st.isFile() || st.uid !== process.getuid() || (st.mode & 0o7077) !== 0 || st.size < 1 || st.size > 2 * 1024 * 1024) reject('recipe_diagnostic_failed');
+    const bytes = Buffer.alloc(st.size + 1); let used = 0;
+    while (used < bytes.length) { const r = await handle.read(bytes, used, bytes.length - used, null); if (!r.bytesRead) break; used += r.bytesRead; }
+    const after = await handle.stat();
+    if (used !== st.size || after.size !== st.size || after.mtimeMs !== st.mtimeMs || after.ctimeMs !== st.ctimeMs) reject('recipe_diagnostic_failed');
+    const parsed = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes.subarray(0, used))), { sha256, ...record } = parsed;
+    if (!HEX.test(sha256 || '') || digest(JSON.stringify(record)) !== sha256 || record.schemaVersion !== 1
+        || record.kind !== 'nginx-x10-local-alpha' || record.prefix !== prefix || !record.nodeRuntime) reject('recipe_diagnostic_failed');
+    const node = await lstat(nodeExecutable);
+    return assessNodePrerequisites({ regular: node.isFile(), canonical: await realpath(nodeExecutable) === nodeExecutable,
+      ownerAllowed: node.uid === 0 || node.uid === process.getuid(), mode: node.mode & 0o7777,
+      recordedPathMatches: record.nodeRuntime.executable === nodeExecutable, recordedVersion: record.nodeRuntime.version });
+  } catch { reject('recipe_diagnostic_failed'); }
+  finally { if (handle) { try { await handle.close(); } catch { reject('recipe_diagnostic_failed'); } } }
 }
 async function archiveBytes(file) {
   const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
@@ -277,7 +335,10 @@ export async function main(argv = process.argv.slice(2)) {
     appPort = await listen(app); gatewayPort = await unusedPort(); do { healthPort = await unusedPort(); } while (healthPort === gatewayPort || healthPort === appPort);
     report.phase = 'install';
     await cli(node, `${parent}/nginx-x10-alpha/install.mjs`, ['install', '--prefix', prefix, '--port', String(gatewayPort), '--health-port', String(healthPort), '--upstream-port', String(appPort)], env); installed = true;
+    report.phase = 'recipe_inspection';
+    report.nodePrerequisites = await observeNodePrerequisites(prefix, node);
     await inspectInstallation({ prefix, nodeExecutable: node });
+    report.phase = 'unit_preparation';
     const token = randomBytes(16).toString('hex'); unitName = fixtureUnitName(token); unitFile = `${parent}/${unitName}`;
     runtimeLink = `${env.XDG_RUNTIME_DIR}/systemd/user/${unitName}`;
     await runtimeParents();
@@ -298,7 +359,7 @@ export async function main(argv = process.argv.slice(2)) {
     if (!await absent(prefix)) reject('uninstall_incomplete'); report.cleanup.installationRemoved = true;
     report.ok = true; report.code = 'basic_lifecycle_verified'; report.phase = 'complete';
   } catch (error) {
-    report.ok = false; report.code = /^[a-z][a-z0-9_]{0,63}$/.test(error?.code || '') ? error.code : 'lifecycle_failed';
+    report.ok = false; report.code = classifyLifecycleError(error, report.phase);
   } finally {
     // No direct signal, force kill, disable-all, enable, linger or account mutation.
     if (linked) {

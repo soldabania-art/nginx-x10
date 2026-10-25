@@ -1274,3 +1274,45 @@ Basic lifecycle does not close actual logging, the single manager restart
 operation, failed-start/cancellation/slow-drain/orphan,
 combined TLS/service, package rollback/recovery, permanent published replay,
 final soak or Production V1. Earlier adverse histories remain retained.
+
+
+### Exact actual service CI: install failure retained
+
+Implementation `0ade140e` FAILED both mandatory actual service commands:
+push40147719156/job121032594807 and PR40147722978/job121032597723.
+[Receipt](evidence/g3-service-lifecycle-hosted.json) records actual steps,
+complete logs, downloaded ZIP digests, source/merge identities and failure
+JSON. Both observed fresh nonroot manager prerequisites, then returned
+phase `install`, code `lifecycle_failed`, exit1. No actual service lifecycle
+is accepted; the exact hidden exception remains unknown.
+
+Both preceding native aggregates passed20/20, upstreamTLS18/frontendTLS16/
+preflight42 and required Unix/feature-off/package checks. Contract tests
+recorded49total/48PASS/1explicit root-onlySKIP. Official1105PASS/25SKIP/
+1expectedTODO-fail/0unexpectedFAIL and research PR21/7/27/48 remain
+separate units; research push runtime was skipped. CLA failure is separate.
+
+Installation/temp-root removal and application sockets0 were reported.
+Other cleanup flags remain false and are not accepted proof. False start/
+link flags alone never prove no ambiguous action; the narrower pre-link
+location is inferred from exact source control flow, not the hidden error.
+Next diagnose the install/inspection guard without weakening authority and
+verify any changed source in exact new CI. Original failures and accepted376
+fixture CI remain preserved. Service and Production V1 remain open.
+
+
+A bounded actual install-only local diagnostic on UID0/Node24 observed
+30 of31 allowlisted prerequisite checks true and the selected Node owner
+check false. The unchanged authoritative recipe inspector refused it. No
+serving native process, manager or service was started; existing pack/install
+validation may invoke native -V/config syntax checks. Cleanup succeeded.
+This establishes that local refusal only, not the exact nonroot Node22 CI
+exception. No Node ownership/mode, account or admission policy was changed.
+
+The checker now adds fixed recipe-inspection phase/refusal diagnostics and
+bounded allowlisted read-only prerequisite booleans. They confer no
+admission authority; all original inspector checks remain mandatory. New
+diagnostic source CI is pending. The final changed-source local contract
+passed67/67; those pure/refusal tests are separate from the old exact49TAP
+and from actual service execution. This is observability, not a product fix
+or accepted service lifecycle.

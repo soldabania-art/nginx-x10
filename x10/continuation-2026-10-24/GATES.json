@@ -263,7 +263,7 @@
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "PARTIAL_BASIC_SERVICE_HARNESS_EXACT_CI_PENDING_SERVICE_OPEN",
+      "status": "PARTIAL_SERVICE_DIAGNOSTICS_EXACT_CI_PENDING_SERVICE_OPEN",
       "depends_on": [
         "G2"
       ],
@@ -470,12 +470,12 @@
         "runId": "x10-service-lifecycle-20261025T002953Z",
         "sourceBase": "ecbbbbeda306f0b1ad664b4187ac13191bb982e6",
         "publicationParent": "208f4b55969517decd55ead3e69808fab5d786aa",
-        "implementationCommit": null,
+        "implementationCommit": "0ade140e41db6ee093f3de216aacca563ae9b2d2",
         "implementationCommitLocator": "Git commit containing the service acceptance harness; resulting exact source CI reconciled by a subsequent receipt",
         "scope": "Source-checkout acceptance harness for an ephemeral generated user-unit basic lifecycle; not installed production runtime",
         "evidence": "x10/evidence/g3-service-lifecycle.json",
         "localAcceptance": "SOURCE_HARNESS_LOCALLY_VERIFIED_ACTUAL_NONROOT_SERVICE_EXACT_CI_PENDING",
-        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_SERVICE_HARNESS",
+        "exactHostedAcceptance": "FAILED_BOTH_EXACT_NATIVE_ACTUAL_SERVICE_INSTALL_LIFECYCLE_FAILED",
         "actualLocalServiceActivated": false,
         "actualLocalNonrootServiceAccepted": false,
         "localRefusalIsServiceAcceptance": false,
@@ -489,7 +489,54 @@
         "requiredWorkflowStepAdded": true,
         "serviceAccepted": false,
         "productionAccepted": false,
-        "nextConcreteTask": "First verify exact resulting service-lifecycle harness implementation CI, including actual nonroot readonly preflight and lifecycle JSON with generated ephemeral user-unit start, explicit installed wait-bind, native request and stop/start with a fresh session and owned cleanup. Refusal at root or missing manager is not actual service acceptance. Verify exact source/merge/build identities and all required native/Unix/feature-off/package/TLS steps and artifacts. Do not borrow accepted376 fixture CI for changed harness/workflow bytes or rerun accepted unchanged checks without cause. Retain original9e63 wrong-CA expected1/actual0 and unknown historical interleaving, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. After narrow basic service evidence, complete actual logging verification, the single systemctl restart operation, cancellation/failed-start/slow-drain/orphan and combined TLS/service acceptance, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak and final G4-G8 Production V1. Full deferred Continuum remains open."
+        "nextConcreteTask": "First verify exact resulting observability-only service diagnostic source CI and its actual nonroot service result on a fresh runner. Then diagnose and correct the actual service installation/inspection guard without weakening ownership, integrity or identity checks. Both exact0ade native attempts FAILED the required actual service step at phase install with lifecycle_failed; nonroot manager prerequisites were observed but the exact underlying exception is not in the sanitized result. Keep full implementation CI and service acceptance false. A bounded local install-only counterexample may identify a mechanism without proving the exact historical CI exception; distinguish these claims. If source diagnostics or checker code changed, first verify exact resulting CI and actual nonroot service JSON on a fresh runner; do not rerun unchanged failed CI blindly or borrow predecessor green results. Preserve accepted376 fixture CI, original9e63 wrong-CA expected1/actual0/unknown cause, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. Actual logging, the single manager restart operation, failed-start/cancellation/slow-drain/orphan, combined TLS/service, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak, Production V1 and full semantic Continuum remain open.",
+        "hostedEvidence": "x10/evidence/g3-service-lifecycle-hosted.json"
+      },
+      "serviceLifecycleHarnessHostedSubcheckpoint": {
+        "state": "FAILED_BOTH_EXACT_NATIVE_ACTUAL_SERVICE_INSTALL_LIFECYCLE_FAILED",
+        "implementationCommit": "0ade140e41db6ee093f3de216aacca563ae9b2d2",
+        "evidence": "x10/evidence/g3-service-lifecycle-hosted.json",
+        "runId": "x10-service-diagnosis-20261025T005241Z",
+        "publicationParent": "7e0b0cfcb2c4d0ee3115f682b9d184e6c6ac7e5d",
+        "ledger": "x10/review/g3-service-lifecycle-hosted-ledger.json",
+        "nativeRunIds": [
+          40147719156,
+          40147722978
+        ],
+        "nativeJobIds": [
+          121032594807,
+          121032597723
+        ],
+        "researchRunIds": [
+          40147719129,
+          40147722796
+        ],
+        "bothRequiredActualServiceStepsFailed": true,
+        "failureCode": "lifecycle_failed",
+        "failurePhase": "install",
+        "actualNonrootManagerPrerequisitesObserved": true,
+        "underlyingHistoricalExceptionKnown": false,
+        "fullImplementationCIAccepted": false,
+        "actualServiceAccepted": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "jobRerunsRequested": 0
+      },
+      "serviceInstallDiagnosticsSubcheckpoint": {
+        "runId": "x10-service-diagnosis-20261025T005241Z",
+        "sourceBase": "0ade140e41db6ee093f3de216aacca563ae9b2d2",
+        "publicationParent": "7e0b0cfcb2c4d0ee3115f682b9d184e6c6ac7e5d",
+        "implementationCommit": null,
+        "implementationCommitLocator": "Git commit containing observability-only checker changes; exact resulting CI reconciled subsequently",
+        "scope": "Bounded service install/refusal observability only; authoritative inspector and all admission guards unchanged",
+        "localEvidence": "x10/evidence/g3-service-lifecycle-hosted.json",
+        "localAcceptance": "BOUNDED_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_DIAGNOSTIC_SOURCE",
+        "historicalCIFailureCauseKnown": false,
+        "productRuntimeFixClaimed": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "nextConcreteTask": "First verify exact resulting observability-only service diagnostic source CI and its actual nonroot service result on a fresh runner. Then diagnose and correct the actual service installation/inspection guard without weakening ownership, integrity or identity checks. Both exact0ade native attempts FAILED the required actual service step at phase install with lifecycle_failed; nonroot manager prerequisites were observed but the exact underlying exception is not in the sanitized result. Keep full implementation CI and service acceptance false. A bounded local install-only counterexample may identify a mechanism without proving the exact historical CI exception; distinguish these claims. If source diagnostics or checker code changed, first verify exact resulting CI and actual nonroot service JSON on a fresh runner; do not rerun unchanged failed CI blindly or borrow predecessor green results. Preserve accepted376 fixture CI, original9e63 wrong-CA expected1/actual0/unknown cause, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. Actual logging, the single manager restart operation, failed-start/cancellation/slow-drain/orphan, combined TLS/service, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak, Production V1 and full semantic Continuum remain open."
       }
     },
     {
@@ -1052,12 +1099,12 @@
     "runId": "x10-service-lifecycle-20261025T002953Z",
     "sourceBase": "ecbbbbeda306f0b1ad664b4187ac13191bb982e6",
     "publicationParent": "208f4b55969517decd55ead3e69808fab5d786aa",
-    "implementationCommit": null,
+    "implementationCommit": "0ade140e41db6ee093f3de216aacca563ae9b2d2",
     "implementationCommitLocator": "Git commit containing the service acceptance harness; resulting exact source CI reconciled by a subsequent receipt",
     "scope": "Source-checkout acceptance harness for an ephemeral generated user-unit basic lifecycle; not installed production runtime",
     "evidence": "x10/evidence/g3-service-lifecycle.json",
     "localAcceptance": "SOURCE_HARNESS_LOCALLY_VERIFIED_ACTUAL_NONROOT_SERVICE_EXACT_CI_PENDING",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_SERVICE_HARNESS",
+    "exactHostedAcceptance": "FAILED_BOTH_EXACT_NATIVE_ACTUAL_SERVICE_INSTALL_LIFECYCLE_FAILED",
     "actualLocalServiceActivated": false,
     "actualLocalNonrootServiceAccepted": false,
     "localRefusalIsServiceAcceptance": false,
@@ -1071,6 +1118,54 @@
     "requiredWorkflowStepAdded": true,
     "serviceAccepted": false,
     "productionAccepted": false,
-    "nextConcreteTask": "First verify exact resulting service-lifecycle harness implementation CI, including actual nonroot readonly preflight and lifecycle JSON with generated ephemeral user-unit start, explicit installed wait-bind, native request and stop/start with a fresh session and owned cleanup. Refusal at root or missing manager is not actual service acceptance. Verify exact source/merge/build identities and all required native/Unix/feature-off/package/TLS steps and artifacts. Do not borrow accepted376 fixture CI for changed harness/workflow bytes or rerun accepted unchanged checks without cause. Retain original9e63 wrong-CA expected1/actual0 and unknown historical interleaving, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. After narrow basic service evidence, complete actual logging verification, the single systemctl restart operation, cancellation/failed-start/slow-drain/orphan and combined TLS/service acceptance, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak and final G4-G8 Production V1. Full deferred Continuum remains open."
+    "nextConcreteTask": "First verify exact resulting observability-only service diagnostic source CI and its actual nonroot service result on a fresh runner. Then diagnose and correct the actual service installation/inspection guard without weakening ownership, integrity or identity checks. Both exact0ade native attempts FAILED the required actual service step at phase install with lifecycle_failed; nonroot manager prerequisites were observed but the exact underlying exception is not in the sanitized result. Keep full implementation CI and service acceptance false. A bounded local install-only counterexample may identify a mechanism without proving the exact historical CI exception; distinguish these claims. If source diagnostics or checker code changed, first verify exact resulting CI and actual nonroot service JSON on a fresh runner; do not rerun unchanged failed CI blindly or borrow predecessor green results. Preserve accepted376 fixture CI, original9e63 wrong-CA expected1/actual0/unknown cause, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. Actual logging, the single manager restart operation, failed-start/cancellation/slow-drain/orphan, combined TLS/service, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak, Production V1 and full semantic Continuum remain open.",
+    "hostedEvidence": "x10/evidence/g3-service-lifecycle-hosted.json"
+  },
+  "serviceLifecycleHarnessHostedCheckpoint": {
+    "state": "FAILED_BOTH_EXACT_NATIVE_ACTUAL_SERVICE_INSTALL_LIFECYCLE_FAILED",
+    "implementationCommit": "0ade140e41db6ee093f3de216aacca563ae9b2d2",
+    "evidence": "x10/evidence/g3-service-lifecycle-hosted.json",
+    "runId": "x10-service-diagnosis-20261025T005241Z",
+    "publicationParent": "7e0b0cfcb2c4d0ee3115f682b9d184e6c6ac7e5d",
+    "ledger": "x10/review/g3-service-lifecycle-hosted-ledger.json",
+    "nativeRunIds": [
+      40147719156,
+      40147722978
+    ],
+    "nativeJobIds": [
+      121032594807,
+      121032597723
+    ],
+    "researchRunIds": [
+      40147719129,
+      40147722796
+    ],
+    "bothRequiredActualServiceStepsFailed": true,
+    "failureCode": "lifecycle_failed",
+    "failurePhase": "install",
+    "actualNonrootManagerPrerequisitesObserved": true,
+    "underlyingHistoricalExceptionKnown": false,
+    "fullImplementationCIAccepted": false,
+    "actualServiceAccepted": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "jobRerunsRequested": 0,
+    "nextConcreteTask": "First verify exact resulting observability-only service diagnostic source CI and its actual nonroot service result on a fresh runner. Then diagnose and correct the actual service installation/inspection guard without weakening ownership, integrity or identity checks. Both exact0ade native attempts FAILED the required actual service step at phase install with lifecycle_failed; nonroot manager prerequisites were observed but the exact underlying exception is not in the sanitized result. Keep full implementation CI and service acceptance false. A bounded local install-only counterexample may identify a mechanism without proving the exact historical CI exception; distinguish these claims. If source diagnostics or checker code changed, first verify exact resulting CI and actual nonroot service JSON on a fresh runner; do not rerun unchanged failed CI blindly or borrow predecessor green results. Preserve accepted376 fixture CI, original9e63 wrong-CA expected1/actual0/unknown cause, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. Actual logging, the single manager restart operation, failed-start/cancellation/slow-drain/orphan, combined TLS/service, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak, Production V1 and full semantic Continuum remain open."
+  },
+  "serviceInstallDiagnosticsCheckpoint": {
+    "runId": "x10-service-diagnosis-20261025T005241Z",
+    "sourceBase": "0ade140e41db6ee093f3de216aacca563ae9b2d2",
+    "publicationParent": "7e0b0cfcb2c4d0ee3115f682b9d184e6c6ac7e5d",
+    "implementationCommit": null,
+    "implementationCommitLocator": "Git commit containing observability-only checker changes; exact resulting CI reconciled subsequently",
+    "scope": "Bounded service install/refusal observability only; authoritative inspector and all admission guards unchanged",
+    "localEvidence": "x10/evidence/g3-service-lifecycle-hosted.json",
+    "localAcceptance": "BOUNDED_DIAGNOSTICS_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_DIAGNOSTIC_SOURCE",
+    "historicalCIFailureCauseKnown": false,
+    "productRuntimeFixClaimed": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "nextConcreteTask": "First verify exact resulting observability-only service diagnostic source CI and its actual nonroot service result on a fresh runner. Then diagnose and correct the actual service installation/inspection guard without weakening ownership, integrity or identity checks. Both exact0ade native attempts FAILED the required actual service step at phase install with lifecycle_failed; nonroot manager prerequisites were observed but the exact underlying exception is not in the sanitized result. Keep full implementation CI and service acceptance false. A bounded local install-only counterexample may identify a mechanism without proving the exact historical CI exception; distinguish these claims. If source diagnostics or checker code changed, first verify exact resulting CI and actual nonroot service JSON on a fresh runner; do not rerun unchanged failed CI blindly or borrow predecessor green results. Preserve accepted376 fixture CI, original9e63 wrong-CA expected1/actual0/unknown cause, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. Actual logging, the single manager restart operation, failed-start/cancellation/slow-drain/orphan, combined TLS/service, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak, Production V1 and full semantic Continuum remain open."
   }
 }
