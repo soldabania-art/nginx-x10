@@ -7,7 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
 import { digest } from '../alpha/runtime.mjs';
-import { parseArguments, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
+import { parseArguments, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
 import { JOURNAL_RESULT_CODES } from './journal-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
@@ -1056,3 +1056,59 @@ for (const cancellationPoint of ['owned_properties', 'pristine_query']) {
     assert.equal(calls.includes('start'), false); assert.equal(calls.includes('reset-failed'), false);
   });
 }
+
+const pausedDrain = { paused: true, complete: false, failed: false, tlsVerified: true, requestClosed: false, responseIncomplete: true };
+const heldDrain = { requested: true, held: true, released: false, completed: false, aborted: false, closed: false };
+test('controlled drain requires a still-open verified paused client and unreleased owned origin response', () => {
+  assert.equal(assessControlledDrainHold(pausedDrain, heldDrain, false), true);
+  assert.equal(assessControlledDrainResult({ ok: true, complete: true, certificateMatched: true, protocol: 'TLSv1.3', body: Buffer.alloc(65537, 0x62) }), true);
+});
+for (const key of Object.keys(pausedDrain)) {
+  test(`controlled drain refuses client ${key} drift or unknown`, () => {
+    for (const value of [!pausedDrain[key], undefined, null, 1, 'true']) assert.throws(() => assessControlledDrainHold({ ...pausedDrain, [key]: value }, heldDrain, false), { code: 'controlled_drain_unconfirmed' });
+  });
+}
+for (const key of Object.keys(heldDrain)) {
+  test(`controlled drain refuses origin ${key} drift or unknown`, () => {
+    for (const value of [!heldDrain[key], undefined, null, 1, 'false']) assert.throws(() => assessControlledDrainHold(pausedDrain, { ...heldDrain, [key]: value }, false), { code: 'controlled_drain_unconfirmed' });
+  });
+}
+test('controlled drain refuses completed or unresolved stop promises before release', () => {
+  for (const settled of [true, undefined, null, 0, 'false']) assert.throws(() => assessControlledDrainHold(pausedDrain, heldDrain, settled), { code: 'controlled_drain_unconfirmed' });
+});
+for (const [name, change] of Object.entries({ partial: { complete: false }, falseSuccess: { ok: false }, wrongCertificate: { certificateMatched: false }, wrongProtocol: { protocol: 'TLSv1.2' }, short: { body: Buffer.alloc(65536, 0x62) }, corrupt: { body: Buffer.alloc(65537, 0x61) }, nonBuffer: { body: 'b'.repeat(65537) } })) {
+  test(`controlled drain refuses completed payload ${name}`, () => assert.throws(() => assessControlledDrainResult({ ok: true, complete: true, certificateMatched: true, protocol: 'TLSv1.3', body: Buffer.alloc(65537, 0x62), ...change }), { code: 'controlled_drain_unconfirmed' }));
+}
+test('controlled drain assessment refuses hostile getter values without evaluation', () => {
+  let invoked = false; const value = { ...pausedDrain }; Object.defineProperty(value, 'paused', { get() { invoked = true; return true; } });
+  assert.throws(() => assessControlledDrainHold(value, heldDrain, false), { code: 'controlled_drain_unconfirmed' }); assert.equal(invoked, false);
+});
+
+test('controlled drain rejects a queued continuation after its successful observation deadline without releasing response', async () => {
+  const source = await readFile(script, 'utf8');
+  const body = source.slice(source.indexOf('  async function verifyControlledSlowDrain()'), source.indexOf("  process.once('SIGINT', cancel)"));
+  const proofKeys = ['clientPaused', 'originResponseHeld', 'sameSessionObserved', 'managerStopPending', 'nativeGroupLiveDuringStop', 'unitDeactivatingObserved', 'incompleteResponseObserved', 'payloadCompleted', 'tlsVerified', 'managerStopCompleted', 'launcherExited', 'nativeGroupsAbsent', 'listeningPortsClosed', 'controlSocketAbsent'];
+  const report = { upstreamTLSActivated: true, downstreamTLSActivated: true, controlledSlowDrainChecks: 0,
+    controlledSlowDrainProof: Object.fromEntries(proofKeys.map(key => [key, false])) };
+  let clock = 0, stopCalls = 0, stopTerminal = false, releaseCalls = 0, resumeCalls = 0, aborted = false, cancelled = false, resolveStop;
+  const held = { path: '/slow-stream/' + 'c'.repeat(32), prefixBytes: 4096, totalBytes: 65537,
+    snapshot: () => ({ ...heldDrain }), release() { releaseCalls++; return true; },
+    async abort() { aborted = true; stopTerminal = true; resolveStop(); return true; } };
+  const client = { snapshot: () => ({ ...pausedDrain }), async resume() { resumeCalls++; throw new Error('resume must not run'); }, async cancel() { cancelled = true; return true; } };
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  const authority = { id: 'b'.repeat(32), launcher: {} }, known = { id: 'a'.repeat(32) };
+  const env = { report, origin: { prepareDrain: () => held }, tlsFixture: { ca: Buffer.from('public'), expectedCertificate: Buffer.from('public') },
+    sessions: [known], lastSession: known.id, currentOriginAuthority: async () => authority, checkCancelled() {}, reject,
+    createPausedTLSClient: async () => client, tlsPort: 12345, assessControlledDrainHold, assessControlledDrainResult,
+    sameLauncher: (a, b) => a === b,
+    stopOwned: async () => { stopCalls++; return new Promise(resolve => { resolveStop = resolve; }); },
+    performance: { now: () => clock },
+    // Simulate an already successful observation callback whose awaiting
+    // continuation runs late; callback internals are covered separately.
+    until: async (_callback, budget) => { assert.equal(budget, 1000); queueMicrotask(() => { clock = 1001; }); },
+    failures: { cleanup() { assert.fail('owned cleanup is expected to succeed'); } } };
+  const verify = new Function(...Object.keys(env), `${body}; return verifyControlledSlowDrain;`)(...Object.values(env));
+  await assert.rejects(verify(), { code: 'controlled_drain_unconfirmed' });
+  assert.equal(releaseCalls, 0); assert.equal(resumeCalls, 0); assert.equal(report.controlledSlowDrainChecks, 0);
+  assert.equal(stopCalls, 1); assert.equal(stopTerminal, true); assert.equal(aborted, true); assert.equal(cancelled, true);
+});

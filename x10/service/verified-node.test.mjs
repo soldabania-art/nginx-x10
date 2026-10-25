@@ -18,7 +18,7 @@ const status = () => `[GNUPG:] PLAINTEXT 74 0 \n[GNUPG:] NEWSIG\n[GNUPG:] KEY_CO
 function receipt() {
   return { checkerExited:true, checkerExitCode:0, report:{ ok:true, code:'basic_lifecycle_verified', phase:'complete', actualNonrootManagerObserved:true, actualUnitStarted:true,
     runtimeUnitLinked:true, runtimeUnitRemoved:true, unitEnabled:false,
-    readinessAutomated:true, automaticReadinessAccepted:false, failedStartAccepted:false, tlsServiceAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
+    readinessAutomated:true, automaticReadinessAccepted:false, failedStartAccepted:false, slowDrainAccepted:false, tlsServiceAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
     primaryFailure:null, cleanupFailures:[], cleanupFailureCount:0, cleanupFailuresTruncated:false,
     explicitReadinessPasses:3, nativeSessionsStarted:3, nativeSessionsStopped:3, proxyBodyChecks:3, uploadChecks:3, streamChecks:3,
     managerRestartCommands:1, completedManagerRestarts:1,
@@ -27,6 +27,10 @@ function receipt() {
     failedStartProof:{unhealthyReadinessObserved:true,managerRefused:true,hookExitObserved:true,bindingAbsent:true,
       launcherExited:true,nativeGroupsAbsent:true,listeningPortsClosed:true,controlSocketAbsent:true,
       failedSessionStopped:true,managerResetConfirmed:true,healthyRestartFresh:true},
+    controlledSlowDrainChecks:1,
+    controlledSlowDrainProof:{clientPaused:true,originResponseHeld:true,sameSessionObserved:true,managerStopPending:true,
+      nativeGroupLiveDuringStop:true,unitDeactivatingObserved:true,incompleteResponseObserved:true,payloadCompleted:true,
+      tlsVerified:true,managerStopCompleted:true,launcherExited:true,nativeGroupsAbsent:true,listeningPortsClosed:true,controlSocketAbsent:true},
     journalChecks:3,journalRecordsObserved:6,journalRunningMarkers:3,
     downstreamTLSActivated:true,downstreamTLSSessionChecks:3,downstreamTLSBodyChecks:6,downstreamTLSUploadChecks:3,downstreamTLSStreamChecks:3,
     downstreamTLS12Checks:3,downstreamTLS13Checks:3,downstreamTLSCertificateChecks:12,downstreamTLSWrongCARefusals:3,downstreamTLSWrongNameRefusals:3,
@@ -137,6 +141,44 @@ test('cleanup rejects accessor failed-start proofs without reading them',()=>{
 });
 test('cleanup accepts the exact null-prototype failed-start data record',()=>{
   const e=receipt();e.report.failedStartProof=Object.assign(Object.create(null),e.report.failedStartProof);
+  assert.equal(cleanupEvidence(e),true);
+});
+test('cleanup refuses the prior complete failed-start profile without controlled drain evidence',()=>{
+  const e=receipt();delete e.report.controlledSlowDrainChecks;delete e.report.controlledSlowDrainProof;
+  assert.equal(cleanupEvidence(e),false);
+});
+test('cleanup requires exactly one controlled drain and preserves the broad unaccepted boundary',()=>{
+  for(const value of [undefined,null,0,2,'1',true,NaN]){
+    const e=receipt();e.report.controlledSlowDrainChecks=value;assert.equal(cleanupEvidence(e),false);
+  }
+  for(const value of [undefined,null,true,0,'false']){
+    const e=receipt();e.report.slowDrainAccepted=value;assert.equal(cleanupEvidence(e),false);
+  }
+});
+test('cleanup refuses every missing or partial controlled-drain authority and retirement proof',()=>{
+  for(const k of Object.keys(receipt().report.controlledSlowDrainProof)){
+    for(const value of [false,undefined,0,1,'true',null]){
+      const e=receipt();e.report.controlledSlowDrainProof[k]=value;assert.equal(cleanupEvidence(e),false,k);
+    }
+    const e=receipt();delete e.report.controlledSlowDrainProof[k];assert.equal(cleanupEvidence(e),false,k);
+  }
+});
+test('cleanup rejects inherited, extra and accessor controlled-drain authority without invoking getters',()=>{
+  for(const value of [undefined,null,[],{},true,Object.create(receipt().report.controlledSlowDrainProof)]){
+    const e=receipt();e.report.controlledSlowDrainProof=value;assert.equal(cleanupEvidence(e),false);
+  }
+  for(const k of ['unverified',Symbol('extra')]){
+    const e=receipt();e.report.controlledSlowDrainProof[k]=true;assert.equal(cleanupEvidence(e),false);
+  }
+  let reads=0;
+  for(const k of Object.keys(receipt().report.controlledSlowDrainProof)){
+    const e=receipt();Object.defineProperty(e.report.controlledSlowDrainProof,k,{get(){reads++;return true;}});
+    assert.equal(cleanupEvidence(e),false);
+  }
+  assert.equal(reads,0);
+});
+test('cleanup accepts an exact null-prototype controlled-drain data record',()=>{
+  const e=receipt();e.report.controlledSlowDrainProof=Object.assign(Object.create(null),e.report.controlledSlowDrainProof);
   assert.equal(cleanupEvidence(e),true);
 });
 test('cleanup refuses the stale two-session profile and mixed session counts',()=>{
@@ -272,6 +314,20 @@ test('cleanup preserves runtime when exact-source receipt lacks failed-start or 
   const source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
   try {
     for(const mutate of [e=>{delete e.report.failedStartProof;},e=>{e.report.failedStartProof.healthyRestartFresh=false;},e=>{e.report.failedStartProof.nativeGroupsAbsent=false;}]){
+      const e=receipt();e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];mutate(e);
+      await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
+      const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);
+      assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.equal(await readFile(p+'/runtime/sentinel','utf8'),'preserve');
+      assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);
+    }
+  } finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
+});
+test('cleanup retains private runtime for exact-source missing, early-completion or incomplete drain evidence',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});await writeFile(p+'/runtime/sentinel','preserve',{mode:0o600});
+  const source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
+  try {
+    for(const mutate of [e=>{delete e.report.controlledSlowDrainProof;},e=>{e.report.controlledSlowDrainProof.managerStopPending=false;},
+      e=>{e.report.controlledSlowDrainProof.payloadCompleted=false;},e=>{e.report.controlledSlowDrainProof.nativeGroupsAbsent=false;}]){
       const e=receipt();e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];mutate(e);
       await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
       const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);

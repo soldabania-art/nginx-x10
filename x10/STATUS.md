@@ -2257,3 +2257,53 @@ unknown; later success does not explain them. Full adverse startup/cancel/drain/
 orphan recovery, package upgrade/rollback/backup restore, permanent distribution,
 security acceptance,60-minute soak and Production V1 remain open. Deferred
 Continuum and the full native roadmap are preserved.
+
+
+## G3 controlled drain; actual service CI pending
+
+Both exact13d native workflows completed success with all31 required actual steps.
+Each observed one deliberate unhealthy readiness startup refusal, all11 owned
+failure/retirement/recovery proofs and a fresh healthy start. The three normal
+combined downstream HTTPS and verified HTTPS-origin sessions, one manager
+restart, three attributable journal checks and all13 final cleanup confirmations
+also passed, with private Node/bootstrap removal. Fresh82-proof review reused
+approved archives and logs. Research PR actually ran21/7/27/48; push runtime was
+skipped. These are separate observation units, not four accepted installations.
+The broad failed-start and complete G3/V1 contracts remain unaccepted.
+
+The new candidate starts one controlled held response on the owned HTTPS origin
+and pauses a verified downstream TLS client after its initial response bytes.
+Within the same third healthy service session, it captures owned unit, session,
+invocation, launcher and native identities, then issues one manager stop. Before
+release, it must observe that command pending, the exact unit deactivating, the
+owned native group still live and the response incomplete. These observations
+must bracket the same identities; stale or unrelated processes grant no authority.
+
+Only then may the origin release its held suffix and the client resume. The full
+response must complete with exact payload and verified downstream TLS, followed
+by completed manager stop and fresh absence of captured launcher/native groups,
+gateway/health/TLS ports and the control socket. Cancellation, timeout, premature
+close, payload mismatch, foreign/stale identity or unknown cleanup must fail
+closed and retain private runtime. All previous startup-refusal, combined TLS,
+restart/journal, callback lifetime and final cleanup guards remain required.
+
+A report requires controlledSlowDrainChecks1 and all14 narrow proof booleans.
+The dependency cleanup profile refuses old, missing or partial drain evidence.
+Final source hashes, actual local test counts, independent review and preserved
+adverse drafts are recorded in
+[slow-drain evidence](evidence/g3-service-slow-drain.json).
+
+This is a controlled held-origin response and paused-client graceful-stop check.
+It does not establish pure network backpressure, every slow-client/drain case,
+slow upload, abnormal/orphan recovery, resource/performance acceptance or the
+predeclared60-minute soak. Broad slowDrainAccepted, serviceAccepted and
+productionAccepted remain false. Local Node contracts/loopback helpers and
+source-extracted checks do not execute the actual nonroot managed native service;
+exact resulting CI is pending and may fail.
+
+Native/controller/alpha, unit recipe, journal/downstream TLS helper and release
+contract/profile remain unchanged. Same-UID trust, user-space timeout limits and
+PID-to-signal races remain explicit. Earlier adverse evidence and unknown raw
+historical causes are preserved. Distinct package upgrade/rollback/backup restore,
+permanent distribution, independent release acceptance, full G3/V1 and semantic
+Continuum remain open; the next portfolio project remains waiting.

@@ -16,12 +16,13 @@ import { verifyAlphaArchive, MAX_ARCHIVE_BYTES } from '../release/verify-alpha-a
 import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mjs';
 import { observeOwnedJournal, JOURNAL_RESULT_CODES } from './journal-check.mjs';
 import { createOriginFixture, ORIGIN_FIXTURE_ERROR_CODES } from './origin-fixture.mjs';
+import { createPausedTLSClient, SLOW_CLIENT_ERROR_CODES } from './slow-client.mjs';
 import { createServicePKI, probeServiceTLS, expectServiceTLSRefusal, TLS_FIXTURE_ERROR_CODES } from './tls-fixture.mjs';
 
 const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 const HEX = /^[a-f0-9]{64}$/, TOKEN = /^[a-f0-9]{32}$/;
 const KEYS = ['LoadState', 'ActiveState', 'SubState', 'Result', 'FragmentPath', 'MainPID', 'ControlGroup'];
-const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed", "failed_start_unconfirmed"]);
+const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed", "failed_start_unconfirmed", "controlled_drain_unconfirmed", ...SLOW_CLIENT_ERROR_CODES]);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const reject = code => { throw Object.assign(new Error(code), { code }); };
 export const LIMITATIONS = Object.freeze({ scope: 'ephemeral-user-service-basic-lifecycle',
@@ -126,9 +127,9 @@ export async function observeNodePrerequisites(prefix, nodeExecutable) {
   finally { if (handle) { try { await handle.close(); } catch { reject('recipe_diagnostic_failed'); } } }
 }
 // Diagnostic collectors have no I/O or lifecycle authority.
-export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'failed_start', 'first_start', 'tls_apply', 'origin_negative', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
+export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'failed_start', 'first_start', 'tls_apply', 'origin_negative', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'controlled_drain', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
 export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'request_restart', 'old_retirement', 'invocation_identity', 'journal_read', 'downstream_tls', 'upstream_tls', 'origin_negative', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
-export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'origin_close', 'temporary_root', 'final_assertion', 'unknown']);
+export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'drain_close', 'origin_close', 'temporary_root', 'final_assertion', 'unknown']);
 const pickEnum = (value, list, fallback = 'unknown') => typeof value === 'string' && list.includes(value) ? value : fallback;
 function ownData(record, key) {
   try { const d = record && Object.getOwnPropertyDescriptor(record, key); return d && Object.hasOwn(d, 'value') ? d.value : undefined; }
@@ -335,6 +336,23 @@ export function assessFailedReadinessStart(record, properties, text, expected) {
   return true;
 }
 
+// Narrow held-response/paused-client control, not a backpressure or soak proof.
+export function assessControlledDrainHold(client, originState, stopSettled) {
+  if (stopSettled !== false || ownData(client, 'paused') !== true || ownData(client, 'complete') !== false
+      || ownData(client, 'failed') !== false || ownData(client, 'tlsVerified') !== true
+      || ownData(client, 'requestClosed') !== false || ownData(client, 'responseIncomplete') !== true
+      || ownData(originState, 'requested') !== true || ownData(originState, 'held') !== true
+      || ownData(originState, 'released') !== false || ownData(originState, 'completed') !== false
+      || ownData(originState, 'aborted') !== false || ownData(originState, 'closed') !== false) reject('controlled_drain_unconfirmed');
+  return true;
+}
+export function assessControlledDrainResult(result) {
+  if (ownData(result, 'ok') !== true || ownData(result, 'complete') !== true
+      || ownData(result, 'certificateMatched') !== true || ownData(result, 'protocol') !== 'TLSv1.3'
+      || !Buffer.isBuffer(ownData(result, 'body')) || !ownData(result, 'body').equals(Buffer.alloc(65537, 0x62))) reject('controlled_drain_unconfirmed');
+  return true;
+}
+
 async function archiveBytes(file) {
   const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
   try {
@@ -403,6 +421,7 @@ export async function main(argv = process.argv.slice(2)) {
   const report = { ok: false, code: 'not_started', phase: 'arguments', ...LIMITATIONS,
     actualNonrootManagerObserved: false, actualUnitStarted: false, explicitReadinessPasses: 0,
     nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
+    controlledSlowDrainChecks: 0, controlledSlowDrainProof: { clientPaused: false, originResponseHeld: false, sameSessionObserved: false, managerStopPending: false, nativeGroupLiveDuringStop: false, unitDeactivatingObserved: false, incompleteResponseObserved: false, payloadCompleted: false, tlsVerified: false, managerStopCompleted: false, launcherExited: false, nativeGroupsAbsent: false, listeningPortsClosed: false, controlSocketAbsent: false },
     failedStartChecks: 0, failedStartProof: { unhealthyReadinessObserved: false, managerRefused: false, hookExitObserved: false, bindingAbsent: false, launcherExited: false, nativeGroupsAbsent: false, listeningPortsClosed: false, controlSocketAbsent: false, failedSessionStopped: false, managerResetConfirmed: false, healthyRestartFresh: false },
     managerRestartCommands: 0, completedManagerRestarts: 0,
     restartProof: { oldLauncherExited: false, oldNativeGroupsAbsent: false, freshSession: false, freshInvocation: false },
@@ -963,6 +982,86 @@ export async function main(argv = process.argv.slice(2)) {
       report[counter]++; report.upstreamTLSRollbackChecks++; report.upstreamTLSCandidate502Checks++; report.upstreamTLSNoPostReplayChecks++;
     }
   }
+  async function verifyControlledSlowDrain() {
+    checkCancelled();
+    if (!origin || !tlsFixture || !report.upstreamTLSActivated || !report.downstreamTLSActivated) reject('controlled_drain_unconfirmed');
+    const known = sessions.find(session => session.id === lastSession);
+    if (!known) reject('controlled_drain_unconfirmed');
+    const before = await currentOriginAuthority(known); checkCancelled();
+    let held, client, stopping, stopSettled = false, primary = null;
+    try {
+      held = origin.prepareDrain();
+      if (!held || typeof held.path !== 'string' || !/^\/slow-stream\/[a-f0-9]{32}$/.test(held.path)
+          || held.prefixBytes !== 4096 || held.totalBytes !== 65537) reject('controlled_drain_unconfirmed');
+      checkCancelled();
+      client = await createPausedTLSClient(tlsPort, held.path, { ca: tlsFixture.ca,
+        expectedCertificate: tlsFixture.expectedCertificate, servername: 'localhost', version: 'TLSv1.3',
+        expectedBody: Buffer.alloc(65537, 0x62), prefixBytes: 4096 });
+      checkCancelled();
+      assessControlledDrainHold(client.snapshot(), held.snapshot(), stopSettled);
+      const fresh = await currentOriginAuthority(known); checkCancelled();
+      if (fresh.id !== before.id || !sameLauncher(fresh.launcher, before.launcher)) reject('unit_invocation_changed');
+      assessControlledDrainHold(client.snapshot(), held.snapshot(), stopSettled);
+      report.controlledSlowDrainProof.clientPaused = true; report.controlledSlowDrainProof.originResponseHeld = true;
+      report.controlledSlowDrainProof.sameSessionObserved = true;
+      checkCancelled();
+      // Exactly one normal owned manager-stop task. Both fulfillment and rejection
+      // are observed immediately; finally always awaits its terminal outcome.
+      stopping = stopOwned().then(() => { stopSettled = true; return { ok: true }; }, error => { stopSettled = true; return { ok: false, error }; });
+      const end = performance.now() + 1000;
+      await until(async () => {
+        checkCancelled(); assessControlledDrainHold(client.snapshot(), held.snapshot(), stopSettled);
+        const p = await ownedProperties(false); checkCancelled();
+        if (performance.now() >= end) reject('controlled_drain_unconfirmed');
+        if (p.ActiveState === 'active') return false;
+        if (p.ActiveState !== 'deactivating' || p.MainPID !== String(before.launcher.pid)) reject('controlled_drain_unconfirmed');
+        const identity = await launcherIdentity(p); checkCancelled();
+        if (!sameLauncher(identity, before.launcher)) reject('unit_launcher_identity');
+        const query = await systemctl(['show', unitName, '--property=InvocationID'], 2500); checkCancelled();
+        if (!query.ok || query.stderr !== '' || parseInvocationProperty(query.stdout) !== before.id) reject('unit_invocation_changed');
+        if ((await remainingNativeGroup(`${prefix}/bin/nginx`, known.identity)).length < 1) reject('controlled_drain_unconfirmed');
+        checkCancelled();
+        const after = await ownedProperties(false); checkCancelled();
+        if (after.ActiveState !== 'deactivating' || after.MainPID !== String(before.launcher.pid)
+            || !sameLauncher(await launcherIdentity(after), before.launcher)) reject('unit_launcher_identity');
+        if ((await remainingNativeGroup(`${prefix}/bin/nginx`, known.identity)).length < 1) reject('controlled_drain_unconfirmed');
+        checkCancelled(); assessControlledDrainHold(client.snapshot(), held.snapshot(), stopSettled);
+        if (performance.now() >= end) reject('controlled_drain_unconfirmed');
+        return true;
+      }, 1000);
+      checkCancelled(); assessControlledDrainHold(client.snapshot(), held.snapshot(), stopSettled);
+      report.controlledSlowDrainProof.managerStopPending = true; report.controlledSlowDrainProof.nativeGroupLiveDuringStop = true;
+      report.controlledSlowDrainProof.unitDeactivatingObserved = true; report.controlledSlowDrainProof.incompleteResponseObserved = true;
+      checkCancelled();
+      if (performance.now() >= end) reject('controlled_drain_unconfirmed');
+      if (held.release() !== true) reject('controlled_drain_unconfirmed');
+      const completed = await client.resume(); checkCancelled(); assessControlledDrainResult(completed);
+      report.controlledSlowDrainProof.payloadCompleted = true; report.controlledSlowDrainProof.tlsVerified = true;
+      const stopped = await stopping; checkCancelled();
+      if (!stopped.ok) throw stopped.error;
+      if (!await exitedLauncher(before.launcher) || !await nativeStopped(known)) reject('controlled_drain_unconfirmed');
+      checkCancelled();
+      if (!report.cleanup.managerStopped || !report.cleanup.launcherExited || !report.cleanup.nativeGroupsAbsent
+          || !report.cleanup.listeningPortsClosed || !report.cleanup.controlSocketAbsent || !report.cleanup.downstreamTLSPortClosed
+          || !await absent(`${prefix}/control.sock`) || !await closedPort(gatewayPort) || !await closedPort(healthPort)
+          || !await closedPort(tlsPort)) reject('controlled_drain_unconfirmed');
+      checkCancelled();
+      report.controlledSlowDrainProof.managerStopCompleted = true; report.controlledSlowDrainProof.launcherExited = true;
+      report.controlledSlowDrainProof.nativeGroupsAbsent = true; report.controlledSlowDrainProof.listeningPortsClosed = true;
+      report.controlledSlowDrainProof.controlSocketAbsent = true;
+    } catch (error) { primary = error; }
+    finally {
+      // Cancel only the captured request/response handles. No new unit stop or
+      // direct signal is issued here; preserve the first failure and await all tasks.
+      try { if (held && await held.abort() !== true) reject('controlled_drain_unconfirmed'); } catch (error) { failures.cleanup(error, 'drain_close'); if (!primary) primary = error; }
+      try { if (client && await client.cancel() !== true) reject('controlled_drain_unconfirmed'); } catch (error) { failures.cleanup(error, 'drain_close'); if (!primary) primary = error; }
+      if (stopping) { const stopped = await stopping; if (!stopped.ok) { failures.cleanup(stopped.error, 'drain_close'); if (!primary) primary = stopped.error; } }
+    }
+    if (primary) throw primary;
+    checkCancelled();
+    if (Object.values(report.controlledSlowDrainProof).some(value => value !== true)) reject('controlled_drain_unconfirmed');
+    report.controlledSlowDrainChecks++;
+  }
   process.once('SIGINT', cancel); process.once('SIGTERM', cancel);
   try {
     input = parseArguments(argv); report.phase = 'preflight';
@@ -1014,7 +1113,8 @@ export async function main(argv = process.argv.slice(2)) {
     report.phase = 'first_stop'; await stopOwned(); report.nativeSessionsStopped++;
     report.phase = 'second_start'; await startAndServe();
     report.phase = 'manager_restart'; await restartAndServe();
-    report.phase = 'third_stop'; await stopOwned(); report.nativeSessionsStopped++;
+    report.phase = 'controlled_drain'; await verifyControlledSlowDrain(); report.nativeSessionsStopped++;
+    if (report.controlledSlowDrainChecks !== 1) reject('controlled_drain_unconfirmed');
     if (report.failedStartChecks !== 1 || Object.values(report.failedStartProof).some(value => value !== true)) reject('failed_start_unconfirmed');
     if (report.downstreamTLSSessionChecks !== 3) reject('downstream_tls_unconfirmed');
     if (report.upstreamTLSSessionChecks !== 3 || report.upstreamTLSRollbackChecks !== 3) reject('upstream_tls_unconfirmed');

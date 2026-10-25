@@ -2,6 +2,7 @@
 import http from 'node:http';
 import https from 'node:https';
 import net from 'node:net';
+import { randomBytes } from 'node:crypto';
 import { constants } from 'node:fs';
 import { lstat, open, realpath } from 'node:fs/promises';
 import path from 'node:path';
@@ -123,18 +124,29 @@ export async function createOriginFixture(parent, options) {
   if (!validPort(gatewayPort) || !Buffer.isBuffer(body) || body.length < 1 || body.length > 4096
       || !Buffer.isBuffer(stream) || stream.length < 1 || stream.length > 1024 * 1024) fail('origin_fixture_invalid');
   const responseBody = Buffer.from(body), responseStream = Buffer.from(stream), originSockets = new Set(), relaySockets = new Set(), pending = new Set();
-  let origin, relay, port, readyPort, closing = false, echoRequests = 0, relay502 = 0, pki;
+  let origin, relay, port, readyPort, closing = false, echoRequests = 0, relay502 = 0, pki, drain = null;
   const byTag = new Map();
+  // One private capability per fixture. Its expiry only aborts; it never sends
+  // the remainder or grants completed-stream evidence.
+  function abortDrain() {
+    if (!drain || drain.aborted || drain.closed || drain.completed) return false;
+    drain.aborted = true; drain.held = false; clearTimeout(drain.timer);
+    if (drain.response) drain.response.destroy();
+    return true;
+  }
+  function expireDrain() {
+    if (drain && !drain.released && !drain.completed && performance.now() >= drain.deadline) abortDrain();
+  }
   const track = (server, sockets) => { server.on('connection', socket => { sockets.add(socket); socket.once('close', () => sockets.delete(socket)); });
     server.on('clientError', (_error, socket) => socket.destroy()); server.requestTimeout = 4000; server.headersTimeout = 4000; };
   async function close() {
-    closing = true; for (const request of pending) request.destroy();
+    closing = true; abortDrain(); for (const request of pending) request.destroy();
     const [originClosed, relayClosed] = await Promise.all([closeServer(origin, originSockets), closeServer(relay, relaySockets)]);
     const [originPortClosedProof, relayPortClosedProof] = await Promise.all([port ? originPortClosed(port) : true, readyPort ? originPortClosed(readyPort) : true]);
     const end = performance.now() + 2500;
-    while ((pending.size || originSockets.size || relaySockets.size) && performance.now() < end) await new Promise(resolve => setTimeout(resolve, 10));
+    while ((pending.size || originSockets.size || relaySockets.size || (drain?.response && !drain.closed)) && performance.now() < end) await new Promise(resolve => setTimeout(resolve, 10));
     if (!originClosed || !relayClosed || !originPortClosedProof || !relayPortClosedProof
-        || pending.size || originSockets.size || relaySockets.size) fail('origin_cleanup_unconfirmed');
+        || pending.size || originSockets.size || relaySockets.size || (drain?.response && !drain.closed)) fail('origin_cleanup_unconfirmed');
     return { originClosed, relayClosed, originPortClosed: originPortClosedProof, relayPortClosed: relayPortClosedProof };
   }
   try {
@@ -145,6 +157,19 @@ export async function createOriginFixture(parent, options) {
       origin = https.createServer({ key, cert: certificate, minVersion: 'TLSv1.2', maxVersion: 'TLSv1.3' }, (req, res) => {
         res.on('error', () => res.destroy()); if (closing) { req.destroy(); return; }
         res.setHeader('X-TLS-App', 'authenticated-origin'); res.setHeader('X-X10-TLS-Probe', 'untrusted-origin-marker');
+        if (req.url?.startsWith('/slow-stream/')) {
+          expireDrain();
+          if (req.method !== 'GET' || !drain || req.url !== drain.path || drain.requested || drain.aborted || drain.closed) {
+            res.writeHead(404); res.end('not found\n'); return;
+          }
+          drain.requested = true; drain.response = res;
+          res.once('finish', () => { if (drain.released && !drain.aborted && !closing) drain.completed = true; });
+          res.once('close', () => { drain.closed = true; drain.held = false; clearTimeout(drain.timer);
+            if (!drain.completed) drain.aborted = true; });
+          res.writeHead(200, { 'Content-Type': 'application/octet-stream', 'Content-Length': 65537,
+            'X-Accel-Buffering': 'no' });
+          res.flushHeaders(); res.write(Buffer.alloc(4096, 0x62)); drain.held = true; return;
+        }
         if (req.method === 'GET' && req.url === '/ready') { res.end('ready\n'); return; }
         if (req.method === 'POST' && req.url === '/echo') {
           echoRequests++; const chunks = []; let size = 0;
@@ -172,6 +197,35 @@ export async function createOriginFixture(parent, options) {
     });
     track(relay, relaySockets); readyPort = await listen(relay);
     return { port, readyPort, ...pki,
+      prepareDrain(...args) {
+        if (args.length || closing || drain) fail('origin_fixture_invalid');
+        drain = { path: `/slow-stream/${randomBytes(16).toString('hex')}`, response: null,
+          requested: false, held: false, released: false, completed: false, aborted: false, closed: false,
+          deadline: performance.now() + 8000 };
+        drain.timer = setTimeout(abortDrain, 8000);
+        return Object.freeze({ path: drain.path, prefixBytes: 4096, totalBytes: 65537,
+          snapshot: () => { expireDrain(); return { held: drain.held && !drain.response?.destroyed && !drain.response?.writableEnded,
+            requested: drain.requested, released: drain.released, completed: drain.completed,
+            aborted: drain.aborted, closed: drain.closed }; },
+          release() {
+            expireDrain();
+            if (closing || !drain.requested || !drain.held || drain.released || drain.aborted || drain.closed
+                || !drain.response || drain.response.destroyed || drain.response.writableEnded) fail('origin_fixture_invalid');
+            drain.released = true; drain.held = false; clearTimeout(drain.timer);
+            drain.response.end(Buffer.alloc(65537 - 4096, 0x62)); return true;
+          }, async abort() {
+            abortDrain();
+            if (!drain.response || drain.closed) return true;
+            return new Promise(resolve => {
+              let settled = false;
+              const done = value => { if (settled) return; settled = true; clearTimeout(timer);
+                drain.response.removeListener('close', closed); resolve(value); };
+              const closed = () => done(drain.closed === true);
+              const timer = setTimeout(() => done(false), 1000);
+              drain.response.once('close', closed);
+            });
+          } });
+      },
       candidate(input) {
         const { tag, trust = 'good', name = 'localhost', target = 'https' } = values(input, ['tag', 'trust', 'name', 'target']);
       if (closing || !validTag(tag) || !['good', 'wrong'].includes(trust) || !['localhost', 'wrong.invalid'].includes(name)
