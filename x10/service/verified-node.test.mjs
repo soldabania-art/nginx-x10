@@ -18,11 +18,15 @@ const status = () => `[GNUPG:] PLAINTEXT 74 0 \n[GNUPG:] NEWSIG\n[GNUPG:] KEY_CO
 function receipt() {
   return { checkerExited:true, checkerExitCode:0, report:{ ok:true, code:'basic_lifecycle_verified', phase:'complete', actualNonrootManagerObserved:true, actualUnitStarted:true,
     runtimeUnitLinked:true, runtimeUnitRemoved:true, unitEnabled:false,
-    readinessAutomated:true, automaticReadinessAccepted:false, tlsServiceAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
+    readinessAutomated:true, automaticReadinessAccepted:false, failedStartAccepted:false, tlsServiceAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
     primaryFailure:null, cleanupFailures:[], cleanupFailureCount:0, cleanupFailuresTruncated:false,
     explicitReadinessPasses:3, nativeSessionsStarted:3, nativeSessionsStopped:3, proxyBodyChecks:3, uploadChecks:3, streamChecks:3,
     managerRestartCommands:1, completedManagerRestarts:1,
     restartProof:{oldLauncherExited:true,oldNativeGroupsAbsent:true,freshSession:true,freshInvocation:true},
+    failedStartChecks:1,
+    failedStartProof:{unhealthyReadinessObserved:true,managerRefused:true,hookExitObserved:true,bindingAbsent:true,
+      launcherExited:true,nativeGroupsAbsent:true,listeningPortsClosed:true,controlSocketAbsent:true,
+      failedSessionStopped:true,managerResetConfirmed:true,healthyRestartFresh:true},
     journalChecks:3,journalRecordsObserved:6,journalRunningMarkers:3,
     downstreamTLSActivated:true,downstreamTLSSessionChecks:3,downstreamTLSBodyChecks:6,downstreamTLSUploadChecks:3,downstreamTLSStreamChecks:3,
     downstreamTLS12Checks:3,downstreamTLS13Checks:3,downstreamTLSCertificateChecks:12,downstreamTLSWrongCARefusals:3,downstreamTLSWrongNameRefusals:3,
@@ -89,6 +93,51 @@ test('cleanup evidence requires exited checker and every exact confirmation',()=
   for(const k of Object.keys(receipt().report.cleanup)) { const e=receipt();e.report.cleanup[k]=k==='appSocketsRemaining'?1:false; assert.equal(cleanupEvidence(e),false,k); }
   for(const k of ['checkerExited','checkerExitCode']) {const e=receipt();e[k]=k==='checkerExited'?false:1;assert.equal(cleanupEvidence(e),false);}
   for(const k of ['nativeSessionsStopped','explicitReadinessPasses','proxyBodyChecks']){const e=receipt();e.report[k]=1;assert.equal(cleanupEvidence(e),false);}
+});
+test('cleanup refuses the prior combined TLS receipt without the new failed-start control',()=>{
+  const e=receipt();delete e.report.failedStartChecks;delete e.report.failedStartProof;
+  assert.equal(e.report.upstreamTLSActivated,true);assert.equal(e.report.cleanup.temporaryRootRemoved,true);
+  assert.equal(cleanupEvidence(e),false);
+});
+test('cleanup requires exactly one failed-start control without a broader acceptance claim',()=>{
+  for(const value of [undefined,false,0,2,'1',true,NaN,Infinity]){
+    const e=receipt();e.report.failedStartChecks=value;assert.equal(cleanupEvidence(e),false);
+  }
+  for(const value of [undefined,true,0,'false',null]){
+    const e=receipt();e.report.failedStartAccepted=value;assert.equal(cleanupEvidence(e),false);
+  }
+});
+test('cleanup requires each distinct failed-start refusal, retirement and fresh recovery proof',()=>{
+  for(const k of Object.keys(receipt().report.failedStartProof)){
+    for(const value of [undefined,false,1,'true',null]){
+      const e=receipt();e.report.failedStartProof[k]=value;assert.equal(cleanupEvidence(e),false,k);
+    }
+    const missing=receipt();delete missing.report.failedStartProof[k];assert.equal(cleanupEvidence(missing),false,k);
+  }
+});
+test('cleanup refuses malformed, inherited and extra failed-start proof fields',()=>{
+  for(const value of [undefined,null,[],true,{},Object.create(receipt().report.failedStartProof)]){
+    const e=receipt();e.report.failedStartProof=value;assert.equal(cleanupEvidence(e),false);
+  }
+  for(const extra of ['unverified',Symbol('unverified')]){
+    const e=receipt();e.report.failedStartProof[extra]=true;assert.equal(cleanupEvidence(e),false);
+  }
+  const foreign=receipt();Object.setPrototypeOf(foreign.report.failedStartProof,{unverified:true});
+  assert.equal(cleanupEvidence(foreign),false);
+  const nonenumerable=receipt();Object.defineProperty(nonenumerable.report.failedStartProof,'unverified',{value:true});
+  assert.equal(cleanupEvidence(nonenumerable),false);
+});
+test('cleanup rejects accessor failed-start proofs without reading them',()=>{
+  let reads=0;
+  for(const k of Object.keys(receipt().report.failedStartProof)){
+    const e=receipt();Object.defineProperty(e.report.failedStartProof,k,{enumerable:true,get(){reads++;return true;}});
+    assert.equal(cleanupEvidence(e),false);
+  }
+  assert.equal(reads,0);
+});
+test('cleanup accepts the exact null-prototype failed-start data record',()=>{
+  const e=receipt();e.report.failedStartProof=Object.assign(Object.create(null),e.report.failedStartProof);
+  assert.equal(cleanupEvidence(e),true);
 });
 test('cleanup refuses the stale two-session profile and mixed session counts',()=>{
   const counters=['explicitReadinessPasses','nativeSessionsStarted','nativeSessionsStopped','proxyBodyChecks','uploadChecks','streamChecks'];
@@ -217,6 +266,19 @@ test('cleanup preserves runtime contents when exact-source receipt has incomplet
   e.report.downstreamTLSWrongCARefusals=2;await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
   try {const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.equal(await readFile(p+'/runtime/sentinel','utf8'),'preserve');assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);}
   finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
+});
+test('cleanup preserves runtime when exact-source receipt lacks failed-start or fresh recovery proof',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});await writeFile(p+'/runtime/sentinel','preserve',{mode:0o600});
+  const source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
+  try {
+    for(const mutate of [e=>{delete e.report.failedStartProof;},e=>{e.report.failedStartProof.healthyRestartFresh=false;},e=>{e.report.failedStartProof.nativeGroupsAbsent=false;}]){
+      const e=receipt();e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];mutate(e);
+      await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
+      const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);
+      assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.equal(await readFile(p+'/runtime/sentinel','utf8'),'preserve');
+      assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);
+    }
+  } finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
 });
 test('cleanup preserves runtime sentinel for exact-source incomplete origin and relay evidence',async()=>{
   const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});await writeFile(p+'/runtime/sentinel','preserve',{mode:0o600});

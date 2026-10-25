@@ -21,7 +21,7 @@ import { createServicePKI, probeServiceTLS, expectServiceTLSRefusal, TLS_FIXTURE
 const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 const HEX = /^[a-f0-9]{64}$/, TOKEN = /^[a-f0-9]{32}$/;
 const KEYS = ['LoadState', 'ActiveState', 'SubState', 'Result', 'FragmentPath', 'MainPID', 'ControlGroup'];
-const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed"]);
+const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed", "failed_start_unconfirmed"]);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const reject = code => { throw Object.assign(new Error(code), { code }); };
 export const LIMITATIONS = Object.freeze({ scope: 'ephemeral-user-service-basic-lifecycle',
@@ -126,7 +126,7 @@ export async function observeNodePrerequisites(prefix, nodeExecutable) {
   finally { if (handle) { try { await handle.close(); } catch { reject('recipe_diagnostic_failed'); } } }
 }
 // Diagnostic collectors have no I/O or lifecycle authority.
-export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'first_start', 'tls_apply', 'origin_negative', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
+export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'failed_start', 'first_start', 'tls_apply', 'origin_negative', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
 export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'request_restart', 'old_retirement', 'invocation_identity', 'journal_read', 'downstream_tls', 'upstream_tls', 'origin_negative', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
 export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'origin_close', 'temporary_root', 'final_assertion', 'unknown']);
 const pickEnum = (value, list, fallback = 'unknown') => typeof value === 'string' && list.includes(value) ? value : fallback;
@@ -298,6 +298,43 @@ export function createHookStatusDiagnostics() {
     snapshot() { return { observationCount: count, observationsTruncated: truncated, observations: observations.map(item => ({ ...item })) }; },
   });
 }
+// These strict expected-failure assessments never accept a timeout or signal.
+// Runtime authority still requires the caller's fresh owned-unit/session checks.
+export function parseFailedStartIdentity(text) {
+  if (typeof text !== 'string' || Buffer.byteLength(text) > 256 || !text.endsWith('\n')) reject('failed_start_unconfirmed');
+  const rows = text.slice(0, -1).split('\n'), value = Object.create(null);
+  if (rows.length !== 2) reject('failed_start_unconfirmed');
+  for (const row of rows) {
+    const match = /^(InvocationID|ControlPID)=([a-f0-9]+)$/.exec(row);
+    if (!match || Object.hasOwn(value, match[1])) reject('failed_start_unconfirmed');
+    value[match[1]] = match[2];
+  }
+  if (!TOKEN.test(value.InvocationID || '') || /^0+$/.test(value.InvocationID)
+      || !/^[1-9][0-9]{0,9}$/.test(value.ControlPID || '') || Number(value.ControlPID) < 2
+      || Number(value.ControlPID) > 2147483647) reject('failed_start_unconfirmed');
+  return { invocation: value.InvocationID, hookPID: Number(value.ControlPID) };
+}
+export function assessFailedReadinessStart(record, properties, text, expected) {
+  const get = ownData;
+  if (get(record, 'ok') !== false || get(record, 'exitCode') !== 1 || get(record, 'termination') !== 'exit_nonzero'
+      || typeof get(record, 'stdout') !== 'string' || typeof get(record, 'stderr') !== 'string'
+      || Buffer.byteLength(get(record, 'stdout')) + Buffer.byteLength(get(record, 'stderr')) > 256 * 1024
+      || get(properties, 'LoadState') !== 'loaded' || get(properties, 'ActiveState') !== 'failed'
+      || get(properties, 'SubState') !== 'failed' || get(properties, 'Result') !== 'exit-code'
+      || get(properties, 'MainPID') !== '0') reject('failed_start_unconfirmed');
+  const node = get(expected, 'nodeExecutable'), launcher = get(expected, 'launcher'), pid = get(expected, 'hookPID');
+  const simple = value => typeof value === 'string' && value.length <= 4096
+    && /^\/[A-Za-z0-9_./+-]+$/.test(value) && path.posix.normalize(value) === value;
+  if (!simple(node) || !simple(launcher) || !Number.isInteger(pid) || pid < 2 || pid > 2147483647
+      || typeof text !== 'string' || Buffer.byteLength(text) > 16384 || /[^\x20-\x7e\n]/.test(text)) reject('failed_start_unconfirmed');
+  const match = /^ExecStartPost=\{ path=([^;{}\n]{1,4096}) ; argv\[\]=([^;{}\n]{1,8192}) ; ignore_errors=no ; start_time=\[([^\]\n]{1,128})\] ; stop_time=\[([^\]\n]{1,128})\] ; pid=([1-9][0-9]{0,9}) ; code=exited ; status=1(?:\/FAILURE)? \}\n$/.exec(text);
+  const time = /^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) [0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01]) (?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\.[0-9]{1,6})? (?:[A-Z]{1,8}|[+-][0-9]{4})$/;
+  if (!match || match[0] !== text || match[1] !== node
+      || match[2] !== `${node} ${launcher} wait-bind --timeout-ms 10000`
+      || !time.test(match[3]) || !time.test(match[4]) || Number(match[5]) !== pid) reject('failed_start_unconfirmed');
+  return true;
+}
+
 async function archiveBytes(file) {
   const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
   try {
@@ -366,6 +403,7 @@ export async function main(argv = process.argv.slice(2)) {
   const report = { ok: false, code: 'not_started', phase: 'arguments', ...LIMITATIONS,
     actualNonrootManagerObserved: false, actualUnitStarted: false, explicitReadinessPasses: 0,
     nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
+    failedStartChecks: 0, failedStartProof: { unhealthyReadinessObserved: false, managerRefused: false, hookExitObserved: false, bindingAbsent: false, launcherExited: false, nativeGroupsAbsent: false, listeningPortsClosed: false, controlSocketAbsent: false, failedSessionStopped: false, managerResetConfirmed: false, healthyRestartFresh: false },
     managerRestartCommands: 0, completedManagerRestarts: 0,
     restartProof: { oldLauncherExited: false, oldNativeGroupsAbsent: false, freshSession: false, freshInvocation: false },
     journalChecks: 0, journalRecordsObserved: 0, journalRunningMarkers: 0,
@@ -383,6 +421,8 @@ export async function main(argv = process.argv.slice(2)) {
       appSocketsRemaining: 0, installationRemoved: false, temporaryRootRemoved: false } };
   let input, parent, prefix, node, launcher, unitFile, runtimeLink, unitName, env, app, appPort, gatewayPort, healthPort, tlsPort, tlsFixture, origin, goodOriginRevision;
   let originCreationRequested = false, originCleanupSafe = true;
+  let failedStartup = null, readinessBlocked = true, readinessCaptureDone = false, readinessRefusals = 0;
+  const heldReadiness = new Set();
   const originSessions = new Set();
   const tlsSessions = new Set();
   let linked = false, installed = false, safeToRemove = false, cancelled = false, startRequested = false, lastSession = null, inCleanup = false;
@@ -531,6 +571,91 @@ export async function main(argv = process.argv.slice(2)) {
     report.cleanup.managerStopped = true; report.cleanup.launcherExited = true; report.cleanup.nativeGroupsAbsent = true;
     report.cleanup.listeningPortsClosed = true; report.cleanup.controlSocketAbsent = true;
   }
+  async function verifyFailedReadinessStart() {
+    resetServiceCleanupEvidence(); checkCancelled();
+    const before = await ownedProperties(false);
+    if (before.ActiveState !== 'inactive' || before.MainPID !== '0') reject('unit_not_stopped');
+    const prior = await systemctl(['show', unitName, '--all', '--property=InvocationID'], 2500);
+    if (!prior.ok || prior.stderr !== '' || prior.stdout !== 'InvocationID=\n') reject('failed_start_unconfirmed');
+    checkCancelled();
+    startRequested = true;
+    // This single bounded command is always awaited, even if capture is refused.
+    const pendingStart = systemctl(['start', unitName], 15000);
+    let started, captured;
+    try {
+      await until(async () => { checkCancelled(); return heldReadiness.size > 0; }, 4000);
+      const active = await ownedProperties(false);
+      if (active.ActiveState !== 'activating' || active.SubState !== 'start-post' || active.Result !== 'success') reject('failed_start_unconfirmed');
+      const launcherCapture = await launcherIdentity(active);
+      const query = await systemctl(['show', unitName, '--property=InvocationID', '--property=ControlPID'], 2500);
+      if (!query.ok || query.stderr !== '') reject('failed_start_unconfirmed');
+      const identity = parseFailedStartIdentity(query.stdout);
+      const manifest = await checkedRecord(`${prefix}/.alpha-install.json`);
+      const registry = await checkedRecord(`${prefix}/.alpha-registry.json`);
+      if (registry.installationId !== manifest.installationId || registry.sessions.length !== 1
+          || registry.current !== registry.sessions[0] || !TOKEN.test(registry.current)) reject('failed_start_unconfirmed');
+      const sessionPrefix = `${prefix}/runs/${registry.current}`, life = await checkedRecord(`${sessionPrefix}/lifecycle.json`);
+      if (life.installationId !== manifest.installationId || life.session !== registry.current || life.prefix !== sessionPrefix
+          || life.stage !== 'running' || !life.runtime) reject('failed_start_unconfirmed');
+      const native = await inspectMaster(`${prefix}/bin/nginx`, sessionPrefix, life.runtime);
+      if (!native) reject('failed_start_unconfirmed');
+      const again = await ownedProperties(false), same = await launcherIdentity(again);
+      if (again.ActiveState !== 'activating' || again.SubState !== 'start-post' || !sameLauncher(launcherCapture, same)) reject('failed_start_unconfirmed');
+      captured = { id: registry.current, prefix: sessionPrefix, identity: native, launcher: launcherCapture, ...identity };
+      // Keep this failed session in the full cleanup inventory, without counting
+      // it as one of the three successful native/readiness/I/O sessions.
+      sessions.push({ id: captured.id, prefix: captured.prefix, identity: native }); launcherIdentities.push(launcherCapture);
+      readinessCaptureDone = true;
+      for (const response of heldReadiness) {
+        if (!response.destroyed && !response.writableEnded) { response.once('finish', () => { if (!response.destroyed) readinessRefusals++; }); response.writeHead(503); response.end('not-ready\n'); }
+      }
+      heldReadiness.clear();
+      started = await pendingStart;
+    } finally {
+      // A capture failure grants no startup acceptance, but releases only our
+      // own held health responses and observes completion of the one command.
+      for (const response of heldReadiness) { if (!response.destroyed && !response.writableEnded) { response.writeHead(503); response.end('not-ready\n'); } }
+      heldReadiness.clear();
+      if (!started) await pendingStart;
+    }
+    checkCancelled();
+    if (!captured || readinessRefusals < 1) reject('failed_start_unconfirmed');
+    const failed = await ownedProperties(false);
+    const invocation = await systemctl(['show', unitName, '--property=InvocationID'], 2500);
+    const hook = await systemctl(['show', unitName, '--property=ExecStartPost'], 2500);
+    if (!invocation.ok || invocation.stderr !== '' || parseInvocationProperty(invocation.stdout) !== captured.invocation
+        || !hook.ok || hook.stderr !== '') reject('failed_start_unconfirmed');
+    assessFailedReadinessStart(started, failed, hook.stdout, { nodeExecutable: node, launcher, hookPID: captured.hookPID });
+    const after = await ownedProperties(false), repeated = await systemctl(['show', unitName, '--property=InvocationID'], 2500);
+    if (!repeated.ok || repeated.stderr !== '' || parseInvocationProperty(repeated.stdout) !== captured.invocation) reject('failed_start_unconfirmed');
+    assessFailedReadinessStart(started, after, hook.stdout, { nodeExecutable: node, launcher, hookPID: captured.hookPID });
+    report.failedStartProof.unhealthyReadinessObserved = true; report.failedStartProof.managerRefused = true; report.failedStartProof.hookExitObserved = true;
+    await until(async () => { checkCancelled();
+      const life = await checkedRecord(`${captured.prefix}/lifecycle.json`);
+      return life.session === captured.id && life.stage === 'stopped' && life.lastExit?.code === 0 && life.lastExit?.signal === null
+        && JSON.stringify(life.runtime) === JSON.stringify(captured.identity) && await exitedLauncher(captured.launcher) && await nativeStopped(captured);
+    });
+    report.failedStartProof.failedSessionStopped = true; report.failedStartProof.launcherExited = true; report.failedStartProof.nativeGroupsAbsent = true;
+    const info = await cli(node, launcher, ['info'], env), status = await cli(node, launcher, ['status'], env);
+    if (info.session !== captured.id || info.sessionPrefix !== captured.prefix || info.stage !== 'stopped'
+        || !Object.hasOwn(status, 'binding') || status.binding !== null || status.pending !== null) reject('failed_start_unconfirmed');
+    report.failedStartProof.bindingAbsent = true;
+    if (!await closedPort(gatewayPort) || !await closedPort(healthPort) || !await absent(`${prefix}/control.sock`)) reject('service_resources_live');
+    report.failedStartProof.listeningPortsClosed = true; report.failedStartProof.controlSocketAbsent = true;
+    checkCancelled();
+    // Reset only this hash/owner/link-verified failed unit, after observing every
+    // captured process and service resource absent. This is never a broad reset.
+    const still = await ownedProperties(false);
+    if (still.ActiveState !== 'failed' || still.MainPID !== '0' || still.Result !== 'exit-code') reject('failed_start_unconfirmed');
+    if (!await exitedLauncher(captured.launcher) || !await nativeStopped(captured)) reject('failed_start_unconfirmed');
+    checkCancelled();
+    const reset = await systemctl(['reset-failed', unitName], 2500); checkCancelled();
+    const resetState = await ownedProperties(false);
+    if (!reset.ok || reset.stderr !== '' || resetState.ActiveState !== 'inactive' || resetState.SubState !== 'dead'
+        || resetState.MainPID !== '0' || resetState.Result !== 'success') reject('failed_start_unconfirmed');
+    checkCancelled();
+    report.failedStartProof.managerResetConfirmed = true; failedStartup = captured; readinessBlocked = false;
+  }
   async function startAndServe() {
     resetServiceCleanupEvidence();
     start.begin();
@@ -548,7 +673,13 @@ export async function main(argv = process.argv.slice(2)) {
     if (!started.ok) { await observeStartPost('failed_start'); reject('unit_start_failed'); }
     start.step('after_properties');
     const active = await ownedProperties(); if (active.ActiveState !== 'active' || active.SubState !== 'running') reject('unit_not_active');
-    await observeActiveAndServe(active);
+    const servedSession = await observeActiveAndServe(active);
+    if (failedStartup && report.failedStartChecks === 0) {
+      const invocation = await ownedInvocation();
+      if (servedSession.id === failedStartup.id || invocation.id === failedStartup.invocation
+          || sameLauncher(invocation.launcher, failedStartup.launcher)) reject('failed_start_unconfirmed');
+      report.failedStartProof.healthyRestartFresh = true; report.failedStartChecks++;
+    }
     start.complete();
   }
   async function observeActiveAndServe(active) {
@@ -557,7 +688,7 @@ export async function main(argv = process.argv.slice(2)) {
     start.step('binding_status');
     const startupStatus = await cli(node, launcher, ['status'], env); if (!startupStatus.binding || startupStatus.runtime?.identityValid !== true) reject('binding_unconfirmed');
     start.step('native_inventory');
-    await until(async () => { try { await inventorySessions(); return sessions.length > report.nativeSessionsStopped; } catch (e) { if (e.code === 'native_cleanup_unknown') return false; throw e; } });
+    await until(async () => { try { await inventorySessions(); const current = await cli(node, launcher, ['info'], env); return current.stage === 'running' && current.session !== failedStartup?.id && sessions.some(s => s.id === current.session); } catch (e) { if (e.code === 'native_cleanup_unknown') return false; throw e; } });
     start.step('native_observation');
     const s = await observeNative();
     start.step('session_freshness');
@@ -848,7 +979,11 @@ export async function main(argv = process.argv.slice(2)) {
     const unpack = await command('/usr/bin/tar', ['-xzf', archiveCopy, '-C', parent], env);
     if (!unpack.ok) reject('archive_extract_failed');
     app = http.createServer((req, res) => {
-      if (req.url === '/ready') { res.end('ready\n'); return; }
+      if (req.url === '/ready') {
+        if (readinessBlocked && readinessCaptureDone) { res.once('finish', () => { if (!res.destroyed) readinessRefusals++; }); res.writeHead(503); res.end('not-ready\n'); }
+        else if (readinessBlocked) { if (heldReadiness.size >= 8) { req.destroy(); return; } heldReadiness.add(res); res.once('close', () => heldReadiness.delete(res)); }
+        else res.end('ready\n'); return;
+      }
       if (req.url === '/stream') { res.write(Buffer.alloc(32768, 0x62)); res.end(Buffer.alloc(32769, 0x62)); return; }
       if (req.url === '/echo') { const chunks = []; let size = 0; req.on('data', b => { size += b.length; if (size > 1024 * 1024) req.destroy(); else chunks.push(b); }); req.on('end', () => res.end(Buffer.concat(chunks))); return; }
       res.end('service-fixture\n');
@@ -873,12 +1008,14 @@ export async function main(argv = process.argv.slice(2)) {
     const linkResult = await systemctl(['--runtime', 'link', unitFile]);
     linked = !await absent(runtimeLink);
     if (!linkResult.ok) reject('unit_link_failed'); await linkAuthority(); linked = true; report.runtimeUnitLinked = true;
+    report.phase = 'failed_start'; await verifyFailedReadinessStart();
     report.phase = 'first_start'; await startAndServe(); await verifyJournalForInvocation(await ownedInvocation());
     report.phase = 'tls_apply'; await activateDownstreamTLS();
     report.phase = 'first_stop'; await stopOwned(); report.nativeSessionsStopped++;
     report.phase = 'second_start'; await startAndServe();
     report.phase = 'manager_restart'; await restartAndServe();
     report.phase = 'third_stop'; await stopOwned(); report.nativeSessionsStopped++;
+    if (report.failedStartChecks !== 1 || Object.values(report.failedStartProof).some(value => value !== true)) reject('failed_start_unconfirmed');
     if (report.downstreamTLSSessionChecks !== 3) reject('downstream_tls_unconfirmed');
     if (report.upstreamTLSSessionChecks !== 3 || report.upstreamTLSRollbackChecks !== 3) reject('upstream_tls_unconfirmed');
     report.phase = 'uninstall'; await cli(node, launcher, ['uninstall'], env); installed = false;

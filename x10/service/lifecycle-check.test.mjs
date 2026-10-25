@@ -7,7 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
 import { digest } from '../alpha/runtime.mjs';
-import { parseArguments, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
+import { parseArguments, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
 import { JOURNAL_RESULT_CODES } from './journal-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
@@ -396,12 +396,12 @@ async function syntheticAutomaticStart({ binding = true, lateBinding = binding, 
   let observations = 0, cancelChecks = 0, statusObservations = 0, managerStarted = false;
   const reject = code => { throw Object.assign(new Error(code), { code }); };
   const own = async () => { calls.push('properties'); observations++; return !managerStarted ? { ActiveState: 'inactive', MainPID: '0' } : { ActiveState: 'active', SubState: 'running' }; };
-  const cli = async (_node, _launcher, args) => { calls.push(`cli_${args[0]}`); assert.equal(args[0], 'status'); return { binding: ++statusObservations === 1 ? binding : lateBinding, runtime: { identityValid } }; };
-  const factory = new Function('start', 'checkCancelled', 'ownedProperties', 'systemctl', 'unitName', 'launcherIdentities', 'launcherIdentity', 'report', 'cli', 'node', 'launcher', 'env', 'until', 'inventorySessions', 'sessions', 'observeNative', 'request', 'gatewayPort', 'reject', 'observeStartPost', `let startRequested = false, lastSession = null; ${reset}${body}; return startAndServe;`);
+  const cli = async (_node, _launcher, args) => { calls.push(`cli_${args[0]}`); if (args[0] === 'info') return { stage: 'running', session: 'one' }; assert.equal(args[0], 'status'); return { binding: ++statusObservations === 1 ? binding : lateBinding, runtime: { identityValid } }; };
+  const factory = new Function('start', 'checkCancelled', 'ownedProperties', 'systemctl', 'unitName', 'launcherIdentities', 'launcherIdentity', 'report', 'cli', 'node', 'launcher', 'env', 'until', 'inventorySessions', 'sessions', 'observeNative', 'request', 'gatewayPort', 'reject', 'observeStartPost', `let startRequested = false, lastSession = null, failedStartup = null; ${reset}${body}; return startAndServe;`);
   const start = factory(createStartDiagnostics(), () => { if (++cancelChecks === cancelAt) reject('cancelled'); }, own,
     async (args, timeout) => { calls.push('manager_start'); managerStarted = true; assert.deepEqual(args, ['start', 'fixture.service']); assert.equal(timeout, 15000); return { ok: startOK }; },
     'fixture.service', [], async () => { calls.push('launcher'); return {}; }, report, cli, '/synthetic/node', '/synthetic/launcher', {},
-    async fn => { assert.equal(await fn(), true); }, async () => { calls.push('inventory'); sessions.push({}); }, sessions,
+    async fn => { assert.equal(await fn(), true); }, async () => { calls.push('inventory'); sessions.push({ id: 'one' }); }, sessions,
     async () => { calls.push('native'); report.nativeSessionsStarted++; return { id: 'one' }; },
     async (_port, route = '/', body) => { calls.push(`request_${route}`); return { status: 200, body: route === '/echo' ? body : route === '/stream' ? Buffer.alloc(65537, 0x62) : Buffer.from('service-fixture\n') }; }, 0, reject, async () => {});
   let failure = null; try { await start(); } catch (e) { failure = e.code; }
@@ -409,7 +409,7 @@ async function syntheticAutomaticStart({ binding = true, lateBinding = binding, 
 }
 test('source-extracted start requires bound status after manager activation without manual bind fallback', async () => {
   const result = await syntheticAutomaticStart(); assert.equal(result.failure, null); assert.equal(result.report.explicitReadinessPasses, 1);
-  assert.equal(result.calls.filter(x => x.startsWith('cli_')).join(','), 'cli_status,cli_status');
+  assert.equal(result.calls.filter(x => x.startsWith('cli_')).join(','), 'cli_status,cli_info,cli_status');
   assert.ok(result.calls.indexOf('manager_start') < result.calls.indexOf('cli_status'));
   assert.ok(result.calls.indexOf('cli_status') < result.calls.indexOf('inventory'));
   assert.ok(result.calls.lastIndexOf('cli_status') > result.calls.indexOf('native'));
@@ -1003,3 +1003,56 @@ for (const [option, code] of [['noKnown', 'upstream_tls_session'], ['wrongStage'
   ['cancelNative', 'cancelled'], ['unitChanged', 'unit_fragment_identity']]) test(`fresh origin authority refuses ${option} before admitted mutation`, async () => {
   const r = await syntheticOriginAuthority({ [option]: true }); assert.equal(r.failure, code); assert.equal(r.result, undefined);
 });
+
+const failureHook = (changes = {}) => {
+  const v = { node: '/synthetic/node', launcher: '/synthetic/install/bin/x10', start: 'Sun 2026-10-25 11:00:00 UTC', stop: 'Sun 2026-10-25 11:00:03 UTC', pid: '1234', code: 'exited', status: '1', ...changes };
+  return `ExecStartPost={ path=${v.node} ; argv[]=${v.node} ${v.launcher} wait-bind --timeout-ms 10000 ; ignore_errors=no ; start_time=[${v.start}] ; stop_time=[${v.stop}] ; pid=${v.pid} ; code=${v.code} ; status=${v.status} }\n`;
+};
+const failedCommand = { ok: false, exitCode: 1, termination: 'exit_nonzero', stdout: '', stderr: 'unit start refused\n' };
+const failedProps = { LoadState: 'loaded', ActiveState: 'failed', SubState: 'failed', Result: 'exit-code', MainPID: '0' };
+const failedExpected = { nodeExecutable: '/synthetic/node', launcher: '/synthetic/install/bin/x10', hookPID: 1234 };
+test('expected readiness refusal requires fresh captured hook PID and exact failed state', () => {
+  assert.deepEqual(parseFailedStartIdentity(`InvocationID=${'a'.repeat(32)}\nControlPID=1234\n`), { invocation: 'a'.repeat(32), hookPID: 1234 });
+  assert.equal(assessFailedReadinessStart(failedCommand, failedProps, failureHook(), failedExpected), true);
+  assert.equal(assessFailedReadinessStart(failedCommand, failedProps, failureHook({ status: '1/FAILURE' }), failedExpected), true);
+});
+for (const [name, text] of Object.entries({ missing: 'ControlPID=1234\n', zero: `InvocationID=${'0'.repeat(32)}\nControlPID=1234\n`, zeroPID: `InvocationID=${'a'.repeat(32)}\nControlPID=0\n`, reusedKey: 'ControlPID=1234\nControlPID=1235\n', upper: `InvocationID=${'A'.repeat(32)}\nControlPID=1234\n`, huge: `InvocationID=${'a'.repeat(32)}\nControlPID=2147483648\n`, trailing: `InvocationID=${'a'.repeat(32)}\nControlPID=1234\n\n` })) {
+  test(`failed-start identity refuses ${name}`, () => assert.throws(() => parseFailedStartIdentity(text), { code: 'failed_start_unconfirmed' }));
+}
+for (const [name, change] of Object.entries({ success: { ok: true, exitCode: 0 }, timeout: { termination: 'timeout_or_killed', exitCode: null }, signal: { termination: 'signal' }, unresolved: { termination: 'unknown' }, unavailable: { termination: 'unavailable' }, otherExit: { exitCode: 2 }, output: { stdout: 'x'.repeat(256 * 1024 + 1) }, noString: { stderr: null } })) {
+  test(`expected startup refusal rejects command ${name}`, () => assert.throws(() => assessFailedReadinessStart({ ...failedCommand, ...change }, failedProps, failureHook(), failedExpected), { code: 'failed_start_unconfirmed' }));
+}
+for (const [name, change] of Object.entries({ live: { MainPID: '1234' }, inactive: { ActiveState: 'inactive' }, activating: { ActiveState: 'activating' }, dead: { SubState: 'dead' }, timeout: { Result: 'timeout' }, protocol: { Result: 'protocol' }, missing: { LoadState: 'not-found' } })) {
+  test(`expected startup refusal rejects unit ${name}`, () => assert.throws(() => assessFailedReadinessStart(failedCommand, { ...failedProps, ...change }, failureHook(), failedExpected), { code: 'failed_start_unconfirmed' }));
+}
+for (const [name, change] of Object.entries({ wrongPID: { pid: '1235' }, noPID: { pid: '0' }, noTime: { start: 'n/a' }, noStop: { stop: 'n/a' }, signal: { code: 'killed', status: '15/TERM' }, success: { status: '0' }, otherExit: { status: '2' }, wrongSuffix: { status: '1/TERM' }, wrongNode: { node: '/other/node' }, wrongLauncher: { launcher: '/other/bin/x10' } })) {
+  test(`expected startup refusal rejects hook ${name}`, () => assert.throws(() => assessFailedReadinessStart(failedCommand, failedProps, failureHook(change), failedExpected), { code: 'failed_start_unconfirmed' }));
+}
+test('failed-start assessors refuse getters without invoking them', () => {
+  let invoked = 0; const r = { ...failedCommand }; Object.defineProperty(r, 'ok', { get() { invoked++; return false; } });
+  assert.throws(() => assessFailedReadinessStart(r, failedProps, failureHook(), failedExpected), { code: 'failed_start_unconfirmed' }); assert.equal(invoked, 0);
+});
+
+test('failed-start pristine invocation query explicitly prints empty id128 rather than inventing zero bytes', async () => {
+  const source = await readFile(script, 'utf8');
+  const body = source.slice(source.indexOf('  async function verifyFailedReadinessStart()'), source.indexOf('  async function startAndServe()'));
+  assert(body.includes("['show', unitName, '--all', '--property=InvocationID']"));
+  assert(body.includes("prior.stdout !== 'InvocationID=\\n'"));
+  assert(!body.includes("prior.stdout !== `InvocationID=${'0'.repeat(32)}"));
+});
+
+for (const cancellationPoint of ['owned_properties', 'pristine_query']) {
+  test(`failed-start cancellation during ${cancellationPoint} cannot issue a new manager start`, async () => {
+    const source = await readFile(script, 'utf8');
+    const body = source.slice(source.indexOf('  async function verifyFailedReadinessStart()'), source.indexOf('  async function startAndServe()'));
+    let cancelled = false; const calls = [];
+    const refuse = code => { throw Object.assign(new Error(code), { code }); };
+    const factory = new Function('resetServiceCleanupEvidence', 'checkCancelled', 'ownedProperties', 'systemctl', 'unitName', 'reject', `${body}; return verifyFailedReadinessStart;`);
+    const verify = factory(() => {}, () => { if (cancelled) refuse('cancelled'); },
+      async () => { calls.push('owned_properties'); if (cancellationPoint === 'owned_properties') cancelled = true; return { ActiveState: 'inactive', MainPID: '0' }; },
+      async args => { calls.push(args[0]); assert.deepEqual(args, ['show', 'fixture.service', '--all', '--property=InvocationID']); if (cancellationPoint === 'pristine_query') cancelled = true; return { ok: true, stderr: '', stdout: 'InvocationID=\n' }; },
+      'fixture.service', refuse);
+    await assert.rejects(verify(), { code: 'cancelled' });
+    assert.equal(calls.includes('start'), false); assert.equal(calls.includes('reset-failed'), false);
+  });
+}

@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-failed-start-20261025T112027Z",
-    "owner": "codex-coordinator-failed-start",
-    "baseCommit": "dd6c4fd63644812fb7d9197d108a58d07e9b902a",
-    "acquiredAtUTC": "2026-10-25T11:20:27.275Z",
-    "expiresAtUTC": "2026-10-25T12:04:27.275Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -2519,14 +2513,14 @@
       "runId": "x10-origin-https-20261025T102352Z",
       "sourceBase": "1e6bac699e7817b07ba017490839467d93335ad3",
       "publicationParent": "b8f6cd268a25fd0f54aef20540daab6fc2b25f30",
-      "implementationCommit": null,
+      "implementationCommit": "dd6c4fd63644812fb7d9197d108a58d07e9b902a",
       "implementationCommitLocator": "Current publication commit; exact resulting CI required",
       "scope": "Combined downstream HTTPS and verified HTTPS-origin managed-service acceptance candidate with candidate-tag-bound health relay",
       "result": "Added an owned HTTPS origin and verified health relay to the managed-service acceptance candidate, preserving downstream TLS and exact ownership/cleanup guards; new actual combined-service CI pending.",
       "evidence": "x10/evidence/g3-service-origin-https.json",
       "perFileLedger": "x10/review/g3-service-origin-https-ledger.json",
       "localAcceptance": "LOCAL_COMBINED_DOWNSTREAM_AND_VERIFIED_ORIGIN_HTTPS_CONTRACTS_FIXTURES_VERIFIED_EXACT_NEW_SERVICE_CI_PENDING",
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_COMBINED_DOWNSTREAM_AND_VERIFIED_ORIGIN_HTTPS_SERVICE",
+      "exactHostedAcceptance": "EXACT_COMBINED_HTTPS_ORIGIN_SERVICE_RESTART_JOURNAL_AND_CLEANUP_VERIFIED",
       "nativeRuntimeChanged": false,
       "controllerRuntimeChanged": false,
       "alphaRuntimeChanged": false,
@@ -2548,14 +2542,171 @@
       "productionAccepted": false,
       "nextConcreteTask": "First reconcile exact resulting combined downstream HTTPS and verified HTTPS-origin managed-service implementation CI. Require positive payload exchange and explicit bad upstream CA/hostname refusals through the candidate-tag-bound health relay, strict service/restart/journal identity, and complete owned upstream/downstream TLS fixture, relay, PKI, service and private dependency cleanup. Local fixture/contracts do not establish actual nonroot manager acceptance. Preserve all prior successful/refused scopes, cancellation/current-attempt cleanup guards and unknown-runtime retention. Adverse startup/drain/recovery, config/package rollback, permanent release, independent security and representative60-minute soak remain open; fullG3/Production V1 and semantic Continuum stay unaccepted.",
       "hostedVerification": {
-        "state": "PENDING_EXACT_RESULTING_COMBINED_DOWNSTREAM_AND_VERIFIED_ORIGIN_HTTPS_SERVICE"
+        "state": "EXACT_COMBINED_HTTPS_ORIGIN_SERVICE_RESTART_JOURNAL_AND_CLEANUP_VERIFIED",
+        "evidence": "x10/evidence/g3-service-failed-start.json"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false,
+      "hostedEvidence": "x10/evidence/g3-service-failed-start.json"
+    },
+    "serviceOriginHttpsHosted": {
+      "state": "EXACT_COMBINED_HTTPS_ORIGIN_SERVICE_RESTART_JOURNAL_AND_CLEANUP_VERIFIED",
+      "implementationCommit": "dd6c4fd63644812fb7d9197d108a58d07e9b902a",
+      "implementationTree": "15dd4d45119d9813460f27f96b0f47d224ffecd2",
+      "evidence": "x10/evidence/g3-service-failed-start.json",
+      "nativeRunIds": [
+        40185635547,
+        40185637960
+      ],
+      "nativeJobIds": [
+        121145751242,
+        121145758108
+      ],
+      "researchPRRunId": 40185638104,
+      "researchPRJobId": 121145758491,
+      "actualPRMergeCheckout": "b95d9ed44906039b07e4de69d822ef3807d80f3e",
+      "bothExactNativeWorkflowsSuccessful": true,
+      "actualNonrootManagerObserved": true,
+      "threeNativeStartStopReadinessAndIOPhasesPerRun": true,
+      "actualManagerRestartCommands": 1,
+      "completedManagerRestarts": 1,
+      "oldLauncherExited": true,
+      "oldNativeGroupsAbsent": true,
+      "freshSession": true,
+      "freshInvocation": true,
+      "boundedJournalChecksPerRun": 3,
+      "journalRecordsObservedPerRun": 99,
+      "journalRunningMarkersPerRun": 3,
+      "downstreamTLSActivated": true,
+      "downstreamTLSSessionChecks": 3,
+      "downstreamTLSBodyChecks": 6,
+      "downstreamTLSUploadChecks": 3,
+      "downstreamTLSStreamChecks": 3,
+      "downstreamTLS12Checks": 3,
+      "downstreamTLS13Checks": 3,
+      "downstreamTLSCertificateChecks": 12,
+      "downstreamTLSWrongCARefusals": 3,
+      "downstreamTLSWrongNameRefusals": 3,
+      "appSocketsRemaining": 0,
+      "runtimeUnitRemoved": true,
+      "unitEnabled": false,
+      "privateDependencyRuntimeRemoved": true,
+      "bootstrapRuntimeRemoved": true,
+      "bootstrapTemporaryRootRemoved": true,
+      "primaryFailure": null,
+      "cleanupFailures": [],
+      "nativeGroupsPassed": 20,
+      "alphaTestsPassed": 62,
+      "recipeTestsPassed": 28,
+      "lifecycleContractPassed": 327,
+      "lifecycleContractRootSkipped": 1,
+      "journalContractPassed": 45,
+      "tlsFixtureContractPassed": 16,
+      "dependencyContractPassed": 62,
+      "hostedOfficial": {
+        "files": 35,
+        "filesPassed": 34,
+        "filesSkipped": 1,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1131,
+          "passed": 1105,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "researchPRActualSuites": [
+        21,
+        7,
+        27,
+        48
+      ],
+      "researchPushRuntimeSkipped": true,
+      "historicalA03RawRejectionConditionKnown": false,
+      "completeAuditHistoryAccepted": false,
+      "originTransport": "VERIFIED_HTTPS",
+      "downstreamHttpsServiceAccepted": true,
+      "verifiedHttpsOriginServiceAccepted": true,
+      "combinedBothLegsTlsServiceAccepted": false,
+      "fullG3ServiceAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0,
+      "allThirteenOwnedServiceCleanupConfirmations": true,
+      "originFixtureContractPassed": 23,
+      "combinedHttpsServicePathObserved": true,
+      "broaderTlsServiceContractAccepted": false,
+      "failedStartAccepted": false,
+      "upstreamTLSSessionChecks": 3,
+      "upstreamTLSBodyChecks": 3,
+      "upstreamTLSUploadChecks": 3,
+      "upstreamTLSStreamChecks": 3,
+      "upstreamTLSRollbackChecks": 3,
+      "upstreamTLSCandidate502Checks": 3,
+      "upstreamTLSNoPostReplayChecks": 3,
+      "upstreamTLSDirectChecks": 1,
+      "upstreamTLSWrongCARefusals": 1,
+      "upstreamTLSWrongNameRefusals": 1,
+      "upstreamTLSPlaintextRefusals": 1,
+      "upstreamTLSActivated": true,
+      "nativeArtifacts": [
+        {
+          "runId": 40185635547,
+          "artifactId": 12595813494,
+          "zipBytes": 115094,
+          "zipSha256": "7134f64fe9c5f3fb3860b79054d6eb82c0f11620eabfae822e10668bfaddedf1"
+        },
+        {
+          "runId": 40185637960,
+          "artifactId": 12596435824,
+          "zipBytes": 115061,
+          "zipSha256": "bcf02e675bacb3385c632045893d483719f4c050cb1ede6935a6214facd933f5"
+        }
+      ],
+      "freshAuditReference": {
+        "sha256": "821ffb4e2275980adc6282afde998b712e2f085e0c08ec6bf58320d2e5266cff",
+        "bytes": 25036
+      }
+    },
+    "serviceFailedStartLocal": {
+      "runId": "x10-failed-start-20261025T112027Z",
+      "sourceBase": "dd6c4fd63644812fb7d9197d108a58d07e9b902a",
+      "publicationParent": "7b595bc433493d2c49da648ed7a380ebdfad0cd5",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+      "scope": "Bounded unhealthy-application startup refusal and guarded healthy recovery service candidate",
+      "result": "Added a deliberate unhealthy-start acceptance control with current owned-attempt refusal, retirement and guarded fresh healthy recovery; actual new service CI pending.",
+      "evidence": "x10/evidence/g3-service-failed-start.json",
+      "perFileLedger": "x10/review/g3-service-failed-start-ledger.json",
+      "localAcceptance": "LOCAL_FAILED_START_AUTHORITY_RETIREMENT_RECOVERY_CONTROLS_VERIFIED_EXACT_SERVICE_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_FAILED_START_AND_SAFE_RECOVERY_SERVICE",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "acceptanceHarnessChanged": true,
+      "dependencyCleanupReceiptProfileChanged": true,
+      "knownGuardsPreserved": true,
+      "releaseContractOrProfileChanged": false,
+      "releaseContractNarrowed": false,
+      "failedStartAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "actualHistoricalCauseProven": false,
+      "nextConcreteTask": "First reconcile exact resulting bounded unhealthy-application startup refusal and safe healthy-restart service CI. Require explicit current owned-attempt failure and absence of readiness authority, exact owned launcher/native/socket retirement before any healthy retry, fresh recovery identity and unchanged combined TLS/restart/journal/final cleanup gates. Timeout, cancellation, malformed/foreign/stale identity or unconfirmed cleanup must fail closed and retain private runtime. Preserve the accepted dd6c scope without unchanged reruns. Full adverse startup/cancel/drain/orphan recovery, package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and60-minute soak remain open. FullG3/Production V1 and semantic Continuum are not accepted.",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_FAILED_START_AND_SAFE_RECOVERY_SERVICE"
       },
       "newPurchases": false,
       "productionDeployChanged": false
     }
   },
   "pendingVerification": [
-    "First verify exact resulting combined downstream HTTPS and verified HTTPS-origin service CI; full G3 and V1 remain unaccepted. First reconcile exact resulting combined downstream HTTPS and verified HTTPS-origin managed-service implementation CI. Require positive payload exchange and explicit bad upstream CA/hostname refusals through the candidate-tag-bound health relay, strict service/restart/journal identity, and complete owned upstream/downstream TLS fixture, relay, PKI, service and private dependency cleanup. Local fixture/contracts do not establish actual nonroot manager acceptance. Preserve all prior successful/refused scopes, cancellation/current-attempt cleanup guards and unknown-runtime retention. Adverse startup/drain/recovery, config/package rollback, permanent release, independent security and representative60-minute soak remain open; fullG3/Production V1 and semantic Continuum stay unaccepted.",
+    "First reconcile exact resulting bounded unhealthy-application startup refusal and safe healthy-restart service CI. Require explicit current owned-attempt failure and absence of readiness authority, exact owned launcher/native/socket retirement before any healthy retry, fresh recovery identity and unchanged combined TLS/restart/journal/final cleanup gates. Timeout, cancellation, malformed/foreign/stale identity or unconfirmed cleanup must fail closed and retain private runtime. Preserve the accepted dd6c scope without unchanged reruns. Full adverse startup/cancel/drain/orphan recovery, package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and60-minute soak remain open. FullG3/Production V1 and semantic Continuum are not accepted.",
+    "Both exactdd6c native workflows completed success with actual required steps. Each nonroot managed service observed three combined downstream HTTPS and verified HTTPS-origin sessions, one manager restart, strict retirement/replacement proofs, three bounded attributable journal checks, explicit bad upstream CA/name/plaintext refusal with rollback and complete owned service/fixture/private dependency cleanup. This accepts that scoped positive and configuration-refusal path only. Earlier a03 raw journal rejection cause and other historical failure interleavings remain unknown and are preserved. Broader failed-start, cancellation, slow-drain, abnormal/orphan recovery, package update and Production V1 remain unaccepted.",
     "Both exact1e6 native workflows completed success with all actual required steps. The real nonroot managed service used downstream HTTPS with an HTTP origin for three native/readiness/I/O sessions, one manager restart, strict retirement/replacement proofs and bounded attributable journal observations. Downstream positive TLS1.2/1.3 CA/hostname payload checks and explicit wrong-CA/wrong-name refusals passed, with complete owned TLS/service/private dependency cleanup. This accepted prior scope does not establish combined verified HTTPS origin. Earlier exact06e4 HTTP-only success and exacta03 failure with unknown raw journal rejection cause are retained without rewriting their evidence.",
     "Both exact06e4 native workflows completed success with all actual required steps. Each real nonroot HTTP service report observed three native start/stop/readiness/proxy/upload/stream sessions, one manager restart, all four exact retirement/replacement proofs and three bounded journal checks with99records/3running markers. All eight owned cleanup confirmations and separate private Node/bootstrap removal were true. This is the scoped HTTP service restart/journal path, not downstream HTTPS, verified HTTPS origin or the full two-leg TLS contract. The earlier a03 journal_response_invalid raw rejected condition remains unknown and its failure is preserved in history. Separate native20/alpha62/recipe28/lifecycle245PASS1rootSKIP/journal45/dependency51 passed; research PR actually ran21/7/27/48 while push runtime was skipped.",
     "Both exacta03 native workflows FAILED actual service first_start/journal_read with primary journal_response_invalid after one observed native/readiness/proxy/upload/stream pass. No manager restart or journal check completed. Six process/socket/link cleanup flags were true, zero app sockets and the runtime unit was removed; installation and temporary-root removal remained false. Private Node/bootstrap were retained with no dependency-cleanup receipt. No cleanup failure was recorded. The actual rejected journal field/condition and raw historical cause remain unknown. Separate native20/alpha62/recipe28/lifecycle245PASS1rootSKIP/journal36/dependency51 passed; research PR actually ran21/7/27/48 while push runtime was skipped. Prior401209 two-automatic-cycle success remains scoped history, not acceptance of a03 restart/journal or new formatter handling.",
@@ -2592,9 +2743,14 @@
   ],
   "nextTasks": [
     {
+      "id": "G3-service-failed-start-exact-CI",
+      "state": "pending-exact-resulting-failed-start-safe-recovery",
+      "goal": "First reconcile exact resulting bounded unhealthy-application startup refusal and safe healthy-restart service CI. Require explicit current owned-attempt failure and absence of readiness authority, exact owned launcher/native/socket retirement before any healthy retry, fresh recovery identity and unchanged combined TLS/restart/journal/final cleanup gates. Timeout, cancellation, malformed/foreign/stale identity or unconfirmed cleanup must fail closed and retain private runtime. Preserve the accepted dd6c scope without unchanged reruns. Full adverse startup/cancel/drain/orphan recovery, package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and60-minute soak remain open. FullG3/Production V1 and semantic Continuum are not accepted."
+    },
+    {
       "id": "G3-service-origin-https-exact-CI",
-      "state": "pending-exact-resulting-combined-downstream-origin-https",
-      "goal": "First reconcile exact resulting combined downstream HTTPS and verified HTTPS-origin managed-service implementation CI. Require positive payload exchange and explicit bad upstream CA/hostname refusals through the candidate-tag-bound health relay, strict service/restart/journal identity, and complete owned upstream/downstream TLS fixture, relay, PKI, service and private dependency cleanup. Local fixture/contracts do not establish actual nonroot manager acceptance. Preserve all prior successful/refused scopes, cancellation/current-attempt cleanup guards and unknown-runtime retention. Adverse startup/drain/recovery, config/package rollback, permanent release, independent security and representative60-minute soak remain open; fullG3/Production V1 and semantic Continuum stay unaccepted."
+      "state": "exact-combined-https-origin-restart-journal-and-cleanup-verified",
+      "goal": "Both exactdd6c native workflows completed success with actual required steps. Each nonroot managed service observed three combined downstream HTTPS and verified HTTPS-origin sessions, one manager restart, strict retirement/replacement proofs, three bounded attributable journal checks, explicit bad upstream CA/name/plaintext refusal with rollback and complete owned service/fixture/private dependency cleanup. This accepts that scoped positive and configuration-refusal path only. Earlier a03 raw journal rejection cause and other historical failure interleavings remain unknown and are preserved. Broader failed-start, cancellation, slow-drain, abnormal/orphan recovery, package update and Production V1 remain unaccepted."
     },
     {
       "id": "G3-service-downstream-https-exact-CI",
@@ -2940,7 +3096,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First reconcile exact resulting combined downstream HTTPS and verified HTTPS-origin managed-service implementation CI. Require positive payload exchange and explicit bad upstream CA/hostname refusals through the candidate-tag-bound health relay, strict service/restart/journal identity, and complete owned upstream/downstream TLS fixture, relay, PKI, service and private dependency cleanup. Local fixture/contracts do not establish actual nonroot manager acceptance. Preserve all prior successful/refused scopes, cancellation/current-attempt cleanup guards and unknown-runtime retention. Adverse startup/drain/recovery, config/package rollback, permanent release, independent security and representative60-minute soak remain open; fullG3/Production V1 and semantic Continuum stay unaccepted.",
+  "nextConcreteTask": "First reconcile exact resulting bounded unhealthy-application startup refusal and safe healthy-restart service CI. Require explicit current owned-attempt failure and absence of readiness authority, exact owned launcher/native/socket retirement before any healthy retry, fresh recovery identity and unchanged combined TLS/restart/journal/final cleanup gates. Timeout, cancellation, malformed/foreign/stale identity or unconfirmed cleanup must fail closed and retain private runtime. Preserve the accepted dd6c scope without unchanged reruns. Full adverse startup/cancel/drain/orphan recovery, package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and60-minute soak remain open. FullG3/Production V1 and semantic Continuum are not accepted.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -3148,7 +3304,7 @@
     "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "G3_COMBINED_DOWNSTREAM_ORIGIN_HTTPS_LOCAL_EXACT_CI_PENDING",
+    "currentGate": "FAILED_START_LOCAL_CONTROLS_VERIFIED_EXACT_SERVICE_CI_PENDING",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -3213,20 +3369,22 @@
     "releaseContractNarrowedByThisPublication": false,
     "fullBothLegsTlsContractAccepted": false,
     "serviceOriginHttpsEvidence": "x10/evidence/g3-service-origin-https.json",
-    "serviceHttpsHostedEvidence": "x10/evidence/g3-service-origin-https.json"
+    "serviceHttpsHostedEvidence": "x10/evidence/g3-service-origin-https.json",
+    "serviceFailedStartEvidence": "x10/evidence/g3-service-failed-start.json",
+    "serviceOriginHttpsHostedEvidence": "x10/evidence/g3-service-failed-start.json"
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-origin-https-20261025T102352Z",
-    "sourceBase": "1e6bac699e7817b07ba017490839467d93335ad3",
-    "publicationParent": "b8f6cd268a25fd0f54aef20540daab6fc2b25f30",
+    "runId": "x10-failed-start-20261025T112027Z",
+    "sourceBase": "dd6c4fd63644812fb7d9197d108a58d07e9b902a",
+    "publicationParent": "7b595bc433493d2c49da648ed7a380ebdfad0cd5",
     "implementationCommit": null,
     "implementationCommitLocator": "Current publication commit; exact resulting CI required",
-    "scope": "Combined downstream HTTPS and verified HTTPS-origin managed-service acceptance candidate with candidate-tag-bound health relay",
-    "result": "Added an owned HTTPS origin and verified health relay to the managed-service acceptance candidate, preserving downstream TLS and exact ownership/cleanup guards; new actual combined-service CI pending.",
-    "evidence": "x10/evidence/g3-service-origin-https.json",
-    "perFileLedger": "x10/review/g3-service-origin-https-ledger.json",
-    "localAcceptance": "LOCAL_COMBINED_DOWNSTREAM_AND_VERIFIED_ORIGIN_HTTPS_CONTRACTS_FIXTURES_VERIFIED_EXACT_NEW_SERVICE_CI_PENDING",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_COMBINED_DOWNSTREAM_AND_VERIFIED_ORIGIN_HTTPS_SERVICE",
+    "scope": "Bounded unhealthy-application startup refusal and guarded healthy recovery service candidate",
+    "result": "Added a deliberate unhealthy-start acceptance control with current owned-attempt refusal, retirement and guarded fresh healthy recovery; actual new service CI pending.",
+    "evidence": "x10/evidence/g3-service-failed-start.json",
+    "perFileLedger": "x10/review/g3-service-failed-start-ledger.json",
+    "localAcceptance": "LOCAL_FAILED_START_AUTHORITY_RETIREMENT_RECOVERY_CONTROLS_VERIFIED_EXACT_SERVICE_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_FAILED_START_AND_SAFE_RECOVERY_SERVICE",
     "nativeRuntimeChanged": false,
     "controllerRuntimeChanged": false,
     "alphaRuntimeChanged": false,
@@ -3237,38 +3395,33 @@
     "knownGuardsPreserved": true,
     "releaseContractOrProfileChanged": false,
     "releaseContractNarrowed": false,
-    "tlsMilestone": "COMBINED_DOWNSTREAM_HTTPS_AND_VERIFIED_HTTPS_ORIGIN_LOCAL_CANDIDATE",
-    "originTransportCandidate": "VERIFIED_HTTPS",
-    "downstreamTransportCandidate": "HTTPS",
-    "candidateTagBoundHealthRelayRequired": true,
-    "verifiedHttpsOriginCombinedServiceAccepted": false,
-    "fullBothLegsTlsContractAccepted": false,
-    "actualHistoricalCauseProven": false,
+    "failedStartAccepted": false,
     "serviceAccepted": false,
     "productionAccepted": false,
-    "nextConcreteTask": "First reconcile exact resulting combined downstream HTTPS and verified HTTPS-origin managed-service implementation CI. Require positive payload exchange and explicit bad upstream CA/hostname refusals through the candidate-tag-bound health relay, strict service/restart/journal identity, and complete owned upstream/downstream TLS fixture, relay, PKI, service and private dependency cleanup. Local fixture/contracts do not establish actual nonroot manager acceptance. Preserve all prior successful/refused scopes, cancellation/current-attempt cleanup guards and unknown-runtime retention. Adverse startup/drain/recovery, config/package rollback, permanent release, independent security and representative60-minute soak remain open; fullG3/Production V1 and semantic Continuum stay unaccepted.",
+    "actualHistoricalCauseProven": false,
+    "nextConcreteTask": "First reconcile exact resulting bounded unhealthy-application startup refusal and safe healthy-restart service CI. Require explicit current owned-attempt failure and absence of readiness authority, exact owned launcher/native/socket retirement before any healthy retry, fresh recovery identity and unchanged combined TLS/restart/journal/final cleanup gates. Timeout, cancellation, malformed/foreign/stale identity or unconfirmed cleanup must fail closed and retain private runtime. Preserve the accepted dd6c scope without unchanged reruns. Full adverse startup/cancel/drain/orphan recovery, package upgrade/rollback/backup restore, permanent distribution, independent release acceptance and60-minute soak remain open. FullG3/Production V1 and semantic Continuum are not accepted.",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_COMBINED_DOWNSTREAM_AND_VERIFIED_ORIGIN_HTTPS_SERVICE"
+      "state": "PENDING_EXACT_RESULTING_FAILED_START_AND_SAFE_RECOVERY_SERVICE"
     },
     "newPurchases": false,
     "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
-    "state": "EXACT_PARTIAL_DOWNSTREAM_HTTPS_HTTP_ORIGIN_RESTART_JOURNAL_AND_CLEANUP_VERIFIED",
-    "implementationCommit": "1e6bac699e7817b07ba017490839467d93335ad3",
-    "implementationTree": "29ce5f2de0662f93d1b923f1503345c42ad6e57d",
-    "evidence": "x10/evidence/g3-service-origin-https.json",
+    "state": "EXACT_COMBINED_HTTPS_ORIGIN_SERVICE_RESTART_JOURNAL_AND_CLEANUP_VERIFIED",
+    "implementationCommit": "dd6c4fd63644812fb7d9197d108a58d07e9b902a",
+    "implementationTree": "15dd4d45119d9813460f27f96b0f47d224ffecd2",
+    "evidence": "x10/evidence/g3-service-failed-start.json",
     "nativeRunIds": [
-      40181970557,
-      40181973612
+      40185635547,
+      40185637960
     ],
     "nativeJobIds": [
-      121134757606,
-      121134776803
+      121145751242,
+      121145758108
     ],
-    "researchPRRunId": 40181973556,
-    "researchPRJobId": 121134780088,
-    "actualPRMergeCheckout": "e741e4372560bf77fb04f8962b4de0aef5c1d887",
+    "researchPRRunId": 40185638104,
+    "researchPRJobId": 121145758491,
+    "actualPRMergeCheckout": "b95d9ed44906039b07e4de69d822ef3807d80f3e",
     "bothExactNativeWorkflowsSuccessful": true,
     "actualNonrootManagerObserved": true,
     "threeNativeStartStopReadinessAndIOPhasesPerRun": true,
@@ -3291,7 +3444,6 @@
     "downstreamTLSCertificateChecks": 12,
     "downstreamTLSWrongCARefusals": 3,
     "downstreamTLSWrongNameRefusals": 3,
-    "allNineOwnedServiceCleanupConfirmations": true,
     "appSocketsRemaining": 0,
     "runtimeUnitRemoved": true,
     "unitEnabled": false,
@@ -3303,11 +3455,11 @@
     "nativeGroupsPassed": 20,
     "alphaTestsPassed": 62,
     "recipeTestsPassed": 28,
-    "lifecycleContractPassed": 266,
+    "lifecycleContractPassed": 327,
     "lifecycleContractRootSkipped": 1,
     "journalContractPassed": 45,
     "tlsFixtureContractPassed": 16,
-    "dependencyContractPassed": 56,
+    "dependencyContractPassed": 62,
     "hostedOfficial": {
       "files": 35,
       "filesPassed": 34,
@@ -3331,14 +3483,49 @@
     "researchPushRuntimeSkipped": true,
     "historicalA03RawRejectionConditionKnown": false,
     "completeAuditHistoryAccepted": false,
-    "originTransport": "HTTP",
+    "originTransport": "VERIFIED_HTTPS",
     "downstreamHttpsServiceAccepted": true,
-    "verifiedHttpsOriginServiceAccepted": false,
+    "verifiedHttpsOriginServiceAccepted": true,
     "combinedBothLegsTlsServiceAccepted": false,
     "fullG3ServiceAccepted": false,
     "serviceAccepted": false,
     "productionAccepted": false,
-    "workflowRerunsRequested": 0
+    "workflowRerunsRequested": 0,
+    "allThirteenOwnedServiceCleanupConfirmations": true,
+    "originFixtureContractPassed": 23,
+    "combinedHttpsServicePathObserved": true,
+    "broaderTlsServiceContractAccepted": false,
+    "failedStartAccepted": false,
+    "upstreamTLSSessionChecks": 3,
+    "upstreamTLSBodyChecks": 3,
+    "upstreamTLSUploadChecks": 3,
+    "upstreamTLSStreamChecks": 3,
+    "upstreamTLSRollbackChecks": 3,
+    "upstreamTLSCandidate502Checks": 3,
+    "upstreamTLSNoPostReplayChecks": 3,
+    "upstreamTLSDirectChecks": 1,
+    "upstreamTLSWrongCARefusals": 1,
+    "upstreamTLSWrongNameRefusals": 1,
+    "upstreamTLSPlaintextRefusals": 1,
+    "upstreamTLSActivated": true,
+    "nativeArtifacts": [
+      {
+        "runId": 40185635547,
+        "artifactId": 12595813494,
+        "zipBytes": 115094,
+        "zipSha256": "7134f64fe9c5f3fb3860b79054d6eb82c0f11620eabfae822e10668bfaddedf1"
+      },
+      {
+        "runId": 40185637960,
+        "artifactId": 12596435824,
+        "zipBytes": 115061,
+        "zipSha256": "bcf02e675bacb3385c632045893d483719f4c050cb1ede6935a6214facd933f5"
+      }
+    ],
+    "freshAuditReference": {
+      "sha256": "821ffb4e2275980adc6282afde998b712e2f085e0c08ec6bf58320d2e5266cff",
+      "bytes": 25036
+    }
   },
   "v1DevelopmentPassHistory": [
     {
@@ -4458,6 +4645,44 @@
       },
       "newPurchases": false,
       "productionDeployChanged": false
+    },
+    {
+      "runId": "x10-origin-https-20261025T102352Z",
+      "sourceBase": "1e6bac699e7817b07ba017490839467d93335ad3",
+      "publicationParent": "b8f6cd268a25fd0f54aef20540daab6fc2b25f30",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+      "scope": "Combined downstream HTTPS and verified HTTPS-origin managed-service acceptance candidate with candidate-tag-bound health relay",
+      "result": "Added an owned HTTPS origin and verified health relay to the managed-service acceptance candidate, preserving downstream TLS and exact ownership/cleanup guards; new actual combined-service CI pending.",
+      "evidence": "x10/evidence/g3-service-origin-https.json",
+      "perFileLedger": "x10/review/g3-service-origin-https-ledger.json",
+      "localAcceptance": "LOCAL_COMBINED_DOWNSTREAM_AND_VERIFIED_ORIGIN_HTTPS_CONTRACTS_FIXTURES_VERIFIED_EXACT_NEW_SERVICE_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_COMBINED_DOWNSTREAM_AND_VERIFIED_ORIGIN_HTTPS_SERVICE",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "acceptanceHarnessChanged": true,
+      "dependencyCleanupReceiptProfileChanged": true,
+      "knownGuardsPreserved": true,
+      "releaseContractOrProfileChanged": false,
+      "releaseContractNarrowed": false,
+      "tlsMilestone": "COMBINED_DOWNSTREAM_HTTPS_AND_VERIFIED_HTTPS_ORIGIN_LOCAL_CANDIDATE",
+      "originTransportCandidate": "VERIFIED_HTTPS",
+      "downstreamTransportCandidate": "HTTPS",
+      "candidateTagBoundHealthRelayRequired": true,
+      "verifiedHttpsOriginCombinedServiceAccepted": false,
+      "fullBothLegsTlsContractAccepted": false,
+      "actualHistoricalCauseProven": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "nextConcreteTask": "First reconcile exact resulting combined downstream HTTPS and verified HTTPS-origin managed-service implementation CI. Require positive payload exchange and explicit bad upstream CA/hostname refusals through the candidate-tag-bound health relay, strict service/restart/journal identity, and complete owned upstream/downstream TLS fixture, relay, PKI, service and private dependency cleanup. Local fixture/contracts do not establish actual nonroot manager acceptance. Preserve all prior successful/refused scopes, cancellation/current-attempt cleanup guards and unknown-runtime retention. Adverse startup/drain/recovery, config/package rollback, permanent release, independent security and representative60-minute soak remain open; fullG3/Production V1 and semantic Continuum stay unaccepted.",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_COMBINED_DOWNSTREAM_AND_VERIFIED_ORIGIN_HTTPS_SERVICE"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
     }
   ],
   "v1VerificationReceiptHistory": [
@@ -5224,6 +5449,93 @@
       "serviceAccepted": false,
       "productionAccepted": false,
       "workflowRerunsRequested": 0
+    },
+    {
+      "state": "EXACT_PARTIAL_DOWNSTREAM_HTTPS_HTTP_ORIGIN_RESTART_JOURNAL_AND_CLEANUP_VERIFIED",
+      "implementationCommit": "1e6bac699e7817b07ba017490839467d93335ad3",
+      "implementationTree": "29ce5f2de0662f93d1b923f1503345c42ad6e57d",
+      "evidence": "x10/evidence/g3-service-origin-https.json",
+      "nativeRunIds": [
+        40181970557,
+        40181973612
+      ],
+      "nativeJobIds": [
+        121134757606,
+        121134776803
+      ],
+      "researchPRRunId": 40181973556,
+      "researchPRJobId": 121134780088,
+      "actualPRMergeCheckout": "e741e4372560bf77fb04f8962b4de0aef5c1d887",
+      "bothExactNativeWorkflowsSuccessful": true,
+      "actualNonrootManagerObserved": true,
+      "threeNativeStartStopReadinessAndIOPhasesPerRun": true,
+      "actualManagerRestartCommands": 1,
+      "completedManagerRestarts": 1,
+      "oldLauncherExited": true,
+      "oldNativeGroupsAbsent": true,
+      "freshSession": true,
+      "freshInvocation": true,
+      "boundedJournalChecksPerRun": 3,
+      "journalRecordsObservedPerRun": 99,
+      "journalRunningMarkersPerRun": 3,
+      "downstreamTLSActivated": true,
+      "downstreamTLSSessionChecks": 3,
+      "downstreamTLSBodyChecks": 6,
+      "downstreamTLSUploadChecks": 3,
+      "downstreamTLSStreamChecks": 3,
+      "downstreamTLS12Checks": 3,
+      "downstreamTLS13Checks": 3,
+      "downstreamTLSCertificateChecks": 12,
+      "downstreamTLSWrongCARefusals": 3,
+      "downstreamTLSWrongNameRefusals": 3,
+      "allNineOwnedServiceCleanupConfirmations": true,
+      "appSocketsRemaining": 0,
+      "runtimeUnitRemoved": true,
+      "unitEnabled": false,
+      "privateDependencyRuntimeRemoved": true,
+      "bootstrapRuntimeRemoved": true,
+      "bootstrapTemporaryRootRemoved": true,
+      "primaryFailure": null,
+      "cleanupFailures": [],
+      "nativeGroupsPassed": 20,
+      "alphaTestsPassed": 62,
+      "recipeTestsPassed": 28,
+      "lifecycleContractPassed": 266,
+      "lifecycleContractRootSkipped": 1,
+      "journalContractPassed": 45,
+      "tlsFixtureContractPassed": 16,
+      "dependencyContractPassed": 56,
+      "hostedOfficial": {
+        "files": 35,
+        "filesPassed": 34,
+        "filesSkipped": 1,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1131,
+          "passed": 1105,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "researchPRActualSuites": [
+        21,
+        7,
+        27,
+        48
+      ],
+      "researchPushRuntimeSkipped": true,
+      "historicalA03RawRejectionConditionKnown": false,
+      "completeAuditHistoryAccepted": false,
+      "originTransport": "HTTP",
+      "downstreamHttpsServiceAccepted": true,
+      "verifiedHttpsOriginServiceAccepted": false,
+      "combinedBothLegsTlsServiceAccepted": false,
+      "fullG3ServiceAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0
     }
   ],
   "currentNativeCIFailure": {
@@ -5622,21 +5934,21 @@
     }
   ],
   "currentServiceLifecycleCIState": {
-    "state": "EXACT_PARTIAL_DOWNSTREAM_HTTPS_HTTP_ORIGIN_RESTART_JOURNAL_AND_CLEANUP_VERIFIED",
-    "implementationCommit": "1e6bac699e7817b07ba017490839467d93335ad3",
-    "implementationTree": "29ce5f2de0662f93d1b923f1503345c42ad6e57d",
-    "evidence": "x10/evidence/g3-service-origin-https.json",
+    "state": "EXACT_COMBINED_HTTPS_ORIGIN_SERVICE_RESTART_JOURNAL_AND_CLEANUP_VERIFIED",
+    "implementationCommit": "dd6c4fd63644812fb7d9197d108a58d07e9b902a",
+    "implementationTree": "15dd4d45119d9813460f27f96b0f47d224ffecd2",
+    "evidence": "x10/evidence/g3-service-failed-start.json",
     "nativeRunIds": [
-      40181970557,
-      40181973612
+      40185635547,
+      40185637960
     ],
     "nativeJobIds": [
-      121134757606,
-      121134776803
+      121145751242,
+      121145758108
     ],
-    "researchPRRunId": 40181973556,
-    "researchPRJobId": 121134780088,
-    "actualPRMergeCheckout": "e741e4372560bf77fb04f8962b4de0aef5c1d887",
+    "researchPRRunId": 40185638104,
+    "researchPRJobId": 121145758491,
+    "actualPRMergeCheckout": "b95d9ed44906039b07e4de69d822ef3807d80f3e",
     "bothExactNativeWorkflowsSuccessful": true,
     "actualNonrootManagerObserved": true,
     "threeNativeStartStopReadinessAndIOPhasesPerRun": true,
@@ -5659,7 +5971,6 @@
     "downstreamTLSCertificateChecks": 12,
     "downstreamTLSWrongCARefusals": 3,
     "downstreamTLSWrongNameRefusals": 3,
-    "allNineOwnedServiceCleanupConfirmations": true,
     "appSocketsRemaining": 0,
     "runtimeUnitRemoved": true,
     "unitEnabled": false,
@@ -5671,11 +5982,11 @@
     "nativeGroupsPassed": 20,
     "alphaTestsPassed": 62,
     "recipeTestsPassed": 28,
-    "lifecycleContractPassed": 266,
+    "lifecycleContractPassed": 327,
     "lifecycleContractRootSkipped": 1,
     "journalContractPassed": 45,
     "tlsFixtureContractPassed": 16,
-    "dependencyContractPassed": 56,
+    "dependencyContractPassed": 62,
     "hostedOfficial": {
       "files": 35,
       "filesPassed": 34,
@@ -5699,13 +6010,48 @@
     "researchPushRuntimeSkipped": true,
     "historicalA03RawRejectionConditionKnown": false,
     "completeAuditHistoryAccepted": false,
-    "originTransport": "HTTP",
+    "originTransport": "VERIFIED_HTTPS",
     "downstreamHttpsServiceAccepted": true,
-    "verifiedHttpsOriginServiceAccepted": false,
+    "verifiedHttpsOriginServiceAccepted": true,
     "combinedBothLegsTlsServiceAccepted": false,
     "fullG3ServiceAccepted": false,
     "serviceAccepted": false,
     "productionAccepted": false,
-    "workflowRerunsRequested": 0
+    "workflowRerunsRequested": 0,
+    "allThirteenOwnedServiceCleanupConfirmations": true,
+    "originFixtureContractPassed": 23,
+    "combinedHttpsServicePathObserved": true,
+    "broaderTlsServiceContractAccepted": false,
+    "failedStartAccepted": false,
+    "upstreamTLSSessionChecks": 3,
+    "upstreamTLSBodyChecks": 3,
+    "upstreamTLSUploadChecks": 3,
+    "upstreamTLSStreamChecks": 3,
+    "upstreamTLSRollbackChecks": 3,
+    "upstreamTLSCandidate502Checks": 3,
+    "upstreamTLSNoPostReplayChecks": 3,
+    "upstreamTLSDirectChecks": 1,
+    "upstreamTLSWrongCARefusals": 1,
+    "upstreamTLSWrongNameRefusals": 1,
+    "upstreamTLSPlaintextRefusals": 1,
+    "upstreamTLSActivated": true,
+    "nativeArtifacts": [
+      {
+        "runId": 40185635547,
+        "artifactId": 12595813494,
+        "zipBytes": 115094,
+        "zipSha256": "7134f64fe9c5f3fb3860b79054d6eb82c0f11620eabfae822e10668bfaddedf1"
+      },
+      {
+        "runId": 40185637960,
+        "artifactId": 12596435824,
+        "zipBytes": 115061,
+        "zipSha256": "bcf02e675bacb3385c632045893d483719f4c050cb1ede6935a6214facd933f5"
+      }
+    ],
+    "freshAuditReference": {
+      "sha256": "821ffb4e2275980adc6282afde998b712e2f085e0c08ec6bf58320d2e5266cff",
+      "bytes": 25036
+    }
   }
 }

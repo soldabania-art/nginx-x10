@@ -720,3 +720,50 @@ user-space timeout limits remain; no complete secret-erasure claim. Full G3, adv
 startup/drain/recovery, separate config/package rollback, permanent distribution, independent
 release acceptance,60-minute soak and Production V1 remain open. Deferred Continuum and full
 native roadmap remain preserved.
+
+
+## Unhealthy startup refusal and guarded recovery candidate
+
+Prior exact dd6c push40185635547 and PR40185637960 native workflows completed
+success with all31 required actual steps. Each observed three combined downstream
+HTTPS and verified HTTPS-origin sessions, one manager restart, three attributable
+journal checks, bad upstream CA/name/plaintext refusal with rollback and all13
+owned service cleanup confirmations. Private Node/bootstrap removal was also
+confirmed. Fresh review reused approved archives and passed80 separate proofs;
+research PR actually ran21/7/27/48 while push runtime was skipped. No unchanged
+runtime rerun was requested. This accepts the scoped prior path, not full G3/V1.
+
+The new acceptance candidate deliberately refuses startup while its owned HTTP
+application returns503 for readiness. It first holds the owned health response
+long enough to capture the activating unit, launcher/native session, invocation
+and post-hook identity. After explicit refusal, acceptance requires exact manager
+exit1/failed exit-code and known current post-hook exited1. A timeout, signal,
+foreign/stale identity, malformed record or missing observation cannot substitute.
+Observed503 and hook exit1 do not exclude every possible internal failure cause.
+Captured values remain private; published output uses bounded counts and booleans.
+
+Before the application becomes healthy, the checker requires no binding or pending
+transaction, a stopped captured session, exited owned launcher, absent native
+groups and closed gateway/health/control resources. Only that exact hash/owner/link
+verified failed unit may be reset after a final absence check. The first healthy
+start must use fresh session, invocation and launcher identities. The failed
+session is retained in cleanup inventory and is not one of the three successful
+TLS/readiness/I/O sessions. No broad reset, direct kill or manager-setting change
+is added. The normal combined TLS/restart/journal/final cleanup path remains.
+
+The narrow report requires failedStartChecks1 and all11 failedStartProof booleans.
+Strict dependency cleanup rejects prior/missing/partial proof receipts and retains
+private runtime on unknown outcomes. Broad failedStartAccepted, serviceAccepted
+and productionAccepted remain false. Source hashes, final actual local counts,
+separate independent reviews and any adverse drafts are in
+[failed-start evidence](../evidence/g3-service-failed-start.json).
+
+Local root contracts and source-extracted controls do not execute the nonroot
+managed service. Exact resulting CI is pending and may fail. Native, controller,
+alpha, unit recipe, release contract/profile and prior TLS/journal helpers are
+unchanged. Same-UID trust, user-space timeouts and PID-to-signal limits remain.
+Prior a03 raw journal rejection cause and older failure interleavings are still
+unknown; later success does not explain them. Full adverse startup/cancel/drain/
+orphan recovery, package upgrade/rollback/backup restore, permanent distribution,
+security acceptance,60-minute soak and Production V1 remain open. Deferred
+Continuum and the full native roadmap are preserved.
