@@ -132,12 +132,12 @@ export async function startOwnedOperator(value) {
   const startedAt = Date.now(), deadline = performance.now() + o.timeoutMs, namespaces = { pidns: await readlink('/proc/self/ns/pid'), netns: await readlink('/proc/self/ns/net') };
   let child, closed = false, exitCode = null, exitSignal = null, output = 0, outputOverflow = false, spawnFailed = false;
   let wrapper, control, locks, pending, captured = false, terminated = false, retired = false, decision = false, terminating;
-  let signalAttempted = false, cleanupAttempted = false;
+  let signalAttempted = false, cleanupAttempted = false, closeConfirmed = false, retirementAttempted = false;
   const expectedWrapper = [o.node, o.launcher, 'apply', '--file', o.inputFile];
   const expectedControl = [o.node, controller, 'apply', '--state', state, '--file', o.inputFile];
   const limit = () => { if (performance.now() >= deadline) fail('operator_fixture_timeout'); };
   function checkCancelled() { let r; try { r = o.checkCancelled(); } catch { fail('operator_fixture_cancelled'); } if (r !== undefined) fail('operator_fixture_cancelled'); }
-  function held() { let result; try { result = o.isHeld(); } catch { fail('operator_fixture_not_held'); } if (result !== true) fail('operator_fixture_not_held'); }
+  function held(stage) { let result; try { result = o.isHeld(stage); } catch { fail('operator_fixture_not_held'); } if (result !== true) fail('operator_fixture_not_held'); }
   async function guards() {
     for (const [p, expected] of directoryIds) if (!same(await dir(p), expected)) fail('operator_fixture_identity');
     // Node bytes were pinned before spawn; reread metadata and exact bytes of
@@ -158,7 +158,7 @@ export async function startOwnedOperator(value) {
         || !Number.isFinite(Date.parse(r.at)) || Date.parse(r.at) < startedAt - 1000 || Date.parse(r.at) > Date.now() + 1000) fail('operator_fixture_lock_changed');
     return { ...f, pid: r.pid };
   }
-  async function currentCapture(requireHeld = true) {
+  async function currentCapture(requireHeld = true, stage = 'capture_final') {
     await guards();
     const a = await lockRecord(alphaLock), c = await lockRecord(controlLock), p = await file(pendingPath, 2 * 1024 * 1024, 0o600);
     if (a.pid !== child.pid || c.pid === a.pid) fail('operator_fixture_process');
@@ -168,17 +168,17 @@ export async function startOwnedOperator(value) {
     if (!same(await group(child.pid), [a.pid, c.pid].sort((x, y) => x - y))) fail('operator_fixture_group');
     if (locks && (!same(a.meta, locks[0].meta) || a.sha256 !== locks[0].sha256 || !same(c.meta, locks[1].meta) || c.sha256 !== locks[1].sha256)) fail('operator_fixture_lock_changed');
     if (pending && (!same(p.meta, pending.meta) || p.sha256 !== pending.sha256)) fail('operator_fixture_pending');
-    if (requireHeld) held(); return { a, c, p, w, ctl };
+    if (requireHeld) held(stage); return { a, c, p, w, ctl };
   }
   async function confirmAbsent() {
     if (!closed || !wrapper || !control || !await absent(wrapper.pid) || !await absent(control.pid) || (await group(child.pid)).length !== 0) fail('operator_fixture_exit_unknown');
   }
   async function stop(acceptance) {
     if (acceptance) limit();
-    const before = performance.now(); await currentCapture(acceptance);
+    const before = performance.now(); await currentCapture(acceptance, 'terminate_capture');
     if (acceptance) limit();
     if (closed || (acceptance && outputOverflow) || performance.now() - before > 1000) fail('operator_fixture_process');
-    if (acceptance) { held(); checkCancelled(); }
+    if (acceptance) { held('terminate_final'); checkCancelled(); }
     signalAttempted = true;
     try { process.kill(-child.pid, 'SIGTERM'); } catch { fail('operator_fixture_signal'); }
     const stopDeadline = performance.now() + 5000;
@@ -208,8 +208,10 @@ export async function startOwnedOperator(value) {
       decision = true; terminating = stop(true); return terminating;
     },
     async removeCapturedLocks() {
-      if (arguments.length || !terminated || retired) fail('operator_fixture_state');
-      limit(); await guards(); await confirmAbsent();
+      if (arguments.length || !captured || !terminated || retired || retirementAttempted) fail('operator_fixture_state');
+      // This decision is consumed before the first await. A refused/partial
+      // retirement cannot be retried from the same capability.
+      retirementAttempted = true; limit(); checkCancelled(); await guards(); await confirmAbsent();
       const capturedFiles = [alphaLock, controlLock];
       for (let i = 0; i < capturedFiles.length; i++) { const f = await lockRecord(capturedFiles[i]);
         if (!same(f.meta, locks[i].meta) || f.sha256 !== locks[i].sha256 || f.pid !== locks[i].pid) fail('operator_fixture_lock_changed'); }
@@ -217,10 +219,32 @@ export async function startOwnedOperator(value) {
       if (!same(p.meta, pending.meta) || p.sha256 !== pending.sha256) fail('operator_fixture_pending');
       await confirmAbsent(); limit();
       // Explicit manual-fixture action only; no stale-lock production API.
-      for (let i = 0; i < capturedFiles.length; i++) { const f = await lockRecord(capturedFiles[i]);
-        if (!same(f.meta, locks[i].meta) || f.sha256 !== locks[i].sha256) fail('operator_fixture_lock_changed');
-        await confirmAbsent(); limit(); checkCancelled(); await unlink(capturedFiles[i]); }
+      for (let i = 0; i < capturedFiles.length; i++) {
+        await confirmAbsent(); limit(); checkCancelled();
+        // Read the exact target and pending record after the per-action
+        // absence await. No further await separates these checks from unlink.
+        const [f, currentPending] = await Promise.all([
+          lockRecord(capturedFiles[i]), file(pendingPath, 2 * 1024 * 1024, 0o600)]);
+        if (!same(f.meta, locks[i].meta) || f.sha256 !== locks[i].sha256 || f.pid !== locks[i].pid) fail('operator_fixture_lock_changed');
+        if (!same(currentPending.meta, pending.meta) || currentPending.sha256 !== pending.sha256) fail('operator_fixture_pending');
+        limit(); checkCancelled(); await unlink(capturedFiles[i]);
+      }
+      await confirmAbsent();
+      const afterPending = await file(pendingPath, 2 * 1024 * 1024, 0o600);
+      if (!same(afterPending.meta, pending.meta) || afterPending.sha256 !== pending.sha256) fail('operator_fixture_pending');
+      limit(); checkCancelled();
       retired = true; return { ok: true, alphaRemoved: true, controllerRemoved: true };
+    },
+    async retireCapturedLocksAfterFailure() {
+      if (arguments.length || !captured || !closeConfirmed) fail('operator_fixture_state');
+      // Explicit fixture containment only. Reuse the original capture,
+      // deadline, cancellation and immutable-file/absence guards; no rearm.
+      const removed = await handle.removeCapturedLocks();
+      return { ...removed, pendingPreserved: true };
+    },
+    assertCleanupAuthority() {
+      if (arguments.length || !captured || !terminated || !retired || !closeConfirmed) fail('operator_fixture_state');
+      limit(); checkCancelled(); return true;
     },
     async cancel() {
       if (arguments.length) fail('operator_fixture_invalid');
@@ -240,7 +264,7 @@ export async function startOwnedOperator(value) {
           }
           terminating = stop(false); await terminating;
         }
-        await confirmAbsent(); return true;
+        await confirmAbsent(); closeConfirmed = true; return true;
       } catch { return false; }
     },
     async close() { if (arguments.length) fail('operator_fixture_invalid'); return handle.cancel(); }

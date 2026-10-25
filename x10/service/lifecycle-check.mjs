@@ -130,7 +130,7 @@ export async function observeNodePrerequisites(prefix, nodeExecutable) {
 // Diagnostic collectors have no I/O or lifecycle authority.
 export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'failed_start', 'first_start', 'tls_apply', 'origin_negative', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'operator_interruption', 'controlled_drain', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
 export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'request_restart', 'old_retirement', 'invocation_identity', 'journal_read', 'downstream_tls', 'upstream_tls', 'origin_negative', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
-export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'operator_close', 'drain_close', 'origin_close', 'temporary_root', 'final_assertion', 'unknown']);
+export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'operator_close', 'operator_recovery', 'drain_close', 'origin_close', 'temporary_root', 'final_assertion', 'unknown']);
 const pickEnum = (value, list, fallback = 'unknown') => typeof value === 'string' && list.includes(value) ? value : fallback;
 function ownData(record, key) {
   try { const d = record && Object.getOwnPropertyDescriptor(record, key); return d && Object.hasOwn(d, 'value') ? d.value : undefined; }
@@ -373,6 +373,44 @@ export function assessInterruptedProbeHold(value) {
       || !Number.isInteger(ownData(value, 'heldResponses')) || value.heldResponses < 1 || value.heldResponses > 8) reject('operator_interruption_unconfirmed');
   return true;
 }
+// Diagnostics record the actual authority decision; later cleanup cannot replace
+// the first refusal. They never grant a signal, lock or recovery capability.
+const OPERATOR_HOLD_STAGES = Object.freeze(['harness_capture', 'harness_terminate', 'capture_final', 'terminate_capture', 'terminate_final', 'unknown']);
+const OPERATOR_HOLD_REASONS = Object.freeze(['current', 'deadline_expired', 'live_probe_gap', 'candidate_unobserved', 'aborted', 'closed', 'budget_unarmed', 'cancelled', 'invalid']);
+export function classifyOperatorHoldDecision(value, deadline, now) {
+  try { assessInterruptedProbeHold(value); }
+  catch {
+    if (ownData(value, 'aborted') === true) return 'aborted';
+    if (ownData(value, 'closed') === true) return 'closed';
+    if (ownData(value, 'requested') === true && ownData(value, 'candidateReadyObserved') === true
+        && ownData(value, 'held') === false && ownData(value, 'heldResponses') === 0
+        && ownData(value, 'released') === false && ownData(value, 'aborted') === false && ownData(value, 'closed') === false) return 'live_probe_gap';
+    if (ownData(value, 'requested') === false || ownData(value, 'candidateReadyObserved') === false) return 'candidate_unobserved';
+    return 'invalid';
+  }
+  if (!Number.isFinite(now) || !Number.isFinite(deadline)) return 'invalid';
+  if (deadline <= 0) return 'budget_unarmed';
+  return now >= deadline ? 'deadline_expired' : 'current';
+}
+export function createOperatorHoldDiagnostics() {
+  let count = 0, truncated = false, firstRefusal = null; const records = [];
+  return Object.freeze({
+    observe(stage, reason, now, deadline, value) {
+      const age = Number.isFinite(now) && Number.isFinite(deadline) && deadline > 0 ? Math.max(0, Math.min(10000, Math.floor(now - (deadline - 1000)))) : null;
+      const bounded = key => { const n = ownData(value, key); return Number.isInteger(n) && n >= 0 && n <= 8 ? n : null; };
+      const entry = { stage: OPERATOR_HOLD_STAGES.includes(stage) ? stage : 'unknown',
+        reason: OPERATOR_HOLD_REASONS.includes(reason) ? reason : 'invalid', ageMs: age,
+        deadlineExpired: Number.isFinite(now) && Number.isFinite(deadline) && deadline > 0 && now >= deadline,
+        nativeProbeChecks: bounded('nativeProbeChecks'), heldResponses: bounded('heldResponses') };
+      if (count < 64) count++; else truncated = true;
+      if (entry.reason !== 'current' && !firstRefusal) firstRefusal = { ...entry };
+      if (records.length === 8) { records.shift(); truncated = true; }
+      records.push(entry);
+    },
+    snapshot() { return { observationCount: count, observationsTruncated: truncated,
+      firstRefusal: firstRefusal ? { ...firstRefusal } : null, observations: records.map(record => ({ ...record })) }; },
+  });
+}
 // Only exact known private fixture paths reach this reader. Raw state stays local.
 async function interruptionFile(file, parse = true) {
   const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
@@ -458,6 +496,7 @@ export async function main(argv = process.argv.slice(2)) {
   const report = { ok: false, code: 'not_started', phase: 'arguments', ...LIMITATIONS,
     actualNonrootManagerObserved: false, actualUnitStarted: false, explicitReadinessPasses: 0,
     nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
+    operatorInterruptionContainment: { attempted: false, operatorAbsent: false, holdClosed: false, snapshotRevalidated: false, locksRetired: false, recoveryVerified: false, completed: false, disposition: 'not_needed' },
     operatorInterruptionChecks: 0, operatorInterruptionProof: { candidateProbeHeld: false, pendingReloadObserved: false, lastConfirmedPreserved: false, sameServiceObserved: false, ownedOperatorTerminated: false, staleLocksPreserved: false, lockedRecoveryRefused: false, exactLockRemovalConfirmed: false, explicitRollbackObserved: false, pendingCleared: false, restoredContentVerified: false, noPostReplay: false, sameServiceAfterRecovery: false, repeatedRecoveryIdempotent: false },
     controlledSlowDrainChecks: 0, controlledSlowDrainProof: { clientPaused: false, originResponseHeld: false, sameSessionObserved: false, managerStopPending: false, nativeGroupLiveDuringStop: false, unitDeactivatingObserved: false, incompleteResponseObserved: false, payloadCompleted: false, tlsVerified: false, managerStopCompleted: false, launcherExited: false, nativeGroupsAbsent: false, listeningPortsClosed: false, controlSocketAbsent: false },
     failedStartChecks: 0, failedStartProof: { unhealthyReadinessObserved: false, managerRefused: false, hookExitObserved: false, bindingAbsent: false, launcherExited: false, nativeGroupsAbsent: false, listeningPortsClosed: false, controlSocketAbsent: false, failedSessionStopped: false, managerResetConfirmed: false, healthyRestartFresh: false },
@@ -484,7 +523,7 @@ export async function main(argv = process.argv.slice(2)) {
   const tlsSessions = new Set();
   let linked = false, installed = false, safeToRemove = false, cancelled = false, startRequested = false, lastSession = null, inCleanup = false;
   const sessions = [], launcherIdentities = [], sockets = new Set();
-  const failures = createFailureDiagnostics(), start = createStartDiagnostics(), fragments = createFragmentIdentityDiagnostics(), hooks = createHookStatusDiagnostics();
+  const failures = createFailureDiagnostics(), start = createStartDiagnostics(), fragments = createFragmentIdentityDiagnostics(), hooks = createHookStatusDiagnostics(), operatorHoldDiagnostics = createOperatorHoldDiagnostics();
   const cancel = () => { cancelled = true; };
   const checkCancelled = () => { if (cancelled) reject('cancelled'); };
   const systemctl = (args, timeout = 10000) => command(TOOL, ['--user', '--no-pager', '--no-ask-password', ...args], env, timeout);
@@ -1041,7 +1080,7 @@ export async function main(argv = process.argv.slice(2)) {
     input.https = { port: tlsPort, certificate: tlsFixture.certificate, certificateKey: tlsFixture.certificateKey };
     const inputFile = `${parent}/interrupted-input.json`, file = await open(inputFile, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
     try { await file.writeFile(JSON.stringify(input)); await file.sync(); } finally { await file.close(); }
-    let held, operator, snapshot, heldDeadline = 0, primary = null;
+    let held, operator, snapshot, heldDeadline = 0, primary = null, normalRetirementAttempted = false;
     const beforePosts = origin.counts().echoRequests;
     async function sameServiceNoCLI() {
       const p = await ownedProperties(false); checkCancelled();
@@ -1082,7 +1121,16 @@ export async function main(argv = process.argv.slice(2)) {
       for (const key of ['pending', 'state', 'candidate', 'fragment', 'history']) if (actual[key].sha256 !== expected[key].sha256) reject('operator_interruption_unconfirmed');
       return actual;
     }
-    const isHeld = () => { checkCancelled(); assessInterruptedProbeHold(held?.snapshot()); return heldDeadline > 0 && performance.now() < heldDeadline; };
+    const isHeld = (stage = 'harness_capture') => {
+      let value, reason;
+      try { checkCancelled(); }
+      catch (error) { operatorHoldDiagnostics.observe(stage, 'cancelled', performance.now(), heldDeadline, null); throw error; }
+      let now;
+      try { value = held?.snapshot(); now = performance.now(); reason = classifyOperatorHoldDecision(value, heldDeadline, now); }
+      catch (error) { operatorHoldDiagnostics.observe(stage, 'invalid', performance.now(), heldDeadline, null); throw error; }
+      operatorHoldDiagnostics.observe(stage, reason, now, heldDeadline, value);
+      return reason === 'current';
+    };
     try {
       held = origin.prepareReadinessHold(tag); checkCancelled();
       operator = await startOwnedOperator({ node, launcher, prefix, sessionPrefix: known.prefix, inputFile, env, isHeld, checkCancelled });
@@ -1097,7 +1145,7 @@ export async function main(argv = process.argv.slice(2)) {
       if (!captured || captured.ok !== true || captured.alphaCaptured !== true || captured.controllerCaptured !== true || captured.pendingCaptured !== true) reject('operator_interruption_unconfirmed');
       snapshot = await capturePending(); await sameServiceNoCLI();
       await unchangedPending(snapshot); checkCancelled();
-      if (!isHeld()) reject('operator_interruption_unconfirmed');
+      if (!isHeld('harness_terminate')) reject('operator_interruption_unconfirmed');
       report.operatorInterruptionProof.candidateProbeHeld = true; report.operatorInterruptionProof.pendingReloadObserved = true;
       report.operatorInterruptionProof.lastConfirmedPreserved = true; report.operatorInterruptionProof.sameServiceObserved = true;
       const terminated = await operator.terminate(); checkCancelled();
@@ -1111,6 +1159,7 @@ export async function main(argv = process.argv.slice(2)) {
           || blockedValue.ok !== false || blockedValue.code !== 'alpha_locked') reject('operator_interruption_unconfirmed');
       await unchangedPending(snapshot); checkCancelled();
       report.operatorInterruptionProof.staleLocksPreserved = true; report.operatorInterruptionProof.lockedRecoveryRefused = true;
+      normalRetirementAttempted = true;
       const retired = await operator.removeCapturedLocks(); checkCancelled();
       if (!retired || retired.ok !== true || retired.alphaRemoved !== true || retired.controllerRemoved !== true) reject('operator_interruption_unconfirmed');
       report.operatorInterruptionProof.exactLockRemovalConfirmed = true;
@@ -1148,8 +1197,51 @@ export async function main(argv = process.argv.slice(2)) {
       goodOriginRevision = recovery.revision;
     } catch (error) { primary = error; }
     finally {
-      try { if (operator && await operator.close() !== true) reject('operator_interruption_unconfirmed'); } catch (error) { failures.cleanup(error, 'operator_close'); if (!primary) primary = error; }
-      try { if (held && await held.abort() !== true) reject('operator_interruption_unconfirmed'); } catch (error) { failures.cleanup(error, 'operator_close'); if (!primary) primary = error; }
+      let operatorAbsent = false, holdClosed = false;
+      try { if (operator) { if (await operator.close() !== true) reject('operator_interruption_unconfirmed'); operatorAbsent = true; } } catch (error) { failures.cleanup(error, 'operator_close'); if (!primary) primary = error; }
+      try { if (held) { if (await held.abort() !== true) reject('operator_interruption_unconfirmed'); holdClosed = true; } } catch (error) { failures.cleanup(error, 'operator_close'); if (!primary) primary = error; }
+      if (primary && operator && snapshot && !normalRetirementAttempted) {
+        const containment = report.operatorInterruptionContainment;
+        containment.attempted = true; containment.operatorAbsent = operatorAbsent; containment.holdClosed = holdClosed;
+        containment.disposition = 'refused';
+        try {
+          if (!operatorAbsent || !holdClosed) reject('operator_interruption_unconfirmed');
+          checkCancelled(); await unchangedPending(snapshot); await sameServiceNoCLI(); checkCancelled();
+          containment.snapshotRevalidated = true;
+          const retired = await operator.retireCapturedLocksAfterFailure(); checkCancelled();
+          if (!retired || retired.ok !== true || retired.alphaRemoved !== true || retired.controllerRemoved !== true || retired.pendingPreserved !== true) reject('operator_interruption_unconfirmed');
+          containment.locksRetired = true;
+          await unchangedPending(snapshot); await sameServiceNoCLI(); checkCancelled();
+          // This permit is synchronous after every awaited state/runtime check.
+          // It retains the original capture deadline and cancellation policy.
+          if (operator.assertCleanupAuthority() !== true) reject('operator_interruption_unconfirmed');
+          const recovered = await command(node, [launcher, 'recover'], env); checkCancelled();
+          const result = assessInterruptedRecovery(recovered, previousRevision, snapshot.failedRevision);
+          const status = await cli(node, launcher, ['status'], env); checkCancelled();
+          const restored = await interruptionFile(`${statePath}/revisions/${result.revision}.json`), { recordSha256, ...revision } = restored.value;
+          if (recordSha256 !== digest(JSON.stringify(revision)) || restored.value.id !== result.revision
+              || restored.value.parent !== previousRevision || restored.value.sourceRevision !== previousRevision
+              || restored.value.inputSha256 !== previous.value.inputSha256 || JSON.stringify(restored.value.input) !== JSON.stringify(previous.value.input)
+              || !await absent(`${statePath}/pending.json`) || status.pending !== null || status.lastConfirmedRevision !== result.revision
+              || JSON.stringify(status.binding) !== JSON.stringify(originalState.value.binding) || status.runtime?.identityValid !== true
+              || status.configUnchanged !== true || status.fragmentMatchesLastConfirmed !== true || status.history?.integrity !== true) reject('operator_interruption_unconfirmed');
+          const body = await request(gatewayPort); checkCancelled();
+          const secure = await probeServiceTLS(tlsPort, '/', { ca: tlsFixture.ca, expectedCertificate: tlsFixture.expectedCertificate, servername: 'localhost', version: 'TLSv1.3' }); checkCancelled();
+          if (body.status !== 200 || body.body.toString() !== 'service-fixture\n' || secure.status !== 200 || secure.certificateMatched !== true
+              || secure.protocol !== 'TLSv1.3' || !Buffer.isBuffer(secure.body) || secure.body.toString() !== 'service-fixture\n'
+              || !Number.isInteger(beforePosts) || origin.counts().echoRequests !== beforePosts) reject('operator_interruption_unconfirmed');
+          await sameServiceNoCLI(); checkCancelled();
+          const beforeRepeatState = await interruptionFile(`${statePath}/state.json`), beforeRepeatHistory = await interruptionFile(`${statePath}/history.jsonl`, false);
+          checkCancelled(); if (operator.assertCleanupAuthority() !== true) reject('operator_interruption_unconfirmed');
+          const repeated = await cli(node, launcher, ['recover'], env); checkCancelled();
+          if (repeated.outcome !== 'nothing_pending' || !await absent(`${statePath}/pending.json`)
+              || (await interruptionFile(`${statePath}/state.json`)).sha256 !== beforeRepeatState.sha256
+              || (await interruptionFile(`${statePath}/history.jsonl`, false)).sha256 !== beforeRepeatHistory.sha256) reject('operator_interruption_unconfirmed');
+          await sameServiceNoCLI(); checkCancelled();
+          containment.recoveryVerified = true; containment.completed = true; containment.disposition = 'contained';
+          // Acceptance proofs/counter and primary are intentionally unchanged.
+        } catch (error) { failures.cleanup(error, 'operator_recovery'); }
+      } else if (primary) report.operatorInterruptionContainment.disposition = normalRetirementAttempted ? 'retirement_already_started' : 'no_snapshot';
     }
     if (primary) throw primary;
     checkCancelled();
@@ -1354,7 +1446,7 @@ export async function main(argv = process.argv.slice(2)) {
         || !report.cleanup.upstreamTLSOriginClosed || !report.cleanup.readinessRelayClosed || sockets.size)) { failures.cleanup(null, 'final_assertion'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel);
   }
-  return { ...report, ...failures.snapshot(), startDiagnostics: start.snapshot(), fragmentIdentityDiagnostics: fragments.snapshot(), hookStatusDiagnostics: hooks.snapshot() };
+  return { ...report, ...failures.snapshot(), operatorHoldDiagnostics: operatorHoldDiagnostics.snapshot(), startDiagnostics: start.snapshot(), fragmentIdentityDiagnostics: fragments.snapshot(), hookStatusDiagnostics: hooks.snapshot() };
 }
 let invoked = false;
 try { invoked = Boolean(process.argv[1]) && await realpath(process.argv[1]) === await realpath(fileURLToPath(import.meta.url)); } catch { /* Import has no mutation authority. */ }

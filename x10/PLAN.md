@@ -1838,3 +1838,61 @@ this profile before any spawn. Nine physical group cases are SKIP locally, not
 PASS; exact supported-host CI must run all18 without skips. No namespace entry,
 host-PID signals or permission changes were used. Later CI success cannot erase
 this earlier local cleanup uncertainty.
+
+
+## G3 current interruption failure precedes recipe distribution
+
+Exact3bf native CI had mixed actual outcomes. Push40209963590/job121218936536
+FAILED required service step28 during operator_interruption: the primary failure
+was operator_fixture_not_held after the first four of14 interruption proofs.
+Cleanup separately recorded unit_stop_unconfirmed; nine final cleanup flags
+remained unconfirmed, no private Node cleanup receipt existed and bootstrap
+retained its runtime/root. False flags mean unconfirmed, not observed presence.
+PR40209966500/job121218941776 passed its scoped operator recovery, controlled
+drain, startup refusal, three combined TLS sessions, restart/journals and13 final
+cleanup confirmations with private Node/bootstrap removal. Both actual operator
+suites ran18 tests without skips. The implementation is not accepted by the PR
+success. The92 factual audit checks reconcile observations, not92 runtime passes.
+
+Research PR actually ran21/7/27/48 while push runtime was skipped. Those separate
+passes do not override native service failure. Earlier local operator fixture
+cleanup remains FAIL_UNKNOWN, including the previously recorded prematurely
+removed private prefixes; later hosted evidence cannot repair that uncertainty.
+The exact historical not-held interleaving/internal cause remains unknown.
+
+The new candidate adds bounded, finite interruption-step/guard observations and
+failed-fixture containment. Diagnostics publish no raw paths, process identifiers,
+command output, private pending/configuration bytes or secrets and grant no
+lifecycle authority. The existing1000ms held-probe and350ms hook budgets remain;
+no timeout extension or same-SHA rerun is used to relabel the failed result.
+
+Failure containment must stay within the already captured owned operator group,
+exact captured lock inodes, immutable pending/input identity, original deadline
+and current process-absence guards. It cannot rearm a refused capability, acquire
+candidate acceptance, blindly clear foreign/stale locks or replace the original
+primary error with successful cleanup. Any explicit fixture recovery remains
+separate from runtime acceptance. Unknown cleanup retains the installation and
+private dependency. The new refusal/containment controls and final frozen hashes,
+actual local results and independent review are in
+[containment evidence](evidence/g3-service-interruption-containment.json).
+
+The original push failure and scoped PR success remain separate durable records.
+New exact CI is pending and must run all26 operator controls with zero skips.
+No actual nonroot managed service is run by
+local root contracts or source-extracted controls. Prior startup/drain/TLS/
+restart/journal guards, every existing acceptance proof and namespace refusal
+remain required. This candidate does not establish the historical not-held cause,
+a general automatic lock cleaner, production crash recovery or package rollback.
+
+Native/controller/alpha, unit recipe, origin/slow-client/journal/downstream TLS
+helpers, release contract/profile and the broad roadmap remain unchanged.
+Installed service-recipe distribution is parked until the current required
+service failure is understood and accepted runtime evidence is available.
+FullG3/G4-G8, permanent release, security/soak, Production V1 and semantic
+Continuum remain unaccepted. No other portfolio project is started.
+
+
+A normal hosted interruption PASS does not prove the separate failure-containment
+branch ran. New receipts must retain its attempted/completed disposition and the
+first finite hold refusal. If that branch was not exercised, actual managed
+failure-containment acceptance remains pending despite passing normal controls.

@@ -35,10 +35,10 @@ async function fixture(fn, extra = false) {
   const w=Buffer.from(wrapperSource(extra)), c=Buffer.from(controlSource); await writeFile(launcher,w,{mode:0o500});await writeFile(controller,c,{mode:0o400});await writeFile(inputFile,'{}\n',{mode:0o600});
   const st=await lstat(prefix), record={prefix,rootIdentity:{dev:st.dev,ino:st.ino,uid:process.getuid()},nodeRuntime:{executable:node,sha256:digest(await readFile(node))},immutable:{'bin/x10':{sha256:digest(w),bytes:w.length,mode:'0500'},'lib/control/cli.mjs':{sha256:digest(c),bytes:c.length,mode:'0400'}}};
   await writeFile(prefix+'/.alpha-install.json',JSON.stringify({...record,sha256:digest(JSON.stringify(record))},null,2)+'\n',{mode:0o600});
-  let held=true, h, fixturePID;
-  const o={node,launcher,prefix,sessionPrefix,inputFile,env:{PATH:'/usr/bin:/bin',LANG:'C',LC_ALL:'C'},isHeld:()=>held,checkCancelled:()=>{},timeoutMs:10000};
+  let held=true, cancelled=false, h, fixturePID;
+  const o={node,launcher,prefix,sessionPrefix,inputFile,env:{PATH:'/usr/bin:/bin',LANG:'C',LC_ALL:'C'},isHeld:()=>held,checkCancelled:()=>{if(cancelled)throw new Error('fixture_cancelled');},timeoutMs:10000};
   try {
-    await fn({o,parent,prefix,sessionPrefix,setHeld:v=>held=v,
+    await fn({o,parent,prefix,sessionPrefix,setHeld:v=>held=v,setCancelled:v=>cancelled=v,
       async start(){h=await startOwnedOperator(o);return h;},
       async ready(){const deadline=Date.now()+2000;while(Date.now()<deadline){try{const a=JSON.parse(await readFile(prefix+'/.alpha-lock'));const b=JSON.parse(await readFile(sessionPrefix+'/.x10-control/lock'));await readFile(sessionPrefix+'/.x10-control/pending.json');fixturePID=a.pid;return {wrapper:a.pid,controller:b.pid};}catch{await wait(10);}}throw new Error('fixture_not_ready');}
     });
@@ -122,4 +122,64 @@ test('actual process profile is either direct or a fixed pre-spawn refusal',asyn
  if(supportedProfile){assert.equal((await inspectOperatorProcessProfile()).supported,true);return;}
  await assert.rejects(inspectOperatorProcessProfile(),{code:'operator_fixture_profile'});
  await assert.rejects(startOwnedOperator({node:'/absent/node',launcher:'/absent/install/bin/x10',prefix:'/absent/install',sessionPrefix:'/absent/install/runs/'+'a'.repeat(32),inputFile:'/absent/input.json',env:{PATH:'/usr/bin:/bin',LANG:'C',LC_ALL:'C'},isHeld:()=>false,checkCancelled:()=>{}}),{code:'operator_fixture_profile'});
+});
+
+processTest('failure-only lock retirement preserves primary refusal while reusing captured cleanup authority',async()=>{
+ await fixture(async f=>{const h=await f.start();await f.ready();await h.captureLocks();f.setHeld(false);
+  await assert.rejects(h.terminate(),{code:'operator_fixture_not_held'});assert.equal(await h.close(),true);
+  const pending=await readFile(f.sessionPrefix+'/.x10-control/pending.json');
+  assert.deepEqual(await h.retireCapturedLocksAfterFailure(),{ok:true,alphaRemoved:true,controllerRemoved:true,pendingPreserved:true});
+  assert.equal(h.assertCleanupAuthority(),true);assert.deepEqual(await readFile(f.sessionPrefix+'/.x10-control/pending.json'),pending);
+  assert.equal(h.snapshot().locksRetired,true);await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_state'});
+ });
+});
+processTest('failure lock retirement never adopts a cleanup-only unaccepted capture',async()=>{
+ await fixture(async f=>{const h=await f.start();await f.ready();assert.equal(await h.close(),true);
+  assert.equal(h.snapshot().groupCaptured,false);await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_state'});
+  assert.throws(()=>h.assertCleanupAuthority(),{code:'operator_fixture_state'});assert.equal((await lstat(f.prefix+'/.alpha-lock')).isFile(),true);
+ });
+});
+processTest('failure lock retirement refuses a live operator and requires explicit successful close',async()=>{
+ await fixture(async f=>{const h=await f.start();await f.ready();await h.captureLocks();
+  await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_state'});assert.equal(h.snapshot().running,true);
+  await h.terminate();await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_state'});
+  assert.equal(await h.close(),true);assert.equal((await h.retireCapturedLocksAfterFailure()).pendingPreserved,true);
+ });
+});
+processTest('changed captured lock refuses failure retirement and consumes the one-shot decision',async()=>{
+ await fixture(async f=>{const h=await f.start();await f.ready();await h.captureLocks();assert.equal(await h.close(),true);
+  const lock=f.prefix+'/.alpha-lock',bytes=await readFile(lock);await rename(lock,lock+'.saved');await writeFile(lock,bytes,{mode:0o600,flag:'wx'});
+  await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_lock_changed'});
+  await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_state'});await assert.rejects(h.removeCapturedLocks(),{code:'operator_fixture_state'});
+  assert.equal(h.snapshot().locksRetired,false);assert.equal((await lstat(lock)).isFile(),true);
+ });
+});
+processTest('changed pending state refuses failure retirement without deleting either captured lock',async()=>{
+ await fixture(async f=>{const h=await f.start();await f.ready();await h.captureLocks();assert.equal(await h.close(),true);
+  await writeFile(f.sessionPrefix+'/.x10-control/pending.json','{"stage":"changed"}\n',{mode:0o600});
+  await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_pending'});
+  for(const p of[f.prefix+'/.alpha-lock',f.sessionPrefix+'/.x10-control/lock'])assert.equal((await lstat(p)).isFile(),true);
+  await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_state'});
+ });
+});
+processTest('failure lock cleanup keeps original expiry and never renews an expired capture',async()=>{
+ await fixture(async f=>{const h=await f.start();await f.ready();await h.captureLocks();assert.equal(await h.close(),true);
+  const {performance}=await import('node:perf_hooks'),old=Object.getOwnPropertyDescriptor(performance,'now'),future=performance.now()+20000;
+  Object.defineProperty(performance,'now',{configurable:true,value:()=>future});
+  try{await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_timeout'});assert.equal(h.snapshot().locksRetired,false);}
+  finally{if(old)Object.defineProperty(performance,'now',old);else delete performance.now;}
+  assert.equal((await lstat(f.prefix+'/.alpha-lock')).isFile(),true);await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_state'});
+ });
+});
+processTest('failure lock retirement respects current cancellation and retains unknown state',async()=>{
+ await fixture(async f=>{const h=await f.start();await f.ready();await h.captureLocks();assert.equal(await h.close(),true);f.setCancelled(true);
+  await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_cancelled'});
+  assert.equal((await lstat(f.prefix+'/.alpha-lock')).isFile(),true);assert.equal(h.snapshot().locksRetired,false);
+  f.setCancelled(false);await assert.rejects(h.retireCapturedLocksAfterFailure(),{code:'operator_fixture_state'});
+ });
+});
+processTest('fixed held stages identify the same unchanged capture and terminate authority checks',async()=>{
+ await fixture(async f=>{const stages=[];f.o.isHeld=stage=>{stages.push(stage);return true};const h=await f.start();await f.ready();await h.captureLocks();await h.terminate();
+  assert.deepEqual(stages,['capture_final','terminate_capture','terminate_final']);await h.removeCapturedLocks();assert.equal(await h.close(),true);
+ });
 });

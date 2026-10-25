@@ -7,7 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
 import { digest } from '../alpha/runtime.mjs';
-import { parseArguments, assessInterruptedRecovery, assessInterruptedProbeHold, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
+import { parseArguments, classifyOperatorHoldDecision, createOperatorHoldDiagnostics, assessInterruptedRecovery, assessInterruptedProbeHold, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
 import { JOURNAL_RESULT_CODES } from './journal-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
@@ -1144,14 +1144,83 @@ test('interrupted operator pure assessors do not invoke hostile getters', () => 
 test('interrupted apply does not renew held-probe authority through a late queued continuation', async () => {
   const source = await readFile(script, 'utf8');
   const fn = source.slice(source.indexOf('  async function verifyOperatorInterruption()'), source.indexOf('  async function verifyControlledSlowDrain()'));
-  const isHeld = fn.slice(fn.indexOf('    const isHeld ='), fn.indexOf('    try {', fn.indexOf('    const isHeld =')));
+  const isHeld = fn.slice(fn.indexOf('    const isHeld ='), fn.indexOf('    try {\n      held = origin.prepareReadinessHold', fn.indexOf('    const isHeld =')));
   const observation = fn.slice(fn.indexOf('      await until('), fn.indexOf('      if (!captured ||', fn.indexOf('      await until(')));
   let clock = 0, captureCalls = 0;
   const reject = code => { throw Object.assign(new Error(code), { code }); };
-  const env = { held: { snapshot: () => ({ ...interruptionHold }) }, checkCancelled() {}, assessInterruptedProbeHold,
+  const env = { held: { snapshot: () => ({ ...interruptionHold }) }, checkCancelled() {}, assessInterruptedProbeHold, classifyOperatorHoldDecision, operatorHoldDiagnostics: createOperatorHoldDiagnostics(),
     performance: { now: () => clock }, reject,
     until: async (callback, budget) => { assert.equal(budget, 2000); assert.equal(await callback(), true); queueMicrotask(() => { clock = 1001; }); },
     operator: { async captureLocks() { captureCalls++; return {}; } } };
   const run = new Function(...Object.keys(env), `return async () => { let heldDeadline = 0; ${isHeld}${observation} };`)(...Object.values(env));
   await assert.rejects(run(), { code: 'operator_interruption_unconfirmed' }); assert.equal(captureCalls, 0);
+});
+
+test('hold diagnostics distinguish exact deadline and current probe gap without changing authority', () => {
+  assert.equal(classifyOperatorHoldDecision(interruptionHold, 1000, 999), 'current');
+  assert.equal(classifyOperatorHoldDecision(interruptionHold, 1000, 1000), 'deadline_expired');
+  assert.equal(classifyOperatorHoldDecision({ ...interruptionHold, held: false, heldResponses: 0 }, 1000, 999), 'live_probe_gap');
+  assert.equal(classifyOperatorHoldDecision({ ...interruptionHold, held: false, heldResponses: 0 }, 1000, 1001), 'live_probe_gap');
+  assert.equal(classifyOperatorHoldDecision(interruptionHold, 0, 1), 'budget_unarmed');
+});
+for (const [name, change, expected] of [
+  ['aborted', { aborted: true }, 'aborted'], ['closed', { closed: true }, 'closed'],
+  ['unrequested', { requested: false }, 'candidate_unobserved'], ['unobserved', { candidateReadyObserved: false }, 'candidate_unobserved'],
+  ['released', { released: true }, 'invalid'], ['invalid_count', { nativeProbeChecks: 'one' }, 'invalid'],
+  ['inconsistent_gap', { held: true, heldResponses: 0 }, 'invalid']]) {
+  test(`hold decision classifies ${name} without accepting it`, () => assert.equal(classifyOperatorHoldDecision({ ...interruptionHold, ...change }, 1000, 500), expected));
+}
+test('hold diagnostics preserve the first actual refusal through later expiry observations', () => {
+  const d = createOperatorHoldDiagnostics();
+  d.observe('capture_final', 'current', 300, 1000, interruptionHold);
+  d.observe('terminate_capture', 'live_probe_gap', 350, 1000, { ...interruptionHold, held: false, heldResponses: 0 });
+  d.observe('terminate_final', 'deadline_expired', 1500, 1000, interruptionHold);
+  const r = d.snapshot(); assert.equal(r.observationCount, 3); assert.equal(r.firstRefusal.stage, 'terminate_capture');
+  assert.equal(r.firstRefusal.reason, 'live_probe_gap'); assert.equal(r.firstRefusal.ageMs, 350); assert.equal(r.firstRefusal.deadlineExpired, false);
+  assert.equal(r.observations[2].deadlineExpired, true); assert.equal(r.observations[2].ageMs, 1500);
+});
+test('hold diagnostics cap observations, counters and timing while retaining the first refusal', () => {
+  const d = createOperatorHoldDiagnostics();
+  d.observe('capture_final', 'cancelled', 10, 1000, null);
+  for (let i = 0; i < 100; i++) d.observe('terminate_final', 'current', i + 20000, 1000, interruptionHold);
+  const r = d.snapshot(); assert.equal(r.observationCount, 64); assert.equal(r.observations.length, 8);
+  assert.equal(r.observationsTruncated, true); assert.equal(r.firstRefusal.reason, 'cancelled');
+  assert(r.observations.every(value => value.ageMs === 10000));
+});
+test('hold diagnostics publish only allowlisted finite values without raw exception or host data', () => {
+  const d = createOperatorHoldDiagnostics();
+  d.observe('/private/host pid=12345', new Error('private diagnostic bytes'), Infinity, -1, { nativeProbeChecks: 'private', heldResponses: 999 });
+  const r = d.snapshot(), text = JSON.stringify(r);
+  assert.equal(r.firstRefusal.stage, 'unknown'); assert.equal(r.firstRefusal.reason, 'invalid');
+  assert.equal(r.firstRefusal.ageMs, null); assert.equal(r.firstRefusal.nativeProbeChecks, null); assert.equal(r.firstRefusal.heldResponses, null);
+  for (const value of ['private', 'host', '12345', 'Error', 'stack']) assert.equal(text.includes(value), false);
+});
+test('hold diagnostics snapshots cannot mutate stored refusal or observations', () => {
+  const d = createOperatorHoldDiagnostics(); d.observe('capture_final', 'deadline_expired', 1000, 1000, interruptionHold);
+  const r = d.snapshot(); r.firstRefusal.reason = 'current'; r.observations[0].reason = 'current'; r.observations.length = 0;
+  assert.equal(d.snapshot().firstRefusal.reason, 'deadline_expired'); assert.equal(d.snapshot().observations.length, 1);
+});
+test('hold diagnostics and classifier refuse getters without reading them', () => {
+  let called = false; const value = { ...interruptionHold }; Object.defineProperty(value, 'nativeProbeChecks', { get() { called = true; return 1; } });
+  assert.equal(classifyOperatorHoldDecision(value, 1000, 1), 'invalid');
+  const d = createOperatorHoldDiagnostics(); d.observe('capture_final', 'invalid', 1, 1000, value);
+  assert.equal(d.snapshot().firstRefusal.nativeProbeChecks, null); assert.equal(called, false);
+});
+
+test('failure containment refuses a self-consistent restored record with the wrong revision ID', async () => {
+  const source = await readFile(script, 'utf8'), start = source.indexOf('          const retired = await operator.retireCapturedLocksAfterFailure()');
+  const begin = source.indexOf('          if (recordSha256 !== digest(JSON.stringify(revision))', start);
+  const guard = source.slice(begin, source.indexOf('          const body = await request(gatewayPort);', begin));
+  assert(guard.includes('restored.value.id !== result.revision'));
+  const oldInput = { serverBody: 'old-confirmed', healthURL: 'http://127.0.0.1:4000/ready' };
+  const previous = { value: { input: oldInput, inputSha256: digest(JSON.stringify(oldInput)) } }, binding = { pid: 321 };
+  const status = { pending: null, lastConfirmedRevision: interruptedRestored, binding, runtime: { identityValid: true }, configUnchanged: true, fragmentMatchesLastConfirmed: true, history: { integrity: true } };
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  async function assess(id) {
+    const revision = { id, parent: interruptedPrevious, sourceRevision: interruptedPrevious, input: oldInput, inputSha256: digest(JSON.stringify(oldInput)) };
+    const env = { recordSha256: digest(JSON.stringify(revision)), digest, revision, restored: { value: revision }, result: { revision: interruptedRestored }, previousRevision: interruptedPrevious, previous, absent: async () => true, status, originalState: { value: { binding } }, statePath: '/synthetic/state', reject };
+    return new Function(...Object.keys(env), `return async () => { ${guard}; return true; };`)(...Object.values(env))();
+  }
+  assert.equal(await assess(interruptedRestored), true);
+  await assert.rejects(assess('4'.repeat(32)), { code: 'operator_interruption_unconfirmed' });
 });
