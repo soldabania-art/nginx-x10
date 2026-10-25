@@ -3,7 +3,29 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": null,
+  "executionLease": {
+    "runId": "x10-verified-node-20261025T012136Z",
+    "owner": "codex-coordinator-verified-node",
+    "baseCommit": "239dd69c1a8f9c36175be2989d8707ad418178c7",
+    "acquiredAtUTC": "2026-10-25T01:21:36.816Z",
+    "expiresAtUTC": "2026-10-25T02:01:36.816Z",
+    "task": "Install independently verified official Node22 into an isolated owned dependency prefix and preserve service admission guards",
+    "allowedFiles": [
+      "x10/service/verified-node.mjs",
+      "x10/service/verified-node.test.mjs",
+      "x10/service/node-runtime-pin.json",
+      "x10/service/keys/node-v22-release.asc",
+      "x10/service/keys/node-v22.23.3-SHASUMS256.asc",
+      "x10/service/README.md",
+      ".github/workflows/x10-native.yml",
+      "x10/STATUS.md",
+      "x10/PLAN.md",
+      "x10/continuation-2026-10-24/GATES.json",
+      "x10/continuum/BACKGROUND.json",
+      "x10/evidence/g3-verified-node.json",
+      "x10/review/g3-verified-node-ledger.json"
+    ]
+  },
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
