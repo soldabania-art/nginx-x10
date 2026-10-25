@@ -314,3 +314,45 @@ separate from the current Node22 mode-policy observation. Logging, single
 manager restart, failed start, cancellation, slow drain, orphan recovery,
 combined TLS/service, package rollback, permanent distribution/replay, soak
 and final Production V1 remain open.
+
+
+## Primary failure and bounded first-start diagnostics
+
+A failed service attempt can fail again during cleanup. The top-level
+compatibility result remains separate from an additive first primary
+failure record and bounded cleanup failure observations. First-start
+command outcomes and unit-state facts use fixed enums/booleans only; raw
+errors, command output, unit paths, session IDs and PIDs are not published.
+These diagnostics cannot confer service authority or replace any existing
+unit/launcher/native identity, readiness or cleanup check.
+
+`primaryFailure` is null or a fixed record with phase, subphase, code and
+systemErrorClass. Its first captured primary is retained even if cleanup
+fails later. `cleanupFailures` retains at most8 fixed stage/code entries;
+its count saturates at32 and an explicit truncated flag marks missing later
+entries. Missing entries do not prove an action or failure did not happen.
+
+`startDiagnostics` records bounded function-entry attempts, progress and
+at most8 fixed outcome/state observations, with count saturation32 and
+explicit truncation. An attempt counts an entered checker function; it is
+not proof a systemctl start command was issued or a unit physically started.
+Command termination and unit state use fixed categories/presence booleans.
+`systemErrorClass` classifies an observed own Error.code only: it does not
+prove an OS syscall, kernel condition, ACL diagnosis or historical cause.
+
+Both actual700 service attempts reported cleanup_unconfirmed at first_start
+after a confirmed runtime link. The original error was overwritten by old
+cleanup handling and is unknown. A false actualUnitStarted flag means an
+unconfirmed start; it does not prove no physical start or no side effect.
+All service cleanup flags were unconfirmed except application sockets0.
+Keep the authenticated private Node runtime available for possible ExecStop
+when cleanup is uncertain. No runtime deletion or final provider cleanup
+is inferred from a failed child report.
+
+The actual signed archive/private Node preparation succeeded narrowly in
+those jobs and all seven Node policy predicates passed. That result does
+not accept service startup, readiness, stop or complete Node/service profile
+compatibility. The new diagnostics require their own exact CI; local pure/
+synthetic tests and actual root refusal are separate evidence. Full service
+operation, logging, manager restart, adverse cleanup, TLS, package rollback,
+permanent distribution, soak and Production V1 remain open.

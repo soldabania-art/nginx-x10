@@ -1339,3 +1339,26 @@ storage review. Actual official archive download/preparation/execution and
 nonroot service acceptance require the resulting exact CI. No new native
 aggregate or unchanged CI retry is borrowed as proof of this new dependency.
 Production V1, permanent release, package rollback and final soak remain open.
+
+
+## Preserve primary service failures separately from cleanup
+
+Both exact700 jobs verified the official signed Node archive and prepared
+private Node22.23.3, including actual runtime-version execution and all
+seven admission prerequisites. Both full workflows nevertheless FAILED
+the actual service at first_start/cleanup_unconfirmed after a confirmed
+runtime unit link. The original primary error was overwritten and remains
+unknown. actualUnitStartedfalse does not prove the start command had no
+side effects or that the physical service never ran. Service cleanup is
+unconfirmed; the private dependency runtime was retained for possible stop.
+
+[Evidence](evidence/g3-service-primary-failure.json) preserves those actual
+artifacts and adds bounded primaryFailure, separate cleanup failures and
+first-start command/state observations. New diagnostics cannot change
+admission, operations or success. Only the fixed checker SHA is propagated
+to dependency cleanup and the workflow; all other logic is unchanged.
+
+Local synthetic/refusal validation and independent review do not accept
+an actual service. The new exact CI is pending; native20 compatibility and
+research21/7/27/48 belong to the prior700 source. Earlier failures remain
+retained. Actual service operation/cleanup and Production V1 remain open.

@@ -115,6 +115,88 @@ export async function observeNodePrerequisites(prefix, nodeExecutable) {
   } catch { reject('recipe_diagnostic_failed'); }
   finally { if (handle) { try { await handle.close(); } catch { reject('recipe_diagnostic_failed'); } } }
 }
+// Diagnostic collectors have no I/O or lifecycle authority.
+export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'first_start', 'first_stop', 'second_start', 'second_stop', 'uninstall', 'complete', 'unknown']);
+export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
+export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'temporary_root', 'final_assertion', 'unknown']);
+const pickEnum = (value, list, fallback = 'unknown') => typeof value === 'string' && list.includes(value) ? value : fallback;
+function ownData(record, key) {
+  try { const d = record && Object.getOwnPropertyDescriptor(record, key); return d && Object.hasOwn(d, 'value') ? d.value : undefined; }
+  catch { return undefined; }
+}
+export function classifySystemError(error) {
+  try {
+    if (!(error instanceof Error)) return 'unknown';
+    const code = ownData(error, 'code');
+    if (code === 'EACCES' || code === 'EPERM') return 'permission_denied';
+    if (code === 'ENOENT') return 'not_found';
+    if (code === 'ESRCH') return 'process_missing';
+    return 'unknown';
+  } catch { return 'unknown'; }
+}
+export function createFailureDiagnostics() {
+  let primary = null, cleanupCount = 0, truncated = false; const cleanup = [];
+  return Object.freeze({
+    primary(error, phase, subphase) {
+      if (primary) return;
+      const safePhase = pickEnum(phase, DIAGNOSTIC_PHASES);
+      primary = { phase: safePhase, subphase: ['first_start', 'second_start'].includes(safePhase)
+        ? pickEnum(subphase, START_SUBPHASES) : 'not_applicable', code: classifyLifecycleError(error, safePhase), systemErrorClass: classifySystemError(error) };
+    },
+    cleanup(error, stage) {
+      if (cleanupCount < 32) cleanupCount++; else truncated = true;
+      const classified = classifyLifecycleError(error, 'cleanup');
+      const item = { stage: pickEnum(stage, CLEANUP_STAGES), code: classified === 'lifecycle_failed' ? 'cleanup_unconfirmed' : classified };
+      if (cleanup.length < 8) cleanup.push(item); else truncated = true;
+    },
+    snapshot() { return { primaryFailure: primary ? { ...primary } : null, cleanupFailures: cleanup.map(x => ({ ...x })),
+      cleanupFailureCount: cleanupCount, cleanupFailuresTruncated: truncated }; },
+  });
+}
+export function classifyCommandTermination(error) {
+  const code = ownData(error, 'code'), killed = ownData(error, 'killed'), signal = ownData(error, 'signal');
+  if (code === 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER') return 'output_limit';
+  if (killed === true) return 'timeout_or_killed';
+  if (typeof signal === 'string' && signal.length > 0) return 'signal';
+  if (typeof code === 'string' && ['ENOENT', 'EACCES', 'EPERM', 'ENOTDIR', 'EISDIR', 'ENOEXEC'].includes(code)) return 'unavailable';
+  if (Number.isInteger(code) && code > 0 && code <= 255) return 'exit_nonzero';
+  return 'unknown';
+}
+export function summarizeManagerOutcome(record) {
+  const ok = ownData(record, 'ok'), exitCode = ownData(record, 'exitCode'), stderr = ownData(record, 'stderr');
+  const exitCodeClass = exitCode === 0 ? 'zero' : Number.isInteger(exitCode) && exitCode >= 1 && exitCode <= 255 ? 'nonzero' : 'unknown';
+  return { outcome: ok === true && exitCodeClass === 'zero' ? 'succeeded'
+    : ok === false && exitCodeClass === 'nonzero' ? 'exited_nonzero' : 'unresolved',
+    exitCodeClass, termination: pickEnum(ownData(record, 'termination'), ['none', 'output_limit', 'timeout_or_killed', 'signal', 'unavailable', 'exit_nonzero']),
+    stderrPresent: typeof stderr === 'string' && stderr.length > 0 };
+}
+export function summarizeUnitProperties(record) {
+  const load = ownData(record, 'LoadState'), active = ownData(record, 'ActiveState'), sub = ownData(record, 'SubState'), result = ownData(record, 'Result');
+  const pid = ownData(record, 'MainPID'), group = ownData(record, 'ControlGroup'), fragment = ownData(record, 'FragmentPath');
+  return { loadState: pickEnum(load, ['loaded', 'not-found']),
+    activeState: pickEnum(active, ['active', 'activating', 'inactive', 'deactivating', 'failed']),
+    subState: pickEnum(sub, ['dead', 'running', 'start', 'start-pre', 'start-post', 'stop', 'stop-sigterm', 'stop-sigkill', 'stop-post', 'failed', 'auto-restart', 'reload', 'reload-signal', 'reload-notify']),
+    result: result === '' ? 'empty' : pickEnum(result, ['success', 'exit-code', 'signal', 'core-dump', 'timeout', 'watchdog', 'start-limit-hit', 'resources', 'protocol', 'oom-kill', 'exec-condition']),
+    mainPIDPresent: typeof pid === 'string' && /^[1-9][0-9]{0,9}$/.test(pid) && !pid.includes('\n') && Number(pid) <= 2147483647,
+    controlGroupPresent: typeof group === 'string' && group.length > 0, fragmentPathPresent: typeof fragment === 'string' && fragment.length > 0 };
+}
+export function createStartDiagnostics() {
+  let attempts = 0, completed = 0, step = 'not_started', count = 0, truncated = false; const observations = [];
+  return Object.freeze({
+    begin() { if (attempts < 2) attempts++; step = 'cancel_check'; },
+    step(value) { step = pickEnum(value, START_SUBPHASES); },
+    observe(kind, record) {
+      if (!['properties_command', 'properties_state', 'start_command'].includes(kind)) return;
+      if (count < 32) count++; else truncated = true;
+      const state = kind === 'properties_state' ? summarizeUnitProperties(record) : summarizeManagerOutcome(record);
+      const item = { attempt: attempts, step, kind, ...state };
+      if (observations.length < 8) observations.push(item); else truncated = true;
+    },
+    complete() { if (completed < 2) completed++; step = 'complete'; },
+    snapshot() { return { attempts, completedAttempts: completed, lastStep: step, observationCount: count,
+      observationsTruncated: truncated, observations: observations.map(x => ({ ...x })) }; },
+  });
+}
 async function archiveBytes(file) {
   const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
   try {
@@ -134,8 +216,8 @@ async function until(fn, budget = 10000) {
 }
 async function command(file, args, env, timeout = 15000) {
   try { const r = await execute(file, args, { cwd: '/', env, timeout, killSignal: 'SIGKILL', maxBuffer: 256 * 1024 });
-    return { ok: true, exitCode: 0, stdout: r.stdout, stderr: r.stderr }; }
-  catch (e) { return { ok: false, exitCode: Number.isInteger(e.code) ? e.code : null, stdout: typeof e.stdout === 'string' ? e.stdout : '', stderr: typeof e.stderr === 'string' ? e.stderr : '' }; }
+    return { ok: true, exitCode: 0, stdout: r.stdout, stderr: r.stderr, termination: 'none' }; }
+  catch (e) { return { ok: false, exitCode: Number.isInteger(e.code) ? e.code : null, stdout: typeof e.stdout === 'string' ? e.stdout : '', stderr: typeof e.stderr === 'string' ? e.stderr : '', termination: classifyCommandTermination(e) }; }
 }
 async function cli(node, launcher, args, env) {
   const r = await command(node, [launcher, ...args], env);
@@ -175,8 +257,9 @@ export async function main(argv = process.argv.slice(2)) {
       listeningPortsClosed: false, controlSocketAbsent: false, runtimeLinkAbsent: false,
       appSocketsRemaining: 0, installationRemoved: false, temporaryRootRemoved: false } };
   let input, parent, prefix, node, launcher, unitFile, runtimeLink, unitName, env, app, appPort, gatewayPort, healthPort;
-  let linked = false, installed = false, safeToRemove = false, cancelled = false, startRequested = false, lastSession = null;
+  let linked = false, installed = false, safeToRemove = false, cancelled = false, startRequested = false, lastSession = null, inCleanup = false;
   const sessions = [], launcherIdentities = [], sockets = new Set();
+  const failures = createFailureDiagnostics(), start = createStartDiagnostics();
   const cancel = () => { cancelled = true; };
   const checkCancelled = () => { if (cancelled) reject('cancelled'); };
   const systemctl = (args, timeout = 10000) => command(TOOL, ['--user', '--no-pager', '--no-ask-password', ...args], env, timeout);
@@ -197,8 +280,10 @@ export async function main(argv = process.argv.slice(2)) {
   }
   async function properties() {
     const r = await systemctl(['show', unitName, ...KEYS.map(k => `--property=${k}`)], 2500);
+    if (!inCleanup && ['first_start', 'second_start'].includes(report.phase)) start.observe('properties_command', r);
     if (![0, 1].includes(r.exitCode)) reject('unit_query_failed');
     const parsed = parseUnitProperties(r.stdout);
+    if (!inCleanup && ['first_start', 'second_start'].includes(report.phase)) start.observe('properties_state', parsed);
     if (parsed.LoadState === 'loaded' && (!r.ok || r.stderr)) reject('unit_query_failed');
     if (parsed.LoadState === 'not-found' && (parsed.MainPID !== '0' || parsed.FragmentPath !== '' || parsed.ControlGroup !== '' || parsed.ActiveState !== 'inactive')) reject('unit_response_invalid');
     return parsed;
@@ -289,26 +374,42 @@ export async function main(argv = process.argv.slice(2)) {
     report.cleanup.listeningPortsClosed = true; report.cleanup.controlSocketAbsent = true;
   }
   async function startAndServe() {
+    start.begin();
     checkCancelled();
+    start.step('before_properties');
     const before = await ownedProperties(); if (before.ActiveState !== 'inactive' || Number(before.MainPID) !== 0) reject('unit_not_stopped');
+    start.step('request_start');
     startRequested = true;
     const started = await systemctl(['start', unitName], 15000);
+    start.observe('start_command', started);
     // Any timeout is diagnosed in finally; no second start is attempted blindly.
     if (!started.ok) reject('unit_start_failed');
+    start.step('after_properties');
     const active = await ownedProperties(); if (active.ActiveState !== 'active' || active.SubState !== 'running') reject('unit_not_active');
+    start.step('launcher_identity');
     launcherIdentities.push(await launcherIdentity(active)); report.actualUnitStarted = true;
+    start.step('native_inventory');
     await until(async () => { try { await inventorySessions(); return sessions.length > report.nativeSessionsStopped; } catch (e) { if (e.code === 'native_cleanup_unknown') return false; throw e; } });
+    start.step('wait_bind');
     await cli(node, launcher, ['wait-bind', '--timeout-ms', '10000'], env);
+    start.step('native_observation');
     const s = await observeNative();
+    start.step('session_freshness');
     if (lastSession === s.id) reject('session_reused');
     lastSession = s.id;
+    start.step('binding_status');
     const status = await cli(node, launcher, ['status'], env); if (!status.binding || status.runtime?.identityValid !== true) reject('binding_unconfirmed');
     report.explicitReadinessPasses++;
+    start.step('proxy_body');
     const served = await request(gatewayPort); if (served.status !== 200 || served.body.toString() !== 'service-fixture\n') reject('proxy_body_mismatch'); report.proxyBodyChecks++;
+    start.step('upload');
     const upload = Buffer.alloc(65551, 0x61), echo = await request(gatewayPort, '/echo', upload);
     if (echo.status !== 200 || !echo.body.equals(upload)) reject('upload_mismatch'); report.uploadChecks++;
+    start.step('stream');
     const stream = await request(gatewayPort, '/stream'); if (stream.status !== 200 || !stream.body.equals(Buffer.alloc(65537, 0x62))) reject('stream_mismatch'); report.streamChecks++;
+    start.step('final_cancel_check');
     checkCancelled();
+    start.complete();
   }
   process.once('SIGINT', cancel); process.once('SIGTERM', cancel);
   try {
@@ -359,8 +460,10 @@ export async function main(argv = process.argv.slice(2)) {
     if (!await absent(prefix)) reject('uninstall_incomplete'); report.cleanup.installationRemoved = true;
     report.ok = true; report.code = 'basic_lifecycle_verified'; report.phase = 'complete';
   } catch (error) {
+    failures.primary(error, report.phase, start.snapshot().lastStep);
     report.ok = false; report.code = classifyLifecycleError(error, report.phase);
   } finally {
+    inCleanup = true;
     // No direct signal, force kill, disable-all, enable, linger or account mutation.
     if (linked) {
       try {
@@ -371,32 +474,32 @@ export async function main(argv = process.argv.slice(2)) {
         const reload = await systemctl(['daemon-reload']); if (!reload.ok) reject('unit_reload_failed');
         const p = await properties(); if (p.LoadState !== 'not-found' || p.ActiveState !== 'inactive' || p.MainPID !== '0') reject('unit_removal_unconfirmed');
         report.runtimeUnitRemoved = true;
-      } catch { report.ok = false; report.code = 'cleanup_unconfirmed'; }
+      } catch (error) { failures.cleanup(error, 'unit_cleanup'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     } else if (runtimeLink) {
       // Ambiguous link completion is never blindly repeated or removed.
-      try { if (!await absent(runtimeLink)) { report.ok = false; report.code = 'cleanup_unconfirmed'; } else report.cleanup.runtimeLinkAbsent = true; } catch { report.ok = false; report.code = 'cleanup_unconfirmed'; }
+      try { if (!await absent(runtimeLink)) { failures.cleanup(null, 'link_readback'); report.ok = false; report.code = 'cleanup_unconfirmed'; } else report.cleanup.runtimeLinkAbsent = true; } catch (error) { failures.cleanup(error, 'link_readback'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     }
     if (installed && !linked && !startRequested) {
       try {
         if (runtimeLink && !await absent(runtimeLink)) reject('unit_link_identity');
         await cli(node, launcher, ['uninstall'], env); installed = false;
         report.cleanup.installationRemoved = await absent(prefix);
-      } catch { report.ok = false; report.code = 'cleanup_unconfirmed'; }
+      } catch (error) { failures.cleanup(error, 'inert_uninstall'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     }
     if (app) {
-      let closed = false;
+      let closed = false, closeError;
       try { for (const socket of sockets) socket.destroy();
         closed = await new Promise(resolve => { const timer = setTimeout(() => resolve(false), 2000); app.close(error => { clearTimeout(timer); resolve(!error); }); }); await pause(20);
-      } catch { /* Fixed cleanup status only. */ }
-      if (!closed) { report.ok = false; report.code = 'cleanup_unconfirmed'; }
+      } catch (error) { closeError = error; }
+      if (!closed) { failures.cleanup(closeError, 'app_close'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     }
     report.cleanup.appSocketsRemaining = sockets.size;
     safeToRemove = Boolean(parent && !installed && (!linked || report.runtimeUnitRemoved) && sockets.size === 0);
-    if (safeToRemove) { try { await rm(parent, { recursive: true, force: true }); report.cleanup.temporaryRootRemoved = await absent(parent); } catch { report.ok = false; report.code = 'cleanup_unconfirmed'; } }
-    if (report.ok && (!report.cleanup.temporaryRootRemoved || !report.runtimeUnitRemoved || sockets.size)) { report.ok = false; report.code = 'cleanup_unconfirmed'; }
+    if (safeToRemove) { try { await rm(parent, { recursive: true, force: true }); report.cleanup.temporaryRootRemoved = await absent(parent); } catch (error) { failures.cleanup(error, 'temporary_root'); report.ok = false; report.code = 'cleanup_unconfirmed'; } }
+    if (report.ok && (!report.cleanup.temporaryRootRemoved || !report.runtimeUnitRemoved || sockets.size)) { failures.cleanup(null, 'final_assertion'); report.ok = false; report.code = 'cleanup_unconfirmed'; }
     process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel);
   }
-  return report;
+  return { ...report, ...failures.snapshot(), startDiagnostics: start.snapshot() };
 }
 let invoked = false;
 try { invoked = Boolean(process.argv[1]) && await realpath(process.argv[1]) === await realpath(fileURLToPath(import.meta.url)); } catch { /* Import has no mutation authority. */ }

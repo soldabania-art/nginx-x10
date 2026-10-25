@@ -4,7 +4,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError } from './lifecycle-check.mjs';
+import { parseArguments, fixtureUnitName, parseUnitProperties, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES } from './lifecycle-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
 const transcript = (changes = {}) => Object.entries({ LoadState: 'loaded', ActiveState: 'active', SubState: 'running', Result: 'success',
@@ -57,7 +57,8 @@ test('actual CLI usage refusal is fixed JSON and never activates service', async
   await assert.rejects(run(process.execPath, [script, '--bad'], { timeout: 5000, maxBuffer: 16384 }), e => {
     assert.equal(e.code, 1); assert.equal(e.stderr, ''); const r = JSON.parse(e.stdout);
     assert.equal(r.code, 'usage_invalid'); assert.equal(r.phase, 'arguments'); assert.equal(r.actualUnitStarted, false);
-    assert.equal(r.runtimeUnitLinked, false); assert.equal(r.serviceAccepted, false); return true;
+    assert.equal(r.runtimeUnitLinked, false); assert.equal(r.serviceAccepted, false);
+    assert.deepEqual(r.primaryFailure, { phase: 'arguments', subphase: 'not_applicable', code: 'usage_invalid', systemErrorClass: 'unknown' }); assert.deepEqual(r.cleanupFailures, []); return true;
   });
 });
 test('actual root CLI refuses before archive read or mutation; nonroot observation is not synthesized', async t => {
@@ -66,7 +67,8 @@ test('actual root CLI refuses before archive read or mutation; nonroot observati
     assert.equal(e.code, 1); assert.equal(e.stderr, ''); const r = JSON.parse(e.stdout);
     assert.equal(r.code, 'nonroot_required'); assert.equal(r.phase, 'preflight'); assert.equal(r.actualNonrootManagerObserved, false);
     assert.equal(r.actualUnitStarted, false); assert.equal(r.runtimeUnitLinked, false); assert.equal(r.nativeSessionsStarted, 0);
-    assert.equal(r.cleanup.temporaryRootRemoved, false); assert.equal(r.serviceAccepted, false); return true;
+    assert.equal(r.cleanup.temporaryRootRemoved, false); assert.equal(r.serviceAccepted, false);
+    assert.deepEqual(r.primaryFailure, { phase: 'preflight', subphase: 'not_applicable', code: 'nonroot_required', systemErrorClass: 'unknown' }); assert.equal(r.startDiagnostics.attempts, 0); return true;
   });
 });
 
@@ -101,4 +103,99 @@ test('arbitrary messages and accessor codes never reach diagnostics', () => {
   let called = false; const e = new Error('private'); Object.defineProperty(e, 'code', { get() { called = true; return 'private'; } });
   assert.equal(classifyLifecycleError(e, 'recipe_inspection'), 'lifecycle_failed'); assert.equal(called, false);
   assert.equal(classifyLifecycleError(Object.assign(new Error('private'), { code: 'unit_query_failed' }), 'unit_preparation'), 'unit_query_failed');
+});
+
+test('primary refusal survives multiple independent cleanup failures with unchanged final refusal', () => {
+  const primary = Object.assign(new Error('private path and pid'), { code: 'unit_launcher_identity' });
+  const old = { ok: false, phase: 'first_start', code: classifyLifecycleError(primary, 'first_start') };
+  old.code = 'cleanup_unconfirmed';
+  assert.equal(old.code, 'cleanup_unconfirmed'); assert.equal(Object.hasOwn(old, 'primaryFailure'), false);
+  const d = createFailureDiagnostics(); d.primary(primary, 'first_start', 'launcher_identity');
+  d.cleanup(Object.assign(new Error('private'), { code: 'native_cleanup_unknown' }), 'unit_cleanup');
+  d.cleanup(new Error('private'), 'app_close'); d.primary(new Error('later'), 'uninstall', 'complete');
+  const result = { ...old, ...d.snapshot() };
+  assert.equal(result.ok, false); assert.equal(result.code, 'cleanup_unconfirmed');
+  assert.deepEqual(result.primaryFailure, { phase: 'first_start', subphase: 'launcher_identity', code: 'unit_launcher_identity', systemErrorClass: 'unknown' });
+  assert.deepEqual(result.cleanupFailures, [{ stage: 'unit_cleanup', code: 'native_cleanup_unknown' }, { stage: 'app_close', code: 'cleanup_unconfirmed' }]);
+});
+test('cleanup-only failure never invents a primary service refusal', () => {
+  const d = createFailureDiagnostics(); d.cleanup(new Error('private'), 'final_assertion');
+  assert.equal(d.snapshot().primaryFailure, null); assert.equal(d.snapshot().cleanupFailureCount, 1);
+});
+test('later stop and uninstall failures cannot inherit a previous start subphase', () => {
+  for (const phase of ['preflight', 'first_stop', 'second_stop', 'uninstall', 'complete']) {
+    const d = createFailureDiagnostics(); d.primary(new Error('private'), phase, 'launcher_identity');
+    assert.equal(d.snapshot().primaryFailure.subphase, 'not_applicable');
+  }
+});
+test('diagnostic snapshots are defensive and cleanup counts are bounded explicitly', () => {
+  const d = createFailureDiagnostics(); d.primary(new Error('private'), 'second_start', 'wait_bind');
+  for (let i = 0; i < 40; i++) d.cleanup(new Error('private'), 'app_close');
+  const snapshot = d.snapshot(); snapshot.primaryFailure.code = 'tampered'; snapshot.cleanupFailures[0].stage = 'tampered'; snapshot.cleanupFailures.push({ secret: true });
+  const actual = d.snapshot(); assert.equal(actual.primaryFailure.code, 'lifecycle_failed'); assert.equal(actual.cleanupFailures.length, 8);
+  assert.equal(actual.cleanupFailures[0].stage, 'app_close'); assert.equal(actual.cleanupFailureCount, 32); assert.equal(actual.cleanupFailuresTruncated, true);
+});
+test('hostile errors and phase objects never leak through failure diagnostics', () => {
+  let called = false; const error = new Error('private-host-path-pid');
+  Object.defineProperty(error, 'code', { get() { called = true; return 'private_runtime_secret'; } });
+  const phase = { toString() { called = true; return 'private_runtime_secret'; } };
+  const d = createFailureDiagnostics(); d.primary(error, phase, phase); d.cleanup(new Proxy({}, { getOwnPropertyDescriptor() { throw new Error('private'); } }), phase);
+  const text = JSON.stringify(d.snapshot()); assert.equal(called, false); assert.equal(text.includes('private'), false);
+  assert.equal(d.snapshot().primaryFailure.phase, 'unknown'); assert.equal(d.snapshot().primaryFailure.subphase, 'not_applicable');
+});
+test('fixed unit observation whitelist hides paths, PIDs and unknown states', () => {
+  const r = summarizeUnitProperties({ LoadState: 'loaded', ActiveState: 'active', SubState: 'private-secret', Result: 'private-secret', MainPID: '1234', ControlGroup: '/private/uid', FragmentPath: '/private/file' });
+  assert.equal(r.loadState, 'loaded'); assert.equal(r.activeState, 'active'); assert.equal(r.subState, 'unknown'); assert.equal(r.result, 'unknown');
+  assert.equal(r.mainPIDPresent, true); assert.equal(r.controlGroupPresent, true); assert.equal(r.fragmentPathPresent, true);
+  const text = JSON.stringify(r); assert.equal(text.includes('private'), false); assert.equal(text.includes('1234'), false);
+});
+test('unit and manager summary functions never evaluate metadata getters', () => {
+  let called = false; const r = {};
+  for (const k of ['LoadState', 'ActiveState', 'SubState', 'Result', 'MainPID', 'ControlGroup', 'FragmentPath', 'ok', 'exitCode', 'stderr', 'termination']) Object.defineProperty(r, k, { get() { called = true; return 'private'; } });
+  assert.equal(summarizeUnitProperties(r).activeState, 'unknown'); assert.equal(summarizeManagerOutcome(r).outcome, 'unresolved'); assert.equal(called, false);
+  const proxy = new Proxy({}, { getOwnPropertyDescriptor() { throw new Error('private'); } });
+  assert.equal(JSON.stringify(summarizeUnitProperties(proxy)).includes('private'), false); assert.equal(summarizeManagerOutcome(proxy).outcome, 'unresolved');
+});
+test('manager outcomes distinguish success, nonzero and unresolved without raw exit codes', () => {
+  assert.equal(summarizeManagerOutcome({ ok: true, exitCode: 0, stderr: '', termination: 'none' }).outcome, 'succeeded');
+  const r = summarizeManagerOutcome({ ok: false, exitCode: 7, stderr: '/private/path pid=123', termination: 'exit_nonzero' });
+  assert.equal(r.outcome, 'exited_nonzero'); assert.equal(r.exitCodeClass, 'nonzero'); assert.equal(r.stderrPresent, true); assert.equal(Object.hasOwn(r, 'exitCode'), false);
+  assert.equal(summarizeManagerOutcome({ ok: true, exitCode: '0', stderr: '', termination: 'private' }).outcome, 'unresolved');
+  assert.equal(summarizeManagerOutcome({ ok: false, exitCode: null, stderr: '', termination: 'timeout_or_killed' }).termination, 'timeout_or_killed');
+});
+for (const [name, input, expected] of [
+  ['output bound', { code: 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER', killed: true }, 'output_limit'],
+  ['timeout or killed', { code: null, killed: true, signal: 'SIGKILL' }, 'timeout_or_killed'],
+  ['signal', { code: null, killed: false, signal: 'SIGTERM' }, 'signal'],
+  ['unavailable', { code: 'EACCES' }, 'unavailable'],
+  ['nonzero', { code: 1 }, 'exit_nonzero'],
+  ['unknown', { code: 'private_runtime_secret' }, 'unknown']]) {
+  test(`command termination diagnostic: ${name}`, () => assert.equal(classifyCommandTermination(input), expected));
+}
+test('start diagnostics have bounded defensive observations and explicit truncation', () => {
+  const d = createStartDiagnostics(); d.begin(); d.step('before_properties');
+  for (let i = 0; i < 40; i++) d.observe('properties_state', { LoadState: 'loaded', ActiveState: 'inactive', SubState: 'dead', Result: 'success', MainPID: '0', FragmentPath: '/private', ControlGroup: '' });
+  d.step('complete'); d.complete(); const first = d.snapshot(); first.observations[0].activeState = 'tampered';
+  const actual = d.snapshot(); assert.equal(actual.attempts, 1); assert.equal(actual.completedAttempts, 1); assert.equal(actual.observations.length, 8);
+  assert.equal(actual.observationCount, 32); assert.equal(actual.observationsTruncated, true); assert.equal(actual.observations[0].activeState, 'inactive');
+  assert.equal(JSON.stringify(actual).includes('/private'), false);
+});
+test('diagnostic enum contracts are immutable and do not grant manager authority', () => {
+  for (const list of [DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES]) assert.equal(Object.isFrozen(list), true);
+  assert.equal(LIMITATIONS.serviceAccepted, false); assert.equal(LIMITATIONS.productionAccepted, false);
+});
+
+test('unit presence diagnostic rejects a trailing newline in a raw PID field', () => {
+  assert.equal(summarizeUnitProperties({ MainPID: '1234\n' }).mainPIDPresent, false);
+});
+
+test('primary system error class is a finite own-data actual-Error observation', () => {
+  for (const [code, expected] of [['EACCES', 'permission_denied'], ['EPERM', 'permission_denied'], ['ENOENT', 'not_found'], ['ESRCH', 'process_missing'], ['private_secret', 'unknown']]) {
+    const error = Object.assign(new Error('/private/path'), { code }); assert.equal(classifySystemError(error), expected);
+    const d = createFailureDiagnostics(); d.primary(error, 'first_start', 'launcher_identity'); assert.equal(d.snapshot().primaryFailure.systemErrorClass, expected);
+  }
+  assert.equal(classifySystemError({ code: 'EACCES' }), 'unknown');
+  const inherited = Object.create(Object.assign(new Error('private'), { code: 'EACCES' })); assert.equal(classifySystemError(inherited), 'unknown');
+  let called = false; const getter = new Error('private'); Object.defineProperty(getter, 'code', { get() { called = true; return 'EACCES'; } });
+  assert.equal(classifySystemError(getter), 'unknown'); assert.equal(called, false);
 });
