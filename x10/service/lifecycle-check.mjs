@@ -373,6 +373,15 @@ export function assessInterruptedProbeHold(value) {
       || !Number.isInteger(ownData(value, 'heldResponses')) || value.heldResponses < 1 || value.heldResponses > 8) reject('operator_interruption_unconfirmed');
   return true;
 }
+// A historical relay observation alone never grants current challenge authority.
+export function assessOwnedNativeChallenge(value) {
+  assessInterruptedProbeHold(value);
+  for (const key of ['nativeRouteObserved', 'ownedRequestObserved', 'relayResponseMatched',
+    'currentRequestOpen', 'responseIncomplete', 'relayResponseOpen', 'socketOpen', 'pairMatched']) {
+    if (ownData(value, key) !== true) reject('operator_interruption_unconfirmed');
+  }
+  return true;
+}
 // Diagnostics record the actual authority decision; later cleanup cannot replace
 // the first refusal. They never grant a signal, lock or recovery capability.
 const OPERATOR_HOLD_STAGES = Object.freeze(['harness_capture', 'harness_terminate', 'capture_final', 'terminate_capture', 'terminate_final', 'unknown']);
@@ -496,6 +505,7 @@ export async function main(argv = process.argv.slice(2)) {
   const report = { ok: false, code: 'not_started', phase: 'arguments', ...LIMITATIONS,
     actualNonrootManagerObserved: false, actualUnitStarted: false, explicitReadinessPasses: 0,
     nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
+    operatorNativeChallengeChecks: 0, operatorNativeChallengeProof: { nativeRouteObserved: false, ownedRequestObserved: false, relayResponseMatched: false, candidateBindingMatched: false, authorityReobservedBeforeSignal: false, ownedChallengeClosed: false },
     operatorInterruptionContainment: { attempted: false, operatorAbsent: false, holdClosed: false, snapshotRevalidated: false, locksRetired: false, recoveryVerified: false, completed: false, disposition: 'not_needed' },
     operatorInterruptionChecks: 0, operatorInterruptionProof: { candidateProbeHeld: false, pendingReloadObserved: false, lastConfirmedPreserved: false, sameServiceObserved: false, ownedOperatorTerminated: false, staleLocksPreserved: false, lockedRecoveryRefused: false, exactLockRemovalConfirmed: false, explicitRollbackObserved: false, pendingCleared: false, restoredContentVerified: false, noPostReplay: false, sameServiceAfterRecovery: false, repeatedRecoveryIdempotent: false },
     controlledSlowDrainChecks: 0, controlledSlowDrainProof: { clientPaused: false, originResponseHeld: false, sameSessionObserved: false, managerStopPending: false, nativeGroupLiveDuringStop: false, unitDeactivatingObserved: false, incompleteResponseObserved: false, payloadCompleted: false, tlsVerified: false, managerStopCompleted: false, launcherExited: false, nativeGroupsAbsent: false, listeningPortsClosed: false, controlSocketAbsent: false },
@@ -1078,9 +1088,8 @@ export async function main(argv = process.argv.slice(2)) {
     if (originalState.value.activeRevision !== previousRevision || JSON.stringify(originalState.value.binding) !== JSON.stringify(initialStatus.binding)) reject('operator_interruption_unconfirmed');
     const tag = randomBytes(16).toString('hex'), input = origin.candidate({ tag });
     input.https = { port: tlsPort, certificate: tlsFixture.certificate, certificateKey: tlsFixture.certificateKey };
-    const inputFile = `${parent}/interrupted-input.json`, file = await open(inputFile, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
-    try { await file.writeFile(JSON.stringify(input)); await file.sync(); } finally { await file.close(); }
-    let held, operator, snapshot, heldDeadline = 0, primary = null, normalRetirementAttempted = false;
+    const inputFile = `${parent}/interrupted-input.json`;
+    let held, ownedChallenge, operator, snapshot, heldDeadline = 0, primary = null, normalRetirementAttempted = false;
     const beforePosts = origin.counts().echoRequests;
     async function sameServiceNoCLI() {
       const p = await ownedProperties(false); checkCancelled();
@@ -1126,13 +1135,23 @@ export async function main(argv = process.argv.slice(2)) {
       try { checkCancelled(); }
       catch (error) { operatorHoldDiagnostics.observe(stage, 'cancelled', performance.now(), heldDeadline, null); throw error; }
       let now;
-      try { value = held?.snapshot(); now = performance.now(); reason = classifyOperatorHoldDecision(value, heldDeadline, now); }
+      try {
+        value = ownedChallenge?.snapshot(); now = performance.now(); reason = classifyOperatorHoldDecision(value, heldDeadline, now);
+        if (reason === 'current') { try { assessOwnedNativeChallenge(value); } catch { reason = 'invalid'; } }
+      }
       catch (error) { operatorHoldDiagnostics.observe(stage, 'invalid', performance.now(), heldDeadline, null); throw error; }
       operatorHoldDiagnostics.observe(stage, reason, now, heldDeadline, value);
+      if (stage === 'terminate_final' && reason === 'current') report.operatorNativeChallengeProof.authorityReobservedBeforeSignal = true;
       return reason === 'current';
     };
     try {
       held = origin.prepareReadinessHold(tag); checkCancelled();
+      if (!held || typeof held.nativeLocation !== 'string' || Buffer.byteLength(held.nativeLocation) < 1
+          || Buffer.byteLength(held.nativeLocation) > 8192) reject('operator_interruption_unconfirmed');
+      input.serverBody += `\n${held.nativeLocation}`;
+      const file = await open(inputFile, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
+      try { await file.writeFile(JSON.stringify(input)); await file.sync(); } finally { await file.close(); }
+      checkCancelled();
       operator = await startOwnedOperator({ node, launcher, prefix, sessionPrefix: known.prefix, inputFile, env, isHeld, checkCancelled });
       checkCancelled();
       await until(async () => { checkCancelled(); const value = held.snapshot();
@@ -1140,7 +1159,15 @@ export async function main(argv = process.argv.slice(2)) {
         if (!heldDeadline) heldDeadline = performance.now() + 1000;
         return true;
       }, 2000);
+      checkCancelled();
+      if (performance.now() >= heldDeadline) reject('operator_interruption_unconfirmed');
+      // This request traverses the new candidate-only native location. Its
+      // deadline is the original first-controller-hold deadline, never renewed.
+      ownedChallenge = await held.openNativeChallenge(heldDeadline); checkCancelled();
       if (!isHeld()) reject('operator_interruption_unconfirmed');
+      const challenge = ownedChallenge.snapshot(); assessOwnedNativeChallenge(challenge);
+      report.operatorNativeChallengeProof.nativeRouteObserved = true; report.operatorNativeChallengeProof.ownedRequestObserved = true;
+      report.operatorNativeChallengeProof.relayResponseMatched = true;
       const captured = await operator.captureLocks(); checkCancelled();
       if (!captured || captured.ok !== true || captured.alphaCaptured !== true || captured.controllerCaptured !== true || captured.pendingCaptured !== true) reject('operator_interruption_unconfirmed');
       snapshot = await capturePending(); await sameServiceNoCLI();
@@ -1148,6 +1175,7 @@ export async function main(argv = process.argv.slice(2)) {
       if (!isHeld('harness_terminate')) reject('operator_interruption_unconfirmed');
       report.operatorInterruptionProof.candidateProbeHeld = true; report.operatorInterruptionProof.pendingReloadObserved = true;
       report.operatorInterruptionProof.lastConfirmedPreserved = true; report.operatorInterruptionProof.sameServiceObserved = true;
+      report.operatorNativeChallengeProof.candidateBindingMatched = true;
       const terminated = await operator.terminate(); checkCancelled();
       if (!terminated || terminated.ok !== true || terminated.wrapperExited !== true || terminated.controllerExited !== true || terminated.groupAbsent !== true) reject('operator_interruption_unconfirmed');
       report.operatorInterruptionProof.ownedOperatorTerminated = true;
@@ -1197,9 +1225,15 @@ export async function main(argv = process.argv.slice(2)) {
       goodOriginRevision = recovery.revision;
     } catch (error) { primary = error; }
     finally {
-      let operatorAbsent = false, holdClosed = false;
+      let operatorAbsent = false, holdClosed = false, ownedChallengeClosed = false;
+      try {
+        if (ownedChallenge) {
+          if (await ownedChallenge.abort() !== true) reject('operator_interruption_unconfirmed');
+          ownedChallengeClosed = true; report.operatorNativeChallengeProof.ownedChallengeClosed = true;
+        }
+      } catch (error) { failures.cleanup(error, 'operator_close'); if (!primary) primary = error; }
       try { if (operator) { if (await operator.close() !== true) reject('operator_interruption_unconfirmed'); operatorAbsent = true; } } catch (error) { failures.cleanup(error, 'operator_close'); if (!primary) primary = error; }
-      try { if (held) { if (await held.abort() !== true) reject('operator_interruption_unconfirmed'); holdClosed = true; } } catch (error) { failures.cleanup(error, 'operator_close'); if (!primary) primary = error; }
+      try { if (held) { if (await held.abort() !== true) reject('operator_interruption_unconfirmed'); holdClosed = !ownedChallenge || ownedChallengeClosed; } } catch (error) { failures.cleanup(error, 'operator_close'); if (!primary) primary = error; }
       if (primary && operator && snapshot && !normalRetirementAttempted) {
         const containment = report.operatorInterruptionContainment;
         containment.attempted = true; containment.operatorAbsent = operatorAbsent; containment.holdClosed = holdClosed;
@@ -1245,8 +1279,9 @@ export async function main(argv = process.argv.slice(2)) {
     }
     if (primary) throw primary;
     checkCancelled();
-    if (Object.values(report.operatorInterruptionProof).some(value => value !== true)) reject('operator_interruption_unconfirmed');
-    report.operatorInterruptionChecks++;
+    if (Object.values(report.operatorInterruptionProof).some(value => value !== true)
+        || Object.values(report.operatorNativeChallengeProof).some(value => value !== true)) reject('operator_interruption_unconfirmed');
+    report.operatorNativeChallengeChecks++; report.operatorInterruptionChecks++;
   }
   async function verifyControlledSlowDrain() {
     checkCancelled();
@@ -1381,7 +1416,7 @@ export async function main(argv = process.argv.slice(2)) {
     report.phase = 'manager_restart'; await restartAndServe();
     report.phase = 'operator_interruption'; await verifyOperatorInterruption();
     report.phase = 'controlled_drain'; await verifyControlledSlowDrain(); report.nativeSessionsStopped++;
-    if (report.operatorInterruptionChecks !== 1) reject('operator_interruption_unconfirmed');
+    if (report.operatorInterruptionChecks !== 1 || report.operatorNativeChallengeChecks !== 1) reject('operator_interruption_unconfirmed');
     if (report.controlledSlowDrainChecks !== 1) reject('controlled_drain_unconfirmed');
     if (report.failedStartChecks !== 1 || Object.values(report.failedStartProof).some(value => value !== true)) reject('failed_start_unconfirmed');
     if (report.downstreamTLSSessionChecks !== 3) reject('downstream_tls_unconfirmed');

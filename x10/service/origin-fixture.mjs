@@ -10,7 +10,8 @@ import { createServicePKI } from './tls-fixture.mjs';
 
 export const ORIGIN_FIXTURE_ERROR_CODES = Object.freeze(['origin_fixture_invalid',
   'origin_fixture_failed', 'origin_cleanup_unconfirmed', 'origin_query_failed',
-  'origin_query_timeout', 'origin_query_limit', 'origin_response_invalid']);
+  'origin_query_timeout', 'origin_query_limit', 'origin_response_invalid',
+  'origin_challenge_invalid', 'origin_challenge_failed', 'origin_challenge_timeout', 'origin_challenge_identity']);
 const fail = code => { throw Object.assign(new Error(code), { code }); };
 const validPort = p => Number.isInteger(p) && p >= 1024 && p <= 65535;
 const validTag = t => typeof t === 'string' && /^[a-f0-9]{32}$/.test(t);
@@ -124,7 +125,7 @@ export async function createOriginFixture(parent, options) {
   if (!validPort(gatewayPort) || !Buffer.isBuffer(body) || body.length < 1 || body.length > 4096
       || !Buffer.isBuffer(stream) || stream.length < 1 || stream.length > 1024 * 1024) fail('origin_fixture_invalid');
   const responseBody = Buffer.from(body), responseStream = Buffer.from(stream), originSockets = new Set(), relaySockets = new Set(), pending = new Set();
-  let origin, relay, port, readyPort, closing = false, echoRequests = 0, relay502 = 0, pki, drain = null, readinessHold = null;
+  let origin, relay, port, readyPort, closing = false, echoRequests = 0, relay502 = 0, pki, drain = null, readinessHold = null, nativeChallenge = null;
   const byTag = new Map(), readinessQueried = new Set();
   // One private capability per fixture. Its expiry only aborts; it never sends
   // the remainder or grants completed-stream evidence.
@@ -143,7 +144,7 @@ export async function createOriginFixture(parent, options) {
   }
   function abortReadinessHold() {
     if (!readinessHold) return;
-    readinessHold.aborted = true; clearTimeout(readinessHold.timer);
+    readinessHold.aborted = true; clearTimeout(readinessHold.timer); abortNativeChallenge();
     for (const response of readinessHold.responses) response.destroy();
     for (const request of readinessHold.pending) request.destroy();
     readinessHoldClosed();
@@ -151,17 +152,132 @@ export async function createOriginFixture(parent, options) {
   function expireReadinessHold() {
     if (readinessHold && performance.now() >= readinessHold.deadline) abortReadinessHold();
   }
+  function nativeClosed() {
+    const c = nativeChallenge;
+    if (!c) return true;
+    c.closed = c.aborted && (!c.started || (c.requestClosed && (!c.socket || c.socketClosed)))
+      && (!c.relayResponse || c.relayClosed) && c.pending.size === 0;
+    return c.closed;
+  }
+  function abortNativeChallenge(code = 'origin_challenge_failed') {
+    const c = nativeChallenge; if (!c) return;
+    c.aborted = true; if (!c.failure) c.failure = code;
+    clearTimeout(c.openTimer);
+    c.response?.destroy(); c.request?.destroy(); c.socket?.destroy(); c.relayResponse?.destroy();
+    for (const request of c.pending) request.destroy();
+    c.rejectOpen?.(Object.assign(new Error(c.failure), { code: c.failure }));
+    nativeClosed();
+  }
+  function expireNativeChallenge() {
+    if (nativeChallenge?.started && Number.isFinite(nativeChallenge.absoluteDeadline)
+        && performance.now() >= nativeChallenge.absoluteDeadline) abortNativeChallenge('origin_challenge_timeout');
+  }
+  function nativeSnapshot() {
+    expireReadinessHold(); expireNativeChallenge(); nativeClosed();
+    const c = nativeChallenge;
+    const requestOpen = Boolean(c?.started && c.request && !c.requestClosed && !c.request.destroyed);
+    const socketOpen = Boolean(c?.socket && !c.socketClosed && !c.socket.destroyed);
+    const incomplete = Boolean(c?.response && !c.response.complete && !c.response.destroyed && requestOpen);
+    const relayOpen = Boolean(c?.relayResponse && !c.relayClosed && !c.relayResponse.destroyed
+      && !c.relayResponse.writableEnded && c.relayResponse.socket && !c.relayResponse.socket.destroyed);
+    const bound = Boolean(c && !closing && !c.aborted && !c.closed && !readinessHold.aborted
+      && c.validated === 1 && c.prefixMatched && c.headersMatched && requestOpen && socketOpen && incomplete && relayOpen);
+    return { held: bound, requested: c?.started === true, candidateReadyObserved: c?.validated === 1,
+      nativeProbeChecks: c?.validated || 0, heldResponses: relayOpen ? 1 : 0,
+      aborted: c?.aborted === true, closed: c?.closed === true, released: false,
+      nativeRouteObserved: bound, ownedRequestObserved: bound, relayResponseMatched: bound,
+      currentRequestOpen: requestOpen, responseIncomplete: incomplete, relayResponseOpen: relayOpen,
+      socketOpen, pairMatched: bound };
+  }
+  async function closeNativeChallenge() {
+    abortNativeChallenge(); const end = performance.now() + 1000;
+    while (!nativeClosed() && performance.now() < end) await new Promise(resolve => setTimeout(resolve, 10));
+    return nativeClosed();
+  }
+  function challengeLocation(tag) {
+    const nonce = randomBytes(16).toString('hex'), route = `/__x10-native-challenge/${nonce}`;
+    nativeChallenge = { tag, nonce, route, relayRoute: `/native-challenge/${tag}/${nonce}`,
+      prefix: Buffer.from(`x10-native-challenge:${tag}:${nonce}\n`), pending: new Set(),
+      started: false, admitted: false, validated: 0, request: null, response: null, socket: null,
+      requestClosed: false, socketClosed: false, relayResponse: null, relayClosed: false,
+      prefixMatched: false, headersMatched: false, aborted: false, closed: false, failure: null };
+    return `location = ${route} { proxy_pass http://127.0.0.1:${readyPort}${nativeChallenge.relayRoute}; proxy_http_version 1.1; proxy_method GET; proxy_pass_request_body off; proxy_pass_request_headers off; proxy_set_header Host $proxy_host; proxy_set_header Connection close; proxy_set_header Content-Length ""; proxy_cache off; proxy_store off; proxy_buffering off; proxy_ignore_client_abort off; proxy_connect_timeout 1s; proxy_send_timeout 1s; proxy_read_timeout 1s; proxy_next_upstream off; proxy_intercept_errors off; proxy_hide_header X-X10-Native-Challenge; proxy_hide_header X-X10-Native-Candidate; add_header X-X10-Native-Challenge "${nonce}" always; add_header X-X10-Native-Candidate "${tag}" always; }`;
+  }
+  async function openNativeChallenge(absoluteDeadline) {
+    const c = nativeChallenge, now = performance.now(); expireReadinessHold();
+    if (arguments.length !== 1 || !c || c.started || closing || c.aborted || readinessHold.aborted
+        || !Number.isFinite(absoluteDeadline) || absoluteDeadline <= now || absoluteDeadline > now + 1000
+        || absoluteDeadline > readinessHold.deadline || gatewayPort === readyPort || gatewayPort === port) fail('origin_challenge_invalid');
+    c.started = true; c.absoluteDeadline = absoluteDeadline;
+    const handle = Object.freeze({
+      snapshot() { if (arguments.length) fail('origin_challenge_invalid'); return nativeSnapshot(); },
+      async abort() { if (arguments.length) fail('origin_challenge_invalid'); return closeNativeChallenge(); }
+    });
+    let resolveOpen;
+    const opened = new Promise((resolve, reject) => { resolveOpen = resolve; c.rejectOpen = reject; });
+    // The rejected promise is consumed immediately; late network events never
+    // rearm the one-use capability or create an unhandled promise rejection.
+    opened.catch(() => {});
+    c.openTimer = setTimeout(() => abortNativeChallenge('origin_challenge_timeout'), Math.max(1, absoluteDeadline - performance.now()));
+    try {
+      c.request = http.request({ host: '127.0.0.1', port: gatewayPort, path: c.route,
+        method: 'GET', agent: false, maxHeaderSize: 4096, headers: { connection: 'close' } }, response => {
+        c.response = response;
+        response.once('error', () => abortNativeChallenge());
+        response.once('aborted', () => abortNativeChallenge());
+        response.once('close', () => { if (!c.aborted) abortNativeChallenge(); });
+        expireReadinessHold();
+        if (c.aborted || closing || performance.now() >= absoluteDeadline) { abortNativeChallenge('origin_challenge_timeout'); return; }
+        const expected = { 'x-x10-native-challenge': c.nonce, 'x-x10-native-candidate': c.tag,
+          'x-x10-relay-challenge': c.nonce, 'x-x10-relay-candidate': c.tag };
+        const found = Object.create(null);
+        for (let i = 0; i < response.rawHeaders.length; i += 2) {
+          const name = response.rawHeaders[i].toLowerCase();
+          if (Object.hasOwn(expected, name)) {
+            if (Object.hasOwn(found, name)) { abortNativeChallenge('origin_challenge_identity'); return; }
+            found[name] = response.rawHeaders[i + 1];
+          }
+        }
+        if (response.statusCode !== 200 || response.headers['content-length'] !== String(c.prefix.length + 1)
+            || Object.keys(found).length !== 4 || Object.keys(expected).some(k => found[k] !== expected[k])) {
+          abortNativeChallenge('origin_challenge_identity'); return;
+        }
+        c.headersMatched = true; let received = 0;
+        response.on('data', b => {
+          expireReadinessHold(); expireNativeChallenge();
+          if (c.aborted || closing) return;
+          if (c.prefixMatched || !Buffer.isBuffer(b) || received + b.length > c.prefix.length
+              || !b.equals(c.prefix.subarray(received, received + b.length))) { abortNativeChallenge('origin_challenge_identity'); return; }
+          received += b.length;
+          if (received === c.prefix.length) {
+            c.prefixMatched = true; response.pause();
+            if (performance.now() >= absoluteDeadline || nativeSnapshot().held !== true) { abortNativeChallenge('origin_challenge_identity'); return; }
+            c.rejectOpen = null; resolveOpen(handle);
+          }
+        });
+        response.once('end', () => abortNativeChallenge('origin_challenge_identity'));
+      });
+      c.request.once('socket', socket => { c.socket = socket; socket.once('close', () => { c.socketClosed = true; abortNativeChallenge(); nativeClosed(); });
+        expireNativeChallenge(); if (c.aborted) socket.destroy(); });
+      c.request.once('error', () => abortNativeChallenge());
+      c.request.once('close', () => { c.requestClosed = true; if (!c.aborted) abortNativeChallenge(); nativeClosed(); });
+      c.request.end();
+    } catch { abortNativeChallenge(); }
+    try { return await opened; }
+    catch (error) { await closeNativeChallenge(); throw error; }
+  }
   const track = (server, sockets) => { server.on('connection', socket => { sockets.add(socket); socket.once('close', () => sockets.delete(socket)); });
     server.on('clientError', (_error, socket) => socket.destroy()); server.requestTimeout = 4000; server.headersTimeout = 4000; };
   async function close() {
     closing = true; abortDrain(); abortReadinessHold(); for (const request of pending) request.destroy();
+    const nativeClosedProof = await closeNativeChallenge();
     const [originClosed, relayClosed] = await Promise.all([closeServer(origin, originSockets), closeServer(relay, relaySockets)]);
     const [originPortClosedProof, relayPortClosedProof] = await Promise.all([port ? originPortClosed(port) : true, readyPort ? originPortClosed(readyPort) : true]);
     const end = performance.now() + 2500;
     while ((pending.size || originSockets.size || relaySockets.size || (drain?.response && !drain.closed)
         || (readinessHold && (readinessHold.responses.size || readinessHold.pending.size))) && performance.now() < end) await new Promise(resolve => setTimeout(resolve, 10));
     readinessHoldClosed();
-    if (!originClosed || !relayClosed || !originPortClosedProof || !relayPortClosedProof
+    if (!nativeClosedProof || !originClosed || !relayClosed || !originPortClosedProof || !relayPortClosedProof
         || pending.size || originSockets.size || relaySockets.size || (drain?.response && !drain.closed)
         || (readinessHold && !readinessHold.closed)) fail('origin_cleanup_unconfirmed');
     return { originClosed, relayClosed, originPortClosed: originPortClosedProof, relayPortClosed: relayPortClosedProof };
@@ -202,6 +318,25 @@ export async function createOriginFixture(parent, options) {
     relay = http.createServer(async (req, res) => {
       res.on('error', () => res.destroy()); if (closing) { req.destroy(); return; }
       if (req.method === 'GET' && ['/', '/ready'].includes(req.url)) { res.end('ready\n'); return; }
+      if (req.url?.startsWith('/native-challenge/')) {
+        expireReadinessHold(); expireNativeChallenge(); const c = nativeChallenge;
+        if (req.method !== 'GET' || !c || req.url !== c.relayRoute || !c.started || c.admitted || c.aborted || closing) {
+          res.writeHead(503); res.end('challenge refused\n'); return;
+        }
+        c.admitted = true; c.relayResponse = res;
+        res.once('close', () => { c.relayClosed = true; if (!c.aborted) abortNativeChallenge(); nativeClosed(); });
+        try {
+          const observed = await queryOriginReadiness(gatewayPort, c.pending); expireReadinessHold(); expireNativeChallenge();
+          const result = routeOriginReadiness(observed, c.tag);
+          if (c.aborted || closing || res.destroyed || result.status !== 200 || !result.body.equals(Buffer.from('ready\n'))) {
+            abortNativeChallenge('origin_challenge_identity'); return;
+          }
+          c.validated = 1;
+          res.writeHead(200, { 'Content-Type': 'application/octet-stream', 'Content-Length': c.prefix.length + 1,
+            'X-X10-Relay-Challenge': c.nonce, 'X-X10-Relay-Candidate': c.tag });
+          res.flushHeaders(); res.write(c.prefix); return;
+        } catch { abortNativeChallenge(); return; }
+      }
       const match = req.method === 'GET' && /^\/tls-probe\/([a-f0-9]{32})$/.exec(req.url);
       if (!match || !byTag.has(match[1])) { res.writeHead(503); res.end('route not ready\n'); return; }
       expireReadinessHold();
@@ -234,7 +369,8 @@ export async function createOriginFixture(parent, options) {
         readinessHold = { tag, admitted: 0, validated: 0, aborted: false, closed: false,
           deadline: performance.now() + 8000, responses: new Set(), held: new Set(), pending: new Set() };
         readinessHold.timer = setTimeout(abortReadinessHold, 8000);
-        return Object.freeze({
+        const nativeLocation = challengeLocation(tag);
+        return Object.freeze({ nativeLocation, openNativeChallenge,
           snapshot() {
             expireReadinessHold(); readinessHoldClosed();
             const active = [...readinessHold.held].filter(response => !response.destroyed && !response.writableEnded).length;
@@ -246,8 +382,8 @@ export async function createOriginFixture(parent, options) {
           async abort() {
             abortReadinessHold();
             const end = performance.now() + 1000;
-            while (!readinessHoldClosed() && performance.now() < end) await new Promise(resolve => setTimeout(resolve, 10));
-            return readinessHoldClosed();
+            while ((!readinessHoldClosed() || !nativeClosed()) && performance.now() < end) await new Promise(resolve => setTimeout(resolve, 10));
+            return readinessHoldClosed() && nativeClosed();
           },
         });
       },

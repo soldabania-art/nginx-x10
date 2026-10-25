@@ -7,7 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
 import { digest } from '../alpha/runtime.mjs';
-import { parseArguments, classifyOperatorHoldDecision, createOperatorHoldDiagnostics, assessInterruptedRecovery, assessInterruptedProbeHold, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
+import { parseArguments, assessOwnedNativeChallenge, classifyOperatorHoldDecision, createOperatorHoldDiagnostics, assessInterruptedRecovery, assessInterruptedProbeHold, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
 import { JOURNAL_RESULT_CODES } from './journal-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
@@ -1148,7 +1148,7 @@ test('interrupted apply does not renew held-probe authority through a late queue
   const observation = fn.slice(fn.indexOf('      await until('), fn.indexOf('      if (!captured ||', fn.indexOf('      await until(')));
   let clock = 0, captureCalls = 0;
   const reject = code => { throw Object.assign(new Error(code), { code }); };
-  const env = { held: { snapshot: () => ({ ...interruptionHold }) }, checkCancelled() {}, assessInterruptedProbeHold, classifyOperatorHoldDecision, operatorHoldDiagnostics: createOperatorHoldDiagnostics(),
+  const env = { held: { snapshot: () => ({ ...interruptionHold }) }, ownedChallenge: null, checkCancelled() {}, assessInterruptedProbeHold, assessOwnedNativeChallenge, classifyOperatorHoldDecision, operatorHoldDiagnostics: createOperatorHoldDiagnostics(),
     performance: { now: () => clock }, reject,
     until: async (callback, budget) => { assert.equal(budget, 2000); assert.equal(await callback(), true); queueMicrotask(() => { clock = 1001; }); },
     operator: { async captureLocks() { captureCalls++; return {}; } } };
@@ -1223,4 +1223,52 @@ test('failure containment refuses a self-consistent restored record with the wro
   }
   assert.equal(await assess(interruptedRestored), true);
   await assert.rejects(assess('4'.repeat(32)), { code: 'operator_interruption_unconfirmed' });
+});
+
+const ownedNativeChallenge = { ...interruptionHold, nativeRouteObserved: true, ownedRequestObserved: true, relayResponseMatched: true, currentRequestOpen: true, responseIncomplete: true, relayResponseOpen: true, socketOpen: true, pairMatched: true };
+test('native challenge authority requires live own request, socket and matched native relay response', () => assert.equal(assessOwnedNativeChallenge(ownedNativeChallenge), true));
+for (const key of ['nativeRouteObserved', 'ownedRequestObserved', 'relayResponseMatched', 'currentRequestOpen', 'responseIncomplete', 'relayResponseOpen', 'socketOpen', 'pairMatched']) {
+  test(`native challenge refuses missing, false or coerced ${key}`, () => {
+    for (const value of [false, undefined, null, 1, 'true']) assert.throws(() => assessOwnedNativeChallenge({ ...ownedNativeChallenge, [key]: value }), { code: 'operator_interruption_unconfirmed' });
+  });
+}
+test('a retained legacy held observation alone never becomes owned native challenge authority', () => {
+  assert.equal(assessInterruptedProbeHold(interruptionHold), true);
+  assert.throws(() => assessOwnedNativeChallenge(interruptionHold), { code: 'operator_interruption_unconfirmed' });
+});
+test('native challenge authority refuses a closed response even with retained route proof booleans', () => {
+  for (const change of [{ held: false, heldResponses: 0 }, { closed: true }, { aborted: true }]) {
+    assert.throws(() => assessOwnedNativeChallenge({ ...ownedNativeChallenge, ...change }), { code: 'operator_interruption_unconfirmed' });
+  }
+});
+test('owned native challenge getters cannot fabricate current request authority', () => {
+  let called = false; const snapshot = { ...ownedNativeChallenge }; Object.defineProperty(snapshot, 'currentRequestOpen', { get() { called = true; return true; } });
+  assert.throws(() => assessOwnedNativeChallenge(snapshot), { code: 'operator_interruption_unconfirmed' }); assert.equal(called, false);
+});
+async function extractedChallengeDecision({ initialClock = 0, own = ownedNativeChallenge } = {}) {
+  const source = await readFile(script, 'utf8');
+  const fn = source.slice(source.indexOf('  async function verifyOperatorInterruption()'), source.indexOf('  async function verifyControlledSlowDrain()'));
+  const callback = fn.slice(fn.indexOf('    const isHeld ='), fn.indexOf('    try {\n      held = origin.prepareReadinessHold', fn.indexOf('    const isHeld =')));
+  let clock = initialClock;
+  const report = { operatorNativeChallengeProof: { authorityReobservedBeforeSignal: false } };
+  const diagnostics = createOperatorHoldDiagnostics();
+  const env = { ownedChallenge: { snapshot: () => own }, held: { snapshot() { assert.fail('legacy controller probe is not owned request authority'); } }, heldDeadline: 1000, checkCancelled() {}, classifyOperatorHoldDecision, assessOwnedNativeChallenge, operatorHoldDiagnostics: diagnostics, performance: { now: () => clock }, report };
+  const decide = new Function(...Object.keys(env), `${callback}; return isHeld;`)(...Object.values(env));
+  return { decide, report, diagnostics, setClock(value) { clock = value; } };
+}
+test('an expired controller probe cannot invalidate a still-current owned native challenge pair', async () => {
+  const c = await extractedChallengeDecision();
+  assert.equal(c.decide('harness_capture'), true); assert.equal(c.decide('terminate_capture'), true);
+  assert.equal(c.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal, false);
+  assert.equal(c.decide('terminate_final'), true); assert.equal(c.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal, true);
+});
+test('only the actual final helper callback with current owned authority sets the pre-signal proof', async () => {
+  const c = await extractedChallengeDecision({ initialClock: 1000 });
+  assert.equal(c.decide('terminate_final'), false); assert.equal(c.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal, false);
+  assert.equal(c.diagnostics.snapshot().firstRefusal.reason, 'deadline_expired');
+});
+test('closed own request is refused even when legacy relay observations remain held', async () => {
+  const c = await extractedChallengeDecision({ own: { ...ownedNativeChallenge, currentRequestOpen: false } });
+  assert.equal(c.decide('terminate_final'), false); assert.equal(c.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal, false);
+  assert.equal(c.diagnostics.snapshot().firstRefusal.reason, 'invalid');
 });

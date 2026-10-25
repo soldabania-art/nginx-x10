@@ -32,6 +32,9 @@ function receipt() {
       nativeGroupLiveDuringStop:true,unitDeactivatingObserved:true,incompleteResponseObserved:true,payloadCompleted:true,
       tlsVerified:true,managerStopCompleted:true,launcherExited:true,nativeGroupsAbsent:true,listeningPortsClosed:true,controlSocketAbsent:true},
     operatorInterruptionChecks:1,
+    operatorNativeChallengeChecks:1,
+    operatorNativeChallengeProof:{nativeRouteObserved:true,ownedRequestObserved:true,relayResponseMatched:true,
+      candidateBindingMatched:true,authorityReobservedBeforeSignal:true,ownedChallengeClosed:true},
     operatorInterruptionProof:{candidateProbeHeld:true,pendingReloadObserved:true,lastConfirmedPreserved:true,sameServiceObserved:true,
       ownedOperatorTerminated:true,staleLocksPreserved:true,lockedRecoveryRefused:true,exactLockRemovalConfirmed:true,
       explicitRollbackObserved:true,pendingCleared:true,restoredContentVerified:true,noPostReplay:true,
@@ -224,6 +227,41 @@ test('cleanup accepts the exact null-prototype interruption data record',()=>{
   const e=receipt();e.report.operatorInterruptionProof=Object.assign(Object.create(null),e.report.operatorInterruptionProof);
   assert.equal(cleanupEvidence(e),true);
 });
+test('cleanup refuses the prior interruption receipt without a live native challenge',()=>{
+  const e=receipt();delete e.report.operatorNativeChallengeChecks;delete e.report.operatorNativeChallengeProof;
+  assert.equal(cleanupEvidence(e),false);
+});
+test('cleanup requires exactly one completed native challenge',()=>{
+  for(const value of [undefined,null,0,2,'1',true,NaN]){
+    const e=receipt();e.report.operatorNativeChallengeChecks=value;assert.equal(cleanupEvidence(e),false);
+  }
+});
+test('cleanup refuses every missing or partial native route, pair, binding and closure proof',()=>{
+  for(const key of Object.keys(receipt().report.operatorNativeChallengeProof)){
+    for(const value of [false,undefined,null,0,1,'true']){
+      const e=receipt();e.report.operatorNativeChallengeProof[key]=value;assert.equal(cleanupEvidence(e),false,key);
+    }
+    const e=receipt();delete e.report.operatorNativeChallengeProof[key];assert.equal(cleanupEvidence(e),false,key);
+  }
+});
+test('cleanup rejects inherited, extra and accessor native challenge proofs without getter evaluation',()=>{
+  for(const value of [undefined,null,[],{},true,Object.create(receipt().report.operatorNativeChallengeProof)]){
+    const e=receipt();e.report.operatorNativeChallengeProof=value;assert.equal(cleanupEvidence(e),false);
+  }
+  for(const key of ['unverified',Symbol('extra')]){
+    const e=receipt();e.report.operatorNativeChallengeProof[key]=true;assert.equal(cleanupEvidence(e),false);
+  }
+  let reads=0;
+  for(const key of Object.keys(receipt().report.operatorNativeChallengeProof)){
+    const e=receipt();Object.defineProperty(e.report.operatorNativeChallengeProof,key,{get(){reads++;return true;}});
+    assert.equal(cleanupEvidence(e),false);
+  }
+  assert.equal(reads,0);
+});
+test('cleanup accepts an exact null-prototype native challenge data record',()=>{
+  const e=receipt();e.report.operatorNativeChallengeProof=Object.assign(Object.create(null),e.report.operatorNativeChallengeProof);
+  assert.equal(cleanupEvidence(e),true);
+});
 test('cleanup refuses the stale two-session profile and mixed session counts',()=>{
   const counters=['explicitReadinessPasses','nativeSessionsStarted','nativeSessionsStopped','proxyBodyChecks','uploadChecks','streamChecks'];
   const old=receipt();for(const k of counters)old.report[k]=2;
@@ -379,12 +417,14 @@ test('cleanup retains private runtime for exact-source missing, early-completion
     }
   } finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
 });
-test('cleanup retains runtime when inspected-lock removal or explicit recovery remains unconfirmed',async()=>{
+test('cleanup retains runtime when interruption, recovery or native challenge remains unconfirmed',async()=>{
   const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});await writeFile(p+'/runtime/sentinel','preserve',{mode:0o600});
   const source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
   try {
     for(const mutate of [e=>{delete e.report.operatorInterruptionProof;},e=>{e.report.operatorInterruptionProof.exactLockRemovalConfirmed=false;},
-      e=>{e.report.operatorInterruptionProof.ownedOperatorTerminated=false;},e=>{e.report.operatorInterruptionProof.explicitRollbackObserved=false;}]){
+      e=>{e.report.operatorInterruptionProof.ownedOperatorTerminated=false;},e=>{e.report.operatorInterruptionProof.explicitRollbackObserved=false;},
+      e=>{delete e.report.operatorNativeChallengeProof;},e=>{e.report.operatorNativeChallengeProof.nativeRouteObserved=false;},
+      e=>{e.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal=false;},e=>{e.report.operatorNativeChallengeProof.ownedChallengeClosed=false;}]){
       const e=receipt();e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];mutate(e);
       await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
       const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);

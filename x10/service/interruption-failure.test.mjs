@@ -217,11 +217,12 @@ function containmentModel(options = {}) {
   const observed = options.observed === null ? null : Object.assign(new Error('fixed primary refusal'), { code: 'operator_fixture_not_held' });
   const proofs = initialProofs(); if (options.fullProofs) for (const key of Object.keys(proofs)) proofs[key] = true;
   const report = { operatorInterruptionChecks: 0, operatorInterruptionProof: proofs,
+    operatorNativeChallengeChecks: 0, operatorNativeChallengeProof: Object.fromEntries(['nativeRouteObserved','ownedRequestObserved','relayResponseMatched','candidateBindingMatched','authorityReobservedBeforeSignal','ownedChallengeClosed'].map(key=>[key,options.fullProofs===true])),
     operatorInterruptionContainment: { attempted: false, operatorAbsent: false, holdClosed: false, snapshotRevalidated: false,
       locksRetired: false, recoveryVerified: false, completed: false, disposition: 'not_needed' } };
   const state = { cancelled: false, clock: 0, pendingUnchanged: true, serviceUnchanged: true, postCount: 0,
     pendingAbsent: true, statusPending: null, httpGood: true, tlsGood: true, repeatedOutcome: 'nothing_pending',
-    stateSHA: 'confirmed-state', historySHA: 'confirmed-history', closeResult: true, abortResult: true, authorityResult: true,
+    stateSHA: 'confirmed-state', historySHA: 'confirmed-history', closeResult: true, abortResult: true, challengeCloseResult: true, authorityResult: true,
     retiredResult: { ok: true, alphaRemoved: true, controllerRemoved: true, pendingPreserved: true } };
   const previousRevision = 'a'.repeat(32), failedRevision = 'b'.repeat(32), revision = 'c'.repeat(32);
   const input = { synthetic: 'previous-input' }, inputSha256 = digest(JSON.stringify(input));
@@ -246,6 +247,7 @@ function containmentModel(options = {}) {
   };
   const held = { abort: () => step('hold.abort', () => state.abortResult) };
   const env = { operator: options.noOperator ? undefined : operator, held: options.noHold ? undefined : held,
+    ownedChallenge: { abort: () => step('challenge.abort', () => state.challengeCloseResult) },
     snapshot: options.noSnapshot ? null : snapshot, normalRetirementAttempted: options.normalRetirementAttempted === true,
     report, failures: { cleanup(error, stage) { cleanups.push({ code: error?.code || 'unknown', stage }); } }, reject,
     checkCancelled() { if (state.cancelled) reject('cancelled'); },
@@ -283,6 +285,7 @@ function containmentModel(options = {}) {
 
 function originalFailurePreserved(model) {
   assert.equal(model.report.operatorInterruptionChecks, 0);
+  assert.equal(model.report.operatorNativeChallengeChecks, 0);
   assert.deepEqual(model.report.operatorInterruptionProof, model.initialProofSnapshot);
 }
 
@@ -317,7 +320,7 @@ for (const [name, options, expected] of [
   assert.equal(f.report.operatorInterruptionContainment.completed, false); assert.equal(f.report.operatorInterruptionContainment.disposition, expected);
 });
 
-for (const field of ['closeResult', 'abortResult']) for (const value of [false, undefined, 1, 'true']) {
+for (const field of ['closeResult', 'abortResult', 'challengeCloseResult']) for (const value of [false, undefined, 1, 'true']) {
   test('failure containment refuses nonconfirmed ' + field + ' ' + String(value), async () => {
     const f = containmentModel(); f.state[field] = value; await assert.rejects(f.run(), error => error === f.observed);
     assert(!f.events.includes('retire')); assert(!f.events.includes('recover')); originalFailurePreserved(f);
@@ -356,7 +359,7 @@ for (const [name, mutate, noRecovery] of [
   assert.equal(f.report.operatorInterruptionContainment.completed, false); assert(f.cleanups.some(x => x.stage === 'operator_recovery')); originalFailurePreserved(f);
 });
 
-for (const operation of ['operator.close', 'retire', 'recover']) test('late ' + operation + ' completion after cancellation cannot upgrade acceptance', async () => {
+for (const operation of ['operator.close', 'retire', 'recover', 'challenge.abort']) test('late ' + operation + ' completion after cancellation cannot upgrade acceptance', async () => {
   let entered, release; const started = new Promise(resolve => { entered = resolve; }), held = new Promise(resolve => { release = resolve; });
   const f = containmentModel({ async after(name) { if (name === operation) { entered(); await held; } } });
   const result = f.run(); await started; f.state.cancelled = true; release();
@@ -383,6 +386,7 @@ test('a normal fully-proved path does not run failure containment', async () => 
   const f = containmentModel({ observed: null, fullProofs: true }); await f.run();
   assert(!f.events.includes('retire')); assert(!f.events.includes('recover'));
   assert.equal(f.report.operatorInterruptionChecks, 1); assert.equal(f.report.operatorInterruptionContainment.completed, false);
+  assert.equal(f.report.operatorNativeChallengeChecks, 1);
   assert.equal(f.report.operatorInterruptionContainment.disposition, 'not_needed');
 });
 
@@ -429,4 +433,22 @@ test('hold diagnostics never invoke accessors or disclose unknown reason/stage s
   const s = d.snapshot(); assert.equal(s.firstRefusal.stage, 'unknown'); assert.equal(s.firstRefusal.reason, 'invalid');
   assert.equal(s.firstRefusal.nativeProbeChecks, null); assert.equal(s.firstRefusal.heldResponses, null); assert.equal(s.firstRefusal.ageMs, null);
   assert.doesNotMatch(JSON.stringify(s), /synthetic-private/);
+});
+
+test('normal termination without final fresh native authority cannot pass even when all original14 proofs are true', async () => {
+  const f=containmentModel({observed:null,fullProofs:true,normalRetirementAttempted:true});
+  f.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal=false;
+  await assert.rejects(f.run(),{code:'operator_interruption_unconfirmed'});
+  assert(Object.values(f.report.operatorInterruptionProof).every(x=>x===true));
+  assert.equal(f.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal,false);
+  assert.equal(f.report.operatorNativeChallengeChecks,0);assert.equal(f.report.operatorInterruptionChecks,0);
+});
+
+test('owned challenge close refusal blocks normal acceptance and cannot become a stale completed proof', async () => {
+  const f=containmentModel({observed:null,fullProofs:true,normalRetirementAttempted:true});
+  f.report.operatorNativeChallengeProof.ownedChallengeClosed=false;f.state.challengeCloseResult=false;
+  await assert.rejects(f.run(),{code:'operator_interruption_unconfirmed'});
+  assert.equal(f.report.operatorNativeChallengeProof.ownedChallengeClosed,false);
+  assert.equal(f.report.operatorNativeChallengeChecks,0);assert.equal(f.report.operatorInterruptionChecks,0);
+  assert(!f.events.includes('retire'));assert(!f.events.includes('recover'));
 });

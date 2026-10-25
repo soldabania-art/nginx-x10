@@ -237,6 +237,16 @@ export function cleanupEvidence(e) {
         const d = Object.getOwnPropertyDescriptor(interrupted, k);
         return !d || !Object.hasOwn(d, 'value') || d.value !== true;
       })) return false;
+  if (r.operatorNativeChallengeChecks !== 1) return false;
+  const challenge = r.operatorNativeChallengeProof;
+  const challengeKeys = ['nativeRouteObserved', 'ownedRequestObserved', 'relayResponseMatched',
+    'candidateBindingMatched', 'authorityReobservedBeforeSignal', 'ownedChallengeClosed'];
+  if (!challenge || typeof challenge !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(challenge))
+      || Reflect.ownKeys(challenge).length !== challengeKeys.length
+      || challengeKeys.some(k => {
+        const d = Object.getOwnPropertyDescriptor(challenge, k);
+        return !d || !Object.hasOwn(d, 'value') || d.value !== true;
+      })) return false;
   for (const k of ['explicitReadinessPasses', 'nativeSessionsStarted', 'nativeSessionsStopped', 'proxyBodyChecks', 'uploadChecks', 'streamChecks']) if (r[k] !== 3) return false;
   if (r.managerRestartCommands !== 1 || r.completedManagerRestarts !== 1
       || r.journalChecks !== 3 || !Number.isInteger(r.journalRecordsObserved)
@@ -355,7 +365,7 @@ export async function main(argv = process.argv.slice(2)) {
       const receipt = await regular(file, 32768, { uid: process.getuid() });
       if ((receipt.stat.mode & 0o7077) !== 0) refuse('runtime_retained_cleanup_unconfirmed');
       const e = JSON.parse(receipt.bytes);
-      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== 'ff5709b265643efb62fc6b2ea1ad45d6c774d0548f92a570689e2557cff39152') refuse('runtime_retained_cleanup_unconfirmed');
+      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '17f01cb99b22909f236f203370057827b247a9f80e0408aaa1f87e9f323df187') refuse('runtime_retained_cleanup_unconfirmed');
       const runtime = await inspectRuntime(prefix);
       if (e.runtimeNodeSha256 !== runtime.files['bin/node'].sha256 || e.runtimeInstallationId !== runtime.installationId) refuse('runtime_retained_cleanup_unconfirmed');
       await removeRuntime(prefix); result = { ok: true, code: 'verified_node_removed', runtimeRemoved: true };

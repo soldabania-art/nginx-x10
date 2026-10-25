@@ -1896,3 +1896,58 @@ A normal hosted interruption PASS does not prove the separate failure-containmen
 branch ran. New receipts must retain its attempted/completed disposition and the
 first finite hold refusal. If that branch was not exercised, actual managed
 failure-containment acceptance remains pending despite passing normal controls.
+
+
+## G3 challenge authority must traverse the current native candidate
+
+Exactc1cf native CI again had mixed actual outcomes. Push40212661367 completed
+its normal scoped service path with all14 operator proofs, controlled drain,
+startup refusal, three combined TLS sessions, restart/journals and13 cleanup
+confirmations plus private Node/bootstrap removal. PR40212664983 failed the
+normal interruption path after the first4 proofs. Its finite first refusal was
+terminate_capture/live_probe_gap at347ms with deadlineExpired:false. The primary
+operator_fixture_not_held remained unchanged. This does not prove the earlier
+3bf failure had the same timing or identify every internal cause.
+
+The PR did execute strict failure containment: all7 containment booleans were
+true, disposition contained,11 owned cleanup facts and runtime-unit removal
+confirmed, cleanupFailures empty. Installation/temp roots and private Node/
+bootstrap were retained; this is scoped containment evidence, not normal-profile
+or complete-cleanup acceptance. Both operator26 and failure-QA100 controls passed
+without skips. Research PR ran21/7/27/48; push runtime was skipped. Fresh60 factual
+audit checks preserve these outcomes separately and do not accept allc1cf.
+Earlier3bf pushFAIL/PR scopedPASS and local fixture cleanup FAIL_UNKNOWN remain.
+
+The new candidate requires a runner-owned fresh one-use nonce challenge through
+the actual native candidate route. It must bind the response to the current
+candidate tag, held request and service/native/pending authority, then reobserve
+that authority before signalling. Direct-origin readiness, cached relay state,
+a retained sourceHeld Boolean or a response from another candidate/nonce must
+not substitute. Nonces and raw response/identity values remain private; public
+evidence contains only allowlisted counters, booleans and source bindings.
+
+Normal interruption acceptance additionally requires operatorNativeChallengeChecks1
+and exactly6 true operatorNativeChallengeProof fields: nativeRouteObserved,
+ownedRequestObserved, relayResponseMatched, candidateBindingMatched,
+authorityReobservedBeforeSignal and ownedChallengeClosed. These augment all14
+existing operator proofs in strict dependency cleanup receipts. A failed or
+contained attempt cannot increment that successful counter or obtain challenge
+acceptance. The1000ms hold,350ms hook,8s fixture and original10s operator helper
+budgets remain unchanged. Strict captured-only containment, cancellation,
+primary-error preservation and every older admission guard remain mandatory.
+Final actual local results, source bindings, reviews and adverse drafts are in
+[native challenge evidence](evidence/g3-service-native-held-challenge.json).
+
+This is freshness evidence for an application/service acceptance fixture. It is
+not authentication, malicious same-UID isolation, OS fencing or a Continuum/TLS
+state-transfer result. Wrong/stale/replayed nonce, wrong candidate, timeout,
+malformed response, closed challenge or lost current authority must fail closed.
+The new actual nonroot service CI is pending and may fail; local root contracts,
+Node loopback helpers and source-extracted controls cannot accept it.
+
+The operator process helper/test, native/controller/alpha, unit recipe, prior
+slow-client/journal/downstream TLS helper and release contract/profile stay
+unchanged. Earlier3bf failure and old local FAIL_UNKNOWN are not retroactively
+repaired. Installed recipe distribution remains parked until required service
+acceptance; fullG3/G4-G8/V1, package rollback, permanent distribution,60-minute
+soak and semantic Continuum remain open.

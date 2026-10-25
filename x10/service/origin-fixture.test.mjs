@@ -26,8 +26,10 @@ function request(port, route = '/') {
 }
 
 test('finite public failure codes are frozen and bounded', () => {
-  assert(Object.isFrozen(ORIGIN_FIXTURE_ERROR_CODES)); assert.equal(ORIGIN_FIXTURE_ERROR_CODES.length, 7);
-  assert.equal(new Set(ORIGIN_FIXTURE_ERROR_CODES).size, 7);
+  assert(Object.isFrozen(ORIGIN_FIXTURE_ERROR_CODES)); assert.equal(ORIGIN_FIXTURE_ERROR_CODES.length, 11);
+  assert.equal(new Set(ORIGIN_FIXTURE_ERROR_CODES).size, 11);
+  assert.deepEqual(ORIGIN_FIXTURE_ERROR_CODES.slice(0,7),['origin_fixture_invalid','origin_fixture_failed','origin_cleanup_unconfirmed','origin_query_failed','origin_query_timeout','origin_query_limit','origin_response_invalid']);
+  assert.deepEqual(ORIGIN_FIXTURE_ERROR_CODES.slice(7),['origin_challenge_invalid','origin_challenge_failed','origin_challenge_timeout','origin_challenge_identity']);
   assert(ORIGIN_FIXTURE_ERROR_CODES.every(c => /^origin_[a-z_]+$/.test(c)));
 });
 test('baseline unbound readiness accepts old route but candidate refuses it', () => {
@@ -88,7 +90,7 @@ test('source-extracted close waits for pending request and socket close events',
   assert(start>0&&end>start);const pending=new Set(),originSockets=new Set([{}]),relaySockets=new Set([{}]);
   const request={destroy(){setTimeout(()=>{pending.delete(request);originSockets.clear();relaySockets.clear();},30);}};pending.add(request);
   const fn=new Function('pending','originSockets','relaySockets','closeServer','originPortClosed','fail',
-    'let closing=false;let origin,relay,port,readyPort,drain=null,readinessHold=null;const abortDrain=()=>{};const abortReadinessHold=()=>{};const readinessHoldClosed=()=>true;'+source.slice(start,end)+';return close;')(pending,originSockets,relaySockets,async()=>true,async()=>true,c=>{throw Object.assign(new Error(c),{code:c});});
+    'let closing=false;let origin,relay,port,readyPort,drain=null,readinessHold=null;const abortDrain=()=>{};const abortReadinessHold=()=>{};const readinessHoldClosed=()=>true;const closeNativeChallenge=async()=>true;'+source.slice(start,end)+';return close;')(pending,originSockets,relaySockets,async()=>true,async()=>true,c=>{throw Object.assign(new Error(c),{code:c});});
   const before=performance.now();assert.deepEqual(await fn(),{originClosed:true,relayClosed:true,originPortClosed:true,relayPortClosed:true});assert(performance.now()-before>=20);assert.equal(pending.size,0);assert.equal(originSockets.size,0);assert.equal(relaySockets.size,0);
 });
 test('source-extracted close refuses missing owned request close confirmation', async () => {
@@ -96,7 +98,7 @@ test('source-extracted close refuses missing owned request close confirmation', 
   const start=source.indexOf('  async function close() {'),end=source.indexOf('\n  try {\n    pki =',start);
   const pending=new Set([{destroy(){}}]);
   const fn=new Function('pending','originSockets','relaySockets','closeServer','originPortClosed','fail',
-    'let closing=false;let origin,relay,port,readyPort,drain=null,readinessHold=null;const abortDrain=()=>{};const abortReadinessHold=()=>{};const readinessHoldClosed=()=>true;'+source.slice(start,end)+';return close;')(pending,new Set(),new Set(),async()=>true,async()=>true,c=>{throw Object.assign(new Error(c),{code:c});});
+    'let closing=false;let origin,relay,port,readyPort,drain=null,readinessHold=null;const abortDrain=()=>{};const abortReadinessHold=()=>{};const readinessHoldClosed=()=>true;const closeNativeChallenge=async()=>true;'+source.slice(start,end)+';return close;')(pending,new Set(),new Set(),async()=>true,async()=>true,c=>{throw Object.assign(new Error(c),{code:c});});
   await assert.rejects(fn(),{code:'origin_cleanup_unconfirmed'});assert.equal(pending.size,1);
 });
 
@@ -234,8 +236,33 @@ function verifiedOriginReady(fixture) {
 }
 async function withReadinessFixture(fn) {
   const parent=await mkdtemp(path.join(os.tmpdir(),'x10-origin-ready-hold-'));await chmod(parent,0o700);let fixture;
-  const control={marker:tag,status:200,body:'ready\n',requests:0,delay:false,delayed:[]};
+  const control={marker:tag,status:200,body:'ready\n',requests:0,delay:false,delayed:[],healthTag:tag,proxyPending:new Set(),nativeSpec:null,nativeMode:'good',nativeResponses:new Set(),lateTimers:new Set()};
   const native=http.createServer(async(req,res)=>{
+    if(control.nativeSpec&&req.url===control.nativeSpec.route){
+      const spec=control.nativeSpec,mode=control.nativeMode;
+      const target=mode==='wrong-relay-nonce'?spec.target.replace(spec.nonce,'f'.repeat(32)):spec.target;
+      const upstream=http.get(target,{agent:false,headers:{connection:'close'}},reply=>{
+        const headers={...reply.headers};control.nativeResponses.add(res);res.once('close',()=>control.nativeResponses.delete(res));
+        if(mode!=='direct-relay'){
+          headers['x-x10-native-challenge']=mode==='wrong-native-nonce'?'f'.repeat(32):mode==='duplicate-native-nonce'?[spec.nonce,spec.nonce]:spec.nonce;
+          headers['x-x10-native-candidate']=mode==='wrong-native-tag'?otherTag:spec.tag;
+        }
+        if(mode==='wrong-relay-header')headers['x-x10-relay-challenge']='f'.repeat(32);
+        if(mode==='wrong-content-length')headers['content-length']='1';
+        res.writeHead(reply.statusCode,headers);res.flushHeaders();
+        reply.on('data',chunk=>{
+          const write=()=>{if(res.destroyed)return;if(mode==='wrong-prefix')res.write(Buffer.alloc(chunk.length,0x00));else if(mode!=='stall-prefix')res.write(chunk);if(mode==='early-eof')res.end();};
+          if(mode==='late-prefix'){const timer=setTimeout(()=>{control.lateTimers.delete(timer);write();},250);control.lateTimers.add(timer);}else write();
+        });reply.once('end',()=>res.end());reply.once('error',()=>res.destroy());
+      });control.proxyPending.add(upstream);upstream.once('close',()=>control.proxyPending.delete(upstream));upstream.once('error',()=>res.destroy());res.once('close',()=>upstream.destroy());return;
+    }
+    if(req.url==='/__x10_health'){
+      const upstream=http.get({host:'127.0.0.1',port:fixture.readyPort,path:`/tls-probe/${control.healthTag}`,agent:false},reply=>{
+        res.writeHead(reply.statusCode,reply.headers);reply.pipe(res);
+      });control.proxyPending.add(upstream);upstream.once('close',()=>control.proxyPending.delete(upstream));
+      upstream.once('error',()=>res.destroy());res.once('close',()=>upstream.destroy());return;
+    }
+    if(req.url!=='/ready'){res.writeHead(404);res.end('not found\n');return;}
     control.requests++;assert.equal(req.url,'/ready');
     try{
       const upstream=await verifiedOriginReady(fixture);assert.equal(upstream.status,200);assert.equal(upstream.body.toString(),'ready\n');
@@ -243,16 +270,16 @@ async function withReadinessFixture(fn) {
       if(!res.destroyed){res.setHeader('X-X10-TLS-Probe',control.marker);res.writeHead(control.status);res.end(control.body);}
     }catch{res.destroy();}
   });
-  try{const gatewayPort=await listen(native);fixture=await createOriginFixture(parent,{gatewayPort});await fn(fixture,control);}
-  finally{if(fixture)await fixture.close();await close(native);await rm(parent,{recursive:true});}
+  try{const gatewayPort=await listen(native);control.gatewayPort=gatewayPort;fixture=await createOriginFixture(parent,{gatewayPort});await fn(fixture,control);}
+  finally{for(const timer of control.lateTimers)clearTimeout(timer);for(const request of control.proxyPending)request.destroy();if(fixture)await fixture.close();await close(native);await rm(parent,{recursive:true});}
 }
-function startHeldReadinessRequest(fixture,candidateTag) {
+function startHeldReadinessRequest(fixture,candidateTag,timeoutMs=10000) {
   let headers=false,ended=false;let resolveDone,rejectDone;
   const done=new Promise((resolve,reject)=>{resolveDone=resolve;rejectDone=reject;});done.catch(()=>{});
   const req=http.get({host:'127.0.0.1',port:fixture.readyPort,path:`/tls-probe/${candidateTag}`,agent:false},res=>{
     headers=true;const chunks=[];res.on('data',b=>chunks.push(b));res.once('error',rejectDone);
     res.once('end',()=>{ended=true;resolveDone({status:res.statusCode,body:Buffer.concat(chunks)});});
-  });req.setTimeout(10000,()=>req.destroy(new Error('fixed readiness hold deadline')));req.once('error',rejectDone);
+  });req.setTimeout(timeoutMs,()=>req.destroy(new Error('fixed readiness hold deadline')));req.once('error',rejectDone);
   return {done,snapshot:()=>({headers,ended}),cancel:()=>req.destroy()};
 }
 async function waitFor(fn){const deadline=performance.now()+1500;while(performance.now()<deadline){if(fn())return;await later(10);}assert.fail('fixed fixture observation deadline');}
@@ -320,4 +347,108 @@ test('origin close drains held readiness responses and refuses every late action
   assert.deepEqual(await fixture.close(),{originClosed:true,relayClosed:true,originPortClosed:true,relayPortClosed:true});await assert.rejects(client.done);
   assert.equal(cap.snapshot().aborted,true);assert.equal(cap.snapshot().closed,true);assert.equal(await cap.abort(),true);
   assert.throws(()=>cap.release(),{code:'origin_fixture_invalid'});assert.throws(()=>fixture.prepareReadinessHold(tag),{code:'origin_fixture_invalid'});
+}));
+
+test('c1cf baseline controller350ms closure leaves a live-probe gap before the original1000ms budget', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  fixture.candidate({tag});const cap=fixture.prepareReadinessHold(tag),start=performance.now();
+  const source=await readFile(new URL('../control/manager.mjs',import.meta.url),'utf8');
+  const first=source.indexOf('function request(settings, target,'),last=source.indexOf('\nasync function acknowledged(',first);
+  assert(first>0&&last>first);const controllerRequest=new Function('http',source.slice(first,last)+';return request;')(http);
+  const controller=controllerRequest({port:control.gatewayPort},'/__x10_health');controller.catch(()=>{});
+  await waitFor(()=>cap.snapshot().held);assert.equal(cap.snapshot().heldResponses,1);
+  await assert.rejects(controller,/Probe (absolute|idle) deadline exceeded/);await waitFor(()=>cap.snapshot().heldResponses===0);
+  const elapsed=performance.now()-start,s=cap.snapshot();
+  assert(elapsed>=300&&elapsed<1000);assert.equal(s.candidateReadyObserved,true);assert.equal(s.nativeProbeChecks,1);
+  assert.equal(s.held,false);assert.equal(s.aborted,false);assert.equal(s.closed,false);
+  assert.equal(await cap.abort(),true);
+}));
+
+function declareNativeChallenge(fixture,control) {
+  const input=fixture.candidate({tag}),held=fixture.prepareReadinessHold(tag),location=held.nativeLocation;
+  const route=/^location = (\/__x10-native-challenge\/([a-f0-9]{32})) \{ proxy_pass (http:\/\/127\.0\.0\.1:([0-9]+)\/native-challenge\/([a-f0-9]{32})\/([a-f0-9]{32}));/.exec(location);
+  assert(route);assert.equal(Number(route[4]),fixture.readyPort);assert.equal(route[5],tag);assert.equal(route[2],route[6]);
+  assert(location.includes(`add_header X-X10-Native-Challenge "${route[2]}" always;`));assert(location.includes(`add_header X-X10-Native-Candidate "${tag}" always;`));
+  for(const directive of ['proxy_buffering off;','proxy_pass_request_headers off;','proxy_cache off;','proxy_next_upstream off;','proxy_ignore_client_abort off;'])assert(location.includes(directive));
+  control.nativeSpec={route:route[1],nonce:route[2],target:route[3],tag:route[5]};input.serverBody+='\n'+location;
+  assert.equal(input.serverBody.split(location).length,2);return {held,input};
+}
+const nativeBooleans=['nativeRouteObserved','ownedRequestObserved','relayResponseMatched','currentRequestOpen','responseIncomplete','relayResponseOpen','socketOpen','pairMatched'];
+function assertNativeLive(snapshot){assert.equal(snapshot.held,true);assert.equal(snapshot.requested,true);assert.equal(snapshot.candidateReadyObserved,true);assert.equal(snapshot.nativeProbeChecks,1);assert.equal(snapshot.heldResponses,1);assert.equal(snapshot.aborted,false);assert.equal(snapshot.closed,false);assert.equal(snapshot.released,false);for(const key of nativeBooleans)assert.equal(snapshot[key],true);}
+async function actualControllerRequest(control) {
+  const source=await readFile(new URL('../control/manager.mjs',import.meta.url),'utf8');
+  const first=source.indexOf('function request(settings, target,'),last=source.indexOf('\nasync function acknowledged(',first);
+  const run=new Function('http',source.slice(first,last)+';return request;')(http);
+  return run({port:control.gatewayPort},'/__x10_health');
+}
+
+test('owned native challenge stays physically live across the controller350ms probe gap', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control);
+  const controller=actualControllerRequest(control);controller.catch(()=>{});await waitFor(()=>held.snapshot().held);
+  const deadline=performance.now()+1000,owned=await held.openNativeChallenge(deadline);assert(Object.isFrozen(owned));assertNativeLive(owned.snapshot());
+  await assert.rejects(controller,/Probe (absolute|idle) deadline exceeded/);await waitFor(()=>held.snapshot().heldResponses===0);
+  assert(performance.now()<deadline);assert.equal(held.snapshot().held,false);assertNativeLive(owned.snapshot());
+  const forged=owned.snapshot();forged.pairMatched=false;assertNativeLive(owned.snapshot());
+  await assert.rejects(held.openNativeChallenge(deadline),{code:'origin_challenge_invalid'});
+  assert.equal(await owned.abort(),true);assert.equal(await owned.abort(),true);assert.equal(owned.snapshot().held,false);assert.equal(owned.snapshot().closed,true);
+  assert.equal(await held.abort(),true);
+}));
+
+for(const mode of ['wrong-native-nonce','wrong-native-tag','duplicate-native-nonce','wrong-relay-header','wrong-relay-nonce','direct-relay','wrong-prefix','wrong-content-length']){
+  test('owned challenge refuses '+mode+' without granting a handle', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+    const {held}=declareNativeChallenge(fixture,control);control.nativeMode=mode;
+    await assert.rejects(held.openNativeChallenge(performance.now()+700),e=>['origin_challenge_identity','origin_challenge_failed','origin_challenge_timeout'].includes(e.code));
+    assert.equal(await held.abort(),true);assert.equal(held.snapshot().aborted,true);
+    await assert.rejects(held.openNativeChallenge(performance.now()+500),{code:'origin_challenge_invalid'});
+  }));
+}
+
+test('early gateway EOF cannot retain physically live challenge authority', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control);control.nativeMode='early-eof';let owned;
+  try{owned=await held.openNativeChallenge(performance.now()+700);}catch(error){assert(/^origin_challenge_/.test(error.code));}
+  if(owned){const end=performance.now()+150;while(owned.snapshot().socketOpen&&performance.now()<end)await later(5);assert.equal(owned.snapshot().socketOpen,false);assert.equal(owned.snapshot().held,false);assert.equal(await owned.abort(),true);}
+  assert.equal(await held.abort(),true);
+}));
+
+test('old gateway route without the native challenge location cannot manufacture proof', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control);control.nativeSpec=null;
+  await assert.rejects(held.openNativeChallenge(performance.now()+500),e=>/^origin_challenge_/.test(e.code));
+  assert.equal(await held.abort(),true);assert.equal(held.snapshot().aborted,true);
+}));
+
+test('own challenge rejects caller-selected routes and invalid or enlarged deadlines', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control);
+  for(const deadline of [undefined,NaN,Infinity,-1,0,'1000',{},performance.now()-1,performance.now()+5000])await assert.rejects(held.openNativeChallenge(deadline),{code:'origin_challenge_invalid'});
+  await assert.rejects(held.openNativeChallenge(performance.now()+500,{port:fixture.readyPort,path:'/ready'}),{code:'origin_challenge_invalid'});
+  const owned=await held.openNativeChallenge(performance.now()+500);assertNativeLive(owned.snapshot());assert.equal(await owned.abort(),true);assert.equal(await held.abort(),true);
+}));
+
+test('own response authority expires at its original deadline even before global8s expiry', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control),deadline=performance.now()+250;
+  const owned=await held.openNativeChallenge(deadline);assertNativeLive(owned.snapshot());await later(300);
+  assert.equal(owned.snapshot().held,false);assert.equal(owned.snapshot().aborted,true);assert.equal(await owned.abort(),true);assert.equal(await held.abort(),true);
+}));
+
+test('aborted pending challenge cannot resolve through a late prefix callback', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control);control.nativeMode='late-prefix';
+  const opening=held.openNativeChallenge(performance.now()+700);opening.catch(()=>{});await waitFor(()=>control.nativeResponses.size===1);
+  assert.equal(await held.abort(),true);await assert.rejects(opening,e=>/^origin_challenge_/.test(e.code));await later(300);
+  assert.equal(held.snapshot().closed,true);await assert.rejects(held.openNativeChallenge(performance.now()+500),{code:'origin_challenge_invalid'});
+}));
+
+test('challenge absolute timeout rejects stalled prefix and cannot rearm after late callback', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control);control.nativeMode='late-prefix';
+  await assert.rejects(held.openNativeChallenge(performance.now()+100),e=>/^origin_challenge_/.test(e.code));await later(300);
+  await assert.rejects(held.openNativeChallenge(performance.now()+500),{code:'origin_challenge_invalid'});assert.equal(await held.abort(),true);
+}));
+
+test('global8s expiry refuses a new challenge without extending or replacing its capability', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control);await later(8050);
+  await assert.rejects(held.openNativeChallenge(performance.now()+500),{code:'origin_challenge_invalid'});
+  assert.equal(held.snapshot().aborted,true);assert.equal(await held.abort(),true);
+}));
+
+test('closing an origin with a live owned challenge observes every local socket close', {timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control),owned=await held.openNativeChallenge(performance.now()+700);
+  assertNativeLive(owned.snapshot());assert.deepEqual(await fixture.close(),{originClosed:true,relayClosed:true,originPortClosed:true,relayPortClosed:true});
+  assert.equal(owned.snapshot().held,false);assert.equal(owned.snapshot().closed,true);assert.equal(await owned.abort(),true);assert.equal(await held.abort(),true);
 }));

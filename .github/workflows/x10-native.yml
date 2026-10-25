@@ -135,7 +135,7 @@ jobs:
           const evidence = 'x10/.build/ci-evidence';
           let root, prefix, archive, envelope;
           const source = 'x10/service/lifecycle-check.mjs';
-          const sourceSha = 'ff5709b265643efb62fc6b2ea1ad45d6c774d0548f92a570689e2557cff39152';
+          const sourceSha = '17f01cb99b22909f236f203370057827b247a9f80e0408aaa1f87e9f323df187';
           const hash = b => createHash('sha256').update(b).digest('hex');
           const save = (name, report) => writeFile(evidence + '/' + name + '.json', JSON.stringify(report) + '\n');
           const status = { ok: false, stage: 'download', code: 'bootstrap_failed', runtimeRemoved: false,
