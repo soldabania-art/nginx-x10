@@ -61,6 +61,8 @@ jobs:
         run: node --test --test-reporter=tap x10/service/user-unit.test.mjs > x10/.build/ci-evidence/user-unit.tap
       - name: Validate fail-closed user-manager preflight
         run: node --test --test-reporter=tap x10/service/preflight.test.mjs > x10/.build/ci-evidence/service-preflight.tap
+      - name: Validate actual-service harness refusal controls
+        run: node --test --test-reporter=tap x10/service/lifecycle-check.test.mjs > x10/.build/ci-evidence/service-lifecycle-contract.tap
       - name: Build dependencies and optional test clients
         run: |
           sudo apt-get update
@@ -108,6 +110,12 @@ jobs:
           node x10/release/verify-alpha-archive.mjs \
             --archive x10/.build/dist/nginx-x10-linux-alpha.tar.gz \
             --sha256 "${checksum%% *}" > x10/.build/ci-evidence/alpha-archive.json
+      - name: Verify actual temporary nonroot user-service lifecycle
+        run: |
+          checksum=$(sha256sum x10/.build/dist/nginx-x10-linux-alpha.tar.gz)
+          node x10/service/lifecycle-check.mjs \
+            --archive x10/.build/dist/nginx-x10-linux-alpha.tar.gz \
+            --sha256 "${checksum%% *}" > x10/.build/ci-evidence/service-lifecycle.json
       - name: Preserve JSON evidence
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6

@@ -1244,3 +1244,33 @@ uncertainty remain retained. No runtime code or local runtime test changed
 in this receipt. Next verify actual nonroot service lifecycle on a fresh
 authorized host after fresh preflight. Service/V1, permanent distribution,
 package rollback, recovery and final soak remain open.
+
+
+## Bounded generated user-service lifecycle acceptance harness
+
+A source-checkout checker now exercises a uniquely named temporary runtime
+user unit built from the unchanged guarded recipe. It verifies fresh
+nonroot prerequisites, an explicitly supplied archive/checksum, installation,
+basic start, explicit installed wait-bind, a native request and stop/start with a fresh session before bounded
+owned cleanup. It never enables a unit
+or changes linger, accounts, manager settings or production deployment.
+
+[Evidence](evidence/g3-service-lifecycle.json) keeps authored pure/refusal
+checks, actual local root refusal, independent review and one fresh native
+aggregate separate. The final authored contract passed49/49; independent
+review passed28 synthetic heldouts and44 static checks. An actual own-proc
+identity check was unavailable with EACCES and is not a PASS. One fresh
+native aggregate passed20/20 groups, with official1083PASS/25SKIP/
+1expectedTODO-fail/0unexpectedFAIL and3 dependency-skipped files.
+These units are separate; the aggregate does not execute the new checker.
+Local root refusal is not actual service acceptance.
+The new mandatory CI step must provide actual nonroot service observations
+for the resulting exact source; accepted376 TLS fixture CI is not borrowed
+as verification of these changed checker/test/workflow bytes.
+
+The generated unit still uses Type=exec and no automatic readiness hook.
+Manual installed wait-bind is explicit; active(systemd) alone is insufficient.
+Basic lifecycle does not close actual logging, the single manager restart
+operation, failed-start/cancellation/slow-drain/orphan,
+combined TLS/service, package rollback/recovery, permanent published replay,
+final soak or Production V1. Earlier adverse histories remain retained.

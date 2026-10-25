@@ -140,3 +140,68 @@ that integration still requires actual manager cancellation/failure/cleanup and
 nonroot target tests. Keep manual startup acceptance and the existing stop and
 faulted/orphan rules until those gates are satisfied. No service is activated
 by generating a unit or by these documentation changes.
+
+
+## Ephemeral basic lifecycle checker
+
+The source helper `lifecycle-check.mjs` is an acceptance harness for a fresh
+authorized nonroot Linux test host. It is not installed in the alpha bundle
+and does not deploy a permanent service. Supply the exact trusted archive
+and checksum; the helper performs its own fresh readonly manager preflight
+before service operations. Do not use sudo, switch accounts, create a
+manager, change linger or alter security settings to turn a refusal into
+success.
+
+Run from the source checkout with the recorded Node executable:
+
+```sh
+node x10/service/lifecycle-check.mjs --archive accepted-alpha.tar.gz \
+  --sha256 REPLACE_WITH_EXACT_64_LOWERCASE_HEX_SHA256
+```
+
+Use a trusted expected checksum obtained with the intended archive. A
+checksum proves byte consistency, not an authenticated publisher signature.
+The checker verifies bounded archive consistency before extraction. Both
+relative and absolute archive paths are explicit inputs; runtime execution
+uses the extracted installation rather than source-checkout alpha files.
+
+The exact output contract and counts are recorded with the checker source
+and [local evidence](../evidence/g3-service-lifecycle.json). Missing manager,
+root execution, invalid input, a failed operation or incomplete cleanup must
+remain an explicit nonzero result; refusal is not a passed service gate.
+
+`actualUnitStarted:false` and `runtimeUnitLinked:false` mean those actions
+were not confirmed. After a timeout or ambiguous mutation, false does not
+prove nothing happened. Cleanup must requery the exact owned unit, link and
+runtime identities. Only the actual local `nonroot_required` refusal in
+preflight, before archive access or any mutation, establishes zero local
+service actions.
+
+The helper generates an unchanged guarded recipe for its private installation,
+temporarily links only its unique runtime unit, and never enables it. It
+uses explicit installed wait-bind after start: Type=exec/active proves process
+execution, not native/application/TLS readiness. No ExecStartPost readiness
+hook or automatic production startup acceptance is introduced. Basic stop
+and a new service session are checked separately from the first startup.
+This is a stop/start path, not the manager's single restart operation.
+Each session checks an exact body,65551-byte upload echo and65537-byte stream.
+
+Cleanup is limited to its own unit, exact installation/session identities,
+processes and fixtures. If native cleanup cannot be confirmed, retain the
+private prefix for diagnosis rather than deleting it or signalling unknown
+processes. Do not issue killall or global systemctl reset-failed/restart.
+Raw journald/native diagnostics can contain paths and process identifiers;
+only allowlisted counts, hashes and fixed result codes belong in Git.
+
+The49-test local authored suite includes one actual root-only refusal. On a
+nonroot runner this case is explicitly skipped:49total/48PASS/1SKIP is
+expected contract accounting. The separate actual service CLI step remains
+mandatory; a skipped root test or refused prerequisite is not service PASS.
+
+Local pure/refusal tests and root rejection do not prove live nonroot service
+execution. Required exact CI must report actual fresh-host start/request/
+explicit wait-bind and stop/start with a fresh session and owned cleanup before
+that narrow lifecycle is accepted. Actual logging, the manager restart
+operation, failed-start, cancellation, slow drain,
+orphan recovery, operated TLS, package upgrade/rollback, permanent release/
+replay, soak and Production V1 remain separate open gates.

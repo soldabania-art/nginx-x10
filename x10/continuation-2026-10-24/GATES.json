@@ -263,7 +263,7 @@
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "PARTIAL_TLS_RELAY_BINDING_EXACT_HOSTED_VERIFIED_SERVICE_OPEN",
+      "status": "PARTIAL_BASIC_SERVICE_HARNESS_EXACT_CI_PENDING_SERVICE_OPEN",
       "depends_on": [
         "G2"
       ],
@@ -465,6 +465,31 @@
         "originalNativePRFailureRetained": true,
         "historicalFailureCauseKnown": false,
         "jobRerunsRequested": 0
+      },
+      "serviceLifecycleHarnessSubcheckpoint": {
+        "runId": "x10-service-lifecycle-20261025T002953Z",
+        "sourceBase": "ecbbbbeda306f0b1ad664b4187ac13191bb982e6",
+        "publicationParent": "208f4b55969517decd55ead3e69808fab5d786aa",
+        "implementationCommit": null,
+        "implementationCommitLocator": "Git commit containing the service acceptance harness; resulting exact source CI reconciled by a subsequent receipt",
+        "scope": "Source-checkout acceptance harness for an ephemeral generated user-unit basic lifecycle; not installed production runtime",
+        "evidence": "x10/evidence/g3-service-lifecycle.json",
+        "localAcceptance": "SOURCE_HARNESS_LOCALLY_VERIFIED_ACTUAL_NONROOT_SERVICE_EXACT_CI_PENDING",
+        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_SERVICE_HARNESS",
+        "actualLocalServiceActivated": false,
+        "actualLocalNonrootServiceAccepted": false,
+        "localRefusalIsServiceAcceptance": false,
+        "nativeRuntimeChanged": false,
+        "controllerRuntimeChanged": false,
+        "alphaRuntimeChanged": false,
+        "serviceRecipeChanged": false,
+        "servicePreflightChanged": false,
+        "bundleInventoryChanged": false,
+        "sourceAcceptanceHarnessAdded": true,
+        "requiredWorkflowStepAdded": true,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "nextConcreteTask": "First verify exact resulting service-lifecycle harness implementation CI, including actual nonroot readonly preflight and lifecycle JSON with generated ephemeral user-unit start, explicit installed wait-bind, native request and stop/start with a fresh session and owned cleanup. Refusal at root or missing manager is not actual service acceptance. Verify exact source/merge/build identities and all required native/Unix/feature-off/package/TLS steps and artifacts. Do not borrow accepted376 fixture CI for changed harness/workflow bytes or rerun accepted unchanged checks without cause. Retain original9e63 wrong-CA expected1/actual0 and unknown historical interleaving, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. After narrow basic service evidence, complete actual logging verification, the single systemctl restart operation, cancellation/failed-start/slow-drain/orphan and combined TLS/service acceptance, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak and final G4-G8 Production V1. Full deferred Continuum remains open."
       }
     },
     {
@@ -1022,5 +1047,30 @@
     "historicalFailureCauseKnown": false,
     "jobRerunsRequested": 0,
     "nextConcreteTask": "Continue G3 actual nonroot user-manager service startup/stop/restart, failed-start, drain and orphan behavior on a fresh authorized test host after its own fresh readonly preflight. Exact376 candidate-bound TLS relay fixture CI is verified narrowly; original9e63 wrong-CA apply-exit0 failure, deterministic borrowed-old-route counterexample and unknown historical CI interleaving/cause remain retained. No controller/native runtime vulnerability or historical product fix is claimed. Readonly manager prerequisites observed in completed ephemeral CI jobs are not service activation or guaranteed future host availability. Controller readiness remains HTTP rather than automatic TLS/expiry acceptance. G2 permanent versioned distribution/published-file replay, package upgrade/rollback/recovery, G4-G8/Production V1 and full deferred Continuum remain open."
+  },
+  "serviceLifecycleHarnessCheckpoint": {
+    "runId": "x10-service-lifecycle-20261025T002953Z",
+    "sourceBase": "ecbbbbeda306f0b1ad664b4187ac13191bb982e6",
+    "publicationParent": "208f4b55969517decd55ead3e69808fab5d786aa",
+    "implementationCommit": null,
+    "implementationCommitLocator": "Git commit containing the service acceptance harness; resulting exact source CI reconciled by a subsequent receipt",
+    "scope": "Source-checkout acceptance harness for an ephemeral generated user-unit basic lifecycle; not installed production runtime",
+    "evidence": "x10/evidence/g3-service-lifecycle.json",
+    "localAcceptance": "SOURCE_HARNESS_LOCALLY_VERIFIED_ACTUAL_NONROOT_SERVICE_EXACT_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_SERVICE_HARNESS",
+    "actualLocalServiceActivated": false,
+    "actualLocalNonrootServiceAccepted": false,
+    "localRefusalIsServiceAcceptance": false,
+    "nativeRuntimeChanged": false,
+    "controllerRuntimeChanged": false,
+    "alphaRuntimeChanged": false,
+    "serviceRecipeChanged": false,
+    "servicePreflightChanged": false,
+    "bundleInventoryChanged": false,
+    "sourceAcceptanceHarnessAdded": true,
+    "requiredWorkflowStepAdded": true,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "nextConcreteTask": "First verify exact resulting service-lifecycle harness implementation CI, including actual nonroot readonly preflight and lifecycle JSON with generated ephemeral user-unit start, explicit installed wait-bind, native request and stop/start with a fresh session and owned cleanup. Refusal at root or missing manager is not actual service acceptance. Verify exact source/merge/build identities and all required native/Unix/feature-off/package/TLS steps and artifacts. Do not borrow accepted376 fixture CI for changed harness/workflow bytes or rerun accepted unchanged checks without cause. Retain original9e63 wrong-CA expected1/actual0 and unknown historical interleaving, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. After narrow basic service evidence, complete actual logging verification, the single systemctl restart operation, cancellation/failed-start/slow-drain/orphan and combined TLS/service acceptance, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak and final G4-G8 Production V1. Full deferred Continuum remains open."
   }
 }
