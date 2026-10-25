@@ -263,7 +263,7 @@
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "PARTIAL_TLS_RELAY_BINDING_LOCAL_VERIFIED_EXACT_CI_PENDING_SERVICE_OPEN",
+      "status": "PARTIAL_TLS_RELAY_BINDING_EXACT_HOSTED_VERIFIED_SERVICE_OPEN",
       "depends_on": [
         "G2"
       ],
@@ -412,18 +412,23 @@
         "evidence": "x10/evidence/g3-service-preflight-hosted.json",
         "blocksFullNativeCIAcceptance": true,
         "candidateLocalFixEvidence": "x10/evidence/g3-tls-relay-binding.json",
-        "candidateVerification": "LOCAL_ONLY_EXACT_NEW_CI_PENDING"
+        "candidateVerification": "SUCCESS_SCOPED_EXACT_CANDIDATE_BOUND_TLS_RELAY_FIXTURE",
+        "candidateImplementationCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+        "candidateHostedEvidence": "x10/evidence/g3-tls-relay-binding-hosted.json",
+        "candidateRuntimeSourcesChanged": false,
+        "blocksFullNativeCIAcceptanceForCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+        "candidateExactNativeCIAccepted": true
       },
       "tlsRelayBindingSubcheckpoint": {
         "runId": "x10-preflight-ci-20261024T231800000Z",
         "sourceBase": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
         "publicationParent": "b81d01a1721580827faf2655422d9da521a9521f",
-        "implementationCommit": null,
+        "implementationCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
         "implementationCommitLocator": "Git commit containing this fixture change; exact SHA recorded by subsequent hosted receipt",
         "scope": "Fixture-only per-input TLS relay route binding; no controller or native runtime change",
         "localEvidence": "x10/evidence/g3-tls-relay-binding.json",
         "localAcceptance": "CANDIDATE_BOUND_TLS_RELAY_LOCAL_VERIFIED_EXACT_CI_PENDING",
-        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_FIXTURE_IMPLEMENTATION",
+        "exactHostedAcceptance": "SUCCESS_SCOPED_EXACT_CANDIDATE_BOUND_TLS_RELAY_FIXTURE",
         "fixtureSourceSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
         "localFixtureBindingVerified": true,
         "nativeRuntimeChanged": false,
@@ -431,7 +436,35 @@
         "historicalCICauseKnown": false,
         "historicalCIInterleavingReproduced": false,
         "serviceAccepted": false,
-        "productionAccepted": false
+        "productionAccepted": false,
+        "hostedEvidence": "x10/evidence/g3-tls-relay-binding-hosted.json",
+        "nextConcreteTask": "Continue G3 actual nonroot user-manager service startup/stop/restart, failed-start, drain and orphan behavior on a fresh authorized test host after its own fresh readonly preflight. Exact376 candidate-bound TLS relay fixture CI is verified narrowly; original9e63 wrong-CA apply-exit0 failure, deterministic borrowed-old-route counterexample and unknown historical CI interleaving/cause remain retained. No controller/native runtime vulnerability or historical product fix is claimed. Readonly manager prerequisites observed in completed ephemeral CI jobs are not service activation or guaranteed future host availability. Controller readiness remains HTTP rather than automatic TLS/expiry acceptance. G2 permanent versioned distribution/published-file replay, package upgrade/rollback/recovery, G4-G8/Production V1 and full deferred Continuum remain open."
+      },
+      "tlsRelayBindingHostedSubcheckpoint": {
+        "state": "SUCCESS_SCOPED_EXACT_CANDIDATE_BOUND_TLS_RELAY_FIXTURE",
+        "implementationCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+        "evidence": "x10/evidence/g3-tls-relay-binding-hosted.json",
+        "runId": "x10-relay-ci-20261025T002429Z",
+        "publicationParent": "3bad586c6c920e1ff6ebdd22f64bd94428840b5e",
+        "ledger": "x10/review/g3-tls-relay-binding-hosted-ledger.json",
+        "nativeRunIds": [
+          40143307531,
+          40143311124
+        ],
+        "researchRunIds": [
+          40143307475,
+          40143311131
+        ],
+        "runtimeSourcesChanged": false,
+        "verificationFixtureChanged": false,
+        "readonlyNonrootManagerPrerequisitesObserved": true,
+        "serviceActivated": false,
+        "serviceAccepted": false,
+        "targetUserManagerAccepted": false,
+        "productionAccepted": false,
+        "originalNativePRFailureRetained": true,
+        "historicalFailureCauseKnown": false,
+        "jobRerunsRequested": 0
       }
     },
     {
@@ -946,12 +979,12 @@
     "runId": "x10-preflight-ci-20261024T231800000Z",
     "sourceBase": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
     "publicationParent": "b81d01a1721580827faf2655422d9da521a9521f",
-    "implementationCommit": null,
+    "implementationCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
     "implementationCommitLocator": "Git commit containing this fixture change; exact SHA recorded by subsequent hosted receipt",
     "scope": "Fixture-only per-input TLS relay route binding; no controller or native runtime change",
     "localEvidence": "x10/evidence/g3-tls-relay-binding.json",
     "localAcceptance": "CANDIDATE_BOUND_TLS_RELAY_LOCAL_VERIFIED_EXACT_CI_PENDING",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_FIXTURE_IMPLEMENTATION",
+    "exactHostedAcceptance": "SUCCESS_SCOPED_EXACT_CANDIDATE_BOUND_TLS_RELAY_FIXTURE",
     "fixtureSourceSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
     "localFixtureBindingVerified": true,
     "nativeRuntimeChanged": false,
@@ -960,6 +993,34 @@
     "historicalCIInterleavingReproduced": false,
     "serviceAccepted": false,
     "productionAccepted": false,
-    "nextConcreteTask": "First verify exact resulting candidate-bound TLS relay fixture implementation CI, including actual upstream TLS, frontend TLS, service-preflight, native/Unix/feature-off and package steps, TAP artifacts, checkout/job/merge identities and cleanup. Local candidate verification does not accept the new source in hosted CI. Retain the original9e63 native PR wrong-CA apply-exit0 failure and deterministic borrowed-old-route counterexample; the exact historical CI interleaving/cause remains unproven and no controller/native product fix is claimed. Do not rerun blindly or borrow earlier green results. After exact candidate CI is accepted, verify actual nonroot user-manager service startup/stop/restart, failed-start, drain and orphan behavior on a fresh authorized test host after a fresh readonly preflight. Old completed CI jobs observed actual nonroot manager prerequisites on Node22.23.3; their ephemeral sessions are not guaranteed to persist. G2 permanent versioned distribution/published-file replay, G4-G8/Production V1 and full deferred Continuum remain open."
+    "nextConcreteTask": "Continue G3 actual nonroot user-manager service startup/stop/restart, failed-start, drain and orphan behavior on a fresh authorized test host after its own fresh readonly preflight. Exact376 candidate-bound TLS relay fixture CI is verified narrowly; original9e63 wrong-CA apply-exit0 failure, deterministic borrowed-old-route counterexample and unknown historical CI interleaving/cause remain retained. No controller/native runtime vulnerability or historical product fix is claimed. Readonly manager prerequisites observed in completed ephemeral CI jobs are not service activation or guaranteed future host availability. Controller readiness remains HTTP rather than automatic TLS/expiry acceptance. G2 permanent versioned distribution/published-file replay, package upgrade/rollback/recovery, G4-G8/Production V1 and full deferred Continuum remain open.",
+    "hostedEvidence": "x10/evidence/g3-tls-relay-binding-hosted.json"
+  },
+  "tlsRelayBindingHostedCheckpoint": {
+    "state": "SUCCESS_SCOPED_EXACT_CANDIDATE_BOUND_TLS_RELAY_FIXTURE",
+    "implementationCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+    "evidence": "x10/evidence/g3-tls-relay-binding-hosted.json",
+    "runId": "x10-relay-ci-20261025T002429Z",
+    "publicationParent": "3bad586c6c920e1ff6ebdd22f64bd94428840b5e",
+    "ledger": "x10/review/g3-tls-relay-binding-hosted-ledger.json",
+    "nativeRunIds": [
+      40143307531,
+      40143311124
+    ],
+    "researchRunIds": [
+      40143307475,
+      40143311131
+    ],
+    "runtimeSourcesChanged": false,
+    "verificationFixtureChanged": false,
+    "readonlyNonrootManagerPrerequisitesObserved": true,
+    "serviceActivated": false,
+    "serviceAccepted": false,
+    "targetUserManagerAccepted": false,
+    "productionAccepted": false,
+    "originalNativePRFailureRetained": true,
+    "historicalFailureCauseKnown": false,
+    "jobRerunsRequested": 0,
+    "nextConcreteTask": "Continue G3 actual nonroot user-manager service startup/stop/restart, failed-start, drain and orphan behavior on a fresh authorized test host after its own fresh readonly preflight. Exact376 candidate-bound TLS relay fixture CI is verified narrowly; original9e63 wrong-CA apply-exit0 failure, deterministic borrowed-old-route counterexample and unknown historical CI interleaving/cause remain retained. No controller/native runtime vulnerability or historical product fix is claimed. Readonly manager prerequisites observed in completed ephemeral CI jobs are not service activation or guaranteed future host availability. Controller readiness remains HTTP rather than automatic TLS/expiry acceptance. G2 permanent versioned distribution/published-file replay, package upgrade/rollback/recovery, G4-G8/Production V1 and full deferred Continuum remain open."
   }
 }

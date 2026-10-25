@@ -1215,3 +1215,32 @@ historical CI interleaving or establish a product runtime vulnerability.
 Exact resulting fixture implementation CI is pending. Next verify that
 source and all required profiles, then proceed to actual nonroot service
 lifecycle on a freshly checked authorized host. Service/V1 remain open.
+
+
+### Exact CI: candidate-bound TLS relay fixture
+
+Implementation `376f810f` is exact-hosted verified for the corrected
+candidate-bound TLS readiness fixture. [Receipt](evidence/g3-tls-relay-binding-hosted.json)
+records completed native push40143307531 and PR40143311124, actual steps,
+complete logs, downloaded ZIP digests and separate source/merge identities.
+Both Node22.23.3 jobs passed upstream18/18 TAP:7 synthetic controls,
+9 installed native scenarios and2 wrappers. Correctly bound native502
+refusals and owned cleanup remain explicit; frontend16/16 and preflight42/42
+TAP passed separately, including actual readonly nonroot manager observations.
+
+Both native aggregates passed20/20 groups, controller86, alpha45, operator30
+and listener42. Required Unix9/10/30, feature-off4, recipe15, archive15,
+release-record35 and actual packed-archive checks passed. Official1105
+strictPASS/25SKIP/1expectedTODO-fail/0unexpectedFAIL retain their own units.
+Research PR actually ran21core/7process/27C1/48C2a; research push was
+scope-only. CLA failure remains separate, with no agreement accepted.
+
+Original9e63 wrong-CA expected apply exit1/actual0, its deterministic
+borrowed-old-route counterexample and unknown exact historical interleaving
+remain preserved. New success verifies the fixture correction narrowly;
+no controller/native runtime vulnerability or historical product fix is
+claimed. Earlier shutdown143/cleanup uncertainty and local19/20 ESRCH
+uncertainty remain retained. No runtime code or local runtime test changed
+in this receipt. Next verify actual nonroot service lifecycle on a fresh
+authorized host after fresh preflight. Service/V1, permanent distribution,
+package rollback, recovery and final soak remain open.
