@@ -263,7 +263,7 @@
     {
       "id": "G3",
       "name": "Real gateway and operated service",
-      "status": "INSTALLED_SERVICE_RECIPE_LOCAL_CONTROLS_VERIFIED_EXACT_SERVICE_CI_PENDING",
+      "status": "RECIPE_NODE_FIXTURE_LOCAL_CONTROLS_VERIFIED_EXACT_SERVICE_CI_PENDING",
       "depends_on": [
         "G2"
       ],
@@ -2302,7 +2302,44 @@
           "bytes": 38731
         }
       },
-      "currentServiceLifecycleCIFailure": null,
+      "currentServiceLifecycleCIFailure": {
+        "state": "ACTUAL_NATIVE_FULL_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
+        "implementationCommit": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
+        "implementationTree": "56da17fb7b8f5ce5d16890ee7669f841a9c69e16",
+        "nativeRunIds": [
+          40268333912,
+          40268338245
+        ],
+        "nativeJobIds": [
+          121395545645,
+          121395574674
+        ],
+        "failurePhase": "native_step20_full_alpha_fixture",
+        "failedGroup": "local-alpha-lifecycle",
+        "nativeGroupsEach": {
+          "total": 20,
+          "passed": 19
+        },
+        "fullAlphaEach": {
+          "total": 76,
+          "pass": 74,
+          "fail": 2
+        },
+        "refusalCode": "service_recipe_invalid",
+        "specificRecordedNodeComparisonKnown": false,
+        "managedServiceStep29": "skipped",
+        "serviceReport": null,
+        "packageReport": null,
+        "archiveReport": null,
+        "bootstrapReport": null,
+        "nodeCleanupReport": null,
+        "cleanupAcceptedFromMissingReports": false,
+        "prior89ScopedNormalAcceptancePreserved": true,
+        "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
+        "implementationAccepted": false,
+        "serviceAccepted": false,
+        "productionAccepted": false
+      },
       "interruptionContainmentSubcheckpoint": {
         "runId": "x10-interruption-diagnostics-20261025T161805Z",
         "sourceBase": "3bf729a8ba2f610df0ecbda286efd12ffffa81eb",
@@ -2887,14 +2924,14 @@
         "runId": "x10-installed-recipe-20261026T040410167Z",
         "sourceBase": "89aa488f0f54bd29f1d71d0b125399a6742a0f57",
         "publicationParent": "040b507f7c7484fc414a5c086b907497b9366e38",
-        "implementationCommit": null,
+        "implementationCommit": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
         "implementationCommitLocator": "Current publication commit; exact resulting CI required",
         "scope": "Schema2 distribution of immutable installed service recipe and installed-payload native acceptance candidate",
         "result": "Accepted exact89 scoped normal service evidence, then added strict schema2 bundle/install helper distribution and read-only installed service-unit generation with native harness consumption and additive cleanup receipt requirements; exact new native service CI pending.",
         "evidence": "x10/evidence/g3-service-installed-recipe.json",
         "perFileLedger": "x10/review/g3-service-installed-recipe-ledger.json",
         "localAcceptance": "LOCAL_INSTALLED_RECIPE_CONTRACTS_AND_SELECTED_ALPHA_VERIFIED_EXACT_NATIVE_SERVICE_CI_PENDING",
-        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_INSTALLED_RECIPE_SERVICE",
+        "exactHostedAcceptance": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
         "nativeRuntimeChanged": false,
         "controllerRuntimeChanged": false,
         "alphaRuntimeChanged": true,
@@ -2922,7 +2959,129 @@
         "actualHistoricalCauseProven": false,
         "nextConcreteTask": "First verify exact resulting installed recipe distribution and actual native service CI. Require a strict schema2 package/install with the immutable installed service helper and read-only installed service-unit command, full installed validation before import and the exact recorded Node identity. The actual service harness must obtain the recipe from installed payload with no source fallback. Strict cleanup receipts add bundleSchemaVersion2/installSchemaVersion2/installedRecipeGenerated:true and retain all existing six challenge,14 operator,14 drain,11 startup,TLS/restart/journal and13 cleanup requirements. Reject mixed schemas/inventories, unknown files, tampered helper/Node and unsupported legacy command without activation. Existing v1 packages remain usable under their exact original contract; no automatic migration or package rollback is claimed. Exact89 scoped normal acceptance is preserved without unchanged reruns, while actual failure containment remains unexercised. FullG3/G4-G8/V1, package upgrade/rollback/restore, permanent distribution,60-minute soak and semantic Continuum remain open until their independent actual gates pass.",
         "hostedVerification": {
-          "state": "PENDING_EXACT_RESULTING_INSTALLED_RECIPE_SERVICE"
+          "state": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
+          "evidence": "x10/evidence/g3-service-recipe-node.json"
+        },
+        "newPurchases": false,
+        "productionDeployChanged": false,
+        "hostedEvidence": "x10/evidence/g3-service-recipe-node.json",
+        "implementationAccepted": false,
+        "actualManagedServiceReached": false,
+        "fullAlphaFailureObserved": true
+      },
+      "installedServiceRecipeHostedObservation": {
+        "state": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
+        "implementationCommit": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
+        "implementationTree": "56da17fb7b8f5ce5d16890ee7669f841a9c69e16",
+        "evidence": "x10/evidence/g3-service-recipe-node.json",
+        "nativeRunIds": [
+          40268333912,
+          40268338245
+        ],
+        "nativeJobIds": [
+          121395545645,
+          121395574674
+        ],
+        "actualPRMergeCheckout": "2e4fb5e2b7a10dab545652795f5cc785f8cc1cea",
+        "auditConsistent": true,
+        "factualReadbackProofCount": 52,
+        "factualReadbackIsRuntimePassCount": false,
+        "bothExactNativeWorkflowsSuccessful": false,
+        "implementationAccepted": false,
+        "nativeGroupsEach": {
+          "total": 20,
+          "passed": 19
+        },
+        "fullAlphaEach": {
+          "total": 76,
+          "pass": 74,
+          "fail": 2
+        },
+        "refusalCode": "service_recipe_invalid",
+        "specificRecordedNodeComparisonKnown": false,
+        "failedGroup": "local-alpha-lifecycle",
+        "managedServiceStep29": "skipped",
+        "actualManagedServiceReport": null,
+        "actualArchiveReport": null,
+        "actualPackageReport": null,
+        "actualBootstrapReport": null,
+        "actualNodeCleanupReport": null,
+        "cleanupAcceptedFromMissingReports": false,
+        "actualFailureContainmentAccepted": false,
+        "prior89ScopedNormalAcceptancePreserved": true,
+        "researchPRRunId": 40268338303,
+        "researchPRJobId": 121395558779,
+        "researchPRActualSuites": [
+          21,
+          7,
+          27,
+          48
+        ],
+        "researchPushRuntimeSkipped": true,
+        "inheritedCLAFailurePreserved": true,
+        "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
+        "fullG3ServiceAccepted": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "workflowRerunsRequested": 0,
+        "nativeArtifacts": [
+          {
+            "runId": 40268333912,
+            "artifactId": 12627248604,
+            "zipBytes": 88744,
+            "zipSha256": "a7297bba1e24b1cb8bd27ca838202ee36372a2e74e5ae62a8bd04bbcdb54f77f"
+          },
+          {
+            "runId": 40268338245,
+            "artifactId": 12627503054,
+            "zipBytes": 88737,
+            "zipSha256": "376912228d7516ee3ee7266e6e95b75a8833b308b23509ceb8e3ab4737a002e6"
+          }
+        ],
+        "freshAuditReference": {
+          "bytes": 41008,
+          "sha256": "8c8626c49ed20420689a4c06edf379b63c9738682bb439011d062c4bbefa50ce"
+        }
+      },
+      "recipeNodeFixtureSubcheckpoint": {
+        "runId": "x10-recipe-node-20261026T042920537Z",
+        "sourceBase": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
+        "publicationParent": "7cf00bbd884bbd5dedd1ee9e78de24c0bf9648c8",
+        "implementationCommit": null,
+        "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+        "scope": "Fixture-only exact owned Node prerequisite for extracted installed recipe acceptance",
+        "result": "Recorded exact195 both-native full-alpha failure and missing managed-service evidence, then aligned the checked-bundle/synthetic recipe fixtures to one private owned exact Node runtime without changing product guards or runtime; exact resulting full native/service CI pending.",
+        "evidence": "x10/evidence/g3-service-recipe-node.json",
+        "perFileLedger": "x10/review/g3-service-recipe-node-ledger.json",
+        "localAcceptance": "LOCAL_SELECTED_OWNED_NODE_FIXTURE_CONTROLS_VERIFIED_EXACT_FULL_NATIVE_SERVICE_CI_PENDING",
+        "exactHostedAcceptance": "PENDING_EXACT_RESULTING_RECIPE_NODE_FIXTURE_NATIVE_SERVICE",
+        "nativeRuntimeChanged": false,
+        "controllerRuntimeChanged": false,
+        "alphaRuntimeChanged": false,
+        "serviceRecipeChanged": false,
+        "preflightChanged": false,
+        "acceptanceHarnessChanged": false,
+        "alphaTestFixtureChanged": true,
+        "dependencyCleanupReceiptProfileChanged": false,
+        "dependencyCleanupReceiptCheckerPinChanged": false,
+        "knownGuardsPreserved": true,
+        "routineOwnerAuthorityConfirmationPreserved": true,
+        "releaseContractOrProfileChanged": false,
+        "releaseContractNarrowed": false,
+        "bundleSchemaVersionRequiredUnchanged": 2,
+        "installSchemaVersionRequiredUnchanged": 2,
+        "installedRecipeGeneratedRequiredUnchanged": true,
+        "legacySchema1ContractRetained": true,
+        "fixtureHostNodeMutated": false,
+        "failedStartAccepted": false,
+        "slowDrainAccepted": false,
+        "operatorInterruptionAccepted": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "actualHistoricalCauseProven": false,
+        "nextConcreteTask": "First verify exact resulting recipe Node fixture native CI. The checked-bundle fixture must install and generate the recipe using one private owned0500 exact Node copy, shared with the synthetic positive fixture. This changes only the test prerequisite; product CLI/helper/archive/harness/receipt/workflow bytes, schema2 inventories, three new receipt facts and all previous authority proofs stay unchanged. Require the full supported native/alpha profile and actual extracted-payload managed service, not only selected controls. Preserve exact195 failure/unknown Node comparison and absent service/cleanup evidence without claiming the fixture observation proves the historical comparison. No guard relaxation, host Node mutation or blind unchanged rerun. FullG3/G4-G8/V1, package lifecycle/permanent release/60-minute soak and semantic Continuum remain open until actual independent gates pass.",
+        "hostedVerification": {
+          "state": "PENDING_EXACT_RESULTING_RECIPE_NODE_FIXTURE_NATIVE_SERVICE"
         },
         "newPurchases": false,
         "productionDeployChanged": false
@@ -5734,14 +5893,14 @@
     "runId": "x10-installed-recipe-20261026T040410167Z",
     "sourceBase": "89aa488f0f54bd29f1d71d0b125399a6742a0f57",
     "publicationParent": "040b507f7c7484fc414a5c086b907497b9366e38",
-    "implementationCommit": null,
+    "implementationCommit": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
     "implementationCommitLocator": "Current publication commit; exact resulting CI required",
     "scope": "Schema2 distribution of immutable installed service recipe and installed-payload native acceptance candidate",
     "result": "Accepted exact89 scoped normal service evidence, then added strict schema2 bundle/install helper distribution and read-only installed service-unit generation with native harness consumption and additive cleanup receipt requirements; exact new native service CI pending.",
     "evidence": "x10/evidence/g3-service-installed-recipe.json",
     "perFileLedger": "x10/review/g3-service-installed-recipe-ledger.json",
     "localAcceptance": "LOCAL_INSTALLED_RECIPE_CONTRACTS_AND_SELECTED_ALPHA_VERIFIED_EXACT_NATIVE_SERVICE_CI_PENDING",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_INSTALLED_RECIPE_SERVICE",
+    "exactHostedAcceptance": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
     "nativeRuntimeChanged": false,
     "controllerRuntimeChanged": false,
     "alphaRuntimeChanged": true,
@@ -5769,7 +5928,129 @@
     "actualHistoricalCauseProven": false,
     "nextConcreteTask": "First verify exact resulting installed recipe distribution and actual native service CI. Require a strict schema2 package/install with the immutable installed service helper and read-only installed service-unit command, full installed validation before import and the exact recorded Node identity. The actual service harness must obtain the recipe from installed payload with no source fallback. Strict cleanup receipts add bundleSchemaVersion2/installSchemaVersion2/installedRecipeGenerated:true and retain all existing six challenge,14 operator,14 drain,11 startup,TLS/restart/journal and13 cleanup requirements. Reject mixed schemas/inventories, unknown files, tampered helper/Node and unsupported legacy command without activation. Existing v1 packages remain usable under their exact original contract; no automatic migration or package rollback is claimed. Exact89 scoped normal acceptance is preserved without unchanged reruns, while actual failure containment remains unexercised. FullG3/G4-G8/V1, package upgrade/rollback/restore, permanent distribution,60-minute soak and semantic Continuum remain open until their independent actual gates pass.",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_INSTALLED_RECIPE_SERVICE"
+      "state": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
+      "evidence": "x10/evidence/g3-service-recipe-node.json"
+    },
+    "newPurchases": false,
+    "productionDeployChanged": false,
+    "hostedEvidence": "x10/evidence/g3-service-recipe-node.json",
+    "implementationAccepted": false,
+    "actualManagedServiceReached": false,
+    "fullAlphaFailureObserved": true
+  },
+  "installedServiceRecipeHostedObservation": {
+    "state": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
+    "implementationCommit": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
+    "implementationTree": "56da17fb7b8f5ce5d16890ee7669f841a9c69e16",
+    "evidence": "x10/evidence/g3-service-recipe-node.json",
+    "nativeRunIds": [
+      40268333912,
+      40268338245
+    ],
+    "nativeJobIds": [
+      121395545645,
+      121395574674
+    ],
+    "actualPRMergeCheckout": "2e4fb5e2b7a10dab545652795f5cc785f8cc1cea",
+    "auditConsistent": true,
+    "factualReadbackProofCount": 52,
+    "factualReadbackIsRuntimePassCount": false,
+    "bothExactNativeWorkflowsSuccessful": false,
+    "implementationAccepted": false,
+    "nativeGroupsEach": {
+      "total": 20,
+      "passed": 19
+    },
+    "fullAlphaEach": {
+      "total": 76,
+      "pass": 74,
+      "fail": 2
+    },
+    "refusalCode": "service_recipe_invalid",
+    "specificRecordedNodeComparisonKnown": false,
+    "failedGroup": "local-alpha-lifecycle",
+    "managedServiceStep29": "skipped",
+    "actualManagedServiceReport": null,
+    "actualArchiveReport": null,
+    "actualPackageReport": null,
+    "actualBootstrapReport": null,
+    "actualNodeCleanupReport": null,
+    "cleanupAcceptedFromMissingReports": false,
+    "actualFailureContainmentAccepted": false,
+    "prior89ScopedNormalAcceptancePreserved": true,
+    "researchPRRunId": 40268338303,
+    "researchPRJobId": 121395558779,
+    "researchPRActualSuites": [
+      21,
+      7,
+      27,
+      48
+    ],
+    "researchPushRuntimeSkipped": true,
+    "inheritedCLAFailurePreserved": true,
+    "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
+    "fullG3ServiceAccepted": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "workflowRerunsRequested": 0,
+    "nativeArtifacts": [
+      {
+        "runId": 40268333912,
+        "artifactId": 12627248604,
+        "zipBytes": 88744,
+        "zipSha256": "a7297bba1e24b1cb8bd27ca838202ee36372a2e74e5ae62a8bd04bbcdb54f77f"
+      },
+      {
+        "runId": 40268338245,
+        "artifactId": 12627503054,
+        "zipBytes": 88737,
+        "zipSha256": "376912228d7516ee3ee7266e6e95b75a8833b308b23509ceb8e3ab4737a002e6"
+      }
+    ],
+    "freshAuditReference": {
+      "bytes": 41008,
+      "sha256": "8c8626c49ed20420689a4c06edf379b63c9738682bb439011d062c4bbefa50ce"
+    }
+  },
+  "recipeNodeFixtureCheckpoint": {
+    "runId": "x10-recipe-node-20261026T042920537Z",
+    "sourceBase": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
+    "publicationParent": "7cf00bbd884bbd5dedd1ee9e78de24c0bf9648c8",
+    "implementationCommit": null,
+    "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+    "scope": "Fixture-only exact owned Node prerequisite for extracted installed recipe acceptance",
+    "result": "Recorded exact195 both-native full-alpha failure and missing managed-service evidence, then aligned the checked-bundle/synthetic recipe fixtures to one private owned exact Node runtime without changing product guards or runtime; exact resulting full native/service CI pending.",
+    "evidence": "x10/evidence/g3-service-recipe-node.json",
+    "perFileLedger": "x10/review/g3-service-recipe-node-ledger.json",
+    "localAcceptance": "LOCAL_SELECTED_OWNED_NODE_FIXTURE_CONTROLS_VERIFIED_EXACT_FULL_NATIVE_SERVICE_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_RECIPE_NODE_FIXTURE_NATIVE_SERVICE",
+    "nativeRuntimeChanged": false,
+    "controllerRuntimeChanged": false,
+    "alphaRuntimeChanged": false,
+    "serviceRecipeChanged": false,
+    "preflightChanged": false,
+    "acceptanceHarnessChanged": false,
+    "alphaTestFixtureChanged": true,
+    "dependencyCleanupReceiptProfileChanged": false,
+    "dependencyCleanupReceiptCheckerPinChanged": false,
+    "knownGuardsPreserved": true,
+    "routineOwnerAuthorityConfirmationPreserved": true,
+    "releaseContractOrProfileChanged": false,
+    "releaseContractNarrowed": false,
+    "bundleSchemaVersionRequiredUnchanged": 2,
+    "installSchemaVersionRequiredUnchanged": 2,
+    "installedRecipeGeneratedRequiredUnchanged": true,
+    "legacySchema1ContractRetained": true,
+    "fixtureHostNodeMutated": false,
+    "failedStartAccepted": false,
+    "slowDrainAccepted": false,
+    "operatorInterruptionAccepted": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "actualHistoricalCauseProven": false,
+    "nextConcreteTask": "First verify exact resulting recipe Node fixture native CI. The checked-bundle fixture must install and generate the recipe using one private owned0500 exact Node copy, shared with the synthetic positive fixture. This changes only the test prerequisite; product CLI/helper/archive/harness/receipt/workflow bytes, schema2 inventories, three new receipt facts and all previous authority proofs stay unchanged. Require the full supported native/alpha profile and actual extracted-payload managed service, not only selected controls. Preserve exact195 failure/unknown Node comparison and absent service/cleanup evidence without claiming the fixture observation proves the historical comparison. No guard relaxation, host Node mutation or blind unchanged rerun. FullG3/G4-G8/V1, package lifecycle/permanent release/60-minute soak and semantic Continuum remain open until actual independent gates pass.",
+    "hostedVerification": {
+      "state": "PENDING_EXACT_RESULTING_RECIPE_NODE_FIXTURE_NATIVE_SERVICE"
     },
     "newPurchases": false,
     "productionDeployChanged": false

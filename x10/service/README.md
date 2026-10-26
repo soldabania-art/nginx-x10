@@ -1099,3 +1099,41 @@ FullG3/G4-G8/V1, permanent distribution, independent published-file acceptance,
 60-minute soak and semantic Continuum remain open.
 
 See [installed recipe evidence](../evidence/g3-service-installed-recipe.json).
+
+
+## Recipe Node fixture prerequisite; product runtime unchanged
+
+Exact195a native push40268333912 and PR40268338245 both failed step20:
+19/20 native groups and full alpha76 TAP tests,74PASS/2FAIL. The extracted-bundle
+recipe subtest and its parent reflect one nested service_recipe_invalid refusal
+at the exact recorded-Node guard. The individual path/version/owner/mode/hash
+comparison was not recorded and remains unknown. Selected new controls passing
+did not override this full-profile failure. Managed service step29 was skipped;
+service/package/archive/bootstrap/Node cleanup reports were absent. Missing
+reports do not establish successful actual service execution or cleanup.
+Research PR ran21/7/27/48, push runtime was skipped and CLA failure remains.
+Prior89 scoped normal native challenge/operator acceptance remains unchanged;
+its actual failure containment was unexercised. All older adverse history and
+local cleanup FAIL_UNKNOWN remain preserved.
+
+This candidate changes only the alpha test fixture. The checked-bundle path and
+synthetic positive recipe fixture share a private owned0500 exact Node copy;
+installation records that runtime and recipe generation executes the same copy.
+The host executable is not chmoded, replaced or adopted as owned fixture data.
+This satisfies the fixture prerequisite without relaxing product validation.
+The local observation motivates the fixture change; it does not identify the
+specific unrecorded comparison in the historical195 CI refusal.
+
+CLI/helper/archive verifier, actual-service harness, strict cleanup receipts,
+workflow and all native/controller runtime bytes remain unchanged. Schema2
+inventories and required bundleSchemaVersion2/installSchemaVersion2/
+installedRecipeGenerated:true facts remain mandatory, together with all prior
+challenge/operator/startup/drain/TLS/restart/journal/cleanup proofs. The actual
+new full native/alpha profile and installed-payload managed service CI remain
+pending. Local selected16/16 passed with actual exit0; older physical groups and
+unchanged runtime contracts were not rerun. These selected fixture controls
+cannot accept the full native/service path or erase the195 failure.
+FullG3/G4-G8/V1, package lifecycle, permanent release, independent published-file
+acceptance,60-minute soak and semantic Continuum remain open.
+
+See [fixture evidence](../evidence/g3-service-recipe-node.json).
