@@ -13,6 +13,14 @@ import { canonical, digest, exists, fail, inspectMaster, remainingNativeGroup, o
 const execute = promisify(execFile), root = fileURLToPath(new URL('../../', import.meta.url));
 const controlNames = ['cli.mjs', 'manager.mjs', 'listeners.mjs', 'generations.mjs', 'status-format.mjs'];
 const alphaNames = ['cli.mjs', 'runtime.mjs', 'upstream-example.mjs'];
+const staticDirectories = ['bin', 'lib', 'lib/control', 'lib/alpha', 'licenses', 'examples', 'runs'];
+const recipePath = 'lib/service/user-unit.mjs';
+const supportedSchema = version => version === 1 || version === 2;
+const installedNames = version => ['bin/nginx', 'bin/x10', 'build.json', 'licenses/NGINX-LICENSE', 'licenses/UPSTREAM.txt', 'examples/candidate-b.json',
+  ...controlNames.map(name => `lib/control/${name}`), ...alphaNames.map(name => `lib/alpha/${name}`), ...(version === 2 ? [recipePath] : [])].sort();
+const bundleNames = version => ['bin/nginx', 'install.mjs', 'LICENSE', 'NOTICE', 'x10/alpha/README.md',
+  ...alphaNames.map(name => `x10/alpha/${name}`), ...controlNames.map(name => `x10/control/${name}`), ...(version === 2 ? ['x10/service/user-unit.mjs'] : [])].sort();
+const payloadMode = relative => ['bin/nginx', 'bin/x10'].includes(relative) ? '0500' : '0400';
 const id = () => randomBytes(16).toString('hex');
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const encode = value => `${JSON.stringify(value, null, 2)}\n`;
@@ -82,17 +90,21 @@ async function sourceBuild(manifestFile, selectedBinary) {
 
 async function bundleBuild() {
   await canonical(root.replace(/\/$/, '')); const manifest = await record(path.join(root, 'bundle.json'));
-  const names = ['bin/nginx', 'install.mjs', 'LICENSE', 'NOTICE', 'x10/alpha/README.md', ...alphaNames.map(n => `x10/alpha/${n}`), ...controlNames.map(n => `x10/control/${n}`)].sort();
-  if (manifest.schemaVersion !== 1 || manifest.kind !== 'nginx-x10-linux-alpha-bundle' || !same(Object.keys(manifest.files || {}).sort(), names)
+  const names = bundleNames(manifest.schemaVersion);
+  if (!supportedSchema(manifest.schemaVersion) || manifest.kind !== 'nginx-x10-linux-alpha-bundle' || !same(Object.keys(manifest.files || {}).sort(), names)
     || manifest.platform?.system !== 'Linux' || manifest.platform.machine !== os.machine()) fail('bundle_identity', 'Bundle profile or inventory is invalid for this host');
+  for (const relative of ['', 'bin', 'x10', 'x10/alpha', 'x10/control', ...(manifest.schemaVersion === 2 ? ['x10/service'] : [])]) {
+    const directory = relative ? path.join(root, relative) : root.replace(/\/$/, ''); await canonical(directory); const stat = await owned(directory, true, true);
+    if ((stat.mode & 0o7777) !== 0o700) fail('bundle_identity', 'Bundle directory mode differs from its profile');
+  }
   for (const [relative, expected] of Object.entries(manifest.files)) {
     const file = path.join(root, relative); await canonical(path.dirname(file)); const stat = await owned(file);
-    if (stat.size !== expected.bytes || digest(await readFile(file)) !== expected.sha256 || (stat.mode & 0o7777).toString(8).padStart(4, '0') !== expected.mode) fail('bundle_identity', `Bundle file changed: ${relative}`);
+    if (expected.mode !== payloadMode(relative) || stat.size !== expected.bytes || digest(await readFile(file)) !== expected.sha256 || (stat.mode & 0o7777).toString(8).padStart(4, '0') !== expected.mode) fail('bundle_identity', `Bundle file changed: ${relative}`);
   }
   const binary = path.join(root, 'bin/nginx'), version = (await execute(binary, ['-V'], { timeout: 5000, maxBuffer: 256 * 1024 })).stderr.trim();
   if (digest(version) !== manifest.nativeVersionOutputSha256) fail('bundle_identity', 'Bundle native version/build metadata differs');
   const build = { ...manifest.provenance, binary: { path: binary, ...manifest.files['bin/nginx'], executable: true }, status: 'built', platform: manifest.platform };
-  return { binary, build, source: root, manifestSha256: digest(await readFile(path.join(root, 'bundle.json'))), dependencies: await dependencies(binary), notice: path.join(root, 'NOTICE') };
+  return { binary, build, source: root, manifestSha256: digest(await readFile(path.join(root, 'bundle.json'))), dependencies: await dependencies(binary), notice: path.join(root, 'NOTICE'), bundleSchemaVersion: manifest.schemaVersion };
 }
 
 export async function pack(values) {
@@ -107,11 +119,12 @@ export async function pack(values) {
   await canonical(path.dirname(output)); await owned(path.dirname(output), true);
   const temporary = await mkdtemp(path.join(os.tmpdir(), 'x10-pack-')), bundle = path.join(temporary, 'nginx-x10-alpha'), archive = path.join(path.dirname(output), `.x10-pack-${id()}.tar.gz`);
   try {
-    await mkdir(bundle, { mode: 0o700 }); for (const dir of ['bin', 'x10', 'x10/alpha', 'x10/control']) await mkdir(path.join(bundle, dir), { mode: 0o700 });
+    await mkdir(bundle, { mode: 0o700 }); for (const dir of ['bin', 'x10', 'x10/alpha', 'x10/control', 'x10/service']) await mkdir(path.join(bundle, dir), { mode: 0o700 });
     const files = {}, put = async (relative, bytes, mode = 0o400) => { await writeFile(path.join(bundle, relative), bytes, { mode, flag: 'wx' }); files[relative] = { bytes: bytes.length, sha256: digest(bytes), mode: mode.toString(8).padStart(4, '0') }; };
     await put('bin/nginx', await readFile(built.binary), 0o500);
     for (const name of alphaNames) await put(`x10/alpha/${name}`, await readFile(path.join(root, 'x10/alpha', name)));
     for (const name of controlNames) await put(`x10/control/${name}`, await readFile(path.join(root, 'x10/control', name)));
+    await put('x10/service/user-unit.mjs', await readFile(path.join(root, 'x10/service/user-unit.mjs')));
     await put('x10/alpha/README.md', await readFile(path.join(root, 'x10/alpha/README.md')));
     await put('LICENSE', await readFile(path.join(built.source, 'LICENSE'))); await put('NOTICE', await readFile(path.join(root, 'x10/alpha/NOTICE.txt')));
     await put('install.mjs', Buffer.from('import { main } from "./x10/alpha/cli.mjs";\nawait main(process.argv.slice(2));\n'));
@@ -119,7 +132,7 @@ export async function pack(values) {
       sourceDiffSha256: b.sourceDiffSha256, nginxVersion: b.nginxVersion, compiledModules: b.compiledModules,
       dependencyVersionsFromHeaders: b.dependencyVersionsFromHeaders, compilerFlags: b.compilerFlags,
       configureFlags: b.configureArgv.filter(v => v.startsWith('--')).map(v => v.startsWith('--builddir=') ? '--builddir=<build-directory>' : v.startsWith('--prefix=') ? '--prefix=<build-prefix>' : v.includes('=/') ? `${v.split('=')[0]}=<path>` : v) };
-    await saveRecord(path.join(bundle, 'bundle.json'), { schemaVersion: 1, kind: 'nginx-x10-linux-alpha-bundle', platform: { system: 'Linux', machine: b.platform.machine },
+    await saveRecord(path.join(bundle, 'bundle.json'), { schemaVersion: 2, kind: 'nginx-x10-linux-alpha-bundle', platform: { system: 'Linux', machine: b.platform.machine },
       files, provenance, nativeVersionOutputSha256: digest(b.nginxVersionOutput.trim()), runtimeNote: 'Dynamic host ABI and Node 22+ required. Checksums are consistency records, not a signature or reproducible-build attestation. Native binary debug/configure metadata can contain build paths.' });
     await execute('tar', ['-czf', archive, '-C', temporary, 'nginx-x10-alpha'], { timeout: 15000, maxBuffer: 128 * 1024 }); await chmod(archive, 0o600);
     await link(archive, output); return { ok: true, outcome: 'packed', output, bytes: (await lstat(output)).size, sha256: digest(await readFile(output)), binarySha256: b.binary.sha256 };
@@ -172,7 +185,9 @@ export async function install(values) {
   if (bundled && (values.manifest || values.binary)) fail('arguments', 'Bundle installation uses its own checked payload; omit --manifest/--binary');
   const built = bundled ? await bundleBuild() : await sourceBuild(values.manifest || process.env.X10_BUILD_MANIFEST || path.join(root, 'x10/.build/manifest.json'), values.binary || process.env.X10_NGINX_BINARY);
   // Validate/capture every source file before creating the install prefix.
+  const schemaVersion = bundled ? built.bundleSchemaVersion : 2;
   const copies = [];
+  if (schemaVersion === 2) { const file = path.join(root, 'x10/service/user-unit.mjs'); await owned(file); copies.push({ relative: recipePath, bytes: await readFile(file), mode: 0o400 }); }
   for (const name of controlNames) { const file = path.join(root, 'x10/control', name); await owned(file); copies.push({ relative: `lib/control/${name}`, bytes: await readFile(file), mode: 0o400 }); }
   for (const name of alphaNames) { const file = path.join(root, 'x10/alpha', name); await owned(file); copies.push({ relative: `lib/alpha/${name}`, bytes: await readFile(file), mode: 0o400 }); }
   const license = await readFile(path.join(built.source, 'LICENSE')); copies.push({ relative: 'licenses/NGINX-LICENSE', bytes: license, mode: 0o400 });
@@ -182,7 +197,7 @@ export async function install(values) {
   copies.push({ relative: 'build.json', bytes: Buffer.from(encode(built.build)), mode: 0o400 });
   await mkdir(prefix, { mode: 0o700 });
   try {
-    for (const dir of ['bin', 'lib', 'lib/control', 'lib/alpha', 'licenses', 'examples', 'runs']) await mkdir(path.join(prefix, dir), { mode: 0o700 });
+    for (const dir of [...staticDirectories, ...(schemaVersion === 2 ? ['lib/service'] : [])]) await mkdir(path.join(prefix, dir), { mode: 0o700 });
     const immutable = {};
     await copyFile(built.binary, path.join(prefix, 'bin/nginx'), constants.COPYFILE_EXCL); await chmod(path.join(prefix, 'bin/nginx'), 0o500);
     immutable['bin/nginx'] = { sha256: built.build.binary.sha256, bytes: built.build.binary.bytes, mode: '0500' };
@@ -195,7 +210,7 @@ export async function install(values) {
       : { ...seed, serverBody: `${seed.serverBody}\nadd_header X-X10-Example "application-b" always;` };
     await writeFile(path.join(prefix, 'examples/candidate-b.json'), encode(candidate), { mode: 0o400 });
     immutable['examples/candidate-b.json'] = { sha256: digest(encode(candidate)), bytes: Buffer.byteLength(encode(candidate)), mode: '0400' };
-    const stat = await owned(prefix, true, true), manifest = { schemaVersion: 1, kind: 'nginx-x10-local-alpha', installationId: id(), prefix,
+    const stat = await owned(prefix, true, true), manifest = { schemaVersion, kind: 'nginx-x10-local-alpha', installationId: id(), prefix,
       rootIdentity: { dev: stat.dev, ino: stat.ino, uid: stat.uid }, installedAt: new Date().toISOString(), port, healthPort, immutable,
       buildManifestSha256: built.manifestSha256, upstreamRevision: built.build.upstreamRevision, nginxVersion: built.build.nginxVersion,
       sourceDiffSha256: built.build.sourceDiffSha256, compiledModules: built.build.compiledModules, dependencyVersionsFromHeaders: built.build.dependencyVersionsFromHeaders,
@@ -213,13 +228,19 @@ export async function install(values) {
 
 async function installed(prefix, allowDependencyDrift = false) {
   prefix = path.resolve(prefix); await canonical(prefix); const stat = await owned(prefix, true, true), manifest = await record(path.join(prefix, '.alpha-install.json'));
-  if (manifest.schemaVersion !== 1 || manifest.kind !== 'nginx-x10-local-alpha' || manifest.prefix !== prefix || !/^[a-f0-9]{32}$/.test(manifest.installationId || '')
+  if (!supportedSchema(manifest.schemaVersion) || manifest.kind !== 'nginx-x10-local-alpha' || manifest.prefix !== prefix || !/^[a-f0-9]{32}$/.test(manifest.installationId || '')
+    || (manifest.schemaVersion === 2 && (stat.mode & 0o7777) !== 0o700)
     || !same(manifest.rootIdentity, { dev: stat.dev, ino: stat.ino, uid: stat.uid })) fail('alpha_integrity', 'Installation root identity changed');
-  const expectedFiles = ['bin/nginx', 'bin/x10', 'build.json', 'licenses/NGINX-LICENSE', 'licenses/UPSTREAM.txt', 'examples/candidate-b.json', ...controlNames.map(name => `lib/control/${name}`), ...alphaNames.map(name => `lib/alpha/${name}`)].sort();
+  const expectedFiles = installedNames(manifest.schemaVersion);
   if (!same(Object.keys(manifest.immutable || {}).sort(), expectedFiles)) fail('alpha_integrity', 'Installation inventory is incomplete or invalid');
+  for (const relative of [...staticDirectories, ...(manifest.schemaVersion === 2 ? ['lib/service'] : [])]) {
+    const directory = path.join(prefix, relative); await canonical(directory); const info = await owned(directory, true, true);
+    if ((info.mode & 0o7777) !== 0o700) fail('alpha_integrity', 'Installation directory mode differs from its profile');
+  }
   for (const [relative, expected] of Object.entries(manifest.immutable)) {
     const file = path.join(prefix, relative); await canonical(path.dirname(file)); const info = await owned(file);
-    if (info.size !== expected.bytes || digest(await readFile(file)) !== expected.sha256 || (info.mode & 0o7777).toString(8).padStart(4, '0') !== expected.mode) fail('alpha_integrity', `Installed file changed: ${relative}`);
+    if (expected.mode !== payloadMode(relative) || (manifest.schemaVersion === 2 && info.nlink !== 1)
+        || info.size !== expected.bytes || digest(await readFile(file)) !== expected.sha256 || (info.mode & 0o7777).toString(8).padStart(4, '0') !== expected.mode) fail('alpha_integrity', `Installed file changed: ${relative}`);
   }
   const dependencyDrift = [];
   if (!Array.isArray(manifest.dependencies?.files) || !manifest.dependencies.files.length) fail('alpha_integrity', 'Missing dynamic dependency inventory');
@@ -232,6 +253,23 @@ async function installed(prefix, allowDependencyDrift = false) {
   if (registry.schemaVersion !== 1 || registry.installationId !== manifest.installationId || !Array.isArray(registry.sessions) || !registry.sessions.length || registry.sessions.length > 256
     || registry.sessions.some(value => !/^[a-f0-9]{32}$/.test(value)) || new Set(registry.sessions).size !== registry.sessions.length || !registry.sessions.includes(registry.current)) fail('alpha_integrity', 'Session registry is inconsistent');
   return { prefix, manifest, registry, dependencyDrift };
+}
+async function serviceUnit(context, autoReadiness) {
+  if (context.manifest.schemaVersion !== 2) fail('service_recipe_unavailable', 'This installed schema has no immutable service recipe');
+  const node = context.manifest.nodeRuntime, executable = await realpath(process.execPath);
+  const actual = await lstat(executable), mode = actual.mode & 0o7777;
+  if (!node || executable !== node.executable || process.version !== node.version
+      || !actual.isFile() || ![0, process.getuid()].includes(actual.uid)
+      || (mode & 0o7022) !== 0 || (mode & 0o100) === 0 || actual.size < 1 || actual.size > 256 * 1024 * 1024
+      || digest(await readFile(executable)) !== node.sha256)
+    fail('service_recipe_invalid', 'Recipe requires the exact recorded Node runtime');
+  // installed() validated the complete fixed inventory, helper bytes and modes
+  // before this import. The command is read-only and never takes alpha's lock.
+  const helper = await import(pathToFileURL(path.join(context.prefix, recipePath)).href);
+  const value = { prefix: context.prefix, nodeExecutable: executable, autoReadiness };
+  await helper.inspectInstallation(value);
+  return { ok: true, unit: helper.renderUserUnit(value), ...helper.RECIPE_LIMITATIONS,
+    readinessAutomated: autoReadiness, outcome: 'service_unit_generated', activationPerformed: false };
 }
 async function lifecycle(context, session = context.registry.current) {
   const prefix = path.join(context.prefix, 'runs', session); await canonical(prefix); await owned(prefix, true, true);
@@ -386,7 +424,7 @@ async function inventory(prefix) {
 }
 async function uninstall(context, moved) {
   const knownFiles = new Set([...Object.keys(context.manifest.immutable), '.alpha-install.json', '.alpha-registry.json', '.alpha-lock']);
-  const knownDirs = new Set(['bin', 'lib', 'lib/control', 'lib/alpha', 'licenses', 'examples', 'runs']);
+  const knownDirs = new Set([...staticDirectories, ...(context.manifest.schemaVersion === 2 ? ['lib/service'] : [])]);
   for (const session of context.registry.sessions) {
     const life = await lifecycle(context, session); await stopped(context, life); const state = await sessionStatus(context, life);
     const history = await state.control.history(state.state), references = new Set();
@@ -508,12 +546,15 @@ export async function main(argv, installedPrefix = null) {
   try {
     const { values, positionals } = parseArgs({ args: argv, allowPositionals: true, options: Object.fromEntries([
       ...['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'output', 'file', 'revision', 'control-socket', 'control-address', 'timeout-ms'].map(name => [name, { type: 'string' }]),
-      ['human', { type: 'boolean' }], ['help', { type: 'boolean', short: 'h' }],
+      ['auto-readiness', { type: 'boolean' }], ['human', { type: 'boolean' }], ['help', { type: 'boolean', short: 'h' }],
     ]) });
     const [command] = positionals;
-    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 prepare-run | run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
+    if (command === 'service-unit' && (argv[0] !== 'service-unit' || ![1, 2].includes(argv.length)
+        || (argv.length === 2 && argv[1] !== '--auto-readiness')))
+      fail('arguments', 'Use service-unit [--auto-readiness]');
+    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 service-unit [--auto-readiness] | prepare-run | run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
     if (positionals.length !== 1) fail('arguments', 'Exactly one command is required; use --help');
-    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
+    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], 'service-unit': ['auto-readiness'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
     if (!allowed[command] || Object.keys(values).some(key => !allowed[command].includes(key))) fail('arguments', 'Unsupported command or option for this command');
     let waitTimeout = 10000;
     if (command === 'wait-bind' && values['timeout-ms'] !== undefined) {
@@ -525,8 +566,9 @@ export async function main(argv, installedPrefix = null) {
     if (command === 'install' || command === 'pack') { if (installedPrefix) fail('arguments', 'Use the source checkout or extracted bundle for installation'); result = command === 'install' ? await install(values) : await pack(values); }
     else {
       if (!installedPrefix) fail('arguments', 'Use the installed PREFIX/bin/x10 launcher for lifecycle commands');
-      const prefix = path.resolve(installedPrefix), allowDrift = ['stop', 'uninstall', 'info', 'status', 'history'].includes(command); await installed(prefix, allowDrift);
-      if (command === 'run') result = await run(prefix, values);
+      const prefix = path.resolve(installedPrefix), allowDrift = ['stop', 'uninstall', 'info', 'status', 'history'].includes(command); const inspected = await installed(prefix, allowDrift);
+      if (command === 'service-unit') result = await serviceUnit(inspected, values['auto-readiness'] === true);
+      else if (command === 'run') result = await run(prefix, values);
       else if (command === 'wait-bind') result = await waitBind(prefix, waitTimeout);
       else result = await lock(prefix, async moved => {
         const context = await installed(prefix, allowDrift);

@@ -7,13 +7,23 @@ import { fileURLToPath } from 'node:url';
 
 export const MAX_ARCHIVE_BYTES = 32 * 1024 * 1024;
 export const MAX_TAR_BYTES = 64 * 1024 * 1024;
-export const PAYLOAD_NAMES = Object.freeze([
+export const PAYLOAD_NAMES_V1 = Object.freeze([
   'bin/nginx', 'install.mjs', 'LICENSE', 'NOTICE', 'x10/alpha/README.md',
   ...['cli.mjs', 'runtime.mjs', 'upstream-example.mjs'].map(n => `x10/alpha/${n}`),
   ...['cli.mjs', 'manager.mjs', 'listeners.mjs', 'generations.mjs', 'status-format.mjs'].map(n => `x10/control/${n}`),
 ].sort());
+// Preserve the existing thirteen-file export for schema1 callers. The larger
+// parse allowlist is a bound, never an inventory accepted on its own.
+export const PAYLOAD_NAMES = PAYLOAD_NAMES_V1;
+export const PAYLOAD_NAMES_V2 = Object.freeze([...PAYLOAD_NAMES_V1, 'x10/service/user-unit.mjs'].sort());
 const ROOT = 'nginx-x10-alpha/';
-const DIRS = new Set(['', 'bin/', 'x10/', 'x10/alpha/', 'x10/control/'].map(n => ROOT + n));
+const DIRS_V1 = Object.freeze(['', 'bin/', 'x10/', 'x10/alpha/', 'x10/control/'].map(n => ROOT + n));
+const DIRS_V2 = Object.freeze([...DIRS_V1, ROOT + 'x10/service/']);
+const PARSE_DIRS = new Set(DIRS_V2);
+const PROFILES = Object.freeze({
+  1: Object.freeze({ kind: 'nginx-x10-linux-alpha-bundle', names: PAYLOAD_NAMES_V1, directories: DIRS_V1 }),
+  2: Object.freeze({ kind: 'nginx-x10-linux-alpha-bundle', names: PAYLOAD_NAMES_V2, directories: DIRS_V2 }),
+});
 const HEX = /^[a-f0-9]{64}$/, REV = /^[a-f0-9]{40}$/;
 const digest = b => createHash('sha256').update(b).digest('hex');
 const reject = () => { throw new Error('archive_invalid'); };
@@ -41,7 +51,7 @@ function parseTar(tar) {
       if (tar.length - offset < 512 || tar.subarray(offset).some(n => n !== 0)) reject();
       terminated = true; break;
     }
-    if (entries.size >= PAYLOAD_NAMES.length + DIRS.size + 1) reject();
+    if (entries.size >= PAYLOAD_NAMES_V2.length + PARSE_DIRS.size + 1) reject();
     const checksum = octal(h.subarray(148, 156)); let sum = 0;
     for (let i = 0; i < 512; i++) sum += i >= 148 && i < 156 ? 32 : h[i];
     if (sum !== checksum) reject();
@@ -54,11 +64,11 @@ function parseTar(tar) {
     const type = h[156];
     if (entries.has(name) || size > MAX_TAR_BYTES || offset + Math.ceil(size / 512) * 512 > tar.length) reject();
     const directory = type === 53;
-    if (directory) { if (!DIRS.has(name) || size !== 0 || mode !== 0o700) reject(); }
+    if (directory) { if (!PARSE_DIRS.has(name) || size !== 0 || mode !== 0o700) reject(); }
     else {
       if ((type !== 48 && type !== 0) || !name.startsWith(ROOT)) reject();
       const relative = name.slice(ROOT.length);
-      if (relative !== 'bundle.json' && !PAYLOAD_NAMES.includes(relative)) reject();
+      if (relative !== 'bundle.json' && !PAYLOAD_NAMES_V2.includes(relative)) reject();
       if (mode !== (relative === 'bin/nginx' ? 0o500 : relative === 'bundle.json' ? 0o600 : 0o400)) reject();
       if (relative === 'bundle.json' && (size === 0 || size > 256 * 1024)) reject();
     }
@@ -66,8 +76,7 @@ function parseTar(tar) {
     if (padding.some(n => n !== 0)) reject();
     entries.set(name, { data, mode, directory }); offset += Math.ceil(size / 512) * 512;
   }
-  const expected = [...DIRS, ROOT + 'bundle.json', ...PAYLOAD_NAMES.map(n => ROOT + n)];
-  if (!terminated || !sameNames([...entries.keys()], expected)) reject();
+  if (!terminated) reject();
   return entries;
 }
 
@@ -82,12 +91,17 @@ export function verifyAlphaArchive(bytes, trustedSha256) {
     const manifest = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(manifestBytes));
     if (!plain(manifest)) reject();
     const { sha256, ...value } = manifest;
-    if (!HEX.test(sha256 || '') || digest(JSON.stringify(value)) !== sha256 || value.schemaVersion !== 1
-      || value.kind !== 'nginx-x10-linux-alpha-bundle' || !plain(value.files)
-      || !sameNames(Object.keys(value.files), PAYLOAD_NAMES)
+    // A complete declared version selects one exact tuple. Neither an extra
+    // helper nor a version-shaped string can opt a legacy inventory into v2.
+    const profile = value.schemaVersion === 1 ? PROFILES[1] : value.schemaVersion === 2 ? PROFILES[2] : null;
+    if (!profile || !HEX.test(sha256 || '') || digest(JSON.stringify(value)) !== sha256
+      || value.kind !== profile.kind || !plain(value.files)
+      || !sameNames(Object.keys(value.files), profile.names)
       || value.platform?.system !== 'Linux' || !['x86_64', 'aarch64'].includes(value.platform?.machine)
       || !HEX.test(value.nativeVersionOutputSha256 || '')) reject();
-    for (const name of PAYLOAD_NAMES) {
+    const expected = [...profile.directories, ROOT + 'bundle.json', ...profile.names.map(n => ROOT + n)];
+    if (!sameNames([...entries.keys()], expected)) reject();
+    for (const name of profile.names) {
       const f = value.files[name], actual = entries.get(ROOT + name);
       if (!plain(f) || !sameNames(Object.keys(f), ['sha256', 'bytes', 'mode']) || !HEX.test(f.sha256 || '')
         || !Number.isSafeInteger(f.bytes) || f.bytes !== actual.data.length || f.sha256 !== digest(actual.data)
@@ -95,8 +109,8 @@ export function verifyAlphaArchive(bytes, trustedSha256) {
     }
     const p = value.provenance;
     if (!plain(p) || !REV.test(p.checkoutRevision || '') || !REV.test(p.upstreamRevision || '') || !HEX.test(p.sourceDiffSha256 || '')) reject();
-    return { valid: true, code: 'archive_consistent', archiveSha256: trustedSha256, archiveBytes: bytes.length,
-      tarBytes: tar.length, payloadFiles: PAYLOAD_NAMES.length, directories: DIRS.size,
+    return { valid: true, code: 'archive_consistent', schemaVersion: value.schemaVersion, archiveSha256: trustedSha256, archiveBytes: bytes.length,
+      tarBytes: tar.length, payloadFiles: profile.names.length, directories: profile.directories.length,
       bundleManifestSha256: digest(manifestBytes), binarySha256: value.files['bin/nginx'].sha256,
       sourceCommit: p.checkoutRevision, upstreamCommit: p.upstreamRevision, sourceDiffSha256: p.sourceDiffSha256,
       machine: value.platform.machine };

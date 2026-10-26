@@ -88,9 +88,31 @@ export async function inspectInstallation(value) {
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) refuse();
   const { sha256, ...manifest } = parsed;
   if (!HEX.test(sha256 || '') || digest(JSON.stringify(manifest)) !== sha256
-      || manifest.schemaVersion !== 1 || manifest.kind !== 'nginx-x10-local-alpha' || manifest.prefix !== prefix
+      || ![1, 2].includes(manifest.schemaVersion) || manifest.kind !== 'nginx-x10-local-alpha' || manifest.prefix !== prefix
       || !/^[a-f0-9]{32}$/.test(manifest.installationId || '')
       || manifest.rootIdentity?.uid !== stat.uid || manifest.rootIdentity?.dev !== stat.dev || manifest.rootIdentity?.ino !== stat.ino) refuse();
+  if (manifest.schemaVersion === 2) {
+    const names = ['bin/nginx', 'bin/x10', 'build.json', 'licenses/NGINX-LICENSE', 'licenses/UPSTREAM.txt', 'examples/candidate-b.json',
+      ...['cli.mjs', 'manager.mjs', 'listeners.mjs', 'generations.mjs', 'status-format.mjs'].map(name => `lib/control/${name}`),
+      ...['cli.mjs', 'runtime.mjs', 'upstream-example.mjs'].map(name => `lib/alpha/${name}`), 'lib/service/user-unit.mjs'].sort();
+    if (JSON.stringify(Object.keys(manifest.immutable || {}).sort()) !== JSON.stringify(names)) refuse();
+    for (const relative of ['bin', 'lib', 'lib/control', 'lib/alpha', 'lib/service', 'licenses', 'examples', 'runs']) {
+      const file = `${prefix}/${relative}`;
+      if (await realpath(file) !== file) refuse();
+      const handle = await open(file, constants.O_RDONLY | constants.O_DIRECTORY | constants.O_NOFOLLOW);
+      try { const info = await handle.stat();
+        if (!info.isDirectory() || info.uid !== stat.uid || (info.mode & 0o7777) !== 0o700) refuse();
+      } finally { await handle.close(); }
+    }
+    for (const relative of names) {
+      const expected = manifest.immutable[relative], mode = ['bin/nginx', 'bin/x10'].includes(relative) ? '0500' : '0400';
+      const actual = await readRegular(`${prefix}/${relative}`, 256 * 1024 * 1024,
+        { uid: stat.uid, privateFile: true, executable: mode === '0500' });
+      if (!expected || expected.mode !== mode || actual.mode.toString(8).padStart(4, '0') !== mode
+          || actual.stat.nlink !== 1 || expected.bytes !== actual.bytes.length
+          || !HEX.test(expected.sha256 || '') || expected.sha256 !== digest(actual.bytes)) refuse();
+    }
+  }
   const launcher = await readRegular(`${prefix}/bin/x10`, 64 * 1024, { uid: stat.uid, privateFile: true, executable: true });
   const expected = manifest.immutable?.['bin/x10'];
   if (!expected || !HEX.test(expected.sha256 || '') || expected.sha256 !== digest(launcher.bytes)

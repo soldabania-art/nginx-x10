@@ -7,8 +7,11 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
 import { digest } from '../alpha/runtime.mjs';
-import { parseArguments, sanitizeNativeChallengeAdmission, assessOwnedNativeChallenge, classifyOperatorHoldDecision, createOperatorHoldDiagnostics, assessInterruptedRecovery, assessInterruptedProbeHold, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
+import { parseArguments, assessInstalledServiceRecipe, assessInstalledServiceRecipeCommand, sanitizeNativeChallengeAdmission, assessOwnedNativeChallenge, classifyOperatorHoldDecision, createOperatorHoldDiagnostics, assessInterruptedRecovery, assessInterruptedProbeHold, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
 import { JOURNAL_RESULT_CODES } from './journal-check.mjs';
+// Test-only source generation supplies known unchanged recipe bytes; the
+// actual service harness must consume its installed command instead.
+import { renderUserUnit } from './user-unit.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
 const transcript = (changes = {}) => Object.entries({ LoadState: 'loaded', ActiveState: 'active', SubState: 'running', Result: 'success',
@@ -1349,4 +1352,140 @@ test('challenge admission sanitizer refuses extra fields, symbols, prototypes an
   }
   assert.equal(called, 0);
   const clean = sanitizeNativeChallengeAdmission(challengeAdmission()); assert.equal(JSON.stringify(clean).includes(raw), false);
+});
+
+
+const recipePrefix = '/tmp/x10-package/install', recipeNode = '/opt/private-node/bin/node';
+const installedRecipe = change => ({ ok: true, unit: renderUserUnit({ prefix: recipePrefix, nodeExecutable: recipeNode, autoReadiness: true }),
+  scope: 'systemd-user-recipe-only', readinessAutomated: true, startupHealthAccepted: false,
+  serviceAccepted: false, productionAccepted: false, outcome: 'service_unit_generated', activationPerformed: false, ...change });
+const installedRecipeCommand = change => ({ ok: true, exitCode: 0, stdout: JSON.stringify(installedRecipe()) + '\n', stderr: '', termination: 'none', ...change });
+test('installed recipe contract accepts exact automatic bytes bound to current prefix and pinned Node only', () => {
+  const value = installedRecipe(); assert.equal(assessInstalledServiceRecipe(value, recipePrefix, recipeNode), value.unit);
+  assert.equal(assessInstalledServiceRecipeCommand(installedRecipeCommand(), recipePrefix, recipeNode), value.unit);
+  const nullProto = Object.assign(Object.create(null), value);
+  assert.equal(assessInstalledServiceRecipe(nullProto, recipePrefix, recipeNode), value.unit);
+});
+for (const [key, expected] of Object.entries({ ok: true, readinessAutomated: true, startupHealthAccepted: false,
+  serviceAccepted: false, productionAccepted: false, activationPerformed: false })) {
+  test(`installed recipe rejects unknown or changed ${key}`, () => {
+    for (const value of [!expected, null, undefined, 1, 0, 'true']) assert.throws(() => assessInstalledServiceRecipe(installedRecipe({ [key]: value }), recipePrefix, recipeNode), { code: 'installed_recipe_invalid' });
+  });
+}
+for (const [key, value] of [['scope', 'user'], ['scope', 'service-accepted'], ['outcome', 'installed'], ['outcome', 'applied']]) {
+  test(`installed recipe refuses substituted ${key}=${value}`, () => assert.throws(() => assessInstalledServiceRecipe(installedRecipe({ [key]: value }), recipePrefix, recipeNode), { code: 'installed_recipe_invalid' }));
+}
+const recipeUnitChanges = {
+  wrongNode: value => value.replaceAll(recipeNode, '/opt/other/bin/node'),
+  wrongPrefix: value => value.replaceAll(recipePrefix, '/tmp/other/install'),
+  missingPreparation: value => value.replace(/^ExecStartPre=.*\n/m, ''),
+  missingWaitBind: value => value.replace(/^ExecStartPost=.*\n/m, ''),
+  shorterWait: value => value.replace('--timeout-ms 10000', '--timeout-ms 1000'),
+  missingControlSocket: value => value.replace(` --control-socket ${recipePrefix}/control.sock`, ''),
+  wrongStop: value => value.replace(' stop\n', ' uninstall\n'),
+  automaticRestart: value => value.replace('Restart=no', 'Restart=always'),
+  groupKill: value => value.replace('KillMode=process', 'KillMode=control-group'),
+  forceKill: value => value.replace('SendSIGKILL=no', 'SendSIGKILL=yes'),
+  longerStart: value => value.replace('TimeoutStartSec=30s', 'TimeoutStartSec=300s'),
+  longerStop: value => value.replace('TimeoutStopSec=30s', 'TimeoutStopSec=300s'),
+  publicMask: value => value.replace('UMask=0077', 'UMask=0022'),
+  inheritedEnvironment: value => value.replace(/^UnsetEnvironment=.*\n/m, ''),
+  extraCommand: value => value.replace('[Install]', 'ExecStartPost=/bin/true\n[Install]'),
+  extraSection: value => value + '[Service]\nExecStart=/bin/false\n',
+  noFinalLF: value => value.slice(0, -1),
+  extraLF: value => value + '\n',
+  CRLF: value => value.replaceAll('\n', '\r\n'),
+  nul: value => value + '\0',
+  nonAscii: value => value.replace('private operator', 'prívate operator'),
+  manualRecipe: () => renderUserUnit({ prefix: recipePrefix, nodeExecutable: recipeNode }),
+  oversized: () => 'a'.repeat(8193),
+};
+for (const [name, change] of Object.entries(recipeUnitChanges)) {
+  test(`installed automatic service refuses recipe unit ${name}`, () => assert.throws(() => assessInstalledServiceRecipe(installedRecipe({ unit: change(installedRecipe().unit) }), recipePrefix, recipeNode), { code: 'installed_recipe_invalid' }));
+}
+test('installed recipe refuses extra keys, symbols, prototypes and getters without invoking them', () => {
+  let called = 0; const getter = installedRecipe(); Object.defineProperty(getter, 'unit', { get() { called++; return installedRecipe().unit; } });
+  const symbol = installedRecipe(); symbol[Symbol('extension')] = true;
+  const missing = installedRecipe(); delete missing.activationPerformed;
+  for (const value of [null, [], {}, Object.assign(Object.create({ ok: true }), installedRecipe()), installedRecipe({ extra: true }), getter, symbol, missing]) {
+    assert.throws(() => assessInstalledServiceRecipe(value, recipePrefix, recipeNode), { code: 'installed_recipe_invalid' });
+  }
+  assert.equal(called, 0);
+});
+for (const [name, change] of Object.entries({ refused: { ok: false }, nonzero: { exitCode: 1 }, unknownExit: { exitCode: null },
+  stderr: { stderr: 'diagnostic' }, timeout: { termination: 'timeout_or_killed' }, signalled: { termination: 'signal' },
+  empty: { stdout: '' }, invalidJSON: { stdout: '{' }, rawUnit: { stdout: installedRecipe().unit }, oversized: { stdout: 'a'.repeat(16385) },
+  extraCommandField: { extra: true }, falseReceipt: { stdout: JSON.stringify(installedRecipe({ activationPerformed: true })) } })) {
+  test(`installed recipe command refuses ${name}`, () => assert.throws(() => assessInstalledServiceRecipeCommand(installedRecipeCommand(change), recipePrefix, recipeNode), { code: 'installed_recipe_invalid' }));
+}
+test('installed recipe command refuses getters without evaluating them', () => {
+  let called = false; const value = installedRecipeCommand(); Object.defineProperty(value, 'stdout', { get() { called = true; return JSON.stringify(installedRecipe()); } });
+  assert.throws(() => assessInstalledServiceRecipeCommand(value, recipePrefix, recipeNode), { code: 'installed_recipe_invalid' }); assert.equal(called, false);
+});
+for (const [name, prefix, node] of [
+  ['relative prefix', 'tmp/x10', recipeNode], ['root prefix', '/x10', recipeNode], ['traversal prefix', '/tmp/a/../x10', recipeNode],
+  ['newline prefix', recipePrefix + '\n', recipeNode], ['too long prefix', '/tmp/' + 'a'.repeat(95), recipeNode],
+  ['relative Node', recipePrefix, 'bin/node'], ['newline Node', recipePrefix, recipeNode + '\n'], ['unbound Node', recipePrefix, '/opt/other/node'],
+]) {
+  test(`installed recipe refuses ${name}`, () => assert.throws(() => assessInstalledServiceRecipe(installedRecipe(), prefix, node), { code: 'installed_recipe_invalid' }));
+}
+test('baseline checkout recipe fallback can generate an apparently valid unit without any installed recipe command', async () => {
+  // Exact prior behavior89aa: the checkout inspector/render are sufficient;
+  // no installed service-unit command participates in these decisions.
+  const oldRecipeCalls = `await inspectInstallation({ prefix, nodeExecutable: node });
+const unit = renderUserUnit({ prefix, nodeExecutable: node, autoReadiness: true }); return unit;`;
+  let inspected = 0;
+  const run = new Function('inspectInstallation', 'renderUserUnit', 'prefix', 'node', `return async () => { ${oldRecipeCalls} };`)(
+    async () => { inspected++; }, renderUserUnit, recipePrefix, recipeNode);
+  assert.equal(await run(), installedRecipe().unit); assert.equal(inspected, 1);
+  // The candidate refuses absent/non-JSON installed output instead of falling
+  // back to either source helper, even if checkout generation would succeed.
+  assert.throws(() => assessInstalledServiceRecipeCommand(installedRecipeCommand({ stdout: '' }), recipePrefix, recipeNode), { code: 'installed_recipe_invalid' });
+});
+test('actual recipe preparation invokes only pinned Node and installed immutable CLI before unit write', async () => {
+  const source = await readFile(script, 'utf8');
+  assert.equal(source.includes("from './user-unit.mjs'"), false);
+  assert.equal(source.includes('renderUserUnit('), false); assert.equal(source.includes('inspectInstallation('), false);
+  const start = source.indexOf("    report.phase = 'recipe_inspection';");
+  const setup = source.slice(start, source.indexOf("    report.phase = 'unit_preparation';", start));
+  const calls = [], report = {};
+  const env = { report, prefix: recipePrefix, node: recipeNode, launcher: `${recipePrefix}/bin/x10`, env: {},
+    observeNodePrerequisites: async (prefix, node) => { assert.equal(prefix, recipePrefix); assert.equal(node, recipeNode); return {}; },
+    command: async (node, args) => { calls.push({ node, args }); return installedRecipeCommand(); }, checkCancelled() {}, assessInstalledServiceRecipeCommand };
+  const actual = await new Function(...Object.keys(env), `return async () => { ${setup}; return unit; };`)(...Object.values(env))();
+  assert.equal(actual, installedRecipe().unit);
+  assert.deepEqual(calls, [{ node: recipeNode, args: [`${recipePrefix}/bin/x10`, 'service-unit', '--auto-readiness'] }]);
+  assert.equal(report.installedRecipeGenerated, true); assert.equal(report.installSchemaVersion, 2);
+  assert(source.indexOf('assessInstalledServiceRecipeCommand(recipeCommand') < source.indexOf('await open(unitFile'));
+});
+
+
+for (const [name, response] of Object.entries({ absent: installedRecipeCommand({ stdout: '' }),
+  refusal: installedRecipeCommand({ ok: false, exitCode: 1 }),
+  timeout: installedRecipeCommand({ ok: false, termination: 'timeout_or_killed' }),
+  foreignUnit: installedRecipeCommand({ stdout: JSON.stringify(installedRecipe({ unit: installedRecipe().unit.replaceAll(recipePrefix, '/tmp/foreign/install') })) }),
+  activationClaim: installedRecipeCommand({ stdout: JSON.stringify(installedRecipe({ activationPerformed: true })) }),
+  incompleteSchema: installedRecipeCommand({ stdout: JSON.stringify({ ok: true, unit: installedRecipe().unit }) }),
+})) {
+  test(`actual recipe preparation preserves false generation flags after ${name}`, async () => {
+    const source = await readFile(script, 'utf8'), start = source.indexOf("    report.phase = 'recipe_inspection';");
+    const setup = source.slice(start, source.indexOf("    report.phase = 'unit_preparation';", start));
+    const report = { installedRecipeGenerated: false, installSchemaVersion: null };
+    const env = { report, prefix: recipePrefix, node: recipeNode, launcher: `${recipePrefix}/bin/x10`, env: {},
+      observeNodePrerequisites: async () => ({}), command: async () => response, checkCancelled() {}, assessInstalledServiceRecipeCommand };
+    await assert.rejects(new Function(...Object.keys(env), `return async () => { ${setup}; };`)(...Object.values(env))(), { code: 'installed_recipe_invalid' });
+    assert.equal(report.installedRecipeGenerated, false); assert.equal(report.installSchemaVersion, null);
+    assert.equal(report.phase, 'recipe_inspection');
+  });
+}
+test('actual managed-service archive path requires exact new bundle schema2 before extraction', async () => {
+  const source = await readFile(script, 'utf8'), start = source.indexOf("    if (!verified.valid || verified.schemaVersion !== 2)");
+  assert(start > 0); const guard = source.slice(start, source.indexOf('    checkCancelled(); parent =', start));
+  const reject = code => { throw Object.assign(new Error(code), { code }); };
+  for (const schemaVersion of [undefined, null, 0, 1, 3, '2']) {
+    const report = {}; assert.throws(() => new Function('verified', 'report', 'reject', guard)({ valid: true, schemaVersion }, report, reject), { code: 'archive_refused' });
+    assert.equal(report.bundleSchemaVersion, undefined);
+  }
+  const report = {}; new Function('verified', 'report', 'reject', guard)({ valid: true, schemaVersion: 2 }, report, reject);
+  assert.equal(report.bundleSchemaVersion, 2);
 });

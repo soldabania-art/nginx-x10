@@ -202,6 +202,10 @@ export function cleanupEvidence(e) {
       || r.tlsServiceAccepted !== false || r.serviceAccepted !== false || r.productionAccepted !== false || r.subprocessOutputsPublished !== false
       || r.primaryFailure !== null || !Array.isArray(r.cleanupFailures) || r.cleanupFailures.length !== 0
       || r.cleanupFailureCount !== 0 || r.cleanupFailuresTruncated !== false) return false;
+  for (const [key, expected] of [['bundleSchemaVersion', 2], ['installSchemaVersion', 2], ['installedRecipeGenerated', true]]) {
+    const descriptor = Object.getOwnPropertyDescriptor(r, key);
+    if (!descriptor || !Object.hasOwn(descriptor, 'value') || descriptor.value !== expected) return false;
+  }
   if (r.failedStartChecks !== 1) return false;
   const failed = r.failedStartProof;
   const failedKeys = ['unhealthyReadinessObserved', 'managerRefused', 'hookExitObserved', 'bindingAbsent',
@@ -365,7 +369,7 @@ export async function main(argv = process.argv.slice(2)) {
       const receipt = await regular(file, 32768, { uid: process.getuid() });
       if ((receipt.stat.mode & 0o7077) !== 0) refuse('runtime_retained_cleanup_unconfirmed');
       const e = JSON.parse(receipt.bytes);
-      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '35910c56066938c0f5f1c4d8aad63ee535f3c6daf1a43576a0ce25d05f8da05e') refuse('runtime_retained_cleanup_unconfirmed');
+      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '1364daf1c1399b39706dae34fedee7134a5bc4857080012ab51a8a952d37f7fe') refuse('runtime_retained_cleanup_unconfirmed');
       const runtime = await inspectRuntime(prefix);
       if (e.runtimeNodeSha256 !== runtime.files['bin/node'].sha256 || e.runtimeInstallationId !== runtime.installationId) refuse('runtime_retained_cleanup_unconfirmed');
       await removeRuntime(prefix); result = { ok: true, code: 'verified_node_removed', runtimeRemoved: true };

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { spawn, execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { once } from 'node:events';
-import { chmod, copyFile, lstat, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises';
+import { chmod, copyFile, link, lstat, mkdir, mkdtemp, readFile, readdir, realpath, rm, rmdir, symlink, writeFile } from 'node:fs/promises';
 import net from 'node:net';
 import http from 'node:http';
 import os from 'node:os';
@@ -155,12 +155,27 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
       await execute('tar', ['-xzf', archive, '-C', parent], { timeout: 10000 });
       const bundle = path.join(parent, 'nginx-x10-alpha'), installer = path.join(bundle, 'install.mjs'), target = path.join(parent, 'bundled-install'), targetLauncher = path.join(target, 'bin/x10');
       const bundled = JSON.parse(await readFile(path.join(bundle, 'bundle.json'), 'utf8'));
+      assert.equal(bundled.schemaVersion,2);assert.equal(bundled.kind,'nginx-x10-linux-alpha-bundle');
+      const expectedBundle=['bin/nginx','install.mjs','LICENSE','NOTICE','x10/alpha/README.md',...recipeAlphaNames.map(n=>'x10/alpha/'+n),...recipeControlNames.map(n=>'x10/control/'+n),'x10/service/user-unit.mjs'].sort();
+      assert.equal(expectedBundle.length,14);assert.deepEqual(Object.keys(bundled.files).sort(),expectedBundle);
+      const bundleTree=await recipeTree(bundle);assert.deepEqual(bundleTree.directories,['','bin','x10','x10/alpha','x10/control','x10/service']);assert.deepEqual(bundleTree.files,[...expectedBundle,'bundle.json'].sort());
+      for(const dir of ['', 'bin','x10','x10/alpha','x10/control','x10/service'])assert.equal((await lstat(path.join(bundle,dir))).mode&0o7777,0o700);
+      assert.equal((await lstat(path.join(bundle,'x10/service/user-unit.mjs'))).mode&0o7777,0o400);
       assert.equal(bundled.files['bin/nginx'].sha256, build.binary.sha256); assert(!JSON.stringify(bundled).includes(root.replace(/\/$/, ''))); assert(!JSON.stringify(bundled).includes('/proc/'));
       assert.equal(await absent(path.join(bundle, 'x10/.build')), true); assert.equal(await absent(path.join(bundle, 'runs')), true);
       const code = path.join(bundle, 'x10/control/listeners.mjs'), saved = await readFile(code); await chmod(code, 0o600);
       try { await writeFile(code, 'changed'); assert.equal((await cli(installer, 'install', '--prefix', target)).json.code, 'bundle_identity'); assert(await absent(target)); }
       finally { await writeFile(code, saved); await chmod(code, 0o400); }
       const result = await cli(installer, 'install', '--prefix', target, '--port', String(port), '--health-port', String(healthPort)); assert.equal(result.code, 0, result.stdout);
+      const installedRecord=JSON.parse(await readFile(path.join(target,'.alpha-install.json'),'utf8'));
+      assert.equal(installedRecord.schemaVersion,2);assert.equal(Object.keys(installedRecord.immutable).length,15);assert.deepEqual(Object.keys(installedRecord.immutable).sort(),recipeV2Names);
+      for(const dir of recipeV2Dirs)assert.equal((await lstat(path.join(target,dir))).mode&0o7777,0o700);
+      const generator=await import('../service/user-unit.mjs'),recordedNode=installedRecord.nodeRuntime.executable;
+      for(const automatic of [false,true]){
+        const recipe=await cli(targetLauncher,'service-unit',...(automatic?['--auto-readiness']:[]));assertRecipeResult(recipe,{prefix:target,nodeExecutable:recordedNode,automatic});
+        assert.equal(recipe.json.unit,generator.renderUserUnit({prefix:target,nodeExecutable:recordedNode,autoReadiness:automatic}));
+        assert.equal(await absent(path.join(target,'.alpha-lock')),true);
+      }
       let output = '', pid;
       const child = spawn(process.execPath, [targetLauncher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); launchers.add(child);
       child.stdout.on('data', b => { output += b; const match = /"(?:pid|candidatePid)": (\d+)/.exec(output); if (match) { pid = Number(match[1]); nativeGroups.add(pid); } }); child.stderr.on('data', b => output += b);
@@ -545,4 +560,104 @@ test('prepare-run preserves live, faulted, locked and malformed prepared records
   assert.equal((await cli(f.launcher, 'prepare-run')).json.code, 'alpha_live');
   assert.deepEqual(await readFile(marker), registry); await f.stop();
   assert.equal((await cli(f.launcher, 'uninstall')).code, 0);
+});
+
+// Read-only installed-command controls use real installed modules and Node,
+// synthetic NONEXECUTED native bytes and no session/native/process-group start.
+const recipeControlNames=['cli.mjs','manager.mjs','listeners.mjs','generations.mjs','status-format.mjs'];
+const recipeAlphaNames=['cli.mjs','runtime.mjs','upstream-example.mjs'];
+const recipeV2Names=['bin/nginx','bin/x10','build.json','licenses/NGINX-LICENSE','licenses/UPSTREAM.txt','examples/candidate-b.json',
+  ...recipeControlNames.map(n=>'lib/control/'+n),...recipeAlphaNames.map(n=>'lib/alpha/'+n),'lib/service/user-unit.mjs'].sort();
+const recipeV2Dirs=['bin','lib','lib/control','lib/alpha','lib/service','licenses','examples','runs'];
+async function recipeTree(base){
+  const directories=[],files=[];
+  async function visit(relative){directories.push(relative);for(const name of await readdir(path.join(base,relative))){const child=relative?relative+'/'+name:name,stat=await lstat(path.join(base,child));if(stat.isDirectory())await visit(child);else{assert.equal(stat.isFile(),true);assert.equal(stat.isSymbolicLink(),false);files.push(child);}}}
+  await visit('');return{directories:directories.sort(),files:files.sort()};
+}
+async function installedRecipeFixture(fn){
+  const parent=await mkdtemp(path.join(os.tmpdir(),'x10-installed-recipe-'));await chmod(parent,0o700);
+  const prefix=parent+'/install',launcher=prefix+'/bin/x10';
+  try{
+    await mkdir(prefix,{mode:0o700});for(const name of recipeV2Dirs)await mkdir(prefix+'/'+name,{mode:0o700});
+    const immutable={},put=async(relative,bytes,mode=0o400)=>{await writeFile(prefix+'/'+relative,bytes,{mode});immutable[relative]={bytes:bytes.length,sha256:digest(bytes),mode:mode.toString(8).padStart(4,'0')};};
+    await put('bin/nginx',Buffer.from('#!/bin/sh\n# Synthetic nonexecuted native placeholder.\nexit 99\n'),0o500);
+    await put('bin/x10',Buffer.from('#!/usr/bin/env node\nimport { main } from "../lib/alpha/cli.mjs";\nimport { fileURLToPath } from "node:url";\nawait main(process.argv.slice(2), fileURLToPath(new URL("../", import.meta.url)));\n'),0o500);
+    for(const name of recipeControlNames)await put('lib/control/'+name,await readFile(root+'x10/control/'+name));
+    for(const name of recipeAlphaNames)await put('lib/alpha/'+name,await readFile(root+'x10/alpha/'+name));
+    await put('lib/service/user-unit.mjs',await readFile(root+'x10/service/user-unit.mjs'));
+    for(const name of ['build.json','licenses/NGINX-LICENSE','licenses/UPSTREAM.txt','examples/candidate-b.json'])await put(name,Buffer.from('{}\n'));
+    const dep=Buffer.from('synthetic private dependency\n'),depfile=parent+'/dependency';await writeFile(depfile,dep,{mode:0o600});
+    const st=await lstat(prefix),nodeExecutable=parent+'/node',installId='a'.repeat(32),session='b'.repeat(32);
+    await copyFile(await realpath(process.execPath),nodeExecutable);await chmod(nodeExecutable,0o500);
+    const manifest={schemaVersion:2,kind:'nginx-x10-local-alpha',installationId:installId,prefix,rootIdentity:{dev:st.dev,ino:st.ino,uid:st.uid},
+      immutable,dependencies:{kind:'dynamic-host-libraries',files:[{path:depfile,bytes:dep.length,sha256:digest(dep)}]},
+      nodeRuntime:{version:process.version,executable:nodeExecutable,sha256:digest(await readFile(nodeExecutable))},compiledModules:['synthetic_nonexecuted']};
+    const save=async()=>{await writeFile(prefix+'/.alpha-install.json',JSON.stringify({...manifest,sha256:digest(JSON.stringify(manifest))}),{mode:0o600});};
+    const registry={schemaVersion:1,installationId:installId,current:session,sessions:[session]};
+    await writeFile(prefix+'/.alpha-registry.json',JSON.stringify({...registry,sha256:digest(JSON.stringify(registry))}),{mode:0o600});await save();
+    await fn({parent,prefix,launcher,manifest,save,nodeExecutable,put});
+  }finally{await rm(parent,{recursive:true,force:true});}
+}
+async function recipeCli(f,...args){
+  try{const r=await execute(f.nodeExecutable,[f.launcher,...args],{timeout:12000,maxBuffer:2*1024*1024});return{code:0,...r,json:JSON.parse(r.stdout)};}
+  catch(error){if(!Number.isInteger(error.code))throw error;return{code:error.code,stdout:error.stdout,stderr:error.stderr,json:JSON.parse(error.stdout)};}
+}
+function assertRecipeResult(result,{prefix,nodeExecutable,automatic=false}){
+  assert.equal(result.code,0,result.stdout);assert.equal(result.stderr,'');
+  assert.deepEqual(Object.keys(result.json),['ok','unit','scope','readinessAutomated','startupHealthAccepted','serviceAccepted','productionAccepted','outcome','activationPerformed']);
+  assert.equal(result.json.ok,true);assert.equal(result.json.outcome,'service_unit_generated');assert.equal(result.json.scope,'systemd-user-recipe-only');
+  for(const key of ['activationPerformed','startupHealthAccepted','serviceAccepted','productionAccepted'])assert.equal(result.json[key],false);
+  assert.equal(result.json.readinessAutomated,automatic);assert(result.json.unit.includes(`ExecStart=${nodeExecutable} ${prefix}/bin/x10 run --control-socket ${prefix}/control.sock\n`));
+  assert.equal(result.json.unit.includes('ExecStartPre='),automatic);assert.equal(result.json.unit.includes('ExecStartPost='),automatic);
+  assert.doesNotMatch(result.json.unit,/systemctl|enable-linger|\/bin\/sh|killall/);
+}
+test('installed recipe command emits manual and automatic units from installed files without activation or alpha lock',{timeout:15000},()=>installedRecipeFixture(async f=>{
+  const marker=await readFile(f.prefix+'/.alpha-install.json'),registry=await readFile(f.prefix+'/.alpha-registry.json');
+  const lock=f.prefix+'/.alpha-lock';await writeFile(lock,'operator-owned-lock\n',{mode:0o600});const lockBefore=await readFile(lock),lockStat=await lstat(lock);
+  for(const automatic of [false,true]){
+    const r=await recipeCli(f,'service-unit',...(automatic?['--auto-readiness']:[]));assertRecipeResult(r,{...f,automatic});
+    assert.deepEqual(await readFile(lock),lockBefore);assert.equal((await lstat(lock)).ino,lockStat.ino);
+  }
+  assert.deepEqual(await readFile(f.prefix+'/.alpha-install.json'),marker);assert.deepEqual(await readFile(f.prefix+'/.alpha-registry.json'),registry);
+  assert.deepEqual(await readdir(f.prefix+'/runs'),[]);assert.equal(await absent(f.prefix+'/control.sock'),true);
+}));
+test('installed recipe command exactflags refuse unknown values duplicates and lifecycle options',{timeout:20000},()=>installedRecipeFixture(async f=>{
+  for(const args of [['--auto-readiness','--auto-readiness'],['--auto-readiness=true'],['--auto-readiness','true'],['--node',f.nodeExecutable],['--prefix',f.prefix],['--output',f.parent+'/unit'],['--control-socket',f.prefix+'/sock'],['--help'],['extra']]){
+    const r=await recipeCli(f,'service-unit',...args);assert.equal(r.code,1);assert.equal(r.json.ok,false);
+    assert.equal(await absent(f.prefix+'/.alpha-lock'),true);assert.equal(await absent(f.parent+'/unit'),true);
+  }
+}));
+test('installed recipe command preserves strict legacyv1 profile and refuses recipe without sniffing optional helper',{timeout:15000},()=>installedRecipeFixture(async f=>{
+  const helper=f.prefix+'/lib/service/user-unit.mjs';await rm(helper);await rmdir(f.prefix+'/lib/service');delete f.manifest.immutable['lib/service/user-unit.mjs'];f.manifest.schemaVersion=1;await f.save();
+  const record=await readFile(f.prefix+'/.alpha-install.json');const r=await recipeCli(f,'service-unit');assert.equal(r.code,1);assert.equal(r.json.code,'service_recipe_unavailable');
+  assert.deepEqual(await readFile(f.prefix+'/.alpha-install.json'),record);assert.equal(await absent(f.prefix+'/.alpha-lock'),true);assert.equal(await absent(helper),true);
+  await mkdir(f.prefix+'/lib/service',{mode:0o700});await writeFile(helper,'throw new Error("must not import optional legacy helper");',{mode:0o400});
+  const again=await recipeCli(f,'service-unit');assert.equal(again.code,1);assert.equal(again.json.code,'service_recipe_unavailable');assert.deepEqual(await readFile(f.prefix+'/.alpha-install.json'),record);
+}));
+test('installed recipe command validates helper bytes before dynamic import',{timeout:15000},()=>installedRecipeFixture(async f=>{
+  const helper=f.prefix+'/lib/service/user-unit.mjs',sentinel=f.parent+'/imported';await chmod(helper,0o600);
+  await writeFile(helper,`await (await import('node:fs/promises')).writeFile(${JSON.stringify(sentinel)},'unexpected import');\nthrow new Error('must not import tampered helper');\n`);await chmod(helper,0o400);
+  const r=await recipeCli(f,'service-unit');assert.equal(r.code,1);assert.equal(r.json.code,'alpha_integrity');assert.equal(await absent(sentinel),true);assert.equal(await absent(f.prefix+'/.alpha-lock'),true);
+}));
+for(const key of ['version','executable','sha256'])test('installed recipe command validates actual recordedNode '+key+' before dynamic import',{timeout:15000},()=>installedRecipeFixture(async f=>{
+  const helper=f.prefix+'/lib/service/user-unit.mjs',sentinel=f.parent+'/imported',bytes=Buffer.from(`await (await import('node:fs/promises')).writeFile(${JSON.stringify(sentinel)},'unexpected import');\nthrow new Error('must not import before recorded node validation');\n`);
+  await chmod(helper,0o600);await writeFile(helper,bytes);await chmod(helper,0o400);f.manifest.immutable['lib/service/user-unit.mjs']={bytes:bytes.length,sha256:digest(bytes),mode:'0400'};
+  if(key==='version')f.manifest.nodeRuntime.version='v22.0.0';if(key==='executable')f.manifest.nodeRuntime.executable=f.parent+'/different-node';if(key==='sha256')f.manifest.nodeRuntime.sha256='0'.repeat(64);await f.save();
+  const r=await recipeCli(f,'service-unit');assert.equal(r.code,1);assert.equal(await absent(sentinel),true);assert.equal(await absent(f.prefix+'/.alpha-lock'),true);
+}));
+for(const mutation of ['missingHelper','unknownVersion','missingOtherFile','wrongHelperMode','wrongDirectoryMode','helperHardlink'])test('installed recipe command refuses fullprofile '+mutation,{timeout:15000},()=>installedRecipeFixture(async f=>{
+  if(mutation==='missingHelper')delete f.manifest.immutable['lib/service/user-unit.mjs'];if(mutation==='unknownVersion')f.manifest.schemaVersion=3;
+  if(mutation==='missingOtherFile')delete f.manifest.immutable['lib/control/listeners.mjs'];
+  if(mutation==='helperHardlink')await link(f.prefix+'/lib/service/user-unit.mjs',f.parent+'/helper-alias');
+  if(mutation==='wrongHelperMode')await chmod(f.prefix+'/lib/service/user-unit.mjs',0o600);if(mutation==='wrongDirectoryMode')await chmod(f.prefix+'/lib/service',0o750);await f.save();
+  const r=await recipeCli(f,'service-unit');assert.equal(r.code,1);assert.equal(await absent(f.prefix+'/.alpha-lock'),true);
+}));
+
+// Exact prior command admission gate; no fake native execution is involved.
+const recipeBaselineGate="    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };\n    if (!allowed[command] || Object.keys(values).some(key => !allowed[command].includes(key))) fail('arguments', 'Unsupported command or option for this command');";
+test('installed recipe baseline exact command gate rejects service-unit before any runtime action',()=>{
+  assert.equal(Buffer.byteLength(recipeBaselineGate),631);assert.equal(digest(recipeBaselineGate),'c2fd2c9011e1e9ec0e6c4b4f046a71168067a30e27ad9089a1ecb07450e2df04');
+  const gate=new Function('command','values','fail',recipeBaselineGate+';return true;');
+  assert.throws(()=>gate('service-unit',{},code=>{throw Object.assign(new Error(code),{code});}),{code:'arguments'});
+  assert.equal(gate('info',{},()=>assert.fail('legacy info must remain available')),true);
 });

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, chmod, writeFile, readFile, lstat, rm, symlink } from 'node:fs/promises';
+import { mkdtemp, mkdir, chmod, link, writeFile, readFile, lstat, rm, symlink } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -173,3 +173,43 @@ test('CLI readiness duplicates, values, reordered or extra flags refuse with san
     assert.doesNotMatch(JSON.stringify(result), /\/tmp\/|\/usr\//);
   }
 });
+
+const installedV2Names=['bin/nginx','bin/x10','build.json','licenses/NGINX-LICENSE','licenses/UPSTREAM.txt','examples/candidate-b.json',
+  ...['cli.mjs','manager.mjs','listeners.mjs','generations.mjs','status-format.mjs'].map(n=>'lib/control/'+n),
+  ...['cli.mjs','runtime.mjs','upstream-example.mjs'].map(n=>'lib/alpha/'+n),'lib/service/user-unit.mjs'].sort();
+const installedV2Dirs=['bin','lib','lib/control','lib/alpha','lib/service','licenses','examples','runs'];
+async function fixtureV2(fn){return fixture(async f=>{
+  f.manifest.schemaVersion=2;
+  for(const dir of installedV2Dirs)if(dir!=='bin')await mkdir(f.prefix+'/'+dir,{mode:0o700});
+  for(const relative of installedV2Names){if(relative==='bin/x10')continue;const bytes=Buffer.from('synthetic nonexecuted installed payload '+relative+'\n'),mode=relative==='bin/nginx'?0o500:0o400;
+    await writeFile(f.prefix+'/'+relative,bytes,{mode});f.manifest.immutable[relative]={bytes:bytes.length,sha256:hash(bytes),mode:mode.toString(8).padStart(4,'0')};}
+  await f.save();await fn(f);
+});}
+test('installed recipe schema2 inspector binds all15 immutable files and8 private directories read-only',()=>fixtureV2(async f=>{
+  assert.equal(installedV2Names.length,15);assert.equal(installedV2Dirs.length,8);const before=await readFile(f.prefix+'/.alpha-install.json');
+  const result=await inspectInstallation({prefix:f.prefix,nodeExecutable:f.nodeExecutable});assert.equal(result.installationChecked,true);assert.equal(result.recordedNodeChecked,true);assert.equal(result.serviceAccepted,false);
+  assert.deepEqual(await readFile(f.prefix+'/.alpha-install.json'),before);
+  for(const relative of installedV2Dirs)assert.equal((await lstat(f.prefix+'/'+relative)).mode&0o7777,0o700);
+}));
+for(const mutation of ['missingHelper','missingOtherFile','unknownFile','unknownVersion','wrongKind'])test('installed recipe schema2 inspector refuses exact tuple '+mutation,()=>fixtureV2(async f=>{
+  if(mutation==='missingHelper')delete f.manifest.immutable['lib/service/user-unit.mjs'];
+  if(mutation==='missingOtherFile')delete f.manifest.immutable['lib/control/listeners.mjs'];
+  if(mutation==='unknownFile')f.manifest.immutable['lib/optional.mjs']={bytes:1,sha256:'a'.repeat(64),mode:'0400'};
+  if(mutation==='unknownVersion')f.manifest.schemaVersion=3;if(mutation==='wrongKind')f.manifest.kind='other';await f.save();
+  await assert.rejects(inspectInstallation({prefix:f.prefix,nodeExecutable:f.nodeExecutable}));
+}));
+for(const mutation of ['helperBytes','helperMode','helperSymlink','privateDirectory','otherFileMode','missingPhysicalHelper','helperHardlink'])test('installed recipe schema2 inspector refuses physical '+mutation,()=>fixtureV2(async f=>{
+  const helper=f.prefix+'/lib/service/user-unit.mjs';
+  if(mutation==='helperHardlink')await link(helper,f.root+'/helper-alias');
+  if(mutation==='helperBytes'){await chmod(helper,0o600);await writeFile(helper,'changed');await chmod(helper,0o400);}
+  if(mutation==='helperMode')await chmod(helper,0o600);
+  if(mutation==='helperSymlink'){await rm(helper);await symlink(f.nodeExecutable,helper);}
+  if(mutation==='privateDirectory')await chmod(f.prefix+'/lib/service',0o750);
+  if(mutation==='otherFileMode')await chmod(f.prefix+'/lib/control/manager.mjs',0o600);
+  if(mutation==='missingPhysicalHelper')await rm(helper);
+  await assert.rejects(inspectInstallation({prefix:f.prefix,nodeExecutable:f.nodeExecutable}));
+}));
+test('installed recipe source inspector legacy narrowv1 remains unchanged without a helper',()=>fixture(async f=>{
+  assert.equal(f.manifest.schemaVersion,1);assert.equal(Object.keys(f.manifest.immutable).length,1);
+  const ordinary=await inspectInstallation({prefix:f.prefix,nodeExecutable:f.nodeExecutable});assert.equal(ordinary.installationChecked,true);assert.equal(ordinary.fullInstallationAccepted,false);
+}));

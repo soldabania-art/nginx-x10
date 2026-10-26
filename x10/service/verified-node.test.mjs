@@ -18,6 +18,7 @@ const status = () => `[GNUPG:] PLAINTEXT 74 0 \n[GNUPG:] NEWSIG\n[GNUPG:] KEY_CO
 function receipt() {
   return { checkerExited:true, checkerExitCode:0, report:{ ok:true, code:'basic_lifecycle_verified', phase:'complete', actualNonrootManagerObserved:true, actualUnitStarted:true,
     runtimeUnitLinked:true, runtimeUnitRemoved:true, unitEnabled:false,
+    bundleSchemaVersion:2, installSchemaVersion:2, installedRecipeGenerated:true,
     readinessAutomated:true, automaticReadinessAccepted:false, failedStartAccepted:false, slowDrainAccepted:false, orphanRecoveryAccepted:false, tlsServiceAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
     primaryFailure:null, cleanupFailures:[], cleanupFailureCount:0, cleanupFailuresTruncated:false,
     explicitReadinessPasses:3, nativeSessionsStarted:3, nativeSessionsStopped:3, proxyBodyChecks:3, uploadChecks:3, streamChecks:3,
@@ -105,6 +106,32 @@ test('cleanup evidence requires exited checker and every exact confirmation',()=
   for(const k of Object.keys(receipt().report.cleanup)) { const e=receipt();e.report.cleanup[k]=k==='appSocketsRemaining'?1:false; assert.equal(cleanupEvidence(e),false,k); }
   for(const k of ['checkerExited','checkerExitCode']) {const e=receipt();e[k]=k==='checkerExited'?false:1;assert.equal(cleanupEvidence(e),false);}
   for(const k of ['nativeSessionsStopped','explicitReadinessPasses','proxyBodyChecks']){const e=receipt();e.report[k]=1;assert.equal(cleanupEvidence(e),false);}
+});
+for (const key of ['bundleSchemaVersion', 'installSchemaVersion']) {
+  test(`cleanup requires exact installed recipe schema ${key}`, () => {
+    for (const value of [undefined, null, false, 0, 1, 3, '2', NaN, Infinity]) {
+      const e = receipt(); e.report[key] = value; assert.equal(cleanupEvidence(e), false);
+    }
+    assert.equal(cleanupEvidence(receipt()), true);
+  });
+}
+test('cleanup requires an actually generated installed recipe', () => {
+  for (const value of [undefined, null, false, 0, 1, 'true']) {
+    const e = receipt(); e.report.installedRecipeGenerated = value; assert.equal(cleanupEvidence(e), false);
+  }
+});
+for (const [key, expected] of [['bundleSchemaVersion', 2], ['installSchemaVersion', 2], ['installedRecipeGenerated', true]]) {
+  test(`cleanup recipe fact ${key} must be own data without evaluating a getter`, () => {
+    let reads = 0; const e = receipt();
+    Object.defineProperty(e.report, key, { configurable: true, get() { reads++; return expected; } });
+    assert.equal(cleanupEvidence(e), false); assert.equal(reads, 0);
+    delete e.report[key]; Object.setPrototypeOf(e.report, { [key]: expected });
+    assert.equal(cleanupEvidence(e), false);
+  });
+}
+test('a complete old-profile receipt cannot substitute for the installed recipe profile', () => {
+  const e = receipt(); for (const key of ['bundleSchemaVersion', 'installSchemaVersion', 'installedRecipeGenerated']) delete e.report[key];
+  assert.equal(cleanupEvidence(e), false);
 });
 test('cleanup refuses the prior combined TLS receipt without the new failed-start control',()=>{
   const e=receipt();delete e.report.failedStartChecks;delete e.report.failedStartProof;

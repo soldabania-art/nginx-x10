@@ -1043,3 +1043,59 @@ The prior lease expired while tree creation was pending. That tree remained
 unpublished: no implementation commit or implementation ref update occurred.
 This checkpoint resumes from fresh ownership with identical source bytes and
 fresh root verification; the original owner work window is unchanged.
+
+
+## Installed service recipe candidate; exact native service CI pending
+
+Generate the automatic-readiness recipe from a schema2 installation:
+
+```sh
+/path/to/node /path/to/install/bin/x10 service-unit --auto-readiness
+```
+
+The command emits JSON. Read its unit string as the proposed unit content;
+activationPerformed remains false. Omit --auto-readiness for the manual recipe.
+These paths are placeholders for the exact recorded Node and installation.
+Installing/starting that unit is a separate explicit operator action described
+by the existing service workflow; generating a recipe does not accept a service.
+
+Exact89aa native push40265731122 and PR40265734847 completed all34 actual
+required steps each. Both passed the scoped normal native challenge/operator
+recovery path with all6 challenge/all14 operator proofs, controlled drain,
+startup refusal, three combined TLS sessions, restart/journals and all13 cleanup
+facts plus private Node/bootstrap removal. Failure containment was not_needed;
+its actual failure branch remains unexercised. Final admission diagnostics show
+accepted history after closure, not current signal authority. Research PR ran
+21/7/27/48; push runtime was skipped. Inherited CLA failure remains unbypassed.
+This accepts the scoped89 implementation, not fullG3 or Production V1. Older
+mixed failures, unknown historical causes and local cleanup FAIL_UNKNOWN stay.
+
+This candidate adds an immutable service recipe helper to exact schema2 bundle
+and install inventories. The installed service-unit command validates the full
+installation and recorded Node identity before importing that helper. It prints
+structured JSON whose unit field contains the generated unit; it writes no
+unit file and performs no linking, enablement, manager start or activation.
+The actual service harness obtains its recipe from installed payload, with no
+source-checkout fallback. Existing manual/automatic rendered unit bytes remain
+unchanged; helper validation and distribution runtime do change.
+
+Strict cleanup receipts now additionally require bundleSchemaVersion2,
+installSchemaVersion2 and installedRecipeGenerated:true. These augment all six
+challenge/fourteen operator/startup/drain/TLS/restart/journal/cleanup obligations;
+they do not substitute for them. An emitted field is not proof until the actual
+installed payload is strictly verified. Exact resulting native service CI is
+pending; local contracts cannot accept that supported nonroot operated service.
+Final frozen local contracts1017/1017 passed; separately selected alpha14/14
+passed. Older physical alpha groups were filtered and not run. Native aggregate
+and actual managed service were not executed locally. See evidence for units.
+
+Legacy schema1 packages retain their existing commands and source recipe path.
+Their original package bytes do not acquire the new installed service-unit
+command. The new CLI reading a valid legacy manifest refuses that new command
+as service_recipe_unavailable. Exact v1/v2 inventories are selected by declared
+schema; mixed or partial helpers, unknown files and mode/link drift are refused.
+No in-place conversion, package upgrade/rollback or G4 migration is claimed.
+FullG3/G4-G8/V1, permanent distribution, independent published-file acceptance,
+60-minute soak and semantic Continuum remain open.
+
+See [installed recipe evidence](../evidence/g3-service-installed-recipe.json).

@@ -11,7 +11,6 @@ import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
 import { preflight } from './preflight.mjs';
-import { inspectInstallation, renderUserUnit } from './user-unit.mjs';
 import { verifyAlphaArchive, MAX_ARCHIVE_BYTES } from '../release/verify-alpha-archive.mjs';
 import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mjs';
 import { observeOwnedJournal, JOURNAL_RESULT_CODES } from './journal-check.mjs';
@@ -23,7 +22,7 @@ import { createServicePKI, probeServiceTLS, expectServiceTLSRefusal, TLS_FIXTURE
 const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 const HEX = /^[a-f0-9]{64}$/, TOKEN = /^[a-f0-9]{32}$/;
 const KEYS = ['LoadState', 'ActiveState', 'SubState', 'Result', 'FragmentPath', 'MainPID', 'ControlGroup'];
-const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed", "failed_start_unconfirmed", "controlled_drain_unconfirmed", "operator_interruption_unconfirmed", ...SLOW_CLIENT_ERROR_CODES, ...INTERRUPTED_OPERATOR_ERROR_CODES]);
+const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "installed_recipe_invalid", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed", "failed_start_unconfirmed", "controlled_drain_unconfirmed", "operator_interruption_unconfirmed", ...SLOW_CLIENT_ERROR_CODES, ...INTERRUPTED_OPERATOR_ERROR_CODES]);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const reject = code => { throw Object.assign(new Error(code), { code }); };
 export const LIMITATIONS = Object.freeze({ scope: 'ephemeral-user-service-basic-lifecycle',
@@ -92,6 +91,68 @@ export function assessNodePrerequisites(value) {
       recordedNodeVersionSupported: /^v(?:2[2-9]|[3-9][0-9])\.[0-9]+\.[0-9]+$/.test(fields.recordedVersion) };
   } catch { reject('recipe_diagnostic_failed'); }
 }
+// The managed-service profile consumes a recipe emitted by the verified
+// installation. This validates the complete fixed profile; it never substitutes
+// checkout generator output when the installed command is absent or refuses.
+export function assessInstalledServiceRecipe(value, prefix, nodeExecutable) {
+  const refuse = () => reject('installed_recipe_invalid');
+  try {
+    const validPath = item => typeof item === 'string' && item.length <= 1024
+      && /^\/[A-Za-z0-9_./+-]+$/.test(item) && path.posix.normalize(item) === item
+      && item !== '/' && !item.endsWith('/');
+    if (!validPath(prefix) || !validPath(nodeExecutable) || path.posix.dirname(prefix) === '/'
+        || prefix.length + 13 > 107 || !value || typeof value !== 'object'
+        || ![Object.prototype, null].includes(Object.getPrototypeOf(value))) refuse();
+    const names = ['ok', 'unit', 'scope', 'readinessAutomated', 'startupHealthAccepted', 'serviceAccepted',
+      'productionAccepted', 'outcome', 'activationPerformed'];
+    const keys = Reflect.ownKeys(value), fields = Object.create(null);
+    if (keys.length !== names.length || keys.some(key => typeof key !== 'string' || !names.includes(key))) refuse();
+    for (const key of names) {
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      if (!descriptor || !Object.hasOwn(descriptor, 'value')) refuse();
+      fields[key] = descriptor.value;
+    }
+    if (fields.ok !== true || fields.scope !== 'systemd-user-recipe-only' || fields.readinessAutomated !== true
+        || fields.startupHealthAccepted !== false || fields.serviceAccepted !== false || fields.productionAccepted !== false
+        || fields.outcome !== 'service_unit_generated' || fields.activationPerformed !== false
+        || typeof fields.unit !== 'string' || Buffer.byteLength(fields.unit) > 8192 || /[^\x20-\x7e\n]/.test(fields.unit)) refuse();
+    const command = `${nodeExecutable} ${prefix}/bin/x10`;
+    const requiredLines = [
+      '# X10 systemd --user recipe only; no activation performed.',
+      '# ExecStartPre prepares the guarded session before run and wait-bind can race.',
+      '# ExecStartPost waits for installed guarded bind; full startup health is not accepted.',
+      '# readinessAutomated:true startupHealthAccepted:false serviceAccepted:false',
+      '# The explicit pinned-node installed launcher waits within the start timeout.',
+      '[Unit]', 'Description=NGINX X10 private operator service', '',
+      '[Service]', 'Type=exec', `WorkingDirectory=${prefix}`,
+      `ExecStartPre=${command} prepare-run`,
+      `ExecStart=${command} run --control-socket ${prefix}/control.sock`,
+      `ExecStartPost=${command} wait-bind --timeout-ms 10000`, `ExecStop=${command} stop`,
+      'Restart=no', 'KillMode=process', 'KillSignal=SIGTERM', 'SendSIGKILL=no',
+      'TimeoutStartSec=30s', 'TimeoutStopSec=30s', 'UMask=0077',
+      'UnsetEnvironment=NODE_OPTIONS NODE_PATH NGINX_CTRL',
+      'StandardOutput=journal', 'StandardError=journal', '', '[Install]', 'WantedBy=default.target', '',
+    ];
+    const lines = fields.unit.split('\n');
+    if (lines.length !== requiredLines.length || lines.some((line, index) => line !== requiredLines[index])) refuse();
+    // Return the installed payload bytes, never requiredLines or a source recipe.
+    return fields.unit;
+  } catch { refuse(); }
+}
+export function assessInstalledServiceRecipeCommand(record, prefix, nodeExecutable) {
+  try {
+    if (!record || typeof record !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(record))) reject('installed_recipe_invalid');
+    const names = ['ok', 'exitCode', 'stdout', 'stderr', 'termination'], keys = Reflect.ownKeys(record), fields = Object.create(null);
+    if (keys.length !== names.length || keys.some(key => typeof key !== 'string' || !names.includes(key))) reject('installed_recipe_invalid');
+    for (const key of names) {
+      const descriptor = Object.getOwnPropertyDescriptor(record, key);
+      if (!descriptor || !Object.hasOwn(descriptor, 'value')) reject('installed_recipe_invalid'); fields[key] = descriptor.value;
+    }
+    if (fields.ok !== true || fields.exitCode !== 0 || fields.termination !== 'none' || fields.stderr !== ''
+        || typeof fields.stdout !== 'string' || Buffer.byteLength(fields.stdout) > 16384) reject('installed_recipe_invalid');
+    return assessInstalledServiceRecipe(JSON.parse(fields.stdout), prefix, nodeExecutable);
+  } catch { reject('installed_recipe_invalid'); }
+}
 export function classifyLifecycleError(error, phase) {
   try {
     const message = error && Object.getOwnPropertyDescriptor(error, 'message');
@@ -118,7 +179,7 @@ export async function observeNodePrerequisites(prefix, nodeExecutable) {
     const after = await handle.stat();
     if (used !== st.size || after.size !== st.size || after.mtimeMs !== st.mtimeMs || after.ctimeMs !== st.ctimeMs) reject('recipe_diagnostic_failed');
     const parsed = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes.subarray(0, used))), { sha256, ...record } = parsed;
-    if (!HEX.test(sha256 || '') || digest(JSON.stringify(record)) !== sha256 || record.schemaVersion !== 1
+    if (!HEX.test(sha256 || '') || digest(JSON.stringify(record)) !== sha256 || record.schemaVersion !== 2
         || record.kind !== 'nginx-x10-local-alpha' || record.prefix !== prefix || !record.nodeRuntime) reject('recipe_diagnostic_failed');
     const node = await lstat(nodeExecutable);
     return assessNodePrerequisites({ regular: node.isFile(), canonical: await realpath(nodeExecutable) === nodeExecutable,
@@ -552,6 +613,7 @@ export async function main(argv = process.argv.slice(2)) {
     upstreamTLSUploadChecks: 0, upstreamTLSStreamChecks: 0, upstreamTLSDirectChecks: 0,
     upstreamTLSWrongCARefusals: 0, upstreamTLSWrongNameRefusals: 0, upstreamTLSPlaintextRefusals: 0,
     upstreamTLSRollbackChecks: 0, upstreamTLSCandidate502Checks: 0, upstreamTLSNoPostReplayChecks: 0,
+    bundleSchemaVersion: null, installSchemaVersion: null, installedRecipeGenerated: false,
     readinessAutomated: false, runtimeUnitLinked: false, runtimeUnitRemoved: false, unitEnabled: false, subprocessOutputsPublished: false,
     cleanup: { managerStopped: false, launcherExited: false, nativeGroupsAbsent: false,
       listeningPortsClosed: false, controlSocketAbsent: false, downstreamTLSPortClosed: false, runtimeLinkAbsent: false,
@@ -1426,7 +1488,8 @@ export async function main(argv = process.argv.slice(2)) {
     if (!prerequisite.ok || prerequisite.managerAvailable !== true) reject(prerequisite.code || 'manager_unavailable');
     report.actualNonrootManagerObserved = true; env = managerEnvironment(process.getuid());
     report.phase = 'archive'; const capturedArchive = await archiveBytes(input.archive), verified = verifyAlphaArchive(capturedArchive, input.sha256);
-    if (!verified.valid) reject('archive_refused');
+    if (!verified.valid || verified.schemaVersion !== 2) reject('archive_refused');
+    report.bundleSchemaVersion = verified.schemaVersion;
     report.archiveSha256 = verified.archiveSha256; report.binarySha256 = verified.binarySha256; report.sourceCommit = verified.sourceCommit;
     checkCancelled(); parent = await mkdtemp(path.join(os.tmpdir(), 'x10-service-')); await chmod(parent, 0o700);
     prefix = `${parent}/install`; node = await realpath(process.execPath); launcher = `${prefix}/bin/x10`;
@@ -1450,14 +1513,16 @@ export async function main(argv = process.argv.slice(2)) {
     await cli(node, `${parent}/nginx-x10-alpha/install.mjs`, ['install', '--prefix', prefix, '--port', String(gatewayPort), '--health-port', String(healthPort), '--upstream-port', String(appPort)], env); installed = true;
     report.phase = 'recipe_inspection';
     report.nodePrerequisites = await observeNodePrerequisites(prefix, node);
-    await inspectInstallation({ prefix, nodeExecutable: node });
+    const recipeCommand = await command(node, [launcher, 'service-unit', '--auto-readiness'], env); checkCancelled();
+    const unit = assessInstalledServiceRecipeCommand(recipeCommand, prefix, node);
+    report.installSchemaVersion = 2; report.installedRecipeGenerated = true;
     report.phase = 'unit_preparation';
     const token = randomBytes(16).toString('hex'); unitName = fixtureUnitName(token); unitFile = `${parent}/${unitName}`;
     runtimeLink = `${env.XDG_RUNTIME_DIR}/systemd/user/${unitName}`;
     await runtimeParents();
     if (!await absent(runtimeLink)) reject('unit_collision');
     const prior = await properties(); if (prior.LoadState !== 'not-found' || prior.ActiveState !== 'inactive' || prior.MainPID !== '0' || prior.FragmentPath !== '') reject('unit_collision');
-    const unit = renderUserUnit({ prefix, nodeExecutable: node, autoReadiness: true }); report.unitSha256 = digest(unit); report.readinessAutomated = true;
+    report.unitSha256 = digest(unit); report.readinessAutomated = true;
     const handle = await open(unitFile, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
     try { await handle.writeFile(unit); await handle.sync(); } finally { await handle.close(); }
     report.phase = 'link';
