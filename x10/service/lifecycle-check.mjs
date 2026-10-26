@@ -15,7 +15,7 @@ import { inspectInstallation, renderUserUnit } from './user-unit.mjs';
 import { verifyAlphaArchive, MAX_ARCHIVE_BYTES } from '../release/verify-alpha-archive.mjs';
 import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mjs';
 import { observeOwnedJournal, JOURNAL_RESULT_CODES } from './journal-check.mjs';
-import { createOriginFixture, ORIGIN_FIXTURE_ERROR_CODES } from './origin-fixture.mjs';
+import { createOriginFixture, ORIGIN_FIXTURE_ERROR_CODES, ADMISSION_DIAGNOSTIC_STAGES, ADMISSION_DIAGNOSTIC_REASONS } from './origin-fixture.mjs';
 import { startOwnedOperator, INTERRUPTED_OPERATOR_ERROR_CODES } from './interrupted-operator.mjs';
 import { createPausedTLSClient, SLOW_CLIENT_ERROR_CODES } from './slow-client.mjs';
 import { createServicePKI, probeServiceTLS, expectServiceTLSRefusal, TLS_FIXTURE_ERROR_CODES } from './tls-fixture.mjs';
@@ -382,6 +382,37 @@ export function assessOwnedNativeChallenge(value) {
   }
   return true;
 }
+// Only this exact finite data schema may cross the diagnostic publication boundary.
+// It cannot grant capture, signal, retirement or recovery authority.
+export function sanitizeNativeChallengeAdmission(value) {
+  const booleans = ['started', 'admitted', 'accepted', 'nativeHeaderPairMatched', 'relayHeaderPairMatched',
+    'contentLengthMatched', 'prefixMatched', 'currentPairLive', 'deadlineExpired'];
+  const keys = ['schema', ...booleans, 'firstRefusal', 'nativeStatusClass', 'relayReadyStatusClass', 'prefixChunks'];
+  const record = (input, names) => {
+    if (!input || typeof input !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(input))) return null;
+    const actual = Reflect.ownKeys(input);
+    if (actual.length !== names.length || actual.some(key => typeof key !== 'string' || !names.includes(key))) return null;
+    const result = Object.create(null);
+    for (const key of names) {
+      const descriptor = Object.getOwnPropertyDescriptor(input, key);
+      if (!descriptor || !Object.hasOwn(descriptor, 'value')) return null;
+      result[key] = descriptor.value;
+    }
+    return result;
+  };
+  try {
+    const data = record(value, keys);
+    if (!data || data.schema !== 1 || booleans.some(key => typeof data[key] !== 'boolean')
+        || !['nativeStatusClass', 'relayReadyStatusClass'].every(key => Number.isInteger(data[key]) && data[key] >= 0 && data[key] <= 5)
+        || !Number.isInteger(data.prefixChunks) || data.prefixChunks < 0 || data.prefixChunks > 4096) return null;
+    if (data.firstRefusal !== null) {
+      const refusal = record(data.firstRefusal, ['stage', 'reason']);
+      if (!refusal || !ADMISSION_DIAGNOSTIC_STAGES.includes(refusal.stage) || !ADMISSION_DIAGNOSTIC_REASONS.includes(refusal.reason)) return null;
+      data.firstRefusal = { stage: refusal.stage, reason: refusal.reason };
+    }
+    return { ...data };
+  } catch { return null; }
+}
 // Diagnostics record the actual authority decision; later cleanup cannot replace
 // the first refusal. They never grant a signal, lock or recovery capability.
 const OPERATOR_HOLD_STAGES = Object.freeze(['harness_capture', 'harness_terminate', 'capture_final', 'terminate_capture', 'terminate_final', 'unknown']);
@@ -505,6 +536,7 @@ export async function main(argv = process.argv.slice(2)) {
   const report = { ok: false, code: 'not_started', phase: 'arguments', ...LIMITATIONS,
     actualNonrootManagerObserved: false, actualUnitStarted: false, explicitReadinessPasses: 0,
     nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
+    operatorNativeChallengeAdmission: null,
     operatorNativeChallengeChecks: 0, operatorNativeChallengeProof: { nativeRouteObserved: false, ownedRequestObserved: false, relayResponseMatched: false, candidateBindingMatched: false, authorityReobservedBeforeSignal: false, ownedChallengeClosed: false },
     operatorInterruptionContainment: { attempted: false, operatorAbsent: false, holdClosed: false, snapshotRevalidated: false, locksRetired: false, recoveryVerified: false, completed: false, disposition: 'not_needed' },
     operatorInterruptionChecks: 0, operatorInterruptionProof: { candidateProbeHeld: false, pendingReloadObserved: false, lastConfirmedPreserved: false, sameServiceObserved: false, ownedOperatorTerminated: false, staleLocksPreserved: false, lockedRecoveryRefused: false, exactLockRemovalConfirmed: false, explicitRollbackObserved: false, pendingCleared: false, restoredContentVerified: false, noPostReplay: false, sameServiceAfterRecovery: false, repeatedRecoveryIdempotent: false },
@@ -1090,6 +1122,7 @@ export async function main(argv = process.argv.slice(2)) {
     input.https = { port: tlsPort, certificate: tlsFixture.certificate, certificateKey: tlsFixture.certificateKey };
     const inputFile = `${parent}/interrupted-input.json`;
     let held, ownedChallenge, operator, snapshot, heldDeadline = 0, primary = null, normalRetirementAttempted = false;
+    let cleanupCapturePhase = 'unarmed';
     const beforePosts = origin.counts().echoRequests;
     async function sameServiceNoCLI() {
       const p = await ownedProperties(false); checkCancelled();
@@ -1136,8 +1169,19 @@ export async function main(argv = process.argv.slice(2)) {
       catch (error) { operatorHoldDiagnostics.observe(stage, 'cancelled', performance.now(), heldDeadline, null); throw error; }
       let now;
       try {
-        value = ownedChallenge?.snapshot(); now = performance.now(); reason = classifyOperatorHoldDecision(value, heldDeadline, now);
-        if (reason === 'current') { try { assessOwnedNativeChallenge(value); } catch { reason = 'invalid'; } }
+        if (stage === 'capture_final') {
+          // This one-shot legacy observation permits cleanup ownership capture
+          // only while the helper is checking the exact original process/locks.
+          // It is never acceptance authority for either termination callback.
+          const permitted = cleanupCapturePhase === 'pending';
+          cleanupCapturePhase = 'consumed';
+          value = permitted ? held?.snapshot() : null; now = performance.now();
+          reason = permitted ? classifyOperatorHoldDecision(value, heldDeadline, now) : 'invalid';
+        } else {
+          value = ownedChallenge?.snapshot(); now = performance.now(); reason = classifyOperatorHoldDecision(value, heldDeadline, now);
+          if (!['harness_capture', 'harness_terminate', 'terminate_capture', 'terminate_final'].includes(stage)) reason = 'invalid';
+          if (reason === 'current') { try { assessOwnedNativeChallenge(value); } catch { reason = 'invalid'; } }
+        }
       }
       catch (error) { operatorHoldDiagnostics.observe(stage, 'invalid', performance.now(), heldDeadline, null); throw error; }
       operatorHoldDiagnostics.observe(stage, reason, now, heldDeadline, value);
@@ -1161,6 +1205,17 @@ export async function main(argv = process.argv.slice(2)) {
       }, 2000);
       checkCancelled();
       if (performance.now() >= heldDeadline) reject('operator_interruption_unconfirmed');
+      // Capture the exact process/locks and pending state before opening a
+      // challenge that may refuse admission. This is cleanup ownership only.
+      let captured;
+      cleanupCapturePhase = 'pending';
+      try { captured = await operator.captureLocks(); }
+      finally { cleanupCapturePhase = 'closed'; }
+      checkCancelled();
+      if (!captured || captured.ok !== true || captured.alphaCaptured !== true || captured.controllerCaptured !== true || captured.pendingCaptured !== true) reject('operator_interruption_unconfirmed');
+      snapshot = await capturePending(); await sameServiceNoCLI();
+      await unchangedPending(snapshot); checkCancelled();
+      if (performance.now() >= heldDeadline) reject('operator_interruption_unconfirmed');
       // This request traverses the new candidate-only native location. Its
       // deadline is the original first-controller-hold deadline, never renewed.
       ownedChallenge = await held.openNativeChallenge(heldDeadline); checkCancelled();
@@ -1168,10 +1223,9 @@ export async function main(argv = process.argv.slice(2)) {
       const challenge = ownedChallenge.snapshot(); assessOwnedNativeChallenge(challenge);
       report.operatorNativeChallengeProof.nativeRouteObserved = true; report.operatorNativeChallengeProof.ownedRequestObserved = true;
       report.operatorNativeChallengeProof.relayResponseMatched = true;
-      const captured = await operator.captureLocks(); checkCancelled();
-      if (!captured || captured.ok !== true || captured.alphaCaptured !== true || captured.controllerCaptured !== true || captured.pendingCaptured !== true) reject('operator_interruption_unconfirmed');
-      snapshot = await capturePending(); await sameServiceNoCLI();
-      await unchangedPending(snapshot); checkCancelled();
+      // Admission may await native I/O: revalidate every original mutable
+      // state and current service identity again before acceptance proceeds.
+      await unchangedPending(snapshot); await sameServiceNoCLI(); checkCancelled();
       if (!isHeld('harness_terminate')) reject('operator_interruption_unconfirmed');
       report.operatorInterruptionProof.candidateProbeHeld = true; report.operatorInterruptionProof.pendingReloadObserved = true;
       report.operatorInterruptionProof.lastConfirmedPreserved = true; report.operatorInterruptionProof.sameServiceObserved = true;
@@ -1276,6 +1330,8 @@ export async function main(argv = process.argv.slice(2)) {
           // Acceptance proofs/counter and primary are intentionally unchanged.
         } catch (error) { failures.cleanup(error, 'operator_recovery'); }
       } else if (primary) report.operatorInterruptionContainment.disposition = normalRetirementAttempted ? 'retirement_already_started' : 'no_snapshot';
+      try { report.operatorNativeChallengeAdmission = sanitizeNativeChallengeAdmission(held?.admissionDiagnostics()); }
+      catch { report.operatorNativeChallengeAdmission = null; }
     }
     if (primary) throw primary;
     checkCancelled();

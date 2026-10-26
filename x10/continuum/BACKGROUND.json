@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-native-admission-resume-20261026T033833425Z",
-    "owner": "codex-coordinator-admission-resume",
-    "baseCommit": "60ba7272fbc168a6c0045b1daf3b3004d917da27",
-    "acquiredAtUTC": "2026-10-26T03:38:33.425Z",
-    "expiresAtUTC": "2026-10-26T04:22:33.425Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -3126,14 +3120,14 @@
       "runId": "x10-native-held-challenge-20261025T165350Z",
       "sourceBase": "c1cf0482337d5970d68bb21ae2fb0fcc81f602fc",
       "publicationParent": "69102a44410c41e89e3a26653eaa50cc0579c95b",
-      "implementationCommit": null,
+      "implementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
       "implementationCommitLocator": "Current publication commit; exact resulting CI required",
       "scope": "Runner-owned fresh native candidate held-probe nonce challenge acceptance candidate",
       "result": "Recorded exactc1cf mixed CI and actual scoped failure containment, then added current native-route nonce challenge requirements with unchanged budgets and strict cleanup; exact resulting service CI pending.",
       "evidence": "x10/evidence/g3-service-native-held-challenge.json",
       "perFileLedger": "x10/review/g3-service-native-held-challenge-ledger.json",
       "localAcceptance": "LOCAL_NATIVE_HELD_CHALLENGE_CONTROLS_EXACT_SERVICE_CI_PENDING_PRIOR_LOCAL_CLEANUP_FAIL_UNKNOWN",
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_NATIVE_HELD_CHALLENGE_SERVICE",
+      "exactHostedAcceptance": "MIXED_NATIVE_CHALLENGE_PUSH_SUCCESS_PR_ADMISSION_FAILURE_NOT_ACCEPTED",
       "nativeRuntimeChanged": false,
       "controllerRuntimeChanged": false,
       "alphaRuntimeChanged": false,
@@ -3152,10 +3146,15 @@
       "actualHistoricalCauseProven": false,
       "nextConcreteTask": "First verify exact resulting runner-owned live nonce challenge through the native candidate in the operator interruption service profile. Require fresh current native challenge response matching the exact candidate tag and one-use nonce; direct-origin, cached relay readiness, retained Boolean or unrelated session is never substitute authority. Preserve unchanged1000ms hold/350ms hook/8s fixture/original10s helper budgets, current service/native/pending/lock identities, all14 original operator proofs and strict captured-only failure containment. A challenge timeout, stale/replayed/wrong nonce/tag, malformed response or lost live source remains an explicit failure, with original primary error and unknown cleanup retained. Exactc1cf mixed outcomes and actual contained failure remain separate observations, not whole acceptance. Earlier local cleanup FAIL_UNKNOWN remains unresolved. FullG3/G4-G8/V1, installed recipe distribution, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted until their actual gates pass.",
       "hostedVerification": {
-        "state": "PENDING_EXACT_RESULTING_NATIVE_HELD_CHALLENGE_SERVICE"
+        "state": "MIXED_NATIVE_CHALLENGE_PUSH_SUCCESS_PR_ADMISSION_FAILURE_NOT_ACCEPTED",
+        "evidence": "x10/evidence/g3-service-challenge-admission.json"
       },
       "newPurchases": false,
-      "productionDeployChanged": false
+      "productionDeployChanged": false,
+      "hostedEvidence": "x10/evidence/g3-service-challenge-admission.json",
+      "implementationAccepted": false,
+      "actualPRServiceFailed": true,
+      "actualContainedFailureObserved": false
     },
     "interruptionContainmentHostedObservation": {
       "state": "MIXED_CONTAINMENT_PUSH_SUCCESS_PR_LIVE_GAP_FAILURE_NOT_ACCEPTED",
@@ -3256,10 +3255,169 @@
         "sha256": "56b705a195ce8c8fcd41fefa353ca8a484e7ebc26b26b8d6e2d1eea22ab11e07",
         "bytes": 47229
       }
+    },
+    "nativeChallengeAdmissionLocal": {
+      "runId": "x10-native-admission-resume-20261026T033833425Z",
+      "sourceBase": "60ba7272fbc168a6c0045b1daf3b3004d917da27",
+      "baselineImplementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
+      "publicationParent": "74cee4a1e810e9c5663ea4c59c588ac0a5cae05c",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+      "scope": "Finite native challenge admission diagnostics and stage-restricted early-failure cleanup capture candidate",
+      "result": "Reconciled exact042 mixed hosted results, then added finite admission observations and captured-only early-failure containment without relaxing challenge authority or deadlines; exact resulting service CI pending.",
+      "evidence": "x10/evidence/g3-service-challenge-admission.json",
+      "perFileLedger": "x10/review/g3-service-challenge-admission-ledger.json",
+      "localAcceptance": "LOCAL_ADMISSION_AND_EARLY_CONTAINMENT_CONTROLS_EXACT_SERVICE_CI_PENDING_PRIOR_LOCAL_CLEANUP_FAIL_UNKNOWN",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_NATIVE_CHALLENGE_ADMISSION_SERVICE",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "acceptanceHarnessChanged": true,
+      "dependencyCleanupReceiptProfileChanged": false,
+      "dependencyCleanupReceiptCheckerPinChanged": true,
+      "knownGuardsPreserved": true,
+      "routineOwnerAuthorityConfirmationPreserved": true,
+      "releaseContractOrProfileChanged": false,
+      "releaseContractNarrowed": false,
+      "failedStartAccepted": false,
+      "slowDrainAccepted": false,
+      "operatorInterruptionAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "actualHistoricalCauseProven": false,
+      "nextConcreteTask": "First verify exact resulting native challenge admission diagnostics and early-failure containment CI. Capture cleanup ownership only from a current stage-restricted initial held probe under the unchanged1000ms deadline; acceptance interruption still requires a fresh current native-route owned challenge at terminate_capture and terminate_final. A legacy probe, retained flag, late callback or failed challenge cannot authorize the acceptance signal or increment successful proof counters. Preserve all14 operator and six challenge proofs,1000ms/350ms/8s/original10s budgets, exact owned service/pending/lock identities and original primary failure. Finite first-refusal fields may identify a newly observed rejected predicate but cannot reconstruct the unknown042 historical condition. Early failure containment requires the original captured snapshot and strict fresh absence/identity checks; unknown cleanup remains failure. No unchanged CI reruns, broad lock cleaner or timeout increase. After required current service acceptance, resume installed recipe distribution. FullG3/G4-G8/V1, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted.",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_NATIVE_CHALLENGE_ADMISSION_SERVICE"
+      },
+      "coordinationResume": {
+        "state": "FRESH_LEASE_RESUME_AFTER_EXPIRED_UNPUBLISHED_TREE",
+        "oldExecutionLeaseCommit": "60ba7272fbc168a6c0045b1daf3b3004d917da27",
+        "oldExecutionLeaseExpiredAtUTC": "2026-10-25T19:07:48.752Z",
+        "createdUnpublishedTree": "48dbafe77017904df1ece29738b57f1bf4a14220",
+        "oldImplementationCommitCreated": false,
+        "oldImplementationRefUpdatePerformed": false,
+        "freshSourceCommit": "60ba7272fbc168a6c0045b1daf3b3004d917da27",
+        "freshLeaseCommit": "74cee4a1e810e9c5663ea4c59c588ac0a5cae05c",
+        "freshLeaseTree": "df8a60d425f3f9c5e4ba65fa65fe8805c9630efa",
+        "freshLeaseExpiresAtUTC": "2026-10-26T04:22:33.425Z",
+        "baselineActualImplementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
+        "originalOwnerCodeStopAtUTC": "2026-10-26T19:17:36.000Z",
+        "ownerWorkWindowExtended": false,
+        "sourceFilesReusedByIdenticalHashes": true,
+        "oldReportsReusedByIdenticalHashes": true,
+        "freshRootIntegrationRequiredBeforePublication": true,
+        "scope": "Real UTC advanced beyond the old lease while tree creation was pending. Guarded resume uses a new clean source tree and fresh lease; the unpublished tree did not become an implementation commit or branch update. Prior failure history and all acceptance gates remain unchanged."
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
+    },
+    "nativeHeldChallengeHostedObservation": {
+      "state": "MIXED_NATIVE_CHALLENGE_PUSH_SUCCESS_PR_ADMISSION_FAILURE_NOT_ACCEPTED",
+      "implementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
+      "implementationTree": "c8d6862c9a731b48d3c9192a8ca392cafcd142cd",
+      "evidence": "x10/evidence/g3-service-challenge-admission.json",
+      "nativeRunIds": [
+        40215886529,
+        40215890093
+      ],
+      "nativeJobIds": [
+        121236849254,
+        121236862647
+      ],
+      "actualPRMergeCheckout": "607c46370faf9423a3e5dbf7fb84769fbc0f6de4",
+      "auditConsistent": true,
+      "factualReadbackProofCount": 51,
+      "factualReadbackIsAcceptance": false,
+      "bothExactNativeWorkflowsSuccessful": false,
+      "implementationAccepted": false,
+      "pushWorkflowConclusion": "success",
+      "prWorkflowConclusion": "failure",
+      "pushNormalScopedServiceObserved": true,
+      "pushAll14OperatorProofs": true,
+      "pushAllSixNativeChallengeProofs": true,
+      "pushAll13CleanupConfirmed": true,
+      "pushNodeAndBootstrapRemoved": true,
+      "prPrimaryFailure": {
+        "phase": "operator_interruption",
+        "subphase": "not_applicable",
+        "code": "origin_challenge_identity",
+        "systemErrorClass": "unknown"
+      },
+      "prFinalCode": "cleanup_unconfirmed",
+      "prHoldObservationCount": 0,
+      "prFirstHoldRefusal": null,
+      "prOperatorInterruptionChecks": 0,
+      "prNativeChallengeChecks": 0,
+      "prOperatorProofsTrue": 0,
+      "prNativeChallengeProofsTrue": 0,
+      "prContainment": {
+        "attempted": false,
+        "operatorAbsent": false,
+        "holdClosed": false,
+        "snapshotRevalidated": false,
+        "locksRetired": false,
+        "recoveryVerified": false,
+        "completed": false,
+        "disposition": "no_snapshot"
+      },
+      "actualFailureContainmentScopedObserved": false,
+      "prOwnedCleanupTrueCount": 4,
+      "prCleanupFailures": [
+        {
+          "stage": "unit_cleanup",
+          "code": "unit_stop_unconfirmed"
+        }
+      ],
+      "prRuntimeUnitRemoved": false,
+      "prInstallationRemoved": false,
+      "prTemporaryRootRemoved": false,
+      "prPrivateNodeCleanupReceiptPresent": false,
+      "prBootstrapRuntimeRemoved": false,
+      "prBootstrapTemporaryRootRemoved": false,
+      "bothActualOperatorControlTests": 26,
+      "bothActualOperatorControlSkips": 0,
+      "bothActualInterruptionFailureControls": 108,
+      "bothActualInterruptionFailureControlSkips": 0,
+      "researchPRRunId": 40215890083,
+      "researchPRJobId": 121236846949,
+      "researchPRActualSuites": [
+        21,
+        7,
+        27,
+        48
+      ],
+      "researchPushRuntimeSkipped": true,
+      "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
+      "exactHistoricalAdmissionPredicateKnown": false,
+      "fullG3ServiceAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0,
+      "nativeArtifacts": [
+        {
+          "runId": 40215886529,
+          "artifactId": 12607991579,
+          "zipBytes": 127479,
+          "zipSha256": "6d4637dc6c2c6937c5a5edeadd9bc9d890073cd95540bbd579dfdb1e1e465775"
+        },
+        {
+          "runId": 40215890093,
+          "artifactId": 12607841655,
+          "zipBytes": 127061,
+          "zipSha256": "e6de7017db1d7959632f4b8b0c1e99eddf2ef6cd2f71dbfea3001c9659624031"
+        }
+      ],
+      "freshAuditReference": {
+        "sha256": "1cb03eb285735c0af8be37157f50cbf87518aa8719e8436304365caaafeee427",
+        "bytes": 46327
+      }
     }
   },
   "pendingVerification": [
-    "First verify exact resulting runner-owned live nonce challenge through the native candidate in the operator interruption service profile. Require fresh current native challenge response matching the exact candidate tag and one-use nonce; direct-origin, cached relay readiness, retained Boolean or unrelated session is never substitute authority. Preserve unchanged1000ms hold/350ms hook/8s fixture/original10s helper budgets, current service/native/pending/lock identities, all14 original operator proofs and strict captured-only failure containment. A challenge timeout, stale/replayed/wrong nonce/tag, malformed response or lost live source remains an explicit failure, with original primary error and unknown cleanup retained. Exactc1cf mixed outcomes and actual contained failure remain separate observations, not whole acceptance. Earlier local cleanup FAIL_UNKNOWN remains unresolved. FullG3/G4-G8/V1, installed recipe distribution, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted until their actual gates pass.",
+    "First verify exact resulting native challenge admission diagnostics and early-failure containment CI. Capture cleanup ownership only from a current stage-restricted initial held probe under the unchanged1000ms deadline; acceptance interruption still requires a fresh current native-route owned challenge at terminate_capture and terminate_final. A legacy probe, retained flag, late callback or failed challenge cannot authorize the acceptance signal or increment successful proof counters. Preserve all14 operator and six challenge proofs,1000ms/350ms/8s/original10s budgets, exact owned service/pending/lock identities and original primary failure. Finite first-refusal fields may identify a newly observed rejected predicate but cannot reconstruct the unknown042 historical condition. Early failure containment requires the original captured snapshot and strict fresh absence/identity checks; unknown cleanup remains failure. No unchanged CI reruns, broad lock cleaner or timeout increase. After required current service acceptance, resume installed recipe distribution. FullG3/G4-G8/V1, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted.",
+    "Exact0420287 native CI had mixed actual outcomes. Push40215886529/job121236849254 completed all34 actual steps with one native challenge/all6 proofs, all14 operator proofs, startup refusal, controlled drain, three combined TLS sessions, restart/journals and all13 cleanup confirmations plus private Node/bootstrap removal. PR40215890093/job121236862647 failed operator_interruption/origin_challenge_identity before the first held observation or ownership snapshot. Its native challenge and operator counters were0, all six/fourteen respective proof flags false, containment no_snapshot and final cleanup_unconfirmed with unit_cleanup/unit_stop_unconfirmed. Nine cleanup confirmations were unconfirmed, four origin/relay closure facts true, appSockets0; installation/temp roots and private runtime removal were unconfirmed. The specific historical admission predicate remains unknown. Both operator26 and failure-QA108 controls passed without skips; research PR actually ran21/7/27/48 and push runtime was skipped. These separate results do not accept the implementation or whole service. Earlierc1cf scoped containment and3bf mixed outcomes/local cleanup FAIL_UNKNOWN remain.",
     "Exactc1cf native CI had mixed actual outcomes, not accepted implementation CI. Push40212661367/job121227090527 completed the normal scoped service path with all14 operator proofs, controlled drain, startup refusal, three combined TLS sessions, restart/journals,13 cleanup confirmations and private Node/bootstrap removal. PR40212664983 failed operator_interruption/operator_fixture_not_held after the first4 proofs. New finite diagnostics observed terminate_capture/live_probe_gap at347ms with deadlineExpired:false. Actual failure containment completed all7 true booleans, kept the primary error, confirmed11 process/socket/link cleanup facts and runtime-unit removal, while installation/temp roots and private Node/bootstrap were retained. Cleanup failures were empty. Both operator26 and interruption-failure100 controls passed without skips; research PR actually ran21/7/27/48 and push runtime was skipped. These narrow containment observations do not accept the failed normal profile or explain every internal cause. Earlier3bf pushFAIL/PRPASS and local fixture cleanup FAIL_UNKNOWN remain preserved.",
     "Exact3bf native workflows had mixed actual outcomes, not accepted implementation CI. Push40209963590/job121218936536 FAILED actual service step28: primary operator_interruption/operator_fixture_not_held after four of14 interruption proofs; cleanup recorded unit_cleanup/unit_stop_unconfirmed, nine final cleanup confirmations remained unconfirmed and private Node/bootstrap were retained. PR40209966500/job121218941776 passed its scoped actual service path with all14 interruption proofs, controlled drain, startup refusal, three combined TLS sessions, restart/journals and complete owned cleanup. Both operator suites ran18 tests without skips. Research PR actually ran21/7/27/48 and research push runtime was skipped. Earlier local operator fixture cleanup remains FAIL_UNKNOWN; no later hosted result erases that uncertainty. The exact historical not-held interleaving/cause is unknown.",
     "Both exactf9 native workflows completed success with all32 actual required steps. Each observed one controlled held-HTTPS-origin response and paused verified-TLS client graceful stop, all14 narrow drain proofs, exact payload completion and owned retirement. Prior unhealthy startup-refusal/all11 proofs, three healthy combined TLS sessions, one manager restart, three attributable journal checks and all13 final cleanup confirmations plus private dependency/bootstrap removal also passed. Research PR actually ran21/7/27/48; research push runtime was skipped. Controlled held response and client pause do not establish pure network backpressure, the full slow-client/drain matrix or60-minute soak. BroadG3/Production V1 and historical internal failure causes remain unaccepted/unknown.",
@@ -3301,9 +3459,14 @@
   ],
   "nextTasks": [
     {
+      "id": "G3-native-challenge-admission-exact-CI",
+      "state": "pending-exact-resulting-admission-containment",
+      "goal": "First verify exact resulting native challenge admission diagnostics and early-failure containment CI. Capture cleanup ownership only from a current stage-restricted initial held probe under the unchanged1000ms deadline; acceptance interruption still requires a fresh current native-route owned challenge at terminate_capture and terminate_final. A legacy probe, retained flag, late callback or failed challenge cannot authorize the acceptance signal or increment successful proof counters. Preserve all14 operator and six challenge proofs,1000ms/350ms/8s/original10s budgets, exact owned service/pending/lock identities and original primary failure. Finite first-refusal fields may identify a newly observed rejected predicate but cannot reconstruct the unknown042 historical condition. Early failure containment requires the original captured snapshot and strict fresh absence/identity checks; unknown cleanup remains failure. No unchanged CI reruns, broad lock cleaner or timeout increase. After required current service acceptance, resume installed recipe distribution. FullG3/G4-G8/V1, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted."
+    },
+    {
       "id": "G3-native-held-challenge-exact-CI",
-      "state": "pending-exact-resulting-native-held-challenge",
-      "goal": "First verify exact resulting runner-owned live nonce challenge through the native candidate in the operator interruption service profile. Require fresh current native challenge response matching the exact candidate tag and one-use nonce; direct-origin, cached relay readiness, retained Boolean or unrelated session is never substitute authority. Preserve unchanged1000ms hold/350ms hook/8s fixture/original10s helper budgets, current service/native/pending/lock identities, all14 original operator proofs and strict captured-only failure containment. A challenge timeout, stale/replayed/wrong nonce/tag, malformed response or lost live source remains an explicit failure, with original primary error and unknown cleanup retained. Exactc1cf mixed outcomes and actual contained failure remain separate observations, not whole acceptance. Earlier local cleanup FAIL_UNKNOWN remains unresolved. FullG3/G4-G8/V1, installed recipe distribution, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted until their actual gates pass."
+      "state": "mixed-push-scoped-success-pr-admission-failure-cleanup-unconfirmed-not-accepted",
+      "goal": "Exact0420287 native CI had mixed actual outcomes. Push40215886529/job121236849254 completed all34 actual steps with one native challenge/all6 proofs, all14 operator proofs, startup refusal, controlled drain, three combined TLS sessions, restart/journals and all13 cleanup confirmations plus private Node/bootstrap removal. PR40215890093/job121236862647 failed operator_interruption/origin_challenge_identity before the first held observation or ownership snapshot. Its native challenge and operator counters were0, all six/fourteen respective proof flags false, containment no_snapshot and final cleanup_unconfirmed with unit_cleanup/unit_stop_unconfirmed. Nine cleanup confirmations were unconfirmed, four origin/relay closure facts true, appSockets0; installation/temp roots and private runtime removal were unconfirmed. The specific historical admission predicate remains unknown. Both operator26 and failure-QA108 controls passed without skips; research PR actually ran21/7/27/48 and push runtime was skipped. These separate results do not accept the implementation or whole service. Earlierc1cf scoped containment and3bf mixed outcomes/local cleanup FAIL_UNKNOWN remain."
     },
     {
       "id": "G3-interruption-containment-exact-CI",
@@ -3674,7 +3837,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First verify exact resulting runner-owned live nonce challenge through the native candidate in the operator interruption service profile. Require fresh current native challenge response matching the exact candidate tag and one-use nonce; direct-origin, cached relay readiness, retained Boolean or unrelated session is never substitute authority. Preserve unchanged1000ms hold/350ms hook/8s fixture/original10s helper budgets, current service/native/pending/lock identities, all14 original operator proofs and strict captured-only failure containment. A challenge timeout, stale/replayed/wrong nonce/tag, malformed response or lost live source remains an explicit failure, with original primary error and unknown cleanup retained. Exactc1cf mixed outcomes and actual contained failure remain separate observations, not whole acceptance. Earlier local cleanup FAIL_UNKNOWN remains unresolved. FullG3/G4-G8/V1, installed recipe distribution, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted until their actual gates pass.",
+  "nextConcreteTask": "First verify exact resulting native challenge admission diagnostics and early-failure containment CI. Capture cleanup ownership only from a current stage-restricted initial held probe under the unchanged1000ms deadline; acceptance interruption still requires a fresh current native-route owned challenge at terminate_capture and terminate_final. A legacy probe, retained flag, late callback or failed challenge cannot authorize the acceptance signal or increment successful proof counters. Preserve all14 operator and six challenge proofs,1000ms/350ms/8s/original10s budgets, exact owned service/pending/lock identities and original primary failure. Finite first-refusal fields may identify a newly observed rejected predicate but cannot reconstruct the unknown042 historical condition. Early failure containment requires the original captured snapshot and strict fresh absence/identity checks; unknown cleanup remains failure. No unchanged CI reruns, broad lock cleaner or timeout increase. After required current service acceptance, resume installed recipe distribution. FullG3/G4-G8/V1, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -3882,7 +4045,7 @@
     "runtimeCodeChangedByThisPublication": false,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "NATIVE_HELD_CHALLENGE_LOCAL_CONTROLS_VERIFIED_EXACT_SERVICE_CI_PENDING",
+    "currentGate": "NATIVE_CHALLENGE_ADMISSION_LOCAL_CONTROLS_VERIFIED_EXACT_SERVICE_CI_PENDING",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -3957,28 +4120,33 @@
     "interruptionContainmentEvidence": "x10/evidence/g3-service-interruption-containment.json",
     "operatorInterruptionHostedObservation": "x10/evidence/g3-service-interruption-containment.json",
     "nativeHeldChallengeEvidence": "x10/evidence/g3-service-native-held-challenge.json",
-    "interruptionContainmentHostedObservation": "x10/evidence/g3-service-native-held-challenge.json"
+    "interruptionContainmentHostedObservation": "x10/evidence/g3-service-native-held-challenge.json",
+    "nativeChallengeAdmissionEvidence": "x10/evidence/g3-service-challenge-admission.json",
+    "nativeHeldChallengeHostedObservation": "x10/evidence/g3-service-challenge-admission.json"
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-native-held-challenge-20261025T165350Z",
-    "sourceBase": "c1cf0482337d5970d68bb21ae2fb0fcc81f602fc",
-    "publicationParent": "69102a44410c41e89e3a26653eaa50cc0579c95b",
+    "runId": "x10-native-admission-resume-20261026T033833425Z",
+    "sourceBase": "60ba7272fbc168a6c0045b1daf3b3004d917da27",
+    "baselineImplementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
+    "publicationParent": "74cee4a1e810e9c5663ea4c59c588ac0a5cae05c",
     "implementationCommit": null,
     "implementationCommitLocator": "Current publication commit; exact resulting CI required",
-    "scope": "Runner-owned fresh native candidate held-probe nonce challenge acceptance candidate",
-    "result": "Recorded exactc1cf mixed CI and actual scoped failure containment, then added current native-route nonce challenge requirements with unchanged budgets and strict cleanup; exact resulting service CI pending.",
-    "evidence": "x10/evidence/g3-service-native-held-challenge.json",
-    "perFileLedger": "x10/review/g3-service-native-held-challenge-ledger.json",
-    "localAcceptance": "LOCAL_NATIVE_HELD_CHALLENGE_CONTROLS_EXACT_SERVICE_CI_PENDING_PRIOR_LOCAL_CLEANUP_FAIL_UNKNOWN",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_NATIVE_HELD_CHALLENGE_SERVICE",
+    "scope": "Finite native challenge admission diagnostics and stage-restricted early-failure cleanup capture candidate",
+    "result": "Reconciled exact042 mixed hosted results, then added finite admission observations and captured-only early-failure containment without relaxing challenge authority or deadlines; exact resulting service CI pending.",
+    "evidence": "x10/evidence/g3-service-challenge-admission.json",
+    "perFileLedger": "x10/review/g3-service-challenge-admission-ledger.json",
+    "localAcceptance": "LOCAL_ADMISSION_AND_EARLY_CONTAINMENT_CONTROLS_EXACT_SERVICE_CI_PENDING_PRIOR_LOCAL_CLEANUP_FAIL_UNKNOWN",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_NATIVE_CHALLENGE_ADMISSION_SERVICE",
     "nativeRuntimeChanged": false,
     "controllerRuntimeChanged": false,
     "alphaRuntimeChanged": false,
     "serviceRecipeChanged": false,
     "preflightChanged": false,
     "acceptanceHarnessChanged": true,
-    "dependencyCleanupReceiptProfileChanged": true,
+    "dependencyCleanupReceiptProfileChanged": false,
+    "dependencyCleanupReceiptCheckerPinChanged": true,
     "knownGuardsPreserved": true,
+    "routineOwnerAuthorityConfirmationPreserved": true,
     "releaseContractOrProfileChanged": false,
     "releaseContractNarrowed": false,
     "failedStartAccepted": false,
@@ -3987,29 +4155,48 @@
     "serviceAccepted": false,
     "productionAccepted": false,
     "actualHistoricalCauseProven": false,
-    "nextConcreteTask": "First verify exact resulting runner-owned live nonce challenge through the native candidate in the operator interruption service profile. Require fresh current native challenge response matching the exact candidate tag and one-use nonce; direct-origin, cached relay readiness, retained Boolean or unrelated session is never substitute authority. Preserve unchanged1000ms hold/350ms hook/8s fixture/original10s helper budgets, current service/native/pending/lock identities, all14 original operator proofs and strict captured-only failure containment. A challenge timeout, stale/replayed/wrong nonce/tag, malformed response or lost live source remains an explicit failure, with original primary error and unknown cleanup retained. Exactc1cf mixed outcomes and actual contained failure remain separate observations, not whole acceptance. Earlier local cleanup FAIL_UNKNOWN remains unresolved. FullG3/G4-G8/V1, installed recipe distribution, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted until their actual gates pass.",
+    "nextConcreteTask": "First verify exact resulting native challenge admission diagnostics and early-failure containment CI. Capture cleanup ownership only from a current stage-restricted initial held probe under the unchanged1000ms deadline; acceptance interruption still requires a fresh current native-route owned challenge at terminate_capture and terminate_final. A legacy probe, retained flag, late callback or failed challenge cannot authorize the acceptance signal or increment successful proof counters. Preserve all14 operator and six challenge proofs,1000ms/350ms/8s/original10s budgets, exact owned service/pending/lock identities and original primary failure. Finite first-refusal fields may identify a newly observed rejected predicate but cannot reconstruct the unknown042 historical condition. Early failure containment requires the original captured snapshot and strict fresh absence/identity checks; unknown cleanup remains failure. No unchanged CI reruns, broad lock cleaner or timeout increase. After required current service acceptance, resume installed recipe distribution. FullG3/G4-G8/V1, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted.",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_NATIVE_HELD_CHALLENGE_SERVICE"
+      "state": "PENDING_EXACT_RESULTING_NATIVE_CHALLENGE_ADMISSION_SERVICE"
+    },
+    "coordinationResume": {
+      "state": "FRESH_LEASE_RESUME_AFTER_EXPIRED_UNPUBLISHED_TREE",
+      "oldExecutionLeaseCommit": "60ba7272fbc168a6c0045b1daf3b3004d917da27",
+      "oldExecutionLeaseExpiredAtUTC": "2026-10-25T19:07:48.752Z",
+      "createdUnpublishedTree": "48dbafe77017904df1ece29738b57f1bf4a14220",
+      "oldImplementationCommitCreated": false,
+      "oldImplementationRefUpdatePerformed": false,
+      "freshSourceCommit": "60ba7272fbc168a6c0045b1daf3b3004d917da27",
+      "freshLeaseCommit": "74cee4a1e810e9c5663ea4c59c588ac0a5cae05c",
+      "freshLeaseTree": "df8a60d425f3f9c5e4ba65fa65fe8805c9630efa",
+      "freshLeaseExpiresAtUTC": "2026-10-26T04:22:33.425Z",
+      "baselineActualImplementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
+      "originalOwnerCodeStopAtUTC": "2026-10-26T19:17:36.000Z",
+      "ownerWorkWindowExtended": false,
+      "sourceFilesReusedByIdenticalHashes": true,
+      "oldReportsReusedByIdenticalHashes": true,
+      "freshRootIntegrationRequiredBeforePublication": true,
+      "scope": "Real UTC advanced beyond the old lease while tree creation was pending. Guarded resume uses a new clean source tree and fresh lease; the unpublished tree did not become an implementation commit or branch update. Prior failure history and all acceptance gates remain unchanged."
     },
     "newPurchases": false,
     "productionDeployChanged": false
   },
   "lastV1VerificationReceipt": {
-    "state": "MIXED_CONTAINMENT_PUSH_SUCCESS_PR_LIVE_GAP_FAILURE_NOT_ACCEPTED",
-    "implementationCommit": "c1cf0482337d5970d68bb21ae2fb0fcc81f602fc",
-    "implementationTree": "8343bb7a2b4934a4effcd1545ea103abef960422",
-    "evidence": "x10/evidence/g3-service-native-held-challenge.json",
+    "state": "MIXED_NATIVE_CHALLENGE_PUSH_SUCCESS_PR_ADMISSION_FAILURE_NOT_ACCEPTED",
+    "implementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
+    "implementationTree": "c8d6862c9a731b48d3c9192a8ca392cafcd142cd",
+    "evidence": "x10/evidence/g3-service-challenge-admission.json",
     "nativeRunIds": [
-      40212661367,
-      40212664983
+      40215886529,
+      40215890093
     ],
     "nativeJobIds": [
-      121227090527,
-      121227112320
+      121236849254,
+      121236862647
     ],
-    "actualPRMergeCheckout": "ed6317264f06062d74d0ca07c218925f1354123c",
+    "actualPRMergeCheckout": "607c46370faf9423a3e5dbf7fb84769fbc0f6de4",
     "auditConsistent": true,
-    "factualReadbackProofCount": 60,
+    "factualReadbackProofCount": 51,
     "factualReadbackIsAcceptance": false,
     "bothExactNativeWorkflowsSuccessful": false,
     "implementationAccepted": false,
@@ -4017,39 +4204,41 @@
     "prWorkflowConclusion": "failure",
     "pushNormalScopedServiceObserved": true,
     "pushAll14OperatorProofs": true,
+    "pushAllSixNativeChallengeProofs": true,
     "pushAll13CleanupConfirmed": true,
     "pushNodeAndBootstrapRemoved": true,
     "prPrimaryFailure": {
       "phase": "operator_interruption",
       "subphase": "not_applicable",
-      "code": "operator_fixture_not_held",
+      "code": "origin_challenge_identity",
       "systemErrorClass": "unknown"
     },
-    "prFirstHoldRefusal": {
-      "stage": "terminate_capture",
-      "reason": "live_probe_gap",
-      "ageMs": 347,
-      "deadlineExpired": false,
-      "nativeProbeChecks": 1,
-      "heldResponses": 0
-    },
+    "prFinalCode": "cleanup_unconfirmed",
+    "prHoldObservationCount": 0,
+    "prFirstHoldRefusal": null,
     "prOperatorInterruptionChecks": 0,
-    "prOperatorProofsTrue": 4,
-    "prControlledSlowDrainChecks": 0,
+    "prNativeChallengeChecks": 0,
+    "prOperatorProofsTrue": 0,
+    "prNativeChallengeProofsTrue": 0,
     "prContainment": {
-      "attempted": true,
-      "operatorAbsent": true,
-      "holdClosed": true,
-      "snapshotRevalidated": true,
-      "locksRetired": true,
-      "recoveryVerified": true,
-      "completed": true,
-      "disposition": "contained"
+      "attempted": false,
+      "operatorAbsent": false,
+      "holdClosed": false,
+      "snapshotRevalidated": false,
+      "locksRetired": false,
+      "recoveryVerified": false,
+      "completed": false,
+      "disposition": "no_snapshot"
     },
-    "actualFailureContainmentScopedObserved": true,
-    "prOwnedCleanupTrueCount": 11,
-    "prCleanupFailures": [],
-    "prRuntimeUnitRemoved": true,
+    "actualFailureContainmentScopedObserved": false,
+    "prOwnedCleanupTrueCount": 4,
+    "prCleanupFailures": [
+      {
+        "stage": "unit_cleanup",
+        "code": "unit_stop_unconfirmed"
+      }
+    ],
+    "prRuntimeUnitRemoved": false,
     "prInstallationRemoved": false,
     "prTemporaryRootRemoved": false,
     "prPrivateNodeCleanupReceiptPresent": false,
@@ -4057,10 +4246,10 @@
     "prBootstrapTemporaryRootRemoved": false,
     "bothActualOperatorControlTests": 26,
     "bothActualOperatorControlSkips": 0,
-    "bothActualInterruptionFailureControls": 100,
+    "bothActualInterruptionFailureControls": 108,
     "bothActualInterruptionFailureControlSkips": 0,
-    "researchPRRunId": 40212665079,
-    "researchPRJobId": 121227109041,
+    "researchPRRunId": 40215890083,
+    "researchPRJobId": 121236846949,
     "researchPRActualSuites": [
       21,
       7,
@@ -4069,29 +4258,28 @@
     ],
     "researchPushRuntimeSkipped": true,
     "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
-    "historical3bfCauseKnown": false,
-    "allInternalC1cfFailureCausesKnown": false,
+    "exactHistoricalAdmissionPredicateKnown": false,
     "fullG3ServiceAccepted": false,
     "serviceAccepted": false,
     "productionAccepted": false,
     "workflowRerunsRequested": 0,
     "nativeArtifacts": [
       {
-        "runId": 40212661367,
-        "artifactId": 12606119959,
-        "zipBytes": 125633,
-        "zipSha256": "d197de6205e7ae9555184dbc116c6d6fa7e9313aa2575a4ac7875c8900261cdc"
+        "runId": 40215886529,
+        "artifactId": 12607991579,
+        "zipBytes": 127479,
+        "zipSha256": "6d4637dc6c2c6937c5a5edeadd9bc9d890073cd95540bbd579dfdb1e1e465775"
       },
       {
-        "runId": 40212664983,
-        "artifactId": 12606576226,
-        "zipBytes": 125543,
-        "zipSha256": "a729ccd923403e546da9f1f0c339d00bbbdfc9923b23827ee9172cf2adaabf0c"
+        "runId": 40215890093,
+        "artifactId": 12607841655,
+        "zipBytes": 127061,
+        "zipSha256": "e6de7017db1d7959632f4b8b0c1e99eddf2ef6cd2f71dbfea3001c9659624031"
       }
     ],
     "freshAuditReference": {
-      "sha256": "56b705a195ce8c8fcd41fefa353ca8a484e7ebc26b26b8d6e2d1eea22ab11e07",
-      "bytes": 47229
+      "sha256": "1cb03eb285735c0af8be37157f50cbf87518aa8719e8436304365caaafeee427",
+      "bytes": 46327
     }
   },
   "v1DevelopmentPassHistory": [
@@ -5384,6 +5572,41 @@
       "nextConcreteTask": "First verify exact resulting interruption diagnostics and failed-fixture containment CI. Preserve exact3bf pushFAIL and PR scopedPASS separately; do not accept the implementation or repeat unchanged CI blindly. Require finite current-step/guard facts without raw host/process output, unchanged1000ms hold and350ms hook budgets, strict ownership and candidate binding, and bounded cleanup only of the explicitly captured owned operator. A diagnostic or containment error cannot replace the original primary failure, restore candidate authority, erase stale locks or promote unknown cleanup. Require the full actual supported nonroot service profile and all26 operator controls without skips before scoped new acceptance. Earlier local cleanup FAIL_UNKNOWN remains unresolved. Installed recipe distribution is parked until this current failure is understood and the required service CI passes. FullG3/G4-G8/V1, package rollback and semantic Continuum remain unaccepted.",
       "hostedVerification": {
         "state": "PENDING_EXACT_RESULTING_INTERRUPTION_CONTAINMENT_SERVICE"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
+    },
+    {
+      "runId": "x10-native-held-challenge-20261025T165350Z",
+      "sourceBase": "c1cf0482337d5970d68bb21ae2fb0fcc81f602fc",
+      "publicationParent": "69102a44410c41e89e3a26653eaa50cc0579c95b",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+      "scope": "Runner-owned fresh native candidate held-probe nonce challenge acceptance candidate",
+      "result": "Recorded exactc1cf mixed CI and actual scoped failure containment, then added current native-route nonce challenge requirements with unchanged budgets and strict cleanup; exact resulting service CI pending.",
+      "evidence": "x10/evidence/g3-service-native-held-challenge.json",
+      "perFileLedger": "x10/review/g3-service-native-held-challenge-ledger.json",
+      "localAcceptance": "LOCAL_NATIVE_HELD_CHALLENGE_CONTROLS_EXACT_SERVICE_CI_PENDING_PRIOR_LOCAL_CLEANUP_FAIL_UNKNOWN",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_NATIVE_HELD_CHALLENGE_SERVICE",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "acceptanceHarnessChanged": true,
+      "dependencyCleanupReceiptProfileChanged": true,
+      "knownGuardsPreserved": true,
+      "releaseContractOrProfileChanged": false,
+      "releaseContractNarrowed": false,
+      "failedStartAccepted": false,
+      "slowDrainAccepted": false,
+      "operatorInterruptionAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "actualHistoricalCauseProven": false,
+      "nextConcreteTask": "First verify exact resulting runner-owned live nonce challenge through the native candidate in the operator interruption service profile. Require fresh current native challenge response matching the exact candidate tag and one-use nonce; direct-origin, cached relay readiness, retained Boolean or unrelated session is never substitute authority. Preserve unchanged1000ms hold/350ms hook/8s fixture/original10s helper budgets, current service/native/pending/lock identities, all14 original operator proofs and strict captured-only failure containment. A challenge timeout, stale/replayed/wrong nonce/tag, malformed response or lost live source remains an explicit failure, with original primary error and unknown cleanup retained. Exactc1cf mixed outcomes and actual contained failure remain separate observations, not whole acceptance. Earlier local cleanup FAIL_UNKNOWN remains unresolved. FullG3/G4-G8/V1, installed recipe distribution, package rollback, permanent release,60-minute soak and semantic Continuum remain unaccepted until their actual gates pass.",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_NATIVE_HELD_CHALLENGE_SERVICE"
       },
       "newPurchases": false,
       "productionDeployChanged": false
@@ -6746,6 +6969,106 @@
         "sha256": "373b2b08c4dff721ce1ddf89d5b58e3d7e63a3e404e3794df39b13faff6125d6",
         "bytes": 38731
       }
+    },
+    {
+      "state": "MIXED_CONTAINMENT_PUSH_SUCCESS_PR_LIVE_GAP_FAILURE_NOT_ACCEPTED",
+      "implementationCommit": "c1cf0482337d5970d68bb21ae2fb0fcc81f602fc",
+      "implementationTree": "8343bb7a2b4934a4effcd1545ea103abef960422",
+      "evidence": "x10/evidence/g3-service-native-held-challenge.json",
+      "nativeRunIds": [
+        40212661367,
+        40212664983
+      ],
+      "nativeJobIds": [
+        121227090527,
+        121227112320
+      ],
+      "actualPRMergeCheckout": "ed6317264f06062d74d0ca07c218925f1354123c",
+      "auditConsistent": true,
+      "factualReadbackProofCount": 60,
+      "factualReadbackIsAcceptance": false,
+      "bothExactNativeWorkflowsSuccessful": false,
+      "implementationAccepted": false,
+      "pushWorkflowConclusion": "success",
+      "prWorkflowConclusion": "failure",
+      "pushNormalScopedServiceObserved": true,
+      "pushAll14OperatorProofs": true,
+      "pushAll13CleanupConfirmed": true,
+      "pushNodeAndBootstrapRemoved": true,
+      "prPrimaryFailure": {
+        "phase": "operator_interruption",
+        "subphase": "not_applicable",
+        "code": "operator_fixture_not_held",
+        "systemErrorClass": "unknown"
+      },
+      "prFirstHoldRefusal": {
+        "stage": "terminate_capture",
+        "reason": "live_probe_gap",
+        "ageMs": 347,
+        "deadlineExpired": false,
+        "nativeProbeChecks": 1,
+        "heldResponses": 0
+      },
+      "prOperatorInterruptionChecks": 0,
+      "prOperatorProofsTrue": 4,
+      "prControlledSlowDrainChecks": 0,
+      "prContainment": {
+        "attempted": true,
+        "operatorAbsent": true,
+        "holdClosed": true,
+        "snapshotRevalidated": true,
+        "locksRetired": true,
+        "recoveryVerified": true,
+        "completed": true,
+        "disposition": "contained"
+      },
+      "actualFailureContainmentScopedObserved": true,
+      "prOwnedCleanupTrueCount": 11,
+      "prCleanupFailures": [],
+      "prRuntimeUnitRemoved": true,
+      "prInstallationRemoved": false,
+      "prTemporaryRootRemoved": false,
+      "prPrivateNodeCleanupReceiptPresent": false,
+      "prBootstrapRuntimeRemoved": false,
+      "prBootstrapTemporaryRootRemoved": false,
+      "bothActualOperatorControlTests": 26,
+      "bothActualOperatorControlSkips": 0,
+      "bothActualInterruptionFailureControls": 100,
+      "bothActualInterruptionFailureControlSkips": 0,
+      "researchPRRunId": 40212665079,
+      "researchPRJobId": 121227109041,
+      "researchPRActualSuites": [
+        21,
+        7,
+        27,
+        48
+      ],
+      "researchPushRuntimeSkipped": true,
+      "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
+      "historical3bfCauseKnown": false,
+      "allInternalC1cfFailureCausesKnown": false,
+      "fullG3ServiceAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0,
+      "nativeArtifacts": [
+        {
+          "runId": 40212661367,
+          "artifactId": 12606119959,
+          "zipBytes": 125633,
+          "zipSha256": "d197de6205e7ae9555184dbc116c6d6fa7e9313aa2575a4ac7875c8900261cdc"
+        },
+        {
+          "runId": 40212664983,
+          "artifactId": 12606576226,
+          "zipBytes": 125543,
+          "zipSha256": "a729ccd923403e546da9f1f0c339d00bbbdfc9923b23827ee9172cf2adaabf0c"
+        }
+      ],
+      "freshAuditReference": {
+        "sha256": "56b705a195ce8c8fcd41fefa353ca8a484e7ebc26b26b8d6e2d1eea22ab11e07",
+        "bytes": 47229
+      }
     }
   ],
   "currentNativeCIFailure": {
@@ -6770,79 +7093,48 @@
     "candidateExactNativeCIAccepted": true
   },
   "currentServiceLifecycleCIFailure": {
-    "state": "ACTUAL_PR_LIVE_PROBE_GAP_FAILURE_WITH_SCOPED_CONTAINMENT_OBSERVED",
-    "implementationCommit": "c1cf0482337d5970d68bb21ae2fb0fcc81f602fc",
-    "implementationTree": "8343bb7a2b4934a4effcd1545ea103abef960422",
-    "runId": 40212664983,
-    "jobId": 121227112320,
+    "state": "ACTUAL_PR_NATIVE_CHALLENGE_ADMISSION_FAILURE_NO_SNAPSHOT_CLEANUP_UNCONFIRMED",
+    "implementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
+    "implementationTree": "c8d6862c9a731b48d3c9192a8ca392cafcd142cd",
+    "runId": 40215890093,
+    "jobId": 121236862647,
     "attempt": 1,
     "workflowConclusion": "failure",
     "service": {
       "ok": false,
-      "code": "operator_fixture_not_held",
+      "code": "cleanup_unconfirmed",
       "phase": "operator_interruption",
+      "operatorNativeChallengeChecks": 0,
+      "operatorNativeChallengeProof": {
+        "nativeRouteObserved": false,
+        "ownedRequestObserved": false,
+        "relayResponseMatched": false,
+        "candidateBindingMatched": false,
+        "authorityReobservedBeforeSignal": false,
+        "ownedChallengeClosed": false
+      },
       "operatorInterruptionContainment": {
-        "attempted": true,
-        "operatorAbsent": true,
-        "holdClosed": true,
-        "snapshotRevalidated": true,
-        "locksRetired": true,
-        "recoveryVerified": true,
-        "completed": true,
-        "disposition": "contained"
+        "attempted": false,
+        "operatorAbsent": false,
+        "holdClosed": false,
+        "snapshotRevalidated": false,
+        "locksRetired": false,
+        "recoveryVerified": false,
+        "completed": false,
+        "disposition": "no_snapshot"
       },
       "operatorHoldDiagnostics": {
-        "observationCount": 4,
+        "observationCount": 0,
         "observationsTruncated": false,
-        "firstRefusal": {
-          "stage": "terminate_capture",
-          "reason": "live_probe_gap",
-          "ageMs": 347,
-          "deadlineExpired": false,
-          "nativeProbeChecks": 1,
-          "heldResponses": 0
-        },
-        "observations": [
-          {
-            "stage": "harness_capture",
-            "reason": "current",
-            "ageMs": 0,
-            "deadlineExpired": false,
-            "nativeProbeChecks": 1,
-            "heldResponses": 1
-          },
-          {
-            "stage": "capture_final",
-            "reason": "current",
-            "ageMs": 155,
-            "deadlineExpired": false,
-            "nativeProbeChecks": 1,
-            "heldResponses": 1
-          },
-          {
-            "stage": "harness_terminate",
-            "reason": "current",
-            "ageMs": 196,
-            "deadlineExpired": false,
-            "nativeProbeChecks": 1,
-            "heldResponses": 1
-          },
-          {
-            "stage": "terminate_capture",
-            "reason": "live_probe_gap",
-            "ageMs": 347,
-            "deadlineExpired": false,
-            "nativeProbeChecks": 1,
-            "heldResponses": 0
-          }
-        ]
+        "firstRefusal": null,
+        "observations": []
       },
       "operatorInterruptionChecks": 0,
       "operatorInterruptionProof": {
-        "candidateProbeHeld": true,
-        "pendingReloadObserved": true,
-        "lastConfirmedPreserved": true,
-        "sameServiceObserved": true,
+        "candidateProbeHeld": false,
+        "pendingReloadObserved": false,
+        "lastConfirmedPreserved": false,
+        "sameServiceObserved": false,
         "ownedOperatorTerminated": false,
         "staleLocksPreserved": false,
         "lockedRecoveryRefused": false,
@@ -6916,15 +7208,15 @@
       "upstreamTLSRollbackChecks": 3,
       "upstreamTLSCandidate502Checks": 3,
       "upstreamTLSNoPostReplayChecks": 3,
-      "runtimeUnitRemoved": true,
+      "runtimeUnitRemoved": false,
       "cleanup": {
-        "managerStopped": true,
-        "launcherExited": true,
-        "nativeGroupsAbsent": true,
-        "listeningPortsClosed": true,
-        "controlSocketAbsent": true,
-        "downstreamTLSPortClosed": true,
-        "runtimeLinkAbsent": true,
+        "managerStopped": false,
+        "launcherExited": false,
+        "nativeGroupsAbsent": false,
+        "listeningPortsClosed": false,
+        "controlSocketAbsent": false,
+        "downstreamTLSPortClosed": false,
+        "runtimeLinkAbsent": false,
         "upstreamTLSPortClosed": true,
         "readinessRelayPortClosed": true,
         "upstreamTLSOriginClosed": true,
@@ -6933,17 +7225,22 @@
         "installationRemoved": false,
         "temporaryRootRemoved": false
       },
-      "archiveSha256": "3f71483f6a132cf3ffc2a8dd04445bc7fe5540009bae3b8b744fd99701078313",
+      "archiveSha256": "ad2041a3be2453a7db2190d333a236a269f8196d272833d9eb43025a945669fb",
       "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
-      "sourceCommit": "ed6317264f06062d74d0ca07c218925f1354123c",
+      "sourceCommit": "607c46370faf9423a3e5dbf7fb84769fbc0f6de4",
       "primaryFailure": {
         "phase": "operator_interruption",
         "subphase": "not_applicable",
-        "code": "operator_fixture_not_held",
+        "code": "origin_challenge_identity",
         "systemErrorClass": "unknown"
       },
-      "cleanupFailures": [],
-      "cleanupFailureCount": 0,
+      "cleanupFailures": [
+        {
+          "stage": "unit_cleanup",
+          "code": "unit_stop_unconfirmed"
+        }
+      ],
+      "cleanupFailureCount": 1,
       "cleanupFailuresTruncated": false
     },
     "privateNodeCleanupReceiptPresent": false,
@@ -6957,12 +7254,9 @@
       "productionAccepted": false,
       "subprocessOutputsPublished": false
     },
-    "containedFailureObserved": true,
-    "allSevenContainmentBooleansTrue": true,
-    "elevenProcessSocketLinkCleanupConfirmations": true,
-    "installationAndPrivateRuntimeRetained": true,
-    "historical3bfCauseKnown": false,
-    "allInternalC1cfFailureCausesKnown": false,
+    "exactHistoricalAdmissionPredicateKnown": false,
+    "failureContainmentCompleted": false,
+    "finalOwnedCleanupConfirmed": false,
     "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
     "unconfirmedFlagsProveObservedPresence": false,
     "implementationAccepted": false,
@@ -7686,24 +7980,195 @@
       "implementationAccepted": false,
       "serviceAccepted": false,
       "productionAccepted": false
+    },
+    {
+      "state": "ACTUAL_PR_NATIVE_CHALLENGE_ADMISSION_FAILURE_NO_SNAPSHOT_CLEANUP_UNCONFIRMED",
+      "implementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
+      "implementationTree": "c8d6862c9a731b48d3c9192a8ca392cafcd142cd",
+      "runId": 40215890093,
+      "jobId": 121236862647,
+      "attempt": 1,
+      "workflowConclusion": "failure",
+      "service": {
+        "ok": false,
+        "code": "cleanup_unconfirmed",
+        "phase": "operator_interruption",
+        "operatorNativeChallengeChecks": 0,
+        "operatorNativeChallengeProof": {
+          "nativeRouteObserved": false,
+          "ownedRequestObserved": false,
+          "relayResponseMatched": false,
+          "candidateBindingMatched": false,
+          "authorityReobservedBeforeSignal": false,
+          "ownedChallengeClosed": false
+        },
+        "operatorInterruptionContainment": {
+          "attempted": false,
+          "operatorAbsent": false,
+          "holdClosed": false,
+          "snapshotRevalidated": false,
+          "locksRetired": false,
+          "recoveryVerified": false,
+          "completed": false,
+          "disposition": "no_snapshot"
+        },
+        "operatorHoldDiagnostics": {
+          "observationCount": 0,
+          "observationsTruncated": false,
+          "firstRefusal": null,
+          "observations": []
+        },
+        "operatorInterruptionChecks": 0,
+        "operatorInterruptionProof": {
+          "candidateProbeHeld": false,
+          "pendingReloadObserved": false,
+          "lastConfirmedPreserved": false,
+          "sameServiceObserved": false,
+          "ownedOperatorTerminated": false,
+          "staleLocksPreserved": false,
+          "lockedRecoveryRefused": false,
+          "exactLockRemovalConfirmed": false,
+          "explicitRollbackObserved": false,
+          "pendingCleared": false,
+          "restoredContentVerified": false,
+          "noPostReplay": false,
+          "sameServiceAfterRecovery": false,
+          "repeatedRecoveryIdempotent": false
+        },
+        "controlledSlowDrainChecks": 0,
+        "controlledSlowDrainProof": {
+          "clientPaused": false,
+          "originResponseHeld": false,
+          "sameSessionObserved": false,
+          "managerStopPending": false,
+          "nativeGroupLiveDuringStop": false,
+          "unitDeactivatingObserved": false,
+          "incompleteResponseObserved": false,
+          "payloadCompleted": false,
+          "tlsVerified": false,
+          "managerStopCompleted": false,
+          "launcherExited": false,
+          "nativeGroupsAbsent": false,
+          "listeningPortsClosed": false,
+          "controlSocketAbsent": false
+        },
+        "failedStartChecks": 1,
+        "failedStartProof": {
+          "unhealthyReadinessObserved": true,
+          "managerRefused": true,
+          "hookExitObserved": true,
+          "bindingAbsent": true,
+          "launcherExited": true,
+          "nativeGroupsAbsent": true,
+          "listeningPortsClosed": true,
+          "controlSocketAbsent": true,
+          "failedSessionStopped": true,
+          "managerResetConfirmed": true,
+          "healthyRestartFresh": true
+        },
+        "nativeSessionsStarted": 3,
+        "nativeSessionsStopped": 2,
+        "explicitReadinessPasses": 3,
+        "proxyBodyChecks": 3,
+        "uploadChecks": 3,
+        "streamChecks": 3,
+        "managerRestartCommands": 1,
+        "completedManagerRestarts": 1,
+        "restartProof": {
+          "oldLauncherExited": true,
+          "oldNativeGroupsAbsent": true,
+          "freshSession": true,
+          "freshInvocation": true
+        },
+        "journalChecks": 3,
+        "journalRecordsObserved": 99,
+        "journalRunningMarkers": 3,
+        "downstreamTLSActivated": true,
+        "downstreamTLSSessionChecks": 3,
+        "downstreamTLSBodyChecks": 6,
+        "downstreamTLSCertificateChecks": 12,
+        "downstreamTLSWrongCARefusals": 3,
+        "downstreamTLSWrongNameRefusals": 3,
+        "upstreamTLSActivated": true,
+        "upstreamTLSSessionChecks": 3,
+        "upstreamTLSWrongCARefusals": 1,
+        "upstreamTLSWrongNameRefusals": 1,
+        "upstreamTLSPlaintextRefusals": 1,
+        "upstreamTLSRollbackChecks": 3,
+        "upstreamTLSCandidate502Checks": 3,
+        "upstreamTLSNoPostReplayChecks": 3,
+        "runtimeUnitRemoved": false,
+        "cleanup": {
+          "managerStopped": false,
+          "launcherExited": false,
+          "nativeGroupsAbsent": false,
+          "listeningPortsClosed": false,
+          "controlSocketAbsent": false,
+          "downstreamTLSPortClosed": false,
+          "runtimeLinkAbsent": false,
+          "upstreamTLSPortClosed": true,
+          "readinessRelayPortClosed": true,
+          "upstreamTLSOriginClosed": true,
+          "readinessRelayClosed": true,
+          "appSocketsRemaining": 0,
+          "installationRemoved": false,
+          "temporaryRootRemoved": false
+        },
+        "archiveSha256": "ad2041a3be2453a7db2190d333a236a269f8196d272833d9eb43025a945669fb",
+        "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+        "sourceCommit": "607c46370faf9423a3e5dbf7fb84769fbc0f6de4",
+        "primaryFailure": {
+          "phase": "operator_interruption",
+          "subphase": "not_applicable",
+          "code": "origin_challenge_identity",
+          "systemErrorClass": "unknown"
+        },
+        "cleanupFailures": [
+          {
+            "stage": "unit_cleanup",
+            "code": "unit_stop_unconfirmed"
+          }
+        ],
+        "cleanupFailureCount": 1,
+        "cleanupFailuresTruncated": false
+      },
+      "privateNodeCleanupReceiptPresent": false,
+      "bootstrap": {
+        "ok": false,
+        "stage": "actual_service",
+        "code": "bootstrap_stage_failed",
+        "runtimeRemoved": false,
+        "temporaryRootRemoved": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "subprocessOutputsPublished": false
+      },
+      "exactHistoricalAdmissionPredicateKnown": false,
+      "failureContainmentCompleted": false,
+      "finalOwnedCleanupConfirmed": false,
+      "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
+      "unconfirmedFlagsProveObservedPresence": false,
+      "implementationAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false
     }
   ],
   "currentServiceLifecycleCIState": {
-    "state": "MIXED_CONTAINMENT_PUSH_SUCCESS_PR_LIVE_GAP_FAILURE_NOT_ACCEPTED",
-    "implementationCommit": "c1cf0482337d5970d68bb21ae2fb0fcc81f602fc",
-    "implementationTree": "8343bb7a2b4934a4effcd1545ea103abef960422",
-    "evidence": "x10/evidence/g3-service-native-held-challenge.json",
+    "state": "MIXED_NATIVE_CHALLENGE_PUSH_SUCCESS_PR_ADMISSION_FAILURE_NOT_ACCEPTED",
+    "implementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
+    "implementationTree": "c8d6862c9a731b48d3c9192a8ca392cafcd142cd",
+    "evidence": "x10/evidence/g3-service-challenge-admission.json",
     "nativeRunIds": [
-      40212661367,
-      40212664983
+      40215886529,
+      40215890093
     ],
     "nativeJobIds": [
-      121227090527,
-      121227112320
+      121236849254,
+      121236862647
     ],
-    "actualPRMergeCheckout": "ed6317264f06062d74d0ca07c218925f1354123c",
+    "actualPRMergeCheckout": "607c46370faf9423a3e5dbf7fb84769fbc0f6de4",
     "auditConsistent": true,
-    "factualReadbackProofCount": 60,
+    "factualReadbackProofCount": 51,
     "factualReadbackIsAcceptance": false,
     "bothExactNativeWorkflowsSuccessful": false,
     "implementationAccepted": false,
@@ -7711,39 +8176,41 @@
     "prWorkflowConclusion": "failure",
     "pushNormalScopedServiceObserved": true,
     "pushAll14OperatorProofs": true,
+    "pushAllSixNativeChallengeProofs": true,
     "pushAll13CleanupConfirmed": true,
     "pushNodeAndBootstrapRemoved": true,
     "prPrimaryFailure": {
       "phase": "operator_interruption",
       "subphase": "not_applicable",
-      "code": "operator_fixture_not_held",
+      "code": "origin_challenge_identity",
       "systemErrorClass": "unknown"
     },
-    "prFirstHoldRefusal": {
-      "stage": "terminate_capture",
-      "reason": "live_probe_gap",
-      "ageMs": 347,
-      "deadlineExpired": false,
-      "nativeProbeChecks": 1,
-      "heldResponses": 0
-    },
+    "prFinalCode": "cleanup_unconfirmed",
+    "prHoldObservationCount": 0,
+    "prFirstHoldRefusal": null,
     "prOperatorInterruptionChecks": 0,
-    "prOperatorProofsTrue": 4,
-    "prControlledSlowDrainChecks": 0,
+    "prNativeChallengeChecks": 0,
+    "prOperatorProofsTrue": 0,
+    "prNativeChallengeProofsTrue": 0,
     "prContainment": {
-      "attempted": true,
-      "operatorAbsent": true,
-      "holdClosed": true,
-      "snapshotRevalidated": true,
-      "locksRetired": true,
-      "recoveryVerified": true,
-      "completed": true,
-      "disposition": "contained"
+      "attempted": false,
+      "operatorAbsent": false,
+      "holdClosed": false,
+      "snapshotRevalidated": false,
+      "locksRetired": false,
+      "recoveryVerified": false,
+      "completed": false,
+      "disposition": "no_snapshot"
     },
-    "actualFailureContainmentScopedObserved": true,
-    "prOwnedCleanupTrueCount": 11,
-    "prCleanupFailures": [],
-    "prRuntimeUnitRemoved": true,
+    "actualFailureContainmentScopedObserved": false,
+    "prOwnedCleanupTrueCount": 4,
+    "prCleanupFailures": [
+      {
+        "stage": "unit_cleanup",
+        "code": "unit_stop_unconfirmed"
+      }
+    ],
+    "prRuntimeUnitRemoved": false,
     "prInstallationRemoved": false,
     "prTemporaryRootRemoved": false,
     "prPrivateNodeCleanupReceiptPresent": false,
@@ -7751,10 +8218,10 @@
     "prBootstrapTemporaryRootRemoved": false,
     "bothActualOperatorControlTests": 26,
     "bothActualOperatorControlSkips": 0,
-    "bothActualInterruptionFailureControls": 100,
+    "bothActualInterruptionFailureControls": 108,
     "bothActualInterruptionFailureControlSkips": 0,
-    "researchPRRunId": 40212665079,
-    "researchPRJobId": 121227109041,
+    "researchPRRunId": 40215890083,
+    "researchPRJobId": 121236846949,
     "researchPRActualSuites": [
       21,
       7,
@@ -7763,29 +8230,28 @@
     ],
     "researchPushRuntimeSkipped": true,
     "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
-    "historical3bfCauseKnown": false,
-    "allInternalC1cfFailureCausesKnown": false,
+    "exactHistoricalAdmissionPredicateKnown": false,
     "fullG3ServiceAccepted": false,
     "serviceAccepted": false,
     "productionAccepted": false,
     "workflowRerunsRequested": 0,
     "nativeArtifacts": [
       {
-        "runId": 40212661367,
-        "artifactId": 12606119959,
-        "zipBytes": 125633,
-        "zipSha256": "d197de6205e7ae9555184dbc116c6d6fa7e9313aa2575a4ac7875c8900261cdc"
+        "runId": 40215886529,
+        "artifactId": 12607991579,
+        "zipBytes": 127479,
+        "zipSha256": "6d4637dc6c2c6937c5a5edeadd9bc9d890073cd95540bbd579dfdb1e1e465775"
       },
       {
-        "runId": 40212664983,
-        "artifactId": 12606576226,
-        "zipBytes": 125543,
-        "zipSha256": "a729ccd923403e546da9f1f0c339d00bbbdfc9923b23827ee9172cf2adaabf0c"
+        "runId": 40215890093,
+        "artifactId": 12607841655,
+        "zipBytes": 127061,
+        "zipSha256": "e6de7017db1d7959632f4b8b0c1e99eddf2ef6cd2f71dbfea3001c9659624031"
       }
     ],
     "freshAuditReference": {
-      "sha256": "56b705a195ce8c8fcd41fefa353ca8a484e7ebc26b26b8d6e2d1eea22ab11e07",
-      "bytes": 47229
+      "sha256": "1cb03eb285735c0af8be37157f50cbf87518aa8719e8436304365caaafeee427",
+      "bytes": 46327
     }
   }
 }

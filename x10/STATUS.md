@@ -2486,3 +2486,50 @@ unchanged. Earlier3bf failure and old local FAIL_UNKNOWN are not retroactively
 repaired. Installed recipe distribution remains parked until required service
 acceptance; fullG3/G4-G8/V1, package rollback, permanent distribution,60-minute
 soak and semantic Continuum remain open.
+
+
+## G3 admission diagnostics and captured early-failure containment candidate
+
+Exact0420287 native results remain mixed. Push40215886529 completed its scoped
+native challenge, operator recovery, startup refusal, controlled drain, TLS,
+restart/journals and complete owned cleanup. PR40215890093 failed before initial
+ownership capture with primary origin_challenge_identity and final
+cleanup_unconfirmed/unit_stop_unconfirmed. Its containment was no_snapshot;
+all six challenge and fourteen operator proofs stayed false. The exact rejected
+historical admission predicate is unknown. Fresh51 factual readback checks do
+not turn this mixed result into acceptance. Research PR ran21/7/27/48; research
+push runtime was skipped. Earlierc1cf scoped containment,3bf mixed outcomes and
+local cleanup FAIL_UNKNOWN remain preserved.
+
+This candidate records bounded first-refusal admission stages/reasons, status
+classes, matched-field booleans and bounded counters without nonce/tag/header,
+body, route, port, PID or raw-error values. Diagnostics cannot grant authority.
+Accepted records admission history; after cleanup,
+currentPairLive is false and cannot authorize any later action.
+Cleanup ownership and the pending snapshot are captured before challenge open,
+using only a current stage-restricted initial held probe. Acceptance interruption
+still requires the owned current native challenge at both termination stages;
+there is no legacy fallback for the acceptance signal. Failed admission keeps
+its primary failure and can use only the original strictly captured cleanup
+snapshot. Full pending and same-service identity are reread after awaited open.
+A late callback, stale identity or expired deadline cannot revive it.
+
+All14 operator and six challenge proofs, strict cleanup receipts and original
+1000ms/350ms/8s/original10s budgets remain required. Native/controller/alpha,
+operator process helper/test, unit recipe and release contract/profile stay
+unchanged. Local contracts and Node bridge controls do not execute the actual
+supported nonroot managed native service. Final frozen local integration846/846 passed with zero
+skips/failures.
+Exact resulting CI remains pending.
+See [admission evidence](evidence/g3-service-challenge-admission.json) for
+frozen source bindings, actual local counts, review and adverse draft history.
+
+Installed recipe distribution remains next after required current service
+acceptance. FullG3/G4-G8/V1, package rollback, permanent release,60-minute soak
+and semantic Continuum remain open. No production or deployment change is
+performed by this fixture checkpoint.
+
+The prior lease expired while tree creation was pending. That tree remained
+unpublished: no implementation commit or implementation ref update occurred.
+This checkpoint resumes from fresh ownership with identical source bytes and
+fresh root verification; the original owner work window is unchanged.

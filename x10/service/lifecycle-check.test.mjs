@@ -7,7 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import { mkdtemp, mkdir, writeFile, readFile, chmod, symlink, link, rm, realpath, lstat, readlink } from 'node:fs/promises';
 import { digest } from '../alpha/runtime.mjs';
-import { parseArguments, assessOwnedNativeChallenge, classifyOperatorHoldDecision, createOperatorHoldDiagnostics, assessInterruptedRecovery, assessInterruptedProbeHold, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
+import { parseArguments, sanitizeNativeChallengeAdmission, assessOwnedNativeChallenge, classifyOperatorHoldDecision, createOperatorHoldDiagnostics, assessInterruptedRecovery, assessInterruptedProbeHold, assessControlledDrainHold, assessControlledDrainResult, parseFailedStartIdentity, assessFailedReadinessStart, assessRejectedOriginApply, fixtureUnitName, parseUnitProperties, parseInvocationProperty, managerEnvironment, LIMITATIONS, assessNodePrerequisites, classifyLifecycleError, createFailureDiagnostics, createStartDiagnostics, summarizeManagerOutcome, summarizeUnitProperties, classifyCommandTermination, classifySystemError, DIAGNOSTIC_PHASES, START_SUBPHASES, CLEANUP_STAGES, summarizeUnitFragmentIdentity, createFragmentIdentityDiagnostics, verifyKnownUnitFragmentPaths, createHookStatusDiagnostics } from './lifecycle-check.mjs';
 import { JOURNAL_RESULT_CODES } from './journal-check.mjs';
 const run = promisify(execFile), script = fileURLToPath(new URL('./lifecycle-check.mjs', import.meta.url));
 const hash = 'a'.repeat(64), token = 'b'.repeat(32);
@@ -1245,16 +1245,16 @@ test('owned native challenge getters cannot fabricate current request authority'
   let called = false; const snapshot = { ...ownedNativeChallenge }; Object.defineProperty(snapshot, 'currentRequestOpen', { get() { called = true; return true; } });
   assert.throws(() => assessOwnedNativeChallenge(snapshot), { code: 'operator_interruption_unconfirmed' }); assert.equal(called, false);
 });
-async function extractedChallengeDecision({ initialClock = 0, own = ownedNativeChallenge } = {}) {
+async function extractedChallengeDecision({ initialClock = 0, own = ownedNativeChallenge, legacy = null, capturePhase = 'unarmed' } = {}) {
   const source = await readFile(script, 'utf8');
   const fn = source.slice(source.indexOf('  async function verifyOperatorInterruption()'), source.indexOf('  async function verifyControlledSlowDrain()'));
   const callback = fn.slice(fn.indexOf('    const isHeld ='), fn.indexOf('    try {\n      held = origin.prepareReadinessHold', fn.indexOf('    const isHeld =')));
   let clock = initialClock;
   const report = { operatorNativeChallengeProof: { authorityReobservedBeforeSignal: false } };
   const diagnostics = createOperatorHoldDiagnostics();
-  const env = { ownedChallenge: { snapshot: () => own }, held: { snapshot() { assert.fail('legacy controller probe is not owned request authority'); } }, heldDeadline: 1000, checkCancelled() {}, classifyOperatorHoldDecision, assessOwnedNativeChallenge, operatorHoldDiagnostics: diagnostics, performance: { now: () => clock }, report };
-  const decide = new Function(...Object.keys(env), `${callback}; return isHeld;`)(...Object.values(env));
-  return { decide, report, diagnostics, setClock(value) { clock = value; } };
+  const env = { ownedChallenge: own ? { snapshot: () => own } : null, held: { snapshot() { if (!legacy) assert.fail('legacy controller probe is not owned request authority'); return legacy; } }, heldDeadline: 1000, checkCancelled() {}, classifyOperatorHoldDecision, assessOwnedNativeChallenge, operatorHoldDiagnostics: diagnostics, performance: { now: () => clock }, report };
+  const { decide, setCapturePhase } = new Function(...Object.keys(env), `let cleanupCapturePhase = '${capturePhase}'; ${callback}; return { decide: isHeld, setCapturePhase(value) { cleanupCapturePhase = value; } };`)(...Object.values(env));
+  return { decide, setCapturePhase, report, diagnostics, setClock(value) { clock = value; } };
 }
 test('an expired controller probe cannot invalidate a still-current owned native challenge pair', async () => {
   const c = await extractedChallengeDecision();
@@ -1271,4 +1271,82 @@ test('closed own request is refused even when legacy relay observations remain h
   const c = await extractedChallengeDecision({ own: { ...ownedNativeChallenge, currentRequestOpen: false } });
   assert.equal(c.decide('terminate_final'), false); assert.equal(c.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal, false);
   assert.equal(c.diagnostics.snapshot().firstRefusal.reason, 'invalid');
+});
+
+
+test('cleanup ownership uses one current legacy capture callback without granting termination', async () => {
+  const c = await extractedChallengeDecision({ own: null, legacy: interruptionHold, capturePhase: 'pending' });
+  assert.equal(c.decide('capture_final'), true);
+  assert.equal(c.decide('capture_final'), false);
+  assert.equal(c.decide('harness_capture'), false);
+  assert.equal(c.decide('harness_terminate'), false);
+  assert.equal(c.decide('terminate_capture'), false);
+  assert.equal(c.decide('terminate_final'), false);
+  assert.equal(c.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal, false);
+});
+for (const phase of ['unarmed', 'consumed', 'closed']) {
+  test(`a late capture callback cannot regain cleanup authority from ${phase}`, async () => {
+    const c = await extractedChallengeDecision({ legacy: interruptionHold, capturePhase: phase });
+    assert.equal(c.decide('capture_final'), false);
+    assert.equal(c.decide('capture_final'), false);
+    assert.equal(c.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal, false);
+  });
+}
+for (const initialClock of [1000, 1001, 10000]) {
+  test(`cleanup capture cannot extend the original hold deadline at ${initialClock}ms`, async () => {
+    const c = await extractedChallengeDecision({ own: null, legacy: interruptionHold, capturePhase: 'pending', initialClock });
+    assert.equal(c.decide('capture_final'), false);
+    c.setClock(1); assert.equal(c.decide('capture_final'), false);
+    assert.equal(c.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal, false);
+  });
+}
+test('an unlisted callback stage cannot obtain acceptance from a valid native challenge', async () => {
+  const c = await extractedChallengeDecision();
+  for (const stage of ['unknown', '', 'late', '/private/capture', null]) assert.equal(c.decide(stage), false);
+  assert.equal(c.decide(), true);
+  assert.equal(c.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal, false);
+});
+test('a rejected first legacy capture cannot become valid on a second callback', async () => {
+  const legacy = { ...interruptionHold, held: false, heldResponses: 0 };
+  const c = await extractedChallengeDecision({ own: null, legacy, capturePhase: 'pending' });
+  assert.equal(c.decide('capture_final'), false);
+  legacy.held = true; legacy.heldResponses = 1;
+  assert.equal(c.decide('capture_final'), false);
+});
+const challengeAdmission = () => ({ schema: 1, started: true, admitted: false, accepted: false,
+  firstRefusal: { stage: 'native_headers', reason: 'native_headers' }, nativeStatusClass: 2,
+  relayReadyStatusClass: 2, nativeHeaderPairMatched: false, relayHeaderPairMatched: true,
+  contentLengthMatched: true, prefixMatched: false, currentPairLive: false, deadlineExpired: false, prefixChunks: 0 });
+test('challenge admission sanitizer clones only the exact finite diagnostic schema', () => {
+  const input = challengeAdmission(), result = sanitizeNativeChallengeAdmission(input);
+  assert.deepEqual(result, input); assert.notEqual(result, input); assert.notEqual(result.firstRefusal, input.firstRefusal);
+  result.firstRefusal.reason = 'expired'; assert.equal(input.firstRefusal.reason, 'native_headers');
+  assert.deepEqual(sanitizeNativeChallengeAdmission({ ...input, firstRefusal: null }), { ...input, firstRefusal: null });
+});
+for (const key of ['started', 'admitted', 'accepted', 'nativeHeaderPairMatched', 'relayHeaderPairMatched', 'contentLengthMatched', 'prefixMatched', 'currentPairLive', 'deadlineExpired']) {
+  test(`challenge admission diagnostic refuses coerced ${key}`, () => {
+    for (const value of [null, undefined, 0, 1, 'true', {}, []]) assert.equal(sanitizeNativeChallengeAdmission({ ...challengeAdmission(), [key]: value }), null);
+  });
+}
+for (const key of ['nativeStatusClass', 'relayReadyStatusClass']) {
+  test(`challenge admission diagnostic refuses unbounded ${key}`, () => {
+    for (const value of [-1, 6, 200, null, undefined, 2.5, '2', Infinity, NaN]) assert.equal(sanitizeNativeChallengeAdmission({ ...challengeAdmission(), [key]: value }), null);
+  });
+}
+test('challenge admission diagnostic refuses chunk/schema drift and unknown refusal enums', () => {
+  for (const prefixChunks of [-1, 4097, 0.5, '1', null, Infinity]) assert.equal(sanitizeNativeChallengeAdmission({ ...challengeAdmission(), prefixChunks }), null);
+  for (const schema of [0, 2, '1', null, undefined]) assert.equal(sanitizeNativeChallengeAdmission({ ...challengeAdmission(), schema }), null);
+  for (const firstRefusal of [{ stage: '/private/path', reason: 'native_headers' }, { stage: 'native_headers', reason: 'raw failure' }, {}, [], 'error']) assert.equal(sanitizeNativeChallengeAdmission({ ...challengeAdmission(), firstRefusal }), null);
+});
+test('challenge admission sanitizer refuses extra fields, symbols, prototypes and getters without exposing raw data', () => {
+  const raw = '/private/host pid=12345 nonce=secret'; let called = 0;
+  const getter = challengeAdmission(); Object.defineProperty(getter, 'nativeStatusClass', { get() { called++; return 2; } });
+  const nestedGetter = challengeAdmission(); Object.defineProperty(nestedGetter.firstRefusal, 'reason', { get() { called++; return 'native_headers'; } });
+  const symbol = challengeAdmission(); symbol[Symbol('secret')] = raw;
+  for (const input of [{ ...challengeAdmission(), raw }, { ...challengeAdmission(), firstRefusal: { ...challengeAdmission().firstRefusal, raw } },
+    Object.assign(Object.create({ raw }), challengeAdmission()), getter, nestedGetter, symbol, new Error(raw), null]) {
+    assert.equal(sanitizeNativeChallengeAdmission(input), null);
+  }
+  assert.equal(called, 0);
+  const clean = sanitizeNativeChallengeAdmission(challengeAdmission()); assert.equal(JSON.stringify(clean).includes(raw), false);
 });

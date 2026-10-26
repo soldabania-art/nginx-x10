@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { assessInterruptedRecovery, classifyOperatorHoldDecision, createOperatorHoldDiagnostics } from './lifecycle-check.mjs';
+import { assessInterruptedRecovery, classifyOperatorHoldDecision, createOperatorHoldDiagnostics, assessOwnedNativeChallenge } from './lifecycle-check.mjs';
 
 // These controls execute quoted baseline/extracted candidate closures against
 // in-memory dependencies. They never create processes, send signals, or unlink
@@ -214,8 +214,9 @@ function failureTail() {
 
 function containmentModel(options = {}) {
   const events = [], awaits = [], calls = Object.create(null), cleanups = [];
-  const observed = options.observed === null ? null : Object.assign(new Error('fixed primary refusal'), { code: 'operator_fixture_not_held' });
-  const proofs = initialProofs(); if (options.fullProofs) for (const key of Object.keys(proofs)) proofs[key] = true;
+  const observed = options.observed === null ? null : options.observedError || Object.assign(new Error('fixed primary refusal'), { code: 'operator_fixture_not_held' });
+  const proofs = initialProofs(); if (options.emptyProofs) for (const key of Object.keys(proofs)) proofs[key] = false;
+  if (options.fullProofs) for (const key of Object.keys(proofs)) proofs[key] = true;
   const report = { operatorInterruptionChecks: 0, operatorInterruptionProof: proofs,
     operatorNativeChallengeChecks: 0, operatorNativeChallengeProof: Object.fromEntries(['nativeRouteObserved','ownedRequestObserved','relayResponseMatched','candidateBindingMatched','authorityReobservedBeforeSignal','ownedChallengeClosed'].map(key=>[key,options.fullProofs===true])),
     operatorInterruptionContainment: { attempted: false, operatorAbsent: false, holdClosed: false, snapshotRevalidated: false,
@@ -247,7 +248,7 @@ function containmentModel(options = {}) {
   };
   const held = { abort: () => step('hold.abort', () => state.abortResult) };
   const env = { operator: options.noOperator ? undefined : operator, held: options.noHold ? undefined : held,
-    ownedChallenge: { abort: () => step('challenge.abort', () => state.challengeCloseResult) },
+    ownedChallenge: options.noChallenge ? undefined : { abort: () => step('challenge.abort', () => state.challengeCloseResult) },
     snapshot: options.noSnapshot ? null : snapshot, normalRetirementAttempted: options.normalRetirementAttempted === true,
     report, failures: { cleanup(error, stage) { cleanups.push({ code: error?.code || 'unknown', stage }); } }, reject,
     checkCancelled() { if (state.cancelled) reject('cancelled'); },
@@ -451,4 +452,113 @@ test('owned challenge close refusal blocks normal acceptance and cannot become a
   assert.equal(f.report.operatorNativeChallengeProof.ownedChallengeClosed,false);
   assert.equal(f.report.operatorNativeChallengeChecks,0);assert.equal(f.report.operatorInterruptionChecks,0);
   assert(!f.events.includes('retire'));assert(!f.events.includes('recover'));
+});
+
+// Exact042 setup sequence: admission failure happened before capture. This
+// reproduces that ordering only; it does not identify its hosted I/O cause.
+const admissionBaselineOrder = "      await until(async () => { checkCancelled(); const value = held.snapshot();\n        if (value.held !== true || value.candidateReadyObserved !== true) return false;\n        if (!heldDeadline) heldDeadline = performance.now() + 1000;\n        return true;\n      }, 2000);\n      checkCancelled();\n      if (performance.now() >= heldDeadline) reject('operator_interruption_unconfirmed');\n      // This request traverses the new candidate-only native location. Its\n      // deadline is the original first-controller-hold deadline, never renewed.\n      ownedChallenge = await held.openNativeChallenge(heldDeadline); checkCancelled();\n      if (!isHeld()) reject('operator_interruption_unconfirmed');\n      const challenge = ownedChallenge.snapshot(); assessOwnedNativeChallenge(challenge);\n      report.operatorNativeChallengeProof.nativeRouteObserved = true; report.operatorNativeChallengeProof.ownedRequestObserved = true;\n      report.operatorNativeChallengeProof.relayResponseMatched = true;\n      const captured = await operator.captureLocks(); checkCancelled();\n      if (!captured || captured.ok !== true || captured.alphaCaptured !== true || captured.controllerCaptured !== true || captured.pendingCaptured !== true) reject('operator_interruption_unconfirmed');\n      snapshot = await capturePending(); await sameServiceNoCLI();\n      await unchangedPending(snapshot); checkCancelled();\n      if (!isHeld('harness_terminate')) reject('operator_interruption_unconfirmed');\n      report.operatorInterruptionProof.candidateProbeHeld = true; report.operatorInterruptionProof.pendingReloadObserved = true;\n      report.operatorInterruptionProof.lastConfirmedPreserved = true; report.operatorInterruptionProof.sameServiceObserved = true;\n      report.operatorNativeChallengeProof.candidateBindingMatched = true;\n";
+function interruptionAdmissionOrder(source) {
+  const first = source.indexOf('      await until(async () =>', source.indexOf('  async function verifyOperatorInterruption()'));
+  const last = source.indexOf('      const terminated = await operator.terminate();', first);
+  assert(first >= 0 && last > first, 'interruption admission setup boundary');
+  return source.slice(first, last);
+}
+async function runAdmissionOrder(block, options = {}) {
+  const events = [], report = { operatorInterruptionProof: Object.fromEntries(Object.keys(initialProofs()).map(key=>[key,false])),
+    operatorNativeChallengeProof: Object.fromEntries(['nativeRouteObserved','ownedRequestObserved','relayResponseMatched','candidateBindingMatched','authorityReobservedBeforeSignal','ownedChallengeClosed'].map(key=>[key,false])) };
+  const state = { now: 0, cancelled: false }, capturedSnapshot = { failedRevision: 'b'.repeat(32) };
+  const primary = Object.assign(new Error('fixed early native admission refusal'), { code: 'origin_challenge_identity' });
+  const challenge = { snapshot: () => ({ held: true }) };
+  const held = { snapshot: () => ({ ...currentHold }), async openNativeChallenge() { events.push('challenge.open'); if (options.failOpen !== false) throw primary; return challenge; } };
+  const operator = { async captureLocks() { events.push('capture.locks'); if (options.captureRefusal) reject('operator_fixture_identity'); return {ok:true,alphaCaptured:true,controllerCaptured:true,pendingCaptured:true}; } };
+  const env = { held, operator, report, reject,
+    checkCancelled() { if (state.cancelled) reject('cancelled'); }, performance: { now: () => state.now },
+    until: async fn => { events.push('initial.hold'); assert.equal(await fn(),true); },
+    capturePending: async () => { events.push('capture.pending'); if(options.pendingRefusal) reject('operator_fixture_pending'); return capturedSnapshot; },
+    sameServiceNoCLI: async () => { events.push('service.check'); },
+    unchangedPending: async value => { events.push('pending.check'); assert.equal(value,capturedSnapshot); },
+    isHeld: stage => { events.push('held.'+(stage||'default')); return true; },
+    assessOwnedNativeChallenge: () => { events.push('assess.native'); },
+  };
+  // Only the real source setup sequence runs. Dependencies contain no files,
+  // processes, transport, signals or authority beyond these synthetic records.
+  const execute = new AsyncFunction(...Object.keys(env), `
+    let heldDeadline=0,ownedChallenge,snapshot,cleanupCapturePhase=false;
+    try { ${block} return {snapshot,ownedChallenge,heldDeadline}; }
+    catch(error) { return {error,snapshot,ownedChallenge,heldDeadline}; }
+  `);
+  const result = await execute(...Object.values(env));
+  return {events,report,result,primary,capturedSnapshot};
+}
+test('recorded042 early-admission setup is exact and leaves no captured cleanup snapshot', async () => {
+  assert.equal(Buffer.byteLength(admissionBaselineOrder),1812);
+  assert.equal(digest(admissionBaselineOrder),'26b34bc191bcddae48cc6663e2d87620dc25fa1f557ecba9c248ff8041370004');
+  const f=await runAdmissionOrder(admissionBaselineOrder);
+  assert.equal(f.result.error,f.primary);assert.equal(f.result.snapshot,undefined);
+  assert(!f.events.includes('capture.locks'));assert(!f.events.includes('capture.pending'));
+  assert(Object.values(f.report.operatorInterruptionProof).every(value=>value===false));
+  assert(Object.values(f.report.operatorNativeChallengeProof).every(value=>value===false));
+});
+test('candidate captures exact cleanup records before an early admission refusal without granting native proof', async () => {
+  const f=await runAdmissionOrder(interruptionAdmissionOrder(lifecycleSource));
+  assert.equal(f.result.error,f.primary);assert.equal(f.result.snapshot,f.capturedSnapshot);
+  for(const action of ['capture.locks','capture.pending','service.check','pending.check'])assert(f.events.indexOf(action)>=0&&f.events.indexOf(action)<f.events.indexOf('challenge.open'));
+  assert(Object.values(f.report.operatorInterruptionProof).every(value=>value===false));
+  assert(Object.values(f.report.operatorNativeChallengeProof).every(value=>value===false));
+});
+for(const option of ['captureRefusal','pendingRefusal'])test('capture refusal '+option+' prevents allocating a native challenge',async()=>{
+  const f=await runAdmissionOrder(interruptionAdmissionOrder(lifecycleSource),{[option]:true});
+  assert(f.result.error);assert(!f.events.includes('challenge.open'));
+  assert(Object.values(f.report.operatorNativeChallengeProof).every(value=>value===false));
+});
+
+function extractedAdmissionAuthority(options={}) {
+  const start=lifecycleSource.indexOf("    const isHeld = (stage = 'harness_capture') =>",lifecycleSource.indexOf('  async function verifyOperatorInterruption()'));
+  const end=lifecycleSource.indexOf('\n    try {\n      held = origin.prepareReadinessHold(tag);',start);
+  assert(start>0&&end>start);let legacyReads=0,nativeReads=0;
+  const state={now:0,phase:options.phase||'pending',cancelled:false};
+  const native={...currentHold,...Object.fromEntries(['nativeRouteObserved','ownedRequestObserved','relayResponseMatched','currentRequestOpen','responseIncomplete','relayResponseOpen','socketOpen','pairMatched'].map(key=>[key,true]))};
+  const report={operatorNativeChallengeProof:{authorityReobservedBeforeSignal:false}},diagnostics=createOperatorHoldDiagnostics();
+  const env={checkCancelled(){if(state.cancelled)reject('cancelled');},performance:{now:()=>state.now},heldDeadline:1000,
+    held:{snapshot(){legacyReads++;return options.legacyInvalid?{...currentHold,held:false}:clone(currentHold);}},
+    ownedChallenge:options.noNative?undefined:{snapshot(){nativeReads++;return options.nativeInvalid?{...native,pairMatched:false}:clone(native);}},
+    classifyOperatorHoldDecision,assessOwnedNativeChallenge,operatorHoldDiagnostics:diagnostics,report};
+  const create=new Function(...Object.keys(env),'state',`let cleanupCapturePhase=state.phase;${lifecycleSource.slice(start,end)};return {isHeld,phase:()=>cleanupCapturePhase};`);
+  const result=create(...Object.values(env),state);return {...result,state,report,diagnostics,reads:()=>({legacyReads,nativeReads})};
+}
+test('legacy cleanup capture is single-use and never sets termination authority',{timeout:1000},()=>{
+  const f=extractedAdmissionAuthority({noNative:true});assert.equal(f.isHeld('capture_final'),true);assert.equal(f.phase(),'consumed');
+  assert.equal(f.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal,false);assert.equal(f.isHeld('capture_final'),false);
+  assert.deepEqual(f.reads(),{legacyReads:1,nativeReads:0});
+});
+for(const phase of ['unarmed','closed','consumed'])test('legacy capture cannot rearm in '+phase+' phase',()=>{
+  const f=extractedAdmissionAuthority({phase});assert.equal(f.isHeld('capture_final'),false);assert.equal(f.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal,false);assert.equal(f.reads().legacyReads,0);
+});
+for(const stage of ['harness_capture','harness_terminate','terminate_capture','terminate_final','unknown_private_stage'])test('termination authority '+stage+' cannot fall back to legacy current readiness',()=>{
+  const f=extractedAdmissionAuthority({noNative:true});assert.equal(f.isHeld(stage),false);assert.equal(f.reads().legacyReads,0);assert.equal(f.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal,false);
+});
+for(const option of ['legacyInvalid','nativeInvalid'])test('wrong '+option+' observation is refused at its authority boundary',()=>{
+  const f=extractedAdmissionAuthority({[option]:true});assert.equal(f.isHeld(option==='legacyInvalid'?'capture_final':'terminate_final'),false);assert.equal(f.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal,false);
+});
+test('original deadline expiration refuses capture and native signal admission without rearming',()=>{
+  const f=extractedAdmissionAuthority();f.state.now=1000;assert.equal(f.isHeld('capture_final'),false);assert.equal(f.isHeld('terminate_final'),false);assert.equal(f.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal,false);assert.equal(f.phase(),'consumed');
+});
+test('owner cancellation stops both current legacy and native authority before reading transport',()=>{
+  const f=extractedAdmissionAuthority();f.state.cancelled=true;for(const stage of ['capture_final','terminate_final'])assert.throws(()=>f.isHeld(stage),{code:'cancelled'});assert.deepEqual(f.reads(),{legacyReads:0,nativeReads:0});assert.equal(f.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal,false);
+});
+test('only final current owned native observation sets signal authority',()=>{
+  const f=extractedAdmissionAuthority({phase:'closed'});assert.equal(f.isHeld('terminate_capture'),true);assert.equal(f.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal,false);assert.equal(f.isHeld('terminate_final'),true);assert.equal(f.report.operatorNativeChallengeProof.authorityReobservedBeforeSignal,true);assert.equal(f.reads().legacyReads,0);
+});
+
+test('early native admission refusal reaches captured-only containment and remains original FAIL',async()=>{
+  const opening=await runAdmissionOrder(interruptionAdmissionOrder(lifecycleSource));assert.equal(opening.result.error,opening.primary);assert(opening.result.snapshot);
+  const f=containmentModel({observedError:opening.result.error,noSnapshot:!opening.result.snapshot,emptyProofs:true,noChallenge:true});
+  await assert.rejects(f.run(),error=>error===opening.primary);assert.equal(f.report.operatorInterruptionContainment.completed,true);assert.equal(f.report.operatorInterruptionContainment.disposition,'contained');
+  assert(f.events.includes('retire'));assert(f.events.includes('recover'));assert.deepEqual(f.cleanups,[]);originalFailurePreserved(f);
+  assert(Object.values(f.report.operatorInterruptionProof).every(value=>value===false));assert(Object.values(f.report.operatorNativeChallengeProof).every(value=>value===false));
+});
+test('failed pending capture before admission stays no_snapshot instead of inventing cleanup ownership',async()=>{
+  const opening=await runAdmissionOrder(interruptionAdmissionOrder(lifecycleSource),{pendingRefusal:true});assert.equal(opening.result.snapshot,undefined);assert(!opening.events.includes('challenge.open'));
+  const f=containmentModel({observedError:opening.result.error,noSnapshot:true,emptyProofs:true});
+  await assert.rejects(f.run(),error=>error===opening.result.error);assert.equal(f.report.operatorInterruptionContainment.completed,false);assert.equal(f.report.operatorInterruptionContainment.disposition,'no_snapshot');assert(!f.events.includes('retire'));assert(!f.events.includes('recover'));originalFailurePreserved(f);
 });

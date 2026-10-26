@@ -9,7 +9,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { X509Certificate } from 'node:crypto';
 import { createOriginFixture, routeOriginReadiness, queryOriginReadiness, originPortClosed,
-  ORIGIN_FIXTURE_ERROR_CODES } from './origin-fixture.mjs';
+  ORIGIN_FIXTURE_ERROR_CODES, ADMISSION_DIAGNOSTIC_STAGES, ADMISSION_DIAGNOSTIC_REASONS } from './origin-fixture.mjs';
 import { probeServiceTLS, expectServiceTLSRefusal } from './tls-fixture.mjs';
 
 const tag = 'a'.repeat(32), otherTag = 'b'.repeat(32);
@@ -248,10 +248,13 @@ async function withReadinessFixture(fn) {
           headers['x-x10-native-candidate']=mode==='wrong-native-tag'?otherTag:spec.tag;
         }
         if(mode==='wrong-relay-header')headers['x-x10-relay-challenge']='f'.repeat(32);
+        if(mode==='wrong-relay-tag')headers['x-x10-relay-candidate']=otherTag;
+        if(mode==='duplicate-relay-header')headers['x-x10-relay-challenge']=[spec.nonce,spec.nonce];
+        if(mode==='absent-relay-header')delete headers['x-x10-relay-candidate'];
         if(mode==='wrong-content-length')headers['content-length']='1';
-        res.writeHead(reply.statusCode,headers);res.flushHeaders();
+        res.writeHead(mode==='wrong-native-status'?503:reply.statusCode,headers);res.flushHeaders();
         reply.on('data',chunk=>{
-          const write=()=>{if(res.destroyed)return;if(mode==='wrong-prefix')res.write(Buffer.alloc(chunk.length,0x00));else if(mode!=='stall-prefix')res.write(chunk);if(mode==='early-eof')res.end();};
+          const write=()=>{if(res.destroyed)return;if(mode==='wrong-prefix')res.write(Buffer.alloc(chunk.length,0x00));else if(mode==='prefix-overflow')res.write(Buffer.concat([chunk,Buffer.from('x')]));else if(mode!=='stall-prefix'&&mode!=='empty-early-eof')res.write(chunk);if(mode==='early-eof'||mode==='empty-early-eof')res.end();};
           if(mode==='late-prefix'){const timer=setTimeout(()=>{control.lateTimers.delete(timer);write();},250);control.lateTimers.add(timer);}else write();
         });reply.once('end',()=>res.end());reply.once('error',()=>res.destroy());
       });control.proxyPending.add(upstream);upstream.once('close',()=>control.proxyPending.delete(upstream));upstream.once('error',()=>res.destroy());res.once('close',()=>upstream.destroy());return;
@@ -452,3 +455,73 @@ test('closing an origin with a live owned challenge observes every local socket 
   assertNativeLive(owned.snapshot());assert.deepEqual(await fixture.close(),{originClosed:true,relayClosed:true,originPortClosed:true,relayPortClosed:true});
   assert.equal(owned.snapshot().held,false);assert.equal(owned.snapshot().closed,true);assert.equal(await owned.abort(),true);assert.equal(await held.abort(),true);
 }));
+
+const admissionKeys=['schema','started','admitted','accepted','firstRefusal','nativeStatusClass','relayReadyStatusClass',
+  'nativeHeaderPairMatched','relayHeaderPairMatched','contentLengthMatched','prefixMatched','currentPairLive','deadlineExpired','prefixChunks'];
+function assertAdmissionDiagnostics(value) {
+  assert.deepEqual(Object.keys(value),admissionKeys);assert.equal(value.schema,1);
+  for(const key of ['started','admitted','accepted','nativeHeaderPairMatched','relayHeaderPairMatched','contentLengthMatched','prefixMatched','currentPairLive','deadlineExpired'])assert.equal(typeof value[key],'boolean');
+  for(const key of ['nativeStatusClass','relayReadyStatusClass'])assert(Number.isInteger(value[key])&&value[key]>=0&&value[key]<=5);
+  assert(Number.isInteger(value.prefixChunks)&&value.prefixChunks>=0&&value.prefixChunks<=4096);
+  if(value.firstRefusal!==null){assert.deepEqual(Object.keys(value.firstRefusal),['stage','reason']);assert(ADMISSION_DIAGNOSTIC_STAGES.includes(value.firstRefusal.stage));assert(ADMISSION_DIAGNOSTIC_REASONS.includes(value.firstRefusal.reason));}
+  assert.doesNotMatch(JSON.stringify(value),/[a-f0-9]{32}|127\.0\.0\.1|native-challenge|X-X10|synthetic-private|\"(?:nonce|candidateTag|headers|body|socket|port)\"/i);
+}
+test('admission diagnostics finite enums and prepared snapshot cannot mint challenge authority',{timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  for(const values of [ADMISSION_DIAGNOSTIC_STAGES,ADMISSION_DIAGNOSTIC_REASONS]){assert(Object.isFrozen(values));assert.equal(new Set(values).size,values.length);assert(values.every(value=>/^[a-z_]{1,32}$/.test(value)));}
+  const {held}=declareNativeChallenge(fixture,control),before=held.admissionDiagnostics();assertAdmissionDiagnostics(before);
+  assert.equal(before.started,false);assert.equal(before.accepted,false);assert.equal(before.firstRefusal,null);
+  assert(Object.isFrozen(before));assert.throws(()=>{before.accepted=true;},TypeError);assert.equal(held.admissionDiagnostics().accepted,false);assert.equal(held.admissionDiagnostics().currentPairLive,false);
+  assert.throws(()=>held.admissionDiagnostics({}),{code:'origin_challenge_invalid'});assert.equal(await held.abort(),true);
+}));
+for(const [mode,reason] of [
+  ['wrong-native-status','native_status'],['wrong-native-nonce','native_headers'],['wrong-native-tag','native_headers'],
+  ['duplicate-native-nonce','duplicate_header'],['wrong-relay-header','relay_headers'],['wrong-relay-tag','relay_headers'],
+  ['duplicate-relay-header','duplicate_header'],['absent-relay-header','relay_headers'],['direct-relay','native_headers'],
+  ['wrong-content-length','content_length'],['wrong-prefix','prefix_mismatch'],['prefix-overflow','prefix_overflow'],
+])test('rejected '+mode+' records bounded first admission refusal after physical close',{timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control);control.nativeMode=mode;
+  await assert.rejects(held.openNativeChallenge(performance.now()+700),{code:'origin_challenge_identity'});
+  const initial=held.admissionDiagnostics();assertAdmissionDiagnostics(initial);assert.equal(initial.accepted,false);assert.equal(initial.currentPairLive,false);assert.equal(initial.firstRefusal.reason,reason);
+  const original={...initial.firstRefusal};assert(Object.isFrozen(initial.firstRefusal));assert.throws(()=>{initial.firstRefusal.reason='synthetic-private-reason';},TypeError);
+  assert.deepEqual(held.admissionDiagnostics().firstRefusal,original);assert.equal(await held.abort(),true);assert.deepEqual(held.admissionDiagnostics().firstRefusal,original);
+  await assert.rejects(held.openNativeChallenge(performance.now()+500),{code:'origin_challenge_invalid'});assert.deepEqual(held.admissionDiagnostics().firstRefusal,original);
+}));
+for(const [change,reason] of [[{status:503},'ready_status'],[{marker:otherTag},'ready_tag'],[{body:'wrong\n'},'ready_body']]){
+  test('fresh relay readiness '+reason+' remains distinct from rejected gateway headers',{timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+    const {held}=declareNativeChallenge(fixture,control);Object.assign(control,change);
+    await assert.rejects(held.openNativeChallenge(performance.now()+700),e=>/^origin_challenge_/.test(e.code));
+    const value=held.admissionDiagnostics();assertAdmissionDiagnostics(value);assert.equal(value.accepted,false);assert.equal(value.firstRefusal.stage,'relay_readiness');assert.equal(value.firstRefusal.reason,reason);assert.equal(await held.abort(),true);
+  }));
+}
+test('expired opening preserves first deadline refusal across late native prefix and cleanup',{timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control);control.nativeMode='late-prefix';
+  await assert.rejects(held.openNativeChallenge(performance.now()+100),{code:'origin_challenge_timeout'});
+  const value=held.admissionDiagnostics();assertAdmissionDiagnostics(value);assert.equal(value.deadlineExpired,true);assert.equal(value.accepted,false);assert.equal(value.firstRefusal.reason,'expired');
+  await later(300);assert.deepEqual(held.admissionDiagnostics().firstRefusal,value.firstRefusal);assert.equal(await held.abort(),true);assert.equal(held.admissionDiagnostics().accepted,false);
+}));
+test('early empty gateway EOF records transport refusal and cannot grant an accepted handle',{timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control);control.nativeMode='empty-early-eof';
+  await assert.rejects(held.openNativeChallenge(performance.now()+700),e=>/^origin_challenge_/.test(e.code));
+  const value=held.admissionDiagnostics();assertAdmissionDiagnostics(value);assert.equal(value.accepted,false);assert.equal(value.prefixMatched,false);
+  assert(['early_eof','response_aborted','response_error','response_closed'].includes(value.firstRefusal.reason),JSON.stringify(value));assert.equal(await held.abort(),true);
+}));
+test('accepted native challenge diagnostics stay observational through owned abort',{timeout:15000},async()=>withReadinessFixture(async(fixture,control)=>{
+  const {held}=declareNativeChallenge(fixture,control),owned=await held.openNativeChallenge(performance.now()+700);
+  const before=held.admissionDiagnostics();assertAdmissionDiagnostics(before);assert.equal(before.accepted,true);assert.equal(before.firstRefusal,null);assert.equal(before.currentPairLive,true);
+  assert.equal(await owned.abort(),true);assert.equal(await held.abort(),true);const after=held.admissionDiagnostics();assertAdmissionDiagnostics(after);assert.equal(after.accepted,true);assert.equal(after.currentPairLive,false);assert.equal(after.firstRefusal,null);assert.equal(owned.snapshot().held,false);
+}));
+
+for(const [name,clock,expected] of [['lostLivePair',1,['native_pair','pair_not_live']],['originalDeadlineExpired',1000,['lifetime','expired']]]){
+  test('source-extracted final prefix refuses '+name+' before resolving owned authority',async()=>{
+    const source=await readFile(new URL('./origin-fixture.mjs',import.meta.url),'utf8');
+    const first=source.indexOf("        response.on('data', b => {",source.indexOf('  async function openNativeChallenge('));
+    const end=source.indexOf("        response.once('end',",first);assert(first>0&&end>first);
+    const prefix=Buffer.from('fixed synthetic prefix\n'),c={prefix,prefixChunks:0,prefixMatched:false,aborted:false},events=[];
+    const response=new EventEmitter();response.pause=()=>events.push('pause');
+    const execute=new Function('c','response','expireReadinessHold','expireNativeChallenge','performance','absoluteDeadline','nativeSnapshot','abortNativeChallenge','resolveOpen',
+      'let received=0,closing=false;'+source.slice(first,end));
+    execute(c,response,()=>{},()=>{},{now:()=>clock},1000,()=>({held:false}),(...args)=>{events.push(args);c.aborted=true;},()=>events.push('resolved'));
+    response.emit('data',prefix);assert.equal(c.prefixMatched,true);assert.equal(c.aborted,true);assert.equal(events.includes('resolved'),false);
+    assert.deepEqual(events.find(value=>Array.isArray(value)),['origin_challenge_identity',...expected]);
+  });
+}
