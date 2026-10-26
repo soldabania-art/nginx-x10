@@ -2082,3 +2082,29 @@ acceptance,60-minute soak and semantic Continuum remain open.
 
 Next read exact resulting native CI before further operator/package work. Do not
 repeat the unchanged195 implementation or treat missing service evidence as PASS.
+
+
+## Next release slice: declarative backup foundation — 26 October 2026
+
+The exacteb normal installed-recipe/service result is reconciled in
+[backup evidence](evidence/g4-declarative-backup.json); its previous195 failure
+and unknown historical Node comparison remain preserved. No unchanged workflow
+rerun is requested. The new runtime can export clean stopped/prepared current
+input to a private bounded canonical backup and initialize a fresh unbound
+installation from that declarative data. It is preparation for the still-open
+G4 contract, not a stage promotion or package migration acceptance.
+
+First verify exact resulting native CI, including actual extracted-bundle
+backup/restore, fresh identities/null binding, unchanged ports/current input,
+native `-t`, no implicit listeners and owned target cleanup. Then verify the
+restored native proxy and supported service path before claiming real recovery.
+Keep explicit refusal for unsupported TLS material, running/pending/faulted or
+tampered source state and unsafe/changed backup files. Preserve original state,
+unknown failures and known-good packages; no global process or lock cleanup.
+
+Package upgrade/rollback, broader operational recovery, final security review,
+permanent versioned distribution, independent published operator replay and the
+frozen60-minute soak remain independent release gates. Existing release/asset
+publication access limits do not authorize credential or workflow bypass. The
+full G3/G4-G8/V1 and deferred semantic Continuum scope remain open; AVERKRON
+starts only through accepted V1 and the central transition protocol.

@@ -2615,3 +2615,53 @@ FullG3/G4-G8/V1, package lifecycle, permanent release, independent published-fil
 acceptance,60-minute soak and semantic Continuum remain open.
 
 See [fixture evidence](evidence/g3-service-recipe-node.json).
+
+
+## Declarative backup foundation and exact installed recipe CI — 26 October 2026
+
+The exact previous implementation `eb577ff140b376b68c2cd10984deb736d3a9ed67`
+passed native push40270300320/job121401514260 and
+PR40270304404/job121401530223, with all34 actual steps in each job. Each
+reported20/20 native groups and78/78 full alpha TAP tests without skips or
+failures. Schema2 bundle/install and installed recipe generation were observed
+on the real managed-service path. Each retained all6 native challenge,
+14 operator interruption,14 controlled drain,11 failed-start and13 cleanup
+facts, three combined TLS sessions, one manager restart, three journal checks,
+zero remaining application sockets and private Node/bootstrap removal.
+
+This accepts that normal scoped installed-recipe/service implementation only.
+Actual failure containment was not exercised. The current source mode observation
+does not establish the specific historical195 Node comparison, which remains
+unknown. Both195 full-alpha failures before managed service, absent service and
+cleanup evidence, older adverse observations and local cleanup FAIL_UNKNOWN are
+preserved. Research PR40270304433/job121401537325 actually ran21/7/27/48;
+research push runtime was skipped. CLA40270302762 remains a separate failure
+without signing an agreement or bypassing checks.
+
+The new alpha runtime adds private declarative backup from clean stopped/prepared
+sessions and fresh unbound restore into an absent prefix. The exact current
+local counts, baseline counterexample, source bindings, independent reviews and
+adverse controls are recorded in [backup evidence](evidence/g4-declarative-backup.json).
+Local tests are the named synthetic/pure profile. Physical native process groups,
+manager activation and the full native aggregate were not run locally in this
+nested namespace; supported hosted CI is required. No physical local cleanup
+uncertainty is repaired by a later hosted pass.
+
+The source's package, bindings, process identities, session history, libraries
+and TLS material are not transferred. Exact declared ports and candidate input
+are retained; external referenced files are not copied or remapped. Fresh native
+`-t` does not check application readiness. This is a G4 foundation, while broadG3
+and G4-G8 acceptance remain open. Package A-to-B-to-A, permanent release,
+independent published replay,60-minute soak and full semantic Continuum are not
+accepted. Exact resulting native/restored-service CI is pending; do not substitute
+the previouseb success for the newly changed alpha runtime.
+
+
+The earlier unpublished candidate tree5cb23ff2c72760d98be0652abaae3d5377cafedb
+was created, but the deadline guard stopped before any implementation commit
+or ref update after its lease expired. Its local Git backing directory became
+unavailable. A fresh full clone, central/source readback and new lease were used
+for resumption; the three frozen source files were copied without byte changes.
+The coordinator reran125 selected controls in the fresh copy, with separate
+82-case QA and named independent resumption reviews. Old results are retained
+as old results. This does not extend the owner work window or prove new hosted CI.

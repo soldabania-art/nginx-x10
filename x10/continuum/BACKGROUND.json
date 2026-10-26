@@ -3,13 +3,7 @@
   "project": "NGINX X10 / Continuum",
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
-  "executionLease": {
-    "runId": "x10-backup-resume-20261026T064053309Z",
-    "owner": "codex-coordinator-backup-resume",
-    "baseCommit": "48ac37d90f8df651af715a892c36345b7f9a55d8",
-    "acquiredAtUTC": "2026-10-26T06:40:53.309Z",
-    "expiresAtUTC": "2026-10-26T07:24:53.309Z"
-  },
+  "executionLease": null,
   "leasePolicy": {
     "maximumMinutes": 45,
     "publishRequiresLiveLease": true,
@@ -3436,7 +3430,7 @@
       "evidence": "x10/evidence/g3-service-installed-recipe.json",
       "perFileLedger": "x10/review/g3-service-installed-recipe-ledger.json",
       "localAcceptance": "LOCAL_INSTALLED_RECIPE_CONTRACTS_AND_SELECTED_ALPHA_VERIFIED_EXACT_NATIVE_SERVICE_CI_PENDING",
-      "exactHostedAcceptance": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
+      "exactHostedAcceptance": "EXACT_SCOPED_INSTALLED_RECIPE_NATIVE_SERVICE_SUCCESS",
       "nativeRuntimeChanged": false,
       "controllerRuntimeChanged": false,
       "alphaRuntimeChanged": true,
@@ -3464,15 +3458,17 @@
       "actualHistoricalCauseProven": false,
       "nextConcreteTask": "First verify exact resulting installed recipe distribution and actual native service CI. Require a strict schema2 package/install with the immutable installed service helper and read-only installed service-unit command, full installed validation before import and the exact recorded Node identity. The actual service harness must obtain the recipe from installed payload with no source fallback. Strict cleanup receipts add bundleSchemaVersion2/installSchemaVersion2/installedRecipeGenerated:true and retain all existing six challenge,14 operator,14 drain,11 startup,TLS/restart/journal and13 cleanup requirements. Reject mixed schemas/inventories, unknown files, tampered helper/Node and unsupported legacy command without activation. Existing v1 packages remain usable under their exact original contract; no automatic migration or package rollback is claimed. Exact89 scoped normal acceptance is preserved without unchanged reruns, while actual failure containment remains unexercised. FullG3/G4-G8/V1, package upgrade/rollback/restore, permanent distribution,60-minute soak and semantic Continuum remain open until their independent actual gates pass.",
       "hostedVerification": {
-        "state": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
-        "evidence": "x10/evidence/g3-service-recipe-node.json"
+        "state": "EXACT_SCOPED_INSTALLED_RECIPE_NATIVE_SERVICE_SUCCESS",
+        "evidence": "x10/evidence/g4-declarative-backup.json"
       },
       "newPurchases": false,
       "productionDeployChanged": false,
-      "hostedEvidence": "x10/evidence/g3-service-recipe-node.json",
+      "hostedEvidence": "x10/evidence/g4-declarative-backup.json",
       "implementationAccepted": false,
       "actualManagedServiceReached": false,
-      "fullAlphaFailureObserved": true
+      "fullAlphaFailureObserved": true,
+      "verifiedOnImplementationCommit": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+      "scopedImplementationAccepted": true
     },
     "nativeChallengeAdmissionHostedObservation": {
       "state": "EXACT_SCOPED_NATIVE_CHALLENGE_ADMISSION_SERVICE_SUCCESS",
@@ -3551,7 +3547,7 @@
       "evidence": "x10/evidence/g3-service-recipe-node.json",
       "perFileLedger": "x10/review/g3-service-recipe-node-ledger.json",
       "localAcceptance": "LOCAL_SELECTED_OWNED_NODE_FIXTURE_CONTROLS_VERIFIED_EXACT_FULL_NATIVE_SERVICE_CI_PENDING",
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_RECIPE_NODE_FIXTURE_NATIVE_SERVICE",
+      "exactHostedAcceptance": "EXACT_SCOPED_INSTALLED_RECIPE_NATIVE_SERVICE_SUCCESS",
       "nativeRuntimeChanged": false,
       "controllerRuntimeChanged": false,
       "alphaRuntimeChanged": false,
@@ -3578,53 +3574,63 @@
       "actualHistoricalCauseProven": false,
       "nextConcreteTask": "First verify exact resulting recipe Node fixture native CI. The checked-bundle fixture must install and generate the recipe using one private owned0500 exact Node copy, shared with the synthetic positive fixture. This changes only the test prerequisite; product CLI/helper/archive/harness/receipt/workflow bytes, schema2 inventories, three new receipt facts and all previous authority proofs stay unchanged. Require the full supported native/alpha profile and actual extracted-payload managed service, not only selected controls. Preserve exact195 failure/unknown Node comparison and absent service/cleanup evidence without claiming the fixture observation proves the historical comparison. No guard relaxation, host Node mutation or blind unchanged rerun. FullG3/G4-G8/V1, package lifecycle/permanent release/60-minute soak and semantic Continuum remain open until actual independent gates pass.",
       "hostedVerification": {
-        "state": "PENDING_EXACT_RESULTING_RECIPE_NODE_FIXTURE_NATIVE_SERVICE"
+        "state": "EXACT_SCOPED_INSTALLED_RECIPE_NATIVE_SERVICE_SUCCESS",
+        "evidence": "x10/evidence/g4-declarative-backup.json"
       },
       "newPurchases": false,
-      "productionDeployChanged": false
+      "productionDeployChanged": false,
+      "verifiedOnImplementationCommit": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+      "hostedEvidence": "x10/evidence/g4-declarative-backup.json",
+      "scopedImplementationAccepted": true
     },
     "installedServiceRecipeHostedObservation": {
-      "state": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
-      "implementationCommit": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
-      "implementationTree": "56da17fb7b8f5ce5d16890ee7669f841a9c69e16",
-      "evidence": "x10/evidence/g3-service-recipe-node.json",
+      "state": "EXACT_SCOPED_INSTALLED_RECIPE_NATIVE_SERVICE_SUCCESS",
+      "implementationCommit": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+      "implementationTree": "41c05ee5c7d77f88db4c8c0ca48270ee0ab1aa10",
+      "evidence": "x10/evidence/g4-declarative-backup.json",
       "nativeRunIds": [
-        40268333912,
-        40268338245
+        40270300320,
+        40270304404
       ],
       "nativeJobIds": [
-        121395545645,
-        121395574674
+        121401514260,
+        121401530223
       ],
-      "actualPRMergeCheckout": "2e4fb5e2b7a10dab545652795f5cc785f8cc1cea",
+      "actualPRMergeCheckout": "02403e1a1de8fd53b5e38442760e6120e1828bbc",
       "auditConsistent": true,
-      "factualReadbackProofCount": 52,
+      "factualReadbackProofCount": 32,
       "factualReadbackIsRuntimePassCount": false,
-      "bothExactNativeWorkflowsSuccessful": false,
-      "implementationAccepted": false,
+      "bothExactNativeWorkflowsSuccessful": true,
+      "implementationAccepted": true,
+      "acceptanceScope": "Exact normal installed service recipe, owned Node fixture and managed service only",
       "nativeGroupsEach": {
         "total": 20,
-        "passed": 19
+        "passed": 20
       },
       "fullAlphaEach": {
-        "total": 76,
-        "pass": 74,
-        "fail": 2
+        "total": 78,
+        "pass": 78,
+        "fail": 0,
+        "skipped": 0
       },
-      "refusalCode": "service_recipe_invalid",
-      "specificRecordedNodeComparisonKnown": false,
-      "failedGroup": "local-alpha-lifecycle",
-      "managedServiceStep29": "skipped",
-      "actualManagedServiceReport": null,
-      "actualArchiveReport": null,
-      "actualPackageReport": null,
-      "actualBootstrapReport": null,
-      "actualNodeCleanupReport": null,
-      "cleanupAcceptedFromMissingReports": false,
+      "bundleSchemaVersion": 2,
+      "installSchemaVersion": 2,
+      "installedRecipeGenerated": true,
+      "all6ChallengeProofsEach": true,
+      "all14OperatorProofsEach": true,
+      "all14DrainProofsEach": true,
+      "all11StartupProofsEach": true,
+      "all13CleanupFactsEach": true,
+      "combinedTLSSessionsEach": 3,
+      "managerRestartsEach": 1,
+      "journalChecksEach": 3,
+      "privateNodeAndBootstrapRemovedEach": true,
+      "actualFailureContainmentBranchExecuted": false,
       "actualFailureContainmentAccepted": false,
-      "prior89ScopedNormalAcceptancePreserved": true,
-      "researchPRRunId": 40268338303,
-      "researchPRJobId": 121395558779,
+      "specific195RecordedNodeComparisonKnown": false,
+      "prior195FailurePreserved": true,
+      "researchPRRunId": 40270304433,
+      "researchPRJobId": 121401537325,
       "researchPRActualSuites": [
         21,
         7,
@@ -3635,31 +3641,201 @@
       "inheritedCLAFailurePreserved": true,
       "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
       "fullG3ServiceAccepted": false,
+      "fullG4Accepted": false,
       "serviceAccepted": false,
       "productionAccepted": false,
       "workflowRerunsRequested": 0,
       "nativeArtifacts": [
         {
-          "runId": 40268333912,
-          "artifactId": 12627248604,
-          "zipBytes": 88744,
-          "zipSha256": "a7297bba1e24b1cb8bd27ca838202ee36372a2e74e5ae62a8bd04bbcdb54f77f"
+          "runId": 40270300320,
+          "artifactId": 12627972671,
+          "zipBytes": 133710,
+          "zipSha256": "1bd4adbcea59df5cd4ae0c20f321bfcac47a289416fdbe5f76a46cf158922e4b"
         },
         {
-          "runId": 40268338245,
-          "artifactId": 12627503054,
-          "zipBytes": 88737,
-          "zipSha256": "376912228d7516ee3ee7266e6e95b75a8833b308b23509ceb8e3ab4737a002e6"
+          "runId": 40270304404,
+          "artifactId": 12628096501,
+          "zipBytes": 133759,
+          "zipSha256": "fa9a632a04858035d68a629276e2f438a4d7fb5e9fa8ca1e4a1cfa0e98cd3b3a"
         }
       ],
       "freshAuditReference": {
-        "bytes": 41008,
-        "sha256": "8c8626c49ed20420689a4c06edf379b63c9738682bb439011d062c4bbefa50ce"
+        "bytes": 7160,
+        "sha256": "c1aa857f494aba928ce51898e707b853df5c6619630f4e4b739a1b7e0d312af1"
+      }
+    },
+    "declarativeBackupLocal": {
+      "runId": "x10-backup-resume-20261026T064053309Z",
+      "sourceBase": "48ac37d90f8df651af715a892c36345b7f9a55d8",
+      "sourceApplicationBase": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+      "publicationParent": "d6b1f109be8dc220a87ebad22dca95b275bbcaca",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+      "scope": "Private declarative backup of a clean stopped/prepared source and fresh unbound installation restore foundation",
+      "result": "Reconciled exacteb normal installed-recipe/service success, added strict private declarative backup and fresh identity/unbound restore without package/runtime/history/TLS material transfer; exact resulting native and restored-service CI pending.",
+      "evidence": "x10/evidence/g4-declarative-backup.json",
+      "perFileLedger": "x10/review/g4-declarative-backup-ledger.json",
+      "localAcceptance": "LOCAL_DECLARATIVE_BACKUP_SYNTHETIC_CONTROLS_VERIFIED_EXACT_NATIVE_RESTORE_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_DECLARATIVE_BACKUP_NATIVE_SERVICE_CI",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": true,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "acceptanceHarnessChanged": false,
+      "alphaTestFixtureChanged": true,
+      "dependencyCleanupReceiptProfileChanged": false,
+      "knownGuardsPreserved": true,
+      "routineOwnerAuthorityConfirmationPreserved": true,
+      "releaseContractOrProfileChanged": false,
+      "releaseContractNarrowed": false,
+      "bundleSchemaVersionRequiredUnchanged": 2,
+      "installSchemaVersionRequiredUnchanged": 2,
+      "installedRecipeGeneratedRequiredUnchanged": true,
+      "legacySchema1ContractRetained": true,
+      "freshUnboundDeclarativeRestoreOnly": true,
+      "packageUpgradeRollbackAccepted": false,
+      "backupAuthenticationProvided": false,
+      "applicationReadinessCheckedByRestore": false,
+      "runtimeBindingOrHistoryTransferred": false,
+      "httpsMaterialSupported": false,
+      "fullG3ServiceAccepted": false,
+      "fullG4Accepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "nextConcreteTask": "First verify exact resulting declarative-backup implementation native CI and actual fresh restored installation. Require a clean stopped/prepared source, strict owned private canonical bounded backup, exact last-confirmed input, absent runtime and pending state, and a fresh target with new installation/session/controller identities and null binding. Restore does not start native code, check application readiness, transfer history/bindings/PIDs/libraries/TLS keys, remap paths/ports, authenticate the backup or perform package rollback. Require supported hosted actual native-t and subsequent proxy/service/cleanup evidence before accepting a real restored service. Reject HTTPS and unsupported/dirty/faulted/tampered states explicitly. Preserve exacteb scoped service acceptance and exact195 unknown comparison/adverse history without unchanged reruns. FullG3/G4-G8/V1, package A-to-B-to-A, permanent distribution, independent published replay,60-minute soak and semantic Continuum remain open.",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_DECLARATIVE_BACKUP_NATIVE_SERVICE_CI"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false,
+      "coordinationResume": {
+        "previousRunId": "x10-backup-20261026T050655815Z",
+        "previousLeaseCommit": "48ac37d90f8df651af715a892c36345b7f9a55d8",
+        "previousLeaseExpiresAtUTC": "2026-10-26T05:50:55.815Z",
+        "previousPublicationReserveCutoffUTC": "2026-10-26T05:45:55.815Z",
+        "clockObservedAfterPauseUTC": "2026-10-26T06:39:00Z",
+        "clockObservationPrecision": "minute from coordinator readback",
+        "unpublishedCandidateTree": "5cb23ff2c72760d98be0652abaae3d5377cafedb",
+        "unpublishedTreeWasCreated": true,
+        "implementationCommitCreatedUnderExpiredLease": false,
+        "refUpdateAttemptedUnderExpiredLease": false,
+        "guardStoppedBeforeImplementationCommit": true,
+        "priorRemoteRefRemainedAtLeaseCommit": true,
+        "oldLocalGitFailure": {
+          "classification": "git_repository_backing_directory_unavailable",
+          "exitCode": 128,
+          "rawErrorAndHostPathPublished": false
+        },
+        "freshIsolatedCloneCreated": true,
+        "freshCentralAdmissionAndSameSourceInstructionsReread": true,
+        "newCoordinationSourceBase": "48ac37d90f8df651af715a892c36345b7f9a55d8",
+        "unchangedApplicationBase": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+        "newRunId": "x10-backup-resume-20261026T064053309Z",
+        "newOwner": "codex-coordinator-backup-resume",
+        "newLeaseCommit": "d6b1f109be8dc220a87ebad22dca95b275bbcaca",
+        "newLeaseTree": "a8e5f8c762750b5faff2dcb637df0f332e87c0c7",
+        "newLeaseAcquiredAtUTC": "2026-10-26T06:40:53.309Z",
+        "newLeaseExpiresAtUTC": "2026-10-26T07:24:53.309Z",
+        "frozenThreeSourceFilesCopiedWithoutChangingBytes": true,
+        "freshRootRegressionRequired": true,
+        "rootRegressionRerunUnderNewLease": true,
+        "codeStopAtUTCUnchanged": "2026-10-26T19:17:36.000Z",
+        "causeOfExternalDelayKnown": false,
+        "freshSecurityAttempt": {
+          "outcome": "transient_capacity_unavailable",
+          "newReviewCompleted": false,
+          "boundedRetryRequested": true,
+          "priorSecurityResultsReusedOnlyForIdenticalFrozenSource": true,
+          "coordinatorFinalPrivacyReviewRequired": true
+        }
+      }
+    },
+    "recipeNodeFixtureHostedObservation": {
+      "state": "EXACT_SCOPED_INSTALLED_RECIPE_NATIVE_SERVICE_SUCCESS",
+      "implementationCommit": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+      "implementationTree": "41c05ee5c7d77f88db4c8c0ca48270ee0ab1aa10",
+      "evidence": "x10/evidence/g4-declarative-backup.json",
+      "nativeRunIds": [
+        40270300320,
+        40270304404
+      ],
+      "nativeJobIds": [
+        121401514260,
+        121401530223
+      ],
+      "actualPRMergeCheckout": "02403e1a1de8fd53b5e38442760e6120e1828bbc",
+      "auditConsistent": true,
+      "factualReadbackProofCount": 32,
+      "factualReadbackIsRuntimePassCount": false,
+      "bothExactNativeWorkflowsSuccessful": true,
+      "implementationAccepted": true,
+      "acceptanceScope": "Exact normal installed service recipe, owned Node fixture and managed service only",
+      "nativeGroupsEach": {
+        "total": 20,
+        "passed": 20
+      },
+      "fullAlphaEach": {
+        "total": 78,
+        "pass": 78,
+        "fail": 0,
+        "skipped": 0
+      },
+      "bundleSchemaVersion": 2,
+      "installSchemaVersion": 2,
+      "installedRecipeGenerated": true,
+      "all6ChallengeProofsEach": true,
+      "all14OperatorProofsEach": true,
+      "all14DrainProofsEach": true,
+      "all11StartupProofsEach": true,
+      "all13CleanupFactsEach": true,
+      "combinedTLSSessionsEach": 3,
+      "managerRestartsEach": 1,
+      "journalChecksEach": 3,
+      "privateNodeAndBootstrapRemovedEach": true,
+      "actualFailureContainmentBranchExecuted": false,
+      "actualFailureContainmentAccepted": false,
+      "specific195RecordedNodeComparisonKnown": false,
+      "prior195FailurePreserved": true,
+      "researchPRRunId": 40270304433,
+      "researchPRJobId": 121401537325,
+      "researchPRActualSuites": [
+        21,
+        7,
+        27,
+        48
+      ],
+      "researchPushRuntimeSkipped": true,
+      "inheritedCLAFailurePreserved": true,
+      "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
+      "fullG3ServiceAccepted": false,
+      "fullG4Accepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0,
+      "nativeArtifacts": [
+        {
+          "runId": 40270300320,
+          "artifactId": 12627972671,
+          "zipBytes": 133710,
+          "zipSha256": "1bd4adbcea59df5cd4ae0c20f321bfcac47a289416fdbe5f76a46cf158922e4b"
+        },
+        {
+          "runId": 40270304404,
+          "artifactId": 12628096501,
+          "zipBytes": 133759,
+          "zipSha256": "fa9a632a04858035d68a629276e2f438a4d7fb5e9fa8ca1e4a1cfa0e98cd3b3a"
+        }
+      ],
+      "freshAuditReference": {
+        "bytes": 7160,
+        "sha256": "c1aa857f494aba928ce51898e707b853df5c6619630f4e4b739a1b7e0d312af1"
       }
     }
   },
   "pendingVerification": [
-    "First verify exact resulting recipe Node fixture native CI. The checked-bundle fixture must install and generate the recipe using one private owned0500 exact Node copy, shared with the synthetic positive fixture. This changes only the test prerequisite; product CLI/helper/archive/harness/receipt/workflow bytes, schema2 inventories, three new receipt facts and all previous authority proofs stay unchanged. Require the full supported native/alpha profile and actual extracted-payload managed service, not only selected controls. Preserve exact195 failure/unknown Node comparison and absent service/cleanup evidence without claiming the fixture observation proves the historical comparison. No guard relaxation, host Node mutation or blind unchanged rerun. FullG3/G4-G8/V1, package lifecycle/permanent release/60-minute soak and semantic Continuum remain open until actual independent gates pass.",
+    "First verify exact resulting declarative-backup implementation native CI and actual fresh restored installation. Require a clean stopped/prepared source, strict owned private canonical bounded backup, exact last-confirmed input, absent runtime and pending state, and a fresh target with new installation/session/controller identities and null binding. Restore does not start native code, check application readiness, transfer history/bindings/PIDs/libraries/TLS keys, remap paths/ports, authenticate the backup or perform package rollback. Require supported hosted actual native-t and subsequent proxy/service/cleanup evidence before accepting a real restored service. Reject HTTPS and unsupported/dirty/faulted/tampered states explicitly. Preserve exacteb scoped service acceptance and exact195 unknown comparison/adverse history without unchanged reruns. FullG3/G4-G8/V1, package A-to-B-to-A, permanent distribution, independent published replay,60-minute soak and semantic Continuum remain open.",
+    "Exacteb577ff native push40270300320/job121401514260 and PR40270304404/job121401530223 completed success with all34 actual steps each,20/20 native groups and78/78 full-alpha TAP tests without skips/failures/cancellation/TODO. Both checked schema2 bundle/install and actual installed recipe generation, native challenge/all6, operator interruption/all14, controlled drain/all14, failed start/all11, three combined TLS sessions, one manager restart, three journal checks, all13 cleanup confirmations, zero app sockets, runtime unit removal and private Node/bootstrap removal. Actual failure containment was unexercised on these successful normal paths. The newly observed source mode policy refusal does not establish the specific historical195 Node comparison, which remains unknown. Original195 full-alpha failure before managed service, absent service/cleanup reports and earlier adverse history/local cleanup FAIL_UNKNOWN are preserved. Research PR actually ran21/7/27/48; push runtime was skipped and CLA failed without agreement or bypass. This accepts the scoped installed-recipe normal service implementation only, not fullG3/G4-G8/V1, permanent distribution, package upgrade/rollback/restore or60-minute soak.",
     "Exact195a native push40268333912/job121395545645 and PR40268338245/job121395574674 both failed native step20 with19/20 groups. Full alpha reported76 TAP tests,74PASS/2FAIL with no skips/cancellation/TODO; the checked-bundle extracted-install subtest and its parent reflect one nested service_recipe_invalid refusal at the exact recorded-Node guard, not two independently established native defects. The specific Node path/version/mode/ownership/hash comparison was not recorded and remains unknown. Managed service step29 was skipped; service/package/archive/bootstrap/Node cleanup reports were absent. No actual new managed service or cleanup is accepted from those missing reports. Separate contract successes and14 selected controls do not override the full alpha failure. Research PR actually ran21/7/27/48; push runtime was skipped and CLA failed without bypass. Prior89 scoped normal native challenge/operator acceptance remains unchanged, while its actual failure containment was unexercised. Older adverse history and local cleanup FAIL_UNKNOWN remain preserved.",
     "Exact89aa native push40265731122/job121387679851 and PR40265734847/job121387682024 completed success with all34 actual steps each. Both observed native challenge1/all6 proofs, operator interruption1/all14 proofs, controlled drain1/all14, failed start1/all11, three combined TLS sessions, one manager restart, three journal checks, all13 owned cleanup confirmations and private Node/bootstrap removal. Normal containment was not_needed and unexercised; this does not accept the actual failure containment branch. Final admission diagnostics record accepted history with currentPairLive:false after cleanup; they are not signal authority at report read time. Research PR ran 21/7/27/48 and push runtime was skipped. CLA failure remains without agreement or bypass. This accepts the scoped normal service fixture implementation, not fullG3/V1 or every interruption/crash state. Earlier042/c1cf/3bf mixed failures, exact unknown historical causes and old local fixture cleanup FAIL_UNKNOWN remain preserved.",
     "Exact0420287 native CI had mixed actual outcomes. Push40215886529/job121236849254 completed all34 actual steps with one native challenge/all6 proofs, all14 operator proofs, startup refusal, controlled drain, three combined TLS sessions, restart/journals and all13 cleanup confirmations plus private Node/bootstrap removal. PR40215890093/job121236862647 failed operator_interruption/origin_challenge_identity before the first held observation or ownership snapshot. Its native challenge and operator counters were0, all six/fourteen respective proof flags false, containment no_snapshot and final cleanup_unconfirmed with unit_cleanup/unit_stop_unconfirmed. Nine cleanup confirmations were unconfirmed, four origin/relay closure facts true, appSockets0; installation/temp roots and private runtime removal were unconfirmed. The specific historical admission predicate remains unknown. Both operator26 and failure-QA108 controls passed without skips; research PR actually ran21/7/27/48 and push runtime was skipped. These separate results do not accept the implementation or whole service. Earlierc1cf scoped containment and3bf mixed outcomes/local cleanup FAIL_UNKNOWN remain.",
@@ -3704,9 +3880,14 @@
   ],
   "nextTasks": [
     {
+      "id": "G4-declarative-backup-exact-CI",
+      "state": "foundation-only-pending-exact-native-and-restored-service",
+      "goal": "First verify exact resulting declarative-backup implementation native CI and actual fresh restored installation. Require a clean stopped/prepared source, strict owned private canonical bounded backup, exact last-confirmed input, absent runtime and pending state, and a fresh target with new installation/session/controller identities and null binding. Restore does not start native code, check application readiness, transfer history/bindings/PIDs/libraries/TLS keys, remap paths/ports, authenticate the backup or perform package rollback. Require supported hosted actual native-t and subsequent proxy/service/cleanup evidence before accepting a real restored service. Reject HTTPS and unsupported/dirty/faulted/tampered states explicitly. Preserve exacteb scoped service acceptance and exact195 unknown comparison/adverse history without unchanged reruns. FullG3/G4-G8/V1, package A-to-B-to-A, permanent distribution, independent published replay,60-minute soak and semantic Continuum remain open."
+    },
+    {
       "id": "G3-recipe-node-fixture-exact-CI",
-      "state": "pending-exact-resulting-node-fixture-native-service",
-      "goal": "First verify exact resulting recipe Node fixture native CI. The checked-bundle fixture must install and generate the recipe using one private owned0500 exact Node copy, shared with the synthetic positive fixture. This changes only the test prerequisite; product CLI/helper/archive/harness/receipt/workflow bytes, schema2 inventories, three new receipt facts and all previous authority proofs stay unchanged. Require the full supported native/alpha profile and actual extracted-payload managed service, not only selected controls. Preserve exact195 failure/unknown Node comparison and absent service/cleanup evidence without claiming the fixture observation proves the historical comparison. No guard relaxation, host Node mutation or blind unchanged rerun. FullG3/G4-G8/V1, package lifecycle/permanent release/60-minute soak and semantic Continuum remain open until actual independent gates pass."
+      "state": "accepted-scoped-installed-recipe-normal-native-service",
+      "goal": "Exacteb577ff native push40270300320/job121401514260 and PR40270304404/job121401530223 completed success with all34 actual steps each,20/20 native groups and78/78 full-alpha TAP tests without skips/failures/cancellation/TODO. Both checked schema2 bundle/install and actual installed recipe generation, native challenge/all6, operator interruption/all14, controlled drain/all14, failed start/all11, three combined TLS sessions, one manager restart, three journal checks, all13 cleanup confirmations, zero app sockets, runtime unit removal and private Node/bootstrap removal. Actual failure containment was unexercised on these successful normal paths. The newly observed source mode policy refusal does not establish the specific historical195 Node comparison, which remains unknown. Original195 full-alpha failure before managed service, absent service/cleanup reports and earlier adverse history/local cleanup FAIL_UNKNOWN are preserved. Research PR actually ran21/7/27/48; push runtime was skipped and CLA failed without agreement or bypass. This accepts the scoped installed-recipe normal service implementation only, not fullG3/G4-G8/V1, permanent distribution, package upgrade/rollback/restore or60-minute soak."
     },
     {
       "id": "G3-installed-service-recipe-exact-CI",
@@ -4092,7 +4273,7 @@
     "spendingUSD": 0,
     "scope": "Bounded read-only held-source API metadata; no actual Finished value preservation, semantic capsule, import, ownership transfer or migration."
   },
-  "nextConcreteTask": "First verify exact resulting recipe Node fixture native CI. The checked-bundle fixture must install and generate the recipe using one private owned0500 exact Node copy, shared with the synthetic positive fixture. This changes only the test prerequisite; product CLI/helper/archive/harness/receipt/workflow bytes, schema2 inventories, three new receipt facts and all previous authority proofs stay unchanged. Require the full supported native/alpha profile and actual extracted-payload managed service, not only selected controls. Preserve exact195 failure/unknown Node comparison and absent service/cleanup evidence without claiming the fixture observation proves the historical comparison. No guard relaxation, host Node mutation or blind unchanged rerun. FullG3/G4-G8/V1, package lifecycle/permanent release/60-minute soak and semantic Continuum remain open until actual independent gates pass.",
+  "nextConcreteTask": "First verify exact resulting declarative-backup implementation native CI and actual fresh restored installation. Require a clean stopped/prepared source, strict owned private canonical bounded backup, exact last-confirmed input, absent runtime and pending state, and a fresh target with new installation/session/controller identities and null binding. Restore does not start native code, check application readiness, transfer history/bindings/PIDs/libraries/TLS keys, remap paths/ports, authenticate the backup or perform package rollback. Require supported hosted actual native-t and subsequent proxy/service/cleanup evidence before accepting a real restored service. Reject HTTPS and unsupported/dirty/faulted/tampered states explicitly. Preserve exacteb scoped service acceptance and exact195 unknown comparison/adverse history without unchanged reruns. FullG3/G4-G8/V1, package A-to-B-to-A, permanent distribution, independent published replay,60-minute soak and semantic Continuum remain open.",
   "previousDevelopmentPass": {
     "runId": "continuum-protection-20261024T090855094Z",
     "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
@@ -4297,10 +4478,10 @@
         "goal": "Held-out third-version adapter, adverse I/O/KeyUpdate/half-close tests, cost and overhead measurements"
       }
     ],
-    "runtimeCodeChangedByThisPublication": false,
+    "runtimeCodeChangedByThisPublication": true,
     "releaseAcceptedByThisPublication": false,
     "publicationOnly": false,
-    "currentGate": "RECIPE_NODE_FIXTURE_LOCAL_CONTROLS_VERIFIED_EXACT_SERVICE_CI_PENDING",
+    "currentGate": "DECLARATIVE_BACKUP_FOUNDATION_LOCAL_VERIFIED_EXACT_NATIVE_CI_PENDING",
     "releaseContractPath": "x10/release/RELEASE-CONTRACT.md",
     "releaseProfilePath": "x10/release/profile.json",
     "releaseRecordValidatorAdded": true,
@@ -4381,29 +4562,32 @@
     "installedServiceRecipeEvidence": "x10/evidence/g3-service-installed-recipe.json",
     "nativeChallengeAdmissionHostedObservation": "x10/evidence/g3-service-installed-recipe.json",
     "recipeNodeFixtureEvidence": "x10/evidence/g3-service-recipe-node.json",
-    "installedServiceRecipeHostedObservation": "x10/evidence/g3-service-recipe-node.json"
+    "installedServiceRecipeHostedObservation": "x10/evidence/g4-declarative-backup.json",
+    "declarativeBackupEvidence": "x10/evidence/g4-declarative-backup.json",
+    "recipeNodeFixtureHostedEvidence": "x10/evidence/g4-declarative-backup.json",
+    "fullG3AndG4AcceptedByThisPublication": false
   },
   "lastV1DevelopmentPass": {
-    "runId": "x10-recipe-node-20261026T042920537Z",
-    "sourceBase": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
-    "publicationParent": "7cf00bbd884bbd5dedd1ee9e78de24c0bf9648c8",
+    "runId": "x10-backup-resume-20261026T064053309Z",
+    "sourceBase": "48ac37d90f8df651af715a892c36345b7f9a55d8",
+    "sourceApplicationBase": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+    "publicationParent": "d6b1f109be8dc220a87ebad22dca95b275bbcaca",
     "implementationCommit": null,
     "implementationCommitLocator": "Current publication commit; exact resulting CI required",
-    "scope": "Fixture-only exact owned Node prerequisite for extracted installed recipe acceptance",
-    "result": "Recorded exact195 both-native full-alpha failure and missing managed-service evidence, then aligned the checked-bundle/synthetic recipe fixtures to one private owned exact Node runtime without changing product guards or runtime; exact resulting full native/service CI pending.",
-    "evidence": "x10/evidence/g3-service-recipe-node.json",
-    "perFileLedger": "x10/review/g3-service-recipe-node-ledger.json",
-    "localAcceptance": "LOCAL_SELECTED_OWNED_NODE_FIXTURE_CONTROLS_VERIFIED_EXACT_FULL_NATIVE_SERVICE_CI_PENDING",
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_RECIPE_NODE_FIXTURE_NATIVE_SERVICE",
+    "scope": "Private declarative backup of a clean stopped/prepared source and fresh unbound installation restore foundation",
+    "result": "Reconciled exacteb normal installed-recipe/service success, added strict private declarative backup and fresh identity/unbound restore without package/runtime/history/TLS material transfer; exact resulting native and restored-service CI pending.",
+    "evidence": "x10/evidence/g4-declarative-backup.json",
+    "perFileLedger": "x10/review/g4-declarative-backup-ledger.json",
+    "localAcceptance": "LOCAL_DECLARATIVE_BACKUP_SYNTHETIC_CONTROLS_VERIFIED_EXACT_NATIVE_RESTORE_CI_PENDING",
+    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_DECLARATIVE_BACKUP_NATIVE_SERVICE_CI",
     "nativeRuntimeChanged": false,
     "controllerRuntimeChanged": false,
-    "alphaRuntimeChanged": false,
+    "alphaRuntimeChanged": true,
     "serviceRecipeChanged": false,
     "preflightChanged": false,
     "acceptanceHarnessChanged": false,
     "alphaTestFixtureChanged": true,
     "dependencyCleanupReceiptProfileChanged": false,
-    "dependencyCleanupReceiptCheckerPinChanged": false,
     "knownGuardsPreserved": true,
     "routineOwnerAuthorityConfirmationPreserved": true,
     "releaseContractOrProfileChanged": false,
@@ -4412,62 +4596,112 @@
     "installSchemaVersionRequiredUnchanged": 2,
     "installedRecipeGeneratedRequiredUnchanged": true,
     "legacySchema1ContractRetained": true,
-    "fixtureHostNodeMutated": false,
-    "failedStartAccepted": false,
-    "slowDrainAccepted": false,
-    "operatorInterruptionAccepted": false,
+    "freshUnboundDeclarativeRestoreOnly": true,
+    "packageUpgradeRollbackAccepted": false,
+    "backupAuthenticationProvided": false,
+    "applicationReadinessCheckedByRestore": false,
+    "runtimeBindingOrHistoryTransferred": false,
+    "httpsMaterialSupported": false,
+    "fullG3ServiceAccepted": false,
+    "fullG4Accepted": false,
     "serviceAccepted": false,
     "productionAccepted": false,
-    "actualHistoricalCauseProven": false,
-    "nextConcreteTask": "First verify exact resulting recipe Node fixture native CI. The checked-bundle fixture must install and generate the recipe using one private owned0500 exact Node copy, shared with the synthetic positive fixture. This changes only the test prerequisite; product CLI/helper/archive/harness/receipt/workflow bytes, schema2 inventories, three new receipt facts and all previous authority proofs stay unchanged. Require the full supported native/alpha profile and actual extracted-payload managed service, not only selected controls. Preserve exact195 failure/unknown Node comparison and absent service/cleanup evidence without claiming the fixture observation proves the historical comparison. No guard relaxation, host Node mutation or blind unchanged rerun. FullG3/G4-G8/V1, package lifecycle/permanent release/60-minute soak and semantic Continuum remain open until actual independent gates pass.",
+    "nextConcreteTask": "First verify exact resulting declarative-backup implementation native CI and actual fresh restored installation. Require a clean stopped/prepared source, strict owned private canonical bounded backup, exact last-confirmed input, absent runtime and pending state, and a fresh target with new installation/session/controller identities and null binding. Restore does not start native code, check application readiness, transfer history/bindings/PIDs/libraries/TLS keys, remap paths/ports, authenticate the backup or perform package rollback. Require supported hosted actual native-t and subsequent proxy/service/cleanup evidence before accepting a real restored service. Reject HTTPS and unsupported/dirty/faulted/tampered states explicitly. Preserve exacteb scoped service acceptance and exact195 unknown comparison/adverse history without unchanged reruns. FullG3/G4-G8/V1, package A-to-B-to-A, permanent distribution, independent published replay,60-minute soak and semantic Continuum remain open.",
     "hostedVerification": {
-      "state": "PENDING_EXACT_RESULTING_RECIPE_NODE_FIXTURE_NATIVE_SERVICE"
+      "state": "PENDING_EXACT_RESULTING_DECLARATIVE_BACKUP_NATIVE_SERVICE_CI"
     },
     "newPurchases": false,
-    "productionDeployChanged": false
+    "productionDeployChanged": false,
+    "coordinationResume": {
+      "previousRunId": "x10-backup-20261026T050655815Z",
+      "previousLeaseCommit": "48ac37d90f8df651af715a892c36345b7f9a55d8",
+      "previousLeaseExpiresAtUTC": "2026-10-26T05:50:55.815Z",
+      "previousPublicationReserveCutoffUTC": "2026-10-26T05:45:55.815Z",
+      "clockObservedAfterPauseUTC": "2026-10-26T06:39:00Z",
+      "clockObservationPrecision": "minute from coordinator readback",
+      "unpublishedCandidateTree": "5cb23ff2c72760d98be0652abaae3d5377cafedb",
+      "unpublishedTreeWasCreated": true,
+      "implementationCommitCreatedUnderExpiredLease": false,
+      "refUpdateAttemptedUnderExpiredLease": false,
+      "guardStoppedBeforeImplementationCommit": true,
+      "priorRemoteRefRemainedAtLeaseCommit": true,
+      "oldLocalGitFailure": {
+        "classification": "git_repository_backing_directory_unavailable",
+        "exitCode": 128,
+        "rawErrorAndHostPathPublished": false
+      },
+      "freshIsolatedCloneCreated": true,
+      "freshCentralAdmissionAndSameSourceInstructionsReread": true,
+      "newCoordinationSourceBase": "48ac37d90f8df651af715a892c36345b7f9a55d8",
+      "unchangedApplicationBase": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+      "newRunId": "x10-backup-resume-20261026T064053309Z",
+      "newOwner": "codex-coordinator-backup-resume",
+      "newLeaseCommit": "d6b1f109be8dc220a87ebad22dca95b275bbcaca",
+      "newLeaseTree": "a8e5f8c762750b5faff2dcb637df0f332e87c0c7",
+      "newLeaseAcquiredAtUTC": "2026-10-26T06:40:53.309Z",
+      "newLeaseExpiresAtUTC": "2026-10-26T07:24:53.309Z",
+      "frozenThreeSourceFilesCopiedWithoutChangingBytes": true,
+      "freshRootRegressionRequired": true,
+      "rootRegressionRerunUnderNewLease": true,
+      "codeStopAtUTCUnchanged": "2026-10-26T19:17:36.000Z",
+      "causeOfExternalDelayKnown": false,
+      "freshSecurityAttempt": {
+        "outcome": "transient_capacity_unavailable",
+        "newReviewCompleted": false,
+        "boundedRetryRequested": true,
+        "priorSecurityResultsReusedOnlyForIdenticalFrozenSource": true,
+        "coordinatorFinalPrivacyReviewRequired": true
+      }
+    }
   },
   "lastV1VerificationReceipt": {
-    "state": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
-    "implementationCommit": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
-    "implementationTree": "56da17fb7b8f5ce5d16890ee7669f841a9c69e16",
-    "evidence": "x10/evidence/g3-service-recipe-node.json",
+    "state": "EXACT_SCOPED_INSTALLED_RECIPE_NATIVE_SERVICE_SUCCESS",
+    "implementationCommit": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+    "implementationTree": "41c05ee5c7d77f88db4c8c0ca48270ee0ab1aa10",
+    "evidence": "x10/evidence/g4-declarative-backup.json",
     "nativeRunIds": [
-      40268333912,
-      40268338245
+      40270300320,
+      40270304404
     ],
     "nativeJobIds": [
-      121395545645,
-      121395574674
+      121401514260,
+      121401530223
     ],
-    "actualPRMergeCheckout": "2e4fb5e2b7a10dab545652795f5cc785f8cc1cea",
+    "actualPRMergeCheckout": "02403e1a1de8fd53b5e38442760e6120e1828bbc",
     "auditConsistent": true,
-    "factualReadbackProofCount": 52,
+    "factualReadbackProofCount": 32,
     "factualReadbackIsRuntimePassCount": false,
-    "bothExactNativeWorkflowsSuccessful": false,
-    "implementationAccepted": false,
+    "bothExactNativeWorkflowsSuccessful": true,
+    "implementationAccepted": true,
+    "acceptanceScope": "Exact normal installed service recipe, owned Node fixture and managed service only",
     "nativeGroupsEach": {
       "total": 20,
-      "passed": 19
+      "passed": 20
     },
     "fullAlphaEach": {
-      "total": 76,
-      "pass": 74,
-      "fail": 2
+      "total": 78,
+      "pass": 78,
+      "fail": 0,
+      "skipped": 0
     },
-    "refusalCode": "service_recipe_invalid",
-    "specificRecordedNodeComparisonKnown": false,
-    "failedGroup": "local-alpha-lifecycle",
-    "managedServiceStep29": "skipped",
-    "actualManagedServiceReport": null,
-    "actualArchiveReport": null,
-    "actualPackageReport": null,
-    "actualBootstrapReport": null,
-    "actualNodeCleanupReport": null,
-    "cleanupAcceptedFromMissingReports": false,
+    "bundleSchemaVersion": 2,
+    "installSchemaVersion": 2,
+    "installedRecipeGenerated": true,
+    "all6ChallengeProofsEach": true,
+    "all14OperatorProofsEach": true,
+    "all14DrainProofsEach": true,
+    "all11StartupProofsEach": true,
+    "all13CleanupFactsEach": true,
+    "combinedTLSSessionsEach": 3,
+    "managerRestartsEach": 1,
+    "journalChecksEach": 3,
+    "privateNodeAndBootstrapRemovedEach": true,
+    "actualFailureContainmentBranchExecuted": false,
     "actualFailureContainmentAccepted": false,
-    "prior89ScopedNormalAcceptancePreserved": true,
-    "researchPRRunId": 40268338303,
-    "researchPRJobId": 121395558779,
+    "specific195RecordedNodeComparisonKnown": false,
+    "prior195FailurePreserved": true,
+    "researchPRRunId": 40270304433,
+    "researchPRJobId": 121401537325,
     "researchPRActualSuites": [
       21,
       7,
@@ -4478,26 +4712,27 @@
     "inheritedCLAFailurePreserved": true,
     "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
     "fullG3ServiceAccepted": false,
+    "fullG4Accepted": false,
     "serviceAccepted": false,
     "productionAccepted": false,
     "workflowRerunsRequested": 0,
     "nativeArtifacts": [
       {
-        "runId": 40268333912,
-        "artifactId": 12627248604,
-        "zipBytes": 88744,
-        "zipSha256": "a7297bba1e24b1cb8bd27ca838202ee36372a2e74e5ae62a8bd04bbcdb54f77f"
+        "runId": 40270300320,
+        "artifactId": 12627972671,
+        "zipBytes": 133710,
+        "zipSha256": "1bd4adbcea59df5cd4ae0c20f321bfcac47a289416fdbe5f76a46cf158922e4b"
       },
       {
-        "runId": 40268338245,
-        "artifactId": 12627503054,
-        "zipBytes": 88737,
-        "zipSha256": "376912228d7516ee3ee7266e6e95b75a8833b308b23509ceb8e3ab4737a002e6"
+        "runId": 40270304404,
+        "artifactId": 12628096501,
+        "zipBytes": 133759,
+        "zipSha256": "fa9a632a04858035d68a629276e2f438a4d7fb5e9fa8ca1e4a1cfa0e98cd3b3a"
       }
     ],
     "freshAuditReference": {
-      "bytes": 41008,
-      "sha256": "8c8626c49ed20420689a4c06edf379b63c9738682bb439011d062c4bbefa50ce"
+      "bytes": 7160,
+      "sha256": "c1aa857f494aba928ce51898e707b853df5c6619630f4e4b739a1b7e0d312af1"
     }
   },
   "v1DevelopmentPassHistory": [
@@ -5926,6 +6161,49 @@
       "nextConcreteTask": "First verify exact resulting installed recipe distribution and actual native service CI. Require a strict schema2 package/install with the immutable installed service helper and read-only installed service-unit command, full installed validation before import and the exact recorded Node identity. The actual service harness must obtain the recipe from installed payload with no source fallback. Strict cleanup receipts add bundleSchemaVersion2/installSchemaVersion2/installedRecipeGenerated:true and retain all existing six challenge,14 operator,14 drain,11 startup,TLS/restart/journal and13 cleanup requirements. Reject mixed schemas/inventories, unknown files, tampered helper/Node and unsupported legacy command without activation. Existing v1 packages remain usable under their exact original contract; no automatic migration or package rollback is claimed. Exact89 scoped normal acceptance is preserved without unchanged reruns, while actual failure containment remains unexercised. FullG3/G4-G8/V1, package upgrade/rollback/restore, permanent distribution,60-minute soak and semantic Continuum remain open until their independent actual gates pass.",
       "hostedVerification": {
         "state": "PENDING_EXACT_RESULTING_INSTALLED_RECIPE_SERVICE"
+      },
+      "newPurchases": false,
+      "productionDeployChanged": false
+    },
+    {
+      "runId": "x10-recipe-node-20261026T042920537Z",
+      "sourceBase": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
+      "publicationParent": "7cf00bbd884bbd5dedd1ee9e78de24c0bf9648c8",
+      "implementationCommit": null,
+      "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+      "scope": "Fixture-only exact owned Node prerequisite for extracted installed recipe acceptance",
+      "result": "Recorded exact195 both-native full-alpha failure and missing managed-service evidence, then aligned the checked-bundle/synthetic recipe fixtures to one private owned exact Node runtime without changing product guards or runtime; exact resulting full native/service CI pending.",
+      "evidence": "x10/evidence/g3-service-recipe-node.json",
+      "perFileLedger": "x10/review/g3-service-recipe-node-ledger.json",
+      "localAcceptance": "LOCAL_SELECTED_OWNED_NODE_FIXTURE_CONTROLS_VERIFIED_EXACT_FULL_NATIVE_SERVICE_CI_PENDING",
+      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_RECIPE_NODE_FIXTURE_NATIVE_SERVICE",
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "serviceRecipeChanged": false,
+      "preflightChanged": false,
+      "acceptanceHarnessChanged": false,
+      "alphaTestFixtureChanged": true,
+      "dependencyCleanupReceiptProfileChanged": false,
+      "dependencyCleanupReceiptCheckerPinChanged": false,
+      "knownGuardsPreserved": true,
+      "routineOwnerAuthorityConfirmationPreserved": true,
+      "releaseContractOrProfileChanged": false,
+      "releaseContractNarrowed": false,
+      "bundleSchemaVersionRequiredUnchanged": 2,
+      "installSchemaVersionRequiredUnchanged": 2,
+      "installedRecipeGeneratedRequiredUnchanged": true,
+      "legacySchema1ContractRetained": true,
+      "fixtureHostNodeMutated": false,
+      "failedStartAccepted": false,
+      "slowDrainAccepted": false,
+      "operatorInterruptionAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "actualHistoricalCauseProven": false,
+      "nextConcreteTask": "First verify exact resulting recipe Node fixture native CI. The checked-bundle fixture must install and generate the recipe using one private owned0500 exact Node copy, shared with the synthetic positive fixture. This changes only the test prerequisite; product CLI/helper/archive/harness/receipt/workflow bytes, schema2 inventories, three new receipt facts and all previous authority proofs stay unchanged. Require the full supported native/alpha profile and actual extracted-payload managed service, not only selected controls. Preserve exact195 failure/unknown Node comparison and absent service/cleanup evidence without claiming the fixture observation proves the historical comparison. No guard relaxation, host Node mutation or blind unchanged rerun. FullG3/G4-G8/V1, package lifecycle/permanent release/60-minute soak and semantic Continuum remain open until actual independent gates pass.",
+      "hostedVerification": {
+        "state": "PENDING_EXACT_RESULTING_RECIPE_NODE_FIXTURE_NATIVE_SERVICE"
       },
       "newPurchases": false,
       "productionDeployChanged": false
@@ -7555,6 +7833,80 @@
         "bytes": 47783,
         "sha256": "fe992d718a876e7645f39c751e93c93d33bf585f1532f642b24ae7bc043a07cf"
       }
+    },
+    {
+      "state": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
+      "implementationCommit": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
+      "implementationTree": "56da17fb7b8f5ce5d16890ee7669f841a9c69e16",
+      "evidence": "x10/evidence/g3-service-recipe-node.json",
+      "nativeRunIds": [
+        40268333912,
+        40268338245
+      ],
+      "nativeJobIds": [
+        121395545645,
+        121395574674
+      ],
+      "actualPRMergeCheckout": "2e4fb5e2b7a10dab545652795f5cc785f8cc1cea",
+      "auditConsistent": true,
+      "factualReadbackProofCount": 52,
+      "factualReadbackIsRuntimePassCount": false,
+      "bothExactNativeWorkflowsSuccessful": false,
+      "implementationAccepted": false,
+      "nativeGroupsEach": {
+        "total": 20,
+        "passed": 19
+      },
+      "fullAlphaEach": {
+        "total": 76,
+        "pass": 74,
+        "fail": 2
+      },
+      "refusalCode": "service_recipe_invalid",
+      "specificRecordedNodeComparisonKnown": false,
+      "failedGroup": "local-alpha-lifecycle",
+      "managedServiceStep29": "skipped",
+      "actualManagedServiceReport": null,
+      "actualArchiveReport": null,
+      "actualPackageReport": null,
+      "actualBootstrapReport": null,
+      "actualNodeCleanupReport": null,
+      "cleanupAcceptedFromMissingReports": false,
+      "actualFailureContainmentAccepted": false,
+      "prior89ScopedNormalAcceptancePreserved": true,
+      "researchPRRunId": 40268338303,
+      "researchPRJobId": 121395558779,
+      "researchPRActualSuites": [
+        21,
+        7,
+        27,
+        48
+      ],
+      "researchPushRuntimeSkipped": true,
+      "inheritedCLAFailurePreserved": true,
+      "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
+      "fullG3ServiceAccepted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "workflowRerunsRequested": 0,
+      "nativeArtifacts": [
+        {
+          "runId": 40268333912,
+          "artifactId": 12627248604,
+          "zipBytes": 88744,
+          "zipSha256": "a7297bba1e24b1cb8bd27ca838202ee36372a2e74e5ae62a8bd04bbcdb54f77f"
+        },
+        {
+          "runId": 40268338245,
+          "artifactId": 12627503054,
+          "zipBytes": 88737,
+          "zipSha256": "376912228d7516ee3ee7266e6e95b75a8833b308b23509ceb8e3ab4737a002e6"
+        }
+      ],
+      "freshAuditReference": {
+        "bytes": 41008,
+        "sha256": "8c8626c49ed20420689a4c06edf379b63c9738682bb439011d062c4bbefa50ce"
+      }
     }
   ],
   "currentNativeCIFailure": {
@@ -7578,44 +7930,7 @@
     "blocksFullNativeCIAcceptanceForCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
     "candidateExactNativeCIAccepted": true
   },
-  "currentServiceLifecycleCIFailure": {
-    "state": "ACTUAL_NATIVE_FULL_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
-    "implementationCommit": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
-    "implementationTree": "56da17fb7b8f5ce5d16890ee7669f841a9c69e16",
-    "nativeRunIds": [
-      40268333912,
-      40268338245
-    ],
-    "nativeJobIds": [
-      121395545645,
-      121395574674
-    ],
-    "failurePhase": "native_step20_full_alpha_fixture",
-    "failedGroup": "local-alpha-lifecycle",
-    "nativeGroupsEach": {
-      "total": 20,
-      "passed": 19
-    },
-    "fullAlphaEach": {
-      "total": 76,
-      "pass": 74,
-      "fail": 2
-    },
-    "refusalCode": "service_recipe_invalid",
-    "specificRecordedNodeComparisonKnown": false,
-    "managedServiceStep29": "skipped",
-    "serviceReport": null,
-    "packageReport": null,
-    "archiveReport": null,
-    "bootstrapReport": null,
-    "nodeCleanupReport": null,
-    "cleanupAcceptedFromMissingReports": false,
-    "prior89ScopedNormalAcceptancePreserved": true,
-    "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
-    "implementationAccepted": false,
-    "serviceAccepted": false,
-    "productionAccepted": false
-  },
+  "currentServiceLifecycleCIFailure": null,
   "serviceLifecycleCIFailureHistory": [
     {
       "state": "FAILED_BOTH_EXACT_NATIVE_ACTUAL_SERVICE_INSTALL_LIFECYCLE_FAILED",
@@ -8545,10 +8860,90 @@
     }
   ],
   "currentServiceLifecycleCIState": {
-    "state": "EXACT_INSTALLED_RECIPE_NATIVE_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
+    "state": "EXACT_SCOPED_INSTALLED_RECIPE_NATIVE_SERVICE_SUCCESS",
+    "implementationCommit": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+    "implementationTree": "41c05ee5c7d77f88db4c8c0ca48270ee0ab1aa10",
+    "evidence": "x10/evidence/g4-declarative-backup.json",
+    "nativeRunIds": [
+      40270300320,
+      40270304404
+    ],
+    "nativeJobIds": [
+      121401514260,
+      121401530223
+    ],
+    "actualPRMergeCheckout": "02403e1a1de8fd53b5e38442760e6120e1828bbc",
+    "auditConsistent": true,
+    "factualReadbackProofCount": 32,
+    "factualReadbackIsRuntimePassCount": false,
+    "bothExactNativeWorkflowsSuccessful": true,
+    "implementationAccepted": true,
+    "acceptanceScope": "Exact normal installed service recipe, owned Node fixture and managed service only",
+    "nativeGroupsEach": {
+      "total": 20,
+      "passed": 20
+    },
+    "fullAlphaEach": {
+      "total": 78,
+      "pass": 78,
+      "fail": 0,
+      "skipped": 0
+    },
+    "bundleSchemaVersion": 2,
+    "installSchemaVersion": 2,
+    "installedRecipeGenerated": true,
+    "all6ChallengeProofsEach": true,
+    "all14OperatorProofsEach": true,
+    "all14DrainProofsEach": true,
+    "all11StartupProofsEach": true,
+    "all13CleanupFactsEach": true,
+    "combinedTLSSessionsEach": 3,
+    "managerRestartsEach": 1,
+    "journalChecksEach": 3,
+    "privateNodeAndBootstrapRemovedEach": true,
+    "actualFailureContainmentBranchExecuted": false,
+    "actualFailureContainmentAccepted": false,
+    "specific195RecordedNodeComparisonKnown": false,
+    "prior195FailurePreserved": true,
+    "researchPRRunId": 40270304433,
+    "researchPRJobId": 121401537325,
+    "researchPRActualSuites": [
+      21,
+      7,
+      27,
+      48
+    ],
+    "researchPushRuntimeSkipped": true,
+    "inheritedCLAFailurePreserved": true,
+    "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
+    "fullG3ServiceAccepted": false,
+    "fullG4Accepted": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "workflowRerunsRequested": 0,
+    "nativeArtifacts": [
+      {
+        "runId": 40270300320,
+        "artifactId": 12627972671,
+        "zipBytes": 133710,
+        "zipSha256": "1bd4adbcea59df5cd4ae0c20f321bfcac47a289416fdbe5f76a46cf158922e4b"
+      },
+      {
+        "runId": 40270304404,
+        "artifactId": 12628096501,
+        "zipBytes": 133759,
+        "zipSha256": "fa9a632a04858035d68a629276e2f438a4d7fb5e9fa8ca1e4a1cfa0e98cd3b3a"
+      }
+    ],
+    "freshAuditReference": {
+      "bytes": 7160,
+      "sha256": "c1aa857f494aba928ce51898e707b853df5c6619630f4e4b739a1b7e0d312af1"
+    }
+  },
+  "lastHistoricalServiceLifecycleCIFailure": {
+    "state": "ACTUAL_NATIVE_FULL_ALPHA_FAILURE_BEFORE_MANAGED_SERVICE",
     "implementationCommit": "195a3c7fa9bb384569f6bf8d0fb2f3a4dae5eac2",
     "implementationTree": "56da17fb7b8f5ce5d16890ee7669f841a9c69e16",
-    "evidence": "x10/evidence/g3-service-recipe-node.json",
     "nativeRunIds": [
       40268333912,
       40268338245
@@ -8557,12 +8952,8 @@
       121395545645,
       121395574674
     ],
-    "actualPRMergeCheckout": "2e4fb5e2b7a10dab545652795f5cc785f8cc1cea",
-    "auditConsistent": true,
-    "factualReadbackProofCount": 52,
-    "factualReadbackIsRuntimePassCount": false,
-    "bothExactNativeWorkflowsSuccessful": false,
-    "implementationAccepted": false,
+    "failurePhase": "native_step20_full_alpha_fixture",
+    "failedGroup": "local-alpha-lifecycle",
     "nativeGroupsEach": {
       "total": 20,
       "passed": 19
@@ -8574,217 +8965,15 @@
     },
     "refusalCode": "service_recipe_invalid",
     "specificRecordedNodeComparisonKnown": false,
-    "failedGroup": "local-alpha-lifecycle",
     "managedServiceStep29": "skipped",
-    "actualManagedServiceReport": null,
-    "actualArchiveReport": null,
-    "actualPackageReport": null,
-    "actualBootstrapReport": null,
-    "actualNodeCleanupReport": null,
+    "serviceReport": null,
+    "packageReport": null,
+    "archiveReport": null,
+    "bootstrapReport": null,
+    "nodeCleanupReport": null,
     "cleanupAcceptedFromMissingReports": false,
-    "actualFailureContainmentAccepted": false,
     "prior89ScopedNormalAcceptancePreserved": true,
-    "researchPRRunId": 40268338303,
-    "researchPRJobId": 121395558779,
-    "researchPRActualSuites": [
-      21,
-      7,
-      27,
-      48
-    ],
-    "researchPushRuntimeSkipped": true,
-    "inheritedCLAFailurePreserved": true,
     "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
-    "fullG3ServiceAccepted": false,
-    "serviceAccepted": false,
-    "productionAccepted": false,
-    "workflowRerunsRequested": 0,
-    "nativeArtifacts": [
-      {
-        "runId": 40268333912,
-        "artifactId": 12627248604,
-        "zipBytes": 88744,
-        "zipSha256": "a7297bba1e24b1cb8bd27ca838202ee36372a2e74e5ae62a8bd04bbcdb54f77f"
-      },
-      {
-        "runId": 40268338245,
-        "artifactId": 12627503054,
-        "zipBytes": 88737,
-        "zipSha256": "376912228d7516ee3ee7266e6e95b75a8833b308b23509ceb8e3ab4737a002e6"
-      }
-    ],
-    "freshAuditReference": {
-      "bytes": 41008,
-      "sha256": "8c8626c49ed20420689a4c06edf379b63c9738682bb439011d062c4bbefa50ce"
-    }
-  },
-  "lastHistoricalServiceLifecycleCIFailure": {
-    "state": "ACTUAL_PR_NATIVE_CHALLENGE_ADMISSION_FAILURE_NO_SNAPSHOT_CLEANUP_UNCONFIRMED",
-    "implementationCommit": "0420287c19cab4e41a1dc8dac500b39abf2e931a",
-    "implementationTree": "c8d6862c9a731b48d3c9192a8ca392cafcd142cd",
-    "runId": 40215890093,
-    "jobId": 121236862647,
-    "attempt": 1,
-    "workflowConclusion": "failure",
-    "service": {
-      "ok": false,
-      "code": "cleanup_unconfirmed",
-      "phase": "operator_interruption",
-      "operatorNativeChallengeChecks": 0,
-      "operatorNativeChallengeProof": {
-        "nativeRouteObserved": false,
-        "ownedRequestObserved": false,
-        "relayResponseMatched": false,
-        "candidateBindingMatched": false,
-        "authorityReobservedBeforeSignal": false,
-        "ownedChallengeClosed": false
-      },
-      "operatorInterruptionContainment": {
-        "attempted": false,
-        "operatorAbsent": false,
-        "holdClosed": false,
-        "snapshotRevalidated": false,
-        "locksRetired": false,
-        "recoveryVerified": false,
-        "completed": false,
-        "disposition": "no_snapshot"
-      },
-      "operatorHoldDiagnostics": {
-        "observationCount": 0,
-        "observationsTruncated": false,
-        "firstRefusal": null,
-        "observations": []
-      },
-      "operatorInterruptionChecks": 0,
-      "operatorInterruptionProof": {
-        "candidateProbeHeld": false,
-        "pendingReloadObserved": false,
-        "lastConfirmedPreserved": false,
-        "sameServiceObserved": false,
-        "ownedOperatorTerminated": false,
-        "staleLocksPreserved": false,
-        "lockedRecoveryRefused": false,
-        "exactLockRemovalConfirmed": false,
-        "explicitRollbackObserved": false,
-        "pendingCleared": false,
-        "restoredContentVerified": false,
-        "noPostReplay": false,
-        "sameServiceAfterRecovery": false,
-        "repeatedRecoveryIdempotent": false
-      },
-      "controlledSlowDrainChecks": 0,
-      "controlledSlowDrainProof": {
-        "clientPaused": false,
-        "originResponseHeld": false,
-        "sameSessionObserved": false,
-        "managerStopPending": false,
-        "nativeGroupLiveDuringStop": false,
-        "unitDeactivatingObserved": false,
-        "incompleteResponseObserved": false,
-        "payloadCompleted": false,
-        "tlsVerified": false,
-        "managerStopCompleted": false,
-        "launcherExited": false,
-        "nativeGroupsAbsent": false,
-        "listeningPortsClosed": false,
-        "controlSocketAbsent": false
-      },
-      "failedStartChecks": 1,
-      "failedStartProof": {
-        "unhealthyReadinessObserved": true,
-        "managerRefused": true,
-        "hookExitObserved": true,
-        "bindingAbsent": true,
-        "launcherExited": true,
-        "nativeGroupsAbsent": true,
-        "listeningPortsClosed": true,
-        "controlSocketAbsent": true,
-        "failedSessionStopped": true,
-        "managerResetConfirmed": true,
-        "healthyRestartFresh": true
-      },
-      "nativeSessionsStarted": 3,
-      "nativeSessionsStopped": 2,
-      "explicitReadinessPasses": 3,
-      "proxyBodyChecks": 3,
-      "uploadChecks": 3,
-      "streamChecks": 3,
-      "managerRestartCommands": 1,
-      "completedManagerRestarts": 1,
-      "restartProof": {
-        "oldLauncherExited": true,
-        "oldNativeGroupsAbsent": true,
-        "freshSession": true,
-        "freshInvocation": true
-      },
-      "journalChecks": 3,
-      "journalRecordsObserved": 99,
-      "journalRunningMarkers": 3,
-      "downstreamTLSActivated": true,
-      "downstreamTLSSessionChecks": 3,
-      "downstreamTLSBodyChecks": 6,
-      "downstreamTLSCertificateChecks": 12,
-      "downstreamTLSWrongCARefusals": 3,
-      "downstreamTLSWrongNameRefusals": 3,
-      "upstreamTLSActivated": true,
-      "upstreamTLSSessionChecks": 3,
-      "upstreamTLSWrongCARefusals": 1,
-      "upstreamTLSWrongNameRefusals": 1,
-      "upstreamTLSPlaintextRefusals": 1,
-      "upstreamTLSRollbackChecks": 3,
-      "upstreamTLSCandidate502Checks": 3,
-      "upstreamTLSNoPostReplayChecks": 3,
-      "runtimeUnitRemoved": false,
-      "cleanup": {
-        "managerStopped": false,
-        "launcherExited": false,
-        "nativeGroupsAbsent": false,
-        "listeningPortsClosed": false,
-        "controlSocketAbsent": false,
-        "downstreamTLSPortClosed": false,
-        "runtimeLinkAbsent": false,
-        "upstreamTLSPortClosed": true,
-        "readinessRelayPortClosed": true,
-        "upstreamTLSOriginClosed": true,
-        "readinessRelayClosed": true,
-        "appSocketsRemaining": 0,
-        "installationRemoved": false,
-        "temporaryRootRemoved": false
-      },
-      "archiveSha256": "ad2041a3be2453a7db2190d333a236a269f8196d272833d9eb43025a945669fb",
-      "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
-      "sourceCommit": "607c46370faf9423a3e5dbf7fb84769fbc0f6de4",
-      "primaryFailure": {
-        "phase": "operator_interruption",
-        "subphase": "not_applicable",
-        "code": "origin_challenge_identity",
-        "systemErrorClass": "unknown"
-      },
-      "cleanupFailures": [
-        {
-          "stage": "unit_cleanup",
-          "code": "unit_stop_unconfirmed"
-        }
-      ],
-      "cleanupFailureCount": 1,
-      "cleanupFailuresTruncated": false
-    },
-    "privateNodeCleanupReceiptPresent": false,
-    "bootstrap": {
-      "ok": false,
-      "stage": "actual_service",
-      "code": "bootstrap_stage_failed",
-      "runtimeRemoved": false,
-      "temporaryRootRemoved": false,
-      "serviceAccepted": false,
-      "productionAccepted": false,
-      "subprocessOutputsPublished": false
-    },
-    "exactHistoricalAdmissionPredicateKnown": false,
-    "failureContainmentCompleted": false,
-    "finalOwnedCleanupConfirmed": false,
-    "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
-    "unconfirmedFlagsProveObservedPresence": false,
     "implementationAccepted": false,
     "serviceAccepted": false,
     "productionAccepted": false

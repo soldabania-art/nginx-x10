@@ -343,3 +343,50 @@ revocation or completed old-worker exit. Status is not a continuous TLS check.
 installed/extracted loopback path. A local source-present test remains distinct
 from independent nonroot Node22 acceptance from a permanent published package.
 The actual user service, permanent release and Production V1 gates remain open.
+
+
+## Declarative backup and fresh restore foundation — 26 October 2026
+
+The installed `backup --output ABSOLUTE_FILE` command exports only the current
+last-confirmed controller input and the two declared installation ports. Every
+registered source session must be prepared or cleanly stopped, with unchanged
+installed/controller records, no pending operation and no live owned native
+process. An unknown or faulted source is refused. The source stays unchanged.
+
+Choose an absent absolute output outside the installation, directly inside an
+owned mode0700 directory with safe canonical ancestors. Publication creates a
+mode0600 regular file without overwriting an existing path. Treat its contents
+as sensitive configuration. The finite command result contains a byte count and
+file hash; consistency hashes are not an authentication signature or encryption.
+A late publication/directory-sync error can leave a completed private output;
+inspect it rather than deleting or retrying blindly after an unknown result.
+
+Restore uses the source checkout or checked extracted bundle:
+`node install.mjs install --prefix NEW_ABSOLUTE --restore ABSOLUTE_FILE`.
+For a source checkout, use `node x10/alpha/cli.mjs install` with the same options
+and the normal checked build inputs. The target prefix must not exist. Do not
+supply `--port`, `--health-port` or `--upstream-port`: restore retains the declared
+ports and exact candidate input without automatic path/port remapping.
+
+The input file must be owned0600, singly linked, bounded to2MiB, canonical JSON
+with the declared schema and valid consistency records. Unknown/duplicate keys,
+unsupported versions, bad hashes, links, unsafe modes and changed read identities
+are refused. The optional controller `https` object is unsupported by this
+foundation; certificates and private keys are not exported or restored. Restore
+only configuration trusted by the local operator: native `-t` parses supplied
+directives and may open referenced external files. A consistency checksum does
+not make arbitrary configuration safe.
+
+A successful restore creates new installation/session/controller identities,
+records the target's checked package, Node and host-library identities, and runs
+native `-t`. It leaves a fresh prepared installation with null binding. It does
+not start a daemon, bind health, test readiness or activate the service. It does
+not transfer old process IDs, namespace identities, history, pending state,
+locks, binary packages, Node binaries or dependency files. External files or
+paths referenced by `serverBody` are not copied or rewritten; native `-t`
+validates the target's available inputs but does not prove application health.
+
+Use the ordinary explicit run/bind or supported service path only after target
+validation. This foundation is not package upgrade/downgrade, a full backup of
+application data, portable TLS recovery, authenticated disaster recovery or V1.
+Exact resulting native and restored-service CI remains pending in the checkpoint.

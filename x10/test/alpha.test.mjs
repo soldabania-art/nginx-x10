@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { digest } from '../alpha/runtime.mjs';
 import './alpha-runtime.test.mjs';
 import '../alpha/prepare-run.test.mjs';
+import '../alpha/backup.test.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url)), source = path.join(root, 'x10/alpha/cli.mjs');
 const manifestFile = path.resolve(process.env.X10_BUILD_MANIFEST || path.join(root, 'x10/.build/manifest.json'));
@@ -193,6 +194,59 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
       assert.equal((await recipeNodeCommand(recipeNode,targetLauncher, 'apply', '--file', path.join(target, 'examples/candidate-b.json'))).code, 0);
       await observedBody(port, 'NGINX X10 updated local alpha\n'); assert.equal((await recipeNodeCommand(recipeNode,targetLauncher, 'stop')).code, 0);
       await until(() => child.exitCode !== null || child.signalCode !== null); assert.equal(child.exitCode, 0, output); launchers.delete(child); nativeGroups.delete(pid);
+      // Actual supported-host native -t restore proof. The source has served
+      // and confirmed B, but a declarative restore creates an unbound fresh
+      // installation; it does not copy process/controller history or start it.
+      const sourceRegistry = JSON.parse(await readFile(path.join(target, '.alpha-registry.json'), 'utf8'));
+      const sourceSession = path.join(target, 'runs', sourceRegistry.current);
+      const preservedPaths = ['.alpha-install.json', '.alpha-registry.json',
+        `runs/${sourceRegistry.current}/lifecycle.json`, `runs/${sourceRegistry.current}/.x10-control/state.json`,
+        `runs/${sourceRegistry.current}/.x10-control/history.jsonl`];
+      const preservedBytes = await Promise.all(preservedPaths.map(relative => readFile(path.join(target, relative))));
+      const sourceStatus = await recipeNodeCommand(recipeNode, targetLauncher, 'status');
+      assert.equal(sourceStatus.code, 0, sourceStatus.stdout); assert.equal(sourceStatus.json.pending, null);
+      const sourceRevision = JSON.parse(await readFile(path.join(sourceSession, '.x10-control/revisions', `${sourceStatus.json.lastConfirmedRevision}.json`), 'utf8'));
+      const backupFile = path.join(parent, 'stopped-declarative-backup.json');
+      const backedUp = await recipeNodeCommand(recipeNode, targetLauncher, 'backup', '--output', backupFile);
+      assert.equal(backedUp.code, 0, backedUp.stdout); assert.equal(backedUp.json.outcome, 'declarative_backup_created');
+      assert.equal(backedUp.json.nativeStarted, false); assert.equal(backedUp.json.serviceAccepted, false); assert.equal(backedUp.json.productionAccepted, false);
+      const backupBytes = await readFile(backupFile), backupValue = JSON.parse(backupBytes);
+      assert.equal((await lstat(backupFile)).mode & 0o7777, 0o600); assert.equal(digest(backupBytes), backedUp.json.sha256);
+      assert.deepEqual(backupValue.source, { installationId: installedRecord.installationId, session: sourceRegistry.current, revision: sourceRevision.id });
+      assert.deepEqual(backupValue.input, sourceRevision.input); assert.equal(backupValue.inputSha256, sourceRevision.inputSha256);
+      assert.equal(backupValue.port, port); assert.equal(backupValue.healthPort, healthPort);
+      const restoredTarget = path.join(parent, 'restored-install'), restoredLauncher = path.join(restoredTarget, 'bin/x10');
+      const restored = await recipeNodeCommand(recipeNode, installer, 'install', '--prefix', restoredTarget, '--restore', backupFile);
+      assert.equal(restored.code, 0, restored.stdout); assert.equal(restored.json.declarativeRestored, true);
+      for (const key of ['nativeStarted', 'readinessChecked', 'serviceAccepted', 'productionAccepted']) assert.equal(restored.json[key], false);
+      const restoredManifest = JSON.parse(await readFile(path.join(restoredTarget, '.alpha-install.json'), 'utf8'));
+      const restoredRegistry = JSON.parse(await readFile(path.join(restoredTarget, '.alpha-registry.json'), 'utf8'));
+      const restoredSession = path.join(restoredTarget, 'runs', restored.json.session);
+      const restoredLife = JSON.parse(await readFile(path.join(restoredSession, 'lifecycle.json'), 'utf8'));
+      const restoredRevision = JSON.parse(await readFile(path.join(restoredSession, '.x10-control/revisions', `${restored.json.revision}.json`), 'utf8'));
+      assert.notEqual(restoredManifest.installationId, installedRecord.installationId); assert.notEqual(restored.json.session, sourceRegistry.current);
+      assert.notEqual(restored.json.revision, sourceRevision.id); assert.deepEqual(restoredRegistry.sessions, [restored.json.session]);
+      assert.equal(restoredRegistry.installationId, restoredManifest.installationId); assert.equal(restoredRegistry.current, restored.json.session);
+      assert.equal(restoredLife.stage, 'prepared'); assert.equal(restoredLife.runtime, null); assert.equal(restoredLife.controlSocket, null);
+      assert.deepEqual(restoredRevision.input, sourceRevision.input); assert.equal(restoredRevision.inputSha256, sourceRevision.inputSha256);
+      assert.equal(restoredRevision.parent, null); assert.equal(restoredRevision.sourceRevision, null);
+      assert.equal(restoredManifest.port, port); assert.equal(restoredManifest.healthPort, healthPort);
+      const restoredStatus = await recipeNodeCommand(recipeNode, restoredLauncher, 'status');
+      assert.equal(restoredStatus.code, 0, restoredStatus.stdout); assert.equal(restoredStatus.json.binding, null); assert.equal(restoredStatus.json.pending, null);
+      assert.equal(restoredStatus.json.lastConfirmedRevision, restored.json.revision); assert.equal(restoredStatus.json.configUnchanged, true);
+      assert.equal(restoredStatus.json.fragmentMatchesLastConfirmed, true); assert.equal(restoredStatus.json.history.entries, 1);
+      const restoredHistory = await recipeNodeCommand(recipeNode, restoredLauncher, 'history');
+      assert.equal(restoredHistory.code, 0, restoredHistory.stdout); assert.equal(restoredHistory.json.records.length, 1);
+      assert.equal(restoredHistory.json.records[0].type, 'initialized_unbound');
+      await assert.rejects(request(port)); await assert.rejects(request(healthPort));
+      assert.equal((await recipeNodeCommand(recipeNode, restoredLauncher, 'uninstall')).code, 0); assert(await absent(restoredTarget));
+      for (let index = 0; index < preservedPaths.length; index++) assert.deepEqual(await readFile(path.join(target, preservedPaths[index])), preservedBytes[index]);
+      assert.deepEqual(await readFile(backupFile), backupBytes); assert.equal(nativeGroups.size, 0); assert.equal(launchers.size, 0);
+      t.diagnostic(JSON.stringify({ suite: 'x10-declarative-restore', profile: 'extracted-bundle-native-syntax-unbound',
+        stoppedConfirmedSource: true, privateBackupCreated: true, freshInstallation: true, freshSession: true, freshRevision: true,
+        exactInputRestored: true, portsPreserved: true, freshHistory: true, bindingAbsent: true, nativeStarted: false,
+        readinessChecked: false, listeningPortsClosed: true, sourcePreserved: true, freshInstallationRemoved: true,
+        serviceAccepted: false, productionAccepted: false }));
       // Interrupt the startup path as soon as a fresh session publishes its native PID.
       let interruptedOutput = '', interruptedPid;
       await verifyRecipeNode(recipeNode);

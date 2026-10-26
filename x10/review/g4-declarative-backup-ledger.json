@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-backup-resume-20261026T064053309Z",
+  "sourceBase": "48ac37d90f8df651af715a892c36345b7f9a55d8",
+  "publicationParent": "d6b1f109be8dc220a87ebad22dca95b275bbcaca",
+  "sourceApplicationBase": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+  "coordinationResume": {
+    "previousRunId": "x10-backup-20261026T050655815Z",
+    "previousLeaseCommit": "48ac37d90f8df651af715a892c36345b7f9a55d8",
+    "previousLeaseExpiresAtUTC": "2026-10-26T05:50:55.815Z",
+    "previousPublicationReserveCutoffUTC": "2026-10-26T05:45:55.815Z",
+    "clockObservedAfterPauseUTC": "2026-10-26T06:39:00Z",
+    "clockObservationPrecision": "minute from coordinator readback",
+    "unpublishedCandidateTree": "5cb23ff2c72760d98be0652abaae3d5377cafedb",
+    "unpublishedTreeWasCreated": true,
+    "implementationCommitCreatedUnderExpiredLease": false,
+    "refUpdateAttemptedUnderExpiredLease": false,
+    "guardStoppedBeforeImplementationCommit": true,
+    "priorRemoteRefRemainedAtLeaseCommit": true,
+    "oldLocalGitFailure": {
+      "classification": "git_repository_backing_directory_unavailable",
+      "exitCode": 128,
+      "rawErrorAndHostPathPublished": false
+    },
+    "freshIsolatedCloneCreated": true,
+    "freshCentralAdmissionAndSameSourceInstructionsReread": true,
+    "newCoordinationSourceBase": "48ac37d90f8df651af715a892c36345b7f9a55d8",
+    "unchangedApplicationBase": "eb577ff140b376b68c2cd10984deb736d3a9ed67",
+    "newRunId": "x10-backup-resume-20261026T064053309Z",
+    "newOwner": "codex-coordinator-backup-resume",
+    "newLeaseCommit": "d6b1f109be8dc220a87ebad22dca95b275bbcaca",
+    "newLeaseTree": "a8e5f8c762750b5faff2dcb637df0f332e87c0c7",
+    "newLeaseAcquiredAtUTC": "2026-10-26T06:40:53.309Z",
+    "newLeaseExpiresAtUTC": "2026-10-26T07:24:53.309Z",
+    "frozenThreeSourceFilesCopiedWithoutChangingBytes": true,
+    "freshRootRegressionRequired": true,
+    "rootRegressionRerunUnderNewLease": true,
+    "codeStopAtUTCUnchanged": "2026-10-26T19:17:36.000Z",
+    "causeOfExternalDelayKnown": false,
+    "freshSecurityAttempt": {
+      "outcome": "transient_capacity_unavailable",
+      "newReviewCompleted": false,
+      "boundedRetryRequested": true,
+      "priorSecurityResultsReusedOnlyForIdenticalFrozenSource": true,
+      "coordinatorFinalPrivacyReviewRequired": true
+    }
+  },
+  "scope": "Private declarative backup of a clean stopped/prepared source and fresh unbound installation restore foundation",
+  "files": [
+    {
+      "file": "x10/alpha/cli.mjs",
+      "beforeSha256": "740d234150afaa5683917d459ba4897f79dac51078c9035c4aff75c684e9b6da",
+      "afterSha256": "38d92317731c155adb183eb918b86517a3474f625f2d53e4f39d608da5af68e0",
+      "sourceChange": true,
+      "author": "Assigned alpha implementation/test owners and coordinator integration",
+      "review": "Independent declarative state, output lifetime, strict restore, package compatibility and security review"
+    },
+    {
+      "file": "x10/alpha/backup.test.mjs",
+      "beforeSha256": null,
+      "afterSha256": "924613f975cc6bd25bc1201479792bfb8b414ce5a88126188037dbdf08a2d3fa",
+      "sourceChange": true,
+      "author": "Assigned alpha implementation/test owners and coordinator integration",
+      "review": "Independent declarative state, output lifetime, strict restore, package compatibility and security review"
+    },
+    {
+      "file": "x10/test/alpha.test.mjs",
+      "beforeSha256": "2c6d6a2f7b8d271837d1604f967fe7a27df9b8f88f271db50bda709e45d073a0",
+      "afterSha256": "98fce826439e983ad9b03fe1e11c24299240aa118f13b9378842251b5632e538",
+      "sourceChange": true,
+      "author": "Assigned alpha implementation/test owners and coordinator integration",
+      "review": "Independent declarative state, output lifetime, strict restore, package compatibility and security review"
+    },
+    {
+      "file": "x10/alpha/README.md",
+      "beforeSha256": "9dfcd6a88491b520bca2773b809441a782a77c92f4df41147c3d95b1628aa1c2",
+      "afterSha256": "e7b41e24fd9ddb7791291c69c356568e7fa70a9a00becf2771c3ec2b1ab682f3",
+      "sourceChange": false,
+      "author": "Assigned alpha implementation/test owners and coordinator integration",
+      "review": "Independent declarative state, output lifetime, strict restore, package compatibility and security review"
+    },
+    {
+      "file": "x10/STATUS.md",
+      "beforeSha256": "092ea0299cfd4315d79b8734935ddf50f6dba84dae09f07559373341444dd433",
+      "afterSha256": "263915c50a9dbfa039149c20b018e357871a619ad7610b1453fb0deeb56be1f2",
+      "sourceChange": false,
+      "author": "Assigned alpha implementation/test owners and coordinator integration",
+      "review": "Independent declarative state, output lifetime, strict restore, package compatibility and security review"
+    },
+    {
+      "file": "x10/PLAN.md",
+      "beforeSha256": "464e5d03c22ebe887ab77965860d1907f71b746728a1a92f4c1e2f6a96aef5ba",
+      "afterSha256": "53d321c3a5277ec786e6f01f3dd9f7135f26252149d1fabc92edf1090e271231",
+      "sourceChange": false,
+      "author": "Assigned alpha implementation/test owners and coordinator integration",
+      "review": "Independent declarative state, output lifetime, strict restore, package compatibility and security review"
+    },
+    {
+      "file": "x10/continuum/BACKGROUND.json",
+      "beforeSha256": "ea0bf369b84356cc5bf08da9d04d982154a6b2b50f7efe7c0875efad52394929",
+      "afterSha256": "08dbdc0c0af95e44cd449912f4e7a106733741a5376eba17746bb750960e90df",
+      "sourceChange": false,
+      "author": "Assigned alpha implementation/test owners and coordinator integration",
+      "review": "Independent declarative state, output lifetime, strict restore, package compatibility and security review"
+    },
+    {
+      "file": "x10/continuation-2026-10-24/GATES.json",
+      "beforeSha256": "76d77cd75dc6a4353ce396494bd6cdc6081f2f283cfdf56955a6ccceb436b558",
+      "afterSha256": "a1f2cde447b5b5a64bf6bc41b849b9734473f4c2dfe83bb33ea7082af3663a42",
+      "sourceChange": false,
+      "author": "Assigned alpha implementation/test owners and coordinator integration",
+      "review": "Independent declarative state, output lifetime, strict restore, package compatibility and security review"
+    },
+    {
+      "file": "x10/evidence/g4-declarative-backup.json",
+      "beforeSha256": null,
+      "afterSha256": "c36c9c30527cc0450bed01c5493eb4baaa005cd08e058f5f32c28c2ffe2575c5",
+      "sourceChange": false,
+      "author": "Assigned alpha implementation/test owners and coordinator integration",
+      "review": "Independent declarative state, output lifetime, strict restore, package compatibility and security review"
+    }
+  ],
+  "ledgerSelfHashExcluded": true,
+  "ledgerFilesExcludedFromHashes": [
+    "x10/review/g4-declarative-backup-ledger.json"
+  ],
+  "candidateCommitLocator": "Current publication commit; exact resulting CI required",
+  "sourceBindings": {
+    "x10/alpha/cli.mjs": {
+      "beforeSha256": "740d234150afaa5683917d459ba4897f79dac51078c9035c4aff75c684e9b6da",
+      "afterSha256": "38d92317731c155adb183eb918b86517a3474f625f2d53e4f39d608da5af68e0",
+      "bytes": 64755
+    },
+    "x10/alpha/backup.test.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "924613f975cc6bd25bc1201479792bfb8b414ce5a88126188037dbdf08a2d3fa",
+      "bytes": 28464
+    },
+    "x10/test/alpha.test.mjs": {
+      "beforeSha256": "2c6d6a2f7b8d271837d1604f967fe7a27df9b8f88f271db50bda709e45d073a0",
+      "afterSha256": "98fce826439e983ad9b03fe1e11c24299240aa118f13b9378842251b5632e538",
+      "bytes": 76288
+    }
+  },
+  "releaseContractUnchanged": {
+    "path": "x10/release/RELEASE-CONTRACT.md",
+    "sha256": "fce36f6ff9575e50042d473eea52a361730216a2155da2c687feea7b9d482d6a"
+  },
+  "releaseProfileUnchanged": {
+    "path": "x10/release/profile.json",
+    "sha256": "9604e00e0dfb68e437dbc967049d3b6816580a8a1d75d96387e84169cb4f9457"
+  },
+  "protectedRuntimeBindings": {
+    "x10/alpha/runtime.mjs": {
+      "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51",
+      "bytes": 7540
+    },
+    "x10/service/user-unit.mjs": {
+      "sha256": "ae8e34acd2d16a0bbe04884b92d692c2e7e3c76c632c6a26eaa1b0cd38d65d9f",
+      "bytes": 9481
+    },
+    "x10/release/verify-alpha-archive.mjs": {
+      "sha256": "df213e76264fd7048abe5fdb790c158f7758cac7806d186db9b0fdf73d68094a",
+      "bytes": 9209
+    },
+    "x10/release/verify-alpha-archive.test.mjs": {
+      "sha256": "2eaf952425734037546a07562edce7d12e6dbada54d9ffa1914ec34befe88ac1",
+      "bytes": 13721
+    },
+    "x10/service/user-unit.test.mjs": {
+      "sha256": "7c3d77eda6f28cd5e547ca6685ececf40c867fe71ee123bb78c882cf618b4f0e",
+      "bytes": 17599
+    },
+    "x10/service/lifecycle-check.mjs": {
+      "sha256": "1364daf1c1399b39706dae34fedee7134a5bc4857080012ab51a8a952d37f7fe",
+      "bytes": 128375
+    },
+    "x10/service/lifecycle-check.test.mjs": {
+      "sha256": "c57523c51e4b9597384589d2d813f96137d5654e19bf6ac2b2f57d0b1a33bab1",
+      "bytes": 141624
+    },
+    "x10/service/verified-node.mjs": {
+      "sha256": "f3c6432ebe4918a08638cf0f5f50572449fec666dbdc1edfa4c830f5e751e187",
+      "bytes": 27244
+    },
+    "x10/service/verified-node.test.mjs": {
+      "sha256": "63651af37c04d94284783c2931169d38bbec97100c5ffa93da189fd741b189a7",
+      "bytes": 37151
+    },
+    ".github/workflows/x10-native.yml": {
+      "sha256": "c86a0e5ed609f415e2831a055657af7313bcda944923d88b9777e55d2ec2a173",
+      "bytes": 13975
+    }
+  },
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "alphaRuntimeChanged": true,
+  "serviceRecipeChanged": false,
+  "acceptanceHarnessChanged": false,
+  "alphaTestFixtureChanged": true,
+  "dependencyCleanupReceiptProfileChanged": false,
+  "releaseContractNarrowed": false,
+  "ownerWorkWindowUnchanged": true,
+  "ownerWorkPolicyUnchanged": true,
+  "automationAndMoneyUnchanged": true,
+  "priorAcceptanceHistoryPreserved": true,
+  "priorServiceFailuresRetained": true,
+  "priorEbNormalInstalledRecipeImplementationAccepted": true,
+  "prior195ImplementationAccepted": false,
+  "specific195HistoricalNodeComparisonKnown": false,
+  "priorLocalOperatorFixtureCleanupConfirmed": false,
+  "freshRestoredNativeServiceAccepted": false,
+  "actualServiceAccepted": false,
+  "productionAccepted": false
+}

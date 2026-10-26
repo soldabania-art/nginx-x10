@@ -160,6 +160,147 @@ async function createSession(prefix, manifest, seed) {
   await saveRecord(path.join(target, 'lifecycle.json'), lifecycle); return { session, initial, lifecycle };
 }
 
+// Declarative backup foundation. These records contain sensitive configuration,
+// not executable/package/session state, and their hashes are not signatures.
+function backupInput(value, port) {
+  const keys = ['serverBody', 'healthURL'], explicit = Object.hasOwn(value || {}, 'healthExpectedStatus');
+  if (explicit) keys.push('healthExpectedStatus', 'healthExpectedBody');
+  if (!value || typeof value !== 'object' || Array.isArray(value)
+      || !same(Object.keys(value), keys) || typeof value.serverBody !== 'string'
+      || Buffer.byteLength(value.serverBody) > 1024 * 1024
+      || Buffer.from(value.serverBody, 'utf8').toString('utf8') !== value.serverBody
+      || typeof value.healthURL !== 'string'
+      || !/^http:\/\/127\.0\.0\.1:[1-9][0-9]{0,4}\/[A-Za-z0-9/_.~%-]*$/.test(value.healthURL))
+    fail('backup_unsupported', 'Only the declared HTTP candidate input profile is supported');
+  let healthPort; try { healthPort = Number(new URL(value.healthURL).port); }
+  catch { fail('backup_unsupported', 'Declarative readiness URL is outside the supported HTTP profile'); }
+  if (!Number.isInteger(healthPort) || healthPort < 1 || healthPort > 65535 || healthPort === port
+      || (explicit && (!Number.isInteger(value.healthExpectedStatus) || value.healthExpectedStatus < 200
+        || value.healthExpectedStatus > 299 || typeof value.healthExpectedBody !== 'string'
+        || Buffer.byteLength(value.healthExpectedBody) > 4096
+        || Buffer.from(value.healthExpectedBody, 'utf8').toString('utf8') !== value.healthExpectedBody)))
+    fail('backup_unsupported', 'Declarative readiness input is outside the supported HTTP profile');
+  return value;
+}
+function backupDocument(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)
+      || !same(Object.keys(value), ['schemaVersion', 'kind', 'source', 'port', 'healthPort', 'input', 'inputSha256', 'sha256'])
+      || value.schemaVersion !== 1 || value.kind !== 'nginx-x10-declarative-backup'
+      || !value.source || !same(Object.keys(value.source), ['installationId', 'session', 'revision'])
+      || Object.values(value.source).some(v => typeof v !== 'string' || !/^[a-f0-9]{32}$/.test(v))
+      || ![value.port, value.healthPort].every(p => Number.isInteger(p) && p >= 1024 && p <= 65535)
+      || value.port === value.healthPort)
+    fail('backup_invalid', 'Declarative backup shape is invalid');
+  backupInput(value.input, value.port);
+  const { sha256, ...body } = value;
+  if (!/^[a-f0-9]{64}$/.test(sha256 || '') || value.inputSha256 !== digest(JSON.stringify(value.input))
+      || sha256 !== digest(JSON.stringify(body))) fail('backup_invalid', 'Declarative backup consistency checks failed');
+  return value;
+}
+async function backupParent(parent) {
+  await canonical(parent); const leaf = await owned(parent, true, true);
+  if ((leaf.mode & 0o7777) !== 0o700) fail('backup_path', 'Backup parent must have mode0700');
+  let current = parent, count = 0;
+  for (;;) {
+    if (++count > 128) fail('backup_path', 'Backup ancestor bound exceeded');
+    const stat = await lstat(current), sticky = (stat.mode & 0o1000) && (stat.mode & 0o002);
+    if (!stat.isDirectory() || ![0, process.getuid()].includes(stat.uid)
+        || ((stat.mode & 0o022) && !sticky)) fail('backup_path', 'Backup ancestor permissions are unsafe');
+    if (current === '/') break; current = path.dirname(current);
+  }
+  return { dev: leaf.dev, ino: leaf.ino, uid: leaf.uid, mode: leaf.mode };
+}
+const backupFileIdentity = stat => ({ dev: stat.dev, ino: stat.ino, uid: stat.uid, mode: stat.mode,
+  nlink: stat.nlink, size: stat.size, mtimeMs: stat.mtimeMs, ctimeMs: stat.ctimeMs });
+async function readBackup(file) {
+  if (!simple(file)) fail('backup_path', 'Backup input requires a simple absolute path');
+  const parent = await backupParent(path.dirname(file)), selected = await lstat(file), limit = 2 * 1024 * 1024;
+  if (!selected.isFile() || selected.uid !== process.getuid() || selected.nlink !== 1
+      || (selected.mode & 0o7777) !== 0o600 || selected.size < 1 || selected.size > limit)
+    fail('backup_path', 'Backup input must be one owned0600 bounded regular file');
+  const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+  try {
+    const before = await handle.stat();
+    if (!before.isFile() || before.uid !== process.getuid() || before.nlink !== 1
+        || (before.mode & 0o7777) !== 0o600 || before.size < 1 || before.size > limit
+        || !same(backupFileIdentity(selected), backupFileIdentity(before)))
+      fail('backup_path', 'Backup input must be one owned0600 bounded regular file');
+    const bytes = Buffer.alloc(limit + 1); let length = 0;
+    try {
+      while (length < bytes.length) { const result = await handle.read(bytes, length, bytes.length - length, null); if (!result.bytesRead) break; length += result.bytesRead; }
+      const after = await handle.stat();
+      if (length !== before.size || !same(backupFileIdentity(before), backupFileIdentity(after))
+          || !same(backupFileIdentity(after), backupFileIdentity(await lstat(file)))
+          || !same(parent, await backupParent(path.dirname(file)))) fail('backup_path', 'Backup input identity changed while reading');
+      const selectedBytes = bytes.subarray(0, length), text = selectedBytes.toString('utf8'); let value;
+      if (!Buffer.from(text, 'utf8').equals(selectedBytes)) fail('backup_invalid', 'Backup must use well-formed UTF-8 bytes');
+      try { value = JSON.parse(text); } catch { fail('backup_invalid', 'Backup JSON is invalid'); }
+      backupDocument(value);
+      if (encode(value) !== text) fail('backup_invalid', 'Backup must use its exact canonical JSON encoding');
+      return value;
+    } finally { bytes.fill(0); }
+  } finally { await handle.close(); }
+}
+async function publishBackup(context, output, value, recheck) {
+  if (!simple(output) || output === context.prefix || output.startsWith(`${context.prefix}/`))
+    fail('backup_path', 'Choose a new backup file outside the installation');
+  backupDocument(value);
+  const parentPath = path.dirname(output), parent = await backupParent(parentPath), bytes = Buffer.from(encode(value));
+  if (bytes.length > 2 * 1024 * 1024) { bytes.fill(0); fail('backup_invalid', 'Backup exceeds its bounded file profile'); }
+  const temporary = path.join(parentPath, `.x10-backup-${id()}`);
+  let handle;
+  try {
+    handle = await open(temporary, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
+    await handle.writeFile(bytes); await handle.sync();
+    const stat = await handle.stat();
+    if (!stat.isFile() || stat.uid !== process.getuid() || stat.nlink !== 1 || (stat.mode & 0o7777) !== 0o600 || stat.size !== bytes.length)
+      fail('backup_path', 'Private backup temporary identity is invalid');
+    await recheck();
+    if (!same(parent, await backupParent(parentPath))
+        || !same(backupFileIdentity(stat), backupFileIdentity(await lstat(temporary)))) fail('backup_path', 'Backup publication identity changed');
+    // link is an atomic, non-overwriting publication. Same-UID cooperative
+    // operation is required: this is not an openat-style adversarial fence.
+    await link(temporary, output); await rm(temporary);
+    const published = await lstat(output);
+    if (published.dev !== stat.dev || published.ino !== stat.ino || published.uid !== stat.uid
+        || published.nlink !== 1 || (published.mode & 0o7777) !== 0o600 || published.size !== bytes.length)
+      fail('backup_path', 'Published backup identity is unconfirmed');
+    const directory = await open(parentPath, constants.O_RDONLY | constants.O_DIRECTORY);
+    try { await directory.sync(); } finally { await directory.close(); }
+    return { ok: true, outcome: 'declarative_backup_created', bytes: bytes.length, sha256: digest(bytes),
+      nativeStarted: false, serviceAccepted: false, productionAccepted: false };
+  } finally { bytes.fill(0); if (handle) { await handle.close(); await rm(temporary, { force: true }); } }
+}
+async function backup(context, output) {
+  const snapshot = async () => {
+    let current;
+    for (const session of context.registry.sessions) {
+      const life = await lifecycle(context, session);
+      if (!['prepared', 'stopped'].includes(life.stage)) fail('backup_requires_stopped', 'Every session must be prepared or cleanly stopped');
+      if (life.stage === 'prepared' && (life.runtime !== null || life.controlSocket !== null))
+        fail('runtime_identity', 'Prepared backup source must be unbound and unstarted');
+      await stopped(context, life); const status = await sessionStatus(context, life);
+      if (session === context.registry.current) current = { life, status };
+    }
+    const { life, status } = current, revision = await load(path.join(life.prefix, '.x10-control/revisions', `${status.result.lastConfirmedRevision}.json`));
+    const { recordSha256, ...body } = revision;
+    if (revision.id !== status.result.lastConfirmedRevision || digest(JSON.stringify(body)) !== recordSha256
+        || digest(JSON.stringify(revision.input)) !== revision.inputSha256) fail('alpha_integrity', 'Confirmed backup input integrity failed');
+    backupInput(revision.input, context.manifest.port);
+    const bodyValue = { schemaVersion: 1, kind: 'nginx-x10-declarative-backup',
+      source: { installationId: context.manifest.installationId, session: life.session, revision: revision.id },
+      port: context.manifest.port, healthPort: context.manifest.healthPort, input: revision.input, inputSha256: revision.inputSha256 };
+    return backupDocument({ ...bodyValue, sha256: digest(JSON.stringify(bodyValue)) });
+  };
+  const value = await snapshot();
+  return publishBackup(context, output, value, async () => {
+    const fresh = await installed(context.prefix);
+    if (!same(fresh.manifest, context.manifest) || !same(fresh.registry, context.registry)
+        || !same(value, await snapshot())) fail('operator_conflict', 'Backup source changed before publication');
+  });
+}
+// End declarative backup foundation.
+
 export async function install(values) {
   if (process.platform !== 'linux' || Number(process.versions.node.split('.')[0]) < 22) fail('unsupported', 'Linux and Node 22+ are required');
   const prefix = values.prefix;
@@ -169,7 +310,10 @@ export async function install(values) {
   const sticky = (parent.mode & 0o1000) && (parent.mode & 0o002);
   if (!parent.isDirectory() || (parent.uid !== process.getuid() && !sticky) || ((parent.mode & 0o022) && !sticky)) fail('unsafe_prefix', 'Parent must be safely owned or a sticky temporary directory');
   if (await exists(prefix)) fail('already_exists', 'Install prefix must not exist');
-  const port = Number(values.port ?? 9080), healthPort = Number(values['health-port'] ?? 9081);
+  const restored = values.restore === undefined ? null : await readBackup(values.restore);
+  if (restored && ['port', 'health-port', 'upstream-port'].some(key => values[key] !== undefined))
+    fail('arguments', 'Restore preserves declared ports; omit port and upstream options');
+  const port = Number(restored?.port ?? values.port ?? 9080), healthPort = Number(restored?.healthPort ?? values['health-port'] ?? 9081);
   if (![port, healthPort].every(p => Number.isInteger(p) && p >= 1024 && p <= 65535) || port === healthPort) fail('invalid_port', 'Distinct unprivileged ports 1024..65535 are required');
   let upstreamPort = null;
   if (values['upstream-port'] !== undefined) {
@@ -180,7 +324,7 @@ export async function install(values) {
       fail('invalid_upstream_port', 'Upstream requires a distinct unprivileged decimal loopback port 1024..65535');
     upstreamPort = Number(value);
   }
-  const seed = upstreamPort === null ? demo(healthPort) : application(upstreamPort);
+  const seed = restored ? restored.input : upstreamPort === null ? demo(healthPort) : application(upstreamPort);
   const bundled = await exists(path.join(root, 'bundle.json'));
   if (bundled && (values.manifest || values.binary)) fail('arguments', 'Bundle installation uses its own checked payload; omit --manifest/--binary');
   const built = bundled ? await bundleBuild() : await sourceBuild(values.manifest || process.env.X10_BUILD_MANIFEST || path.join(root, 'x10/.build/manifest.json'), values.binary || process.env.X10_NGINX_BINARY);
@@ -205,7 +349,7 @@ export async function install(values) {
       await writeFile(path.join(prefix, item.relative), item.bytes, { mode: item.mode, flag: 'wx' });
       immutable[item.relative] = { sha256: digest(item.bytes), bytes: item.bytes.length, mode: item.mode.toString(8).padStart(4, '0') };
     }
-    const candidate = upstreamPort === null
+    const candidate = restored ? { ...seed } : upstreamPort === null
       ? { ...demo(healthPort), serverBody: 'location = / { return 200 "NGINX X10 updated local alpha\\n"; }' }
       : { ...seed, serverBody: `${seed.serverBody}\nadd_header X-X10-Example "application-b" always;` };
     await writeFile(path.join(prefix, 'examples/candidate-b.json'), encode(candidate), { mode: 0o400 });
@@ -216,13 +360,14 @@ export async function install(values) {
       sourceDiffSha256: built.build.sourceDiffSha256, compiledModules: built.build.compiledModules, dependencyVersionsFromHeaders: built.build.dependencyVersionsFromHeaders,
       dependencies: built.dependencies, runtimeNote: 'Dynamically linked host-specific local build, not a static or reproducible-build attestation.',
       nodeRuntime: { version: process.version, executable: await realpath(process.execPath), sha256: digest(await readFile(process.execPath)) },
-      healthNote: upstreamPort === null
+      healthNote: restored ? 'Restored declarative HTTP input only; native syntax checked, no application health or traffic accepted. External files and services are not backed up.' : upstreamPort === null
         ? 'Native demo self-check only; application health is not established.'
         : 'Configured application readiness via loopback HTTP /ready with expected HTTP 200 and exact ready newline body; installation has not checked application health.' };
     await saveRecord(path.join(prefix, '.alpha-install.json'), manifest);
     const prepared = await createSession(prefix, manifest, seed);
     await saveRecord(path.join(prefix, '.alpha-registry.json'), { schemaVersion: 1, installationId: manifest.installationId, current: prepared.session, sessions: [prepared.session] });
-    return { ok: true, outcome: 'installed', prefix, launcher: path.join(prefix, 'bin/x10'), session: prepared.session, sessionPrefix: prepared.lifecycle.prefix, revision: prepared.initial.revision, port, healthPort, controlApiEnabled: false, healthNote: manifest.healthNote };
+    return { ok: true, outcome: 'installed', prefix, launcher: path.join(prefix, 'bin/x10'), session: prepared.session, sessionPrefix: prepared.lifecycle.prefix, revision: prepared.initial.revision, port, healthPort, controlApiEnabled: false, healthNote: manifest.healthNote,
+      ...(restored ? { declarativeRestored: true, nativeStarted: false, readinessChecked: false, serviceAccepted: false, productionAccepted: false } : {}) };
   } catch (error) { error.message += `; incomplete private prefix preserved for inspection: ${prefix}`; throw error; }
 }
 
@@ -545,16 +690,24 @@ export async function main(argv, installedPrefix = null) {
   const oldMask = process.umask(0o077);
   try {
     const { values, positionals } = parseArgs({ args: argv, allowPositionals: true, options: Object.fromEntries([
-      ...['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'output', 'file', 'revision', 'control-socket', 'control-address', 'timeout-ms'].map(name => [name, { type: 'string' }]),
+      ...['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'output', 'file', 'revision', 'control-socket', 'control-address', 'timeout-ms', 'restore'].map(name => [name, { type: 'string' }]),
       ['auto-readiness', { type: 'boolean' }], ['human', { type: 'boolean' }], ['help', { type: 'boolean', short: 'h' }],
     ]) });
     const [command] = positionals;
     if (command === 'service-unit' && (argv[0] !== 'service-unit' || ![1, 2].includes(argv.length)
         || (argv.length === 2 && argv[1] !== '--auto-readiness')))
       fail('arguments', 'Use service-unit [--auto-readiness]');
-    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 service-unit [--auto-readiness] | prepare-run | run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
+    if (command === 'backup' && (argv.length !== 3 || argv[0] !== 'backup' || argv[1] !== '--output' || values.output !== argv[2]))
+      fail('arguments', 'Use backup --output NEW_ABSOLUTE_FILE');
+    if (values.restore !== undefined) {
+      const flags = argv.filter(value => value.startsWith('--')).map(value => value.split('=')[0]);
+      if (command !== 'install' || positionals.length !== 1 || values.help || new Set(flags).size !== flags.length
+          || ['port', 'health-port', 'upstream-port'].some(key => values[key] !== undefined))
+        fail('arguments', 'Use install --prefix NEW_ABSOLUTE --restore BACKUP_FILE with no repeated options');
+    }
+    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nRestore: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --restore BACKUP_FILE [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 backup --output NEW_ABSOLUTE_FILE | service-unit [--auto-readiness] | prepare-run | run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
     if (positionals.length !== 1) fail('arguments', 'Exactly one command is required; use --help');
-    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], 'service-unit': ['auto-readiness'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
+    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'restore'], pack: ['output', 'manifest', 'binary'], backup: ['output'], run: ['control-socket'], 'service-unit': ['auto-readiness'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
     if (!allowed[command] || Object.keys(values).some(key => !allowed[command].includes(key))) fail('arguments', 'Unsupported command or option for this command');
     let waitTimeout = 10000;
     if (command === 'wait-bind' && values['timeout-ms'] !== undefined) {
@@ -581,13 +734,20 @@ export async function main(argv, installedPrefix = null) {
         }
         if (command === 'stop') return stop(context);
         if (command === 'uninstall') return uninstall(context, moved);
+        if (command === 'backup') return backup(context, values.output);
         if (command === 'info') { const life = await lifecycle(context); return { ok: true, prefix, session: life.session, sessionPrefix: life.prefix, stage: life.stage, port: context.manifest.port, healthPort: context.manifest.healthPort, controlSocket: life.controlSocket, nginxVersion: context.manifest.nginxVersion, moduleCount: context.manifest.compiledModules.length, healthNote: context.manifest.healthNote }; }
         if (!['bind', 'status', 'apply', 'revert', 'history', 'recover', 'inspect-generations', 'snapshot-listeners', 'inspect-listeners'].includes(command)) fail('arguments', 'Unknown alpha command');
         return proxy(context, command, values);
       });
     }
     if (result) { process.stdout.write(encode(result)); if (!result.ok) process.exitCode = 1; }
-  } catch (error) { if (!error.forwarded) process.stdout.write(encode({ ok: false, code: error.code || 'error', error: error.message, ...(error.bindingMayHaveCommitted === true ? { bindingMayHaveCommitted: true } : {}) })); process.exitCode = 1; }
+  } catch (error) {
+    const sensitive = argv[0] === 'backup' || argv.some(value => value === '--restore' || value.startsWith('--restore='));
+    if (sensitive) process.stdout.write(encode({ ok: false, code: /^[A-Za-z0-9_]{1,64}$/.test(error.code || '') ? error.code : 'backup_restore_refused',
+      error: 'Declarative backup or restore refused; preserve any created files for operator inspection' }));
+    else if (!error.forwarded) process.stdout.write(encode({ ok: false, code: error.code || 'error', error: error.message, ...(error.bindingMayHaveCommitted === true ? { bindingMayHaveCommitted: true } : {}) }));
+    process.exitCode = 1;
+  }
   finally { process.umask(oldMask); }
 }
 
