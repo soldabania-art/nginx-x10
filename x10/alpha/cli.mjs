@@ -301,6 +301,53 @@ async function backup(context, output) {
 }
 // End declarative backup foundation.
 
+// Installed runtime package identity. This is consistency data, not authority
+// to migrate state, activate a package or accept an upgrade/rollback.
+export function packageIdentity(manifest) {
+  const refuse = () => fail('package_identity_invalid', 'Installed runtime package identity is invalid');
+  try {
+    const plain = value => value && typeof value === 'object'
+      && [Object.prototype, null].includes(Object.getPrototypeOf(value));
+    const own = (value, name) => {
+      const descriptor = Object.getOwnPropertyDescriptor(value, name);
+      if (!descriptor || !Object.hasOwn(descriptor, 'value') || descriptor.enumerable !== true) refuse();
+      return descriptor.value;
+    };
+    if (!plain(manifest)) refuse();
+    const version = own(manifest, 'schemaVersion'), immutable = own(manifest, 'immutable');
+    if (!supportedSchema(version) || !plain(immutable)) refuse();
+    const expected = installedNames(version), keys = Reflect.ownKeys(immutable);
+    if (keys.length !== expected.length || keys.some(key => typeof key !== 'string' || !expected.includes(key))) refuse();
+    // Check descriptors for the complete inventory without evaluating ignored
+    // build, example or license metadata. Only runtime rows enter the hashes.
+    for (const name of expected) {
+      const descriptor = Object.getOwnPropertyDescriptor(immutable, name);
+      if (!descriptor || !Object.hasOwn(descriptor, 'value') || descriptor.enumerable !== true) refuse();
+    }
+    const names = ['bin/nginx', 'bin/x10', ...controlNames.map(name => `lib/control/${name}`),
+      ...alphaNames.map(name => `lib/alpha/${name}`), ...(version === 2 ? [recipePath] : [])].sort();
+    const runtimeFiles = names.map(relative => {
+      const metadata = own(immutable, relative), fields = ['bytes', 'sha256', 'mode'];
+      if (!plain(metadata)) refuse();
+      const metadataKeys = Reflect.ownKeys(metadata);
+      if (metadataKeys.length !== fields.length || metadataKeys.some(key => typeof key !== 'string' || !fields.includes(key))) refuse();
+      const bytes = own(metadata, 'bytes'), sha256 = own(metadata, 'sha256'), mode = own(metadata, 'mode');
+      if (!Number.isSafeInteger(bytes) || bytes < 1 || bytes > 256 * 1024 * 1024
+          || typeof sha256 !== 'string' || sha256.length !== 64 || !/^[a-f0-9]{64}$/.test(sha256)
+          || typeof mode !== 'string' || mode !== payloadMode(relative)) refuse();
+      return { path: relative, bytes, sha256, mode };
+    });
+    const fingerprint = files => digest(JSON.stringify({ schemaVersion: 1, files }));
+    return { ok: true, outcome: 'package_identified', schemaVersion: 1, kind: 'nginx-x10-installed-package-identity',
+      installationSchemaVersion: version, runtimePayloadSha256: fingerprint(runtimeFiles),
+      operatorPayloadSha256: fingerprint(runtimeFiles.filter(row => row.path !== 'bin/nginx')),
+      nativeBinarySha256: runtimeFiles.find(row => row.path === 'bin/nginx').sha256, runtimeFiles,
+      consistencyOnly: true, compatibilityAccepted: false, upgradePerformed: false,
+      rollbackAccepted: false, serviceAccepted: false, productionAccepted: false };
+  } catch { refuse(); }
+}
+// End installed runtime package identity.
+
 export async function install(values) {
   if (process.platform !== 'linux' || Number(process.versions.node.split('.')[0]) < 22) fail('unsupported', 'Linux and Node 22+ are required');
   const prefix = values.prefix;
@@ -370,6 +417,8 @@ export async function install(values) {
       ...(restored ? { declarativeRestored: true, nativeStarted: false, readinessChecked: false, serviceAccepted: false, productionAccepted: false } : {}) };
   } catch (error) { error.message += `; incomplete private prefix preserved for inspection: ${prefix}`; throw error; }
 }
+
+
 
 async function installed(prefix, allowDependencyDrift = false) {
   prefix = path.resolve(prefix); await canonical(prefix); const stat = await owned(prefix, true, true), manifest = await record(path.join(prefix, '.alpha-install.json'));
@@ -688,12 +737,16 @@ async function proxy(context, command, values) {
 
 export async function main(argv, installedPrefix = null) {
   const oldMask = process.umask(0o077);
+  let packageInfoRequested = argv.includes('package-info');
   try {
     const { values, positionals } = parseArgs({ args: argv, allowPositionals: true, options: Object.fromEntries([
       ...['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'output', 'file', 'revision', 'control-socket', 'control-address', 'timeout-ms', 'restore'].map(name => [name, { type: 'string' }]),
       ['auto-readiness', { type: 'boolean' }], ['human', { type: 'boolean' }], ['help', { type: 'boolean', short: 'h' }],
     ]) });
     const [command] = positionals;
+    packageInfoRequested = command === 'package-info';
+    if (command === 'package-info' && (argv.length !== 1 || argv[0] !== 'package-info'))
+      fail('arguments', 'Use package-info with no options');
     if (command === 'service-unit' && (argv[0] !== 'service-unit' || ![1, 2].includes(argv.length)
         || (argv.length === 2 && argv[1] !== '--auto-readiness')))
       fail('arguments', 'Use service-unit [--auto-readiness]');
@@ -705,9 +758,9 @@ export async function main(argv, installedPrefix = null) {
           || ['port', 'health-port', 'upstream-port'].some(key => values[key] !== undefined))
         fail('arguments', 'Use install --prefix NEW_ABSOLUTE --restore BACKUP_FILE with no repeated options');
     }
-    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nRestore: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --restore BACKUP_FILE [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 backup --output NEW_ABSOLUTE_FILE | service-unit [--auto-readiness] | prepare-run | run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
+    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nRestore: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --restore BACKUP_FILE [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 package-info | backup --output NEW_ABSOLUTE_FILE | service-unit [--auto-readiness] | prepare-run | run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
     if (positionals.length !== 1) fail('arguments', 'Exactly one command is required; use --help');
-    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'restore'], pack: ['output', 'manifest', 'binary'], backup: ['output'], run: ['control-socket'], 'service-unit': ['auto-readiness'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
+    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'restore'], pack: ['output', 'manifest', 'binary'], 'package-info': [], backup: ['output'], run: ['control-socket'], 'service-unit': ['auto-readiness'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
     if (!allowed[command] || Object.keys(values).some(key => !allowed[command].includes(key))) fail('arguments', 'Unsupported command or option for this command');
     let waitTimeout = 10000;
     if (command === 'wait-bind' && values['timeout-ms'] !== undefined) {
@@ -720,7 +773,8 @@ export async function main(argv, installedPrefix = null) {
     else {
       if (!installedPrefix) fail('arguments', 'Use the installed PREFIX/bin/x10 launcher for lifecycle commands');
       const prefix = path.resolve(installedPrefix), allowDrift = ['stop', 'uninstall', 'info', 'status', 'history'].includes(command); const inspected = await installed(prefix, allowDrift);
-      if (command === 'service-unit') result = await serviceUnit(inspected, values['auto-readiness'] === true);
+      if (command === 'package-info') result = packageIdentity(inspected.manifest);
+      else if (command === 'service-unit') result = await serviceUnit(inspected, values['auto-readiness'] === true);
       else if (command === 'run') result = await run(prefix, values);
       else if (command === 'wait-bind') result = await waitBind(prefix, waitTimeout);
       else result = await lock(prefix, async moved => {
@@ -742,6 +796,10 @@ export async function main(argv, installedPrefix = null) {
     }
     if (result) { process.stdout.write(encode(result)); if (!result.ok) process.exitCode = 1; }
   } catch (error) {
+    if (packageInfoRequested) {
+      process.stdout.write(encode({ ok: false, code: 'package_info_refused', error: 'Installed package identity inspection refused' }));
+      process.exitCode = 1; return;
+    }
     const sensitive = argv[0] === 'backup' || argv.some(value => value === '--restore' || value.startsWith('--restore='));
     if (sensitive) process.stdout.write(encode({ ok: false, code: /^[A-Za-z0-9_]{1,64}$/.test(error.code || '') ? error.code : 'backup_restore_refused',
       error: 'Declarative backup or restore refused; preserve any created files for operator inspection' }));

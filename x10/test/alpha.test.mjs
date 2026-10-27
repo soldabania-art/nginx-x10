@@ -15,6 +15,7 @@ import './alpha-runtime.test.mjs';
 import './alpha-pid.test.mjs';
 import '../alpha/prepare-run.test.mjs';
 import '../alpha/backup.test.mjs';
+import '../alpha/package-info.test.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url)), source = path.join(root, 'x10/alpha/cli.mjs');
 const manifestFile = path.resolve(process.env.X10_BUILD_MANIFEST || path.join(root, 'x10/.build/manifest.json'));
@@ -194,6 +195,8 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
       assert.ok(recordedNode===recipeNode.nodeExecutable,'installed recorded Node path matches declared owned copy');
       assert.ok(installedRecord.nodeRuntime.version===recipeNode.version,'installed recorded Node version matches declared owned copy');
       assert.ok(installedRecord.nodeRuntime.sha256===recipeNode.sha256,'installed recorded Node hash matches declared owned copy');
+      const packageIdentity = await assertInstalledPackageInfo(target, targetLauncher,
+        (file, ...args) => recipeNodeCommand(recipeNode, file, ...args));
       for(const automatic of [false,true]){
         const recipe=await recipeNodeCommand(recipeNode,targetLauncher,'service-unit',...(automatic?['--auto-readiness']:[]));assertRecipeResult(recipe,{prefix:target,nodeExecutable:recordedNode,automatic});
         assert.equal(recipe.json.unit,generator.renderUserUnit({prefix:target,nodeExecutable:recordedNode,autoReadiness:automatic}));
@@ -234,6 +237,19 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
       assert.equal(restored.code, 0, restored.stdout); assert.equal(restored.json.declarativeRestored, true);
       for (const key of ['nativeStarted', 'readinessChecked', 'serviceAccepted', 'productionAccepted']) assert.equal(restored.json[key], false);
       const restoredManifest = JSON.parse(await readFile(path.join(restoredTarget, '.alpha-install.json'), 'utf8'));
+      const restoredPackageIdentity = await assertInstalledPackageInfo(restoredTarget, restoredLauncher,
+        (file, ...args) => recipeNodeCommand(recipeNode, file, ...args));
+      assert.deepEqual(restoredPackageIdentity, packageIdentity,
+        'The same installed payload retains its identity across fresh restore identities');
+      t.diagnostic(JSON.stringify({ suite: 'x10-package-identity', profile: 'extracted-bundle-read-only',
+        runtimePayloadFiles: packageIdentity.runtimeFiles.length,
+        runtimePayloadSha256: packageIdentity.runtimePayloadSha256,
+        operatorPayloadSha256: packageIdentity.operatorPayloadSha256,
+        nativeBinarySha256: packageIdentity.nativeBinarySha256,
+        actualInstalledBytesMatched: true, sourceAndRestoredPayloadIdentityMatched: true,
+        preparedRecordsAndOwnedLockPreserved: true, invalidArgumentsRefused: true,
+        compatibilityAccepted: false, upgradePerformed: false, rollbackAccepted: false,
+        serviceAccepted: false, productionAccepted: false }));
       const restoredRegistry = JSON.parse(await readFile(path.join(restoredTarget, '.alpha-registry.json'), 'utf8'));
       const restoredSession = path.join(restoredTarget, 'runs', restored.json.session);
       const restoredLife = JSON.parse(await readFile(path.join(restoredSession, 'lifecycle.json'), 'utf8'));
@@ -382,6 +398,10 @@ test('extracted bundle proxies an independent app and preserves application read
     assert.equal(await absent(path.join(bundle, 'x10/.build')), true);
     const installed = await cli(installer, 'install', '--prefix', prefix, '--port', String(port), '--health-port', String(healthPort), '--upstream-port', String(upstreamPort));
     assert.equal(installed.code, 0, installed.stdout); assert.match(installed.json.healthNote, /application readiness/);
+    const beforePackageRequests = { appRequests, echoRequests };
+    await assertInstalledPackageInfo(prefix, launcher);
+    assert.deepEqual({ appRequests, echoRequests }, beforePackageRequests,
+      'Package inspection must not call application health or replay traffic');
     const first = await start();
     assert.equal((await request(healthPort, '/__x10_demo_self_check')).status, 200);
     assert.equal((await request(port, '/__x10_health')).status, 503, 'native demo must not stand in for application readiness');
@@ -767,6 +787,75 @@ const recipeAlphaNames=['cli.mjs','runtime.mjs','upstream-example.mjs'];
 const recipeV2Names=['bin/nginx','bin/x10','build.json','licenses/NGINX-LICENSE','licenses/UPSTREAM.txt','examples/candidate-b.json',
   ...recipeControlNames.map(n=>'lib/control/'+n),...recipeAlphaNames.map(n=>'lib/alpha/'+n),'lib/service/user-unit.mjs'].sort();
 const recipeV2Dirs=['bin','lib','lib/control','lib/alpha','lib/service','licenses','examples','runs'];
+// Independent installed-byte comparison. This never imports the package helper
+// under test and grants no process, compatibility, upgrade or rollback authority.
+async function assertInstalledPackageInfo(prefix, launcher, invoke = cli) {
+  const manifest = JSON.parse(await readFile(path.join(prefix, '.alpha-install.json'), 'utf8'));
+  const names = ['bin/nginx', 'bin/x10',
+    ...recipeControlNames.map(name => `lib/control/${name}`),
+    ...recipeAlphaNames.map(name => `lib/alpha/${name}`),
+    ...(manifest.schemaVersion === 2 ? ['lib/service/user-unit.mjs'] : [])].sort();
+  const files = await Promise.all(names.map(async relative => {
+    const bytes = await readFile(path.join(prefix, relative)), stat = await lstat(path.join(prefix, relative));
+    assert.equal(stat.isFile(), true); assert.equal(stat.isSymbolicLink(), false);
+    return { path: relative, bytes: bytes.length, sha256: digest(bytes),
+      mode: (stat.mode & 0o7777).toString(8).padStart(4, '0') };
+  }));
+  const fingerprint = selected => digest(JSON.stringify({ schemaVersion: 1, files: selected }));
+  const expected = { ok: true, outcome: 'package_identified', schemaVersion: 1,
+    kind: 'nginx-x10-installed-package-identity', installationSchemaVersion: manifest.schemaVersion,
+    runtimePayloadSha256: fingerprint(files),
+    operatorPayloadSha256: fingerprint(files.filter(file => file.path !== 'bin/nginx')),
+    nativeBinarySha256: files.find(file => file.path === 'bin/nginx').sha256, runtimeFiles: files,
+    consistencyOnly: true, compatibilityAccepted: false, upgradePerformed: false,
+    rollbackAccepted: false, serviceAccepted: false, productionAccepted: false };
+  const lock = path.join(prefix, '.alpha-lock'), sentinel = Buffer.from('package-info-owned-lock-sentinel\n');
+  await writeFile(lock, sentinel, { mode: 0o600, flag: 'wx' });
+  const lockIdentity = await lstat(lock);
+  try {
+    const before = await recipeTree(prefix);
+    const beforeBytes = await Promise.all(before.files.map(relative => readFile(path.join(prefix, relative))));
+    const result = await invoke(launcher, 'package-info');
+    assert.equal(result.code, 0, 'Installed package inspection succeeds with an existing operator lock');
+    assert.equal(result.stderr, ''); assert.deepEqual(result.json, expected);
+    assert.equal(result.stdout.includes(prefix), false);
+    assert.equal(result.stdout.includes(manifest.installationId), false);
+    for (const args of [['package-info', '--human'], ['package-info', 'package-info']]) {
+      const refused = await invoke(launcher, ...args);
+      assert.equal(refused.code, 1); assert.equal(refused.json.code, 'package_info_refused');
+      assert.equal(refused.stdout.includes(prefix), false);
+    }
+    // Excluding a file from the runtime fingerprint must not bypass the full
+    // existing immutable-installation and host-dependency verification.
+    const example = path.join(prefix, 'examples/candidate-b.json'), exampleBytes = await readFile(example);
+    try {
+      await chmod(example, 0o600); await writeFile(example, Buffer.concat([exampleBytes, Buffer.from(' ')]));
+      const refused = await invoke(launcher, 'package-info');
+      assert.equal(refused.code, 1); assert.equal(refused.json.code, 'package_info_refused');
+      assert.equal(refused.stdout.includes(prefix), false);
+    } finally { await writeFile(example, exampleBytes); await chmod(example, 0o400); }
+    const marker = path.join(prefix, '.alpha-install.json'), markerBytes = await readFile(marker);
+    try {
+      await amendRecord(marker, value => { value.dependencies.files[0].sha256 = '0'.repeat(64); });
+      const refused = await invoke(launcher, 'package-info');
+      assert.equal(refused.code, 1); assert.equal(refused.json.code, 'package_info_refused');
+      assert.equal(refused.stdout.includes(prefix), false);
+    } finally { await writeFile(marker, markerBytes); }
+    assert.deepEqual(await recipeTree(prefix), before);
+    for (let index = 0; index < before.files.length; index++)
+      assert.deepEqual(await readFile(path.join(prefix, before.files[index])), beforeBytes[index],
+        'Package inspection and refusals preserve every prepared installation file');
+    const afterLock = await lstat(lock);
+    for (const key of ['dev', 'ino', 'uid', 'mode', 'size', 'mtimeMs', 'ctimeMs'])
+      assert.equal(afterLock[key], lockIdentity[key], 'Package inspection preserves the existing lock identity');
+    assert.deepEqual(await readFile(lock), sentinel);
+    return result.json;
+  } finally {
+    const current = await lstat(lock);
+    assert.equal(current.dev, lockIdentity.dev); assert.equal(current.ino, lockIdentity.ino);
+    await rm(lock);
+  }
+}
 async function recipeTree(base){
   const directories=[],files=[];
   async function visit(relative){directories.push(relative);for(const name of await readdir(path.join(base,relative))){const child=relative?relative+'/'+name:name,stat=await lstat(path.join(base,child));if(stat.isDirectory())await visit(child);else{assert.equal(stat.isFile(),true);assert.equal(stat.isSymbolicLink(),false);files.push(child);}}}
@@ -838,6 +927,15 @@ async function installedRecipeFixture(fn){
   }finally{await rm(parent,{recursive:true,force:true});}
 }
 async function recipeCli(f,...args){return recipeNodeCommand(f.recipeNode,f.launcher,...args);}
+test('installed package-info identifies checked nonexecuted payload without state or lock writes',
+  { timeout: 20000 }, () => installedRecipeFixture(async f => {
+    const result = await assertInstalledPackageInfo(f.prefix, f.launcher,
+      (file, ...args) => recipeNodeCommand(f.recipeNode, file, ...args));
+    assert.equal(result.runtimeFiles.length, 11);
+    assert.equal(result.nativeBinarySha256, f.manifest.immutable['bin/nginx'].sha256);
+    assert.equal(result.compatibilityAccepted, false); assert.equal(result.upgradePerformed, false);
+    assert.equal(result.rollbackAccepted, false); assert.equal(result.productionAccepted, false);
+  }));
 function assertRecipeResult(result,{prefix,nodeExecutable,automatic=false}){
   assert.equal(result.code,0,result.stdout);assert.equal(result.stderr,'');
   assert.deepEqual(Object.keys(result.json),['ok','unit','scope','readinessAutomated','startupHealthAccepted','serviceAccepted','productionAccepted','outcome','activationPerformed']);

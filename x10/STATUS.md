@@ -2817,3 +2817,34 @@ that difference is not a package-upgrade acceptance. Next: implement the
 explicit side-by-side package transition/state-compatibility contract and
 verify meaningful A-to-B-to-A, preserving known-good files and prior failures.
 Evidence: x10/evidence/g4-restored-service-hosted.json.
+
+
+## Installed package identity foundation — 27 October 2026
+
+The installed package-info command verifies the complete installation and
+recorded host dependencies before reporting canonical runtime/operator payload
+fingerprints and a separate native binary hash. Build/provenance, docs,
+examples and installation/session/host metadata do not create a different
+runtime identity. Excluded immutable files are still verified by the existing
+installation guard. Inspection takes no alpha lock, writes no state and
+launches no native code. Hashes are consistency records, not signatures.
+
+Frozen local Node24 pure/tempfile checks passed248/248, including86 new
+controls. Independent10 pure heldouts are a separate count. Four initial
+source-extracted install test failures were fixed by relocating the new
+helper; old assertions were preserved. Actual extracted-bundle observations
+and new runtime regressions remain pending exact hosted CI. Native source,
+package inventories, schemas, workflows and service checker pins are unchanged.
+
+The831360 restored HTTP service receipt remains scoped to its exact runtime.
+This feature does not accept package staging, state compatibility, A-to-B-to-A,
+native binary upgrade, TLS restore or fullG3/G4/V1. After exact package-info
+acceptance, implement the supported side-by-side package transition while
+preserving the old package and records. Older A has no package-info command;
+its identity must come from independently verified known installed records.
+Evidence: x10/evidence/g4-package-identity.json.
+
+A separate exact-name Node/private-tempfile test passed1/1 using a
+nonexecuted native placeholder. It exercises the actual installed CLI and
+strict file/dependency guards without NGINX, service or signal execution.
+This result is not added to248 or claimed as extracted-bundle acceptance.

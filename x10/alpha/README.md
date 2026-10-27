@@ -418,3 +418,62 @@ is foreground loopback HTTP application acceptance: it does not establish a
 restored managed service, HTTPS/PKI backup, application-data/database recovery or
 an upgrade between distinct runtime packages. Preserve the original installation
 and known-good package until a new target is independently accepted.
+
+
+## Checked installed package identity — 27 October 2026
+
+A newly verified installation containing this command can report its checked
+runtime payload without starting native code or changing operator state:
+
+```sh
+"$X10" package-info
+```
+
+Use the installed launcher with no additional arguments or options. An older
+installed CLI does not gain the command when a checkout is updated. Before
+reporting, the installed command performs the existing canonical installation,
+immutable-file and strict recorded dynamic-dependency checks. It does not
+acquire the alpha lock, write a lifecycle record, bind health, activate a
+service or run a native executable. A refused inspection returns the fixed
+`package_info_refused` code and a generic message without installation paths.
+
+The JSON result has `outcome: package_identified` and code-relative
+`runtimeFiles`, sorted by path, containing the file byte counts, modes and
+SHA256 values. `runtimePayloadSha256` identifies the selected installed native
+binary, launcher, alpha/controller modules and, for schema2, the service recipe.
+`operatorPayloadSha256` uses the same records except `bin/nginx`, while
+`nativeBinarySha256` identifies that binary separately. A changed operator
+package must not be described as a changed native NGINX binary.
+
+The two payload fingerprints hash the canonical JSON
+`{schemaVersion: 1, files: [...]}` for their respective sorted file lists.
+Build records, source/provenance labels, archive timestamps, documentation,
+`examples/candidate-b.json`, licenses, installation IDs, prefixes, sessions,
+configuration and host-library paths are excluded from these payload identities.
+The installed `lib/alpha/upstream-example.mjs` helper remains a runtime file. Updating only
+those metadata therefore does not establish a different runtime package.
+The original complete installation inventory is still verified; exclusion
+from a fingerprint does not permit an installed file to be changed or omitted.
+
+These are consistency observations under the existing trusted-operator
+boundary, not signatures, a new concurrent same-UID filesystem fence or an
+atomic snapshot of live application state. `consistencyOnly` is true;
+`compatibilityAccepted`, `upgradePerformed`, `rollbackAccepted`,
+`serviceAccepted` and `productionAccepted` remain false. Identical identities
+do not establish ABI or state compatibility; differing identities do not prove
+that an upgrade is safe. Keep the old known-good package, installation and
+state until separately verified target acceptance.
+
+This command supplies a bounded identity prerequisite for the still-open
+side-by-side package A-to-B-to-A contract. It does not stage, switch, migrate,
+start, restore or roll back a package. Its new extracted-bundle assertions
+require exact resulting hosted CI; local pure and virtual controls do not
+establish physical package transition or service acceptance.
+
+The older dated pending paragraphs above retain their historical scope.
+The earlier restored HTTP managed-service path on implementation
+`831360a9a9770815c660f5bc06d002b92154a1b0` is separately accepted only within
+the same checked package and temporary nonroot systemd-user profile; see its
+[hosted receipt](../evidence/g4-restored-service-hosted.json). That success
+does not close distinct-package rollback, TLS backup, the full G4/V1,
+permanent distribution, independent published replay or the60-minute soak.
