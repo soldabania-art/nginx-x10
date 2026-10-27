@@ -117,3 +117,15 @@ GitHub Release. В текущем подключённом GitHub инструм
 Release/загрузки release assets; публикация и независимый published-file replay
 остаются открыты. Новые credentials или расширение workflow permissions не
 создаются ради обхода этого ограничения.
+
+
+## Supported-path review and archive identity types
+
+The [supported-path review](SUPPORTED-PATH-REVIEW.md) records explicit supported,
+refused and still-unknown operator outcomes. The pre-extraction archive verifier
+candidate now requires primitive string HEX/REV identities/checksums; malformed
+JSON arrays cannot become source identities through regex coercion. Both schema1
+and schema2 remain supported. Local synthetic-archive tests do not extract or
+execute payload, authenticate an issuer, or accept a release. Exact new hosted
+verification remains pending. Controller record-read bounds and session/inventory
+capacity are separate open findings; full G4/G5/G7/V1 remains unaccepted.

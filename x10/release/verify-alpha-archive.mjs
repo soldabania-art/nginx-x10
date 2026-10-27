@@ -25,6 +25,10 @@ const PROFILES = Object.freeze({
   2: Object.freeze({ kind: 'nginx-x10-linux-alpha-bundle', names: PAYLOAD_NAMES_V2, directories: DIRS_V2 }),
 });
 const HEX = /^[a-f0-9]{64}$/, REV = /^[a-f0-9]{40}$/;
+// RegExp.test coerces arrays and objects. Identity fields must be primitive
+// JSON strings before a format match can establish consistency.
+const isHex = value => typeof value === 'string' && HEX.test(value);
+const isRevision = value => typeof value === 'string' && REV.test(value);
 const digest = b => createHash('sha256').update(b).digest('hex');
 const reject = () => { throw new Error('archive_invalid'); };
 const plain = v => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -82,7 +86,7 @@ function parseTar(tar) {
 
 export function verifyAlphaArchive(bytes, trustedSha256) {
   const failure = code => ({ valid: false, code });
-  if (!Buffer.isBuffer(bytes) || bytes.length === 0 || bytes.length > MAX_ARCHIVE_BYTES || typeof trustedSha256 !== 'string' || !HEX.test(trustedSha256)) return failure('archive_input');
+  if (!Buffer.isBuffer(bytes) || bytes.length === 0 || bytes.length > MAX_ARCHIVE_BYTES || !isHex(trustedSha256)) return failure('archive_input');
   // This ordering is intentional: never decompress bytes with a mismatching digest.
   if (digest(bytes) !== trustedSha256) return failure('archive_checksum');
   try {
@@ -94,21 +98,21 @@ export function verifyAlphaArchive(bytes, trustedSha256) {
     // A complete declared version selects one exact tuple. Neither an extra
     // helper nor a version-shaped string can opt a legacy inventory into v2.
     const profile = value.schemaVersion === 1 ? PROFILES[1] : value.schemaVersion === 2 ? PROFILES[2] : null;
-    if (!profile || !HEX.test(sha256 || '') || digest(JSON.stringify(value)) !== sha256
+    if (!profile || !isHex(sha256) || digest(JSON.stringify(value)) !== sha256
       || value.kind !== profile.kind || !plain(value.files)
       || !sameNames(Object.keys(value.files), profile.names)
       || value.platform?.system !== 'Linux' || !['x86_64', 'aarch64'].includes(value.platform?.machine)
-      || !HEX.test(value.nativeVersionOutputSha256 || '')) reject();
+      || !isHex(value.nativeVersionOutputSha256)) reject();
     const expected = [...profile.directories, ROOT + 'bundle.json', ...profile.names.map(n => ROOT + n)];
     if (!sameNames([...entries.keys()], expected)) reject();
     for (const name of profile.names) {
       const f = value.files[name], actual = entries.get(ROOT + name);
-      if (!plain(f) || !sameNames(Object.keys(f), ['sha256', 'bytes', 'mode']) || !HEX.test(f.sha256 || '')
+      if (!plain(f) || !sameNames(Object.keys(f), ['sha256', 'bytes', 'mode']) || !isHex(f.sha256)
         || !Number.isSafeInteger(f.bytes) || f.bytes !== actual.data.length || f.sha256 !== digest(actual.data)
         || f.mode !== actual.mode.toString(8).padStart(4, '0')) reject();
     }
     const p = value.provenance;
-    if (!plain(p) || !REV.test(p.checkoutRevision || '') || !REV.test(p.upstreamRevision || '') || !HEX.test(p.sourceDiffSha256 || '')) reject();
+    if (!plain(p) || !isRevision(p.checkoutRevision) || !isRevision(p.upstreamRevision) || !isHex(p.sourceDiffSha256)) reject();
     return { valid: true, code: 'archive_consistent', schemaVersion: value.schemaVersion, archiveSha256: trustedSha256, archiveBytes: bytes.length,
       tarBytes: tar.length, payloadFiles: profile.names.length, directories: profile.directories.length,
       bundleManifestSha256: digest(manifestBytes), binarySha256: value.files['bin/nginx'].sha256,
@@ -120,7 +124,7 @@ export function verifyAlphaArchive(bytes, trustedSha256) {
 export function verifyAlphaArchiveFile(file, trustedSha256) {
   let fd;
   try {
-    if (typeof file !== 'string' || typeof trustedSha256 !== 'string' || !HEX.test(trustedSha256)) return { valid: false, code: 'archive_input' };
+    if (typeof file !== 'string' || !isHex(trustedSha256)) return { valid: false, code: 'archive_input' };
     fd = openSync(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
     const stat = fstatSync(fd);
     if (!stat.isFile() || stat.size < 1 || stat.size > MAX_ARCHIVE_BYTES) return { valid: false, code: 'archive_input' };
@@ -133,7 +137,7 @@ export function verifyAlphaArchiveFile(file, trustedSha256) {
   finally { if (fd !== undefined) closeSync(fd); }
 }
 export function main(argv = process.argv.slice(2)) {
-  if (argv.length !== 4 || argv[0] !== '--archive' || argv[2] !== '--sha256' || !HEX.test(argv[3])) return { valid: false, code: 'archive_usage' };
+  if (argv.length !== 4 || argv[0] !== '--archive' || argv[2] !== '--sha256' || !isHex(argv[3])) return { valid: false, code: 'archive_usage' };
   return verifyAlphaArchiveFile(argv[1], argv[3]);
 }
 let cli = false;

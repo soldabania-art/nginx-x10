@@ -7,7 +7,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { verifyAlphaArchive, verifyAlphaArchiveFile, PAYLOAD_NAMES, PAYLOAD_NAMES_V1, PAYLOAD_NAMES_V2, MAX_ARCHIVE_BYTES, MAX_TAR_BYTES } from './verify-alpha-archive.mjs';
+import { verifyAlphaArchive, verifyAlphaArchiveFile, main as archiveMain, PAYLOAD_NAMES, PAYLOAD_NAMES_V1, PAYLOAD_NAMES_V2, MAX_ARCHIVE_BYTES, MAX_TAR_BYTES } from './verify-alpha-archive.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const ROOT = 'nginx-x10-alpha/';
 function header(name, data, mode, type = '0', magic = 'ustar\0' + '00') {
@@ -174,4 +174,34 @@ test('schema2 verifier and CLI stay pre-extraction consistency checks', () => {
     for (const k of ['evidenceAuthenticated', 'payloadExecuted', 'extracted', 'productionAccepted']) assert.equal(result[k], false);
     assert.equal(r.stdout.includes(directory), false);
   } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+const identityFields = [
+  ['checkoutRevision', 'a'.repeat(40), (v, value) => { v.provenance.checkoutRevision = value; }],
+  ['upstreamRevision', 'b'.repeat(40), (v, value) => { v.provenance.upstreamRevision = value; }],
+  ['sourceDiffSha256', 'c'.repeat(64), (v, value) => { v.provenance.sourceDiffSha256 = value; }],
+  ['nativeVersionOutputSha256', 'd'.repeat(64), (v, value) => { v.nativeVersionOutputSha256 = value; }],
+];
+for (const version of [1, 2]) for (const [name, identity, set] of identityFields) {
+  for (const [shape, malformed] of [
+    ['array', [identity]], ['nested-array', [[identity]]],
+    ['object', { value: identity }], ['null', null],
+    ['boolean', true], ['number', 42], ['empty-array', []],
+    ['wrong-string', 'not-an-identity'],
+  ]) test(`schema${version} refuses ${shape} ${name} despite consistent archive hashes`, () => {
+    assert.deepEqual(verify(fixture({ version, edit: v => set(v, malformed) })),
+      { valid: false, code: 'archive_invalid' });
+  });
+}
+test('checksum API boundaries refuse coercible objects without invoking conversion', () => {
+  const bytes = gzipSync(fixture({ version: 2 }));
+  let conversions = 0;
+  const coercible = { [Symbol.toPrimitive]() { conversions++; return hash(bytes); } };
+  for (const input of [[hash(bytes)], new String(hash(bytes)), coercible]) {
+    assert.deepEqual(verifyAlphaArchive(bytes, input), { valid: false, code: 'archive_input' });
+    assert.deepEqual(verifyAlphaArchiveFile('/unused-before-checksum-validation', input), { valid: false, code: 'archive_input' });
+    assert.deepEqual(archiveMain(['--archive', '/unused-before-checksum-validation', '--sha256', input]),
+      { valid: false, code: 'archive_usage' });
+  }
+  assert.equal(conversions, 0);
 });

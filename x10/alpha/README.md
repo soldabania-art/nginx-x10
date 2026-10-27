@@ -184,8 +184,11 @@ manually; this alpha is not an orphan reaper. Startup cancellation after native
 spawn requests the same verified SIGQUIT and waits a bounded five seconds.
 Unresolved startup cleanup is preserved and reported.
 
-Use the [faulted/orphan incident runbook](../service/INCIDENT-RUNBOOK.md)
+Use the [faulted/orphan incident runbook](https://github.com/soldabania-art/nginx-x10/blob/34f713c411b73fdf1e10337c4539f35b64a31235/x10/service/INCIDENT-RUNBOOK.md)
 before acting on an abnormal exit. Preserve the original prefix in place.
+This pinned source document is available from an extracted bundle as well:
+the bundle does not include the runbook itself. The link does not establish
+a permanent accepted package release or physical incident recovery acceptance.
 Installed `info`, `status` and `history` acquire locks; `status` may also make
 an HTTP revision observation. They are not passive initial diagnostics.
 There is no supported command to clear `faulted` or force uninstall it.

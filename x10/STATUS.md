@@ -3292,3 +3292,33 @@ fallback remains separate. Full G3/G4/G5/G7/V1, permanent release, published
 replay,60-minute soak and semantic Continuum remain OPEN. Owner40h/history,
 Windows deferral and earlier adverse evidence are preserved.
 Evidence: x10/evidence/g7-ci-step-receipts.json.
+
+
+## Supported-path review and archive identity correction — 27 October 2026
+
+Exact60a native push40511943248/job122215951327 and
+PR40511951149/job122215972544 succeeded36 actual steps each, including actual
+release-record119TAP. Both evidence ZIPs were downloaded once and digests
+verified; native20/alpha617/official and strict normal/fallback/legacy service
+and owned/privateNode/history/bootstrap cleanup remain separate regressions.
+Research PR actually ran21/7/27/48; push runtime skipped and CLA failed.
+This accepts the declaration component, not a permanent G7/V1 release.
+
+Whole operator boundary source review found archive regex coercion accepting
+four malformed identity arrays. The narrow pre-extraction verifier candidate
+now requires primitive HEX/REV strings. Frozen archive122TAP passed, including
+65 new controls once over57; independent61 pure heldouts are separate.
+No payload extraction/execution or physical fixture ran locally. The packaged
+alpha README's source-only runbook link now uses the exact public commit URL.
+
+Two findings remain OPEN with source-pinned portable reproducers: controller
+JSON acquisition is unbounded before parse/CLI size refusal, and session256
+preparation can exceed inventory4096 entries. Next fix the record-read bounds,
+then inventory capacity with compatibility tests. Trusted user-manager/Node/
+loader environment remains an unverified profile prerequisite. No severity,
+OOM, remote exploit, actual256-session run or full security acceptance follows.
+See release/SUPPORTED-PATH-REVIEW.md and evidence/g5-supported-path-review.json.
+Earlier34f timeout cause/cleanupUNKNOWN, c2/6401/localFAIL_UNKNOWN/CLA stay.
+Full G3/G4/G5/G7/V1, actual orphan recovery/disposal, native binary upgrade,
+TLS restore, permanent publication, published replay,60-minute soak and
+semantic Continuum remain OPEN; owner40h/history and Windows deferral unchanged.
