@@ -2794,3 +2794,26 @@ processes and completion by elapsed hours are not guaranteed. Existing
 authority, spending, deployment and other-project limits remain unchanged.
 The deferred Windows plan is saved in PLAN and does not change the central
 portfolio queue or claim Windows compatibility.
+
+
+## Exact restored HTTP managed-service acceptance — 27 October 2026
+
+Implementation831360a9a9770815c660f5bc06d002b92154a1b0 passed native
+push40447807340/job122003205464 and PR40447810051/job122003208919:
+34 actual successful steps,20 native groups and197 alpha tests each.
+Both actual artifacts contain all18 restored proofs,5 successful sessions,
+2 manager restarts,6 bounded journal checks and unchanged3 TLS sessions.
+All13 cleanup facts, socket absence, unit removal and private Node/bootstrap
+removal are verified. Hosted contract results are617PASS/1root-onlySKIP;
+the real nonroot service was exercised separately. Failure containment
+remains unexercised. Research PR ran21/7/27/48; push runtime skipped, CLA failed.
+
+This accepts only restored HTTP configuration within the same checked
+runtime package and the declared temporary systemd-user profile. It does
+not accept a distinct-package A-to-B-to-A transition, TLS restore, external
+application data recovery, permanent release, soak or fullG3/G4/V1.
+The two archives differ in provenance, with the same native binary;
+that difference is not a package-upgrade acceptance. Next: implement the
+explicit side-by-side package transition/state-compatibility contract and
+verify meaningful A-to-B-to-A, preserving known-good files and prior failures.
+Evidence: x10/evidence/g4-restored-service-hosted.json.

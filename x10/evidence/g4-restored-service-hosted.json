@@ -1,0 +1,498 @@
+{
+  "schemaVersion": 1,
+  "state": "EXACT_SCOPED_RESTORED_HTTP_MANAGED_SERVICE_SUCCESS",
+  "implementationCommit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+  "implementationTree": "2008abfd22dd799ec68e7006f11bd07a52124682",
+  "evidence": "x10/evidence/g4-restored-service-hosted.json",
+  "scope": "Same checked runtime package; stopped confirmed HTTP source restored into a fresh temporary nonroot systemd-user installation/unit, operated and restarted.",
+  "nativeRunIds": [
+    40447807340,
+    40447810051
+  ],
+  "nativeJobIds": [
+    122003205464,
+    122003208919
+  ],
+  "all34ActualStepsEach": true,
+  "nativeGroupsEach": 20,
+  "fullAlphaEach": 197,
+  "restoredProofFieldsEach": 18,
+  "nativeSessionsEach": 5,
+  "managerRestartsEach": 2,
+  "journalChecksEach": 6,
+  "journalChecksAreNotExactQueryCounts": true,
+  "tlsSessionsEach": 3,
+  "all13CleanupFactsEach": true,
+  "privateNodeAndBootstrapRemovedEach": true,
+  "serviceContractEach": {
+    "tests": 618,
+    "pass": 617,
+    "skipped": 1,
+    "fail": 0,
+    "skipReason": "Root-only refusal control not executed by nonroot runner; actual nonroot service separately executed."
+  },
+  "restoredManagedServiceAccepted": true,
+  "samePackageOnly": true,
+  "tlsBackupAccepted": false,
+  "packageUpgradeRollbackAccepted": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "productionAccepted": false,
+  "actualFailureContainmentExercised": false,
+  "sourceCandidateEvidence": {
+    "commit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+    "path": "x10/evidence/g4-restored-service.json",
+    "unchanged": true
+  },
+  "nativePush": {
+    "schemaVersion": 1,
+    "state": "EXACT_SCOPED_RESTORED_HTTP_MANAGED_SERVICE_SUCCESS",
+    "sourceCommit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+    "sourceTree": "2008abfd22dd799ec68e7006f11bd07a52124682",
+    "sourceParent": "0bca7078522bef5576561632eb09b6d9bca99de4",
+    "runId": 40447807340,
+    "jobId": 122003205464,
+    "jobStatus": "completed_success",
+    "actualSuccessfulSteps": 34,
+    "artifact": {
+      "id": 12709282348,
+      "name": "x10-native-evidence",
+      "size_in_bytes": 138659,
+      "digest": "sha256:5c40a795a60bb6f84b4191c329d42ed82dcacb6ae3a341a54d5b89569a001c0a",
+      "expires_at": "2026-11-10T04:14:23Z"
+    },
+    "downloadedOnce": true,
+    "lifecycleSourcePin": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370",
+    "verificationChecks": [
+      "artifactdigest",
+      "actual34steps",
+      "sourceTreeParent",
+      "exactActualSource",
+      "archiveAndBinaryIdentities",
+      "18ExactRestoreProofs",
+      "actualNonrootService",
+      "fiveActualSessionsTrafficStop",
+      "twoManagerRestarts",
+      "sixBoundedJournalChecks",
+      "TLS3Retained",
+      "failedStartProof",
+      "controlledSlowDrainProof",
+      "operatorInterruptionProof",
+      "operatorNativeChallengeProof",
+      "oldAdverseControlsOnce",
+      "all13CleanupFacts",
+      "unitRemovedNotEnabled",
+      "noHiddenCleanupFailures",
+      "privateAuthenticatedNodeRemoved",
+      "20ActualNativeGroups",
+      "alpha197Pass",
+      "officialSampleWithExclusions",
+      "serviceContract617PlusRootOnlySkip",
+      "verifiedNode102Pass",
+      "unsupportedNotAccepted",
+      "failureContainmentUnexercised"
+    ],
+    "sourceIdentities": {
+      "buildCheckout": "831360a9a9770815c660f5bc06d002b92154a1b0",
+      "aggregateCheckout": "831360a9a9770815c660f5bc06d002b92154a1b0",
+      "serviceSource": "831360a9a9770815c660f5bc06d002b92154a1b0",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+      "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+      "archiveSha256": "31d11ab179d7164367a9749a81c612b9536940dc4c2c1a0ad637d5a276e92459",
+      "manifestSha256": "a2ad54c31487c2f3f6a8bc24a8db8838c4f4f98103fe6e7f4ced2fc2339c5d47",
+      "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303"
+    },
+    "buildProfile": {
+      "system": "Linux",
+      "architecture": "x86_64",
+      "nginxVersion": "1.31.9",
+      "compiledModuleCount": 105,
+      "dependencyHeaders": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "nodeVersion": "v22.23.3"
+    },
+    "restoredHTTPProof": {
+      "stoppedConfirmedSource": true,
+      "privateBackupCreated": true,
+      "sourceUnitRemoved": true,
+      "freshUnit": true,
+      "freshInstallation": true,
+      "freshSession": true,
+      "freshRevision": true,
+      "exactInputRestored": true,
+      "portsPreserved": true,
+      "bindingInitiallyAbsent": true,
+      "freshHistory": true,
+      "restoredHTTPServed": true,
+      "restoredHTTPRestarted": true,
+      "noPostReplay": true,
+      "sourceRecordsPreserved": true,
+      "backupPreserved": true,
+      "archivePreserved": true,
+      "sourceInstallationRemoved": true
+    },
+    "counts": {
+      "explicitReadinessPasses": 5,
+      "nativeSessionsStarted": 5,
+      "nativeSessionsStopped": 5,
+      "proxyBodyChecks": 5,
+      "uploadChecks": 5,
+      "streamChecks": 5,
+      "restoredHTTPChecks": 1,
+      "managerRestartCommands": 2,
+      "completedManagerRestarts": 2,
+      "journalChecks": 6,
+      "journalRecordsObserved": 198,
+      "journalRunningMarkers": 6,
+      "downstreamTLSSessionChecks": 3,
+      "upstreamTLSSessionChecks": 3
+    },
+    "cleanup": {
+      "managerStopped": true,
+      "launcherExited": true,
+      "nativeGroupsAbsent": true,
+      "listeningPortsClosed": true,
+      "controlSocketAbsent": true,
+      "downstreamTLSPortClosed": true,
+      "runtimeLinkAbsent": true,
+      "upstreamTLSPortClosed": true,
+      "readinessRelayPortClosed": true,
+      "upstreamTLSOriginClosed": true,
+      "readinessRelayClosed": true,
+      "appSocketsRemaining": 0,
+      "installationRemoved": true,
+      "temporaryRootRemoved": true
+    },
+    "privateNodeRemoved": true,
+    "bootstrapTemporaryRootRemoved": true,
+    "runtimeUnitRemoved": true,
+    "nativeGroups": 20,
+    "alpha": {
+      "format": "node-test-tap",
+      "pass": 197,
+      "fail": 0,
+      "valid": true,
+      "total": 197,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "officialSample": {
+      "files": 35,
+      "filesPassed": 34,
+      "filesSkipped": 1,
+      "filesFailed": 0,
+      "assertions": {
+        "run": 1131,
+        "passed": 1105,
+        "failed": 0,
+        "skipped": 25,
+        "todoFailed": 1,
+        "todoPassed": 0
+      }
+    },
+    "contractTAP": {
+      "service-lifecycle-contract.tap": {
+        "tests": 618,
+        "pass": 617,
+        "fail": 0,
+        "skipped": 1,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "verified-node-contract.tap": {
+        "tests": 102,
+        "pass": 102,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      }
+    },
+    "rootOnlySkip": "Actual root CLI refusal not executed on nonroot runner; actual nonroot service separately executed.",
+    "failureContainmentExercised": false,
+    "physicalFixturesExecutedLocally": false,
+    "hostPathsPIDsSessionKeysPublished": false,
+    "unsupported": {
+      "tlsBackupAccepted": false,
+      "packageUpgradeRollbackAccepted": false,
+      "fullG3Accepted": false,
+      "fullG4Accepted": false,
+      "productionAccepted": false,
+      "permanentReleaseAccepted": false
+    }
+  },
+  "nativePR": {
+    "schemaVersion": 1,
+    "sourceSHA": "831360a9a9770815c660f5bc06d002b92154a1b0",
+    "sourceTree": "2008abfd22dd799ec68e7006f11bd07a52124682",
+    "runId": 40447810051,
+    "jobId": 122003208919,
+    "event": "pull_request",
+    "actualSuccessfulJobSteps": 34,
+    "workflowState": "completed_success",
+    "actualMergeBuildSHA": "cccfdcdc6450a3a48a7ea334e3195bac475fb47d",
+    "mergeTreeMatchesSource": true,
+    "orderedMergeParents": [
+      "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+      "831360a9a9770815c660f5bc06d002b92154a1b0"
+    ],
+    "artifact": {
+      "id": 12709207750,
+      "name": "x10-native-evidence",
+      "bytes": 138632,
+      "zipSHA256": "ea1a13cd6c10cac6536ff65ced6b327a437498f346ff6416507c5440207be1dd",
+      "downloads": 1,
+      "digestVerified": true,
+      "expiresAtUTC": "2026-11-10T04:13:55Z"
+    },
+    "nativeGroups": 20,
+    "allNativeGroupsPassed": true,
+    "fullAlphaTAP": {
+      "format": "node-test-tap",
+      "pass": 197,
+      "fail": 0,
+      "valid": true,
+      "total": 197,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "serviceContractTAP": {
+      "tests": 618,
+      "pass": 617,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 1,
+      "todo": 0
+    },
+    "serviceContractSkipReason": "Actual root CLI refusal only; real nonroot lifecycle is a separate required CI command",
+    "service": {
+      "ok": true,
+      "scope": "ephemeral-user-service-basic-lifecycle",
+      "actualNonrootManagerObserved": true,
+      "actualUnitStarted": true,
+      "restoredHTTPChecks": 1,
+      "restoredHTTPProof": {
+        "stoppedConfirmedSource": true,
+        "privateBackupCreated": true,
+        "sourceUnitRemoved": true,
+        "freshUnit": true,
+        "freshInstallation": true,
+        "freshSession": true,
+        "freshRevision": true,
+        "exactInputRestored": true,
+        "portsPreserved": true,
+        "bindingInitiallyAbsent": true,
+        "freshHistory": true,
+        "restoredHTTPServed": true,
+        "restoredHTTPRestarted": true,
+        "noPostReplay": true,
+        "sourceRecordsPreserved": true,
+        "backupPreserved": true,
+        "archivePreserved": true,
+        "sourceInstallationRemoved": true
+      },
+      "counts": {
+        "explicitReadinessPasses": 5,
+        "nativeSessionsStarted": 5,
+        "nativeSessionsStopped": 5,
+        "proxyBodyChecks": 5,
+        "uploadChecks": 5,
+        "streamChecks": 5,
+        "managerRestartCommands": 2,
+        "completedManagerRestarts": 2,
+        "journalChecks": 6,
+        "journalRecordsObserved": 198,
+        "journalRunningMarkers": 6,
+        "downstreamTLSSessionChecks": 3,
+        "upstreamTLSSessionChecks": 3
+      },
+      "journalCountUnit": "Bounded attributed checks; each check may issue1-3 journalctl queries",
+      "cleanup": {
+        "managerStopped": true,
+        "launcherExited": true,
+        "nativeGroupsAbsent": true,
+        "listeningPortsClosed": true,
+        "controlSocketAbsent": true,
+        "downstreamTLSPortClosed": true,
+        "runtimeLinkAbsent": true,
+        "upstreamTLSPortClosed": true,
+        "readinessRelayPortClosed": true,
+        "upstreamTLSOriginClosed": true,
+        "readinessRelayClosed": true,
+        "appSocketsRemaining": 0,
+        "installationRemoved": true,
+        "temporaryRootRemoved": true
+      },
+      "runtimeUnitRemoved": true,
+      "unitEnabled": false,
+      "priorProofLengths": {
+        "failedStartProof": 11,
+        "controlledSlowDrainProof": 14,
+        "operatorInterruptionProof": 14,
+        "operatorNativeChallengeProof": 6
+      },
+      "actualFailureContainmentAttempted": false,
+      "primaryFailure": null,
+      "cleanupFailureCount": 0,
+      "archiveSHA256": "4820d998261dd0f6062f51ce70f8d861666c89c66551707f0bfd056449d7ec6a",
+      "binarySHA256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+      "tlsBackupAccepted": false,
+      "packageUpgradeRollbackAccepted": false,
+      "fullG3Accepted": false,
+      "fullG4Accepted": false,
+      "productionAccepted": false
+    },
+    "privateNode": {
+      "version": "v22.23.3",
+      "signatureVerified": true,
+      "runtimeVersionVerified": true,
+      "nodeSHA256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+      "removed": true,
+      "bootstrapTemporaryRootRemoved": true
+    },
+    "build": {
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "sourceDiffSHA256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+      "binarySHA256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+      "compiledModuleCount": 105,
+      "generatedFiles": {
+        "ngx_auto_config.h": {
+          "sha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+          "bytes": 10104,
+          "mode": "0644"
+        },
+        "ngx_auto_headers.h": {
+          "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+          "bytes": 657,
+          "mode": "0644"
+        },
+        "ngx_modules.c": {
+          "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+          "bytes": 11820,
+          "mode": "0644"
+        }
+      },
+      "dependencyVersionsFromHeaders": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      }
+    },
+    "acceptance": "EXACT_SCOPED_RESTORED_HTTP_MANAGED_SERVICE_SUCCESS",
+    "limitations": [
+      "Same checked runtime package; no meaningful distinct-runtime-package upgrade or rollback.",
+      "Only six selected current source records plus backup/archive preservation are exercised.",
+      "TLS backup, full G3/G4/V1, permanent release, independent published replay, soak and semantic Continuum remain open.",
+      "Normal successful operation does not accept the unexercised failure-containment branch.",
+      "Artifact is temporary Actions evidence, not a permanent release."
+    ]
+  },
+  "research": {
+    "researchPR": {
+      "runId": 40447810097,
+      "jobId": 122003213582,
+      "attempt": 1,
+      "state": "completed_success",
+      "actualSteps": 11,
+      "allActualStepsSuccessful": true,
+      "checkoutCommit": "cccfdcdc6450a3a48a7ea334e3195bac475fb47d",
+      "checkoutTree": "2008abfd22dd799ec68e7006f11bd07a52124682",
+      "orderedParents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "831360a9a9770815c660f5bc06d002b92154a1b0"
+      ],
+      "checkoutMatchesSourceTree": true,
+      "nodeVersion": "v22.23.3",
+      "commands": [
+        {
+          "command": "node x10/continuum/check.mjs",
+          "counts": {
+            "tests": 21,
+            "suites": 0,
+            "pass": 21,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "exitCode": 0
+        },
+        {
+          "command": "node --test --test-reporter=tap x10/continuum/process-handover.test.mjs",
+          "counts": {
+            "tests": 7,
+            "pass": 7,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "observedCommand": true
+        },
+        {
+          "command": "node x10/continuum/handshake-check.mjs",
+          "counts": {
+            "tests": 27,
+            "suites": 0,
+            "pass": 27,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "exitCode": 0
+        },
+        {
+          "command": "node x10/continuum/openssl-probe-check.mjs",
+          "counts": {
+            "tests": 48,
+            "suites": 0,
+            "pass": 48,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "exitCode": 0
+        }
+      ],
+      "logFetchedExactlyOnce": true
+    },
+    "researchPush": {
+      "runId": 40447807327,
+      "workflowState": "completed_success",
+      "runtimeJobId": 122003210233,
+      "runtimeState": "skipped",
+      "runtimeSteps": null,
+      "runtimeAcceptanceClaimed": false
+    },
+    "cla": {
+      "runId": 40447808536,
+      "jobId": 122003137643,
+      "state": "failure",
+      "failedStep": 3,
+      "agreementSigned": false,
+      "bypassPerformed": false
+    }
+  },
+  "review": {
+    "independentReviewBlockers": 0,
+    "bothExistingArchivesIndependentlyReparsed": true,
+    "coordinatorArchiveDigestsAndServiceProofsRechecked": true,
+    "noUnchangedRuntimeRerunRequested": true
+  },
+  "limitations": [
+    "Only the same schema2 checked runtime package was restored; different archive/provenance hashes do not prove meaningfully different runtime packages.",
+    "Six selected current source records plus backup/archive are preserved until the documented source-uninstall boundary; no external application database/data restore.",
+    "Wrong-readiness negative belongs to the original source/startup and separate foreground tests; no new restored-target wrong-readiness acceptance.",
+    "Normal service success leaves actual failure containment unexercised.",
+    "Historical local cleanup FAIL_UNKNOWN, mode-drift and unknown195 causes remain retained in immutable prior history.",
+    "Temporary Actions artifacts expire; permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open."
+  ]
+}

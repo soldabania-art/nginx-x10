@@ -396,5 +396,46 @@
     "fullG3Accepted": false,
     "fullG4Accepted": false,
     "productionAccepted": false
+  },
+  "restoredHTTPManagedServiceHosted": {
+    "state": "EXACT_SCOPED_RESTORED_HTTP_MANAGED_SERVICE_SUCCESS",
+    "implementationCommit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+    "implementationTree": "2008abfd22dd799ec68e7006f11bd07a52124682",
+    "evidence": "x10/evidence/g4-restored-service-hosted.json",
+    "scope": "Same checked runtime package; stopped confirmed HTTP source restored into a fresh temporary nonroot systemd-user installation/unit, operated and restarted.",
+    "nativeRunIds": [
+      40447807340,
+      40447810051
+    ],
+    "nativeJobIds": [
+      122003205464,
+      122003208919
+    ],
+    "all34ActualStepsEach": true,
+    "nativeGroupsEach": 20,
+    "fullAlphaEach": 197,
+    "restoredProofFieldsEach": 18,
+    "nativeSessionsEach": 5,
+    "managerRestartsEach": 2,
+    "journalChecksEach": 6,
+    "journalChecksAreNotExactQueryCounts": true,
+    "tlsSessionsEach": 3,
+    "all13CleanupFactsEach": true,
+    "privateNodeAndBootstrapRemovedEach": true,
+    "serviceContractEach": {
+      "tests": 618,
+      "pass": 617,
+      "skipped": 1,
+      "fail": 0,
+      "skipReason": "Root-only refusal control not executed by nonroot runner; actual nonroot service separately executed."
+    },
+    "restoredManagedServiceAccepted": true,
+    "samePackageOnly": true,
+    "tlsBackupAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false,
+    "actualFailureContainmentExercised": false
   }
 }

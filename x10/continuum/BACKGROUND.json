@@ -1,13 +1,7 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-restored-service-ci-20261027T042058134Z",
-    "owner": "codex-x10-restored-service-ci-coordinator",
-    "baseCommit": "831360a9a9770815c660f5bc06d002b92154a1b0",
-    "acquiredAtUTC": "2026-10-27T04:20:58.134Z",
-    "expiresAtUTC": "2026-10-27T05:04:58.134Z"
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
     "requestedAtUTC": "2026-10-27T03:45:59.000Z",
     "hours": 20,
@@ -176,6 +170,47 @@
       "fullG3Accepted": false,
       "fullG4Accepted": false,
       "productionAccepted": false
+    },
+    "restoredHTTPManagedServiceHosted": {
+      "state": "EXACT_SCOPED_RESTORED_HTTP_MANAGED_SERVICE_SUCCESS",
+      "implementationCommit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+      "implementationTree": "2008abfd22dd799ec68e7006f11bd07a52124682",
+      "evidence": "x10/evidence/g4-restored-service-hosted.json",
+      "scope": "Same checked runtime package; stopped confirmed HTTP source restored into a fresh temporary nonroot systemd-user installation/unit, operated and restarted.",
+      "nativeRunIds": [
+        40447807340,
+        40447810051
+      ],
+      "nativeJobIds": [
+        122003205464,
+        122003208919
+      ],
+      "all34ActualStepsEach": true,
+      "nativeGroupsEach": 20,
+      "fullAlphaEach": 197,
+      "restoredProofFieldsEach": 18,
+      "nativeSessionsEach": 5,
+      "managerRestartsEach": 2,
+      "journalChecksEach": 6,
+      "journalChecksAreNotExactQueryCounts": true,
+      "tlsSessionsEach": 3,
+      "all13CleanupFactsEach": true,
+      "privateNodeAndBootstrapRemovedEach": true,
+      "serviceContractEach": {
+        "tests": 618,
+        "pass": 617,
+        "skipped": 1,
+        "fail": 0,
+        "skipReason": "Root-only refusal control not executed by nonroot runner; actual nonroot service separately executed."
+      },
+      "restoredManagedServiceAccepted": true,
+      "samePackageOnly": true,
+      "tlsBackupAccepted": false,
+      "packageUpgradeRollbackAccepted": false,
+      "fullG3Accepted": false,
+      "fullG4Accepted": false,
+      "productionAccepted": false,
+      "actualFailureContainmentExercised": false
     }
   },
   "lastV1DevelopmentPass": {
@@ -243,19 +278,24 @@
     "packageUpgradeRollbackAccepted": false,
     "fullG3Accepted": false,
     "fullG4Accepted": false,
-    "productionAccepted": false
+    "productionAccepted": false,
+    "exactHostedAcceptance": "EXACT_SCOPED_RESTORED_HTTP_MANAGED_SERVICE_SUCCESS",
+    "hostedEvidence": "x10/evidence/g4-restored-service-hosted.json",
+    "verifiedOnImplementationCommit": "831360a9a9770815c660f5bc06d002b92154a1b0"
   },
   "pendingVerification": [
-    "Inspect exact resulting implementation native push/PR jobs and actual service artifact: require all 18 restored HTTP proofs, five successful sessions, two manager restarts, six bounded journal checks, unchanged three TLS sessions and complete owned/private-Node cleanup. Accept only scoped restored HTTP managed-service evidence on success. Then verify meaningful distinct-runtime-package A-to-B-to-A and state compatibility; tests/docs-only successors are not distinct runtime packages. Keep TLS restore unsupported and full G3/G4/V1, permanent release, independent published replay,60-minute soak and semantic Continuum open.",
-    "Read COMPLETE mandatory ancestral checkpoint and gate references, preserving every adverse and unknown result. No local physical native/process-group/signal/systemd fixture is admitted by the present namespace."
+    "Implement and verify the supported side-by-side package transition and rollback contract using meaningfully distinct reviewed installed runtime payloads, preserving the old package/prefix/state until target acceptance. Distinguish package/operator runtime change from native NGINX binary change; tests/docs/provenance-only successors and same-package restore do not qualify. Establish reversible state compatibility and failure refusals, then obtain actual hosted A-to-B-to-A evidence. Keep TLS backup unsupported; permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
+    "Any resulting metadata successor CI is separate from the accepted831360 implementation runtime evidence. Do not request unchanged runtime reruns without a new reason."
   ],
-  "nextConcreteTask": "Inspect exact resulting implementation native push/PR jobs and actual service artifact: require all 18 restored HTTP proofs, five successful sessions, two manager restarts, six bounded journal checks, unchanged three TLS sessions and complete owned/private-Node cleanup. Accept only scoped restored HTTP managed-service evidence on success. Then verify meaningful distinct-runtime-package A-to-B-to-A and state compatibility; tests/docs-only successors are not distinct runtime packages. Keep TLS restore unsupported and full G3/G4/V1, permanent release, independent published replay,60-minute soak and semantic Continuum open.",
+  "nextConcreteTask": "Implement and verify the supported side-by-side package transition and rollback contract using meaningfully distinct reviewed installed runtime payloads, preserving the old package/prefix/state until target acceptance. Distinguish package/operator runtime change from native NGINX binary change; tests/docs/provenance-only successors and same-package restore do not qualify. Establish reversible state compatibility and failure refusals, then obtain actual hosted A-to-B-to-A evidence. Keep TLS backup unsupported; permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
   "nextTasks": [
     {
       "id": "G4-restored-HTTP-managed-service-exact-CI",
-      "state": "PENDING_EXACT_HOSTED",
+      "state": "ACCEPTED_SCOPED_SAME_PACKAGE_HTTP_ONLY",
       "goal": "Inspect exact resulting implementation native push/PR jobs and actual service artifact: require all 18 restored HTTP proofs, five successful sessions, two manager restarts, six bounded journal checks, unchanged three TLS sessions and complete owned/private-Node cleanup. Accept only scoped restored HTTP managed-service evidence on success. Then verify meaningful distinct-runtime-package A-to-B-to-A and state compatibility; tests/docs-only successors are not distinct runtime packages. Keep TLS restore unsupported and full G3/G4/V1, permanent release, independent published replay,60-minute soak and semantic Continuum open.",
-      "evidence": "x10/evidence/g4-restored-service.json"
+      "evidence": "x10/evidence/g4-restored-service.json",
+      "verifiedOnImplementationCommit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+      "hostedEvidence": "x10/evidence/g4-restored-service-hosted.json"
     },
     {
       "id": "G4-restored-managed-service-and-package-rollback",
@@ -296,7 +336,7 @@
   },
   "portfolioContinuation": {
     "activeProject": "x10",
-    "currentGate": "RESTORED_HTTP_MANAGED_SERVICE_CODE_PRESENT_EXACT_HOSTED_PENDING",
+    "currentGate": "RESTORED_HTTP_MANAGED_SERVICE_EXACT_HOSTED_VERIFIED_DISTINCT_PACKAGE_ROLLBACK_OPEN",
     "fullVisionAndDeferredResearchReference": {
       "path": "x10/continuum/PLAN.md",
       "historicalAssignmentReference": {
@@ -330,38 +370,52 @@
   },
   "productionAccepted": false,
   "lastV1VerificationReceipt": {
-    "state": "EXACT_SCOPED_RESTORED_FOREGROUND_HTTP_SUCCESS",
-    "implementationCommit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
-    "implementationTree": "04729ebf53161427a751f94d219d03f2be3a3503",
-    "evidence": "x10/evidence/g4-restored-http-hosted.json",
-    "scope": "Extracted-bundle restored foreground HTTP application only",
+    "state": "EXACT_SCOPED_RESTORED_HTTP_MANAGED_SERVICE_SUCCESS",
+    "implementationCommit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+    "implementationTree": "2008abfd22dd799ec68e7006f11bd07a52124682",
+    "evidence": "x10/evidence/g4-restored-service-hosted.json",
+    "scope": "Same checked runtime package; stopped confirmed HTTP source restored into a fresh temporary nonroot systemd-user installation/unit, operated and restarted.",
     "nativeRunIds": [
-      40441860772,
-      40441866135
+      40447807340,
+      40447810051
     ],
     "nativeJobIds": [
-      121983898949,
-      121983950332
+      122003205464,
+      122003208919
     ],
     "all34ActualStepsEach": true,
     "nativeGroupsEach": 20,
     "fullAlphaEach": 197,
-    "foregroundHTTPAccepted": true,
-    "managedServiceRestoreAccepted": false,
+    "restoredProofFieldsEach": 18,
+    "nativeSessionsEach": 5,
+    "managerRestartsEach": 2,
+    "journalChecksEach": 6,
+    "journalChecksAreNotExactQueryCounts": true,
+    "tlsSessionsEach": 3,
+    "all13CleanupFactsEach": true,
+    "privateNodeAndBootstrapRemovedEach": true,
+    "serviceContractEach": {
+      "tests": 618,
+      "pass": 617,
+      "skipped": 1,
+      "fail": 0,
+      "skipReason": "Root-only refusal control not executed by nonroot runner; actual nonroot service separately executed."
+    },
+    "restoredManagedServiceAccepted": true,
+    "samePackageOnly": true,
     "tlsBackupAccepted": false,
     "packageUpgradeRollbackAccepted": false,
     "fullG3Accepted": false,
     "fullG4Accepted": false,
-    "productionAccepted": false
+    "productionAccepted": false,
+    "actualFailureContainmentExercised": false
   },
   "previousV1VerificationReceiptReference": {
-    "commit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+    "commit": "831360a9a9770815c660f5bc06d002b92154a1b0",
     "path": "x10/continuum/BACKGROUND.json",
-    "blobSha": "7602d58510c3b60cae511195cf7f5d9442f6da41",
     "requiredReadBeforeNextTask": true,
     "readCompleteHistoricalDocument": true,
-    "allPriorAcceptanceFailuresAndUnknownsRetained": true,
-    "recordLocator": "lastV1VerificationReceipt"
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
   },
   "previousV1DevelopmentPassReference": {
     "commit": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
