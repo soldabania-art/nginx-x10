@@ -2814,3 +2814,14 @@ new totals by subtracting17 from617 or adding it to162. No blind budget raise
 or unchanged rerun. PR-only9b compatibility does not clear push9b timeout or
 unknown wholealpha cleanup. Capacity implementation waits for this gate.
 Preserve all release/recovery/security/Continuum and40h/Windows constraints.
+
+
+## After inventory binding repair
+
+First verify both exact successor jobs/artifacts: complete managed/alpha TAP,
+all retained recipe and expanded binding controls, physical inventory assertions,
+strictservice reports and owned/privateNode/history/bootstrap cleanup. No counts
+transferred from oldsource or guessed by arithmetic. Both844 failures were
+ReferenceError/non-timeout; retain unknown wholefailedalpha cleanup. Capacity
+remains dependent on accepted compatibility, and the earlier timeout histories
+are not explained or cleared by this test binding repair. Allfullgates remain.

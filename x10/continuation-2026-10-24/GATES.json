@@ -2029,5 +2029,66 @@
       "requiredReadBeforeNextTask": true,
       "fullPriorRecordRequired": true
     }
+  ],
+  "alphaBoundedDecompositionHostedFailure": {
+    "state": "BOTH_NATIVE_HOSTED_FAILED_INVENTORY_BINDINGS",
+    "implementationCommit": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+    "evidence": "x10/evidence/g5-alpha-inventory-bindings-hosted-failure.json",
+    "nativeRuns": [
+      40551918135,
+      40551926948
+    ],
+    "nativeJobs": [
+      122358084257,
+      122358886554
+    ],
+    "nativeGroupsPassed": 19,
+    "nativeGroupsTotal": 20,
+    "managedTAP": 201,
+    "relocatedRecipeControlsIncluded": 17,
+    "priorGuardControlsIncluded": 22,
+    "readerControlsIncluded": 76,
+    "alphaTAP": {
+      "tests": 600,
+      "pass": 598,
+      "fail": 2
+    },
+    "alphaElapsedMs": [
+      83235,
+      83115
+    ],
+    "timedOut": false,
+    "observedFailure": "recipeV2Names is not defined",
+    "sourceConfirmedLatentOmission": "recipeV2Dirs",
+    "fullFailedAlphaOwnedCleanupConfirmed": false,
+    "laterServicePackagePrivateNodeGates": "SKIPPED",
+    "productionAccepted": false
+  },
+  "alphaInventoryBindingsCandidate": {
+    "state": "LOCAL_BINDING_REPAIR_HOSTED_PENDING",
+    "sourceBase": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+    "publicationParent": "51178f96d8eb3e63fd909a614e5509e93b03f8d0",
+    "evidence": "x10/evidence/g5-alpha-inventory-bindings.json",
+    "perFileLedger": "x10/review/g5-alpha-inventory-bindings-ledger.json",
+    "scope": "Export recipeV2Names/recipeV2Dirs from shared test helper and import both into physical alpha test; add pure actual-consumer ESM-link and VM inventory assertion regression guards. No runtime payload, physical assertion, workflow, group or timeout change.",
+    "capacityRemainsDependent": true,
+    "physicalFixturesExecuted": 0,
+    "productionAccepted": false
+  },
+  "alphaDecompositionPriorReferences": [
+    {
+      "commit": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+      "path": "x10/evidence/g5-alpha-bounded-decomposition.json",
+      "blobSha": "67d6e0a6d78576490f554de6b313d5f7bac023d5",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+      "path": "x10/review/g5-alpha-bounded-decomposition-ledger.json",
+      "blobSha": "cbf02219a24ec6a40bf20d76637219e8d735ec5c",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
   ]
 }

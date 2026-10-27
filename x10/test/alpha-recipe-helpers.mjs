@@ -20,9 +20,9 @@ export async function amendRecord(file, mutate) {
 // synthetic NONEXECUTED native bytes and no session/native/process-group start.
 export const recipeControlNames=['cli.mjs','manager.mjs','listeners.mjs','generations.mjs','status-format.mjs'];
 export const recipeAlphaNames=['cli.mjs','runtime.mjs','upstream-example.mjs'];
-const recipeV2Names=['bin/nginx','bin/x10','build.json','licenses/NGINX-LICENSE','licenses/UPSTREAM.txt','examples/candidate-b.json',
+export const recipeV2Names=['bin/nginx','bin/x10','build.json','licenses/NGINX-LICENSE','licenses/UPSTREAM.txt','examples/candidate-b.json',
   ...recipeControlNames.map(n=>'lib/control/'+n),...recipeAlphaNames.map(n=>'lib/alpha/'+n),'lib/service/user-unit.mjs'].sort();
-const recipeV2Dirs=['bin','lib','lib/control','lib/alpha','lib/service','licenses','examples','runs'];
+export const recipeV2Dirs=['bin','lib','lib/control','lib/alpha','lib/service','licenses','examples','runs'];
 // Independent installed-byte comparison. This never imports the package helper
 // under test and grants no process, compatibility, upgrade or rollback authority.
 export async function assertInstalledPackageInfo(prefix, launcher, invoke) {

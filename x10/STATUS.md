@@ -3404,3 +3404,26 @@ checks coverage. This is test scheduling, not a measured speedup or runtime fix.
 verification separately; exact successor hosted compatibility is pending.
 Capacity remains dependent; fullG3/G4/G5/G7/V1 and earlier adverse/owner40h/Windows
 boundaries are preserved. No localphysical/native/network/signals/systemd ran.
+
+
+## 27 October 2026: restore extracted inventory bindings
+
+Both exact844 native runs40551918135/job122358084257 and
+40551926948/job122358886554 failed19/20groups without timeout. Managed201TAP
+passed with moved17/new22/reader76 included; alpha598PASS/2FAIL/600total
+failed on recipeV2Names ReferenceError plus parent propagation. recipeV2Dirs
+was also missing from the shared-module exports/imports on the next line;
+that second omission is source-confirmed, not a separate observed hostederror.
+Both wholefailedalpha cleanup results remainUNKNOWN; laterservice/privateNode
+gates skipped. [Actual failure receipt](evidence/g5-alpha-inventory-bindings-hosted-failure.json)
+keeps event/build/artifact facts and prior history separate.
+
+The narrow repair exports both test-helper inventory constants and imports
+them into alpha. Physical test bodies/cleanup and runtime bytes are unchanged.
+Pure guards now link the actual consumer import clause and execute its exact
+inventory assertions against mock records, retaining the earlier body guards.
+[Candidate evidence](evidence/g5-alpha-inventory-bindings.json) records actual
+local results separately. Exact successor physical compatibility remains pending;
+capacity and fullG3/G4/G5/G7/V1/release/recovery/Continuum gates remainOPEN.
+No localphysical/native/network/processgroup/signal/systemd fixtures ran.
+Owner40h/history/Windows and allprior adverse evidence are preserved.

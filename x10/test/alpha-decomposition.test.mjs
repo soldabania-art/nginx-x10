@@ -1,4 +1,4 @@
-// Pure source preservation controls. No fixture/helper import or execution.
+// Pure source preservation and module binding controls. No physical fixture runs.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -130,3 +130,86 @@ test('workflow configured step names and job budgets are unchanged', () => {
   assert.deepEqual([...workflow.matchAll(/^\s+- name: (.+)$/gm)].map(m => m[1]), snapshot.workflowSteps);
   assert.deepEqual([...workflow.matchAll(/^\s+timeout-minutes: (.+)$/gm)].map(m => m[1]), snapshot.workflowBudgets);
 });
+
+// Link the actual consumer clauses without importing either test module. The
+// helper module only defines functions/constants; none of its fixtures run.
+import vm from 'node:vm';
+import path from 'node:path';
+const helperURL = new URL('./alpha-recipe-helpers.mjs', import.meta.url).href;
+const sharedDeclarations = ['amendRecord', 'recipeControlNames', 'recipeAlphaNames',
+  'recipeV2Names', 'recipeV2Dirs', 'assertInstalledPackageInfo', 'recipeTree',
+  'prepareRecipeNode', 'observeRecipeNode', 'verifyRecipeNode', 'rawRecipeNodeCommand',
+  'recipeNodeCommand', 'installedRecipeFixture', 'recipeCli', 'assertRecipeResult'];
+function consumerClause(source) {
+  const match = /import\s*\{([^}]+)\}\s*from\s*'\.\/alpha-recipe-helpers\.mjs';/.exec(source);
+  assert(match, 'One actual shared-helper named import is required');
+  const names = match[1].split(',').map(v => v.trim());
+  assert(names.every(v => /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(v)));
+  assert.equal(new Set(names).size, names.length);
+  return { clause: match[0], names };
+}
+const consumers = { alpha: consumerClause(alpha), recipe: consumerClause(recipe) };
+function moduleURL(source) { return 'data:text/javascript;base64,' + Buffer.from(source).toString('base64'); }
+function linkConsumer(consumer, url, exports = consumer.names) {
+  const clause = consumer.clause.replace("'./alpha-recipe-helpers.mjs'", JSON.stringify(url));
+  return import(moduleURL(clause + '\nexport { ' + exports.join(', ') + ' };\n'));
+}
+for (const [name, consumer] of Object.entries(consumers))
+  test('actual ' + name + ' consumer import clause links every used shared binding', async () => {
+    const linked = await linkConsumer(consumer, helperURL);
+    assert.deepEqual(Object.keys(linked).sort(), [...consumer.names].sort());
+    const actual = await import(helperURL);
+    for (const binding of consumer.names) assert.equal(linked[binding], actual[binding]);
+  });
+const oldAlphaConsumer = {
+  clause: "import { amendRecord, recipeControlNames, recipeAlphaNames, assertInstalledPackageInfo,\n  recipeTree, prepareRecipeNode, verifyRecipeNode, recipeNodeCommand, assertRecipeResult } from './alpha-recipe-helpers.mjs';",
+  names: ['amendRecord', 'recipeControlNames', 'recipeAlphaNames', 'assertInstalledPackageInfo',
+    'recipeTree', 'prepareRecipeNode', 'verifyRecipeNode', 'recipeNodeCommand', 'assertRecipeResult']
+};
+test('exact844 alpha import omission refuses both requested inventory bindings before fixture execution', async () => {
+  await assert.rejects(linkConsumer(oldAlphaConsumer, helperURL, ['recipeV2Names', 'recipeV2Dirs']),
+    error => error.name === 'SyntaxError' && /not defined/.test(error.message));
+});
+test('shared helper export inventory is the finite original fifteen declarations', async () => {
+  const actual = await import(helperURL);
+  assert.equal(sharedDeclarations.length, 15);
+  assert.deepEqual(Object.keys(actual).sort(), [...sharedDeclarations].sort());
+});
+test('the two actual consumer clauses cover all fifteen shared declarations', () => {
+  assert.deepEqual([...new Set(Object.values(consumers).flatMap(v => v.names))].sort(),
+    [...sharedDeclarations].sort());
+});
+for (const missing of sharedDeclarations)
+  test('actual consumer named imports refuse missing helper export: ' + missing, async () => {
+    const consumer = Object.values(consumers).find(v => v.names.includes(missing)); assert(consumer);
+    const incomplete = moduleURL(sharedDeclarations.filter(v => v !== missing)
+      .map(v => 'export const ' + v + ' = null;').join('\n'));
+    await assert.rejects(linkConsumer(consumer, incomplete), error =>
+      error.name === 'SyntaxError' && error.message.includes(missing) && /export/.test(error.message));
+  });
+const inventoryLine = alpha.split('\n').find(line => line.includes('assert.equal(installedRecord.schemaVersion,2)'));
+const directoryLine = alpha.split('\n').find(line => line.includes('for(const dir of recipeV2Dirs)'));
+assert(inventoryLine && directoryLine, 'Both exact remaining physical inventory assertions are required');
+async function inventoryAssertions(missing) {
+  const actual = await import(helperURL), observed = [];
+  const context = {
+    assert, path, Object, installedRecord: { schemaVersion: 2,
+      immutable: Object.fromEntries(actual.recipeV2Names.map(name => [name, {}])) },
+    target: '/synthetic/owned-prefix', recipeV2Names: actual.recipeV2Names,
+    recipeV2Dirs: actual.recipeV2Dirs,
+    lstat: async file => { observed.push(file); return { mode: 0o700 }; }
+  };
+  if (missing) delete context[missing];
+  await new vm.Script('(async () => {\n' + inventoryLine + '\n' + directoryLine + '\n})()')
+    .runInNewContext(context, { timeout: 1000 });
+  return { observed, expected: actual.recipeV2Dirs.map(dir => path.join(context.target, dir)) };
+}
+test('exact remaining physical inventory assertions consume both actual imported arrays without I/O', async () => {
+  const result = await inventoryAssertions(); assert.deepEqual(result.observed, result.expected);
+  assert.equal(result.observed.length, 8);
+});
+for (const missing of ['recipeV2Names', 'recipeV2Dirs'])
+  test('exact remaining inventory assertions reproduce missing binding: ' + missing, async () => {
+    await assert.rejects(inventoryAssertions(missing), error =>
+      error.name === 'ReferenceError' && error.message.includes(missing));
+  });

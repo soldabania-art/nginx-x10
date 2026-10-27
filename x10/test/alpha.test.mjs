@@ -20,7 +20,7 @@ import '../alpha/stage.test.mjs';
 import { assertHostedOperatorReturn } from './package-return.mjs';
 import { SHARED_OPERATOR_PEERS, verifySharedOperatorPeerFiles } from '../service/operator-package-return.mjs';
 import './package-return-proof.test.mjs';
-import { amendRecord, recipeControlNames, recipeAlphaNames, assertInstalledPackageInfo,
+import { amendRecord, recipeControlNames, recipeAlphaNames, recipeV2Names, recipeV2Dirs, assertInstalledPackageInfo,
   recipeTree, prepareRecipeNode, verifyRecipeNode, recipeNodeCommand, assertRecipeResult } from './alpha-recipe-helpers.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url)), source = path.join(root, 'x10/alpha/cli.mjs');

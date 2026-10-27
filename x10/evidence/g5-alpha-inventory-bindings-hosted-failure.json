@@ -1,0 +1,818 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-hosted-alpha-inventory-bindings-failure",
+  "state": "BOTH_NATIVE_EVENTS_FAILED_EXTRACTION_DEPENDENCY",
+  "implementationCommit": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+  "implementationTree": "4a4b76e56c947ea1b2b3b4d6baac13419b1b913b",
+  "implementationSoleParent": "e2fa32cf282e8e312877dae40751ff5a4b646892",
+  "scope": "Exact844 decomposition implementation fails in both hosted native events despite successful managed group. This is adverse evidence for a missing shared test binding; it does not accept decomposition, installed/service compatibility, G5 or V1. A source/local successor correction is separate and hosted pending.",
+  "sourceBindings": {
+    "x10/test/alpha.test.mjs": {
+      "bytes": 91747,
+      "sha256": "2704fd2cf484382569a20bfa0465f78f6ced962eda0ab19490ffae6062ae25e8",
+      "blobSha": "595debf4279a5c8ee3ee5edffc8231f6b2e5883c"
+    },
+    "x10/test/alpha-recipe-helpers.mjs": {
+      "bytes": 14542,
+      "sha256": "38b1c7a903a1b3b46385047f85c8afde51baf0ebd7e2478025c87274fc7a2940",
+      "blobSha": "273df928b078731390fc80dc0deed1ca386effa1"
+    },
+    "x10/test/alpha-recipe.test.mjs": {
+      "bytes": 10577,
+      "sha256": "99530dcb2135b99c91eee30e87dfe21a7cd6cfd67aefaf1cef0ba58d6bebe5f4",
+      "blobSha": "47fe768ad98ab4307c2b43effc4ce6b21605a18f"
+    },
+    "x10/test/alpha-decomposition.test.mjs": {
+      "bytes": 8487,
+      "sha256": "29fc199a9b8831decad5b786337fdea1eb96470b4739083f93500a94a394cdad",
+      "blobSha": "e07aad2516a9869a0ed18f55b72c4ee8b33d2812"
+    },
+    "x10/test/all.mjs": {
+      "bytes": 32171,
+      "sha256": "ca43fcbc8388d76673c6d8bde061a94d1689b109af346b6d6efb9947f29deb82",
+      "blobSha": "e8d9e9b6fff1aecaf070df81602053c5fd472d85"
+    }
+  },
+  "nativeEvents": [
+    {
+      "event": "push",
+      "runId": 40551918135,
+      "jobId": 122358084257,
+      "status": "completed",
+      "conclusion": "failure",
+      "failedStepNumber": 22,
+      "actualOrderedSteps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Validate release-record contract and refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Validate alpha archive refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Validate guarded user-service recipe",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Validate fail-closed user-manager preflight",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Validate actual-service harness refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Validate bounded owned-service journal observations",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Validate bounded downstream HTTPS fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Validate bounded verified HTTPS origin fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Validate bounded paused TLS client controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Validate owned operator interruption controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Validate failed interruption containment controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Validate authenticated Node dependency refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Validate managed operator-package return refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Validate managed unhealthy-package fallback refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Build dependencies and optional test clients",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Install pinned HTTP3 interoperability client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19
+        },
+        {
+          "name": "Install independent HTTP3 HEAD client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20
+        },
+        {
+          "name": "Compile native profile",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "Native regressions and pinned official compatibility sample",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 22
+        },
+        {
+          "name": "Verify installed HTTPS upstream trust and hostname",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 23
+        },
+        {
+          "name": "Verify managed frontend HTTPS and certificate lifecycle",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 24
+        },
+        {
+          "name": "Verify native tenant cache contract experiment",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 25
+        },
+        {
+          "name": "Verify private Unix control transport",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 26
+        },
+        {
+          "name": "Build profile without control API",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 27
+        },
+        {
+          "name": "Package local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 28
+        },
+        {
+          "name": "Checksum local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 29
+        },
+        {
+          "name": "Verify packed alpha before extraction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 30
+        },
+        {
+          "name": "Verify temporary user-service with authenticated private Node",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 31
+        },
+        {
+          "name": "Preserve JSON evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32
+        },
+        {
+          "name": "Preserve local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 33
+        },
+        {
+          "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 65
+        },
+        {
+          "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 66
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 67
+        }
+      ],
+      "actualStepCount": 36,
+      "nativeGroups": {
+        "pass": 19,
+        "total": 20,
+        "failed": [
+          "local-alpha-lifecycle"
+        ]
+      },
+      "managedController": {
+        "tests": 201,
+        "pass": 201,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "elapsedMs": 60984,
+        "timedOut": false,
+        "exitCode": 0,
+        "movedRecipe17Included": true,
+        "newDecomposition22Included": true,
+        "reader76Included": true,
+        "testFiles": [
+          "x10/test/control.test.mjs",
+          "x10/control/record-input.test.mjs",
+          "x10/test/alpha-recipe.test.mjs",
+          "x10/test/alpha-decomposition.test.mjs"
+        ]
+      },
+      "alpha": {
+        "tests": 600,
+        "pass": 598,
+        "fail": 2,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "completeSummary": true,
+        "validSuccessSummary": false,
+        "elapsedMs": 83235,
+        "timedOut": false,
+        "exitCode": 1,
+        "outputLimitExceeded": false,
+        "failedChildBody": "checked-bundle-extracts-and-installs-without-original-build-paths",
+        "errorType": "ReferenceError",
+        "error": "recipeV2Names is not defined",
+        "sourceLocation": "x10/test/alpha.test.mjs:194:179",
+        "failedBodies": 1,
+        "parentPropagationFailures": 1
+      },
+      "artifact": {
+        "id": 12755718154,
+        "name": "x10-native-evidence",
+        "bytes": 127761,
+        "sha256": "8b5dbc89e9f8a93fdd4abdffb2b854f07fabd07de3fcfc77e70e09ec24a97a29",
+        "downloadedOnce": true,
+        "apiDigestVerified": true
+      },
+      "officialSample": {
+        "strictPass": 1105,
+        "skip": 25,
+        "expectedTODOFailed": 1,
+        "unexpectedFail": 0,
+        "cleanupErrors": []
+      },
+      "contractsSeparate": {
+        "archive": 122,
+        "releaseDeclaration": 119,
+        "return": 623,
+        "fallback": 545,
+        "verifiedNode": 138
+      },
+      "cleanup": {
+        "fullFailedAlphaOwnedCleanupConfirmed": false,
+        "fullFailedAlphaCleanupState": "UNKNOWN_NO_UNIVERSAL_RECEIPT",
+        "laterTLSServicePackagePrivateNodeGates": "SKIPPED",
+        "privateNodeCleanupAccepted": false,
+        "completedForegroundAndRestoredDiagnostics": "Their successful cleanup facts cover their own fixtures only; they cannot attest the failed initial extracted-bundle subtest or whole alpha suite."
+      },
+      "checkout": {
+        "revision": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+        "tree": "4a4b76e56c947ea1b2b3b4d6baac13419b1b913b"
+      }
+    },
+    {
+      "event": "pull_request",
+      "runId": 40551926948,
+      "jobId": 122358886554,
+      "status": "completed",
+      "conclusion": "failure",
+      "failedStepNumber": 22,
+      "actualOrderedSteps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Validate release-record contract and refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Validate alpha archive refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Validate guarded user-service recipe",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Validate fail-closed user-manager preflight",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Validate actual-service harness refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Validate bounded owned-service journal observations",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Validate bounded downstream HTTPS fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Validate bounded verified HTTPS origin fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Validate bounded paused TLS client controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Validate owned operator interruption controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Validate failed interruption containment controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Validate authenticated Node dependency refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Validate managed operator-package return refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Validate managed unhealthy-package fallback refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Build dependencies and optional test clients",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Install pinned HTTP3 interoperability client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19
+        },
+        {
+          "name": "Install independent HTTP3 HEAD client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20
+        },
+        {
+          "name": "Compile native profile",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "Native regressions and pinned official compatibility sample",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 22
+        },
+        {
+          "name": "Verify installed HTTPS upstream trust and hostname",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 23
+        },
+        {
+          "name": "Verify managed frontend HTTPS and certificate lifecycle",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 24
+        },
+        {
+          "name": "Verify native tenant cache contract experiment",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 25
+        },
+        {
+          "name": "Verify private Unix control transport",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 26
+        },
+        {
+          "name": "Build profile without control API",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 27
+        },
+        {
+          "name": "Package local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 28
+        },
+        {
+          "name": "Checksum local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 29
+        },
+        {
+          "name": "Verify packed alpha before extraction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 30
+        },
+        {
+          "name": "Verify temporary user-service with authenticated private Node",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 31
+        },
+        {
+          "name": "Preserve JSON evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32
+        },
+        {
+          "name": "Preserve local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 33
+        },
+        {
+          "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 65
+        },
+        {
+          "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 66
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 67
+        }
+      ],
+      "actualStepCount": 36,
+      "nativeGroups": {
+        "pass": 19,
+        "total": 20,
+        "failed": [
+          "local-alpha-lifecycle"
+        ]
+      },
+      "managedController": {
+        "tests": 201,
+        "pass": 201,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "elapsedMs": 60718,
+        "timedOut": false,
+        "exitCode": 0,
+        "movedRecipe17Included": true,
+        "newDecomposition22Included": true,
+        "reader76Included": true,
+        "testFiles": [
+          "x10/test/control.test.mjs",
+          "x10/control/record-input.test.mjs",
+          "x10/test/alpha-recipe.test.mjs",
+          "x10/test/alpha-decomposition.test.mjs"
+        ]
+      },
+      "alpha": {
+        "tests": 600,
+        "pass": 598,
+        "fail": 2,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "completeSummary": true,
+        "validSuccessSummary": false,
+        "elapsedMs": 83115,
+        "timedOut": false,
+        "exitCode": 1,
+        "outputLimitExceeded": false,
+        "failedChildBody": "checked-bundle-extracts-and-installs-without-original-build-paths",
+        "errorType": "ReferenceError",
+        "error": "recipeV2Names is not defined",
+        "sourceLocation": "x10/test/alpha.test.mjs:194:179",
+        "failedBodies": 1,
+        "parentPropagationFailures": 1
+      },
+      "artifact": {
+        "id": 12756068050,
+        "bytes": 127716,
+        "sha256": "513190ed382da11948bb2adaeaad05c474f0f6a8138342df60bb000948aa0ebf",
+        "downloadedOnce": true,
+        "apiDigestVerified": true
+      },
+      "officialSample": {
+        "strictPass": 1105,
+        "skip": 25,
+        "expectedTODOFailed": 1,
+        "unexpectedFail": 0,
+        "cleanupErrors": []
+      },
+      "contractsSeparate": {
+        "archive": 122,
+        "releaseDeclaration": 119,
+        "return": 623,
+        "fallback": 545,
+        "verifiedNode": 138
+      },
+      "cleanup": {
+        "fullFailedAlphaOwnedCleanupConfirmed": false,
+        "fullFailedAlphaCleanupState": "UNKNOWN_NO_UNIVERSAL_RECEIPT",
+        "laterTLSServicePackagePrivateNodeGates": "SKIPPED",
+        "privateNodeCleanupAccepted": false,
+        "completedForegroundAndRestoredDiagnostics": "Their successful cleanup facts cover their own fixtures only; they cannot attest the failed initial extracted-bundle subtest or whole alpha suite."
+      },
+      "checkout": {
+        "checkout": "9ed4d8732be29ce25bf1be36027aa6ad97ab6949",
+        "tree": "4a4b76e56c947ea1b2b3b4d6baac13419b1b913b",
+        "orderedParents": [
+          "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+          "8447c8f7894ef951e717a15ec5f4b48a6dc251e1"
+        ],
+        "apiVerified": true
+      }
+    }
+  ],
+  "diagnosis": {
+    "confirmedObservedRuntimeError": "Both actual hosted alpha runs report recipeV2Names ReferenceError at the same physical extracted-bundle assertion. The helpers module retains the constant privately while alpha references it without a corresponding import.",
+    "secondLatentSourceDependency": "recipeV2Dirs is referenced by the next statement at alpha.test.mjs:195 and is likewise private/unimported. This is source-confirmed; a second runtime ReferenceError was not independently observed because recipeV2Names failed first.",
+    "notHistoricalTimeoutExplanation": "Both exact844 failures were non-timeout. Their shorter alpha durations do not prove that the complete corrected suite will fit its budget, because the failed initial subtest terminated early. No explanation of previous34f/9b timeout causes or cleanup is established.",
+    "testReviewBoundary": "Successful moved17 controls and22pure source guards plus prior static review did not execute the remaining physical alpha body and missed its free constant bindings. Preserve that review limitation rather than treating their PASS as physical compatibility.",
+    "boundedCorrection": "Export and import both inventory constants, preserve their values and every original assertion, add cross-module free-binding/dependency checks without local physical alpha execution, and inspect exact new hosted results. Do not delete assertions, relax complete TAP, raise limits blindly or rerun unchanged code."
+  },
+  "researchPullRequest": {
+    "runId": 40551926279,
+    "jobId": 122358801145,
+    "status": "completed",
+    "conclusion": "success",
+    "actualStepCount": 11,
+    "actualOrderedSteps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1
+      },
+      {
+        "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2
+      },
+      {
+        "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 3
+      },
+      {
+        "name": "Build dependencies for TLS interoperability and isolated source probe",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 4
+      },
+      {
+        "name": "Independent record and state counterexamples",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5
+      },
+      {
+        "name": "Same TCP connection across research worker versions",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 6
+      },
+      {
+        "name": "Real TLS handshake and independent record observer",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 7
+      },
+      {
+        "name": "Pinned OpenSSL read-only state probe",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 8
+      },
+      {
+        "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 15
+      },
+      {
+        "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 16
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 17
+      }
+    ],
+    "coreTAP": 21,
+    "processTAP": 7,
+    "handshakeTAP": 27,
+    "sourceProbeTAP": 48,
+    "checkoutRevision": "9ed4d8732be29ce25bf1be36027aa6ad97ab6949",
+    "checkoutTree": "4a4b76e56c947ea1b2b3b4d6baac13419b1b913b",
+    "orderedParents": [
+      "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+      "8447c8f7894ef951e717a15ec5f4b48a6dc251e1"
+    ],
+    "apiGitCommitVerified": true,
+    "runtimeCountsFromActualLogs": true
+  },
+  "researchPush": {
+    "runId": 40551918215,
+    "runtimeJobId": 122357864346,
+    "status": "completed",
+    "conclusion": "skipped",
+    "runtimeAccepted": false
+  },
+  "cla": {
+    "runId": 40551922594,
+    "jobId": 122357663567,
+    "status": "completed",
+    "conclusion": "failure",
+    "failedStepNumber": 3,
+    "actualOrderedSteps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1
+      },
+      {
+        "name": "Check if F5 CLA should be skipped",
+        "status": "completed",
+        "conclusion": "skipped",
+        "number": 2
+      },
+      {
+        "name": "Run F5 CLA assistant",
+        "status": "completed",
+        "conclusion": "failure",
+        "number": 3
+      },
+      {
+        "name": "Leave a note in the PR if the F5 CLA is not required",
+        "status": "completed",
+        "conclusion": "skipped",
+        "number": 4
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5
+      }
+    ],
+    "separateFromNativeResearch": true
+  },
+  "historyPreserved": [
+    "Exact9b push alpha120008ms timeout/rootcauseUNKNOWN/wholecleanupUNKNOWN; PR-only9b success remains separately scoped.",
+    "Exact98b peer-precondition failures and unconfirmed wholealpha cleanup.",
+    "34f timeout120006ms/rootcauseUNKNOWN/cleanupUNKNOWN.",
+    "c2 original primaryUNKNOWN/privateNode cleanupUNCONFIRMED.",
+    "6401 original causeUNKNOWN; its failed-fixture cleanup confirmation remains separate from skipped downstream service cleanup.",
+    "Historical localphysical cleanupFAIL_UNKNOWN and inherited CLA.",
+    "Earlier accepted7b/26d receipts retain their original source/event boundaries."
+  ],
+  "artifactDownloads": "Both event ZIPs downloaded once and API digests verified; no alpha package download or manual rerun.",
+  "physicalFixturesExecutedLocally": 0,
+  "networkFixturesExecutedLocally": 0,
+  "signalsSentLocally": 0,
+  "newSuccessorHostedAccepted": false,
+  "bothEventCompatibilityAccepted": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "fullG5Accepted": false,
+  "fullG7Accepted": false,
+  "productionAccepted": false,
+  "nextTask": "Verify source/local correction of the two extracted inventory bindings and cross-module dependency controls, then inspect exact new push/PR native artifacts including every moved17/new22/reader76/sharedpeer79 control and all owned/privateNode/history/bootstrap cleanup. Capacity remains dependent. Full release/security/recovery/V1 and semanticContinuum gates remain open."
+}
