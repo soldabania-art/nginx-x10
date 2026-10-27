@@ -1,13 +1,7 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-hosted-receipt-20261027T031420Z",
-    "owner": "codex-coordinator-hosted-receipt",
-    "baseCommit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
-    "acquiredAtUTC": "2026-10-27T03:14:20.598Z",
-    "expiresAtUTC": "2026-10-27T03:30:00.000Z"
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
     "requestedAtUTC": "2026-10-26T17:23:06.000Z",
     "hours": 10,
@@ -131,12 +125,39 @@
         "exitCode": 0,
         "notAddedToTAPCount": true
       },
-      "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION_CI",
+      "exactHostedAcceptance": "EXACT_SCOPED_RESTORED_FOREGROUND_HTTP_SUCCESS",
       "actualRestoredNativeExecutedLocally": false,
       "runtimeControllerNativeWorkflowsChanged": false,
-      "gatePlanSynchronization": "PENDING_SEPARATE_WRITE",
+      "gatePlanSynchronization": "SYNCHRONIZED_BY_THIS_RECEIPT",
       "restoredManagedServiceAccepted": false,
       "packageUpgradeRollbackAccepted": false,
+      "fullG4Accepted": false,
+      "productionAccepted": false,
+      "verifiedOnImplementationCommit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+      "hostedEvidence": "x10/evidence/g4-restored-http-hosted.json"
+    },
+    "restoredHTTPApplicationHosted": {
+      "state": "EXACT_SCOPED_RESTORED_FOREGROUND_HTTP_SUCCESS",
+      "implementationCommit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+      "implementationTree": "04729ebf53161427a751f94d219d03f2be3a3503",
+      "evidence": "x10/evidence/g4-restored-http-hosted.json",
+      "scope": "Extracted-bundle restored foreground HTTP application only",
+      "nativeRunIds": [
+        40441860772,
+        40441866135
+      ],
+      "nativeJobIds": [
+        121983898949,
+        121983950332
+      ],
+      "all34ActualStepsEach": true,
+      "nativeGroupsEach": 20,
+      "fullAlphaEach": 197,
+      "foregroundHTTPAccepted": true,
+      "managedServiceRestoreAccepted": false,
+      "tlsBackupAccepted": false,
+      "packageUpgradeRollbackAccepted": false,
+      "fullG3Accepted": false,
       "fullG4Accepted": false,
       "productionAccepted": false
     }
@@ -171,26 +192,34 @@
       "exitCode": 0,
       "notAddedToTAPCount": true
     },
-    "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION_CI",
+    "exactHostedAcceptance": "EXACT_SCOPED_RESTORED_FOREGROUND_HTTP_SUCCESS",
     "actualRestoredNativeExecutedLocally": false,
     "runtimeControllerNativeWorkflowsChanged": false,
-    "gatePlanSynchronization": "PENDING_SEPARATE_WRITE",
+    "gatePlanSynchronization": "SYNCHRONIZED_BY_THIS_RECEIPT",
     "restoredManagedServiceAccepted": false,
     "packageUpgradeRollbackAccepted": false,
     "fullG4Accepted": false,
-    "productionAccepted": false
+    "productionAccepted": false,
+    "verifiedOnImplementationCommit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+    "hostedEvidence": "x10/evidence/g4-restored-http-hosted.json"
   },
   "pendingVerification": [
-    "First verify exact resulting restored foreground HTTP application native CI. Require a stopped confirmed application-B source, strict private backup, new installation/session/revision identities, initially null binding and one fresh initialized history. The restored owned native process must explicitly refuse wrong readiness without committing binding, then accept the exact ready body; require fresh restored revision and exact GET/POST/no-replay observations, graceful owned stop, resource absence, uninstall and unchanged source records/backup. These observations apply only to the supported foreground HTTP application fixture, not a restored managed service, TLS backup, package upgrade/rollback or fullG3/G4/V1. Then obtain separately scoped restored managed-service evidence and meaningful distinct-runtime-package A-to-B-to-A acceptance. Preserve permanent distribution, independent published replay,60-minute soak, previous adverse/unknown causes and full deferred Continuum gates.",
-    "Gate-plan synchronization remains pending as a separate write. GATES.json is unchanged by this fixture publication; fullG3/G4/V1 acceptance remains false.",
+    "Obtain separately scoped restored HTTP managed-service acceptance with fresh installation, runtime, unit and binding identities, owned cleanup and preserved source. Keep TLS restore unsupported. Then verify meaningful distinct-runtime-package A-to-B-to-A upgrade/rollback and state compatibility. Permanent release, independent published-file replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
     "Before choosing later work, read the COMPLETE historical checkpoint referenced by historyReference, including all standalone failure and mode-drift fields; the section list is a minimum, not an exhaustive allowlist."
   ],
-  "nextConcreteTask": "First verify exact resulting restored foreground HTTP application native CI. Require a stopped confirmed application-B source, strict private backup, new installation/session/revision identities, initially null binding and one fresh initialized history. The restored owned native process must explicitly refuse wrong readiness without committing binding, then accept the exact ready body; require fresh restored revision and exact GET/POST/no-replay observations, graceful owned stop, resource absence, uninstall and unchanged source records/backup. These observations apply only to the supported foreground HTTP application fixture, not a restored managed service, TLS backup, package upgrade/rollback or fullG3/G4/V1. Then obtain separately scoped restored managed-service evidence and meaningful distinct-runtime-package A-to-B-to-A acceptance. Preserve permanent distribution, independent published replay,60-minute soak, previous adverse/unknown causes and full deferred Continuum gates.",
+  "nextConcreteTask": "Obtain separately scoped restored HTTP managed-service acceptance with fresh installation, runtime, unit and binding identities, owned cleanup and preserved source. Keep TLS restore unsupported. Then verify meaningful distinct-runtime-package A-to-B-to-A upgrade/rollback and state compatibility. Permanent release, independent published-file replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
   "nextTasks": [
     {
+      "id": "G4-restored-managed-service-and-package-rollback",
+      "state": "OPEN",
+      "goal": "Obtain separately scoped restored HTTP managed-service acceptance with fresh installation, runtime, unit and binding identities, owned cleanup and preserved source. Keep TLS restore unsupported. Then verify meaningful distinct-runtime-package A-to-B-to-A upgrade/rollback and state compatibility. Permanent release, independent published-file replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open."
+    },
+    {
       "id": "G4-restored-HTTP-application-exact-CI",
-      "state": "authored-pending-exact-supported-native-CI",
-      "goal": "First verify exact resulting restored foreground HTTP application native CI. Require a stopped confirmed application-B source, strict private backup, new installation/session/revision identities, initially null binding and one fresh initialized history. The restored owned native process must explicitly refuse wrong readiness without committing binding, then accept the exact ready body; require fresh restored revision and exact GET/POST/no-replay observations, graceful owned stop, resource absence, uninstall and unchanged source records/backup. These observations apply only to the supported foreground HTTP application fixture, not a restored managed service, TLS backup, package upgrade/rollback or fullG3/G4/V1. Then obtain separately scoped restored managed-service evidence and meaningful distinct-runtime-package A-to-B-to-A acceptance. Preserve permanent distribution, independent published replay,60-minute soak, previous adverse/unknown causes and full deferred Continuum gates."
+      "state": "accepted-scoped-foreground-http-only",
+      "goal": "First verify exact resulting restored foreground HTTP application native CI. Require a stopped confirmed application-B source, strict private backup, new installation/session/revision identities, initially null binding and one fresh initialized history. The restored owned native process must explicitly refuse wrong readiness without committing binding, then accept the exact ready body; require fresh restored revision and exact GET/POST/no-replay observations, graceful owned stop, resource absence, uninstall and unchanged source records/backup. These observations apply only to the supported foreground HTTP application fixture, not a restored managed service, TLS backup, package upgrade/rollback or fullG3/G4/V1. Then obtain separately scoped restored managed-service evidence and meaningful distinct-runtime-package A-to-B-to-A acceptance. Preserve permanent distribution, independent published replay,60-minute soak, previous adverse/unknown causes and full deferred Continuum gates.",
+      "evidence": "x10/evidence/g4-restored-http-hosted.json",
+      "verifiedOnImplementationCommit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02"
     }
   ],
   "adverseHistory": {
@@ -219,7 +248,7 @@
   },
   "portfolioContinuation": {
     "activeProject": "x10",
-    "currentGate": "RESTORED_HTTP_FIXTURE_EXACT_CI_PENDING",
+    "currentGate": "RESTORED_FOREGROUND_HTTP_EXACT_HOSTED_VERIFIED_MANAGED_RESTORE_AND_PACKAGE_ROLLBACK_OPEN",
     "fullVisionAndDeferredResearchReference": {
       "path": "x10/continuum/PLAN.md",
       "historicalAssignmentReference": {
@@ -244,7 +273,7 @@
     },
     "otherProjectsStarted": false,
     "releaseAcceptedByThisPublication": false,
-    "gatePlanChangedByThisPublication": false
+    "gatePlanChangedByThisPublication": true
   },
   "checkpointCompaction": {
     "technicalHistoryReferenceIsMandatory": true,
@@ -253,10 +282,37 @@
   },
   "productionAccepted": false,
   "lastV1VerificationReceipt": {
-    "implementationCommit": "1c257bd85c27e905ddc8d7d2725a7ebc579b81d7",
-    "state": "EXACT_SCOPED_DECLARATIVE_UNBOUND_RESTORE_SUCCESS",
-    "evidence": "x10/evidence/g4-restored-app.json",
-    "recordLocator": "priorImplementationVerification",
-    "scope": "Previous native-syntax unbound restore and normal service only; not new restored HTTP fixture."
+    "state": "EXACT_SCOPED_RESTORED_FOREGROUND_HTTP_SUCCESS",
+    "implementationCommit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+    "implementationTree": "04729ebf53161427a751f94d219d03f2be3a3503",
+    "evidence": "x10/evidence/g4-restored-http-hosted.json",
+    "scope": "Extracted-bundle restored foreground HTTP application only",
+    "nativeRunIds": [
+      40441860772,
+      40441866135
+    ],
+    "nativeJobIds": [
+      121983898949,
+      121983950332
+    ],
+    "all34ActualStepsEach": true,
+    "nativeGroupsEach": 20,
+    "fullAlphaEach": 197,
+    "foregroundHTTPAccepted": true,
+    "managedServiceRestoreAccepted": false,
+    "tlsBackupAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false
+  },
+  "previousV1VerificationReceiptReference": {
+    "commit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+    "path": "x10/continuum/BACKGROUND.json",
+    "blobSha": "7602d58510c3b60cae511195cf7f5d9442f6da41",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true,
+    "recordLocator": "lastV1VerificationReceipt"
   }
 }

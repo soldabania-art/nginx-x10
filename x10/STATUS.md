@@ -2752,3 +2752,18 @@ acceptance, pending work and adverse history at commit
 `a276533d8472bfdd8cc74322864a350d6f15e107`. That Git history is unchanged.
 Private operational policy remains in force; compaction changes no gate,
 spending allowance, native capability or acceptance claim.
+
+
+## Exact restored foreground HTTP CI and technical gate checkpoint — 27 October 2026
+
+Implementation245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02 passed both native
+workflows with34 actual successful steps,20 native groups and197 full-alpha
+TAP tests each. Both observed all35 finite restored-HTTP diagnostic fields,
+including fresh identities, wrong-readiness refusal, exact GET/POST without
+replay, graceful owned stop, closed resources and preserved source/backup.
+Normal managed-service evidence remained scoped; actual failure containment
+was unexercised. Research PR ran21/7/27/48; push runtime skipped and CLA failed.
+Full G3/G4/V1, managed-service restore, package rollback, permanent release
+and60-minute soak remain open. GATES keeps all10 gate core records and
+unchanged statuses; every earlier deep record is mandatory through its
+immutable245d commit/blob reference. Evidence: x10/evidence/g4-restored-http-hosted.json.
