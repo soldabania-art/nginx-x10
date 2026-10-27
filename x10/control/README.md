@@ -458,3 +458,74 @@ This repairs a fixture overclaim, not the controller or native reload behavior.
 The complete current file has 77 passing TAP checks: the prior 68 native
 checks plus eight synthetic scenarios and their parent. Full local official
 aggregate: 20/20 groups. Exact implementation hosted CI remains separate.
+
+## Bounded controller record acquisition candidate
+
+Controller disk records and control CLI JSON inputs now use the existing
+installed `manager.mjs` module's `readBoundedText` helper. This changes record
+acquisition before decoding/parsing; it does not change the durable event
+format, revision integrity hashes, transaction/recovery rules or readiness
+contract. The new code still needs exact hosted native compatibility evidence.
+
+| Input | Maximum encoded file bytes | Oversize refusal |
+| --- | --- | --- |
+| Controller metadata: settings, state, pending transaction, event intent | 2 MiB (2097152) | `record_limit` |
+| Immutable revision record | 8 MiB (8388608) | `record_limit` |
+| Controller history JSONL | 16 MiB (16777216), retaining its existing cap | `history_limit` |
+| Control CLI JSON file arguments, including settings/candidate/listener inputs | 2 MiB (2097152) | `input_limit` |
+
+The revision budget leaves room for JSON escaping and metadata around the
+existing bounded candidate body. These are encoded-byte limits, not character
+counts. No runtime option silently raises them. A file already over its budget
+is refused from metadata before allocating its content buffer or reading its
+contents. Accepted descriptor size determines a finite buffer with one extra
+byte to detect growth; there is no unbounded `readFile` fallback for these
+records. Decode requires well-formed UTF-8 before JSON/JSONL parsing.
+
+Acquisition requires an owned regular file with no group/other write permission.
+The descriptor opens read-only with `O_NOFOLLOW | O_NONBLOCK`; a final-component
+symlink or nonregular file is refused, not followed or accepted as an empty
+record. This helper does not independently certify every ancestor directory;
+the controller's existing canonical/private-prefix guards remain separate.
+Existing accepted read-only modes remain valid. Stable hardlinks remain
+supported: a positive link count is required and rechecked, rather than imposing
+a new single-link restriction on historical records.
+
+The helper compares device, inode, UID, mode, link count, size, mtime and ctime
+between the selected path, opened descriptor, post-read descriptor and repeated
+path observation. It also requires the number of bytes read to match the
+original descriptor size. Identity/read inconsistencies refuse with
+`record_changed`; a newly observed oversize or permissions violation keeps its
+own refusal code. Malformed UTF-8 refuses with `record_encoding`.
+Ownership/permissions retain their existing `unsafe_path`/`unsafe_permissions`
+refusals. These are sampled
+consistency checks under the trusted same-UID operator model, not an OS fence
+against another same-UID process racing the files. Kernel/filesystem stalls
+still have no hard wall-clock termination guarantee.
+
+The helper does not repair, rename, chmod or rewrite a rejected record. Existing
+controller lock, durable save and explicit recovery behavior still apply; a
+record refusal does not authorize deleting locks, clearing faulted alpha state
+or replaying an operation. Other binary, native configuration, certificate or
+`/proc` reads are separate contracts: this change does not claim every read in
+the controller or installed package is covered by this helper.
+
+The focused pure/tempfile checks are:
+
+```sh
+node --test --test-reporter=tap x10/control/record-input.test.mjs
+```
+
+This test file also runs in the existing `managed-native-control` aggregate
+suite. Its local pure/tempfile results do not establish physical durable
+recovery, native process compatibility or full G4/G5/V1 acceptance; those
+require the applicable supported hosted checks. No new bundle helper file,
+native process or background service is introduced by the reader.
+
+The checked-in source-pinned baseline reproducers under `x10/review/` remain
+unchanged historical evidence. Their controller input/loader guards now
+intentionally refuse the changed runtime source. To reproduce the accepted
+oversized-settings and read-before-size-check observations, run them from a
+separate clean checkout of `26d74c91ca4a3e95a5c3a93eeeae16bc278e2819`;
+do not remove their pins or run them against a live installation. The separate
+session/inventory capacity finding remains open.

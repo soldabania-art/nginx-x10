@@ -1,0 +1,644 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-controller-record-acquisition-candidate",
+  "state": "LOCAL_BOUNDED_RECORD_ACQUISITION_VERIFIED_HOSTED_PENDING",
+  "sourceBase": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+  "publicationParent": "bb45d9bb18c556267818c22e1d75ad51d96a2bda",
+  "evidence": "x10/evidence/g5-controller-record-bounds.json",
+  "perFileLedger": "x10/review/g5-controller-record-bounds-ledger.json",
+  "sourceBindings": {
+    "x10/control/manager.mjs": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "x10/control/cli.mjs": {
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+    },
+    "x10/control/record-input.test.mjs": {
+      "bytes": 22249,
+      "sha256": "eedae58efe27152f95cb2bb3d0526c7bdb24b5778ba1ba19807adf5ddc2dbbf8"
+    },
+    "x10/control/README.md": {
+      "bytes": 29076,
+      "sha256": "986bca81e2cee3d911ff63ff92eb9e94779f46671e99af05d4062dc3554aa392"
+    },
+    "x10/test/all.mjs": {
+      "bytes": 32070,
+      "sha256": "c023f5f7ed52d34e7a4c69b976b5133a230fde60e0a92fbdc7525f24ff4b61c2"
+    },
+    "x10/release/SUPPORTED-PATH-REVIEW.md": {
+      "bytes": 6624,
+      "sha256": "1531c3d75658a59bcff182da5ae5bbbdec7d58e5aabf60d5a112045bdeae8095"
+    }
+  },
+  "metadataAndCLIBytes": 2097152,
+  "revisionBytes": 8388608,
+  "historyBytes": 16777216,
+  "localPureTempfileTAP": {
+    "tests": 76,
+    "pass": 76,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "localExitCode": 0,
+  "independentPureHeldouts": 29,
+  "independentStaticBoundaryChecks": 21,
+  "installedControllerBytesChanged": true,
+  "nativeCChanged": false,
+  "workflowChanged": false,
+  "fixedBundleFileInventoryChanged": false,
+  "physicalFixturesExecuted": 0,
+  "fullG4Accepted": false,
+  "fullG5Accepted": false,
+  "productionAccepted": false,
+  "scope": "Controller JSON/history and installed control CLI acquisition only; not all alpha/config/binary/proc reads, a global heap limit or same-UID OS fence.",
+  "baselineFinding": "Actual unbound status accepted ignored extra3MiB settings; control CLI2MiB check followed full read/allocation.",
+  "baselineControllerControls": 13,
+  "baselineMockedCLILoaderControls": 3,
+  "baselineControlsAreNotAddedToCandidateTAP": true,
+  "baselineScriptsUnchanged": [
+    "x10/review/controller-input-counterexample.mjs",
+    "x10/review/controller-loader-counterexample.mjs"
+  ],
+  "baselineScriptsRunOnCommit": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+  "currentSourcePinRefusalIsIntentional": true,
+  "readerDesign": {
+    "sourceBase": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+    "ownedFiles": [
+      "x10/control/manager.mjs"
+    ],
+    "sourceBinding": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "api": "readBoundedText(file,maxBytes=2MiB,limitCode=record_limit)",
+    "budgets": {
+      "metadataBytes": 2097152,
+      "revisionBytes": 8388608,
+      "historyBytes": 16777216,
+      "maxAPIBytes": 16777216
+    },
+    "preservedPolicies": [
+      "Owned regular files; existing non-group/other-write modes incl0400/0600/0644",
+      "Stable positive hardlinks retained; link drift refused",
+      "Empty history retained; history_limit code retained",
+      "Exact old schema/hash/key-order and durable semantics untouched",
+      "Leading UTF8 BOM retained in decoded text so JSON.parse keeps prior refusal"
+    ],
+    "acquisition": [
+      "Strict primitive arguments beforeIO",
+      "lstat owned selection and metadata size bound beforeopen",
+      "O_RDONLY|O_NOFOLLOW|O_NONBLOCK descriptor open",
+      "fstat type/UID/mode/link/size and exact selection identity beforeallocation/read",
+      "Allocate descriptor-size+1 bounded sentinel",
+      "Bound eachread toremaining buffer; inconsistent count/refusal",
+      "Exactlength and FD/path metadata rechecks dev/ino/UID/mode/nlink/size/mtimeMs/ctimeMs",
+      "Fatal UTF8 withignoreBOM true then parseoutsidehelper",
+      "Owned temporary Buffer zeroed and descriptorclosed in finally"
+    ],
+    "baselineActualTempfile": {
+      "kind": "independent-control-tempfile-source-review",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "records": [
+        {
+          "name": "valid-unbound-status-no-network",
+          "pass": true
+        },
+        {
+          "name": "valid-empty-history",
+          "pass": true
+        },
+        {
+          "name": "unknown-state-property-refused",
+          "pass": true
+        },
+        {
+          "name": "null-pending-not-absence",
+          "pass": true
+        },
+        {
+          "name": "false-intent-not-absence",
+          "pass": true
+        },
+        {
+          "name": "state-symlink-refused",
+          "pass": true
+        },
+        {
+          "name": "partial-history-refused",
+          "pass": true
+        },
+        {
+          "name": "history-head-mismatch-refused",
+          "pass": true
+        },
+        {
+          "name": "existing-lock-retained",
+          "pass": true
+        },
+        {
+          "name": "recover-nothing-pending-does-not-repair-or-activate",
+          "pass": true
+        },
+        {
+          "name": "damaged-revision-refused",
+          "pass": true
+        },
+        {
+          "name": "oversized-settings-extra-property-accepted-unbounded-disk-json",
+          "pass": true
+        },
+        {
+          "name": "oversize-history-refused",
+          "pass": true
+        }
+      ],
+      "physicalFixturesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "subprocessesExecuted": 0,
+      "signalsSent": 0,
+      "serviceAccepted": false,
+      "productionAccepted": false
+    },
+    "candidateActualTempfile": {
+      "kind": "independent-control-tempfile-source-review",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "records": [
+        {
+          "name": "valid-unbound-status-no-network",
+          "pass": true
+        },
+        {
+          "name": "valid-empty-history",
+          "pass": true
+        },
+        {
+          "name": "unknown-state-property-refused",
+          "pass": true
+        },
+        {
+          "name": "null-pending-not-absence",
+          "pass": true
+        },
+        {
+          "name": "false-intent-not-absence",
+          "pass": true
+        },
+        {
+          "name": "state-symlink-refused",
+          "pass": true
+        },
+        {
+          "name": "partial-history-refused",
+          "pass": true
+        },
+        {
+          "name": "history-head-mismatch-refused",
+          "pass": true
+        },
+        {
+          "name": "existing-lock-retained",
+          "pass": true
+        },
+        {
+          "name": "recover-nothing-pending-does-not-repair-or-activate",
+          "pass": true
+        },
+        {
+          "name": "damaged-revision-refused",
+          "pass": true
+        },
+        {
+          "name": "oversized-settings-refused-before-read",
+          "pass": true
+        },
+        {
+          "name": "oversize-history-refused",
+          "pass": true
+        }
+      ],
+      "physicalFixturesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "subprocessesExecuted": 0,
+      "signalsSent": 0,
+      "serviceAccepted": false,
+      "productionAccepted": false
+    },
+    "CLIbaselinePure": {
+      "kind": "source-extracted-CLI-load-read-order-contract",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "cases": [
+        {
+          "name": "at2MiB-validJSON",
+          "bytesReturnedByUnboundedReadFile": 2097152,
+          "loaderRefused": false,
+          "readFileCompletedBeforeRejection": false,
+          "pass": true
+        },
+        {
+          "name": "above2MiB-readCompletesBeforeRefusal",
+          "bytesReturnedByUnboundedReadFile": 2097153,
+          "loaderRefused": true,
+          "readFileCompletedBeforeRejection": true,
+          "pass": true
+        },
+        {
+          "name": "at3MiB-readCompletesBeforeRefusal",
+          "bytesReturnedByUnboundedReadFile": 3145728,
+          "loaderRefused": true,
+          "readFileCompletedBeforeRejection": true,
+          "pass": true
+        }
+      ],
+      "sourceExtractionExact": true,
+      "readFileIsMocked": true,
+      "actualOOMExecuted": false,
+      "subprocessesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "signalsSent": 0
+    },
+    "physicalFixturesExecuted": 0,
+    "networkFixturesExecuted": 0,
+    "managerServiceQueriesExecuted": 0,
+    "signalsSent": 0,
+    "nativeExecution": 0,
+    "scope": "JSON metadata/revision/history and shared text reader only; native config/binary/proc reads are not universally bounded; sameUID sampled checks are not an OS fence.",
+    "unpublishedCompatibilityCorrection": "Initial draft decoder used fatal UTF8 defaultBOM stripping; detected locally and corrected ignoreBOM:true before freeze. No published prior source or historical failure changed."
+  },
+  "CLIChange": {
+    "sourceBase": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+    "ownedFiles": [
+      "x10/control/cli.mjs"
+    ],
+    "sourceBinding": {
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+    },
+    "baseline": {
+      "kind": "source-extracted-CLI-load-read-order-contract",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "cases": [
+        {
+          "name": "at2MiB-validJSON",
+          "bytesReturnedByUnboundedReadFile": 2097152,
+          "loaderRefused": false,
+          "readFileCompletedBeforeRejection": false,
+          "pass": true
+        },
+        {
+          "name": "above2MiB-readCompletesBeforeRefusal",
+          "bytesReturnedByUnboundedReadFile": 2097153,
+          "loaderRefused": true,
+          "readFileCompletedBeforeRejection": true,
+          "pass": true
+        },
+        {
+          "name": "at3MiB-readCompletesBeforeRefusal",
+          "bytesReturnedByUnboundedReadFile": 3145728,
+          "loaderRefused": true,
+          "readFileCompletedBeforeRejection": true,
+          "pass": true
+        }
+      ],
+      "sourceExtractionExact": true,
+      "readFileIsMocked": true,
+      "actualOOMExecuted": false,
+      "subprocessesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "signalsSent": 0
+    },
+    "candidateChange": "Shared manager bounded acquisition before JSON.parse; retains 2MiB CLI bound, missing argument and oversize message; finite input_limit code. No new module or payload inventory.",
+    "syntaxChecked": true,
+    "diffCheckEmpty": true,
+    "physicalFixturesExecuted": 0,
+    "networkFixturesExecuted": 0,
+    "signalsSent": 0,
+    "remoteWrites": 0,
+    "actualCLICommandExecuted": false,
+    "integrationChecks": "Pending core reader implementation and independent input_tests controls."
+  },
+  "frozenCandidateVerification": {
+    "command": "node --test --test-reporter=tap x10/control/record-input.test.mjs",
+    "exitCode": 0,
+    "counts": {
+      "tests": 76,
+      "pass": 76,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "sourceBindings": {
+      "x10/control/record-input.test.mjs": {
+        "bytes": 22249,
+        "sha256": "eedae58efe27152f95cb2bb3d0526c7bdb24b5778ba1ba19807adf5ddc2dbbf8"
+      },
+      "x10/control/manager.mjs": {
+        "bytes": 51246,
+        "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+      },
+      "x10/control/cli.mjs": {
+        "bytes": 4766,
+        "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+      }
+    },
+    "physicalFixturesExecuted": 0,
+    "nativeExecutablesExecuted": 0,
+    "networkFixturesExecuted": 0,
+    "signalsSent": 0,
+    "serviceManagerQueries": 0,
+    "subprocessesExecutedByTests": 0,
+    "scope": "Pure scripted filesystem and actual owned unbound tempfile controls; no physical acceptance",
+    "initialCandidateRun": {
+      "tests": 73,
+      "pass": 73,
+      "fail": 0,
+      "beforeBOMCompatibilityCorrection": true
+    },
+    "baselineSeparate": {
+      "actualControllerTempfileControls": 13,
+      "pureMockedCLILoaderControls": 3,
+      "notAddedToCandidateTAP": true
+    }
+  },
+  "independentReview": {
+    "kind": "independent-bounded-controller-record-review",
+    "sourceBase": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+    "candidateBindings": {
+      "x10/control/manager.mjs": {
+        "bytes": 51246,
+        "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+      },
+      "x10/control/cli.mjs": {
+        "bytes": 4766,
+        "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+      },
+      "x10/test/all.mjs": {
+        "bytes": 32070,
+        "sha256": "c023f5f7ed52d34e7a4c69b976b5133a230fde60e0a92fbdc7525f24ff4b61c2"
+      }
+    },
+    "reviewDisposition": "PASS_NARROW_SOURCE_AND_PURE_TEMPFILE_SCOPE",
+    "independentHeldouts": {
+      "kind": "independent-bounded-record-input-heldouts",
+      "sourceBindings": {
+        "x10/control/manager.mjs": {
+          "bytes": 51246,
+          "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+        }
+      },
+      "controls": 29,
+      "pass": 29,
+      "fail": 0,
+      "records": [
+        {
+          "name": "budgets-retain-2-8-16-MiB-finite-profile",
+          "pass": true
+        },
+        {
+          "name": "actual-owned-mode-400",
+          "pass": true
+        },
+        {
+          "name": "actual-owned-mode-600",
+          "pass": true
+        },
+        {
+          "name": "actual-owned-mode-644",
+          "pass": true
+        },
+        {
+          "name": "stable-hardlink-keeps-existing-read-compatibility",
+          "pass": true
+        },
+        {
+          "name": "invalid-bound-refuses-before-open-0",
+          "pass": true
+        },
+        {
+          "name": "invalid-bound-refuses-before-open--1",
+          "pass": true
+        },
+        {
+          "name": "invalid-bound-refuses-before-open-NaN",
+          "pass": true
+        },
+        {
+          "name": "invalid-bound-refuses-before-open-Infinity",
+          "pass": true
+        },
+        {
+          "name": "invalid-bound-refuses-before-open-8",
+          "pass": true
+        },
+        {
+          "name": "invalid-bound-refuses-before-open-",
+          "pass": true
+        },
+        {
+          "name": "invalid-bound-refuses-before-open-16777217",
+          "pass": true
+        },
+        {
+          "name": "unknown-limit-code-refuses-before-open",
+          "pass": true
+        },
+        {
+          "name": "empty-owned-file-remains-readable-for-empty-history",
+          "pass": true
+        },
+        {
+          "name": "exact-byte-budget-success-and-NONBLOCK-NOFOLLOW-flags",
+          "pass": true
+        },
+        {
+          "name": "oversized-sparse-input-refuses-with-no-open-or-read",
+          "pass": true
+        },
+        {
+          "name": "symlink-refused-with-target-unchanged",
+          "pass": true
+        },
+        {
+          "name": "directory-refused-before-content-read",
+          "pass": true
+        },
+        {
+          "name": "unsafe-write-mode-refused-preserved",
+          "pass": true
+        },
+        {
+          "name": "invalid-UTF8-refused-after-bounded-acquisition",
+          "pass": true
+        },
+        {
+          "name": "actual-in-read-path-replacement-refused",
+          "pass": true
+        },
+        {
+          "name": "actual-in-read-truncate-refused",
+          "pass": true
+        },
+        {
+          "name": "actual-in-read-growth-refused",
+          "pass": true
+        },
+        {
+          "name": "actual-in-read-safe-mode-change-refused",
+          "pass": true
+        },
+        {
+          "name": "actual-in-read-link-count-change-refused",
+          "pass": true
+        },
+        {
+          "name": "regular-to-directory-open-race-refuses-and-closes-descriptor",
+          "pass": true
+        },
+        {
+          "name": "BOM-retained-and-JSON-refusal-compatible",
+          "pass": true
+        },
+        {
+          "name": "8MiB-revision-budget-exact-byte-success",
+          "pass": true
+        },
+        {
+          "name": "above16MiB-history-sparse-refusal-before-open",
+          "pass": true
+        }
+      ],
+      "sourceUnchanged": true,
+      "ownedTemporaryRootRemoved": true,
+      "physicalFixturesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "managerQueriesExecuted": 0,
+      "signalsSent": 0,
+      "subprocessesExecuted": 0,
+      "limitations": [
+        "Actual reader with controlled filesystem I/O hooks only; no native/controller runtime acceptance.",
+        "Sparse file proves metadata refusal before read/open under this reader, not OOM resistance against arbitrary same-UID interference.",
+        "Byte bounds and sampled metadata checks are not kernel-level snapshots or process fencing."
+      ]
+    },
+    "staticReview": {
+      "boundArgumentsValidatedBeforeFilesystem": true,
+      "metadataBudget2MiBRevision8MiBHistory16MiB": true,
+      "descriptorSizeCheckedBeforeContentBufferAllocation": true,
+      "contentBufferAtMostCheckedSizePlusOne": true,
+      "NOFOLLOWAndNONBLOCKObservedOnActualOpen": true,
+      "ownedRegularSafeModeStablePositiveLinkCount": true,
+      "040006000644AndStableHardlinkReadCompatibility": true,
+      "pathAndDescriptorIdentityComparedBeforeAndAfter": true,
+      "growthTruncationReplacementModeLinkDriftRefuse": true,
+      "invalidUTF8RefusesAndBOMRetainsLegacyJSONRefusal": true,
+      "closeAndOwnBufferWipeInFinally": true,
+      "JSONParsingOccursAfterBoundedReaderReturns": true,
+      "revisionCallUses8MiBBudget": true,
+      "historyUsesBoundedReaderWithExistingHistoryLimit": true,
+      "CLIUsesSharedInstalledManagerReader2MiB": true,
+      "fixedFiveControllerFileBundleInventoryUnchanged": true,
+      "newPureTestIncludedInExistingManagedControlSuite": true,
+      "noWorkflowStepNameOrBudgetChangeRequired": true,
+      "noChangesToRecordWritersOrDurableCommitFunctions": true,
+      "noSameUIDOrKernelAtomicFenceClaim": true,
+      "otherAlphaMetadataBinaryConfigProcReadsRemainOutsideScope": true
+    },
+    "staticBoundaryChecks": 21,
+    "blockingFindings": [],
+    "resolvedFindings": [
+      {
+        "kind": "commentPrecision",
+        "result": "Final source correctly states descriptor size checked before allocation/reading, without claiming fstat before each read."
+      },
+      {
+        "kind": "BOMCompatibility",
+        "result": "Core writer independently corrected default decoder BOM stripping; final ignoreBOM:true preserves leading UFEFF and old JSON.parse refusal."
+      }
+    ],
+    "limits": [
+      "No physical native/process-group/signal/systemd/network fixture executed.",
+      "Actual reader tests use only owned temporary files and controlled same-process filesystem I/O hooks; no subprocesses.",
+      "EightMiB compatibility check is a byte-reader case; full highlyescaped revision/native configuration compatibility is a separate product test/gate.",
+      "Stable hardlinks are retained by explicit compatibility decision, not described as singly linked files.",
+      "Other alpha metadata/config/native binary/proc reads unchanged; this is controller JSON/history/control-CLI acquisition only.",
+      "New installed controller bytes require fresh hosted compatibility; prior accepted actual runtime receipts are not transferred.",
+      "No OOM, remote exploit severity, exhaustive security or fullG4/G5/V1 acceptance established."
+    ],
+    "sourceEdits": 0,
+    "physicalFixturesExecuted": 0,
+    "networkFixturesExecuted": 0,
+    "signalsSent": 0,
+    "subprocessesExecuted": 0,
+    "productionAccepted": false,
+    "fullG5Accepted": false
+  },
+  "documentationReview": {
+    "kind": "bounded-record-reader-documentation-source-review",
+    "path": "x10/control/README.md",
+    "bytes": 29076,
+    "sha256": "986bca81e2cee3d911ff63ff92eb9e94779f46671e99af05d4062dc3554aa392",
+    "checks": {
+      "helperAPI": true,
+      "metadata2MiB": true,
+      "revision8MiB": true,
+      "history16MiB": true,
+      "CLI2MiB": true,
+      "nofollowNonblock": true,
+      "stableLinkPolicy": true,
+      "hostedSuiteWired": true,
+      "baselineSourcePreserved": true,
+      "noPhysicalAcceptance": true,
+      "otherReadsLimitedScope": true,
+      "sameUIDRaceLimit": true,
+      "leafSymlinkScopeExplicit": true
+    },
+    "pass": 13,
+    "sourceEdits": [
+      "x10/control/README.md"
+    ],
+    "physicalFixturesExecuted": 0,
+    "networkFixturesExecuted": 0,
+    "signalsSent": 0,
+    "runtimeAccepted": false
+  },
+  "mandatoryAncestryRead": {
+    "state": "PASS",
+    "documents": 34,
+    "mandatoryEdges": 165,
+    "blobPinComparisons": 91,
+    "distinctPinnedTargets": 8,
+    "distinctAncestorCommits": 17,
+    "missingReferences": 0,
+    "mismatches": 0
+  },
+  "compatibility": [
+    "Existing record schemas/hashes and durable writer/recovery functions unchanged.",
+    "Modes400/600/640/644/444 and stable positive hardlinks retain the previous owned-file policy; link-count drift refuses.",
+    "Empty history retained; fatal UTF8 rejects malformed input and ignoreBOM:true preserves previous JSON BOM refusal.",
+    "8MiB revision budget preserves supported escaped CLI/installed inputs; no guarantee for arbitrary gigantic programmatic API records.",
+    "No new bundle module; exported reader is in existing installed manager.",
+    "New pure test joins the existing managed-native-control suite; no workflow step name/count/job budget change."
+  ],
+  "limits": [
+    "Byte acquisition is finite, not a global JavaScript heap or kernel-stall deadline guarantee.",
+    "Temporary read Buffer is wiped; returned immutable decoded strings are not a full-memory cleansing claim.",
+    "O_NOFOLLOW guards the final path component; existing private/canonical state checks and trusted operator are separate.",
+    "Sampled metadata checks are not a kernel fence against malicious same-UID races.",
+    "New installed controller bytes require exact hosted physical compatibility; no local physical fixtures were executed.",
+    "Prior bounded archive and declaration acceptance remain on their exact previous implementation commits."
+  ],
+  "priorArchiveHostedEvidence": "x10/evidence/g5-archive-identity-hosted.json",
+  "nextConcreteTask": "First inspect exact new controller-reader CI: require the new76 pure tests actually included in existing managed-native-control suite, actual complete native/controller/alpha/service/installed-bundle compatibility and owned cleanup; do not transfer prior26d archive acceptance to new installed controller bytes. Preserve any new failures and34f timeout/cleanupUNKNOWN. Once that scoped compatibility is accepted, separately fix ALPHA_SESSION_INVENTORY_CAPACITY_OPEN: prepareRun can publish255-to256 sessions whose minimum4353 entries exceeds inventory4096. Reproduce the checked-in source-pinned virtual baseline, then define compatible cumulative capacity accounting/refusal BEFORE publishing uninspectable state; not blind cap increase. Keep old session records, revisions and unsupported/orphan outcomes. Controller correction is acquisition only, not global JSON/heap/kernel-time bounds or arbitrary programmatic giant-record compatibility. Other alpha/config/binary/proc reads and trusted user-manager environment remain outside its guarantee. FullG3/G4/G5/G7/V1, actual orphan replay/disposal, nativebinaryupgrade,TLSrestore,permanent release/publisher capability,published replay,60minsoak and semanticContinuum remain OPEN;40h/history/Windows/adverse unchanged. Localpure/tempfileonly, hostedphysicalexistingCI only."
+}

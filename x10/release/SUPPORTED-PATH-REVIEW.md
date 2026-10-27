@@ -13,7 +13,7 @@ an exhaustive native security audit or an actual incident recovery replay.
 | Packaged operator documentation | Alpha README linked a source-only sibling service document absent from bundle inventory | Link now points to the exact reviewed public runbook commit; no new payload entry or runtime-package identity is claimed. |
 | Runtime ownership | Recorded UID, namespace, executable, command and start identity; guarded stop and retained unknown outcomes | Sampled checks have a verification-to-signal race and do not isolate a malicious same-UID actor. |
 | Config change/revert | Explicit readiness/revision observation, retained history and guarded durable transaction recovery | No all-traffic fence or reversal of completed application side effects; controller recovery does not clear alpha faulted state. |
-| Controller disk input | Actual unbound status accepts settings with an ignored extra3MiB string; CLI's2MiB check follows full read | **OPEN:** bounded record acquisition must refuse oversized input before allocation/parsing, with ownership/mode/identity compatibility preserved. No OOM or remote exploit was demonstrated. |
+| Controller disk input | Baseline unbound status accepted settings with an ignored extra3MiB string; CLI's2MiB check followed full read | **LOCAL_FIX_PENDING_HOSTED:** candidate uses bounded descriptor acquisition for metadata/CLI2MiB, revisions8MiB and history16MiB, with pre-allocation limits and identity rechecks. Other alpha/config/binary/proc reads remain outside this correction; full security is open. |
 | Session/inventory capacity | Source-extracted virtual prepare permits255→256; minimum256-session tree4353entries exceeds inventory4096 | **OPEN:** session capacity and cumulative inventory accounting disagree. No actual256-native-session installation was exercised. Raising one limit alone does not prove safe capacity. |
 | Package staging/return | Accepted exact historical/current operator HTTP staging/return/fallback receipts preserve identities and separate counters | Native binary change, TLS-state restore, permanent historical package and broader recovery remain unaccepted. |
 | Faulted/orphan incident | Existing commands refuse unsafe restart/uninstall; runbook requires exact observations and STOP_UNRESOLVED | Original prefix stays in place even after a separate fresh restore. No lifecycle-clear/reaper/forced-uninstall path or accepted orphan incident replay. |
@@ -27,9 +27,10 @@ refuse without coercing caller objects. No archive is extracted or payload
 executed by these tests. A newly computed checksum does not make an invalid
 identity type valid, and the correction does not add publisher authentication.
 
-Next, address the controller record-reader bound with a source-level baseline
-and bounded tempfile tests, then align session/inventory capacity before any
-broader recovery acceptance. These are separate changes to installed runtime
+The controller record-reader candidate has76 frozen pure/tempfile tests and
+29 separate independent heldouts. Its installed controller bytes change and
+need fresh hosted compatibility. After that, align session/inventory capacity
+before any broader recovery acceptance. These are separate changes to runtime
 contracts and need their own compatibility/evidence review. Do not turn known
 failures into PASS by changing a cap without validating the resulting states.
 
@@ -47,6 +48,10 @@ These scripts intentionally demonstrate current OPEN behavior; a successful
 counterexample is not product acceptance. They refuse source drift. The first
 uses owned private temporary records and removes only that created directory;
 its returned counts contain no raw paths, configuration or process identities.
+The two controller scripts are preserved historical baselines for exact
+`26d74c91ca4a3e95a5c3a93eeeae16bc278e2819`: run them in a clean checkout of that
+commit. Their hash refusal against the new controller is intentional; do not
+rewrite their pins or call them failing candidate regression tests.
 
 Exact60a native push/PR both completed36 successful steps. Their alpha suites
 took116097ms and115161ms under the120000ms budget. The older34f PR timed out

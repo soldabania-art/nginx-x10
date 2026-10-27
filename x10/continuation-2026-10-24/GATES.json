@@ -1720,7 +1720,7 @@
     "evidence": "x10/evidence/g7-ci-step-receipts-hosted.json"
   },
   "supportedPathBoundaryReview": {
-    "state": "ARCHIVE_IDENTITY_TYPE_FIX_LOCAL_VERIFIED_HOSTED_PENDING",
+    "state": "EXACT_HOSTED_ARCHIVE_IDENTITY_SUCCESS_REVIEW_FINDINGS_OPEN",
     "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
     "publicationParent": "25d9b99b190b9dbfeb3d2e44b63e8a1846335277",
     "evidence": "x10/evidence/g5-supported-path-review.json",
@@ -1778,14 +1778,18 @@
     "fullG4Accepted": false,
     "fullG5Accepted": false,
     "fullG7Accepted": false,
-    "productionAccepted": false
+    "productionAccepted": false,
+    "verifiedOnImplementationCommit": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+    "hostedEvidence": "x10/evidence/g5-archive-identity-hosted.json"
   },
   "supportedPathOpenFindings": [
     {
       "id": "CONTROL_JSON_RESOURCE_BOUNDS_OPEN",
-      "state": "SOURCE_REPRODUCED_OPEN",
+      "state": "LOCAL_FIX_VERIFIED_HOSTED_PENDING",
       "fact": "Actual unbound controller accepts settings with ignored extra3MiB; CLI2MiB refusal follows full read.",
-      "limits": "Local operator-owned input-bound gap; no OOM, remote exploit or severity demonstrated."
+      "limits": "Local operator-owned input-bound gap; no OOM, remote exploit or severity demonstrated.",
+      "candidateEvidence": "x10/evidence/g5-controller-record-bounds.json",
+      "scope": "ControllerJSON/history/controlCLI acquisition only; other reads and fullsecurity remain open."
     },
     {
       "id": "ALPHA_SESSION_INVENTORY_CAPACITY_OPEN",
@@ -1793,5 +1797,70 @@
       "fact": "prepareRun accepts255-to256; minimum4353 treeentries exceeds4096 inventory limit and refuses stage/uninstall inspection.",
       "limits": "Virtual source-extracted observations, not actual256-native-session fixture."
     }
-  ]
+  ],
+  "archiveIdentityHosted": {
+    "state": "EXACT_HOSTED_ARCHIVE_IDENTITY_CONTRACT_SUCCESS",
+    "implementationCommit": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+    "implementationTree": "bf3e56e8690eb9f1211f3ea143ae04e3ff5a105b",
+    "actualArchiveTAPEach": 122,
+    "actualNativeStepsEach": 36,
+    "fullG5Accepted": false,
+    "productionAccepted": false,
+    "evidence": "x10/evidence/g5-archive-identity-hosted.json"
+  },
+  "controllerRecordBoundsCandidate": {
+    "state": "LOCAL_BOUNDED_RECORD_ACQUISITION_VERIFIED_HOSTED_PENDING",
+    "sourceBase": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+    "publicationParent": "bb45d9bb18c556267818c22e1d75ad51d96a2bda",
+    "evidence": "x10/evidence/g5-controller-record-bounds.json",
+    "perFileLedger": "x10/review/g5-controller-record-bounds-ledger.json",
+    "sourceBindings": {
+      "x10/control/manager.mjs": {
+        "bytes": 51246,
+        "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+      },
+      "x10/control/cli.mjs": {
+        "bytes": 4766,
+        "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+      },
+      "x10/control/record-input.test.mjs": {
+        "bytes": 22249,
+        "sha256": "eedae58efe27152f95cb2bb3d0526c7bdb24b5778ba1ba19807adf5ddc2dbbf8"
+      },
+      "x10/control/README.md": {
+        "bytes": 29076,
+        "sha256": "986bca81e2cee3d911ff63ff92eb9e94779f46671e99af05d4062dc3554aa392"
+      },
+      "x10/test/all.mjs": {
+        "bytes": 32070,
+        "sha256": "c023f5f7ed52d34e7a4c69b976b5133a230fde60e0a92fbdc7525f24ff4b61c2"
+      },
+      "x10/release/SUPPORTED-PATH-REVIEW.md": {
+        "bytes": 6624,
+        "sha256": "1531c3d75658a59bcff182da5ae5bbbdec7d58e5aabf60d5a112045bdeae8095"
+      }
+    },
+    "metadataAndCLIBytes": 2097152,
+    "revisionBytes": 8388608,
+    "historyBytes": 16777216,
+    "localPureTempfileTAP": {
+      "tests": 76,
+      "pass": 76,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "localExitCode": 0,
+    "independentPureHeldouts": 29,
+    "independentStaticBoundaryChecks": 21,
+    "installedControllerBytesChanged": true,
+    "nativeCChanged": false,
+    "workflowChanged": false,
+    "fixedBundleFileInventoryChanged": false,
+    "physicalFixturesExecuted": 0,
+    "fullG4Accepted": false,
+    "fullG5Accepted": false,
+    "productionAccepted": false
+  }
 }

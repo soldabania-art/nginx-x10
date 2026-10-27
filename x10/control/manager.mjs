@@ -59,7 +59,65 @@ async function atomic(file, bytes, mode = 0o600) {
   catch (error) { await rm(temporary, { force: true }); throw error; }
 }
 
-async function json(file) { await owned(file); return JSON.parse(await readFile(file, 'utf8')); }
+export const MAX_CONTROLLER_RECORD_BYTES = 2 * 1024 * 1024;
+export const MAX_CONTROLLER_REVISION_BYTES = 8 * 1024 * 1024;
+export const MAX_CONTROLLER_HISTORY_BYTES = 16 * 1024 * 1024;
+
+// Acquire one bounded owned regular file before decoding or parsing it. This
+// preserves stable hardlinks and the existing owned-file mode policy. Checks
+// are sampled consistency observations, not an OS fence against a same-UID race.
+export async function readBoundedText(file, maxBytes = 2 * 1024 * 1024, limitCode = 'record_limit') {
+  if (typeof file !== 'string' || file.length === 0
+      || !Number.isSafeInteger(maxBytes) || maxBytes < 1 || maxBytes > 16 * 1024 * 1024
+      || typeof limitCode !== 'string' || !['record_limit', 'history_limit', 'input_limit'].includes(limitCode))
+    fail('record_input', 'A supported finite record-read bound and failure code are required');
+  const keys = ['dev', 'ino', 'uid', 'mode', 'nlink', 'size', 'mtimeMs', 'ctimeMs'];
+  const sameIdentity = (a, b) => keys.every(key => a[key] === b[key]);
+  const inspect = value => {
+    if (!value.isFile() || value.uid !== uid || !Number.isSafeInteger(value.nlink) || value.nlink < 1)
+      fail('unsafe_path', 'Record must remain an owned regular file with a stable positive link count');
+    if ((value.mode & 0o022) !== 0) fail('unsafe_permissions', 'Record has unsafe group/other write permissions');
+    if (!Number.isSafeInteger(value.size) || value.size < 0)
+      fail('record_changed', 'Record size is not a supported finite integer');
+    if (value.size > maxBytes) fail(limitCode, 'Record exceeds its bounded input size');
+  };
+  const selected = await owned(file);
+  inspect(selected);
+  const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+  let bytes;
+  try {
+    const before = await handle.stat();
+    inspect(before);
+    if (!sameIdentity(selected, before)) fail('record_changed', 'Record identity changed before acquisition');
+    // The descriptor size is checked before allocating or reading bytes. One
+    // additional byte detects growth without an unbounded readFile operation.
+    bytes = Buffer.alloc(before.size + 1);
+    let length = 0;
+    while (length < bytes.length) {
+      const remaining = bytes.length - length;
+      const { bytesRead } = await handle.read(bytes, length, remaining, null);
+      if (!Number.isSafeInteger(bytesRead) || bytesRead < 0 || bytesRead > remaining)
+        fail('record_changed', 'Record read returned an inconsistent byte count');
+      if (bytesRead === 0) break;
+      length += bytesRead;
+    }
+    const after = await handle.stat(), reobserved = await owned(file);
+    inspect(after); inspect(reobserved);
+    if (length !== before.size || !sameIdentity(before, after) || !sameIdentity(after, reobserved))
+      fail('record_changed', 'Record identity or bytes changed during acquisition');
+    // Keep a leading BOM visible, as readFile('utf8') did; JSON.parse must not
+    // silently gain acceptance of a previously refused byte representation.
+    try { return new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes.subarray(0, length)); }
+    catch { fail('record_encoding', 'Record must contain well-formed UTF-8'); }
+  } finally {
+    if (bytes) bytes.fill(0);
+    await handle.close();
+  }
+}
+
+async function json(file, maxBytes = MAX_CONTROLLER_RECORD_BYTES) {
+  return JSON.parse(await readBoundedText(file, maxBytes));
+}
 async function save(file, value) { await atomic(file, encode(value)); }
 async function exists(file) { try { await lstat(file); return true; } catch (error) { if (error.code === 'ENOENT') return false; throw error; } }
 
@@ -212,7 +270,7 @@ async function makeRevision(settings, input, parent, sourceRevision = null) {
 
 async function readRevision(settings, id) {
   if (!idPattern.test(id)) fail('invalid_revision', 'Invalid revision identifier');
-  const value = await json(path.join(settings.state, 'revisions', `${id}.json`));
+  const value = await json(path.join(settings.state, 'revisions', `${id}.json`), MAX_CONTROLLER_REVISION_BYTES);
   const { recordSha256, ...record } = value;
   if (recordSha256 !== hash(JSON.stringify(record)) || value.id !== id || value.inputSha256 !== hash(JSON.stringify(candidate(value.input))) || value.fragmentSha256 !== hash(render(settings, value)))
     fail('revision_integrity', `Revision ${id} failed its integrity checks`);
@@ -270,9 +328,8 @@ function eventShape(row) {
 }
 
 async function readHistory(settings, current, allowHeadMismatch = false) {
-  const file = path.join(settings.state, 'history.jsonl'); await owned(file);
-  const s = await lstat(file); if (s.size > 16 * 1024 * 1024) fail('history_limit', 'History exceeds this controller version\'s 16 MiB limit');
-  const bytes = await readFile(file, 'utf8');
+  const file = path.join(settings.state, 'history.jsonl');
+  const bytes = await readBoundedText(file, MAX_CONTROLLER_HISTORY_BYTES, 'history_limit');
   let records;
   try {
     if (bytes && !bytes.endsWith('\n')) throw new Error('Incomplete history line');

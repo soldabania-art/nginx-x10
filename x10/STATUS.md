@@ -3322,3 +3322,36 @@ Earlier34f timeout cause/cleanupUNKNOWN, c2/6401/localFAIL_UNKNOWN/CLA stay.
 Full G3/G4/G5/G7/V1, actual orphan recovery/disposal, native binary upgrade,
 TLS restore, permanent publication, published replay,60-minute soak and
 semantic Continuum remain OPEN; owner40h/history and Windows deferral unchanged.
+
+
+## Bounded controller acquisition candidate — 27 October 2026
+
+Controller JSON/history and control CLI now acquire finite owned regular-file
+bytes before allocation/read/parse: metadata and CLI2MiB, revisions8MiB,
+history16MiB. Leaf nofollow/nonblocking descriptor acquisition, pre/post
+descriptor/path identity/size/mode/link checks and bounded sentinel reads
+refuse oversized or changing input. Existing modes, stable hardlinks, schemas,
+empty history and BOM refusal remain. Writer/durable/recovery functions are
+unchanged. Other alpha/config/binary/proc reads are outside this correction.
+
+Frozen local pure/tempfile76TAP passed; independent29heldouts/21static checks
+are separate. Baseline13controller/3mockedCLI controls are not added. New tests
+join the existing managed-native-control CI suite without a new workflow step
+or budget. Installed controller bytes change and require fresh hosted native,
+alpha/bundle/service compatibility; no physical fixture ran locally.
+
+Prior26d native push40522713517/job122253980948 and
+PR40522721822/job122253989586 each succeeded36 actual steps with actual
+archive122 and declaration119TAP; separate native20/alpha617/official and three
+strict service/owned privateNode cleanup reports passed. Both evidence ZIPs
+were downloaded once and digests verified. Research PR21/7/27/48 succeeded,
+push runtime skipped and CLA failed. This accepts the prior archive component,
+not this new controller. Historical34f timeout cause/cleanupUNKNOWN remains.
+
+Next reconcile exact reader CI, then repair session/inventory capacity before
+publishing uninspectable states. Source-pinned controller baseline harnesses
+remain immutable and run on exact26d, not newly changed controller bytes.
+Full G3/G4/G5/G7/V1, orphan incident/disposal, native binary upgrade,TLS restore,
+permanent release,published replay,60minsoak and semanticContinuum stay OPEN.
+Owner40h/history, Windows deferral and all earlier adverse evidence preserved.
+Evidence: x10/evidence/g5-controller-record-bounds.json.

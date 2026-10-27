@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
-import { initialize, bind, apply, revert, recover, status, history, snapshotListeners, inspectListeners, inspectGenerations } from './manager.mjs';
+import { initialize, bind, apply, revert, recover, status, history, snapshotListeners, inspectListeners, inspectGenerations, readBoundedText } from './manager.mjs';
 import { formatStatus, formatStatusError } from './status-format.mjs';
 
 const help = `NGINX X10 local native controller (Linux, Node >=22)
@@ -29,9 +28,11 @@ See x10/control/README.md for the include boundary and recovery limitations.
 
 async function load(file) {
   if (!file) throw new Error('A required JSON file argument is missing');
-  const bytes = await readFile(file);
-  if (bytes.length > 2 * 1024 * 1024) throw new Error('JSON input exceeds 2 MiB');
-  return JSON.parse(bytes.toString('utf8'));
+  try { return JSON.parse(await readBoundedText(file, 2 * 1024 * 1024, 'input_limit')); }
+  catch (error) {
+    if (error.code === 'input_limit') error.message = 'JSON input exceeds 2 MiB';
+    throw error;
+  }
 }
 
 let humanStatus = false;
