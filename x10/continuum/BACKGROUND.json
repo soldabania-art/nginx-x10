@@ -1,13 +1,7 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-tls-route-20261027T085703Z",
-    "owner": "codex-x10-tls-route-coordinator",
-    "baseCommit": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
-    "acquiredAtUTC": "2026-10-27T08:57:03Z",
-    "expiresAtUTC": "2026-10-27T09:42:03.000Z"
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
     "requestedAtUTC": "2026-10-27T03:45:59.000Z",
     "hours": 20,
@@ -326,66 +320,76 @@
   },
   "lastV1DevelopmentPass": {
     "state": "FROZEN_FIXTURE_PURE_CONTROLS_VERIFIED_EXACT_HOSTED_PENDING",
-    "sourceBase": "bdcc39c85399a2252daa6e1928f6a99f82d31eaf",
-    "publicationParent": "78ab11d84b99cabe223984159d35b52a2c0bca75",
-    "scope": "Actual foreground HTTP operator-package A(P)-to-B(Q)-to-old-A2(Q) fixture and bounded declarative backward compatibility, using one unchanged compiled native binary",
+    "sourceBase": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+    "publicationParent": "d80ab8694c807b85be13b0ab839d74957f01d713",
+    "scope": "Fixture-only verified downstream HTTP route connection selection before a unique application POST and stream through the native HTTPS upstream proxy",
     "sourceBindings": {
-      "x10/test/package-return.mjs": {
-        "bytes": 29574,
-        "afterSha256": "ceff1dcb3debb31f98ca75582ed43ca2c60de494a0d58cb3b27c2d8a2cc1bd86",
+      "x10/test/tls-verified-route.mjs": {
+        "bytes": 12047,
+        "afterSha256": "2b62f31e33a4b3e419f014254b8cc891068783d376f4fe8b931c853240cb3478",
         "beforeSha256": null
       },
-      "x10/test/package-return-proof.mjs": {
-        "bytes": 7719,
-        "afterSha256": "65540f4a5db5deb1ddaa2950e70f81e67d7304ba8cc4616d43a67facbbc4fd6d",
+      "x10/test/tls-verified-route.test.mjs": {
+        "bytes": 22241,
+        "afterSha256": "3729934702abbcb49d0e0e23092846b272142663487d13d7a3ae2f380e6418e0",
         "beforeSha256": null
       },
-      "x10/test/package-return-proof.test.mjs": {
-        "bytes": 14089,
-        "afterSha256": "9e39dc372b499c582bc7c230c7470d986bc2bd242c1380a7e11158ab7f7cc668",
-        "beforeSha256": null
-      },
-      "x10/test/alpha.test.mjs": {
-        "bytes": 114990,
-        "afterSha256": "1314f97f176a1fccf75a79d664aed7f777ce401873f795b0a801cc9c9844cedf",
-        "beforeSha256": "12868a338f450466c8201e8ca110dda65c473db90ad043414d0a3e7e5936a1e9"
+      "x10/test/alpha-tls.test.mjs": {
+        "bytes": 20270,
+        "afterSha256": "f54a3b54705b2524bbfd49545ed181dcd10d28058f51dbd725ec692904c45ac6",
+        "beforeSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e"
       }
     },
-    "evidence": "x10/evidence/g4-operator-return.json",
-    "perFileLedger": "x10/review/g4-operator-return-ledger.json",
+    "evidence": "x10/evidence/g3-tls-verified-route.json",
+    "perFileLedger": "x10/review/g3-tls-verified-route-ledger.json",
     "fixtureOnlyChange": true,
     "alphaRuntimeChanged": false,
     "nativeRuntimeChanged": false,
     "controllerRuntimeChanged": false,
     "serviceRecipeChanged": false,
     "localSelectedTAP": {
-      "tests": 581,
-      "pass": 581,
+      "tests": 639,
+      "pass": 639,
       "fail": 0,
       "cancelled": 0,
       "skipped": 0,
       "todo": 0,
-      "nodeVersion": "v24.22.1",
       "exitCode": 0,
+      "nodeVersion": "v24.22.1",
       "physicalNativeExecuted": false,
+      "networkFixtureExecuted": false,
       "systemdExecuted": false
     },
-    "newPureControlsIncludedOnce": 207,
-    "independentPureHeldoutsSeparate": 12,
-    "independentVirtualStreamControlsSeparate": 4,
+    "newTLSVirtualControlsIncludedOnce": 58,
+    "separateSyntheticReadinessTAP": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "independentVirtualControlsSeparate": 9,
+    "rootCauseEstablished": false,
+    "nativeRuntimeFixClaimed": false,
+    "tlsFixtureCorrectionHostedAccepted": false,
     "foregroundOperatorReturnAccepted": false,
-    "backwardDeclarativeCompatibilityAccepted": false,
     "managedServicePackageTransitionAccepted": false,
     "packageUpgradeRollbackAccepted": false,
     "productionAccepted": false
   },
   "pendingVerification": [
-    "Inspect exact resulting implementation native push/PR jobs and actual x10-operator-package-return artifact diagnostic:19 top-level fields,13 ordered phases,3 real A/P-B/Q-oldA2/Q traffic legs,3 distinct completed synthetic POST receipts and3 exact256KiB streams. Require actual payload A=A2!=B with identical native binary, B-produced HTTP Q consumed by the exact old A installer, fresh identities/bindings, explicit TCP refusal plus owned master/group/launcher absence between starts, all known-good A files preserved and all owned cleanup confirmed. Check full unchanged service/TLS/private-Node regressions; local pure checks do not accept physical return. Then close only scoped foreground operator return/backward HTTP compatibility and continue the separate managed-service package-transition/recovery gate. Native binary upgrade, TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum stay open. Do not rerun unchanged accepted CI without cause.",
-    "Inherited CLA failure and historical local physical cleanup FAIL_UNKNOWN remain preserved; no local physical fixture was run.",
-    "Input hashes are run-specific: compare P!=Q=A2 within each event and preserve both observed proofs; do not require complete proof equality across push/PR."
+    "First inspect exact resulting implementation native push/PR jobs and actual installed HTTPS artifact: require the new14-field x10-tls-verified-route diagnostic,11 asserted result fields, bounded verifiedGET acquisition, one unretried POST and exact stream on the same privately checked downstream socket, originPOSTcount1 and agent cleanup. Preserve all original CA/hostname/plaintext candidate-tag-bound TLS refusal controls, direct trust checks and owned cleanup. Recheck unchanged actual617-alpha foreground A/P-B/Q-oldA2/Q proof (19fields/13phases/3legs), within-event P!=Q=A2, source preservation and full service/TLS/private-Node regressions. Historical6401push success andPRstep21POST503 failure remain separate; possible old-route generation interleaving is not established. Do not call this a native/controller fix or all-worker fence. Only after exact successful hosted evidence accept narrowly named fixture and foreground return/backward HTTP compatibility, then continue the separate managed-service package-transition/recovery gate. Native binary upgrade, permanent release, independent published replay,60-minute soak, TLS restore, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason.",
+    "Input hashes are run-specific; compare P!=Q=A2 within each event and preserve both proofs. Original617-positive return observations do not make the failed PR workflow successful."
   ],
-  "nextConcreteTask": "Inspect exact resulting implementation native push/PR jobs and actual x10-operator-package-return artifact diagnostic:19 top-level fields,13 ordered phases,3 real A/P-B/Q-oldA2/Q traffic legs,3 distinct completed synthetic POST receipts and3 exact256KiB streams. Require actual payload A=A2!=B with identical native binary, B-produced HTTP Q consumed by the exact old A installer, fresh identities/bindings, explicit TCP refusal plus owned master/group/launcher absence between starts, all known-good A files preserved and all owned cleanup confirmed. Check full unchanged service/TLS/private-Node regressions; local pure checks do not accept physical return. Then close only scoped foreground operator return/backward HTTP compatibility and continue the separate managed-service package-transition/recovery gate. Native binary upgrade, TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum stay open. Do not rerun unchanged accepted CI without cause.",
+  "nextConcreteTask": "First inspect exact resulting implementation native push/PR jobs and actual installed HTTPS artifact: require the new14-field x10-tls-verified-route diagnostic,11 asserted result fields, bounded verifiedGET acquisition, one unretried POST and exact stream on the same privately checked downstream socket, originPOSTcount1 and agent cleanup. Preserve all original CA/hostname/plaintext candidate-tag-bound TLS refusal controls, direct trust checks and owned cleanup. Recheck unchanged actual617-alpha foreground A/P-B/Q-oldA2/Q proof (19fields/13phases/3legs), within-event P!=Q=A2, source preservation and full service/TLS/private-Node regressions. Historical6401push success andPRstep21POST503 failure remain separate; possible old-route generation interleaving is not established. Do not call this a native/controller fix or all-worker fence. Only after exact successful hosted evidence accept narrowly named fixture and foreground return/backward HTTP compatibility, then continue the separate managed-service package-transition/recovery gate. Native binary upgrade, permanent release, independent published replay,60-minute soak, TLS restore, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason.",
   "nextTasks": [
+    {
+      "id": "G3-verified-TLS-route-fixture-exact-CI",
+      "state": "FROZEN_FIXTURE_PURE_CONTROLS_VERIFIED_EXACT_HOSTED_PENDING",
+      "goal": "First inspect exact resulting implementation native push/PR jobs and actual installed HTTPS artifact: require the new14-field x10-tls-verified-route diagnostic,11 asserted result fields, bounded verifiedGET acquisition, one unretried POST and exact stream on the same privately checked downstream socket, originPOSTcount1 and agent cleanup. Preserve all original CA/hostname/plaintext candidate-tag-bound TLS refusal controls, direct trust checks and owned cleanup. Recheck unchanged actual617-alpha foreground A/P-B/Q-oldA2/Q proof (19fields/13phases/3legs), within-event P!=Q=A2, source preservation and full service/TLS/private-Node regressions. Historical6401push success andPRstep21POST503 failure remain separate; possible old-route generation interleaving is not established. Do not call this a native/controller fix or all-worker fence. Only after exact successful hosted evidence accept narrowly named fixture and foreground return/backward HTTP compatibility, then continue the separate managed-service package-transition/recovery gate. Native binary upgrade, permanent release, independent published replay,60-minute soak, TLS restore, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason.",
+      "evidence": "x10/evidence/g3-tls-verified-route.json"
+    },
     {
       "id": "G4-foreground-operator-return-exact-CI",
       "state": "FROZEN_FIXTURE_PURE_CONTROLS_VERIFIED_EXACT_HOSTED_PENDING",
@@ -455,7 +459,7 @@
   },
   "portfolioContinuation": {
     "activeProject": "x10",
-    "currentGate": "FOREGROUND_OPERATOR_RETURN_FIXTURE_EXACT_HOSTED_PENDING",
+    "currentGate": "TLS_VERIFIED_ROUTE_FIXTURE_EXACT_HOSTED_PENDING",
     "fullVisionAndDeferredResearchReference": {
       "path": "x10/continuum/PLAN.md",
       "historicalAssignmentReference": {
@@ -563,38 +567,41 @@
     "allPriorAcceptanceFailuresAndUnknownsRetained": true
   },
   "currentHeadCIStepReadback": {
-    "commit": "bdcc39c85399a2252daa6e1928f6a99f82d31eaf",
+    "commit": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
     "native": [
       {
-        "runId": 40470959459,
-        "jobId": 122077776259,
+        "runId": 40475357966,
+        "jobId": 122092247049,
         "state": "completed_success",
         "actualSuccessfulSteps": 34
       },
       {
-        "runId": 40470963365,
-        "jobId": 122077787281,
-        "state": "completed_success",
-        "actualSuccessfulSteps": 34
+        "runId": 40475365565,
+        "jobId": 122092230894,
+        "state": "completed_failure",
+        "failedStep": 21,
+        "actualSuccessfulSteps": 23,
+        "nativeAggregateComponentSucceeded": true,
+        "serviceRegressionExecuted": false
       }
     ],
     "researchPR": {
-      "runId": 40470963411,
-      "jobId": 122077787302,
+      "runId": 40475365639,
+      "jobId": 122092235172,
       "state": "completed_success",
       "actualSuccessfulSteps": 11
     },
     "researchPush": {
-      "runId": 40470959463,
-      "runtimeJobId": 122077778770,
+      "runId": 40475357972,
+      "runtimeJobId": 122092216429,
       "runtime": "skipped"
     },
     "cla": {
-      "runId": 40470961889,
-      "jobId": 122077706720,
+      "runId": 40475360520,
+      "jobId": 122092142522,
       "state": "failure"
     },
-    "artifactCountsReaudited": false,
+    "actualArtifactsAudited": true,
     "noUnchangedRerunRequested": true
   },
   "deferredWindowsPlan": {
@@ -618,5 +625,30 @@
     "requiredReadBeforeNextTask": true,
     "readCompleteHistoricalDocument": true,
     "allPriorAcceptanceFailuresAndUnknownsRetained": true
+  },
+  "tlsRoutePriorDevelopmentReference": {
+    "commit": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+    "path": "x10/continuum/BACKGROUND.json",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
+  },
+  "tlsUpstreamPOSTFailureHistory": {
+    "implementationCommit": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+    "pushRunId": 40475357966,
+    "pushState": "completed_success",
+    "prRunId": 40475365565,
+    "prJobId": 122092230894,
+    "prState": "completed_failure",
+    "failedStep": 21,
+    "expectedPOSTStatus": 200,
+    "actualPOSTStatus": 503,
+    "originPOSTRequests": 0,
+    "failedFixtureOwnedCleanupConfirmed": true,
+    "nativeAggregateComponentAlphaEach": 617,
+    "fullPRServiceExecuted": false,
+    "rootCauseEstablished": false,
+    "evidence": "x10/evidence/g3-tls-verified-route.json",
+    "noUnchangedRerunRequested": true
   }
 }

@@ -12,6 +12,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mjs';
+import { verifiedRouteExchange } from './tls-verified-route.mjs';
+import './tls-verified-route.test.mjs';
 
 // This profile authenticates an HTTPS application upstream. The managed listener
 // and bounded readiness relay remain HTTP/loopback; neither is frontend TLS.
@@ -156,10 +158,10 @@ test('extracted native alpha authenticates HTTPS upstream and rolls back rejecte
       };
     };
     async function apply(value, name) { const file = path.join(parent, `${name}.json`); await writeFile(file, JSON.stringify(value), { mode: 0o600 }); return cli(launcher, 'apply', '--file', file); }
-    let goodRevision;
+    let goodRevision, goodTag;
     await check('explicit trusted CA and hostname enable the installed native HTTPS proxy', async () => {
       const direct = await transfer(appPort, '/', { secure: true, ca }); assert.equal(direct.status, 200); assert.equal(direct.body.toString(), 'verified HTTPS application\n');
-      const good = candidate(), goodTag = new URL(good.healthURL).pathname.split('/').at(-1);
+      const good = candidate(); goodTag = new URL(good.healthURL).pathname.split('/').at(-1);
       const result = await apply(good, 'good'); assert.equal(result.code, 0); goodRevision = result.json.revision;
       const response = await until(async () => { const response = await transfer(gatewayPort); return response.body.toString() === 'verified HTTPS application\n' && response; });
       assert.equal(response.headers['x-tls-app'], 'authenticated-origin');
@@ -167,8 +169,25 @@ test('extracted native alpha authenticates HTTPS upstream and rolls back rejecte
     });
     await check('verified native HTTPS proxy preserves POST bytes and streamed bytes', async () => {
       const payload = Buffer.alloc(65551); for (let i = 0; i < payload.length; i++) payload[i] = (i * 37) & 255;
-      const echo = await transfer(gatewayPort, '/echo', { method: 'POST', body: payload }); assert.equal(echo.status, 200); assert.deepEqual(echo.body, payload); assert.equal(echoRequests, 1);
-      const streamed = await transfer(gatewayPort, '/stream'); assert.equal(streamed.status, 200); assert.deepEqual(streamed.body, Buffer.concat([Buffer.alloc(32768, 37), Buffer.alloc(32769, 91)]));
+      const expectedStream = Buffer.concat([Buffer.alloc(32768, 37), Buffer.alloc(32769, 91)]);
+      const beforeEcho = echoRequests;
+      // A GET on one accepted connection is not an all-worker reload fence.
+      // Send the unique POST once, only on that exact verified live socket;
+      // a replacement connection must fail before any POST body is submitted.
+      const route = await verifiedRouteExchange({ port: gatewayPort, tag: goodTag,
+        body: Buffer.from('verified HTTPS application\n'), origin: 'authenticated-origin',
+        postBody: payload, streamBody: expectedStream });
+      assert.equal(Number.isSafeInteger(route.getAttempts), true);
+      assert(route.getAttempts >= 1 && route.getAttempts <= 8);
+      assert.deepEqual(route, { routeVerified: true, sameSocket: true,
+        getAttempts: route.getAttempts, postAttempts: 1, postExact: true, streamExact: true,
+        postBytes: payload.length, streamBytes: expectedStream.length, agentDestroyed: true,
+        postRetried: false, allWorkerFenceAccepted: false });
+      assert.equal(echoRequests, beforeEcho + 1, 'Only one unique POST reaches the authenticated origin');
+      assert.equal(echoRequests, 1);
+      t.diagnostic(JSON.stringify({ suite: 'x10-tls-verified-route',
+        profile: 'verified-get-pinned-downstream-http-connection', ...route,
+        originPostRequestsObserved: echoRequests - beforeEcho }));
     });
     for (const [name, value] of [['wrong-ca', candidate(pki.wrongCA)], ['wrong-hostname', candidate(pki.ca, 'wrong.invalid')], ['plaintext-peer', candidate(pki.ca, 'localhost', readyPort)]]) {
       await check(`${name} refuses native TLS readiness and rolls back to known good`, async () => {

@@ -2957,3 +2957,29 @@ Actual foreground return acceptance awaits the new exact hosted CI artifact.
 This does not accept managed-service package return, arbitrary state/journal
 migration, native binary upgrade, TLS restore, permanent release, soak or V1.
 Evidence: x10/evidence/g4-operator-return.json.
+
+
+## TLS fixture connection selection candidate — 27 October 2026
+
+Exact6401 push40475357966 passed34steps,20groups and617alpha plus
+service regressions. PR40475365565 passed the617alpha return component
+but FAILED step21: first HTTPS-upstream POST returned503 rather than200;
+the origin received0POST requests. Cleanup passed, later PR trust/service
+checks were not executed. The exact old-worker interleaving is unknown.
+Both actual foreground return proofs and both ZIP digests are retained.
+
+The fixture-only correction selects one actual verified downstream HTTP GET
+connection and permits one POST/stream on that exact live reused socket.
+Automatic replacement is disabled; no POST retry is permitted. It changes
+no CLI, controller, native code, service recipe or package payload. Cold GET,
+Agent free-pool timing, EOF and terminal error draining are checked explicitly.
+Initial draft missing socket equality and late-error cleanup controls failed
+before their corrections; those observations are not hidden by final PASS.
+
+Frozen local Node24 pure/virtual controls passed639/639, including58 new
+controls once. Separate synthetic readiness8/8 and independent virtual
+security3/integration6 controls passed. No network/native/process-group/
+signal/systemd fixture ran locally. Actual correction and overall return
+acceptance remain pending exact new hosted CI; all-worker readiness,
+managed-service package return, native binary upgrade and fullV1 stay open.
+Evidence: x10/evidence/g3-tls-verified-route.json.

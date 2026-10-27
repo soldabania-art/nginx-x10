@@ -652,3 +652,49 @@ upgrade/downgrade, arbitrary state/database/journal migration, TLS-state restore
 permanent distribution, independent published replay, the60-minute soak or full
 G3/G4/V1. Semantic Continuum and the deferred Windows plan remain unverified;
 the central G9 portfolio handoff is unchanged.
+
+
+## Verified-route connection contract for the HTTPS fixture — 27 October 2026
+
+The HTTPS-upstream fixture now makes its connection assumption explicit.
+Before sending its one application POST, it selects a downstream HTTP
+connection on which a GET has actually returned the expected good body,
+authenticated-origin marker and exact candidate route tag. The POST and stream
+must use that same selected connection. Automatic agent redial is disabled;
+the request must have the exact live, writable socket and the expected reuse
+state before the fixture sends the payload. A missing, changed or closed socket
+causes refusal, without retrying the application POST on another connection.
+
+This connection is between the test client and the managed native HTTP
+listener. It is not the HTTPS origin socket, a TLS-library state transfer or a
+proof about every worker. Native upstream CA/hostname verification and the
+existing negative TLS controls remain separate obligations. Matching a public
+fixture route marker alone is not authentication. The initial GET also checks
+actual response content and origin identity before the connection is selected.
+This is a fixture-only correction: installed CLI, native C, controller and
+service behavior are unchanged.
+
+The earlier exact implementation `6401c8f0fe4690a4daea0abac43d2e0efd91c0ad`
+had different native workflow outcomes. Push `40475357966` completed all34
+steps successfully. PR `40475365565` failed step21 in the HTTPS-upstream
+fixture: its application POST received503 instead of200, and the origin had
+received zero application POSTs. The preceding good CA/hostname GET passed;
+later negative TLS controls and the PR service step did not execute. The
+failed fixture's owned native/launcher/socket/temp-root cleanup was confirmed.
+Both events had already passed the20-group native aggregate and617 alpha tests,
+including the new foreground operator-return proof. Push success does not
+erase the PR failure or supply its skipped service observations.
+
+An old-worker/route interleaving is a hypothesis, not an established cause of
+that503. Reusing a verified downstream connection narrows the fixture to its
+declared route; a future passing test must not be described as fixing a native
+runtime defect or guaranteeing all-traffic readiness. The adverse result and
+exact artifact identities remain in [candidate evidence](../evidence/g3-tls-verified-route.json).
+The new source and pure controls require a frozen local result and exact
+resulting hosted TLS/native/service verification. Until then, the changed
+fixture is not accepted by the earlier successful push.
+
+No zero-downtime, all-worker drain, request replay, live connection migration,
+Continuum, package rollback, permanent release or Production V1 claim follows
+from the pin. The operator-return/managed-service transition and the remaining
+G3–G8 gates retain their separately declared acceptance requirements.

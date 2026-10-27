@@ -706,5 +706,65 @@
     "managedServicePackageTransitionAccepted": false,
     "packageUpgradeRollbackAccepted": false,
     "productionAccepted": false
+  },
+  "tlsVerifiedRouteFixtureCandidate": {
+    "state": "FROZEN_FIXTURE_PURE_CONTROLS_VERIFIED_EXACT_HOSTED_PENDING",
+    "sourceBase": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+    "publicationParent": "d80ab8694c807b85be13b0ab839d74957f01d713",
+    "scope": "Fixture-only verified downstream HTTP route connection selection before a unique application POST and stream through the native HTTPS upstream proxy",
+    "sourceBindings": {
+      "x10/test/tls-verified-route.mjs": {
+        "bytes": 12047,
+        "afterSha256": "2b62f31e33a4b3e419f014254b8cc891068783d376f4fe8b931c853240cb3478",
+        "beforeSha256": null
+      },
+      "x10/test/tls-verified-route.test.mjs": {
+        "bytes": 22241,
+        "afterSha256": "3729934702abbcb49d0e0e23092846b272142663487d13d7a3ae2f380e6418e0",
+        "beforeSha256": null
+      },
+      "x10/test/alpha-tls.test.mjs": {
+        "bytes": 20270,
+        "afterSha256": "f54a3b54705b2524bbfd49545ed181dcd10d28058f51dbd725ec692904c45ac6",
+        "beforeSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e"
+      }
+    },
+    "evidence": "x10/evidence/g3-tls-verified-route.json",
+    "perFileLedger": "x10/review/g3-tls-verified-route-ledger.json",
+    "fixtureOnlyChange": true,
+    "alphaRuntimeChanged": false,
+    "nativeRuntimeChanged": false,
+    "controllerRuntimeChanged": false,
+    "serviceRecipeChanged": false,
+    "localSelectedTAP": {
+      "tests": 639,
+      "pass": 639,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "physicalNativeExecuted": false,
+      "networkFixtureExecuted": false,
+      "systemdExecuted": false
+    },
+    "newTLSVirtualControlsIncludedOnce": 58,
+    "separateSyntheticReadinessTAP": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "independentVirtualControlsSeparate": 9,
+    "rootCauseEstablished": false,
+    "nativeRuntimeFixClaimed": false,
+    "tlsFixtureCorrectionHostedAccepted": false,
+    "foregroundOperatorReturnAccepted": false,
+    "managedServicePackageTransitionAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "productionAccepted": false
   }
 }
