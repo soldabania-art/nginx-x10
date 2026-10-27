@@ -3194,3 +3194,37 @@ The owner renewed work for40 hours from27Oct11:24:15UTC through
 through04:24:15UTC. Previous20h/10h/60h/70h windows remain history. This does
 not guarantee continuous processes or completion. Deferred Windows remains
 UNVERIFIED after separately accepted LinuxV1, with no automatic queue change.
+
+
+## Exact explicit KEPT-A fallback acceptance — 27 October 2026
+
+Implementation7b32841d28a8b155b5783cef1a0c56337bb45a06 passed both native
+contexts: push40497965654/job122168221801 and PR40497972686/job122168235728,
+all36 actual steps each. ZIP digests and actual strict reports were checked.
+Each fallback report is4653 artifact bytes with13 fields,13 proof sections,
+13 phases and19 failed-B facts. The owned B fails the exact readiness hook,
+has no binding or POST effects, and fully retires before explicit kept-A
+preparation. The same old installation serves P with fresh unit/session/
+revision/invocation/binding and unique unretried POST/stream, without replay.
+
+Separate fallback counts are3 units,2 installs,2 successful invocations,
+1 expected failed B attempt,0 restarts and2 bounded successful journal CHECKS.
+Normal3/4/1/5 and legacy18 restored proofs/5sessions/2restarts/6journalCHECKS/
+3downstream+3upstream TLS sessions remain verified separately. All owned
+resources and private Node/history/bootstrap were removed after all3 strict
+source-pinned reports succeeded. These CHECKS are not exact raw query counts.
+
+Native20 groups,alpha617,TLS76,normal544/fallback545/Node138 TAP passed each;
+legacy617passed/1root-onlyskip and official1105pass/25skip/1expectedTODO/
+0unexpectedFAIL remain separate. Research PR actually ran21/7/27/48;
+push research runtime skipped; CLA failed. New fixture success does not erase
+c2/6401 failures or local FAIL_UNKNOWN, or establish a native binary upgrade.
+
+Only the named explicit operator fallback is accepted. Same-UID trust,
+unsigned pins and checked historical CLI reassembly limits remain. The next
+operator gap is a reviewed faulted/orphan incident runbook using existing
+strict refusals and confirmed backups, not automatic reaping or lifecycle
+editing. Release-record step completeness/cap also needs reconciliation.
+Permanent release, independent published replay,60minsoak, full recovery/
+security, TLS restore,fullG3/G4/V1 and semantic Continuum remain OPEN.
+Evidence: x10/evidence/g4-kept-a-fallback-hosted.json.
