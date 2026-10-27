@@ -6,12 +6,19 @@ import { createHash, randomBytes } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkManagedOperatorReturnReport } from './operator-package-return-proof.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PIN = Object.freeze({ version: 'v22.23.3', root: 'node-v22.23.3-linux-x64',
   filename: 'node-v22.23.3-linux-x64.tar.xz',
   sha256: 'df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de',
   fingerprint: '5BE8A3F6C8A5C01D106C0AD820B1A390B168D356' });
+// The coordinator freezes both literals together with the producer and workflow.
+// These are source consistency pins, not signatures or acceptance authority.
+export const MANAGED_PACKAGE_CLEANUP_SOURCE = Object.freeze({
+  checkerSha256: 'de0aeeea7562df808fc7c72050743606f31273ca7e881fc909a7d172a824d5f9',
+  proofSha256: 'e92ea85477297193b1400f0c1d590ee0a94e9cdebf2cd152201cf4a29fe521ad',
+});
 const MAX_ARCHIVE = 64 * 1024 ** 2, MAX_TAR = 512 * 1024 ** 2;
 const MAX_NODE = 256 * 1024 ** 2, MAX_LICENSE = 2 * 1024 ** 2;
 const sha = b => createHash('sha256').update(b).digest('hex');
@@ -191,7 +198,26 @@ async function signature(work, signal) {
 }
 // Explicit evidence is supplied by the trusted same-UID test coordinator only
 // after waiting for the unchanged checker child. It is not an OS process fence.
+function managedPackageCleanupEvidence(envelope) {
+  try {
+    const own = key => {
+      const descriptor = Object.getOwnPropertyDescriptor(envelope, key);
+      if (!descriptor || descriptor.enumerable !== true || !Object.hasOwn(descriptor, 'value')) return undefined;
+      return descriptor.value;
+    };
+    if (!envelope || typeof envelope !== 'object' || Array.isArray(envelope)
+        || ![Object.prototype, null].includes(Object.getPrototypeOf(envelope))
+        || own('managedPackageCheckerExited') !== true || !Object.is(own('managedPackageCheckerExitCode'), 0)
+        || own('sourceManagedPackageSha256') !== MANAGED_PACKAGE_CLEANUP_SOURCE.checkerSha256
+        || own('sourceManagedPackageProofSha256') !== MANAGED_PACKAGE_CLEANUP_SOURCE.proofSha256) return false;
+    const report = own('managedPackageReport');
+    if (checkManagedOperatorReturnReport(report).ok !== true) return false;
+    const encoded = JSON.stringify(report);
+    return typeof encoded === 'string' && Buffer.byteLength(encoded, 'utf8') <= 12288;
+  } catch { return false; }
+}
 export function cleanupEvidence(e) {
+  if (!managedPackageCleanupEvidence(e)) return false;
   const r = e?.report;
   if (e?.checkerExited !== true || e.checkerExitCode !== 0 || r?.ok !== true
       || r.code !== 'basic_lifecycle_verified' || r.phase !== 'complete'
@@ -383,6 +409,11 @@ export async function main(argv = process.argv.slice(2)) {
       if ((receipt.stat.mode & 0o7077) !== 0) refuse('runtime_retained_cleanup_unconfirmed');
       const e = JSON.parse(receipt.bytes);
       if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== 'e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370') refuse('runtime_retained_cleanup_unconfirmed');
+      for (const [name, expected] of [['operator-package-return.mjs', MANAGED_PACKAGE_CLEANUP_SOURCE.checkerSha256],
+        ['operator-package-return-proof.mjs', MANAGED_PACKAGE_CLEANUP_SOURCE.proofSha256]]) {
+        const source = await regular(path.join(HERE, name), 256 * 1024, { uid: process.getuid() });
+        if (sha(source.bytes) !== expected) refuse('runtime_retained_cleanup_unconfirmed');
+      }
       const runtime = await inspectRuntime(prefix);
       if (e.runtimeNodeSha256 !== runtime.files['bin/node'].sha256 || e.runtimeInstallationId !== runtime.installationId) refuse('runtime_retained_cleanup_unconfirmed');
       await removeRuntime(prefix); result = { ok: true, code: 'verified_node_removed', runtimeRemoved: true };

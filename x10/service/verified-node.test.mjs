@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, writeFile, mkdir, symlink, readdir, lstat, unlink, rmdir, readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { PIN, parseTar, parseChecksumText, parseSignatureStatus, cleanupEvidence, main } from './verified-node.mjs';
+import { PIN, MANAGED_PACKAGE_CLEANUP_SOURCE, parseTar, parseChecksumText, parseSignatureStatus, cleanupEvidence, main } from './verified-node.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const nodeMember = `${PIN.root}/bin/node`, licenseMember = `${PIN.root}/LICENSE`;
 function member(name, data = Buffer.from('SYNTHETIC_NONEXECUTABLE'), type = '0', mode = 0o755, link = '') {
@@ -15,8 +15,47 @@ function member(name, data = Buffer.from('SYNTHETIC_NONEXECUTABLE'), type = '0',
 const tar = (...members) => Buffer.concat([...members, Buffer.alloc(1024)]);
 const good = () => tar(member(nodeMember), member(licenseMember, Buffer.from('public license'), '0', 0o644));
 const status = () => `[GNUPG:] PLAINTEXT 74 0 \n[GNUPG:] NEWSIG\n[GNUPG:] KEY_CONSIDERED ${PIN.fingerprint} 0\n[GNUPG:] SIG_ID public 2026-09-23 1790183910\n[GNUPG:] GOODSIG 20B1A390B168D356 Public Signer\n[GNUPG:] VALIDSIG ${PIN.fingerprint} 2026-09-23 1790183910 0 4 0 22 8 01 ${PIN.fingerprint}\n`;
+// Public synthetic observations only. This fixture grants no process authority.
+function managedPackageProof() {
+  const digest=label=>hash(`public-synthetic-managed-return:${label}`);
+  const a={runtimePayloadSha256:digest('a'),operatorPayloadSha256:digest('a-operator'),nativeBinarySha256:digest('native')};
+  const b={runtimePayloadSha256:digest('b'),operatorPayloadSha256:digest('b-operator'),nativeBinarySha256:a.nativeBinarySha256};
+  const p=digest('input-p'),q=digest('input-q');
+  const stopped=()=>({unitInactive:true,invocationRetired:true,launcherExited:true,masterAbsent:true,
+    nativeGroupsAbsent:true,portsClosed:true,controlSocketAbsent:true,operatorLocksAbsent:true,pendingAbsent:true,
+    runtimeLinkAbsent:true,unitNotFound:true});
+  return {schemaVersion:1,kind:'nginx-x10-managed-operator-package-return-proof',
+    packages:{a,b,a2:{...a}},inputs:{pSha256:p,qSha256:q,a2RestoredSha256:q},
+    phases:['a_started','a_served','a_stopped','b_staged','b_started','b_initial_p_observed','b_q_applied',
+      'b_served','b_restart_started','b_restarted_served','b_stopped','a2_restored','a2_started','a2_served','a2_stopped','cleanup'],
+    legs:['a','b','b_restart','a2'].map((name,i)=>({name,identityOrdinals:{installation:[1,2,2,3][i],unit:[1,2,2,3][i],
+      session:i+1,revision:i+1,binding:i+1,invocation:i+1},inputSha256:i===0?p:q,initialBindingAbsent:i===2?null:true,
+      readinessAccepted:true,bindingMatchesOwnedRuntime:true,getExact:true,postExact:true,streamExact:true,
+      postEffectsBefore:i,postEffectsAfter:i+1})),
+    transitions:{beforeB:stopped(),beforeA2:stopped()},
+    restart:{commandExercised:true,oldLauncherExited:true,oldMasterAbsent:true,oldNativeGroupsAbsent:true,
+      oldInvocationRetired:true,freshSession:true,freshBinding:true,freshInvocation:true,sameUnit:true,samePackage:true,inputPreserved:true,unitActive:true},
+    retention:{retainedAAllFilesPreserved:true,retainedABackupPreserved:true,oldAInstallerRestoredQ:true,bInitialPObservedBeforeQ:true},
+    counts:{units:3,invocations:4,restarts:1,journalChecks:5,trafficGets:4,posts:4,streams:4,bInitialPGetChecks:1},
+    cleanup:{known:true,ownedProcessesAbsent:true,ownedLaunchersAbsent:true,ownedListenersClosed:true,
+      ownedUnitsRemoved:3,ownedInstallationsRemoved:3,historicalBundleRemoved:true,backupFilesRemoved:true},
+    limits:{consistencyOnly:true,nativeBinaryUpgradeAccepted:false,liveConnectionPreserved:false,
+      applicationSideEffectsReversed:false,productionAccepted:false,automaticMigrationAccepted:false,
+      allTrafficFenceAccepted:false,restartPreparedBindingObserved:false}};
+}
+function managedPackageReport() {
+  return { schemaVersion:1,kind:'nginx-x10-managed-operator-return-report',ok:true,
+    code:'managed_operator_return_verified',phase:'complete',proof:managedPackageProof(),
+    cleanupFailures:[],cleanupFailureCount:0,cleanupFailuresTruncated:false,
+    serviceAccepted:false,productionAccepted:false,subprocessOutputsPublished:false };
+}
 function receipt() {
-  return { checkerExited:true, checkerExitCode:0, report:{ ok:true, code:'basic_lifecycle_verified', phase:'complete', actualNonrootManagerObserved:true, actualUnitStarted:true,
+  return { checkerExited:true, checkerExitCode:0,
+    managedPackageCheckerExited:true,managedPackageCheckerExitCode:0,
+    sourceManagedPackageSha256:MANAGED_PACKAGE_CLEANUP_SOURCE.checkerSha256,
+    sourceManagedPackageProofSha256:MANAGED_PACKAGE_CLEANUP_SOURCE.proofSha256,
+    managedPackageReport:managedPackageReport(),
+    report:{ ok:true, code:'basic_lifecycle_verified', phase:'complete', actualNonrootManagerObserved:true, actualUnitStarted:true,
     runtimeUnitLinked:true, runtimeUnitRemoved:true, unitEnabled:false,
     bundleSchemaVersion:2, installSchemaVersion:2, installedRecipeGenerated:true,
     readinessAutomated:true, automaticReadinessAccepted:false, failedStartAccepted:false, slowDrainAccepted:false, orphanRecoveryAccepted:false, tlsServiceAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
@@ -53,6 +92,94 @@ function receipt() {
     upstreamTLSRollbackChecks:3,upstreamTLSCandidate502Checks:3,upstreamTLSNoPostReplayChecks:3,
     cleanup:{ managerStopped:true, launcherExited:true, nativeGroupsAbsent:true, listeningPortsClosed:true, controlSocketAbsent:true, runtimeLinkAbsent:true, installationRemoved:true, temporaryRootRemoved:true, downstreamTLSPortClosed:true, upstreamTLSPortClosed:true, readinessRelayPortClosed:true, upstreamTLSOriginClosed:true, readinessRelayClosed:true, appSocketsRemaining:0 } } };
 }
+test('legacy service evidence alone cannot authorize private Node cleanup', () => {
+  const value=receipt();
+  for(const key of ['managedPackageCheckerExited','managedPackageCheckerExitCode',
+    'sourceManagedPackageSha256','sourceManagedPackageProofSha256','managedPackageReport'])delete value[key];
+  assert.equal(value.report.restoredHTTPProof.restoredHTTPRestarted,true);
+  assert.equal(value.report.nativeSessionsStopped,5);assert.equal(value.report.journalChecks,6);
+  assert.equal(cleanupEvidence(value),false);
+});
+test('both managed checker exit and independently frozen source pins are mandatory', () => {
+  const invalid={managedPackageCheckerExited:[undefined,false,1,'true'],
+    managedPackageCheckerExitCode:[undefined,1,-0,null,'0'],
+    sourceManagedPackageSha256:[undefined,'f'.repeat(63),'g'.repeat(64),MANAGED_PACKAGE_CLEANUP_SOURCE.checkerSha256+'\n'],
+    sourceManagedPackageProofSha256:[undefined,'f'.repeat(63),'g'.repeat(64),MANAGED_PACKAGE_CLEANUP_SOURCE.proofSha256+'\n']};
+  for(const[key,values]of Object.entries(invalid))for(const value of values){
+    const e=receipt();e[key]=value;assert.equal(cleanupEvidence(e),false,key);
+  }
+  assert.equal(cleanupEvidence(receipt()),true);
+});
+test('managed cleanup envelope requires own enumerable data without evaluating accessors', () => {
+  let reads=0;
+  for(const key of ['managedPackageCheckerExited','managedPackageCheckerExitCode',
+    'sourceManagedPackageSha256','sourceManagedPackageProofSha256','managedPackageReport']){
+    const accessor=receipt();Object.defineProperty(accessor,key,{get(){reads++;return true;}});
+    assert.equal(cleanupEvidence(accessor),false,key);
+    const inherited=receipt(),value=inherited[key];delete inherited[key];Object.setPrototypeOf(inherited,{[key]:value});
+    assert.equal(cleanupEvidence(inherited),false,key);
+    const hidden=receipt();Object.defineProperty(hidden,key,{value:hidden[key],enumerable:false});
+    assert.equal(cleanupEvidence(hidden),false,key);
+  }
+  assert.equal(reads,0);
+});
+test('managed report must be complete, successful, strict and free of adverse cleanup', () => {
+  const mutations=[e=>{delete e.managedPackageReport;},e=>e.managedPackageReport=null,
+    e=>e.managedPackageReport.schemaVersion=2,e=>e.managedPackageReport.kind='old-service-report',
+    e=>e.managedPackageReport.ok=false,e=>e.managedPackageReport.code='managed_operator_return_refused',
+    e=>e.managedPackageReport.phase='a2_started',e=>e.managedPackageReport.proof=null,
+    e=>e.managedPackageReport.cleanupFailures=['unknown'],e=>e.managedPackageReport.cleanupFailureCount=1,
+    e=>e.managedPackageReport.cleanupFailuresTruncated=true,e=>e.managedPackageReport.serviceAccepted=true,
+    e=>e.managedPackageReport.productionAccepted=true,e=>e.managedPackageReport.subprocessOutputsPublished=true,
+    e=>e.managedPackageReport.unknown=true,e=>e.managedPackageReport.padding='x'.repeat(12289)];
+  for(const mutate of mutations){const e=receipt();mutate(e);assert.equal(cleanupEvidence(e),false);}
+});
+test('new managed receipt does not relax any exact legacy lifecycle counter', () => {
+  for(const[key,value]of [['nativeSessionsStarted',4],['nativeSessionsStopped',4],
+    ['managerRestartCommands',1],['completedManagerRestarts',1],['journalChecks',5],
+    ['downstreamTLSSessionChecks',2],['upstreamTLSSessionChecks',2]]){
+    const e=receipt();e.report[key]=value;assert.equal(cleanupEvidence(e),false,key);
+  }
+  const e=receipt();e.report.restoredHTTPProof.sourceUnitRemoved=false;assert.equal(cleanupEvidence(e),false);
+});
+test('managed proof requires the separately declared unit, invocation, restart and journal counts', () => {
+  for(const[key,count]of Object.entries(receipt().managedPackageReport.proof.counts))
+    for(const value of [undefined,count-1,count+1,String(count),NaN,Infinity]){
+      const e=receipt();e.managedPackageReport.proof.counts[key]=value;
+      assert.equal(cleanupEvidence(e),false,key);
+    }
+});
+test('one old managed unit, runtime link or process still live retains the private Node', () => {
+  for(const transition of ['beforeB','beforeA2'])
+    for(const key of Object.keys(receipt().managedPackageReport.proof.transitions[transition])){
+      const e=receipt();e.managedPackageReport.proof.transitions[transition][key]=false;
+      assert.equal(cleanupEvidence(e),false,`${transition}:${key}`);
+    }
+  for(const key of Object.keys(receipt().managedPackageReport.proof.restart)){
+    const e=receipt();e.managedPackageReport.proof.restart[key]=false;
+    assert.equal(cleanupEvidence(e),false,key);
+  }
+});
+test('managed cleanup rejects unknown or incomplete final owned-resource cleanup', () => {
+  for(const[key,value]of Object.entries(receipt().managedPackageReport.proof.cleanup)){
+    const e=receipt();e.managedPackageReport.proof.cleanup[key]=typeof value==='number'?value-1:false;
+    assert.equal(cleanupEvidence(e),false,key);
+  }
+});
+test('active restart intermediate binding absence remains explicitly unobserved', () => {
+  for(const value of [undefined,true,false,0,'null']){
+    const e=receipt();e.managedPackageReport.proof.legs[2].initialBindingAbsent=value;
+    assert.equal(cleanupEvidence(e),false);
+  }
+  const e=receipt();e.managedPackageReport.proof.limits.restartPreparedBindingObserved=true;
+  assert.equal(cleanupEvidence(e),false);
+});
+test('managed return cannot substitute candidate package bytes or an older declarative input', () => {
+  const same=receipt();same.managedPackageReport.proof.packages.a2={...same.managedPackageReport.proof.packages.b};
+  assert.equal(cleanupEvidence(same),false);
+  const stale=receipt();stale.managedPackageReport.proof.inputs.a2RestoredSha256=stale.managedPackageReport.proof.inputs.pSha256;
+  assert.equal(cleanupEvidence(stale),false);
+});
 test('synthetic tar selection is byte exact and never executes payload', () => {
   const r=parseTar(good()); assert.equal(r.node.toString(),'SYNTHETIC_NONEXECUTABLE'); assert.equal(r.license.toString(),'public license'); assert.deepEqual(Object.keys(r).sort(),['license','node']);
 });
@@ -571,4 +698,42 @@ test('cleanup retains the private runtime for exact-source incomplete restored H
       assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);
     }
   } finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
+});
+test('missing or unsafe new managed evidence preserves existing runtime bytes and directory identity',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-managed-test-'),prefix=p+'/runtime',file=p+'/receipt.json';
+  await mkdir(prefix,{mode:0o700});await writeFile(prefix+'/sentinel','public-synthetic-retain',{mode:0o600});
+  const before=await lstat(prefix),source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
+  const lifecyclePin=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];
+  const mutations=[e=>{delete e.managedPackageReport;},e=>{delete e.managedPackageCheckerExited;},
+    e=>e.managedPackageCheckerExitCode=1,e=>e.sourceManagedPackageSha256+='\n',
+    e=>e.sourceManagedPackageProofSha256+='\n',e=>e.managedPackageReport.schemaVersion=2,
+    e=>e.managedPackageReport.proof.cleanup.known=false,
+    e=>e.managedPackageReport.proof.transitions.beforeA2.unitInactive=false,
+    e=>e.managedPackageReport.proof.transitions.beforeB.runtimeLinkAbsent=false,
+    e=>e.managedPackageReport.proof.transitions.beforeB.unitNotFound=false,
+    e=>e.managedPackageReport.proof.counts.journalChecks=4,
+    e=>e.managedPackageReport.padding='x'.repeat(12289)];
+  try{
+    for(const mutate of mutations){
+      const e=receipt();e.sourceLifecycleSha256=lifecyclePin;mutate(e);
+      await writeFile(file,JSON.stringify(e),{mode:0o600});
+      const result=await main(['--cleanup','--prefix',prefix,'--service-evidence',file]);
+      assert.equal(result.code,'runtime_retained_cleanup_unconfirmed');assert.equal(result.ok,false);
+      assert.equal(await readFile(prefix+'/sentinel','utf8'),'public-synthetic-retain');
+      const after=await lstat(prefix);assert.equal(after.dev,before.dev);assert.equal(after.ino,before.ino);
+      assert.deepEqual(await readdir(prefix),['sentinel']);
+      assert.equal(JSON.stringify(result).includes(p),false);
+    }
+  } finally {await unlink(prefix+'/sentinel');await unlink(file);await rmdir(prefix);await rmdir(p);}
+});
+test('combined evidence remains bounded at the original 32KiB before any runtime removal',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-managed-test-'),prefix=p+'/runtime',file=p+'/receipt.json';
+  await mkdir(prefix,{mode:0o700});await writeFile(prefix+'/sentinel','retain',{mode:0o600});
+  const e=receipt();e.padding='x'.repeat(32769);await writeFile(file,JSON.stringify(e),{mode:0o600});
+  try{
+    assert((await lstat(file)).size>32768);
+    const result=await main(['--cleanup','--prefix',prefix,'--service-evidence',file]);
+    assert.equal(result.ok,false);assert.equal(await readFile(prefix+'/sentinel','utf8'),'retain');
+    assert.deepEqual(await readdir(prefix),['sentinel']);
+  } finally {await unlink(prefix+'/sentinel');await unlink(file);await rmdir(prefix);await rmdir(p);}
 });

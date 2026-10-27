@@ -1,13 +1,7 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-service-return-20261027T094349Z",
-    "owner": "codex-x10-service-return-coordinator",
-    "baseCommit": "ee2daa0385f654e96fd5b75c09da4e0179bb90a1",
-    "acquiredAtUTC": "2026-10-27T09:43:49.000Z",
-    "expiresAtUTC": "2026-10-27T10:28:49.000Z"
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
     "requestedAtUTC": "2026-10-27T03:45:59.000Z",
     "hours": 20,
@@ -407,79 +401,118 @@
     }
   },
   "lastV1DevelopmentPass": {
-    "state": "EXACT_SCOPED_FOREGROUND_OPERATOR_RETURN_AND_TLS_FIXTURE_SUCCESS",
-    "sourceBase": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
-    "publicationParent": "d80ab8694c807b85be13b0ab839d74957f01d713",
-    "scope": "Fixture-only verified downstream HTTP route connection selection before a unique application POST and stream through the native HTTPS upstream proxy",
+    "state": "FROZEN_CODE_AND_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+    "sourceBase": "ee2daa0385f654e96fd5b75c09da4e0179bb90a1",
+    "publicationParent": "d4691f13a90e9d6f73dbe2bdccd2a576593b1086",
+    "scope": "Separate ephemeral nonroot systemd-user HTTP operator-package A(P) to B(Q), actual B manager restart, then old A2(Q) return; hosted physical acceptance pending.",
     "sourceBindings": {
-      "x10/test/tls-verified-route.mjs": {
-        "bytes": 12047,
-        "afterSha256": "2b62f31e33a4b3e419f014254b8cc891068783d376f4fe8b931c853240cb3478",
-        "beforeSha256": null
+      "x10/service/operator-package-return.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "de0aeeea7562df808fc7c72050743606f31273ca7e881fc909a7d172a824d5f9",
+        "bytes": 46042
       },
-      "x10/test/tls-verified-route.test.mjs": {
-        "bytes": 22241,
-        "afterSha256": "3729934702abbcb49d0e0e23092846b272142663487d13d7a3ae2f380e6418e0",
-        "beforeSha256": null
+      "x10/service/operator-package-return-proof.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "e92ea85477297193b1400f0c1d590ee0a94e9cdebf2cd152201cf4a29fe521ad",
+        "bytes": 12101
       },
-      "x10/test/alpha-tls.test.mjs": {
-        "bytes": 20270,
-        "afterSha256": "f54a3b54705b2524bbfd49545ed181dcd10d28058f51dbd725ec692904c45ac6",
-        "beforeSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e"
+      "x10/service/operator-package-return.test.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "32c455b090a171acb2855cbd88d837f04e30322e34a56a5024ea9a561c3eb223",
+        "bytes": 12752
+      },
+      "x10/service/operator-package-return-proof.test.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "efd69c053af02add57b078525fda2b6d62adb931a3eeaa031ff16463cd945af8",
+        "bytes": 17654
+      },
+      "x10/service/verified-node.mjs": {
+        "beforeSha256": "54c3a1891e036295673b57ccffbee33bf4c5ac9e5ac11c70c1b9003a00298573",
+        "afterSha256": "f856f4574c3484792b7960eb3c8ae50c58283ff311d1582a844def464212b615",
+        "bytes": 30357
+      },
+      "x10/service/verified-node.test.mjs": {
+        "beforeSha256": "5d3524fd7d56bc631cf9bd8e43e9b3471e415245aad3084527c053b2a0263099",
+        "afterSha256": "e925a8ae1d89d3d68f2af4312f45e9509f79b685663d1ed539c088a3680c9b25",
+        "bytes": 55823
+      },
+      ".github/workflows/x10-native.yml": {
+        "beforeSha256": "e2db4ddf78e2ff7321c29d798f70d071dce2db835fa13f61c345a3d9fc4f2726",
+        "afterSha256": "ea1c66d6db16b4379263c37ad9761cd9edd1c759e146864cbe7b37f96ac6b87b",
+        "bytes": 23053
       }
     },
-    "evidence": "x10/evidence/g3-tls-verified-route.json",
-    "perFileLedger": "x10/review/g3-tls-verified-route-ledger.json",
-    "fixtureOnlyChange": true,
-    "alphaRuntimeChanged": false,
-    "nativeRuntimeChanged": false,
-    "controllerRuntimeChanged": false,
-    "serviceRecipeChanged": false,
+    "evidence": "x10/evidence/g4-managed-package-return.json",
+    "perFileLedger": "x10/review/g4-managed-package-return-ledger.json",
     "localSelectedTAP": {
-      "tests": 639,
-      "pass": 639,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "tests": 631,
+      "pass": 631,
       "fail": 0,
       "cancelled": 0,
       "skipped": 0,
       "todo": 0,
-      "exitCode": 0,
-      "nodeVersion": "v24.22.1",
+      "newControlsIncludedOnce": 529,
+      "priorConsumerControls": 102,
+      "unchangedLegacySource": true,
+      "workflowYAMLAndInlineSyntaxPassed": true,
+      "newExplicitJobSteps": 31,
+      "expectedActualStepsNotObservedLocally": 35,
       "physicalNativeExecuted": false,
-      "networkFixtureExecuted": false,
-      "systemdExecuted": false
+      "systemdExecuted": false,
+      "networkFixtureExecuted": false
     },
-    "newTLSVirtualControlsIncludedOnce": 58,
-    "separateSyntheticReadinessTAP": {
-      "tests": 8,
-      "pass": 8,
-      "fail": 0,
-      "cancelled": 0,
-      "skipped": 0,
-      "todo": 0
+    "newPureControlsIncludedOnce": 529,
+    "separateIndependentHistoricalReaderControls": 3,
+    "separateWorkflowTempfileControls": 8,
+    "separateWorkflowVirtualReportControls": 8,
+    "expectedHostedCounts": {
+      "reportFields": 12,
+      "proofTopSections": 12,
+      "orderedPhases": 16,
+      "units": 3,
+      "successfulNativeInvocations": 4,
+      "managerRestarts": 1,
+      "boundedJournalChecks": 5,
+      "trafficLegGETChecks": 4,
+      "separateInitialBInputPGETCheck": 1,
+      "uniqueCompletedSyntheticPOSTEffects": 4,
+      "postBytesEach": 65551,
+      "exactStreamChecks": 4,
+      "streamBytesEach": 65537,
+      "stopFieldsBeforeEachNewUnit": 11,
+      "restartProofFields": 12,
+      "ownedUnitsRemoved": 3,
+      "ownedInstallationsRemoved": 3
     },
-    "independentVirtualControlsSeparate": 9,
-    "rootCauseEstablished": false,
-    "nativeRuntimeFixClaimed": false,
-    "tlsFixtureCorrectionHostedAccepted": true,
-    "foregroundOperatorReturnAccepted": true,
+    "expectedCountsAreNotLocalRuntimeObservations": true,
+    "legacyLifecycleSourceUnchanged": true,
+    "legacyRestoredProofs": 18,
+    "legacyNativeSessions": 5,
+    "legacyManagerRestarts": 2,
+    "legacyBoundedJournalChecks": 6,
+    "legacyDownstreamTLSSessions": 3,
+    "legacyUpstreamTLSSessions": 3,
     "managedServicePackageTransitionAccepted": false,
     "packageUpgradeRollbackAccepted": false,
-    "productionAccepted": false,
-    "verifiedOnImplementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
-    "hostedEvidence": "x10/evidence/g4-operator-return-hosted.json",
-    "backwardDeclarativeHTTPCompatibilityAccepted": true
+    "nativeBinaryVersionChangeAccepted": false,
+    "tlsBackupAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false
   },
   "pendingVerification": [
-    "Next substantive package is the separately scoped managed-service package-return checker and cleanup consumer; not yet implemented or accepted.",
-    "On the resulting evidence-only successor, reconcile actual run jobs only. Do not transfer ac2 runtime acceptance to changed bytes or request an unchanged rerun. Inherited CLA remains failed; do not sign or change credentials.",
-    "Keep fullG3/G4/G5-G8/V1, permanent release/independent published replay/60minsoak/native binary upgrade/TLS restore and semantic Continuum OPEN."
+    "First inspect exact resulting implementation native push/PR jobs and mandatory service-package-return.json actual artifact, not only green scope jobs. Require strict12-field report/12-section proof/16ordered phases,3distinct owned units and4actual invocations A/P-B/Q-B_restart/Q-oldA2/Q,1actual B manager restart,5bounded JOURNAL CHECKS (not exactly5journalctl queries),4successful traffic-leg verifiedGET checks plus1separate initial B/P GET check,4unique unretried65551-byte POST effects retained in synthetic origin memory and4exact65537-byte streams. Verified-route acquisition can make up to8idempotent GET attempts per leg; trafficGets4 is successful leg checks, not exact raw GET requests. Compare P!=Q=A2 and payloadA=A2!=B within each event, with one unchanged compiled native binary. Demand11actual stop/link/not-found facts before B and A2 activation,12freshness/retirement restart facts, all known-good A files/backups preserved, all3owned units/installations removed. A/B/A2 prepared null bindings must be observed by the collector; B manager restart intermediate null binding is explicitly unobserved/null, never an invented observation. Verify legacy source e88ef and exact18restored proofs/5sessions/2restarts/6journal checks/3+3TLS separately, plus both source-pinned reports admitted before complete private Node/history/bootstrap cleanup. New proof and failure validators grant no acceptance; finite validFailureReport remains ok:false. Only actual hosted success may accept narrowly named managed HTTP operator-package return. Preserve earlier6401PR POST503/origin0 causeunknown, local cleanup FAIL_UNKNOWN and CLA failure. No unchanged reruns without reason. Then continue separately frozen recovery/security/package-failure gates, permanent versioned release, independent published replay and60minsoak; native binary upgrade, TLS restore, fullG3/G4/V1 and semantic Continuum remain open.",
+    "Existing accepted ac2 scoped receipt remains separate. No new managed-service package acceptance until exact native push and PR complete with actual mandatory service artifact and all owned/private Node cleanup."
   ],
-  "nextConcreteTask": "Implement the separate bounded nonroot systemd-user operator-package A(P)-to-B(Q)-to-old-A2(Q) return checker. Preserve legacy18restored proofs/5sessions/2manager restarts/6journal CHECKS/3downstream+3upstream TLS sessions exactly. Use three owned units/prefixes and immutable per-leg contexts: A serves P, fully stops and retires its link; trusted B stages from A, serves P then Q and completes one actual manager restart with fresh InvocationID/session/binding and absence of its previous launcher/native group; after B stop/export, exact old A installer restores B-produced Q in fresh A2 and serves it. Keep new counters separate (planned3units/4successful native invocations/1B manager restart; journal count declared before implementation), known-good A snapshots/backups preserved and all owned cleanup. Checkout-owner preflight supplies bounded literal-hash-checked nonexecuted old CLI bytes outside the candidate bundle; private Node checker must not execute Git or change permissions/security. Integrate a second source-pinned mandatory service artifact into verified-node cleanup admission; merely appending ignored envelope fields is insufficient. Keep combined cleanup evidence within existing32KiB bound; require both strict legacy and new success before private Node removal. Local only pure/tempfile/virtual checks, physical manager acceptance only existing supported hosted CI. Narrow foreground return/backward HTTP and TLS fixture are accepted on exact ac2 events; original6401 PR503/origin0 failure and unknown cause persist. Managed-service package return/recovery, native binary change, TLS restore, permanent release, independent published replay,60minsoak, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason.",
+  "nextConcreteTask": "First inspect exact resulting implementation native push/PR jobs and mandatory service-package-return.json actual artifact, not only green scope jobs. Require strict12-field report/12-section proof/16ordered phases,3distinct owned units and4actual invocations A/P-B/Q-B_restart/Q-oldA2/Q,1actual B manager restart,5bounded JOURNAL CHECKS (not exactly5journalctl queries),4successful traffic-leg verifiedGET checks plus1separate initial B/P GET check,4unique unretried65551-byte POST effects retained in synthetic origin memory and4exact65537-byte streams. Verified-route acquisition can make up to8idempotent GET attempts per leg; trafficGets4 is successful leg checks, not exact raw GET requests. Compare P!=Q=A2 and payloadA=A2!=B within each event, with one unchanged compiled native binary. Demand11actual stop/link/not-found facts before B and A2 activation,12freshness/retirement restart facts, all known-good A files/backups preserved, all3owned units/installations removed. A/B/A2 prepared null bindings must be observed by the collector; B manager restart intermediate null binding is explicitly unobserved/null, never an invented observation. Verify legacy source e88ef and exact18restored proofs/5sessions/2restarts/6journal checks/3+3TLS separately, plus both source-pinned reports admitted before complete private Node/history/bootstrap cleanup. New proof and failure validators grant no acceptance; finite validFailureReport remains ok:false. Only actual hosted success may accept narrowly named managed HTTP operator-package return. Preserve earlier6401PR POST503/origin0 causeunknown, local cleanup FAIL_UNKNOWN and CLA failure. No unchanged reruns without reason. Then continue separately frozen recovery/security/package-failure gates, permanent versioned release, independent published replay and60minsoak; native binary upgrade, TLS restore, fullG3/G4/V1 and semantic Continuum remain open.",
   "nextTasks": [
     {
       "id": "G4-managed-service-operator-package-return",
-      "state": "OPEN_NOT_IMPLEMENTED",
-      "goal": "Implement the separate bounded nonroot systemd-user operator-package A(P)-to-B(Q)-to-old-A2(Q) return checker. Preserve legacy18restored proofs/5sessions/2manager restarts/6journal CHECKS/3downstream+3upstream TLS sessions exactly. Use three owned units/prefixes and immutable per-leg contexts: A serves P, fully stops and retires its link; trusted B stages from A, serves P then Q and completes one actual manager restart with fresh InvocationID/session/binding and absence of its previous launcher/native group; after B stop/export, exact old A installer restores B-produced Q in fresh A2 and serves it. Keep new counters separate (planned3units/4successful native invocations/1B manager restart; journal count declared before implementation), known-good A snapshots/backups preserved and all owned cleanup. Checkout-owner preflight supplies bounded literal-hash-checked nonexecuted old CLI bytes outside the candidate bundle; private Node checker must not execute Git or change permissions/security. Integrate a second source-pinned mandatory service artifact into verified-node cleanup admission; merely appending ignored envelope fields is insufficient. Keep combined cleanup evidence within existing32KiB bound; require both strict legacy and new success before private Node removal. Local only pure/tempfile/virtual checks, physical manager acceptance only existing supported hosted CI. Narrow foreground return/backward HTTP and TLS fixture are accepted on exact ac2 events; original6401 PR503/origin0 failure and unknown cause persist. Managed-service package return/recovery, native binary change, TLS restore, permanent release, independent published replay,60minsoak, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason."
+      "state": "FROZEN_CODE_AND_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+      "goal": "First inspect exact resulting implementation native push/PR jobs and mandatory service-package-return.json actual artifact, not only green scope jobs. Require strict12-field report/12-section proof/16ordered phases,3distinct owned units and4actual invocations A/P-B/Q-B_restart/Q-oldA2/Q,1actual B manager restart,5bounded JOURNAL CHECKS (not exactly5journalctl queries),4successful traffic-leg verifiedGET checks plus1separate initial B/P GET check,4unique unretried65551-byte POST effects retained in synthetic origin memory and4exact65537-byte streams. Verified-route acquisition can make up to8idempotent GET attempts per leg; trafficGets4 is successful leg checks, not exact raw GET requests. Compare P!=Q=A2 and payloadA=A2!=B within each event, with one unchanged compiled native binary. Demand11actual stop/link/not-found facts before B and A2 activation,12freshness/retirement restart facts, all known-good A files/backups preserved, all3owned units/installations removed. A/B/A2 prepared null bindings must be observed by the collector; B manager restart intermediate null binding is explicitly unobserved/null, never an invented observation. Verify legacy source e88ef and exact18restored proofs/5sessions/2restarts/6journal checks/3+3TLS separately, plus both source-pinned reports admitted before complete private Node/history/bootstrap cleanup. New proof and failure validators grant no acceptance; finite validFailureReport remains ok:false. Only actual hosted success may accept narrowly named managed HTTP operator-package return. Preserve earlier6401PR POST503/origin0 causeunknown, local cleanup FAIL_UNKNOWN and CLA failure. No unchanged reruns without reason. Then continue separately frozen recovery/security/package-failure gates, permanent versioned release, independent published replay and60minsoak; native binary upgrade, TLS restore, fullG3/G4/V1 and semantic Continuum remain open.",
+      "evidence": "x10/evidence/g4-managed-package-return.json"
     },
     {
       "id": "G3-verified-TLS-route-fixture-exact-CI",
@@ -768,5 +801,25 @@
     "requiredReadBeforeNextTask": true,
     "readCompleteHistoricalDocument": true,
     "allPriorAcceptanceFailuresAndUnknownsRetained": true
+  },
+  "managedPackageReturnPriorCheckpointReference": {
+    "commit": "ee2daa0385f654e96fd5b75c09da4e0179bb90a1",
+    "path": "x10/continuum/BACKGROUND.json",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
+  },
+  "precedingReceiptCIStepReadback": {
+    "commit": "ee2daa0385f654e96fd5b75c09da4e0179bb90a1",
+    "nativePushRunId": 40482751385,
+    "nativePRRunId": 40482758798,
+    "nativeConclusions": "completed_success",
+    "researchPRRunId": 40482758669,
+    "researchPRConclusion": "completed_success",
+    "researchPushRunId": 40482751421,
+    "researchPushRuntimeAccepted": false,
+    "claRunId": 40482756450,
+    "claConclusion": "failure",
+    "readbackScope": "Workflow conclusions only; no new artifact download or transfer of ac2 acceptance to changed bytes."
   }
 }

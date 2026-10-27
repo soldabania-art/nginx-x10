@@ -3025,3 +3025,54 @@ permanent release, independent published replay,60-minute soak, fullG3/G4/V1
 and semantic Continuum remain open. Next: the separately verified managed-service
 package-transition/recovery gate. Windows and G9 remain deferred/unchanged.
 Evidence: x10/evidence/g4-operator-return-hosted.json.
+
+
+## Managed operator-package return candidate — 27 October 2026
+
+A separate nonroot systemd-user checker now exercises three private units:
+A serves HTTP P, stops and retires; B stages from A, first serves P, applies Q,
+serves Q and completes an actual manager restart; the exact old A installer
+then restores B-produced Q into a fresh A2 that serves Q. Each unit retains
+its own immutable prefix/binary/launcher context. Actual hosted acceptance
+of this new scenario is pending; the accepted foreground receipt remains
+separate at `ee2daa0385f654e96fd5b75c09da4e0179bb90a1`.
+
+The expected new proof has 12 sections,16 phases,3 units,4 successful native
+invocations,1 manager restart and5 bounded journal checks. These are separate
+from the unchanged legacy18 restored proofs/5 sessions/2 restarts/6 journal
+checks/3 downstream plus3 upstream TLS sessions. Journal checks are not exact
+query counts. Four successful traffic-leg GET checks can each use up to8
+idempotent route-acquisition attempts; the initial B/P GET is one separate
+check. Each leg sends one unique65551-byte POST and one exact65537-byte stream
+on its already verified downstream HTTP connection, without POST retry.
+Synthetic POST effects remain in origin memory, not durable business storage.
+
+The checker requires observed prepared null bindings for A/B/A2. B manager restart can bind before
+external observation; its intermediate initial binding is explicitly null
+meaning unobserved, while new actual session/revision/binding/invocation and
+old process retirement are mandatory. Eleven stop/link/not-found facts gate
+activation of the next unit. Known-good A files and backups remain preserved.
+
+Checkout-owned system Node supplies exact reviewed historical CLI bytes as
+a private0400 input outside the candidate bundle. Private Node never runs Git
+or changes security configuration. Both source-pinned collectors and strict
+success reports are now mandatory before private Node cleanup. The new report
+is bounded12KiB and the combined envelope32KiB. Closed adverse reports remain
+`ok:false`; unknown logs/proofs are not published and dependency cleanup refuses.
+
+Frozen local Node24 pure/tempfile/virtual checks passed631/631, including529
+new controls once. Separate review has3 historical-reader controls,8 workflow
+tempfile controls and8 virtual report controls. YAML/inline Node syntax passed.
+No physical native/process-group/signal/systemd/network fixtures ran locally.
+The actual new managed package path therefore remains unaccepted pending exact
+hosted push/PR jobs and `service-package-return.json`.
+
+B remains the operator runtime introduced by `ad012…`; fixtures/docs do not
+create another runtime version. A/A2 use reviewed historical CLI reassembly
+with the same compiled NGINX binary. Native/library upgrade, TLS restore,
+full recovery/security matrix, permanent release, independent published replay,
+60-minute soak, fullG3/G4/V1 and semantic Continuum remain open. Historical
+6401 POST503/origin0 failure with unknown cause, local cleanup FAIL_UNKNOWN,
+CLA failure, owner window and deferred Windows plan remain unchanged.
+
+Evidence: `x10/evidence/g4-managed-package-return.json`; ledger: `x10/review/g4-managed-package-return-ledger.json`.

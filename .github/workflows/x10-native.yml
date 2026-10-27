@@ -77,6 +77,12 @@ jobs:
         run: node --test --test-reporter=tap x10/service/interruption-failure.test.mjs > x10/.build/ci-evidence/service-interruption-failure-contract.tap
       - name: Validate authenticated Node dependency refusal controls
         run: node --test --test-reporter=tap x10/service/verified-node.test.mjs > x10/.build/ci-evidence/verified-node-contract.tap
+      - name: Validate managed operator-package return refusal controls
+        run: |
+          node --test --test-reporter=tap \
+            x10/service/operator-package-return-proof.test.mjs \
+            x10/service/operator-package-return.test.mjs \
+            > x10/.build/ci-evidence/service-package-return-contract.tap
       - name: Build dependencies and optional test clients
         run: |
           sudo apt-get update
@@ -127,85 +133,185 @@ jobs:
       - name: Verify temporary user-service with authenticated private Node
         run: |
           node --input-type=module <<'NODE'
-          import { mkdtemp, chmod, writeFile, readFile, readdir, unlink, rmdir } from 'node:fs/promises';
-          import { spawn } from 'node:child_process';
+          import { constants } from 'node:fs';
+          import { mkdtemp, chmod, writeFile, readFile, readdir, unlink, rmdir, mkdir, lstat, open, realpath } from 'node:fs/promises';
+          import { spawn, execFile } from 'node:child_process';
+          import { promisify } from 'node:util';
+          import { pathToFileURL } from 'node:url';
           import { createHash } from 'node:crypto';
           import path from 'node:path';
           import os from 'node:os';
           const evidence = 'x10/.build/ci-evidence';
-          let root, prefix, archive, envelope;
+          let root, prefix, archive, envelope, history, historicalCli;
           const source = 'x10/service/lifecycle-check.mjs';
           const sourceSha = 'e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370';
+          const managedSource = 'x10/service/operator-package-return.mjs';
+          const managedSourceSha = 'de0aeeea7562df808fc7c72050743606f31273ca7e881fc909a7d172a824d5f9';
+          const managedProofSource = 'x10/service/operator-package-return-proof.mjs';
+          const managedProofSha = 'e92ea85477297193b1400f0c1d590ee0a94e9cdebf2cd152201cf4a29fe521ad';
+          const historicalCommit = 'acb648392e745b5246a5620f2ea6a6286dc06d42';
+          const historicalBlob = 'f036791f3e843c3628964f5c61b0bc0ab903d6f9';
+          const historicalSha = '4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d';
           const hash = b => createHash('sha256').update(b).digest('hex');
+          const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
           const save = (name, report) => writeFile(evidence + '/' + name + '.json', JSON.stringify(report) + '\n');
+          const execute = promisify(execFile);
           const status = { ok: false, stage: 'download', code: 'bootstrap_failed', runtimeRemoved: false,
             temporaryRootRemoved: false, serviceAccepted: false, productionAccepted: false,
-            subprocessOutputsPublished: false };
-          async function run(exe, args, timeout) {
+            subprocessOutputsPublished: false, historicalCliVerified: false, managedPackageReturnExecuted: false };
+          const stamp = s => ({ dev: s.dev, ino: s.ino, uid: s.uid, mode: s.mode, nlink: s.nlink,
+            size: s.size, mtimeMs: s.mtimeMs, ctimeMs: s.ctimeMs });
+          async function directory(file) {
+            if (await realpath(file) !== file) throw new Error('bootstrap_directory_changed');
+            const s = await lstat(file);
+            if (!s.isDirectory() || s.uid !== process.getuid() || (s.mode & 0o7777) !== 0o700)
+              throw new Error('bootstrap_directory_changed');
+            return { dev: s.dev, ino: s.ino, uid: s.uid, mode: s.mode };
+          }
+          async function snapshot(file, max, mode) {
+            if (await realpath(file) !== file) throw new Error('bootstrap_file_changed');
+            const selected = await lstat(file);
+            if (!selected.isFile() || selected.uid !== process.getuid() || selected.nlink !== 1
+                || (selected.mode & 0o7777) !== mode || selected.size < 1 || selected.size > max)
+              throw new Error('bootstrap_file_changed');
+            const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+            try {
+              const s = await handle.stat();
+              if (!s.isFile() || s.uid !== process.getuid() || s.nlink !== 1 || (s.mode & 0o7777) !== mode
+                  || s.size < 1 || s.size > max || !same(stamp(selected), stamp(s))) throw new Error('bootstrap_file_changed');
+              const bytes = Buffer.alloc(s.size + 1); let count = 0;
+              while (count < bytes.length) { const r = await handle.read(bytes, count, bytes.length - count, null); if (!r.bytesRead) break; count += r.bytesRead; }
+              if (count !== s.size || !same(stamp(s), stamp(await handle.stat()))
+                  || !same(stamp(s), stamp(await lstat(file)))) throw new Error('bootstrap_file_changed');
+              return { identity: stamp(s), sha256: hash(bytes.subarray(0, count)) };
+            } finally { await handle.close(); }
+          }
+          async function recheck(file, expected, max, mode) {
+            if (!same(await snapshot(file, max, mode), expected)) throw new Error('bootstrap_file_changed');
+          }
+          async function checkerPins() {
+            if (hash(await readFile(source)) !== sourceSha || hash(await readFile(managedSource)) !== managedSourceSha
+                || hash(await readFile(managedProofSource)) !== managedProofSha) throw new Error('checker_source_changed');
+          }
+          async function historicalBytes() {
+            // Git is used only by this original checkout-owned Node, before the
+            // authenticated private Node runs. No safe.directory/config changes.
+            const object = historicalCommit + ':x10/alpha/cli.mjs';
+            const options = { cwd: process.cwd(), encoding: 'buffer', timeout: 5000, maxBuffer: 256 * 1024 };
+            const identity = await execute('/usr/bin/git', ['rev-parse', object], options);
+            if (!identity.stdout.equals(Buffer.from(historicalBlob + '\n')) || identity.stderr.length) throw new Error('historical_cli_refused');
+            const raw = await execute('/usr/bin/git', ['show', object], options);
+            if (raw.stderr.length || raw.stdout.length !== 68551 || hash(raw.stdout) !== historicalSha) throw new Error('historical_cli_refused');
+            const peers = ['cli.mjs', 'manager.mjs', 'listeners.mjs', 'generations.mjs', 'status-format.mjs'].map(n => 'x10/control/' + n);
+            peers.push('x10/alpha/runtime.mjs', 'x10/alpha/upstream-example.mjs', 'x10/service/user-unit.mjs');
+            const unchanged = await execute('/usr/bin/git', ['diff', '--exit-code', historicalCommit, '--', ...peers], options);
+            if (unchanged.stdout.length || unchanged.stderr.length) throw new Error('historical_runtime_peers_changed');
+            return raw.stdout;
+          }
+          async function run(exe, args, timeout, maxOutput = 1024 * 1024) {
             return new Promise(resolve => {
-              let child, bytes = 0, timedOut = false, fault = false, forced = false;
+              let child, bytes = 0, stderrBytes = 0, timedOut = false, fault = false, forced = false;
               const output = []; let grace;
               try { child = spawn(exe, args, { stdio: ['ignore', 'pipe', 'pipe'] }); }
-              catch { resolve({ code: null, output: '', failed: true }); return; }
+              catch { resolve({ code: null, output: '', stderrBytes: 0, failed: true }); return; }
               const stop = () => { if (timedOut) return; timedOut = true; child.kill('SIGTERM');
                 grace = setTimeout(() => { forced = true; child.kill('SIGKILL'); }, 15000); };
               const timer = setTimeout(stop, timeout);
               child.once('error', () => { fault = true; });
               child.stdout.on('data', b => { bytes += b.length;
-                if (bytes > 1024 * 1024) { fault = true; stop(); } else output.push(b); });
-              child.stderr.on('data', b => { bytes += b.length; if (bytes > 1024 * 1024) { fault = true; stop(); } });
+                if (bytes > maxOutput) { fault = true; stop(); } else output.push(b); });
+              child.stderr.on('data', b => { bytes += b.length; stderrBytes += b.length; if (bytes > maxOutput) { fault = true; stop(); } });
               child.once('close', (code, signal) => { clearTimeout(timer); clearTimeout(grace);
-                resolve({ code, output: Buffer.concat(output).toString('utf8'),
+                resolve({ code, output: Buffer.concat(output).toString('utf8'), stderrBytes,
                   failed: fault || timedOut || forced || Boolean(signal) }); });
             });
           }
-          async function jsonStep(name, exe, args, timeout) {
-            const result = await run(exe, args, timeout);
+          async function jsonStep(name, exe, args, timeout, maxOutput = 1024 * 1024, validate = null, validateFailure = null) {
+            const result = await run(exe, args, timeout, maxOutput);
             let report;
             try { report = JSON.parse(result.output); } catch { report = { ok: false, code: 'bootstrap_child_report_invalid' }; }
-            if (result.failed || result.code !== 0 || report?.ok !== true) {
-              await save(name, report && typeof report === 'object' ? report : { ok: false, code: 'bootstrap_child_report_invalid' });
+            const managed = name === 'service-package-return';
+            let validated = validate === null && !managed;
+            try { if (validate) validated = validate(report)?.ok === true; } catch {}
+            if (result.failed || result.code !== 0 || report?.ok !== true
+                || (managed && result.stderrBytes !== 0) || !validated) {
+              // Only a source-pinned closed failure schema may retain finite
+              // adverse phase/reason/cleanup facts. It never admits success.
+              let safeFailure = false;
+              try { if (validateFailure) safeFailure = validateFailure(report)?.validFailureReport === true; } catch {}
+              await save(name, managed ? safeFailure ? report
+                : { ok: false, code: 'managed_package_return_failed', subprocessOutputsPublished: false }
+                : report && typeof report === 'object' ? report : { ok: false, code: 'bootstrap_child_report_invalid' });
               throw new Error('bootstrap_stage_failed');
             }
             await save(name, report); return report;
           }
           try {
+            await save('service-package-return', { ok: false, code: 'managed_package_return_not_executed', subprocessOutputsPublished: false });
+            status.stage = 'historical_preflight';
+            await checkerPins();
+            const oldCliBytes = await historicalBytes();
             root = await mkdtemp(path.join(os.tmpdir(), 'x10-node-bootstrap-'));
-            await chmod(root, 0o700);
+            await chmod(root, 0o700); const rootIdentity = await directory(root);
             prefix = root + '/runtime'; archive = root + '/node.tar.xz';
-            envelope = root + '/service-evidence.json';
+            envelope = root + '/service-evidence.json'; history = root + '/history'; historicalCli = history + '/old-cli.mjs';
+            await mkdir(history, { mode: 0o700 }); const historyIdentity = await directory(history);
+            const oldHandle = await open(historicalCli, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o400);
+            try { await oldHandle.writeFile(oldCliBytes); await oldHandle.sync(); } finally { await oldHandle.close(); }
+            const historicalSnapshot = await snapshot(historicalCli, 68551, 0o400);
+            if (historicalSnapshot.identity.size !== 68551 || historicalSnapshot.sha256 !== historicalSha) throw new Error('historical_cli_refused');
+            status.historicalCliVerified = true;
             const download = await run('/usr/bin/curl', ['--fail', '--silent', '--show-error',
               '--proto', '=https', '--tlsv1.2', '--connect-timeout', '10', '--max-time', '60',
               '--max-filesize', '67108864', '--retry', '2', '--retry-max-time', '120',
               '--output', archive,
               'https://nodejs.org/download/release/v22.23.3/node-v22.23.3-linux-x64.tar.xz'], 150000);
             if (download.failed || download.code !== 0) throw new Error('download_failed');
+            await chmod(archive, 0o600); const archiveSnapshot = await snapshot(archive, 67108864, 0o600);
             status.stage = 'authenticated_install';
             const installed = await jsonStep('verified-node', process.execPath,
               ['x10/service/verified-node.mjs', '--archive', archive, '--prefix', prefix], 120000);
-            if (hash(await readFile(source)) !== sourceSha) throw new Error('checker_source_changed');
+            await checkerPins(); await recheck(historicalCli, historicalSnapshot, 68551, 0o400);
             status.stage = 'actual_service';
-            const alpha = 'x10/.build/dist/nginx-x10-linux-alpha.tar.gz';
+            const alpha = 'x10/.build/dist/nginx-x10-linux-alpha.tar.gz', alphaSha = hash(await readFile(alpha));
             const report = await jsonStep('service-lifecycle', prefix + '/bin/node',
-              [source, '--archive', alpha, '--sha256', hash(await readFile(alpha))], 240000);
-            if (hash(await readFile(source)) !== sourceSha) throw new Error('checker_source_changed');
-            // This point is reached only after that exact checker child closed
-            // normally with code zero. Same-UID coordination is not OS fencing.
-            await writeFile(envelope, JSON.stringify({ checkerExited: true, checkerExitCode: 0,
+              [source, '--archive', alpha, '--sha256', alphaSha], 240000);
+            await checkerPins(); await recheck(historicalCli, historicalSnapshot, 68551, 0o400);
+            status.stage = 'actual_managed_package_return';
+            const { checkManagedOperatorReturnReport, checkManagedOperatorReturnFailureReport } = await import(pathToFileURL(path.resolve(managedProofSource)).href);
+            if (typeof checkManagedOperatorReturnReport !== 'function' || typeof checkManagedOperatorReturnFailureReport !== 'function')
+              throw new Error('managed_checker_api_changed');
+            const managedPackageReport = await jsonStep('service-package-return', prefix + '/bin/node',
+              [managedSource, '--archive', path.resolve(alpha), '--sha256', alphaSha, '--historical-cli', historicalCli], 240000, 12288, checkManagedOperatorReturnReport, checkManagedOperatorReturnFailureReport);
+            status.managedPackageReturnExecuted = true;
+            await checkerPins(); await recheck(historicalCli, historicalSnapshot, 68551, 0o400);
+            // Both exact source-pinned children must have closed normally with
+            // code zero. Same-UID coordination is not OS fencing.
+            const envelopeBytes = Buffer.from(JSON.stringify({ checkerExited: true, checkerExitCode: 0,
               runtimeInstallationId: installed.installationId, runtimeNodeSha256: installed.nodeSha256,
-              sourceLifecycleSha256: sourceSha, report }) + '\n', { mode: 0o600, flag: 'wx' });
+              sourceLifecycleSha256: sourceSha, report, managedPackageCheckerExited: true,
+              managedPackageCheckerExitCode: 0, sourceManagedPackageSha256: managedSourceSha,
+              sourceManagedPackageProofSha256: managedProofSha, managedPackageReport }) + '\n');
+            if (envelopeBytes.length > 32768) throw new Error('cleanup_envelope_limit');
+            await writeFile(envelope, envelopeBytes, { mode: 0o600, flag: 'wx' });
+            const envelopeSnapshot = await snapshot(envelope, 32768, 0o600);
             status.stage = 'dependency_cleanup';
             const cleanup = await jsonStep('verified-node-cleanup', process.execPath,
               ['x10/service/verified-node.mjs', '--cleanup', '--prefix', prefix, '--service-evidence', envelope], 30000);
             if (cleanup.runtimeRemoved !== true) throw new Error('runtime_retained');
             status.runtimeRemoved = true;
-            if (JSON.stringify((await readdir(root)).sort()) !== JSON.stringify(['node.tar.xz', 'service-evidence.json'])) throw new Error('cleanup_inventory_unknown');
-            await unlink(archive); await unlink(envelope); await rmdir(root);
+            if (!same(await directory(root), rootIdentity) || !same(await directory(history), historyIdentity)
+                || !same((await readdir(root)).sort(), ['history', 'node.tar.xz', 'service-evidence.json'])
+                || !same(await readdir(history), ['old-cli.mjs'])) throw new Error('cleanup_inventory_unknown');
+            await recheck(historicalCli, historicalSnapshot, 68551, 0o400);
+            await recheck(archive, archiveSnapshot, 67108864, 0o600);
+            await recheck(envelope, envelopeSnapshot, 32768, 0o600);
+            await unlink(historicalCli); await rmdir(history); await unlink(archive); await unlink(envelope); await rmdir(root);
             status.temporaryRootRemoved = true; status.ok = true; status.stage = 'complete';
             status.code = 'authenticated_dependency_lifecycle_complete';
           } catch {
-            // Preserve the runtime whenever service cleanup is unconfirmed:
-            // the generated unit's ExecStop may still require this exact Node.
+            // Preserve the runtime whenever either service cleanup is unconfirmed:
+            // a generated unit's ExecStop may still require this exact Node.
             status.code = 'bootstrap_stage_failed'; process.exitCode = 1;
           }
           try { await save('verified-node-bootstrap', status); }
