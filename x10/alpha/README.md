@@ -795,3 +795,51 @@ full recovery/security matrix, permanent release, independent published replay,
 CLA failure, owner window and deferred Windows plan remain unchanged.
 
 See the [candidate evidence](../evidence/g4-managed-package-return.json) and [per-file ledger](../review/g4-managed-package-return-ledger.json).
+
+
+## Immutable revision reader and failure-reason candidate — 27 October 2026
+
+The first managed-service package-return implementation
+`c2adbea6c8d1e8b864291383445d35a0b27e875a` failed both native push40486053822
+and PR40486064789 at step30. Both reports show phase `install_a`, terminal
+`cleanup_unconfirmed` and no managed proof. Cleanup overwrote the original
+primary refusal, so its exact historical code is unavailable. The private Node,
+historical CLI input and bootstrap root were retained; no dependency-cleanup
+artifact confirms their removal. Do not describe that failed path as accepted.
+
+Both events had passed the20-group native aggregate,617 alpha tests,76 TLS
+TAP tests and the separate existing service's18 restored proofs/5 sessions/
+2 restarts/6 bounded journal checks/3 downstream and3 upstream TLS sessions.
+Those earlier checks and legacy cleanup do not prove successful cleanup of the
+new managed-package collector. The foreground operator-return acceptance remains
+separately scoped, with no managed package return inferred from it.
+
+The reproduced fixture defect is specific: the manager writes an immutable
+revision with mode0400, while the new collector's exact reader required0600.
+A safe baseline control refused the actual0400 record and accepted identical
+0600 bytes. The candidate instead requires0400 and retains exact regular-file,
+ownership/link/size and consistency checks; it does not relax the manager's
+record permissions or modify the installed CLI/native/controller/service recipe.
+That known contract mismatch is not claimed as the exclusive historical cause.
+
+The new report schema2 has13 fields and preserves a bounded `primaryFailure`
+code/phase before cleanup can overwrite the terminal outcome. Successful reports
+require `primaryFailure:null`; closed failure reports remain `ok:false` and
+cannot authorize private Node removal. Proof shape/counts remain unchanged.
+The workflow/consumer source pins change together, with no new job budget,
+permissions, credentials or schedules.
+
+Frozen local Node24 pure/tempfile/virtual controls passed662/662 with no
+fail/cancel/skip/TODO. The31 additional fix controls are included once:
+18 proof,9 actual-reader and4 consumer controls. The separate3-control exact-c2
+baseline is not added. An intermediate mixed-schema consumer run had11 failures
+among118 controls; that adverse result stays separate from final verification.
+YAML and inline Node syntax passed. No physical native/process-group/signal/
+systemd/network fixture ran locally.
+
+Actual resulting CI remains pending; no local pure check is evidence of
+physical managed-service return acceptance.
+The prior failed results and earlier6401 POST503/cause-unknown observation stay
+in history. Recovery/security, native binary upgrade, TLS restore, permanent
+release, independent published replay, the60-minute soak and fullG3/G4/V1/
+Continuum gates remain open. See [candidate evidence](../evidence/g4-managed-package-return.json).

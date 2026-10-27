@@ -91,8 +91,8 @@ async function record(file) {
   const value = JSON.parse((await regularBytes(file, 2 * 1024 * 1024, { mode: 0o600 })).bytes), { sha256, ...body } = value;
   if (!hex(sha256, 64) || digest(JSON.stringify(body)) !== sha256) refuse('record_refused'); return body;
 }
-async function revision(file) {
-  const value = JSON.parse((await regularBytes(file, 2 * 1024 * 1024, { mode: 0o600 })).bytes), { recordSha256, ...body } = value;
+export async function readManagedReturnRevision(file) {
+  const value = JSON.parse((await regularBytes(file, 2 * 1024 * 1024, { mode: 0o400 })).bytes), { recordSha256, ...body } = value;
   if (!hex(recordSha256, 64) || digest(JSON.stringify(body)) !== recordSha256 || digest(JSON.stringify(value.input)) !== value.inputSha256) refuse('record_refused');
   return value;
 }
@@ -133,8 +133,8 @@ async function packageIdentity(prefix) {
 }
 
 export async function main(argv = process.argv.slice(2)) {
-  const report = { schemaVersion: 1, kind: 'nginx-x10-managed-operator-return-report', ok: false, code: 'not_started', phase: 'arguments',
-    proof: null, cleanupFailures: [], cleanupFailureCount: 0, cleanupFailuresTruncated: false,
+  const report = { schemaVersion: 2, kind: 'nginx-x10-managed-operator-return-report', ok: false, code: 'not_started', phase: 'arguments',
+    proof: null, primaryFailure: null, cleanupFailures: [], cleanupFailureCount: 0, cleanupFailuresTruncated: false,
     serviceAccepted: false, productionAccepted: false, subprocessOutputsPublished: false };
   let input, parent, node, env, app, appPort, gatewayPort, healthPort, bundle, oldBundle, savedOldBundle, savedBundle;
   let cancelled = false, inCleanup = false, ownAppClosed = false, finished = false;
@@ -176,7 +176,7 @@ export async function main(argv = process.argv.slice(2)) {
     const status = await cli(ctx.launcher, ['status']);
     if (status.pending !== null || status.configUnchanged !== true || status.fragmentMatchesLastConfirmed !== true || status.history?.integrity !== true
         || !hex(status.lastConfirmedRevision, 32)) refuse('controller_state');
-    const rev = await revision(`${sessionPrefix}/.x10-control/revisions/${status.lastConfirmedRevision}.json`);
+    const rev = await readManagedReturnRevision(`${sessionPrefix}/.x10-control/revisions/${status.lastConfirmedRevision}.json`);
     if (rev.id !== status.lastConfirmedRevision) refuse('controller_state');
     return { manifest, registry, sessionPrefix, life, status, revision: rev };
   };
@@ -488,7 +488,13 @@ export async function main(argv = process.argv.slice(2)) {
       'unit_start', 'input_mismatch', 'traffic_unconfirmed', 'traffic_identity_changed', 'apply_refused', 'backup_refused', 'source_preservation', 'backup_preservation',
       'transition_refused', 'stage_refused', 'package_identity', 'initial_b_unconfirmed', 'unit_restart', 'restart_identity', 'restore_refused', 'final_observation',
       'uninstall_unconfirmed', 'snapshot_refused', 'origin_cleanup', 'proof_refused', 'cancelled', 'observation_timeout', 'installed_command_failed', 'installed_response_invalid']);
-    report.ok = false; report.code = allowed.has(error.code) ? error.code : 'managed_operator_return_refused'; report.proof = null;
+    let originalCode;
+    try { const descriptor = Object.getOwnPropertyDescriptor(error, 'code');
+      if (descriptor && Object.hasOwn(descriptor, 'value') && typeof descriptor.value === 'string') originalCode = descriptor.value;
+    } catch { /* Untrusted exception metadata is never evaluated or published. */ }
+    const primary = allowed.has(originalCode) ? originalCode : 'managed_operator_return_refused';
+    // Keep the first finite failure even if conservative cleanup later refuses.
+    report.primaryFailure = primary; report.ok = false; report.code = primary; report.proof = null;
   } finally {
     inCleanup = true;
     if (!finished) {
@@ -507,8 +513,12 @@ export async function main(argv = process.argv.slice(2)) {
     }
     process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel);
   }
-  if (report.cleanupFailureCount) { report.ok = false; report.code = 'cleanup_unconfirmed'; report.proof = null; }
-  if (Buffer.byteLength(encode(report)) > 12288) return { ...report, ok: false, code: 'report_bound', proof: null };
+  if (report.cleanupFailureCount) {
+    report.primaryFailure ??= 'managed_operator_return_refused';
+    report.ok = false; report.code = 'cleanup_unconfirmed'; report.proof = null;
+  }
+  if (Buffer.byteLength(encode(report)) > 12288)
+    return { ...report, ok: false, code: 'report_bound', primaryFailure: report.primaryFailure ?? 'report_bound', proof: null };
   return report;
 }
 let invoked = false;

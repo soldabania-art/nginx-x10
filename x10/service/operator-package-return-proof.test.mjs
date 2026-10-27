@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { MANAGED_OPERATOR_RETURN_PROOF_KIND, MANAGED_OPERATOR_RETURN_PHASES,
   MAX_MANAGED_OPERATOR_RETURN_REPORT_BYTES, checkManagedOperatorReturnProof,
   checkManagedOperatorReturnReport, checkManagedOperatorReturnFailureReport,
-  MANAGED_OPERATOR_RETURN_FAILURE_CODES, MANAGED_OPERATOR_RETURN_FAILURE_PHASES } from './operator-package-return-proof.mjs';
+  MANAGED_OPERATOR_RETURN_FAILURE_CODES, MANAGED_OPERATOR_RETURN_FAILURE_PHASES,
+  MANAGED_OPERATOR_RETURN_PRIMARY_FAILURE_CODES } from './operator-package-return-proof.mjs';
 
 // Synthetic finite facts only. No process, manager, socket or native code runs.
 const positive = {
@@ -220,8 +221,8 @@ function collect(value, path = [], output = []) {
 }
 const result = ok => ({ ok, code: ok ? 'managed_operator_return_proof_valid' : 'managed_operator_return_proof_invalid',
   compatibilityAccepted: false, managedPackageReturnAccepted: false, serviceAccepted: false, productionAccepted: false });
-const report = proof => ({ schemaVersion: 1, kind: 'nginx-x10-managed-operator-return-report', ok: true,
-  code: 'managed_operator_return_verified', phase: 'complete', proof, cleanupFailures: [], cleanupFailureCount: 0,
+const report = proof => ({ schemaVersion: 2, kind: 'nginx-x10-managed-operator-return-report', ok: true,
+  code: 'managed_operator_return_verified', phase: 'complete', proof, primaryFailure: null, cleanupFailures: [], cleanupFailureCount: 0,
   cleanupFailuresTruncated: false, serviceAccepted: false, productionAccepted: false, subprocessOutputsPublished: false });
 test('finite positive managed return facts grant no acceptance', () => {
   assert.equal(MANAGED_OPERATOR_RETURN_PROOF_KIND, positive.kind);
@@ -322,10 +323,10 @@ for (const value of [null, undefined, true, 1, 'complete', [], Object.create({})
     assert.deepEqual(checkManagedOperatorReturnReport(value), result(false));
   });
 
-const failed = () => ({ ...report(null), ok: false, code: 'usage_refused', phase: 'arguments' });
+const failed = () => ({ ...report(null), ok: false, code: 'usage_refused', phase: 'arguments', primaryFailure: 'usage_refused' });
 for (const code of MANAGED_OPERATOR_RETURN_FAILURE_CODES.filter(code => code !== 'cleanup_unconfirmed'))
   test('bounded adverse report preserves known code without success ' + code, () => {
-    const value = failed(); value.code = code;
+    const value = failed(); value.code = code; value.primaryFailure = code;
     const checked = checkManagedOperatorReturnFailureReport(value);
     assert.equal(checked.validFailureReport, true); assert.equal(checked.ok, false);
     for (const key of ['compatibilityAccepted', 'managedPackageReturnAccepted', 'serviceAccepted', 'productionAccepted']) assert.equal(checked[key], false);
@@ -370,4 +371,65 @@ test('adverse report accessors never execute', () => {
   const value = failed(); let calls = 0;
   Object.defineProperty(value, 'proof', { enumerable: true, get() { calls++; throw new Error('must not execute'); } });
   assert.equal(checkManagedOperatorReturnFailureReport(value).validFailureReport, false); assert.equal(calls, 0);
+});
+
+test('schema2 success requires thirteen exact fields and null primaryFailure', () => {
+  const value = report(fixture()); assert.equal(Object.keys(value).length, 13);
+  assert.equal(checkManagedOperatorReturnReport(value).ok, true);
+  value.primaryFailure = 'file_refused'; assert.equal(checkManagedOperatorReturnReport(value).ok, false);
+});
+test('cleanup disposition preserves the original closed primary failure', () => {
+  const value = failed(); value.primaryFailure = 'file_refused'; value.code = 'cleanup_unconfirmed';
+  value.cleanupFailures = ['owned_unit_cleanup_unconfirmed']; value.cleanupFailureCount = 1;
+  const before = structuredClone(value); const checked = checkManagedOperatorReturnFailureReport(value);
+  assert.equal(checked.validFailureReport, true); assert.equal(checked.ok, false); assert.deepEqual(value, before);
+});
+for (const mutation of ['missing', 'inherited', 'getter', 'unknown', 'raw', 'null', 'boxed', 'final_cleanup', 'nonenumerable'])
+  test('closed original primary refuses ' + mutation, () => {
+    const value = failed(); let getterCalls = 0;
+    if (mutation === 'missing') delete value.primaryFailure;
+    if (mutation === 'inherited') { delete value.primaryFailure; Object.setPrototypeOf(value, { primaryFailure: 'usage_refused' }); }
+    if (mutation === 'getter') Object.defineProperty(value, 'primaryFailure', { enumerable: true, get() { getterCalls++; throw new Error('must not execute'); } });
+    if (mutation === 'unknown') value.primaryFailure = 'unknown_failure';
+    if (mutation === 'raw') value.primaryFailure = '/private/operator/prefix/raw error';
+    if (mutation === 'null') value.primaryFailure = null;
+    if (mutation === 'boxed') value.primaryFailure = new String('usage_refused');
+    if (mutation === 'final_cleanup') value.primaryFailure = 'cleanup_unconfirmed';
+    if (mutation === 'nonenumerable') Object.defineProperty(value, 'primaryFailure', { enumerable: false });
+    const checked = checkManagedOperatorReturnFailureReport(value);
+    assert.equal(checked.validFailureReport, false); assert.equal(checked.ok, false); assert.equal(getterCalls, 0);
+  });
+test('success never reads a primaryFailure getter', () => {
+  const value = report(fixture()); let getterCalls = 0;
+  Object.defineProperty(value, 'primaryFailure', { enumerable: true, get() { getterCalls++; throw new Error('must not execute'); } });
+  assert.equal(checkManagedOperatorReturnReport(value).ok, false); assert.equal(getterCalls, 0);
+});
+for (const code of ['usage_refused', 'report_bound'])
+  test('normal refusal cannot silently replace primary with ' + code, () => {
+    const value = failed(); value.code = 'file_refused'; value.primaryFailure = code;
+    assert.equal(checkManagedOperatorReturnFailureReport(value).validFailureReport, false);
+  });
+test('report_bound retains an earlier closed cause or names its own bounded failure', () => {
+  for (const primary of ['file_refused', 'report_bound']) {
+    const value = failed(); value.code = 'report_bound'; value.primaryFailure = primary;
+    assert.equal(checkManagedOperatorReturnFailureReport(value).validFailureReport, true);
+  }
+  const value = failed(); value.code = 'report_bound'; value.primaryFailure = 'file_refused';
+  value.cleanupFailures = ['owned_unit_cleanup_unconfirmed']; value.cleanupFailureCount = 1;
+  assert.equal(checkManagedOperatorReturnFailureReport(value).validFailureReport, true);
+});
+test('an original schema1 c2 adverse report cannot satisfy schema2 or new cleanup admission', () => {
+  const original = { schemaVersion: 1, kind: 'nginx-x10-managed-operator-return-report', ok: false,
+    code: 'cleanup_unconfirmed', phase: 'install_a', proof: null,
+    cleanupFailures: ['owned_unit_cleanup_unconfirmed'], cleanupFailureCount: 1, cleanupFailuresTruncated: false,
+    serviceAccepted: false, productionAccepted: false, subprocessOutputsPublished: false };
+  assert.equal(checkManagedOperatorReturnReport(original).ok, false);
+  assert.equal(checkManagedOperatorReturnFailureReport(original).validFailureReport, false);
+  const oldSuccess = report(fixture()); oldSuccess.schemaVersion = 1; delete oldSuccess.primaryFailure;
+  assert.equal(checkManagedOperatorReturnReport(oldSuccess).ok, false);
+});
+test('primary-code inventory excludes only the final cleanup disposition', () => {
+  assert.equal(Object.isFrozen(MANAGED_OPERATOR_RETURN_PRIMARY_FAILURE_CODES), true);
+  assert.equal(MANAGED_OPERATOR_RETURN_PRIMARY_FAILURE_CODES.includes('cleanup_unconfirmed'), false);
+  assert.equal(MANAGED_OPERATOR_RETURN_PRIMARY_FAILURE_CODES.includes('report_bound'), true);
 });

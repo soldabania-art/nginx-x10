@@ -16,8 +16,8 @@ export const PIN = Object.freeze({ version: 'v22.23.3', root: 'node-v22.23.3-lin
 // The coordinator freezes both literals together with the producer and workflow.
 // These are source consistency pins, not signatures or acceptance authority.
 export const MANAGED_PACKAGE_CLEANUP_SOURCE = Object.freeze({
-  checkerSha256: 'de0aeeea7562df808fc7c72050743606f31273ca7e881fc909a7d172a824d5f9',
-  proofSha256: 'e92ea85477297193b1400f0c1d590ee0a94e9cdebf2cd152201cf4a29fe521ad',
+  checkerSha256: '89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d',
+  proofSha256: 'baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de',
 });
 const MAX_ARCHIVE = 64 * 1024 ** 2, MAX_TAR = 512 * 1024 ** 2;
 const MAX_NODE = 256 * 1024 ** 2, MAX_LICENSE = 2 * 1024 ** 2;
@@ -211,6 +211,8 @@ function managedPackageCleanupEvidence(envelope) {
         || own('sourceManagedPackageSha256') !== MANAGED_PACKAGE_CLEANUP_SOURCE.checkerSha256
         || own('sourceManagedPackageProofSha256') !== MANAGED_PACKAGE_CLEANUP_SOURCE.proofSha256) return false;
     const report = own('managedPackageReport');
+    const primary = report && Object.getOwnPropertyDescriptor(report, 'primaryFailure');
+    if (!primary || primary.enumerable !== true || !Object.hasOwn(primary, 'value') || primary.value !== null) return false;
     if (checkManagedOperatorReturnReport(report).ok !== true) return false;
     const encoded = JSON.stringify(report);
     return typeof encoded === 'string' && Buffer.byteLength(encoded, 'utf8') <= 12288;

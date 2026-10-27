@@ -2509,3 +2509,51 @@ full recovery/security matrix, permanent release, independent published replay,
 CLA failure, owner window and deferred Windows plan remain unchanged.
 
 Evidence: `x10/evidence/g4-managed-package-return.json`; ledger: `x10/review/g4-managed-package-return-ledger.json`.
+
+
+## Managed-return immutable revision reader candidate — 27 October 2026
+
+Exact implementation `c2adbea6c8d1e8b864291383445d35a0b27e875a` failed
+both native contexts at step30: push40486053822/job122128117810 and
+PR40486064789/job122128133176. Each new managed-return report stopped in
+`install_a`, ended with `cleanup_unconfirmed` and contained no managed proof.
+The original primary refusal was overwritten by the final cleanup code.
+Private Node/history/bootstrap resources were retained; dependency-cleanup
+artifacts and confirmed bootstrap removal are absent. This is a failed new
+managed path, not successful cleanup or an accepted package transition.
+
+The earlier components still passed in each event:20 native groups,617 alpha
+tests,76 TLS TAP tests and the separate legacy service's18 restored proofs,
+5 sessions,2 restarts,6 bounded journal checks and3 downstream/3 upstream TLS
+sessions. Legacy owned-service cleanup does not establish cleanup of the new
+failed collector or permission to remove its retained private Node.
+
+A safe source-extracted counterexample reproduced a concrete reader mismatch:
+the unchanged manager writes immutable revision records as0400, but the new
+collector required0600. The exact baseline reader refused0400 while accepting
+identical0600 bytes. The candidate requires0400 instead; it does not broaden
+permissions or change the manager, installed CLI, native runtime or service
+recipe. This reproduced contract defect does not establish the exclusive cause
+of the historical CI failures, whose original primary error was not recorded.
+
+The new strict report is schema2 with13 fields, adding finite `primaryFailure`.
+Success requires null primary failure; an adverse report preserves its original
+allowlisted code/phase even if later cleanup also fails. Valid failure reports
+remain `ok:false` and never authorize dependency removal. The proof retains its
+12 sections,16 phases and declared counts; source/proof pins must match across
+workflow and cleanup consumer. Legacy e88ef source and workflow budgets/permissions
+remain unchanged.
+
+Frozen local Node24 pure/tempfile/virtual controls passed662/662 with no
+fail/cancel/skip/TODO. The31 additional fix controls are included once:
+18 proof,9 actual-reader and4 consumer controls. The separate3-control exact-c2
+baseline is not added. An intermediate mixed-schema consumer run had11 failures
+among118 controls; that adverse result stays separate from final verification.
+YAML and inline Node syntax passed. No physical native/process-group/signal/
+systemd/network fixture ran locally.
+
+New exact hosted verification is pending; local pure checks cannot accept a
+physical managed-service return. Full recovery/security gates,
+native binary upgrade, TLS restore, permanent release, independent published
+replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.
+Evidence: x10/evidence/g4-managed-package-return.json.

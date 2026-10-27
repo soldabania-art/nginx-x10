@@ -44,8 +44,9 @@ function managedPackageProof() {
       allTrafficFenceAccepted:false,restartPreparedBindingObserved:false}};
 }
 function managedPackageReport() {
-  return { schemaVersion:1,kind:'nginx-x10-managed-operator-return-report',ok:true,
+  return { schemaVersion:2,kind:'nginx-x10-managed-operator-return-report',ok:true,
     code:'managed_operator_return_verified',phase:'complete',proof:managedPackageProof(),
+    primaryFailure:null,
     cleanupFailures:[],cleanupFailureCount:0,cleanupFailuresTruncated:false,
     serviceAccepted:false,productionAccepted:false,subprocessOutputsPublished:false };
 }
@@ -125,7 +126,7 @@ test('managed cleanup envelope requires own enumerable data without evaluating a
 });
 test('managed report must be complete, successful, strict and free of adverse cleanup', () => {
   const mutations=[e=>{delete e.managedPackageReport;},e=>e.managedPackageReport=null,
-    e=>e.managedPackageReport.schemaVersion=2,e=>e.managedPackageReport.kind='old-service-report',
+    e=>e.managedPackageReport.schemaVersion=1,e=>e.managedPackageReport.kind='old-service-report',
     e=>e.managedPackageReport.ok=false,e=>e.managedPackageReport.code='managed_operator_return_refused',
     e=>e.managedPackageReport.phase='a2_started',e=>e.managedPackageReport.proof=null,
     e=>e.managedPackageReport.cleanupFailures=['unknown'],e=>e.managedPackageReport.cleanupFailureCount=1,
@@ -133,6 +134,32 @@ test('managed report must be complete, successful, strict and free of adverse cl
     e=>e.managedPackageReport.productionAccepted=true,e=>e.managedPackageReport.subprocessOutputsPublished=true,
     e=>e.managedPackageReport.unknown=true,e=>e.managedPackageReport.padding='x'.repeat(12289)];
   for(const mutate of mutations){const e=receipt();mutate(e);assert.equal(cleanupEvidence(e),false);}
+});
+test('the exact c2 schema1 twelve-field managed report cannot authorize current Node cleanup', () => {
+  const e=receipt();e.managedPackageReport.schemaVersion=1;delete e.managedPackageReport.primaryFailure;
+  assert.equal(Object.keys(e.managedPackageReport).length,12);
+  assert.equal(e.managedPackageReport.ok,true);assert.equal(e.managedPackageReport.proof.counts.invocations,4);
+  assert.equal(e.report.restoredHTTPProof.sourceUnitRemoved,true);assert.equal(e.report.nativeSessionsStopped,5);
+  assert.equal(cleanupEvidence(e),false);
+  const missing=receipt();delete missing.managedPackageReport.primaryFailure;assert.equal(cleanupEvidence(missing),false);
+  assert.equal(cleanupEvidence(receipt()),true);
+});
+test('managed cleanup refuses every non-null primary failure even with success flags and cleanup facts', () => {
+  for(const value of [undefined,false,0,'null','controller_state','cleanup_unconfirmed','unknown_failure',
+    'SYNTHETIC_PRIVATE_PRIMARY_MUST_NOT_LEAK',{},[],{code:'controller_state'}]){
+    const e=receipt();e.managedPackageReport.primaryFailure=value;
+    assert.equal(cleanupEvidence(e),false);
+  }
+});
+test('managed primary failure must be own enumerable data and getters are never evaluated', () => {
+  let reads=0;
+  const accessor=receipt();Object.defineProperty(accessor.managedPackageReport,'primaryFailure',{
+    enumerable:true,get(){reads++;return null;}});
+  assert.equal(cleanupEvidence(accessor),false);assert.equal(reads,0);
+  const inherited=receipt();delete inherited.managedPackageReport.primaryFailure;
+  Object.setPrototypeOf(inherited.managedPackageReport,{primaryFailure:null});assert.equal(cleanupEvidence(inherited),false);
+  const hidden=receipt();Object.defineProperty(hidden.managedPackageReport,'primaryFailure',{value:null,enumerable:false});
+  assert.equal(cleanupEvidence(hidden),false);
 });
 test('new managed receipt does not relax any exact legacy lifecycle counter', () => {
   for(const[key,value]of [['nativeSessionsStarted',4],['nativeSessionsStopped',4],
@@ -706,7 +733,7 @@ test('missing or unsafe new managed evidence preserves existing runtime bytes an
   const lifecyclePin=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];
   const mutations=[e=>{delete e.managedPackageReport;},e=>{delete e.managedPackageCheckerExited;},
     e=>e.managedPackageCheckerExitCode=1,e=>e.sourceManagedPackageSha256+='\n',
-    e=>e.sourceManagedPackageProofSha256+='\n',e=>e.managedPackageReport.schemaVersion=2,
+    e=>e.sourceManagedPackageProofSha256+='\n',e=>e.managedPackageReport.schemaVersion=1,
     e=>e.managedPackageReport.proof.cleanup.known=false,
     e=>e.managedPackageReport.proof.transitions.beforeA2.unitInactive=false,
     e=>e.managedPackageReport.proof.transitions.beforeB.runtimeLinkAbsent=false,
@@ -735,5 +762,28 @@ test('combined evidence remains bounded at the original 32KiB before any runtime
     const result=await main(['--cleanup','--prefix',prefix,'--service-evidence',file]);
     assert.equal(result.ok,false);assert.equal(await readFile(prefix+'/sentinel','utf8'),'retain');
     assert.deepEqual(await readdir(prefix),['sentinel']);
+  } finally {await unlink(prefix+'/sentinel');await unlink(file);await rmdir(prefix);await rmdir(p);}
+});
+test('legacy or non-null managed primary failure preserves private runtime files before inspection',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-primary-test-'),prefix=p+'/runtime',file=p+'/receipt.json';
+  await mkdir(prefix,{mode:0o700});await writeFile(prefix+'/sentinel','public-synthetic-retain',{mode:0o600});
+  const source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
+  const lifecyclePin=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1],before=await lstat(prefix);
+  const mutations=[e=>{e.managedPackageReport.schemaVersion=1;delete e.managedPackageReport.primaryFailure;},
+    e=>{delete e.managedPackageReport.primaryFailure;},e=>e.managedPackageReport.primaryFailure='controller_state',
+    e=>e.managedPackageReport.primaryFailure='cleanup_unconfirmed',
+    e=>e.managedPackageReport.primaryFailure='SYNTHETIC_PRIVATE_PRIMARY_MUST_NOT_LEAK'];
+  try{
+    for(const mutate of mutations){
+      const e=receipt();e.sourceLifecycleSha256=lifecyclePin;mutate(e);
+      await writeFile(file,JSON.stringify(e),{mode:0o600});
+      const result=await main(['--cleanup','--prefix',prefix,'--service-evidence',file]);
+      assert.equal(result.code,'runtime_retained_cleanup_unconfirmed');assert.equal(result.ok,false);
+      assert.equal(await readFile(prefix+'/sentinel','utf8'),'public-synthetic-retain');
+      const after=await lstat(prefix);assert.equal(after.dev,before.dev);assert.equal(after.ino,before.ino);
+      assert.deepEqual(await readdir(prefix),['sentinel']);
+      assert.equal(JSON.stringify(result).includes('SYNTHETIC_PRIVATE_PRIMARY'),false);
+      assert.equal(JSON.stringify(result).includes(p),false);
+    }
   } finally {await unlink(prefix+'/sentinel');await unlink(file);await rmdir(prefix);await rmdir(p);}
 });

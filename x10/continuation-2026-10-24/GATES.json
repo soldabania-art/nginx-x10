@@ -856,44 +856,44 @@
     "productionAccepted": false
   },
   "managedOperatorPackageReturnCandidate": {
-    "state": "FROZEN_CODE_AND_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
-    "sourceBase": "ee2daa0385f654e96fd5b75c09da4e0179bb90a1",
-    "publicationParent": "d4691f13a90e9d6f73dbe2bdccd2a576593b1086",
-    "scope": "Separate ephemeral nonroot systemd-user HTTP operator-package A(P) to B(Q), actual B manager restart, then old A2(Q) return; hosted physical acceptance pending.",
+    "state": "FROZEN_IMMUTABLE_REVISION_READER_FIX_LOCAL_VERIFIED_EXACT_HOSTED_PENDING",
+    "sourceBase": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+    "publicationParent": "e0ef02aab16ae6c956449ef19e69403000701262",
+    "scope": "Fixture-only immutable revision reader contract correction and finite primary-error preservation for the separate managed HTTP operator-package return; physical acceptance pending.",
     "sourceBindings": {
       "x10/service/operator-package-return.mjs": {
-        "beforeSha256": null,
-        "afterSha256": "de0aeeea7562df808fc7c72050743606f31273ca7e881fc909a7d172a824d5f9",
-        "bytes": 46042
+        "beforeSha256": "de0aeeea7562df808fc7c72050743606f31273ca7e881fc909a7d172a824d5f9",
+        "afterSha256": "89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d",
+        "bytes": 46700
       },
       "x10/service/operator-package-return-proof.mjs": {
-        "beforeSha256": null,
-        "afterSha256": "e92ea85477297193b1400f0c1d590ee0a94e9cdebf2cd152201cf4a29fe521ad",
-        "bytes": 12101
+        "beforeSha256": "e92ea85477297193b1400f0c1d590ee0a94e9cdebf2cd152201cf4a29fe521ad",
+        "afterSha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de",
+        "bytes": 12890
       },
       "x10/service/operator-package-return.test.mjs": {
-        "beforeSha256": null,
-        "afterSha256": "32c455b090a171acb2855cbd88d837f04e30322e34a56a5024ea9a561c3eb223",
-        "bytes": 12752
+        "beforeSha256": "32c455b090a171acb2855cbd88d837f04e30322e34a56a5024ea9a561c3eb223",
+        "afterSha256": "1d2c7e7a3acafe2258ba16f320e8c9ddef505e4a1d6d87fb5d36517b9d134f8b",
+        "bytes": 18646
       },
       "x10/service/operator-package-return-proof.test.mjs": {
-        "beforeSha256": null,
-        "afterSha256": "efd69c053af02add57b078525fda2b6d62adb931a3eeaa031ff16463cd945af8",
-        "bytes": 17654
+        "beforeSha256": "efd69c053af02add57b078525fda2b6d62adb931a3eeaa031ff16463cd945af8",
+        "afterSha256": "a371fb330b15c796ef0c5f082d0667ff62527c9803b1886d5de98afeea649b93",
+        "bytes": 22388
       },
       "x10/service/verified-node.mjs": {
-        "beforeSha256": "54c3a1891e036295673b57ccffbee33bf4c5ac9e5ac11c70c1b9003a00298573",
-        "afterSha256": "f856f4574c3484792b7960eb3c8ae50c58283ff311d1582a844def464212b615",
-        "bytes": 30357
+        "beforeSha256": "f856f4574c3484792b7960eb3c8ae50c58283ff311d1582a844def464212b615",
+        "afterSha256": "9fbc3fd883f19943644f12602bfcc68e770eb290e8cca81e300d4f290f4232cb",
+        "bytes": 30571
       },
       "x10/service/verified-node.test.mjs": {
-        "beforeSha256": "5d3524fd7d56bc631cf9bd8e43e9b3471e415245aad3084527c053b2a0263099",
-        "afterSha256": "e925a8ae1d89d3d68f2af4312f45e9509f79b685663d1ed539c088a3680c9b25",
-        "bytes": 55823
+        "beforeSha256": "e925a8ae1d89d3d68f2af4312f45e9509f79b685663d1ed539c088a3680c9b25",
+        "afterSha256": "22188a10a6e99e11c35d268720310518377d4dc617422316c834a9a020b076b6",
+        "bytes": 59488
       },
       ".github/workflows/x10-native.yml": {
-        "beforeSha256": "e2db4ddf78e2ff7321c29d798f70d071dce2db835fa13f61c345a3d9fc4f2726",
-        "afterSha256": "ea1c66d6db16b4379263c37ad9761cd9edd1c759e146864cbe7b37f96ac6b87b",
+        "beforeSha256": "ea1c66d6db16b4379263c37ad9761cd9edd1c759e146864cbe7b37f96ac6b87b",
+        "afterSha256": "e2e954642138e9f80ae09eb873c35343f5cf35709928d2286e7043ebccdb6d8f",
         "bytes": 23053
       }
     },
@@ -902,28 +902,24 @@
     "localSelectedTAP": {
       "exitCode": 0,
       "nodeVersion": "v24.22.1",
-      "tests": 631,
-      "pass": 631,
+      "tests": 662,
+      "pass": 662,
       "fail": 0,
       "cancelled": 0,
       "skipped": 0,
       "todo": 0,
-      "newControlsIncludedOnce": 529,
-      "priorConsumerControls": 102,
-      "unchangedLegacySource": true,
+      "newFixControlsIncludedOnce": 31,
+      "previousFrozenManagedControls": 631,
+      "separateUnchangedSourceBaselineControls": 3,
       "workflowYAMLAndInlineSyntaxPassed": true,
-      "newExplicitJobSteps": 31,
-      "expectedActualStepsNotObservedLocally": 35,
       "physicalNativeExecuted": false,
       "systemdExecuted": false,
       "networkFixtureExecuted": false
     },
-    "newPureControlsIncludedOnce": 529,
-    "separateIndependentHistoricalReaderControls": 3,
-    "separateWorkflowTempfileControls": 8,
-    "separateWorkflowVirtualReportControls": 8,
+    "newFixControlsIncludedOnce": 31,
+    "separateUnchangedSourceBaselineControls": 3,
     "expectedHostedCounts": {
-      "reportFields": 12,
+      "reportFields": 13,
       "proofTopSections": 12,
       "orderedPhases": 16,
       "units": 3,
@@ -939,16 +935,15 @@
       "stopFieldsBeforeEachNewUnit": 11,
       "restartProofFields": 12,
       "ownedUnitsRemoved": 3,
-      "ownedInstallationsRemoved": 3
+      "ownedInstallationsRemoved": 3,
+      "reportSchemaVersion": 2,
+      "primaryFailureOnSuccess": null,
+      "proofSchemaVersion": 1
     },
     "expectedCountsAreNotLocalRuntimeObservations": true,
-    "legacyLifecycleSourceUnchanged": true,
-    "legacyRestoredProofs": 18,
-    "legacyNativeSessions": 5,
-    "legacyManagerRestarts": 2,
-    "legacyBoundedJournalChecks": 6,
-    "legacyDownstreamTLSSessions": 3,
-    "legacyUpstreamTLSSessions": 3,
+    "strictImmutableRevisionMode": "0400",
+    "revisionMode0600Accepted": false,
+    "historicalPrimaryCIFailureObserved": false,
     "managedServicePackageTransitionAccepted": false,
     "packageUpgradeRollbackAccepted": false,
     "nativeBinaryVersionChangeAccepted": false,
@@ -956,5 +951,36 @@
     "fullG3Accepted": false,
     "fullG4Accepted": false,
     "productionAccepted": false
+  },
+  "managedOperatorPackageReturnPreviousCandidateReference": {
+    "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+    "path": "x10/continuation-2026-10-24/GATES.json",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
+  },
+  "managedOperatorPackageReturnC2Failure": {
+    "implementationCommit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+    "nativeRunIds": [
+      40486053822,
+      40486064789
+    ],
+    "nativeJobIds": [
+      122128117810,
+      122128133176
+    ],
+    "conclusions": [
+      "failure",
+      "failure"
+    ],
+    "failedStepEach": 30,
+    "phaseEach": "install_a",
+    "codeEach": "cleanup_unconfirmed",
+    "proofEach": null,
+    "originalPrimaryRefusalObserved": false,
+    "privateNodeCleanupArtifactAbsentEach": true,
+    "privateNodeAndBootstrapRemovalConfirmedEach": false,
+    "evidence": "x10/evidence/g4-managed-package-return.json",
+    "modeContractCounterexampleReproducedSeparately": true
   }
 }

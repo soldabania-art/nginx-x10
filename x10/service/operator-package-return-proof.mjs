@@ -31,7 +31,7 @@ const CLEANUP_KEYS = ['known', 'ownedProcessesAbsent', 'ownedLaunchersAbsent',
 const LIMIT_KEYS = ['consistencyOnly', 'nativeBinaryUpgradeAccepted', 'liveConnectionPreserved',
   'applicationSideEffectsReversed', 'productionAccepted', 'automaticMigrationAccepted',
   'allTrafficFenceAccepted', 'restartPreparedBindingObserved'];
-const REPORT_KEYS = ['schemaVersion', 'kind', 'ok', 'code', 'phase', 'proof',
+const REPORT_KEYS = ['schemaVersion', 'kind', 'ok', 'code', 'phase', 'proof', 'primaryFailure',
   'cleanupFailures', 'cleanupFailureCount', 'cleanupFailuresTruncated',
   'serviceAccepted', 'productionAccepted', 'subprocessOutputsPublished'];
 const invalid = () => { throw new Error('invalid'); };
@@ -113,8 +113,9 @@ export function checkManagedOperatorReturnProof(value) {
 export function checkManagedOperatorReturnReport(value) {
   try {
     const report = fields(value, REPORT_KEYS);
-    requireFact(report.schemaVersion === 1 && report.kind === 'nginx-x10-managed-operator-return-report'
-      && report.ok === true && report.code === 'managed_operator_return_verified' && report.phase === 'complete');
+    requireFact(report.schemaVersion === 2 && report.kind === 'nginx-x10-managed-operator-return-report'
+      && report.ok === true && report.code === 'managed_operator_return_verified' && report.phase === 'complete'
+      && report.primaryFailure === null);
     proofValid(report.proof); array(report.cleanupFailures, 0);
     requireFact(integer(report.cleanupFailureCount, 0) && report.cleanupFailuresTruncated === false
       && report.serviceAccepted === false && report.productionAccepted === false && report.subprocessOutputsPublished === false);
@@ -154,12 +155,17 @@ export const MANAGED_OPERATOR_RETURN_FAILURE_CODES = Object.freeze([
   'managed_operator_return_refused', 'cleanup_unconfirmed', 'report_bound',
 ]);
 
+// cleanup_unconfirmed is a final cleanup disposition, never an original cause.
+export const MANAGED_OPERATOR_RETURN_PRIMARY_FAILURE_CODES = Object.freeze(
+  MANAGED_OPERATOR_RETURN_FAILURE_CODES.filter(code => code !== 'cleanup_unconfirmed'));
+
 export function checkManagedOperatorReturnFailureReport(value) {
   let validFailureReport = false;
   try {
     const report = fields(value, REPORT_KEYS);
-    requireFact(report.schemaVersion === 1 && report.kind === 'nginx-x10-managed-operator-return-report'
+    requireFact(report.schemaVersion === 2 && report.kind === 'nginx-x10-managed-operator-return-report'
       && report.ok === false && MANAGED_OPERATOR_RETURN_FAILURE_CODES.includes(report.code)
+      && MANAGED_OPERATOR_RETURN_PRIMARY_FAILURE_CODES.includes(report.primaryFailure)
       && MANAGED_OPERATOR_RETURN_FAILURE_PHASES.includes(report.phase) && report.proof === null
       && report.serviceAccepted === false && report.productionAccepted === false && report.subprocessOutputsPublished === false);
     requireFact(Number.isSafeInteger(report.cleanupFailureCount) && !Object.is(report.cleanupFailureCount, -0)
@@ -172,7 +178,16 @@ export function checkManagedOperatorReturnFailureReport(value) {
     requireFact(report.cleanupFailuresTruncated
       ? length === 8 && report.cleanupFailureCount > 8
       : report.cleanupFailureCount === length);
-    requireFact(report.cleanupFailureCount === 0 ? report.code !== 'cleanup_unconfirmed' : report.code === 'cleanup_unconfirmed');
+    if (report.code === 'report_bound') {
+      // A final bound failure retains the original cause if one exists; when
+      // there was no earlier refusal, report_bound is itself the cause.
+      requireFact(report.primaryFailure !== 'cleanup_unconfirmed');
+    } else {
+      requireFact(report.primaryFailure !== 'report_bound');
+      requireFact(report.cleanupFailureCount > 0
+        ? report.code === 'cleanup_unconfirmed'
+        : report.code === report.primaryFailure && report.code !== 'cleanup_unconfirmed');
+    }
     validFailureReport = true;
   } catch { /* Unknown or malformed observations never become public authority. */ }
   // Valid adverse data must NEVER resemble successful child admission.

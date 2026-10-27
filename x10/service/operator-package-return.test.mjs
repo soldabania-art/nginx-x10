@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile, writeFile, chmod, mkdtemp, readdir, lstat, rm } from 'node:fs/promises';
+import { readFile, writeFile, chmod, mkdtemp, readdir, lstat, rm, symlink, link } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { createHash } from 'node:crypto';
@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import os from 'node:os';
 import path from 'node:path';
 import { parseOperatorReturnArguments, assessHistoricalOperatorBytes, createImmutableUnitContext,
-  assessStoppedServiceUnit } from './operator-package-return.mjs';
+  assessStoppedServiceUnit, readManagedReturnRevision } from './operator-package-return.mjs';
 
 // Independent pure/private-file controls only. They never invoke the service
 // checker CLI, execute candidate/historical operator code, open a network socket,
@@ -160,3 +160,79 @@ test('service cleanup closure refuses a getter without calling it or leaking its
 });
 for (const value of [null, undefined, [], true, 'all clean', Object.create(stoppedFields())])
   test(`service cleanup closure refuses unsupported record ${typeof value}`, () => assert.equal(assessStoppedServiceUnit(value), false));
+
+
+// Exercise the collector's ACTUAL revision reader, not a replacement/stub. The
+// producer contract is an immutable0400 manager revision. No native syntax
+// checking, process, controller CLI or service activation occurs in these cases.
+function managedReturnRevision(mutator = () => {}) {
+  const input = { serverBody: 'location / { return 200 "PUBLIC_SYNTHETIC_HTTP"; }',
+    healthURL: 'http://127.0.0.1:19081/ready', healthExpectedStatus: 200, healthExpectedBody: 'ready\n' };
+  const body = { schemaVersion: 1, id: 'c'.repeat(32), createdAt: '2026-10-27T00:00:00.000Z',
+    parent: null, sourceRevision: null, input, inputSha256: digest(JSON.stringify(input)),
+    fragmentSha256: digest('PUBLIC_SYNTHETIC_FRAGMENT_CONSISTENCY_ONLY') };
+  mutator(body);
+  return { ...body, recordSha256: digest(JSON.stringify(body)) };
+}
+async function immutableRevisionFixture(parent, { mode = 0o400, value = managedReturnRevision() } = {}) {
+  const file = path.join(parent, 'revision.json'), bytes = Buffer.from(JSON.stringify(value, null, 2) + '\n');
+  await writeFile(file, bytes, { mode, flag: 'wx' });
+  return { file, bytes, before: await lstat(file), value };
+}
+async function assertRevisionPreserved(fixture) {
+  assert.deepEqual(await readFile(fixture.file), fixture.bytes);
+  const after = await lstat(fixture.file);
+  for (const key of ['dev', 'ino', 'uid', 'nlink', 'mode', 'size', 'mtimeMs', 'ctimeMs'])
+    assert.equal(after[key], fixture.before[key], `Revision ${key} stays unchanged`);
+}
+test('actual managed-return reader accepts a checksum-valid immutable0400 revision without changing its bytes or identity', () => temporary(async parent => {
+  const f = await immutableRevisionFixture(parent);
+  const result = await readManagedReturnRevision(f.file);
+  assert.deepEqual(result, f.value); assert.equal((await lstat(f.file)).mode & 0o7777, 0o400);
+  await assertRevisionPreserved(f);
+}));
+test('actual managed-return reader refuses the same otherwise-valid0600 revision and preserves it', () => temporary(async parent => {
+  const f = await immutableRevisionFixture(parent, { mode: 0o600 });
+  await assert.rejects(() => readManagedReturnRevision(f.file)); await assertRevisionPreserved(f);
+}));
+test('actual managed-return reader refuses an invalid record checksum on immutable0400 bytes', () => temporary(async parent => {
+  const value = managedReturnRevision(); value.recordSha256 = '0'.repeat(64);
+  const f = await immutableRevisionFixture(parent, { value });
+  await assert.rejects(() => readManagedReturnRevision(f.file)); await assertRevisionPreserved(f);
+}));
+test('actual managed-return reader independently refuses input corruption despite a valid outer record checksum', () => temporary(async parent => {
+  const value = managedReturnRevision(body => { body.input.serverBody += ' PUBLIC_SYNTHETIC_CHANGED'; });
+  const f = await immutableRevisionFixture(parent, { value });
+  assert.equal(value.recordSha256, digest(JSON.stringify(Object.fromEntries(Object.entries(value).filter(([key]) => key !== 'recordSha256')))));
+  assert.notEqual(value.inputSha256, digest(JSON.stringify(value.input)));
+  await assert.rejects(() => readManagedReturnRevision(f.file)); await assertRevisionPreserved(f);
+}));
+test('actual managed-return reader refuses a final symlink without changing the immutable revision', () => temporary(async parent => {
+  const f = await immutableRevisionFixture(parent), alias = path.join(parent, 'alias.json'); await symlink(f.file, alias);
+  await assert.rejects(() => readManagedReturnRevision(alias));
+  assert.equal((await lstat(alias)).isSymbolicLink(), true); await assertRevisionPreserved(f);
+}));
+test('actual managed-return reader refuses a hardlinked revision and preserves both existing names', () => temporary(async parent => {
+  const f = await immutableRevisionFixture(parent), alias = path.join(parent, 'alias.json'); await link(f.file, alias);
+  const expected = await lstat(f.file);
+  await assert.rejects(() => readManagedReturnRevision(f.file)); await assert.rejects(() => readManagedReturnRevision(alias));
+  assert.deepEqual(await readFile(f.file), f.bytes); assert.deepEqual(await readFile(alias), f.bytes);
+  assert.equal((await lstat(f.file)).ino, expected.ino); assert.equal((await lstat(alias)).ino, expected.ino);
+  assert.equal((await lstat(f.file)).nlink, 2); assert.equal((await lstat(alias)).nlink, 2);
+  assert.equal((await lstat(f.file)).mode & 0o7777, 0o400);
+}));
+test('actual managed-return reader refuses a symlink ancestor and preserves the original target', () => temporary(async parent => {
+  const original = path.join(parent, 'original'); await import('node:fs/promises').then(fs => fs.mkdir(original, { mode: 0o700 }));
+  const f = await immutableRevisionFixture(original), alias = path.join(parent, 'alias-directory'); await symlink(original, alias);
+  await assert.rejects(() => readManagedReturnRevision(path.join(alias, 'revision.json'))); await assertRevisionPreserved(f);
+}));
+test('actual managed-return reader refuses a noncanonical relative file path without opening it', () => temporary(async parent => {
+  const f = await immutableRevisionFixture(parent);
+  await assert.rejects(() => readManagedReturnRevision(path.relative(process.cwd(), f.file))); await assertRevisionPreserved(f);
+}));
+test('actual managed-return reader refuses a trailing-LF path even when that exact owned file exists', () => temporary(async parent => {
+  const file = path.join(parent, 'revision.json\n'), bytes = Buffer.from(JSON.stringify(managedReturnRevision()) + '\n');
+  await writeFile(file, bytes, { mode: 0o400 }); const before = await lstat(file);
+  await assert.rejects(() => readManagedReturnRevision(file));
+  assert.deepEqual(await readFile(file), bytes); assert.equal((await lstat(file)).ino, before.ino); assert.equal((await lstat(file)).mode & 0o7777, 0o400);
+}));
