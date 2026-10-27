@@ -21,8 +21,8 @@ function receipt() {
     bundleSchemaVersion:2, installSchemaVersion:2, installedRecipeGenerated:true,
     readinessAutomated:true, automaticReadinessAccepted:false, failedStartAccepted:false, slowDrainAccepted:false, orphanRecoveryAccepted:false, tlsServiceAccepted:false, serviceAccepted:false, productionAccepted:false, subprocessOutputsPublished:false,
     primaryFailure:null, cleanupFailures:[], cleanupFailureCount:0, cleanupFailuresTruncated:false,
-    explicitReadinessPasses:3, nativeSessionsStarted:3, nativeSessionsStopped:3, proxyBodyChecks:3, uploadChecks:3, streamChecks:3,
-    managerRestartCommands:1, completedManagerRestarts:1,
+    explicitReadinessPasses:5, nativeSessionsStarted:5, nativeSessionsStopped:5, proxyBodyChecks:5, uploadChecks:5, streamChecks:5,
+    managerRestartCommands:2, completedManagerRestarts:2,
     restartProof:{oldLauncherExited:true,oldNativeGroupsAbsent:true,freshSession:true,freshInvocation:true},
     failedStartChecks:1,
     failedStartProof:{unhealthyReadinessObserved:true,managerRefused:true,hookExitObserved:true,bindingAbsent:true,
@@ -40,7 +40,12 @@ function receipt() {
       ownedOperatorTerminated:true,staleLocksPreserved:true,lockedRecoveryRefused:true,exactLockRemovalConfirmed:true,
       explicitRollbackObserved:true,pendingCleared:true,restoredContentVerified:true,noPostReplay:true,
       sameServiceAfterRecovery:true,repeatedRecoveryIdempotent:true},
-    journalChecks:3,journalRecordsObserved:6,journalRunningMarkers:3,
+    restoredHTTPChecks:1,tlsBackupAccepted:false,packageUpgradeRollbackAccepted:false,
+    restoredHTTPProof:{stoppedConfirmedSource:true,privateBackupCreated:true,sourceUnitRemoved:true,freshUnit:true,
+      freshInstallation:true,freshSession:true,freshRevision:true,exactInputRestored:true,portsPreserved:true,
+      bindingInitiallyAbsent:true,freshHistory:true,restoredHTTPServed:true,restoredHTTPRestarted:true,
+      noPostReplay:true,sourceRecordsPreserved:true,backupPreserved:true,archivePreserved:true,sourceInstallationRemoved:true},
+    journalChecks:6,journalRecordsObserved:12,journalRunningMarkers:6,
     downstreamTLSActivated:true,downstreamTLSSessionChecks:3,downstreamTLSBodyChecks:6,downstreamTLSUploadChecks:3,downstreamTLSStreamChecks:3,
     downstreamTLS12Checks:3,downstreamTLS13Checks:3,downstreamTLSCertificateChecks:12,downstreamTLSWrongCARefusals:3,downstreamTLSWrongNameRefusals:3,
     upstreamTLSActivated:true,upstreamTLSSessionChecks:3,upstreamTLSBodyChecks:3,upstreamTLSUploadChecks:3,upstreamTLSStreamChecks:3,
@@ -289,25 +294,99 @@ test('cleanup accepts an exact null-prototype native challenge data record',()=>
   const e=receipt();e.report.operatorNativeChallengeProof=Object.assign(Object.create(null),e.report.operatorNativeChallengeProof);
   assert.equal(cleanupEvidence(e),true);
 });
-test('cleanup refuses the stale two-session profile and mixed session counts',()=>{
+test('cleanup refuses the prior complete three-session receipt without restored HTTP evidence',()=>{
+  const e=receipt();
+  for(const k of ['restoredHTTPChecks','restoredHTTPProof','tlsBackupAccepted','packageUpgradeRollbackAccepted'])delete e.report[k];
+  for(const k of ['explicitReadinessPasses','nativeSessionsStarted','nativeSessionsStopped','proxyBodyChecks','uploadChecks','streamChecks'])e.report[k]=3;
+  e.report.managerRestartCommands=1;e.report.completedManagerRestarts=1;
+  e.report.journalChecks=3;e.report.journalRecordsObserved=6;e.report.journalRunningMarkers=3;
+  assert.equal(e.report.cleanup.temporaryRootRemoved,true);assert.equal(e.report.upstreamTLSActivated,true);
+  assert.equal(cleanupEvidence(e),false);
+});
+test('new aggregate counts cannot substitute for the exact restored HTTP proof',()=>{
+  const e=receipt();delete e.report.restoredHTTPProof;
+  assert.equal(e.report.nativeSessionsStopped,5);assert.equal(e.report.journalChecks,6);
+  assert.equal(cleanupEvidence(e),false);
+});
+test('cleanup requires exactly one restored HTTP check with no broader backup or package acceptance',()=>{
+  for(const value of [undefined,null,false,0,2,'1',true,NaN,Infinity]){
+    const e=receipt();e.report.restoredHTTPChecks=value;assert.equal(cleanupEvidence(e),false);
+  }
+  for(const key of ['tlsBackupAccepted','packageUpgradeRollbackAccepted']){
+    for(const value of [undefined,null,true,0,'false']){
+      const e=receipt();e.report[key]=value;assert.equal(cleanupEvidence(e),false,key);
+    }
+    const e=receipt();delete e.report[key];assert.equal(cleanupEvidence(e),false,key);
+  }
+});
+test('restored check and unsupported facts must be own data without accessor evaluation',()=>{
+  let reads=0;
+  for(const [key,value] of [['restoredHTTPChecks',1],['tlsBackupAccepted',false],['packageUpgradeRollbackAccepted',false]]){
+    const accessor=receipt();Object.defineProperty(accessor.report,key,{get(){reads++;return value;}});
+    assert.equal(cleanupEvidence(accessor),false,key);
+    const inherited=receipt();delete inherited.report[key];Object.setPrototypeOf(inherited.report,{[key]:value});
+    assert.equal(cleanupEvidence(inherited),false,key);
+  }
+  assert.equal(reads,0);
+});
+test('cleanup requires all eighteen independent restored HTTP identity IO and preservation facts',()=>{
+  assert.equal(Object.keys(receipt().report.restoredHTTPProof).length,18);
+  for(const key of Object.keys(receipt().report.restoredHTTPProof)){
+    for(const value of [undefined,null,false,0,1,'true']){
+      const e=receipt();e.report.restoredHTTPProof[key]=value;assert.equal(cleanupEvidence(e),false,key);
+    }
+    const e=receipt();delete e.report.restoredHTTPProof[key];assert.equal(cleanupEvidence(e),false,key);
+  }
+});
+test('cleanup rejects malformed inherited and extra restored HTTP proof data',()=>{
+  for(const value of [undefined,null,[],{},true,1,'true',Object.create(receipt().report.restoredHTTPProof)]){
+    const e=receipt();e.report.restoredHTTPProof=value;assert.equal(cleanupEvidence(e),false);
+  }
+  for(const key of ['unverified',Symbol('unverified')]){
+    const e=receipt();e.report.restoredHTTPProof[key]=true;assert.equal(cleanupEvidence(e),false);
+  }
+  const nonenumerable=receipt();Object.defineProperty(nonenumerable.report.restoredHTTPProof,'unverified',{value:true});
+  assert.equal(cleanupEvidence(nonenumerable),false);
+  const foreign=receipt();Object.setPrototypeOf(foreign.report.restoredHTTPProof,{unverified:true});
+  assert.equal(cleanupEvidence(foreign),false);
+});
+test('cleanup rejects restored HTTP proof and field accessors without evaluating them',()=>{
+  let reads=0;
+  const top=receipt();Object.defineProperty(top.report,'restoredHTTPProof',{get(){reads++;return receipt().report.restoredHTTPProof;}});
+  assert.equal(cleanupEvidence(top),false);
+  const inherited=receipt();const proof=inherited.report.restoredHTTPProof;delete inherited.report.restoredHTTPProof;
+  Object.setPrototypeOf(inherited.report,{restoredHTTPProof:proof});assert.equal(cleanupEvidence(inherited),false);
+  for(const key of Object.keys(proof)){
+    const e=receipt();Object.defineProperty(e.report.restoredHTTPProof,key,{get(){reads++;return true;}});
+    assert.equal(cleanupEvidence(e),false,key);
+  }
+  assert.equal(reads,0);
+});
+test('cleanup accepts exact null-prototype restored HTTP proof without accepting TLS backup or package rollback',()=>{
+  const e=receipt();e.report.restoredHTTPProof=Object.assign(Object.create(null),e.report.restoredHTTPProof);
+  assert.equal(cleanupEvidence(e),true);assert.equal(e.report.tlsBackupAccepted,false);
+  assert.equal(e.report.packageUpgradeRollbackAccepted,false);assert.equal(e.report.serviceAccepted,false);
+  assert.equal(e.report.productionAccepted,false);
+});
+test('cleanup refuses stale session profiles and mixed five-session counts',()=>{
   const counters=['explicitReadinessPasses','nativeSessionsStarted','nativeSessionsStopped','proxyBodyChecks','uploadChecks','streamChecks'];
   const old=receipt();for(const k of counters)old.report[k]=2;
   delete old.report.restartProof;delete old.report.managerRestartCommands;delete old.report.completedManagerRestarts;
   delete old.report.journalChecks;delete old.report.journalRecordsObserved;delete old.report.journalRunningMarkers;
   assert.equal(cleanupEvidence(old),false);
-  for(const k of counters)for(const value of [undefined,2,4,'3',NaN]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
+  for(const k of counters)for(const value of [undefined,2,3,4,6,'5',NaN]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
 });
-test('cleanup requires exactly one completed restart and all four own exit/freshness proofs',()=>{
-  for(const k of ['managerRestartCommands','completedManagerRestarts'])for(const value of [undefined,0,2,'1',true]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
+test('cleanup requires exactly two completed restarts and all four own exit/freshness proofs',()=>{
+  for(const k of ['managerRestartCommands','completedManagerRestarts'])for(const value of [undefined,0,1,3,'2',true]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
   for(const k of Object.keys(receipt().report.restartProof))for(const value of [undefined,false,1,'true']){const e=receipt();e.report.restartProof[k]=value;assert.equal(cleanupEvidence(e),false,k);}
   for(const value of [null,[],true,{},Object.create(receipt().report.restartProof)]){const e=receipt();e.report.restartProof=value;assert.equal(cleanupEvidence(e),false);}
   const extra=receipt();extra.report.restartProof.unverified=true;assert.equal(cleanupEvidence(extra),false);
 });
 test('cleanup bounds journal evidence without accepting absent or inconsistent markers',()=>{
-  for(const value of [undefined,0,2,4,'3',true]){const e=receipt();e.report.journalChecks=value;assert.equal(cleanupEvidence(e),false);}
-  for(const k of ['journalRecordsObserved','journalRunningMarkers'])for(const value of [undefined,0,2,385,3.5,'3',NaN,Infinity]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
-  const inconsistent=receipt();inconsistent.report.journalRecordsObserved=3;inconsistent.report.journalRunningMarkers=4;assert.equal(cleanupEvidence(inconsistent),false);
-  for(const count of [3,384]){const e=receipt();e.report.journalRecordsObserved=count;e.report.journalRunningMarkers=count;assert.equal(cleanupEvidence(e),true);}
+  for(const value of [undefined,0,2,3,5,7,'6',true]){const e=receipt();e.report.journalChecks=value;assert.equal(cleanupEvidence(e),false);}
+  for(const k of ['journalRecordsObserved','journalRunningMarkers'])for(const value of [undefined,0,2,3,5,769,6.5,'6',NaN,Infinity]){const e=receipt();e.report[k]=value;assert.equal(cleanupEvidence(e),false,k);}
+  const inconsistent=receipt();inconsistent.report.journalRecordsObserved=6;inconsistent.report.journalRunningMarkers=7;assert.equal(cleanupEvidence(inconsistent),false);
+  for(const count of [6,768]){const e=receipt();e.report.journalRecordsObserved=count;e.report.journalRunningMarkers=count;assert.equal(cleanupEvidence(e),true);}
 });
 test('cleanup refuses the earlier HTTP-only three-session receipt even with a stale closed TLS port claim',()=>{
   for(const claimedClosed of [undefined,true]){
@@ -465,6 +544,24 @@ test('cleanup preserves runtime sentinel for exact-source incomplete origin and 
   const source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
   const mutations=[e=>e.report.upstreamTLSNoPostReplayChecks=2,e=>e.report.cleanup.readinessRelayClosed=false,
     e=>e.report.cleanup.upstreamTLSOriginClosed=false];
+  try {
+    for(const mutate of mutations){
+      const e=receipt();e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];mutate(e);
+      await writeFile(p+'/receipt.json',JSON.stringify(e),{mode:0o600});
+      const r=await main(['--cleanup','--prefix',p+'/runtime','--service-evidence',p+'/receipt.json']);
+      assert.equal(r.code,'runtime_retained_cleanup_unconfirmed');assert.equal(await readFile(p+'/runtime/sentinel','utf8'),'preserve');
+      assert.deepEqual(await readdir(p+'/runtime'),['sentinel']);
+    }
+  } finally {await unlink(p+'/runtime/sentinel');await unlink(p+'/receipt.json');await rmdir(p+'/runtime');await rmdir(p);}
+});
+test('cleanup retains the private runtime for exact-source incomplete restored HTTP evidence',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-test-');await mkdir(p+'/runtime',{mode:0o700});
+  await writeFile(p+'/runtime/sentinel','preserve',{mode:0o600});
+  const source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
+  const mutations=[e=>{delete e.report.restoredHTTPProof;},e=>{e.report.restoredHTTPProof.sourceUnitRemoved=false;},
+    e=>{e.report.restoredHTTPProof.restoredHTTPRestarted=false;},e=>{e.report.restoredHTTPProof.noPostReplay=false;},
+    e=>{e.report.restoredHTTPProof.sourceRecordsPreserved=false;},e=>{e.report.restoredHTTPProof.sourceInstallationRemoved=false;},
+    e=>{e.report.tlsBackupAccepted=true;},e=>{e.report.packageUpgradeRollbackAccepted=true;}];
   try {
     for(const mutate of mutations){
       const e=receipt();e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];mutate(e);

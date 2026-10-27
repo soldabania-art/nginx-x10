@@ -22,7 +22,7 @@ import { createServicePKI, probeServiceTLS, expectServiceTLSRefusal, TLS_FIXTURE
 const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 const HEX = /^[a-f0-9]{64}$/, TOKEN = /^[a-f0-9]{32}$/;
 const KEYS = ['LoadState', 'ActiveState', 'SubState', 'Result', 'FragmentPath', 'MainPID', 'ControlGroup'];
-const ERROR_CODES = new Set(["archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "installed_recipe_invalid", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed", "failed_start_unconfirmed", "controlled_drain_unconfirmed", "operator_interruption_unconfirmed", ...SLOW_CLIENT_ERROR_CODES, ...INTERRUPTED_OPERATOR_ERROR_CODES]);
+const ERROR_CODES = new Set(["restored_http_unconfirmed", "archive_extract_failed", "archive_refused", "binding_unconfirmed", "cancelled", "installed_command_failed", "installed_response_invalid", "lifecycle_identity", "linux_required", "local_manager_prerequisites_unavailable", "manager_query_failed", "manager_response_invalid", "manager_unavailable", "native_cleanup_unknown", "native_identity", "nonroot_required", "observation_timeout", "proxy_body_mismatch", "query_invalid", "query_output_limit", "query_timeout", "recipe_diagnostic_failed", "installed_recipe_invalid", "service_resources_live", "session_identity", "session_reused", "stream_mismatch", "uid_mismatch", "uninstall_incomplete", "unit_cgroup_identity", "unit_collision", "unit_directory_identity", "unit_file_identity", "unit_fragment_identity", "unit_launcher_identity", "unit_link_failed", "unit_link_identity", "unit_name_invalid", "unit_not_active", "unit_not_stopped", "unit_query_failed", "unit_reload_failed", "unit_removal_unconfirmed", "unit_response_invalid", "unit_start_failed", "unit_stop_unconfirmed", "upload_mismatch", "usage_invalid", "unit_invocation_invalid", "unit_invocation_changed", "unit_restart_failed", "restart_identity", "restart_retirement_unconfirmed", "journal_unconfirmed", ...JOURNAL_RESULT_CODES, ...TLS_FIXTURE_ERROR_CODES, ...ORIGIN_FIXTURE_ERROR_CODES, "upstream_tls_unconfirmed", "upstream_tls_session", "upstream_tls_rollback_unconfirmed", "upstream_tls_candidate_unconfirmed", "upstream_tls_replay", "downstream_tls_unconfirmed", "downstream_tls_session", "downstream_tls_body_mismatch", "downstream_tls_upload_mismatch", "downstream_tls_stream_mismatch", "downstream_tls_ca_unconfirmed", "downstream_tls_hostname_unconfirmed", "failed_start_unconfirmed", "controlled_drain_unconfirmed", "operator_interruption_unconfirmed", ...SLOW_CLIENT_ERROR_CODES, ...INTERRUPTED_OPERATOR_ERROR_CODES]);
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 const reject = code => { throw Object.assign(new Error(code), { code }); };
 export const LIMITATIONS = Object.freeze({ scope: 'ephemeral-user-service-basic-lifecycle',
@@ -189,7 +189,7 @@ export async function observeNodePrerequisites(prefix, nodeExecutable) {
   finally { if (handle) { try { await handle.close(); } catch { reject('recipe_diagnostic_failed'); } } }
 }
 // Diagnostic collectors have no I/O or lifecycle authority.
-export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'failed_start', 'first_start', 'tls_apply', 'origin_negative', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'operator_interruption', 'controlled_drain', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
+export const DIAGNOSTIC_PHASES = Object.freeze(['arguments', 'preflight', 'archive', 'install', 'recipe_inspection', 'unit_preparation', 'link', 'failed_start', 'first_start', 'restore_http', 'tls_apply', 'origin_negative', 'first_stop', 'second_start', 'second_stop', 'manager_restart', 'operator_interruption', 'controlled_drain', 'third_stop', 'journal', 'uninstall', 'complete', 'unknown']);
 export const START_SUBPHASES = Object.freeze(['not_started', 'not_applicable', 'cancel_check', 'before_properties', 'request_start', 'request_restart', 'old_retirement', 'invocation_identity', 'journal_read', 'downstream_tls', 'upstream_tls', 'origin_negative', 'after_properties', 'launcher_identity', 'native_inventory', 'wait_bind', 'native_observation', 'session_freshness', 'binding_status', 'proxy_body', 'upload', 'stream', 'final_cancel_check', 'complete', 'unknown']);
 export const CLEANUP_STAGES = Object.freeze(['unit_cleanup', 'link_readback', 'inert_uninstall', 'app_close', 'operator_close', 'operator_recovery', 'drain_close', 'origin_close', 'temporary_root', 'final_assertion', 'unknown']);
 const pickEnum = (value, list, fallback = 'unknown') => typeof value === 'string' && list.includes(value) ? value : fallback;
@@ -398,6 +398,79 @@ export function assessFailedReadinessStart(record, properties, text, expected) {
   return true;
 }
 
+// Restored HTTP preparation is a data consistency check, never service authority.
+// The caller separately verifies stopped source ownership and the live new unit.
+export function assessRestoredHTTPPreparation(source, backup, restored) {
+  const refuse = () => reject('restored_http_unconfirmed');
+  try {
+    const plain = value => value && typeof value === 'object'
+      && [Object.prototype, null].includes(Object.getPrototypeOf(value));
+    const fields = (value, names, exact = false) => {
+      if (!plain(value) || (exact && (Reflect.ownKeys(value).length !== names.length
+          || Reflect.ownKeys(value).some(key => !names.includes(key))))) refuse();
+      const out = Object.create(null);
+      for (const name of names) {
+        const descriptor = Object.getOwnPropertyDescriptor(value, name);
+        if (!descriptor || !Object.hasOwn(descriptor, 'value')) refuse();
+        out[name] = descriptor.value;
+      }
+      return out;
+    };
+    const inputData = input => {
+      const names = ['serverBody', 'healthURL'];
+      if (Object.hasOwn(input || {}, 'healthExpectedStatus')) names.push('healthExpectedStatus', 'healthExpectedBody');
+      const data = fields(input, names, true);
+      if (typeof data.serverBody !== 'string' || Buffer.byteLength(data.serverBody) > 1024 * 1024
+          || typeof data.healthURL !== 'string' || !/^http:\/\/127\.0\.0\.1:[1-9][0-9]{0,4}\/[A-Za-z0-9/_.~%-]*$/.test(data.healthURL)
+          || (names.length === 4 && (!Number.isInteger(data.healthExpectedStatus) || data.healthExpectedStatus < 200
+            || data.healthExpectedStatus > 299 || typeof data.healthExpectedBody !== 'string'
+            || Buffer.byteLength(data.healthExpectedBody) > 4096))) refuse();
+      return input;
+    };
+    const before = fields(source, ['installationId', 'session', 'revision', 'input', 'inputSha256', 'port', 'healthPort'], true);
+    inputData(before.input);
+    if (![before.installationId, before.session, before.revision].every(value => typeof value === 'string' && TOKEN.test(value))
+        || ![before.port, before.healthPort].every(value => Number.isInteger(value) && value >= 1024 && value <= 65535)
+        || before.port === before.healthPort || typeof before.inputSha256 !== 'string' || !HEX.test(before.inputSha256)
+        || digest(JSON.stringify(before.input)) !== before.inputSha256 || Object.hasOwn(before.input, 'https')) refuse();
+    const saved = fields(backup, ['schemaVersion', 'kind', 'source', 'port', 'healthPort', 'input', 'inputSha256', 'sha256'], true);
+    inputData(saved.input);
+    const ids = fields(saved.source, ['installationId', 'session', 'revision'], true);
+    if (![ids.installationId, ids.session, ids.revision].every(value => typeof value === 'string' && TOKEN.test(value))) refuse();
+    const { sha256, ...body } = saved;
+    if (saved.schemaVersion !== 1 || saved.kind !== 'nginx-x10-declarative-backup' || typeof sha256 !== 'string' || !HEX.test(sha256)
+        || digest(JSON.stringify(body)) !== sha256 || saved.port !== before.port || saved.healthPort !== before.healthPort
+        || ids.installationId !== before.installationId || ids.session !== before.session || ids.revision !== before.revision
+        || saved.inputSha256 !== before.inputSha256 || JSON.stringify(saved.input) !== JSON.stringify(before.input)) refuse();
+    const value = fields(restored, ['prefix', 'manifest', 'registry', 'lifecycle', 'revision', 'status', 'history'], true);
+    if (typeof value.prefix !== 'string' || !/^\/[A-Za-z0-9_./+-]+$/.test(value.prefix)
+        || path.posix.normalize(value.prefix) !== value.prefix || value.prefix === '/') refuse();
+    const manifest = fields(value.manifest, ['installationId', 'prefix', 'port', 'healthPort']);
+    const registry = fields(value.registry, ['installationId', 'current', 'sessions']);
+    const life = fields(value.lifecycle, ['installationId', 'session', 'prefix', 'stage', 'runtime', 'controlSocket']);
+    const revision = fields(value.revision, ['id', 'parent', 'sourceRevision', 'input', 'inputSha256']);
+    inputData(revision.input);
+    const status = fields(value.status, ['binding', 'pending', 'lastConfirmedRevision', 'configUnchanged', 'fragmentMatchesLastConfirmed', 'history']);
+    const history = fields(value.history, ['records']);
+    if (typeof manifest.installationId !== 'string' || !TOKEN.test(manifest.installationId) || manifest.installationId === before.installationId
+        || manifest.prefix !== value.prefix || manifest.port !== before.port || manifest.healthPort !== before.healthPort
+        || registry.installationId !== manifest.installationId || typeof registry.current !== 'string' || !TOKEN.test(registry.current) || registry.current === before.session
+        || !Array.isArray(registry.sessions) || registry.sessions.length !== 1 || registry.sessions[0] !== registry.current
+        || life.installationId !== manifest.installationId || life.session !== registry.current
+        || life.prefix !== `${value.prefix}/runs/${registry.current}` || life.stage !== 'prepared' || life.runtime !== null || life.controlSocket !== null
+        || typeof revision.id !== 'string' || !TOKEN.test(revision.id) || revision.id === before.revision || revision.parent !== null || revision.sourceRevision !== null
+        || revision.inputSha256 !== before.inputSha256 || JSON.stringify(revision.input) !== JSON.stringify(before.input)
+        || status.binding !== null || status.pending !== null || status.lastConfirmedRevision !== revision.id
+        || status.configUnchanged !== true || status.fragmentMatchesLastConfirmed !== true || ownData(status.history, 'entries') !== 1 || ownData(status.history, 'integrity') !== true
+        || !Array.isArray(history.records) || history.records.length !== 1 || ownData(history.records[0], 'type') !== 'initialized_unbound'
+        || ownData(history.records[0], 'sequence') !== 1 || ownData(history.records[0], 'previousHash') !== null
+        || ownData(ownData(history.records[0], 'details'), 'revision') !== revision.id) refuse();
+    return { freshInstallation: true, freshSession: true, freshRevision: true, exactInputRestored: true,
+      portsPreserved: true, bindingInitiallyAbsent: true, freshHistory: true };
+  } catch { refuse(); }
+}
+// End restored HTTP preparation assessment.
+
 // Narrow held-response/paused-client control, not a backpressure or soak proof.
 export function assessControlledDrainHold(client, originState, stopSettled) {
   if (stopSettled !== false || ownData(client, 'paused') !== true || ownData(client, 'complete') !== false
@@ -596,6 +669,11 @@ async function request(port, route = '/', body = Buffer.alloc(0)) {
 export async function main(argv = process.argv.slice(2)) {
   const report = { ok: false, code: 'not_started', phase: 'arguments', ...LIMITATIONS,
     actualNonrootManagerObserved: false, actualUnitStarted: false, explicitReadinessPasses: 0,
+    tlsBackupAccepted: false, packageUpgradeRollbackAccepted: false, restoredHTTPChecks: 0,
+    restoredHTTPProof: { stoppedConfirmedSource: false, privateBackupCreated: false, sourceUnitRemoved: false, freshUnit: false,
+      freshInstallation: false, freshSession: false, freshRevision: false, exactInputRestored: false, portsPreserved: false,
+      bindingInitiallyAbsent: false, freshHistory: false, restoredHTTPServed: false, restoredHTTPRestarted: false,
+      noPostReplay: false, sourceRecordsPreserved: false, backupPreserved: false, archivePreserved: false, sourceInstallationRemoved: false },
     nativeSessionsStarted: 0, nativeSessionsStopped: 0, proxyBodyChecks: 0, uploadChecks: 0, streamChecks: 0,
     operatorNativeChallengeAdmission: null,
     operatorNativeChallengeChecks: 0, operatorNativeChallengeProof: { nativeRouteObserved: false, ownedRequestObserved: false, relayResponseMatched: false, candidateBindingMatched: false, authorityReobservedBeforeSignal: false, ownedChallengeClosed: false },
@@ -620,7 +698,7 @@ export async function main(argv = process.argv.slice(2)) {
       upstreamTLSPortClosed: false, readinessRelayPortClosed: false, upstreamTLSOriginClosed: false, readinessRelayClosed: false,
       appSocketsRemaining: 0, installationRemoved: false, temporaryRootRemoved: false } };
   let input, parent, prefix, node, launcher, unitFile, runtimeLink, unitName, env, app, appPort, gatewayPort, healthPort, tlsPort, tlsFixture, origin, goodOriginRevision;
-  let originCreationRequested = false, originCleanupSafe = true;
+  let originCreationRequested = false, originCleanupSafe = true, retainedHTTPSource = null, appEchoRequests = 0;
   let failedStartup = null, readinessBlocked = true, readinessCaptureDone = false, readinessRefusals = 0;
   const heldReadiness = new Set();
   const originSessions = new Set();
@@ -1481,6 +1559,135 @@ export async function main(argv = process.argv.slice(2)) {
     if (Object.values(report.controlledSlowDrainProof).some(value => value !== true)) reject('controlled_drain_unconfirmed');
     report.controlledSlowDrainChecks++;
   }
+  async function prepareOwnedRuntimeUnit() {
+    checkCancelled();
+    report.nodePrerequisites = await observeNodePrerequisites(prefix, node);
+    const recipeCommand = await command(node, [launcher, 'service-unit', '--auto-readiness'], env); checkCancelled();
+    const unit = assessInstalledServiceRecipeCommand(recipeCommand, prefix, node);
+    report.installSchemaVersion = 2; report.installedRecipeGenerated = true;
+    unitName = fixtureUnitName(randomBytes(16).toString('hex')); unitFile = `${parent}/${unitName}`;
+    runtimeLink = `${env.XDG_RUNTIME_DIR}/systemd/user/${unitName}`;
+    await runtimeParents();
+    if (!await absent(runtimeLink)) reject('unit_collision');
+    const prior = await properties(); if (prior.LoadState !== 'not-found' || prior.ActiveState !== 'inactive' || prior.MainPID !== '0' || prior.FragmentPath !== '') reject('unit_collision');
+    report.unitSha256 = digest(unit); report.readinessAutomated = true;
+    const handle = await open(unitFile, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600);
+    try { await handle.writeFile(unit); await handle.sync(); } finally { await handle.close(); }
+    checkCancelled();
+    const linkResult = await systemctl(['--runtime', 'link', unitFile]);
+    linked = !await absent(runtimeLink);
+    if (!linkResult.ok) reject('unit_link_failed'); await linkAuthority(); linked = true; report.runtimeUnitLinked = true;
+  }
+  // This retires only the current, freshly checked unit after every captured
+  // launcher/native group and listener is absent. Never reinterpret old sessions
+  // using a new prefix: inventory is reset only after this complete retirement.
+  async function retireStoppedRuntimeUnit() {
+    const before = await ownedProperties(false);
+    if (before.ActiveState !== 'inactive' || before.MainPID !== '0' || before.Result !== 'success') reject('unit_stop_unconfirmed');
+    for (const identity of launcherIdentities) if (!await exitedLauncher(identity)) reject('native_cleanup_unknown');
+    for (const session of sessions) if (!await nativeStopped(session)) reject('native_cleanup_unknown');
+    if (!await closedPort(gatewayPort) || !await closedPort(healthPort) || !await absent(`${prefix}/control.sock`)) reject('service_resources_live');
+    await linkAuthority(); checkCancelled(); await rm(runtimeLink);
+    report.cleanup.runtimeLinkAbsent = await absent(runtimeLink);
+    const reload = await systemctl(['daemon-reload']); if (!reload.ok) reject('unit_reload_failed');
+    const after = await properties();
+    if (after.LoadState !== 'not-found' || after.ActiveState !== 'inactive' || after.MainPID !== '0') reject('unit_removal_unconfirmed');
+    linked = false; report.runtimeUnitRemoved = true;
+    checkCancelled();
+  }
+  // Restored managed HTTP acceptance.
+  async function restoreConfirmedHTTPService() {
+    checkCancelled();
+    const beforeEchoes = appEchoRequests;
+    await stopOwned(); report.nativeSessionsStopped++; checkCancelled();
+    if (appEchoRequests !== beforeEchoes) reject('restored_http_unconfirmed');
+    const sourceManifest = await checkedRecord(`${prefix}/.alpha-install.json`);
+    const sourceRegistry = await checkedRecord(`${prefix}/.alpha-registry.json`);
+    if (typeof sourceRegistry.current !== 'string' || !TOKEN.test(sourceRegistry.current)) reject('restored_http_unconfirmed');
+    const currentPrefix = `${prefix}/runs/${sourceRegistry.current}`;
+    const life = await checkedRecord(`${currentPrefix}/lifecycle.json`);
+    const status = await cli(node, launcher, ['status'], env);
+    if (life.stage !== 'stopped' || life.session !== lastSession || sourceRegistry.current !== lastSession
+        || life.installationId !== sourceManifest.installationId || status.pending !== null
+        || status.configUnchanged !== true || status.fragmentMatchesLastConfirmed !== true || status.history?.integrity !== true
+        || !TOKEN.test(status.lastConfirmedRevision || '')) reject('restored_http_unconfirmed');
+    const revisionPath = `${currentPrefix}/.x10-control/revisions/${status.lastConfirmedRevision}.json`;
+    const revisionRecord = await interruptionFile(revisionPath), revision = revisionRecord.value;
+    const { recordSha256, ...revisionBody } = revision;
+    if (recordSha256 !== digest(JSON.stringify(revisionBody)) || revision.id !== status.lastConfirmedRevision
+        || revision.inputSha256 !== digest(JSON.stringify(revision.input))) reject('restored_http_unconfirmed');
+    const source = { installationId: sourceManifest.installationId, session: sourceRegistry.current, revision: revision.id,
+      input: revision.input, inputSha256: revision.inputSha256, port: sourceManifest.port, healthPort: sourceManifest.healthPort };
+    const files = [`${prefix}/.alpha-install.json`, `${prefix}/.alpha-registry.json`, `${currentPrefix}/lifecycle.json`,
+      `${currentPrefix}/.x10-control/state.json`, `${currentPrefix}/.x10-control/history.jsonl`, revisionPath];
+    const records = await Promise.all(files.map(file => interruptionFile(file, false)));
+    const backupFile = `${parent}/confirmed-http-backup.json`;
+    retainedHTTPSource = { prefix, launcher, files, records, backupFile, backupBytes: null, expectedAppEchoRequests: beforeEchoes + 2, removed: false };
+    report.restoredHTTPProof.stoppedConfirmedSource = true;
+    checkCancelled();
+    const backedUp = await cli(node, launcher, ['backup', '--output', backupFile], env);
+    const backupRecord = await interruptionFile(backupFile), backup = backupRecord.value;
+    if (backedUp.outcome !== 'declarative_backup_created' || backedUp.nativeStarted !== false
+        || backedUp.serviceAccepted !== false || backedUp.productionAccepted !== false
+        || backedUp.sha256 !== digest(backupRecord.bytes) || ((await lstat(backupFile)).mode & 0o7777) !== 0o600) reject('restored_http_unconfirmed');
+    retainedHTTPSource.backupBytes = backupRecord.bytes; report.restoredHTTPProof.privateBackupCreated = true; checkCancelled();
+    const oldUnit = unitName;
+    await retireStoppedRuntimeUnit(); report.restoredHTTPProof.sourceUnitRemoved = true; checkCancelled();
+    // No remaining source launcher/group/unit can be mistaken for this new one.
+    sessions.length = 0; launcherIdentities.length = 0; startRequested = false; failedStartup = null;
+    runtimeLink = undefined; unitFile = undefined; unitName = undefined; installed = false;
+    prefix = `${parent}/restored-http`; launcher = `${prefix}/bin/x10`;
+    checkCancelled();
+    const restored = await cli(node, `${parent}/nginx-x10-alpha/install.mjs`, ['install', '--prefix', prefix, '--restore', backupFile], env);
+    installed = true; checkCancelled();
+    if (typeof restored.session !== 'string' || !TOKEN.test(restored.session) || typeof restored.revision !== 'string' || !TOKEN.test(restored.revision)
+        || restored.declarativeRestored !== true || ['nativeStarted', 'readinessChecked', 'serviceAccepted', 'productionAccepted'].some(key => restored[key] !== false)) reject('restored_http_unconfirmed');
+    const manifest = await checkedRecord(`${prefix}/.alpha-install.json`), registry = await checkedRecord(`${prefix}/.alpha-registry.json`);
+    if (typeof registry.current !== 'string' || !TOKEN.test(registry.current)) reject('restored_http_unconfirmed');
+    const sessionPrefix = `${prefix}/runs/${registry.current}`;
+    const restoredLife = await checkedRecord(`${sessionPrefix}/lifecycle.json`);
+    const restoredRevision = (await interruptionFile(`${sessionPrefix}/.x10-control/revisions/${restored.revision}.json`)).value;
+    const { recordSha256: restoredHash, ...restoredBody } = restoredRevision;
+    if (restoredHash !== digest(JSON.stringify(restoredBody))) reject('restored_http_unconfirmed');
+    const prepared = await cli(node, launcher, ['status'], env), history = await cli(node, launcher, ['history'], env);
+    const preparation = assessRestoredHTTPPreparation(source, backup, { prefix, manifest, registry, lifecycle: restoredLife,
+      revision: restoredRevision, status: prepared, history });
+    if (restored.session !== registry.current || restored.revision !== prepared.lastConfirmedRevision
+        || !await closedPort(gatewayPort) || !await closedPort(healthPort) || appEchoRequests !== beforeEchoes) reject('restored_http_unconfirmed');
+    Object.assign(report.restoredHTTPProof, preparation);
+    report.runtimeUnitRemoved = false; report.cleanup.runtimeLinkAbsent = false;
+    await prepareOwnedRuntimeUnit();
+    if (unitName === oldUnit) reject('restored_http_unconfirmed'); report.restoredHTTPProof.freshUnit = true;
+    report.phase = 'first_start'; await startAndServe(); await verifyJournalForInvocation(await ownedInvocation());
+    if (lastSession !== restored.session || appEchoRequests !== beforeEchoes + 1) reject('restored_http_unconfirmed');
+    const served = await cli(node, launcher, ['status'], env);
+    const running = sessions.find(session => session.id === lastSession);
+    if (!running || served.lastConfirmedRevision !== restored.revision || served.runtime?.observedRevision !== restored.revision
+        || served.runtime?.identityValid !== true || !served.binding || served.pending !== null) reject('restored_http_unconfirmed');
+    report.restoredHTTPProof.restoredHTTPServed = true;
+    report.phase = 'manager_restart'; await restartAndServe();
+    if (appEchoRequests !== beforeEchoes + 2 || lastSession === restored.session) reject('restored_http_unconfirmed');
+    const restarted = await cli(node, launcher, ['status'], env);
+    if (typeof restarted.lastConfirmedRevision !== 'string' || !TOKEN.test(restarted.lastConfirmedRevision)) reject('restored_http_unconfirmed');
+    const restartedRevision = (await interruptionFile(`${prefix}/runs/${lastSession}/.x10-control/revisions/${restarted.lastConfirmedRevision}.json`)).value;
+    const { recordSha256: restartedHash, ...restartedBody } = restartedRevision;
+    if (restartedHash !== digest(JSON.stringify(restartedBody)) || JSON.stringify(restartedRevision.input) !== JSON.stringify(source.input) || restartedRevision.inputSha256 !== source.inputSha256
+        || restarted.runtime?.identityValid !== true || !restarted.binding || restarted.pending !== null) reject('restored_http_unconfirmed');
+    report.restoredHTTPProof.restoredHTTPRestarted = true;
+  }
+  async function verifyRetainedHTTPSource() {
+    if (!retainedHTTPSource || !retainedHTTPSource.backupBytes || retainedHTTPSource.removed
+        || appEchoRequests !== retainedHTTPSource.expectedAppEchoRequests) reject('restored_http_unconfirmed');
+    for (let index = 0; index < retainedHTTPSource.files.length; index++) {
+      const current = await interruptionFile(retainedHTTPSource.files[index], false);
+      if (!current.bytes.equals(retainedHTTPSource.records[index].bytes)) reject('restored_http_unconfirmed');
+    }
+    if (!(await interruptionFile(retainedHTTPSource.backupFile, false)).bytes.equals(retainedHTTPSource.backupBytes)
+        || digest(await archiveBytes(input.archive)) !== input.sha256) reject('restored_http_unconfirmed');
+    report.restoredHTTPProof.sourceRecordsPreserved = true;
+    report.restoredHTTPProof.backupPreserved = true; report.restoredHTTPProof.archivePreserved = true;
+  }
+  // End restored managed HTTP acceptance.
   process.once('SIGINT', cancel); process.once('SIGTERM', cancel);
   try {
     input = parseArguments(argv); report.phase = 'preflight';
@@ -1504,7 +1711,7 @@ export async function main(argv = process.argv.slice(2)) {
         else res.end('ready\n'); return;
       }
       if (req.url === '/stream') { res.write(Buffer.alloc(32768, 0x62)); res.end(Buffer.alloc(32769, 0x62)); return; }
-      if (req.url === '/echo') { const chunks = []; let size = 0; req.on('data', b => { size += b.length; if (size > 1024 * 1024) req.destroy(); else chunks.push(b); }); req.on('end', () => res.end(Buffer.concat(chunks))); return; }
+      if (req.url === '/echo') { const chunks = []; let size = 0; req.on('data', b => { size += b.length; if (size > 1024 * 1024) req.destroy(); else chunks.push(b); }); req.on('end', () => { if (req.method === 'POST') appEchoRequests++; res.end(Buffer.concat(chunks)); }); return; }
       res.end('service-fixture\n');
     });
     app.on('connection', socket => { sockets.add(socket); socket.once('close', () => sockets.delete(socket)); });
@@ -1531,6 +1738,7 @@ export async function main(argv = process.argv.slice(2)) {
     if (!linkResult.ok) reject('unit_link_failed'); await linkAuthority(); linked = true; report.runtimeUnitLinked = true;
     report.phase = 'failed_start'; await verifyFailedReadinessStart();
     report.phase = 'first_start'; await startAndServe(); await verifyJournalForInvocation(await ownedInvocation());
+    report.phase = 'restore_http'; await restoreConfirmedHTTPService();
     report.phase = 'tls_apply'; await activateDownstreamTLS();
     report.phase = 'first_stop'; await stopOwned(); report.nativeSessionsStopped++;
     report.phase = 'second_start'; await startAndServe();
@@ -1544,6 +1752,14 @@ export async function main(argv = process.argv.slice(2)) {
     if (report.upstreamTLSSessionChecks !== 3 || report.upstreamTLSRollbackChecks !== 3) reject('upstream_tls_unconfirmed');
     report.phase = 'uninstall'; await cli(node, launcher, ['uninstall'], env); installed = false;
     if (!await absent(prefix)) reject('uninstall_incomplete'); report.cleanup.installationRemoved = true;
+    report.phase = 'restore_http'; await verifyRetainedHTTPSource();
+    await cli(node, retainedHTTPSource.launcher, ['uninstall'], env);
+    if (!await absent(retainedHTTPSource.prefix)) reject('uninstall_incomplete');
+    retainedHTTPSource.removed = true; report.restoredHTTPProof.sourceInstallationRemoved = true;
+    if (appEchoRequests !== retainedHTTPSource.expectedAppEchoRequests) reject('restored_http_unconfirmed');
+    report.restoredHTTPProof.noPostReplay = true;
+    if (Object.values(report.restoredHTTPProof).some(value => value !== true)) reject('restored_http_unconfirmed');
+    report.restoredHTTPChecks++; checkCancelled();
     report.ok = true; report.code = 'basic_lifecycle_verified'; report.phase = 'complete';
   } catch (error) {
     failures.primary(error, report.phase, start.snapshot().lastStep);
@@ -1596,7 +1812,7 @@ export async function main(argv = process.argv.slice(2)) {
       failures.cleanup(null, 'origin_close'); report.ok = false; report.code = 'cleanup_unconfirmed';
     }
     report.cleanup.appSocketsRemaining = sockets.size;
-    safeToRemove = Boolean(parent && !installed && (!linked || report.runtimeUnitRemoved) && sockets.size === 0 && originCleanupSafe);
+    safeToRemove = Boolean(parent && !installed && (!retainedHTTPSource || retainedHTTPSource.removed) && (!linked || report.runtimeUnitRemoved) && sockets.size === 0 && originCleanupSafe);
     if (safeToRemove) { try { await rm(parent, { recursive: true, force: true }); report.cleanup.temporaryRootRemoved = await absent(parent); } catch (error) { failures.cleanup(error, 'temporary_root'); report.ok = false; report.code = 'cleanup_unconfirmed'; } }
     if (report.ok && (!report.cleanup.temporaryRootRemoved || !report.runtimeUnitRemoved || !report.cleanup.downstreamTLSPortClosed || !report.cleanup.upstreamTLSPortClosed || !report.cleanup.readinessRelayPortClosed
         || !report.cleanup.upstreamTLSOriginClosed || !report.cleanup.readinessRelayClosed || sockets.size)) { failures.cleanup(null, 'final_assertion'); report.ok = false; report.code = 'cleanup_unconfirmed'; }

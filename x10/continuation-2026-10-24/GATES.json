@@ -50,8 +50,8 @@
   },
   "attribution": {
     "site_path": "/cases/",
-    "section_title": "Наши проекты",
-    "developer_label": "Разработчик — АВЕРКРОН",
+    "section_title": "\u041d\u0430\u0448\u0438 \u043f\u0440\u043e\u0435\u043a\u0442\u044b",
+    "developer_label": "\u0420\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a \u2014 \u0410\u0412\u0415\u0420\u041a\u0420\u041e\u041d",
     "preserve_upstream_license_authorship_history": true,
     "card_status_requires_confirmed_release": true
   },
@@ -322,7 +322,7 @@
         "All G0-G8 accepted with evidence",
         "Local Alpha alone did not trigger transition",
         "Unfinished broad platform/Continuum not marked completed",
-        "Final queue remains X10→AVERKRON→TEXTORA/AI Index→TROVENDI→Replyscope"
+        "Final queue remains X10\u2192AVERKRON\u2192TEXTORA/AI Index\u2192TROVENDI\u2192Replyscope"
       ],
       "required_evidence": [
         "central_transition_commit",
@@ -362,5 +362,39 @@
     "noGateStatusPromoted": true,
     "noAcceptanceRequirementRemoved": true,
     "fullVisionPreserved": true
+  },
+  "restoredHTTPManagedServiceCandidate": {
+    "state": "CODE_PRESENT_EXACT_HOSTED_PENDING",
+    "sourceBase": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
+    "evidence": "x10/evidence/g4-restored-service.json",
+    "perFileLedger": "x10/review/g4-restored-service-ledger.json",
+    "localSelectedTAP": {
+      "total": 802,
+      "pass": 802,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "physicalNativeExecuted": false,
+      "systemdExecuted": false
+    },
+    "newPureControlsIncludedInTAP": 84,
+    "separateIndependentVirtualReviewControls": 14,
+    "expectedHostedCounts": {
+      "successfulNativeSessions": 5,
+      "managerRestarts": 2,
+      "boundedJournalChecks": 6,
+      "tlsSessions": 3,
+      "restoredProofFields": 18
+    },
+    "expectedCountsAreNotLocalRuntimeObservations": true,
+    "restoredManagedServiceAccepted": false,
+    "tlsBackupAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false
   }
 }

@@ -202,7 +202,8 @@ export function cleanupEvidence(e) {
       || r.tlsServiceAccepted !== false || r.serviceAccepted !== false || r.productionAccepted !== false || r.subprocessOutputsPublished !== false
       || r.primaryFailure !== null || !Array.isArray(r.cleanupFailures) || r.cleanupFailures.length !== 0
       || r.cleanupFailureCount !== 0 || r.cleanupFailuresTruncated !== false) return false;
-  for (const [key, expected] of [['bundleSchemaVersion', 2], ['installSchemaVersion', 2], ['installedRecipeGenerated', true]]) {
+  for (const [key, expected] of [['bundleSchemaVersion', 2], ['installSchemaVersion', 2], ['installedRecipeGenerated', true],
+    ['restoredHTTPChecks', 1], ['tlsBackupAccepted', false], ['packageUpgradeRollbackAccepted', false]]) {
     const descriptor = Object.getOwnPropertyDescriptor(r, key);
     if (!descriptor || !Object.hasOwn(descriptor, 'value') || descriptor.value !== expected) return false;
   }
@@ -251,11 +252,23 @@ export function cleanupEvidence(e) {
         const d = Object.getOwnPropertyDescriptor(challenge, k);
         return !d || !Object.hasOwn(d, 'value') || d.value !== true;
       })) return false;
-  for (const k of ['explicitReadinessPasses', 'nativeSessionsStarted', 'nativeSessionsStopped', 'proxyBodyChecks', 'uploadChecks', 'streamChecks']) if (r[k] !== 3) return false;
-  if (r.managerRestartCommands !== 1 || r.completedManagerRestarts !== 1
-      || r.journalChecks !== 3 || !Number.isInteger(r.journalRecordsObserved)
-      || r.journalRecordsObserved < 3 || r.journalRecordsObserved > 384
-      || !Number.isInteger(r.journalRunningMarkers) || r.journalRunningMarkers < 3
+  const restoredDescriptor = Object.getOwnPropertyDescriptor(r, 'restoredHTTPProof');
+  const restored = restoredDescriptor && Object.hasOwn(restoredDescriptor, 'value') ? restoredDescriptor.value : null;
+  const restoredKeys = ['stoppedConfirmedSource', 'privateBackupCreated', 'sourceUnitRemoved', 'freshUnit',
+    'freshInstallation', 'freshSession', 'freshRevision', 'exactInputRestored', 'portsPreserved',
+    'bindingInitiallyAbsent', 'freshHistory', 'restoredHTTPServed', 'restoredHTTPRestarted',
+    'noPostReplay', 'sourceRecordsPreserved', 'backupPreserved', 'archivePreserved', 'sourceInstallationRemoved'];
+  if (!restored || typeof restored !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(restored))
+      || Reflect.ownKeys(restored).length !== restoredKeys.length
+      || restoredKeys.some(k => {
+        const d = Object.getOwnPropertyDescriptor(restored, k);
+        return !d || !Object.hasOwn(d, 'value') || d.value !== true;
+      })) return false;
+  for (const k of ['explicitReadinessPasses', 'nativeSessionsStarted', 'nativeSessionsStopped', 'proxyBodyChecks', 'uploadChecks', 'streamChecks']) if (r[k] !== 5) return false;
+  if (r.managerRestartCommands !== 2 || r.completedManagerRestarts !== 2
+      || r.journalChecks !== 6 || !Number.isInteger(r.journalRecordsObserved)
+      || r.journalRecordsObserved < 6 || r.journalRecordsObserved > 768
+      || !Number.isInteger(r.journalRunningMarkers) || r.journalRunningMarkers < 6
       || r.journalRunningMarkers > r.journalRecordsObserved) return false;
   const restart = r.restartProof;
   const proofKeys = ['oldLauncherExited', 'oldNativeGroupsAbsent', 'freshSession', 'freshInvocation'];
@@ -369,7 +382,7 @@ export async function main(argv = process.argv.slice(2)) {
       const receipt = await regular(file, 32768, { uid: process.getuid() });
       if ((receipt.stat.mode & 0o7077) !== 0) refuse('runtime_retained_cleanup_unconfirmed');
       const e = JSON.parse(receipt.bytes);
-      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== '1364daf1c1399b39706dae34fedee7134a5bc4857080012ab51a8a952d37f7fe') refuse('runtime_retained_cleanup_unconfirmed');
+      if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== 'e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370') refuse('runtime_retained_cleanup_unconfirmed');
       const runtime = await inspectRuntime(prefix);
       if (e.runtimeNodeSha256 !== runtime.files['bin/node'].sha256 || e.runtimeInstallationId !== runtime.installationId) refuse('runtime_retained_cleanup_unconfirmed');
       await removeRuntime(prefix); result = { ok: true, code: 'verified_node_removed', runtimeRemoved: true };

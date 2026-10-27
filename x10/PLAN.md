@@ -2182,3 +2182,48 @@ Full G3/G4/V1, managed-service restore, package rollback, permanent release
 and60-minute soak remain open. GATES keeps all10 gate core records and
 unchanged statuses; every earlier deep record is mandatory through its
 immutable245d commit/blob reference. Evidence: x10/evidence/g4-restored-http-hosted.json.
+
+
+## Deferred Windows profile — 27 October 2026
+
+The owner requested that the Windows plan be retained. Finish the accepted
+Linux V1 first. A future Windows package may use WSL2, but that profile is
+UNVERIFIED: it still requires the declared Linux distribution, architecture,
+Node and dependency ABI, private local control, a real nonroot user-service
+manager, process ownership, networking, restore and owned cleanup acceptance.
+WSL2 availability alone does not establish X10 compatibility.
+
+A native Windows executable is a separate port and support profile, with
+its own service lifecycle, process identity, filesystem permissions,
+control transport, recovery and regression gates. No Windows implementation,
+runtime acceptance or performance parity is claimed by this checkpoint.
+This backlog does not change the central G9 portfolio queue or automatically
+start a Windows release after Linux V1; later activation requires its own
+current assignment.
+
+
+## Restored HTTP managed-service candidate — 27 October 2026
+
+A new service acceptance fixture stops the confirmed HTTP source before TLS
+configuration, exports its private declarative backup, retires its exact unit
+and restores into a new installation, session, revision and systemd-user unit.
+It checks HTTP serving and manager restart, then preserves the existing TLS
+regressions and verifies six original records, backup and archive through
+owned cleanup. The two authenticated checker pins identify the exact reviewed
+source; no timeout, permission or runner policy is relaxed.
+
+Frozen local Node24 pure/tempfile/virtual checks passed802/802, including84
+new controls. Independent14 virtual review controls are a separate count.
+No physical native or systemd fixture ran locally. Exact resulting hosted CI
+is PENDING; expected5 sessions,2 manager restarts,6 bounded journal checks
+and3 TLS sessions are assertions to verify, not local runtime observations.
+Evidence: x10/evidence/g4-restored-service.json. FullG3/G4/V1, TLS backup,
+meaningful package A-to-B-to-A, permanent release and60-minute soak stay open.
+
+The owner renewed the X10 work window for20 hours from27October2026
+03:45:59UTC to23:45:59UTC (28October03:45:59Samara). Earlier windows remain
+history. Six useful helper roles supported this bounded pass; continuous
+processes and completion by elapsed hours are not guaranteed. Existing
+authority, spending, deployment and other-project limits remain unchanged.
+The deferred Windows plan is saved in PLAN and does not change the central
+portfolio queue or claim Windows compatibility.

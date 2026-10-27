@@ -1,8 +1,19 @@
-# G3: подготовка systemd user unit
+# X10: systemd user recipe и приёмочные fixtures
 
-Это генератор recipe, не установленный и не принятый сервис. Нативный data plane,
-существующий alpha lifecycle и readiness-контракт сохраняются. Генератор не
-запускает systemctl, не устанавливает unit и не меняет автозапуск или linger.
+Генератор recipe выдаёт предложенный unit и не запускает systemctl, не
+устанавливает сервис, не меняет автозапуск или linger. Отдельный source helper
+`lifecycle-check.mjs` проверяет временный сервис на разрешённом nonroot хосте;
+его фактические результаты относятся только к точным проверенным исходникам.
+Нативный data plane, alpha lifecycle и readiness-контракт сохраняются.
+
+В этом документе сохранена хронология реализации и прежних отказов. Слова
+«candidate» и «pending» в исторических разделах относятся к указанному там SHA;
+актуальную точку продолжения задают [checkpoint](../continuum/BACKGROUND.json)
+и [gates](../continuation-2026-10-24/GATES.json). Проверенный normal-service путь
+с TLS, restart, journal и owned cleanup остаётся узкой приёмкой, не всем G3/V1.
+[Exact receipt245](../evidence/g4-restored-http-hosted.json) отдельно принимает
+восстановленный foreground HTTP fixture; восстановленный managed service требует
+собственной фактической проверки ниже. TLS backup и package rollback не приняты.
 
 ## Создание
 
@@ -1137,3 +1148,75 @@ FullG3/G4-G8/V1, package lifecycle, permanent release, independent published-fil
 acceptance,60-minute soak and semantic Continuum remain open.
 
 See [fixture evidence](../evidence/g3-service-recipe-node.json).
+
+
+## Restored HTTP managed-service candidate — 27 October 2026
+
+The next acceptance fixture uses a stopped, confirmed HTTP service as its
+declarative source. It runs before the existing downstream HTTPS change:
+the backup contract still refuses an HTTPS input and never exports TLS keys.
+The original owned unit must be stopped and retired before a restored service
+can reuse the declared ports. The original installation and its records remain
+available until target cleanup and the final preservation check.
+
+The installed backup and extracted-bundle restore commands create a different
+private installation with fresh installation, session and controller revision
+identities. Before startup, the target must have a null binding and its own
+single initialized history record. It cannot borrow the source binding, unit,
+session, process or history. The exact confirmed HTTP input and declared ports
+are retained; no automatic port or external-file remapping is introduced.
+
+The harness obtains the new unit recipe from the restored installed payload.
+It links only a new unique runtime unit and leaves it disabled. Automatic
+readiness, exact application GET, upload and stream checks must pass on the
+restored target. One immediate manager restart must establish another fresh
+session and invocation and confirm retirement of the preceding owned processes.
+Application POST counts must distinguish delivery from management-command
+replay. The existing combined TLS, startup-refusal, interruption, held-response
+drain, restart, journal and owned-cleanup obligations remain required afterward
+on the restored installation.
+
+A complete candidate report requires five native sessions with matching
+readiness/body/upload/stream counts, two manager restarts and six attributable
+journal checks. `journalChecks` counts completed checks; each bounded journal
+read may issue one to three journalctl queries. Six checks do not mean exactly
+six queries. The three combined TLS session observations retain their prior
+meaning and count. `restoredHTTPChecks` must equal1 and `restoredHTTPProof`
+requires all seven preparation and eleven operated-service/preservation/cleanup
+observations. Missing or false proofs cannot accept the path. These are required
+observation units, not results inferred from this document or independent installs.
+
+Target stop and native/launcher absence must be confirmed before uninstall.
+Exact runtime-link removal and manager readback, both installation removals
+and all other cleanup must pass before deleting the temporary root or shared
+verified Node dependency. The preservation check compares six selected current
+source records: manifest, session registry, current lifecycle, controller state,
+history and current revision. Those records, the backup and supplied archive
+must remain unchanged before original-source uninstall; this does not inspect
+every historical source file. An ambiguous stop, identity mismatch, replaced
+link, failed cleanup or cancellation remains a failure and retains diagnostic
+state. Cleanup never signals a broad process search or removes unknown units.
+Private paths, process/session identities, configuration, backup contents and
+raw journal output stay out of public evidence.
+
+The [candidate evidence](../evidence/g4-restored-service.json) records authored
+code, frozen source bindings and actual local pure/source controls separately
+from exact hosted execution. This local nested PID environment must not run the
+physical native, signal, process-group or systemd fixture. Pure controls and
+successful parsing do not establish an operated restored service; actual new
+supported-host CI is pending and may fail.
+
+Final local selected contracts passed802/802 with zero failures, skips or TODOs
+on Node24.22.1. That aggregate includes the84 new controls once:64 pure related-
+record controls and20 virtual-I/O controls extracted from the actual functions.
+Fourteen independent review controls are separate and are not added to802.
+These checks do not execute the supported Node22 managed-service profile.
+
+This is HTTP configuration restore within the same checked package. It does
+not establish a transition between meaningfully distinct runtime packages,
+TLS-key/PKI restore, application-data/database recovery, arbitrary external-file
+portability, automatic stale-lock/orphan recovery or an OS process fence.
+Full G3/G4-G8, permanent release, independent published-file replay, security
+acceptance, the predeclared60-minute soak and Production V1 remain open.
+The earlier mixed CI outcomes, unknown historical causes and local cleanup
+FAIL_UNKNOWN remain preserved; later success cannot retroactively repair them.

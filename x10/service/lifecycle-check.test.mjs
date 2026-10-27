@@ -1,4 +1,5 @@
 import test from 'node:test';
+import '../test/managed-restore-controls.test.mjs';
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';

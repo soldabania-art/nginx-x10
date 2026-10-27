@@ -1,26 +1,12 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-restored-service-20261027T035116776Z",
-    "owner": "codex-x10-restored-service-coordinator",
-    "baseCommit": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
-    "acquiredAtUTC": "2026-10-27T03:51:16.776Z",
-    "expiresAtUTC": "2026-10-27T04:35:16.776Z",
-    "effectiveOwnerWorkWindow": {
-      "requestedAtUTC": "2026-10-27T03:45:59.000Z",
-      "hours": 20,
-      "codeStopAtUTC": "2026-10-27T23:45:59.000Z",
-      "reportOnlyUntilUTC": "2026-10-28T00:45:59.000Z"
-    },
-    "checkpointWindowSuperseded": true,
-    "ownerWorkWindowWillBeReconciledInSubstantiveCheckpoint": true
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
-    "requestedAtUTC": "2026-10-26T17:23:06.000Z",
-    "hours": 10,
-    "codeStopAtUTC": "2026-10-27T03:23:06.000Z",
-    "reportOnlyUntilUTC": "2026-10-27T04:23:06.000Z",
+    "requestedAtUTC": "2026-10-27T03:45:59.000Z",
+    "hours": 20,
+    "codeStopAtUTC": "2026-10-27T23:45:59.000Z",
+    "reportOnlyUntilUTC": "2026-10-28T00:45:59.000Z",
     "completionIsEvidenceGated": true,
     "fullReleaseIsNotGuaranteedByElapsedHours": true,
     "continuousProcessesGuaranteed": false,
@@ -37,6 +23,16 @@
       "hours": 60,
       "codeStopAtUTC": "2026-10-26T19:17:36.000Z",
       "reportOnlyUntilUTC": "2026-10-26T20:17:36.000Z"
+    },
+    {
+      "requestedAtUTC": "2026-10-26T17:23:06.000Z",
+      "hours": 10,
+      "codeStopAtUTC": "2026-10-27T03:23:06.000Z",
+      "reportOnlyUntilUTC": "2026-10-27T04:23:06.000Z",
+      "completionIsEvidenceGated": true,
+      "fullReleaseIsNotGuaranteedByElapsedHours": true,
+      "continuousProcessesGuaranteed": false,
+      "afterCodeStop": "Only safe owned cleanup, result readback and final reporting; no code changes."
     }
   ],
   "ownerWorkPolicy": {
@@ -177,52 +173,84 @@
     }
   },
   "lastV1DevelopmentPass": {
-    "scope": "Fresh restored foreground HTTP application acceptance fixture and complete-field PID parsing in tests.",
-    "sourceBase": "1c257bd85c27e905ddc8d7d2725a7ebc579b81d7",
+    "state": "CODE_PRESENT_EXACT_HOSTED_PENDING",
+    "sourceBase": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
+    "scope": "Stopped confirmed HTTP source restored into a fresh installation and systemd-user unit, with HTTP restart and exact owned cleanup evidence.",
     "sourceBindings": {
-      "x10/test/alpha.test.mjs": {
-        "beforeSha256": "98fce826439e983ad9b03fe1e11c24299240aa118f13b9378842251b5632e538",
-        "afterSha256": "eb7bfc20173e002086c727b9838ab20a475ca46474d21f592a838783354ee5e0",
-        "bytes": 89489
+      "x10/service/lifecycle-check.mjs": {
+        "beforeSha256": "1364daf1c1399b39706dae34fedee7134a5bc4857080012ab51a8a952d37f7fe",
+        "afterSha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370",
+        "bytes": 147483
       },
-      "x10/test/alpha-pid.test.mjs": {
+      "x10/service/verified-node.mjs": {
+        "beforeSha256": "f3c6432ebe4918a08638cf0f5f50572449fec666dbdc1edfa4c830f5e751e187",
+        "afterSha256": "54c3a1891e036295673b57ccffbee33bf4c5ac9e5ac11c70c1b9003a00298573",
+        "bytes": 28343
+      },
+      "x10/service/lifecycle-check.test.mjs": {
+        "beforeSha256": "c57523c51e4b9597384589d2d813f96137d5654e19bf6ac2b2f57d0b1a33bab1",
+        "afterSha256": "4d3eda4bb396436e12c86dfba859496245e9e83e9b84e0cdc675cee7aa878bfe",
+        "bytes": 141676
+      },
+      "x10/service/verified-node.test.mjs": {
+        "beforeSha256": "63651af37c04d94284783c2931169d38bbec97100c5ffa93da189fd741b189a7",
+        "afterSha256": "5d3524fd7d56bc631cf9bd8e43e9b3471e415245aad3084527c053b2a0263099",
+        "bytes": 43947
+      },
+      "x10/test/managed-restore-controls.test.mjs": {
         "beforeSha256": null,
-        "afterSha256": "f8a61a9445136b80a3ef9cbe9933434a4d7efa560bced1592631f6a257b82af7",
-        "bytes": 5365
+        "afterSha256": "2cab30eed86adb6e6510390e634b74ecc0ddc2d776f6110526920cd6ba1df985",
+        "bytes": 22506
+      },
+      ".github/workflows/x10-native.yml": {
+        "beforeSha256": "c86a0e5ed609f415e2831a055657af7313bcda944923d88b9777e55d2ec2a173",
+        "afterSha256": "e2db4ddf78e2ff7321c29d798f70d071dce2db835fa13f61c345a3d9fc4f2726",
+        "bytes": 13975
       }
     },
-    "evidence": "x10/evidence/g4-restored-app.json",
-    "perFileLedger": "x10/review/g4-restored-app-ledger.json",
+    "evidence": "x10/evidence/g4-restored-service.json",
+    "perFileLedger": "x10/review/g4-restored-service-ledger.json",
     "localSelectedTAP": {
-      "total": 162,
-      "pass": 162,
+      "total": 802,
+      "pass": 802,
       "fail": 0,
-      "exitCode": 0
-    },
-    "separateVirtualControls": {
-      "total": 46,
-      "pass": 46,
-      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
       "exitCode": 0,
-      "notAddedToTAPCount": true
+      "nodeVersion": "v24.22.1",
+      "physicalNativeExecuted": false,
+      "systemdExecuted": false
     },
-    "exactHostedAcceptance": "EXACT_SCOPED_RESTORED_FOREGROUND_HTTP_SUCCESS",
-    "actualRestoredNativeExecutedLocally": false,
-    "runtimeControllerNativeWorkflowsChanged": false,
-    "gatePlanSynchronization": "SYNCHRONIZED_BY_THIS_RECEIPT",
+    "newPureControlsIncludedInTAP": 84,
+    "separateIndependentVirtualReviewControls": 14,
+    "expectedHostedCounts": {
+      "successfulNativeSessions": 5,
+      "managerRestarts": 2,
+      "boundedJournalChecks": 6,
+      "tlsSessions": 3,
+      "restoredProofFields": 18
+    },
+    "expectedCountsAreNotLocalRuntimeObservations": true,
     "restoredManagedServiceAccepted": false,
+    "tlsBackupAccepted": false,
     "packageUpgradeRollbackAccepted": false,
+    "fullG3Accepted": false,
     "fullG4Accepted": false,
-    "productionAccepted": false,
-    "verifiedOnImplementationCommit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
-    "hostedEvidence": "x10/evidence/g4-restored-http-hosted.json"
+    "productionAccepted": false
   },
   "pendingVerification": [
-    "Obtain separately scoped restored HTTP managed-service acceptance with fresh installation, runtime, unit and binding identities, owned cleanup and preserved source. Keep TLS restore unsupported. Then verify meaningful distinct-runtime-package A-to-B-to-A upgrade/rollback and state compatibility. Permanent release, independent published-file replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
-    "Before choosing later work, read the COMPLETE historical checkpoint referenced by historyReference, including all standalone failure and mode-drift fields; the section list is a minimum, not an exhaustive allowlist."
+    "Inspect exact resulting implementation native push/PR jobs and actual service artifact: require all 18 restored HTTP proofs, five successful sessions, two manager restarts, six bounded journal checks, unchanged three TLS sessions and complete owned/private-Node cleanup. Accept only scoped restored HTTP managed-service evidence on success. Then verify meaningful distinct-runtime-package A-to-B-to-A and state compatibility; tests/docs-only successors are not distinct runtime packages. Keep TLS restore unsupported and full G3/G4/V1, permanent release, independent published replay,60-minute soak and semantic Continuum open.",
+    "Read COMPLETE mandatory ancestral checkpoint and gate references, preserving every adverse and unknown result. No local physical native/process-group/signal/systemd fixture is admitted by the present namespace."
   ],
-  "nextConcreteTask": "Obtain separately scoped restored HTTP managed-service acceptance with fresh installation, runtime, unit and binding identities, owned cleanup and preserved source. Keep TLS restore unsupported. Then verify meaningful distinct-runtime-package A-to-B-to-A upgrade/rollback and state compatibility. Permanent release, independent published-file replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
+  "nextConcreteTask": "Inspect exact resulting implementation native push/PR jobs and actual service artifact: require all 18 restored HTTP proofs, five successful sessions, two manager restarts, six bounded journal checks, unchanged three TLS sessions and complete owned/private-Node cleanup. Accept only scoped restored HTTP managed-service evidence on success. Then verify meaningful distinct-runtime-package A-to-B-to-A and state compatibility; tests/docs-only successors are not distinct runtime packages. Keep TLS restore unsupported and full G3/G4/V1, permanent release, independent published replay,60-minute soak and semantic Continuum open.",
   "nextTasks": [
+    {
+      "id": "G4-restored-HTTP-managed-service-exact-CI",
+      "state": "PENDING_EXACT_HOSTED",
+      "goal": "Inspect exact resulting implementation native push/PR jobs and actual service artifact: require all 18 restored HTTP proofs, five successful sessions, two manager restarts, six bounded journal checks, unchanged three TLS sessions and complete owned/private-Node cleanup. Accept only scoped restored HTTP managed-service evidence on success. Then verify meaningful distinct-runtime-package A-to-B-to-A and state compatibility; tests/docs-only successors are not distinct runtime packages. Keep TLS restore unsupported and full G3/G4/V1, permanent release, independent published replay,60-minute soak and semantic Continuum open.",
+      "evidence": "x10/evidence/g4-restored-service.json"
+    },
     {
       "id": "G4-restored-managed-service-and-package-rollback",
       "state": "OPEN",
@@ -262,7 +290,7 @@
   },
   "portfolioContinuation": {
     "activeProject": "x10",
-    "currentGate": "RESTORED_FOREGROUND_HTTP_EXACT_HOSTED_VERIFIED_MANAGED_RESTORE_AND_PACKAGE_ROLLBACK_OPEN",
+    "currentGate": "RESTORED_HTTP_MANAGED_SERVICE_CODE_PRESENT_EXACT_HOSTED_PENDING",
     "fullVisionAndDeferredResearchReference": {
       "path": "x10/continuum/PLAN.md",
       "historicalAssignmentReference": {
@@ -328,5 +356,55 @@
     "readCompleteHistoricalDocument": true,
     "allPriorAcceptanceFailuresAndUnknownsRetained": true,
     "recordLocator": "lastV1VerificationReceipt"
+  },
+  "previousV1DevelopmentPassReference": {
+    "commit": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
+    "path": "x10/continuum/BACKGROUND.json",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
+  },
+  "currentHeadCIStepReadback": {
+    "commit": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
+    "native": [
+      {
+        "runId": 40443531553,
+        "jobId": 121989308805,
+        "state": "completed_success",
+        "actualSuccessfulSteps": 34
+      },
+      {
+        "runId": 40443539041,
+        "jobId": 121989333442,
+        "state": "completed_success",
+        "actualSuccessfulSteps": 34
+      }
+    ],
+    "researchPR": {
+      "runId": 40443538988,
+      "jobId": 121989338014,
+      "state": "completed_success",
+      "actualSuccessfulSteps": 11
+    },
+    "researchPush": {
+      "runId": 40443531605,
+      "runtimeJobId": 121989324761,
+      "runtime": "skipped"
+    },
+    "cla": {
+      "runId": 40443535038,
+      "jobId": 121989262771,
+      "state": "failure"
+    },
+    "artifactCountsReaudited": false,
+    "noUnchangedRerunRequested": true
+  },
+  "deferredWindowsPlan": {
+    "state": "DEFERRED_UNVERIFIED",
+    "path": "x10/PLAN.md",
+    "order": "Accepted Linux V1 first; separately assigned WSL2 verification and native Windows port later.",
+    "changesCentralPortfolioQueue": false,
+    "windowsImplemented": false,
+    "windowsRuntimeAccepted": false
   }
 }
