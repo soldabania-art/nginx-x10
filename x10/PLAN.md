@@ -2852,3 +2852,18 @@ independently establish cumulative candidate+rollback/pending/event/fragment/
 lock/atomic-temp headroom before alpha pre-spawn refusal. Preliminary six is
 not an accepted bound. Preserve durablewriters, existingrecords, stop/recover,
 postpartialSTOP and othergrowth/fullcapacity/fullG5/V1/40h/Windows boundaries.
+
+
+## After alpha apply/revert control-entry admission candidate
+
+Verify actual new push/PR artifacts before accepting changed installedalphaCLI:
+new revision-capacity suite in existing managed group, complete zero-skip TAP,
+retained per-suite controls,20groups/36steps/budgets, three strictreports/source
+pins and allowned/privateNode/history/bootstrapcleanup. Do not infer totals
+or transfer prior447 acceptance. Preparation18 overlaps managed and alpha.
+
+The reviewed7 reserve covers source-bound controller entry writes, including
+rollback and retained atomic temporaries. Native/concurrent/transient/direct
+controller/initialcreation/recovery growth and stopped postpartial STOP remain
+separate. Preserve oldrecords/revisions/durablewriters/stop/recover; no compaction,
+deletion, blindcapincrease, universal OS fence or fullcapacity/G5/V1 closure.

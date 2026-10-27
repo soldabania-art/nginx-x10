@@ -3481,3 +3481,30 @@ rollback can retain two revisions. Determine every simultaneous durable/temp
 entry before choosing admission headroom; no blindcapraise, durablewriter
 rewrite, stop/recover gate, compaction or deletion. Directcontroller/native/
 transient/concurrent/initialcreation growth and allpriorfullgates remainOPEN.
+
+
+## 27 October 2026: alpha apply/revert control-entry admission candidate
+
+Exact6518 metadata native push40578695433/job122452097306 and
+PR40578705576/job122452179946 completed36 successful steps each; researchPR
+40578705590/job122452149840 completed11. CLA40578701799/job122451981361
+failedstep3. No artifacts downloaded or runtime counts/build identities guessed;
+accepted exact447 scoped compatibility remains separate.
+
+The new alphaCLI samples whole-prefix inventory under the existing alpha lock
+before spawning apply/revert, reserving7 control entries under the4096 bound.
+Six is insufficient when failed atomic cleanup retains multiple temporaries.
+The source-extracted phase model includes candidate and rollback revisions,
+pending/eventintent/controllerlock and retained atomic temps; representative
+nonallocating failures are included, not every OS failure.
+[Evidence](evidence/g5-alpha-revision-capacity.json) and
+[ledger](review/g5-alpha-revision-capacity-ledger.json) record separate pure/
+tempfile/virtual verification and source pins. New installed compatibility is
+pending exact hosted acceptance, not inherited from447.
+
+The new pinned [baseline producer](review/alpha-revision-capacity-counterexample.mjs)
+reproduces actual source control flow with mocked IO on exact447/unchanged6518
+bytes. Older producer pins are unchanged; candidate drift refusal is intentional.
+Controller durable writers, schemas, nativeC/workflow and stop/recover remain
+unchanged. Directcontroller/initialcreation/recovery/native/transient/concurrent
+growth, stopped postpartial STOP and fullcapacity/G5/V1 remainOPEN.

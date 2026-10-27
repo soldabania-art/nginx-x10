@@ -1,0 +1,478 @@
+{
+  "schemaVersion": 1,
+  "kind": "alpha-apply-revert-controller-entry-admission",
+  "state": "LOCAL_NARROW_COMPONENT_VERIFIED_HOSTED_PENDING_FULL_CAPACITY_OPEN",
+  "sourceBase": "6518fbf9d938845917644b46a0cd4a875ec34df4",
+  "publicationParent": "a9138b752782488dc6480ced7b1cfc9bb26fc5e9",
+  "sourceBindings": {
+    "x10/alpha/cli.mjs": {
+      "bytes": 89800,
+      "sha256": "4fd2726810b9ff4b8a00c7598c4a97c673cfedf077bde1302e7ad683445336df"
+    },
+    "x10/alpha/revision-capacity.test.mjs": {
+      "bytes": 18382,
+      "sha256": "5e1468be66f554bee8c5f0a6c4d8fe1a7ed9a1725c9f05cbe8c9eb1cd697a242"
+    },
+    "x10/review/alpha-revision-capacity-counterexample.mjs": {
+      "bytes": 6803,
+      "sha256": "80b10fb9a7bc8fef217e6f2257148bddbbdf3b5e9a158fb7657316b3cf75b512"
+    },
+    "x10/test/all.mjs": {
+      "bytes": 32284,
+      "sha256": "3e44df768a048393fa94b83f927a0ab9f47d8a1057a32ee2a25f326a8ea28461"
+    },
+    "x10/alpha/README.md": {
+      "bytes": 58639,
+      "sha256": "5863f67e361b781d33966194af3d620d1dc89da2d548171918de974fb5ff0fa5"
+    },
+    "x10/release/SUPPORTED-PATH-REVIEW.md": {
+      "bytes": 15269,
+      "sha256": "6cc1e7a27f018adf49509b1b8a3dd4d58516644af457b4b75412910e7988c1e2"
+    }
+  },
+  "scope": "Installed alpha apply/revert pre-controller-spawn cumulative inventory admission for declared controller control-file entries only. Native/transient/concurrent/direct-controller growth and fullcapacity remain open.",
+  "evidence": "x10/evidence/g5-alpha-revision-capacity.json",
+  "perFileLedger": "x10/review/g5-alpha-revision-capacity-ledger.json",
+  "entryLimit": 4096,
+  "controllerMutationEntryReserve": 7,
+  "thresholds": {
+    "existingEntries4089": "may pass admission",
+    "existingEntries4090": "refused before controller spawn"
+  },
+  "baseline": {
+    "producer": "x10/review/alpha-revision-capacity-counterexample.mjs",
+    "binding": {
+      "bytes": 6803,
+      "sha256": "80b10fb9a7bc8fef217e6f2257148bddbbdf3b5e9a158fb7657316b3cf75b512"
+    },
+    "pinnedSourceCommit": "447565d452755f508652141a0e15eba166cd547a",
+    "pinnedSourceBindings": {
+      "x10/alpha/cli.mjs": {
+        "bytes": 89441,
+        "sha256": "7fda15b58a3579f628b6cdb3b0352cf3cc2fff9baa83a2f11cc0c76e7ac3bdaf"
+      },
+      "x10/control/manager.mjs": {
+        "bytes": 51246,
+        "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+      }
+    },
+    "controls": 6,
+    "pass": 6,
+    "exitCode": 0,
+    "stderrBytes": 0,
+    "replayedBeforeCandidateChanges": true,
+    "earlierDraftReplaysNotAdditionalCoverage": true,
+    "sourcePinRefusalAfterCandidateChangeIntentional": true,
+    "observations": "Source-extracted actual controller apply/revert/activate/rollback flows retain revisions: virtual4096-to4097 success/rejection,4095-to4097 rollback; unbound refuses before allocation. Actual alpha proxy forwards apply/revert without inventory reads. All filesystem/native/durability effects mocked; occupancy lower bounds are not physical high-water."
+  },
+  "candidatePureTempfileSuite": {
+    "suite": "x10/alpha/revision-capacity.test.mjs",
+    "command": "node --test --test-reporter=tap x10/alpha/revision-capacity.test.mjs",
+    "exitCode": 0,
+    "stderrBytes": 0,
+    "TAP": {
+      "tests": 37,
+      "pass": 37,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "bytes": 18382,
+    "sha256": "5e1468be66f554bee8c5f0a6c4d8fe1a7ed9a1725c9f05cbe8c9eb1cd697a242",
+    "durationMs": 5439.754703,
+    "sourceExtracted": [
+      "alpha inventory",
+      "alpha requireSessionInventoryCapacity",
+      "alpha proxy",
+      "manager activate",
+      "manager rollback",
+      "manager event",
+      "manager pending",
+      "manager save",
+      "manager durableEvent",
+      "manager clearPending",
+      "manager makeRevision"
+    ],
+    "finiteFaultModel": {
+      "terminalPaths": 4165,
+      "executions": 6093,
+      "modes": [
+        "applied",
+        "native-rejected",
+        "rolled-back"
+      ],
+      "maximumAdditionalControlEntries": 7,
+      "fourTAPControlsShareOneEnumeration": true,
+      "representativeNonallocatingFaultPoints": [
+        "load",
+        "guard",
+        "readRevision",
+        "verifyHttps",
+        "nativeTest",
+        "signal",
+        "acknowledged",
+        "exists",
+        "json",
+        "readHistory",
+        "lstat",
+        "appendEvent",
+        "clearCommit-before-rm",
+        "clearCommit-after-rm-sync",
+        "syncDirectory",
+        "rm-before"
+      ],
+      "notAllOSFailurePaths": true,
+      "not4165AdditionalTAPControls": true
+    },
+    "runCountOnFrozenTestSource": 1,
+    "localPhysicalFixturesExecuted": 0,
+    "networkFixturesExecuted": 0,
+    "signalsSent": 0,
+    "scope": "Source-extracted mock-controller/virtual-filesystem and owned tempfile controls with declared atomic/revision and representative nonallocating fault choices; not all OS failures, physical capacity exhaustion, native highwater, concurrency fencing or fullcapacity closure.",
+    "managerSourceBinding": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289",
+      "strictBindingBeforeModelExecution": true
+    },
+    "preliminaryVerification": {
+      "TAP": {
+        "tests": 37,
+        "pass": 37,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "modelTerminalPaths": 989,
+      "modelExecutions": 1327,
+      "reasonForFinalChangedSourceVerification": "Extended declared fault choices with representative nonallocating errors and strict manager source binding after independent review. The repeated37 controls are not additional74 unique controls."
+    }
+  },
+  "independentReservationReview": {
+    "sourceCommit": "6518fbf9d938845917644b46a0cd4a875ec34df4",
+    "managerBinding": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "sourceExtractedFunctions": [
+      "activate",
+      "rollback",
+      "event",
+      "pending",
+      "save",
+      "durableEvent",
+      "clearPending",
+      "makeRevision"
+    ],
+    "modeledAtomicOutcomes": [
+      "success",
+      "failure-before-create",
+      "failure-with-retained-temp",
+      "failure-after-rename"
+    ],
+    "modeledRevisionOutcomes": [
+      "success",
+      "failure-before-create",
+      "failure-with-retained-revision"
+    ],
+    "terminalPaths": 4165,
+    "executions": 6093,
+    "maximumAdditionalControlEntries": 7,
+    "preliminarySixEntryReserveRefuted": true,
+    "sevenEntryWitness": "Controller lock + candidate revision + pending record + rollback revision + up to three atomic temporary entries during rollback/ambiguity failure handling. Retained temporary cleanup failures must be counted.",
+    "modes": [
+      {
+        "mode": "applied",
+        "terminalPaths": 1959,
+        "maximumAdditionalControlEntries": 7
+      },
+      {
+        "mode": "native-rejected",
+        "terminalPaths": 655,
+        "maximumAdditionalControlEntries": 7
+      },
+      {
+        "mode": "rolled-back",
+        "terminalPaths": 1551,
+        "maximumAdditionalControlEntries": 7
+      }
+    ],
+    "staticChecks": [
+      {
+        "name": "atomic-single-creation",
+        "pass": true
+      },
+      {
+        "name": "atomic-single-rename",
+        "pass": true
+      },
+      {
+        "name": "revision-single-exclusive-creation",
+        "pass": true
+      },
+      {
+        "name": "activate-one-candidate",
+        "pass": true
+      },
+      {
+        "name": "rollback-one-restored",
+        "pass": true
+      },
+      {
+        "name": "event-incomplete-short-circuits-restore",
+        "pass": true
+      },
+      {
+        "name": "no-creation-history-append",
+        "pass": true
+      }
+    ],
+    "preconditions": [
+      "Whole installation inventory sampled while alpha lock already exists",
+      "Controller lock absent before its exclusive creation; existing controller lock only causes refusal",
+      "settings/state/history/fragment/revisions directory already exist and pending/event-commit absence is required by actual load/activate flow before candidate allocation",
+      "Only declared controller writes are modeled; native/config/trusted operator and concurrent direct writer changes are excluded"
+    ],
+    "atomicPrimitiveProof": {
+      "newTemporaryNamesPerInvocation": 1,
+      "simultaneousNewEntriesPerInvocationAtMost": 1,
+      "absentTargetBecomesOnePersistentEntryAfterRename": true,
+      "retainedTemporaryOnCleanupOrCloseFailureModeled": true,
+      "postRenameSyncDirectoryFailureModeled": true,
+      "atomicCallsAwaitedSequentially": true
+    },
+    "scope": "Source-extracted control-flow with virtual filesystem accounting and modeled atomic primitive outcomes. Atomic retained-temp failures include cleanup/close failures; native/concurrent/transient effects are excluded. Not physical highwater or OS fencing.",
+    "notIndependentAdditionalTAPControls": true,
+    "notEveryPossibleOSFailureEnumerated": true,
+    "privateReportBinding": {
+      "bytes": 23485,
+      "sha256": "0219d4cfaead5cc9e05bbbf2e3345f0928503613c228fad029a45fced6f38fd8"
+    },
+    "nonallocatingFaultModel": {
+      "points": [
+        "load",
+        "guard",
+        "readRevision",
+        "verifyHttps",
+        "nativeTest",
+        "signal",
+        "acknowledged",
+        "exists",
+        "json",
+        "readHistory",
+        "lstat",
+        "appendEvent",
+        "clearCommit-before-rm",
+        "clearCommit-after-rm-sync",
+        "rm-before",
+        "syncDirectory"
+      ],
+      "outcomes": [
+        "success",
+        "throw-without-addition"
+      ],
+      "clearCommitAfterRemovalThrowModeled": true,
+      "allOSFailuresEnumerated": false,
+      "justification": "These are finite representative error classes for nonallocating operations: throwing before versus after removal, while actual source catch/restore flow is retained. Failed controller-lock creation allocates at most its one reserved entry; finally close/rm/sync cannot increase entries or trigger further allocations. Other pure validation or read/guard errors occur at one of the same allocation intervals and can only short-circuit, begin the single rollback, or enter the single ambiguous-pending rewrite; the event_commit_incomplete class short-circuits restoration. The model does not exercise kernel/filesystem timing, native writes, concurrent operator writes or arbitrary OS behavior."
+    },
+    "earlierAtomicRevisionOnlyModel": {
+      "terminalPaths": 989,
+      "executions": 1327,
+      "refinedNotAdditionalCoverage": true
+    },
+    "privateHarnessDiagnostic": "Original989 terminal atomic/revision outcome paths were refined to include representative nonallocating failure positions. This is not a claim to enumerate every OS failure."
+  },
+  "admissionOrdering": [
+    "Existing main alpha lock remains the surrounding coordination",
+    "Actual lifecycle and controller state resolved",
+    "For apply/revert only, whole-prefix inventory plus reserve7 checked",
+    "Only after admission may controller process execute and allocate controller entries"
+  ],
+  "preservation": {
+    "refusalBeforeControllerSpawn": true,
+    "noRevisionOrPendingRecordAddedByAdmissionRefusal": true,
+    "oldRecordsRevisionsAndHistoryNotPruned": true,
+    "controllerDurableWritersAndRecordSchemasChanged": false,
+    "stopRecoverReceiveNewCapacityGate": false,
+    "existingStoppedPre18Post1SemanticsChanged": false,
+    "postCreatePartialSessionSTOPStillRequired": true
+  },
+  "unchangedBindings": {
+    "x10/control/manager.mjs": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "x10/control/cli.mjs": {
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+    },
+    "x10/alpha/runtime.mjs": {
+      "bytes": 7540,
+      "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51"
+    },
+    ".github/workflows/x10-native.yml": {
+      "bytes": 26465,
+      "sha256": "d3f92329a396b02d045b45736733cdb711bf55af10b30504bc24f1a0efc8eb73"
+    },
+    "x10/service/operator-package-return.mjs": {
+      "bytes": 68575,
+      "sha256": "612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7"
+    },
+    "x10/service/operator-package-return-proof.mjs": {
+      "bytes": 12890,
+      "sha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de"
+    },
+    "x10/service/operator-package-fallback.mjs": {
+      "bytes": 630,
+      "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+    },
+    "x10/service/operator-package-fallback-proof.mjs": {
+      "bytes": 13468,
+      "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+    },
+    "x10/service/lifecycle-check.mjs": {
+      "bytes": 147483,
+      "sha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370"
+    },
+    "x10/service/verified-node.mjs": {
+      "bytes": 32439,
+      "sha256": "2febc8bdb6d890e738a426e4a80121ea840d143d9a718768ef10b5b09e839090"
+    },
+    "x10/review/alpha-session-capacity-counterexample.mjs": {
+      "bytes": 4982,
+      "sha256": "ce2dfb9292d5321f9c205589e65035ecb8d9aa1086b7b748dae3bab3b1ee7abb"
+    },
+    "x10/review/controller-input-counterexample.mjs": {
+      "bytes": 5973,
+      "sha256": "f7b4527bc08bfc8dd3751fe5b9b034db0bd5dbc7c9d30b330637d3acbb086be2"
+    },
+    "x10/review/controller-loader-counterexample.mjs": {
+      "bytes": 1876,
+      "sha256": "f545c20a3f24f2f914252a405d6d3e411837717f86d6c34efe0c4158b8fe5d8a"
+    }
+  },
+  "testWiring": "New revision-capacity.test.mjs is added only to existing managed-native-control arguments; requireCompleteTAP remains true. No new group/step/name/order/budget or fixedbundle entry. Actual successor TAP totals must be read, not inferred.",
+  "metadataPredecessorReadback": {
+    "sourceCommit": "6518fbf9d938845917644b46a0cd4a875ec34df4",
+    "nativePush": {
+      "runId": 40578695433,
+      "jobId": 122452097306,
+      "actualSuccessfulSteps": 36
+    },
+    "nativePR": {
+      "runId": 40578705576,
+      "jobId": 122452179946,
+      "actualSuccessfulSteps": 36
+    },
+    "researchPR": {
+      "runId": 40578705590,
+      "jobId": 122452149840,
+      "actualSuccessfulSteps": 11
+    },
+    "cla": {
+      "runId": 40578701799,
+      "jobId": 122451981361,
+      "failedStep": 3
+    },
+    "newArtifactDownloads": 0,
+    "scope": "Actual job/step readback only for unchanged predecessor runtime; no guessed checkout/build/test totals or acceptance transferred to this new alphaCLI."
+  },
+  "remainingOpenBoundaries": [
+    "Direct controller CLI/API bypasses this alpha admission; recovery/stop remain ungated.",
+    "Native/configuration-test/application temporary or persistent files, arbitrary concurrent same-UID writers, initial install/restore/stage growth and prepared reuse are outside this reserve.",
+    "Whole-prefix inventory is a sampled cooperative-profile consistency check, not an OS filesystem quota, race fence, total memory/bytes bound or kernel deadline.",
+    "Stopped preparation postcheck failure may preserve an unregistered/uninspectable tree with session_capacity_unresolved STOP; no automatic orphan recovery, cleanup or retry is added.",
+    "All older source-pinned baseline producers remain immutable and their expected source-drift refusals are not candidate failing tests.",
+    "FullG3/G4/G5/G7/V1, orphanincident replay/disposal, TLSrestore, nativebinaryupgrade, permanent release/publisher authentication, independent published replay,60-minute soak, semanticContinuum and WindowsDEFERRED_UNVERIFIED remain open."
+  ],
+  "installedAlphaCLIChanged": true,
+  "controllerBytesChanged": false,
+  "nativeCChanged": false,
+  "workflowChanged": false,
+  "fixedBundleInventoryChanged": false,
+  "localPhysicalFixturesExecuted": 0,
+  "networkFixturesExecuted": 0,
+  "signalsSent": 0,
+  "physicalCapacityExhaustionAccepted": false,
+  "candidateHostedCompatibilityAccepted": false,
+  "fullCapacityFindingClosed": false,
+  "fullG5Accepted": false,
+  "productionAccepted": false,
+  "priorAdverseUNKNOWNOrCLAExplainedOrCleared": false,
+  "nextConcreteTask": "Inspect exact successor both native events and actual artifacts for changed alphaCLI: require new revision-capacity controls included in existing managed suite, complete zero-skip TAP, unchanged groups/steps/budgets, all strict service reports/source pins and owned/privateNode/history/bootstrap cleanup. Do not infer new totals or transfer exact447 acceptance. Keep fullcapacity and all other growth boundaries open.",
+  "existingRegressionSuites": [
+    {
+      "suite": "x10/alpha/session-capacity.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 46,
+        "pass": 46,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "collectorCorrection": "Initial private collector used an overescaped digit regex and failed after test completion; one corrected rerun captures exit before parsing. Repeated controls are not additional coverage."
+    },
+    {
+      "suite": "x10/alpha/prepare-run.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 18,
+        "pass": 18,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "collectorCorrection": "Initial private collector used an overescaped digit regex and failed after test completion; one corrected rerun captures exit before parsing. Repeated controls are not additional coverage."
+    },
+    {
+      "suite": "x10/test/alpha-recipe.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 17,
+        "pass": 17,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "collectorCorrection": "Initial private collector used an overescaped digit regex and failed after test completion; one corrected rerun captures exit before parsing. Repeated controls are not additional coverage."
+    },
+    {
+      "suite": "x10/test/alpha-decomposition.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 45,
+        "pass": 45,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "collectorCorrection": "Initial private collector used an overescaped digit regex and failed after test completion; one corrected rerun captures exit before parsing. Repeated controls are not additional coverage."
+    }
+  ],
+  "candidateVerificationHistory": {
+    "preliminaryTAP": {
+      "tests": 37,
+      "pass": 37,
+      "modelTerminalPaths": 989,
+      "modelExecutions": 1327
+    },
+    "finalTAP": {
+      "tests": 37,
+      "pass": 37,
+      "modelTerminalPaths": 4165,
+      "modelExecutions": 6093
+    },
+    "reasonForNewFrozenRun": "Extend representative nonallocating fault positions and pin the manager before phase model execution. Preliminary controls overlap final suite and are not74uniquecontrols.",
+    "productAssertionFailureEstablished": false
+  }
+}

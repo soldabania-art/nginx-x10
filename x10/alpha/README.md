@@ -910,9 +910,9 @@ to the separate cross-package fallback. Windows and the G9 portfolio handoff
 remain deferred/unchanged. See the [exact hosted receipt](../evidence/g4-managed-package-return-hosted.json).
 
 
-## Stopped-session capacity admission — candidate
+## Stopped-session capacity admission — exact447 compatibility accepted
 
-Before a stopped session can create and register its successor, the candidate
+Before a stopped session can create and register its successor, the guard
 counts the whole existing private installation tree under the alpha lock. This
 includes retained sessions and revision files, not just the session count. The
 entry bound remains4096; the walker now refuses a4097th entry instead of
@@ -943,5 +943,43 @@ be preserved for manual inspection, without history editing or forced removal.
 
 The fixed counters and reserves are consistency checks for the declared
 cooperative profile, not a filesystem resource quota or an OS fencing mechanism.
-The candidate still needs exact hosted operator/service compatibility; local
-pure, virtual or tempfile checks are not physical runtime acceptance.
+Exact447 normal installed operator/service compatibility is accepted for both
+events in the [scoped receipt](../evidence/g5-stopped-session-capacity-hosted.json).
+Its4096-entry exhaustion controls remain pure/virtual; this does not accept
+physical capacity exhaustion, the new apply/revert candidate below or full G5/V1.
+
+
+## Apply/revert control-entry admission — candidate
+
+Before the installed alpha CLI forwards `apply` or `revert` to the controller,
+it counts the actual whole installation tree while holding the existing alpha
+lock. That tree includes retained sessions, revisions and the alpha lock itself.
+The command requires seven free entries under the unchanged4096-entry bound;
+4089 existing entries can pass this check, while4090 cannot. A refusal happens
+before the controller process is started, so this admission adds no revision,
+pending record, native signal or controller write on its refusal path. Existing
+records and revisions are preserved rather than pruned to make room.
+
+The seven-entry reserve describes only the declared controller's own writes
+for one apply/revert operation. It includes the controller lock, candidate and
+possible rollback revisions, pending/event records and atomic temporaries.
+Counting only one candidate revision or assuming successful temporary cleanup
+is insufficient: an error path can retain three atomic temporaries while
+rollback and ambiguity handling proceed. A source-extracted virtual fault model uses explicit atomic/revision failure
+outcomes plus representative nonallocating failure classes, and checks that path along with normal apply, native rejection and
+rollback; it is not an enumeration of every possible OS failure. This
+is a model of the pinned controller control flow, not physical filesystem
+high-water measurement or a guarantee about arbitrary native configuration.
+
+The controller's durable writers, record schemas and recovery behavior are
+unchanged. `stop`, `recover` and other forwarded commands do not receive this
+new admission gate. Direct controller CLI/API use bypasses this alpha guard.
+Native application files, configuration-test temporary writes, same-UID
+concurrent writers, initial install/restore/stage growth and prepared-session
+reuse remain outside this new reserve. It does not repair an existing
+unregistered session or replace the stopped-preparation STOP/manual-inspection
+contract above. Capacity, full security/recovery and V1 remain open.
+
+The changed installed alpha CLI requires new exact hosted compatibility. Local
+pure/tempfile tests and virtual fault paths are separate from that acceptance.
+See [candidate evidence](../evidence/g5-alpha-revision-capacity.json).

@@ -19,6 +19,9 @@ const INVENTORY_ENTRY_LIMIT = 4096;
 // minimum structure, not a bound on native -t or later native temporary files.
 const NEW_SESSION_MINIMUM_ENTRIES = 17;
 const REGISTRY_PUBLICATION_RESERVE = 1;
+// Includes candidate/rollback revisions and retained atomic temporaries across
+// controller failure paths; native and concurrent file growth are not fenced.
+const CONTROLLER_MUTATION_ENTRY_RESERVE = 7;
 const recipePath = 'lib/service/user-unit.mjs';
 const supportedSchema = version => version === 1 || version === 2;
 const installedNames = version => ['bin/nginx', 'bin/x10', 'build.json', 'licenses/NGINX-LICENSE', 'licenses/UPSTREAM.txt', 'examples/candidate-b.json',
@@ -841,9 +844,9 @@ async function inventory(prefix) {
   }
   return entries;
 }
-// Stopped-session registry-publication admission only. This sampled inventory
-// does not fence direct controller writers, native temporary-file growth or a
-// same-UID concurrent process. Existing stop/recover/uninstall paths are ungated.
+// Alpha stopped-session publication and apply/revert admission only. This sampled
+// inventory does not fence direct controller writers, native temporary-file growth
+// or a same-UID concurrent process. Existing stop/recover/uninstall paths are ungated.
 async function requireSessionInventoryCapacity(prefix, reserve) {
   if (!Number.isSafeInteger(reserve) || reserve < 1 || reserve > INVENTORY_ENTRY_LIMIT)
     fail('inventory_limit', 'A supported finite inventory reserve is required');
@@ -963,6 +966,7 @@ export async function waitBind(prefix, timeoutMs = 10000) {
 
 async function proxy(context, command, values) {
   const life = await lifecycle(context), args = [path.join(context.prefix, 'lib/control/cli.mjs'), command, '--state', await controllerState(context.prefix, life.session)];
+  if (command === 'apply' || command === 'revert') await requireSessionInventoryCapacity(context.prefix, CONTROLLER_MUTATION_ENTRY_RESERVE);
   for (const flag of ['file', 'revision', 'control-socket', 'control-address']) if (values[flag]) args.push(`--${flag}`, values[flag]);
   if (values.human) args.push('--human');
   const result = await execute(process.execPath, args, { timeout: 70000, maxBuffer: 2 * 1024 * 1024 }).catch(error => {
