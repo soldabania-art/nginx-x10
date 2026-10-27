@@ -1,13 +1,7 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-package-identity-ci-20261027T062657664Z",
-    "owner": "codex-x10-package-identity-ci-coordinator",
-    "baseCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
-    "acquiredAtUTC": "2026-10-27T06:26:57.664Z",
-    "expiresAtUTC": "2026-10-27T07:10:57.664Z"
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
     "requestedAtUTC": "2026-10-27T03:45:59.000Z",
     "hours": 20,
@@ -217,6 +211,51 @@
       "fullG4Accepted": false,
       "productionAccepted": false,
       "actualFailureContainmentExercised": false
+    },
+    "installedPackageIdentityHosted": {
+      "state": "EXACT_SCOPED_INSTALLED_PACKAGE_IDENTITY_SUCCESS",
+      "implementationCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+      "implementationTree": "9dd8486ea965c984c4325966674d3595f662b61f",
+      "evidence": "x10/evidence/g4-package-identity-hosted.json",
+      "scope": "Read-only installed/extracted/restored package identity and existing service regressions; no package transition.",
+      "nativeRunIds": [
+        40455973705,
+        40455978706
+      ],
+      "nativeJobIds": [
+        122029316296,
+        122029337388
+      ],
+      "all34ActualStepsEach": true,
+      "nativeGroupsEach": 20,
+      "fullAlphaEach": 284,
+      "packageDiagnosticFieldsEach": 15,
+      "runtimePayloadFilesEach": 11,
+      "sameRuntimeAndOperatorFingerprintsAcrossContexts": true,
+      "packageIdentityHostedAccepted": true,
+      "restoredServiceRegressionsAcceptedOnThisImplementation": true,
+      "restoredProofFieldsEach": 18,
+      "nativeSessionsEach": 5,
+      "managerRestartsEach": 2,
+      "journalChecksEach": 6,
+      "journalChecksAreNotExactQueryCounts": true,
+      "tlsSessionsEach": 3,
+      "all13CleanupFactsEach": true,
+      "privateNodeAndBootstrapRemovedEach": true,
+      "serviceContractEach": {
+        "tests": 618,
+        "pass": 617,
+        "skipped": 1,
+        "fail": 0,
+        "skipReason": "Root-only refusal control not executed by nonroot runner; actual nonroot service separately exercised."
+      },
+      "compatibilityAccepted": false,
+      "packageUpgradeRollbackAccepted": false,
+      "tlsBackupAccepted": false,
+      "fullG3Accepted": false,
+      "fullG4Accepted": false,
+      "productionAccepted": false,
+      "actualFailureContainmentExercised": false
     }
   },
   "lastV1DevelopmentPass": {
@@ -267,19 +306,24 @@
       "exitCode": 0,
       "scope": "Actual installed Node CLI with private synthetic files and nonexecuted native placeholder; not actual bundle/native acceptance.",
       "notAddedToSelectedTAP": true
-    }
+    },
+    "exactHostedAcceptance": "EXACT_SCOPED_INSTALLED_PACKAGE_IDENTITY_SUCCESS",
+    "hostedEvidence": "x10/evidence/g4-package-identity-hosted.json",
+    "verifiedOnImplementationCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42"
   },
   "pendingVerification": [
-    "First inspect exact resulting implementation native push/PR jobs and actual extracted-bundle package-info observations. Require finite runtime/operator/native fingerprints independently derived from actual installed bytes, no installation/session/host metadata, same-package fingerprint stability across fresh restored identities, unchanged prepared records and owned lock, refusal of malformed arguments/tampered excluded immutable files/dependency drift, and no application request or POST replay. This is only package identity. Then implement explicit side-by-side staging, state-compatibility and rollback with meaningfully distinct reviewed runtime payloads, preserving old known-good files. Old A has no package-info command; verify its payload through the known installed manifest rather than assuming the new API exists. Native binary identity and operator package identity remain separate. TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum stay open.",
-    "The831360 restored HTTP service receipt remains accepted only for its exact runtime. New CLI bytes require their own hosted regressions; fingerprints are consistency records, not signatures or compatibility authority."
+    "Implement bounded side-by-side package staging without implicit activation: inspect the trusted known-good installed source and declared target package, require clean stopped declarative HTTP state, preserve original files/records, create a fresh separate target prefix and identities, reject unsupported schema/dependency/state drift, and record distinct operator/native payload identities. Then verify meaningful reviewed A-to-B-to-A and reversible state compatibility with actual hosted traffic and cleanup. Old A lacks package-info: use independently verified known installed records, not an assumed new command. Keep target validation, package identity, staging, cutover and rollback as separate evidence. TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
+    "Any metadata successor CI is separate from accepted acb6483 runtime evidence. Do not request unchanged runtime reruns without a new reason."
   ],
-  "nextConcreteTask": "First inspect exact resulting implementation native push/PR jobs and actual extracted-bundle package-info observations. Require finite runtime/operator/native fingerprints independently derived from actual installed bytes, no installation/session/host metadata, same-package fingerprint stability across fresh restored identities, unchanged prepared records and owned lock, refusal of malformed arguments/tampered excluded immutable files/dependency drift, and no application request or POST replay. This is only package identity. Then implement explicit side-by-side staging, state-compatibility and rollback with meaningfully distinct reviewed runtime payloads, preserving old known-good files. Old A has no package-info command; verify its payload through the known installed manifest rather than assuming the new API exists. Native binary identity and operator package identity remain separate. TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum stay open.",
+  "nextConcreteTask": "Implement bounded side-by-side package staging without implicit activation: inspect the trusted known-good installed source and declared target package, require clean stopped declarative HTTP state, preserve original files/records, create a fresh separate target prefix and identities, reject unsupported schema/dependency/state drift, and record distinct operator/native payload identities. Then verify meaningful reviewed A-to-B-to-A and reversible state compatibility with actual hosted traffic and cleanup. Old A lacks package-info: use independently verified known installed records, not an assumed new command. Keep target validation, package identity, staging, cutover and rollback as separate evidence. TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
   "nextTasks": [
     {
       "id": "G4-installed-package-identity-exact-CI",
-      "state": "PENDING_EXACT_HOSTED",
+      "state": "ACCEPTED_SCOPED_PACKAGE_IDENTITY_ONLY",
       "goal": "First inspect exact resulting implementation native push/PR jobs and actual extracted-bundle package-info observations. Require finite runtime/operator/native fingerprints independently derived from actual installed bytes, no installation/session/host metadata, same-package fingerprint stability across fresh restored identities, unchanged prepared records and owned lock, refusal of malformed arguments/tampered excluded immutable files/dependency drift, and no application request or POST replay. This is only package identity. Then implement explicit side-by-side staging, state-compatibility and rollback with meaningfully distinct reviewed runtime payloads, preserving old known-good files. Old A has no package-info command; verify its payload through the known installed manifest rather than assuming the new API exists. Native binary identity and operator package identity remain separate. TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum stay open.",
-      "evidence": "x10/evidence/g4-package-identity.json"
+      "evidence": "x10/evidence/g4-package-identity.json",
+      "verifiedOnImplementationCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+      "hostedEvidence": "x10/evidence/g4-package-identity-hosted.json"
     },
     {
       "id": "G4-restored-HTTP-managed-service-exact-CI",
@@ -328,7 +372,7 @@
   },
   "portfolioContinuation": {
     "activeProject": "x10",
-    "currentGate": "INSTALLED_PACKAGE_IDENTITY_CODE_PRESENT_EXACT_HOSTED_PENDING",
+    "currentGate": "INSTALLED_PACKAGE_IDENTITY_EXACT_HOSTED_VERIFIED_SIDE_BY_SIDE_STAGING_OPEN",
     "fullVisionAndDeferredResearchReference": {
       "path": "x10/continuum/PLAN.md",
       "historicalAssignmentReference": {
@@ -362,22 +406,27 @@
   },
   "productionAccepted": false,
   "lastV1VerificationReceipt": {
-    "state": "EXACT_SCOPED_RESTORED_HTTP_MANAGED_SERVICE_SUCCESS",
-    "implementationCommit": "831360a9a9770815c660f5bc06d002b92154a1b0",
-    "implementationTree": "2008abfd22dd799ec68e7006f11bd07a52124682",
-    "evidence": "x10/evidence/g4-restored-service-hosted.json",
-    "scope": "Same checked runtime package; stopped confirmed HTTP source restored into a fresh temporary nonroot systemd-user installation/unit, operated and restarted.",
+    "state": "EXACT_SCOPED_INSTALLED_PACKAGE_IDENTITY_SUCCESS",
+    "implementationCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "implementationTree": "9dd8486ea965c984c4325966674d3595f662b61f",
+    "evidence": "x10/evidence/g4-package-identity-hosted.json",
+    "scope": "Read-only installed/extracted/restored package identity and existing service regressions; no package transition.",
     "nativeRunIds": [
-      40447807340,
-      40447810051
+      40455973705,
+      40455978706
     ],
     "nativeJobIds": [
-      122003205464,
-      122003208919
+      122029316296,
+      122029337388
     ],
     "all34ActualStepsEach": true,
     "nativeGroupsEach": 20,
-    "fullAlphaEach": 197,
+    "fullAlphaEach": 284,
+    "packageDiagnosticFieldsEach": 15,
+    "runtimePayloadFilesEach": 11,
+    "sameRuntimeAndOperatorFingerprintsAcrossContexts": true,
+    "packageIdentityHostedAccepted": true,
+    "restoredServiceRegressionsAcceptedOnThisImplementation": true,
     "restoredProofFieldsEach": 18,
     "nativeSessionsEach": 5,
     "managerRestartsEach": 2,
@@ -391,19 +440,18 @@
       "pass": 617,
       "skipped": 1,
       "fail": 0,
-      "skipReason": "Root-only refusal control not executed by nonroot runner; actual nonroot service separately executed."
+      "skipReason": "Root-only refusal control not executed by nonroot runner; actual nonroot service separately exercised."
     },
-    "restoredManagedServiceAccepted": true,
-    "samePackageOnly": true,
-    "tlsBackupAccepted": false,
+    "compatibilityAccepted": false,
     "packageUpgradeRollbackAccepted": false,
+    "tlsBackupAccepted": false,
     "fullG3Accepted": false,
     "fullG4Accepted": false,
     "productionAccepted": false,
     "actualFailureContainmentExercised": false
   },
   "previousV1VerificationReceiptReference": {
-    "commit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+    "commit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
     "path": "x10/continuum/BACKGROUND.json",
     "requiredReadBeforeNextTask": true,
     "readCompleteHistoricalDocument": true,

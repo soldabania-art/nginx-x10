@@ -2848,3 +2848,30 @@ A separate exact-name Node/private-tempfile test passed1/1 using a
 nonexecuted native placeholder. It exercises the actual installed CLI and
 strict file/dependency guards without NGINX, service or signal execution.
 This result is not added to248 or claimed as extracted-bundle acceptance.
+
+
+## Exact installed package identity acceptance — 27 October 2026
+
+Implementationacb648392e745b5246a5620f2ea6a6286dc06d42 passed native
+push40455973705/job122029316296 and PR40455978706/job122029337388:
+34 actual successful steps,20 native groups and284 alpha tests each.
+Both artifacts contain the15-field package identity diagnostic,11 runtime
+files and identical runtime/operator/native fingerprints across contexts.
+Actual installed-byte, fresh restored identity, prepared-record/owned-lock
+preservation and argument-refusal observations passed. The passing fixtures
+also retain excluded immutable-file and dependency-drift refusals, plus
+unchanged application request/POST counters before first startup.
+
+Existing restored-service regressions also passed on this new CLI:18 proofs,
+5 sessions,2 restarts,6 bounded journal checks,TLS3 and all13 cleanup facts,
+with unit/private Node/bootstrap removal. Service contract617PASS/1root-only
+SKIP remains explicit; normal operation did not exercise failure containment.
+Research PR actually ran21/7/27/48; push runtime skipped and CLA failed.
+
+This accepts read-only package identity, not package staging, compatibility,
+activation, native binary upgrade or A-to-B-to-A. Next: implement bounded
+side-by-side staging with no implicit activation and preserved known-good
+files, then verify actual reviewed payload transitions and rollback.
+Hashes are consistency records, not signatures. FullG3/G4/V1, TLS restore,
+permanent release, independent published replay and60-minute soak stay open.
+Evidence: x10/evidence/g4-package-identity-hosted.json.
