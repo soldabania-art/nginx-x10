@@ -2837,3 +2837,18 @@ Pre18/post1 admits only stopped replacement registry publication; postfailure
 can retain an unregistered tree and must stop for inspection, not auto-retry.
 Preserve oldrecords/revisions, unsupported/faulted refusals, no compaction and no
 blind capincrease. Fullcapacity/G5/V1 and allprior adverse/40h/Windows limits remain.
+
+
+## After exact447 stopped-publication hosted compatibility
+
+Both exact447 native events accepted only scoped normal installed compatibility:
+36steps/20groups, managed288/alpha603 complete zero-skip and allstrictreports/
+ownedcleanup. Preparation18 overlaps managed and alpha through an existing
+import; neither series nor hosted groups are unique totals. Boundary exhaustion
+is pure/virtual, not a physical4096-entry exhaustion fixture.
+
+Next: source-pinned apply/revert/controller revision-growth baseline, then
+independently establish cumulative candidate+rollback/pending/event/fragment/
+lock/atomic-temp headroom before alpha pre-spawn refusal. Preliminary six is
+not an accepted bound. Preserve durablewriters, existingrecords, stop/recover,
+postpartialSTOP and othergrowth/fullcapacity/fullG5/V1/40h/Windows boundaries.

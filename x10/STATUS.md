@@ -3456,3 +3456,28 @@ Initialinstall/restore/stage,apply/revert,directcontroller andnative/temp/concur
 stop/recover; stage/uninstall inspection preserves overbound/unknowndata. FullG3/
 G4/G5/G7/V1,orphanreplay/disposal,TLSrestore,nativebinaryupgrade,release/replay/soak
 andsemanticContinuum remainOPEN. Owner40h/history/Windows remainunchanged.
+
+
+## 27 October 2026: exact stopped-session admission hosted compatibility
+
+Exact447 native push40571347227/job122426177419 and PR40571355168/
+job122426248703 completed36 successful steps and20/20groups each. Actual
+managed288 and alpha603 complete zero-skip TAP passed; all3strictreports,
+sourcepins andowned/privateNode/history/bootstrapcleanup confirmed.
+[Scoped hosted receipt](evidence/g5-stopped-session-capacity-hosted.json)
+accepts normal installed compatibility of the exact447 alphaCLI. It does not
+prove physical4096-boundary exhaustion or fullcapacity/G5/V1.
+
+Both capacity46 and preparation18 occur once in each managed command. The
+existing alpha import also executes preparation18, so alpha603 and managed288
+overlap and are not summed. Earlier output is absent from bounded retained
+TAP tails; inclusion rests on actual sixfilecommands/source registration and
+complete summaries, not invented individual labels. Timings100203/90147ms
+are separate observations, not controlled speedup or historical timeout causes.
+
+Stopped pre18/post1 remains narrow: a late refusal may preserve an unregistered
+uninspectable tree with STOP. Apply/revert revision accumulation is next: a
+rollback can retain two revisions. Determine every simultaneous durable/temp
+entry before choosing admission headroom; no blindcapraise, durablewriter
+rewrite, stop/recover gate, compaction or deletion. Directcontroller/native/
+transient/concurrent/initialcreation growth and allpriorfullgates remainOPEN.

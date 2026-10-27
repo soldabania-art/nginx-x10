@@ -133,4 +133,8 @@ normally small. Recovery, stop and uninstall keep their
 existing independent semantics and refusals. Neither a smaller session count
 nor raising the inventory limit alone would establish whole-path capacity.
 All prior adverse receipts and full G3/G4/G5/G7/V1/release/recovery/Continuum
-boundaries remain separate. Exact candidate hosted compatibility is pending.
+boundaries remain separate. Exact447 both-event normal installed compatibility is accepted by the
+[scoped hosted receipt](../evidence/g5-stopped-session-capacity-hosted.json).
+The4096 boundary controls remain pure/virtual; no actual physical exhaustion
+fixture or fullcapacity acceptance is implied. Preparation18 overlaps managed
+and alpha via an existing import; actual288/603 TAP series are not summed.
