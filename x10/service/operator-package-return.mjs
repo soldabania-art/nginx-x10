@@ -15,10 +15,12 @@ import { preflight } from './preflight.mjs';
 import { verifyAlphaArchive, MAX_ARCHIVE_BYTES } from '../release/verify-alpha-archive.mjs';
 import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mjs';
 import { parseUnitProperties, parseInvocationProperty, fixtureUnitName, managerEnvironment,
-  assessInstalledServiceRecipeCommand, observeNodePrerequisites, verifyKnownUnitFragmentPaths } from './lifecycle-check.mjs';
+  assessInstalledServiceRecipeCommand, observeNodePrerequisites, verifyKnownUnitFragmentPaths,
+  parseFailedStartIdentity, assessFailedReadinessStart } from './lifecycle-check.mjs';
 import { observeOwnedJournal } from './journal-check.mjs';
 import { verifiedRouteExchange } from '../test/tls-verified-route.mjs';
 import { checkManagedOperatorReturnProof } from './operator-package-return-proof.mjs';
+import { checkManagedOperatorFallbackProof } from './operator-package-fallback-proof.mjs';
 
 const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 export const HISTORICAL_OPERATOR = Object.freeze({ bytes: 68551,
@@ -96,6 +98,29 @@ export async function readManagedReturnRevision(file) {
   if (!hex(recordSha256, 64) || digest(JSON.stringify(body)) !== recordSha256 || digest(JSON.stringify(value.input)) !== value.inputSha256) refuse('record_refused');
   return value;
 }
+// Read-only startup capture while wait-bind owns the alpha/controller locks.
+// Calling an installed inspection CLI here would compete for those same locks.
+// The unbound controller state is compared with the exact prior preparation;
+// controller state.json itself has no checksum in the current schema.
+export async function readManagedHeldState(prefix, expected) {
+  if (!simple(prefix) || expected?.manifest?.prefix !== prefix) refuse('failed_start_refused');
+  const manifest = await record(`${prefix}/.alpha-install.json`), registry = await record(`${prefix}/.alpha-registry.json`);
+  if (manifest.schemaVersion !== 2 || manifest.kind !== 'nginx-x10-local-alpha'
+      || !same(manifest, expected.manifest) || !same(registry, expected.registry) || !hex(manifest.installationId, 32)
+      || registry.schemaVersion !== 1 || registry.installationId !== manifest.installationId || !hex(registry.current, 32)
+      || !same(registry.sessions, [registry.current])) refuse('failed_start_refused');
+  const sessionPrefix = `${prefix}/runs/${registry.current}`, life = await record(`${sessionPrefix}/lifecycle.json`);
+  if (life.schemaVersion !== 1 || life.prefix !== sessionPrefix || life.session !== registry.current || life.installationId !== manifest.installationId
+      || life.stage !== 'running' || !life.runtime || life.controlSocket !== `${prefix}/control.sock`) refuse('failed_start_refused');
+  const state = fields(JSON.parse((await regularBytes(`${sessionPrefix}/.x10-control/state.json`, 2 * 1024 * 1024, { mode: 0o600 })).bytes),
+    ['schemaVersion', 'activeRevision', 'previousRevision', 'binding', 'historyHead']);
+  if (state.schemaVersion !== 1 || state.activeRevision !== expected.revision?.id || state.previousRevision !== null
+      || state.binding !== null || !hex(state.historyHead, 64) || state.historyHead !== expected.status?.history?.head
+      || !await absent(`${sessionPrefix}/.x10-control/pending.json`) || !await absent(`${sessionPrefix}/.x10-control/event-commit.json`)) refuse('failed_start_refused');
+  const revision = await readManagedReturnRevision(`${sessionPrefix}/.x10-control/revisions/${state.activeRevision}.json`);
+  if (!same(revision, expected.revision)) refuse('failed_start_refused');
+  return { manifest, registry, sessionPrefix, life, revision, status: { binding: null, pending: null } };
+}
 async function absent(file) { try { await lstat(file); return false; } catch (error) { if (error.code === 'ENOENT') return true; throw error; } }
 async function until(fn, budget = 10000) { const end = performance.now() + budget; while (performance.now() < end) { if (await fn()) return; await pause(25); } refuse('observation_timeout'); }
 async function closedPort(port) {
@@ -132,8 +157,48 @@ async function packageIdentity(prefix) {
   return { runtimePayloadSha256: hash(rows), operatorPayloadSha256: hash(rows.filter(v => v.path !== 'bin/nginx')), nativeBinarySha256: rows.find(v => v.path === 'bin/nginx').sha256 };
 }
 
-export async function main(argv = process.argv.slice(2)) {
-  const report = { schemaVersion: 2, kind: 'nginx-x10-managed-operator-return-report', ok: false, code: 'not_started', phase: 'arguments',
+// Pure consistency check for a deliberately prepared second session in the
+// KEPT installation. Live old-process retirement is checked separately by caller.
+export function assessKeptAReactivationPreparation(prior, prepared) {
+  try {
+    const p = prior, n = prepared;
+    if (!p || !n || p.manifest.prefix !== n.manifest.prefix || !simple(n.manifest.prefix)
+        || !hex(p.manifest.installationId, 32) || n.manifest.installationId !== p.manifest.installationId
+        || n.registry.installationId !== n.manifest.installationId || p.registry.installationId !== p.manifest.installationId
+        || !hex(p.registry.current, 32) || !hex(n.registry.current, 32) || n.registry.current === p.registry.current
+        || !Array.isArray(p.registry.sessions) || !same(p.registry.sessions, [p.registry.current])
+        || !Array.isArray(n.registry.sessions) || !same(n.registry.sessions, [p.registry.current, n.registry.current])
+        || n.life.installationId !== n.manifest.installationId || n.life.session !== n.registry.current
+        || n.life.prefix !== `${n.manifest.prefix}/runs/${n.registry.current}` || n.life.stage !== 'prepared'
+        || n.life.runtime !== null || n.life.controlSocket !== null || n.status.binding !== null || n.status.pending !== null
+        || n.status.configUnchanged !== true || n.status.fragmentMatchesLastConfirmed !== true
+        || n.status.history?.integrity !== true || n.status.history.entries !== 1
+        || !hex(n.revision.id, 32) || n.revision.id === p.revision.id || n.status.lastConfirmedRevision !== n.revision.id
+        || n.revision.parent !== null || n.revision.sourceRevision !== null
+        || !hex(p.revision.inputSha256, 64) || n.revision.inputSha256 !== p.revision.inputSha256
+        || digest(JSON.stringify(n.revision.input)) !== n.revision.inputSha256 || !same(n.revision.input, p.revision.input)) return false;
+    return true;
+  } catch { return false; }
+}
+
+// Check EVERY unit context before uninstalling any installation. Two retired
+// unit contexts may refer to one kept prefix; deletion is performed only once.
+export async function forEachUniqueRetiredInstallation(contexts, verifyRetired, removeInstallation) {
+  if (!Array.isArray(contexts) || contexts.length < 1 || contexts.length > 3
+      || typeof verifyRetired !== 'function' || typeof removeInstallation !== 'function') refuse('unit_retirement');
+  for (const ctx of contexts) {
+    const descriptor = ctx && Object.getOwnPropertyDescriptor(ctx, 'prefix');
+    if (!descriptor || !Object.hasOwn(descriptor, 'value') || !simple(descriptor.value)) refuse('unit_retirement');
+  }
+  for (const ctx of contexts) if (await verifyRetired(ctx) !== true) refuse('unit_retirement');
+  const seen = new Set();
+  for (const ctx of [...contexts].reverse()) {
+    if (seen.has(ctx.prefix)) continue; seen.add(ctx.prefix); await removeInstallation(ctx);
+  }
+}
+
+async function runManagedFixture(argv, fallback) {
+  const report = { schemaVersion: fallback ? 1 : 2, kind: fallback ? 'nginx-x10-managed-operator-fallback-report' : 'nginx-x10-managed-operator-return-report', ok: false, code: 'not_started', phase: 'arguments',
     proof: null, primaryFailure: null, cleanupFailures: [], cleanupFailureCount: 0, cleanupFailuresTruncated: false,
     serviceAccepted: false, productionAccepted: false, subprocessOutputsPublished: false };
   let input, parent, node, env, app, appPort, gatewayPort, healthPort, bundle, oldBundle, savedOldBundle, savedBundle;
@@ -142,6 +207,8 @@ export async function main(argv = process.argv.slice(2)) {
   const maps = Object.fromEntries(['installation', 'unit', 'session', 'revision', 'binding', 'invocation'].map(key => [key, new Map()]));
   const ordinal = (key, value) => { const m = maps[key], s = JSON.stringify(value); if (!m.has(s)) m.set(s, m.size + 1); return m.get(s); };
   let journalChecks = 0, streams = 0, initialBGetChecks = 0;
+  let readinessBlocked = false, readinessCaptureDone = false, readinessRefusals = 0, fallbackFacts;
+  const heldReadiness = new Set();
   const cancel = () => { cancelled = true; };
   const check = () => { if (cancelled && !inCleanup) refuse('cancelled'); };
   const noteCleanup = code => { report.cleanupFailureCount++; if (report.cleanupFailures.length < 8) report.cleanupFailures.push(code); else report.cleanupFailuresTruncated = true; };
@@ -366,6 +433,118 @@ export async function main(argv = process.argv.slice(2)) {
     if (!state.retired || p.LoadState !== 'not-found' || p.ActiveState !== 'inactive' || p.MainPID !== '0' || !await absent(ctx.runtimeLink)
         || !await allRetired(ctx) || value.life.stage !== 'stopped' || !await closedPort(gatewayPort) || !await closedPort(healthPort)
         || !await absent(`${ctx.prefix}/control.sock`) || !await operatorLocksAbsent(ctx)) refuse('transition_refused');
+    return true;
+  };
+  const failBAndReactivateA = async (ctxA, ctxB, retainedA, identityA, identityB, inputP, tagP, legA, prepB, beforeB) => {
+    const effectsBefore = effects.map(value => ({ ...value })), stateB = states.get(ctxB);
+    const before = await properties(ctxB);
+    if (before.ActiveState !== 'inactive' || before.MainPID !== '0') refuse('failed_start_refused');
+    const prior = await ctl(['show', ctxB.unitName, '--all', '--property=InvocationID'], 2500);
+    if (!prior.ok || prior.stderr !== '' || prior.stdout !== 'InvocationID=\n') refuse('failed_start_refused');
+    readinessBlocked = true; readinessCaptureDone = false; readinessRefusals = 0;
+    report.phase = 'start_b'; phases.push('b_start_requested'); stateB.startRequested = true;
+    // This is one bounded command, awaited even if capture is refused. Only
+    // this fixture's own application readiness responses are held/released.
+    const pendingStart = ctl(['start', ctxB.unitName], 15000);
+    let started, captured;
+    try {
+      await until(async () => { check(); return heldReadiness.size > 0; }, 4000);
+      const activating = await properties(ctxB);
+      if (activating.ActiveState !== 'activating' || activating.SubState !== 'start-post' || activating.Result !== 'success') refuse('failed_start_refused');
+      const launcher = await launcherIdentity(ctxB, activating);
+      const queried = await ctl(['show', ctxB.unitName, '--property=InvocationID', '--property=ControlPID'], 2500);
+      if (!queried.ok || queried.stderr !== '') refuse('failed_start_refused');
+      const invocation = parseFailedStartIdentity(queried.stdout), value = await readManagedHeldState(ctxB.prefix, prepB);
+      if (value.registry.current !== prepB.registry.current || value.registry.sessions.length !== 1
+          || value.life.stage !== 'running' || !value.life.runtime || value.status.binding !== null
+          || value.revision.id !== prepB.revision.id || !same(value.revision.input, inputP)) refuse('failed_start_refused');
+      const native = await inspectMaster(ctxB.binary, value.sessionPrefix, value.life.runtime);
+      if (!native || native.executable !== ctxB.binary) refuse('failed_start_refused');
+      const repeated = await properties(ctxB), repeatedIdentity = await ctl(['show', ctxB.unitName, '--property=InvocationID', '--property=ControlPID'], 2500);
+      if (repeated.ActiveState !== 'activating' || repeated.SubState !== 'start-post' || !same(launcher, await launcherIdentity(ctxB, repeated))
+          || !repeatedIdentity.ok || repeatedIdentity.stderr !== '' || !same(parseFailedStartIdentity(repeatedIdentity.stdout), invocation)
+          || !same(await readManagedHeldState(ctxB.prefix, prepB), value)) refuse('failed_start_refused');
+      captured = { ...value, identity: native, launcher, invocation: invocation.invocation, hookPID: invocation.hookPID };
+      // Capture grants only cleanup inventory, never successful readiness/traffic.
+      stateB.sessions.push({ id: value.registry.current, prefix: value.sessionPrefix, identity: native }); stateB.launchers.push(launcher);
+      ordinal('installation', value.manifest.installationId); ordinal('unit', ctxB.unitName); ordinal('session', value.registry.current);
+      ordinal('revision', value.revision.id); ordinal('invocation', invocation.invocation);
+      readinessCaptureDone = true;
+      for (const response of heldReadiness) {
+        if (!response.destroyed && !response.writableEnded) { response.once('finish', () => { if (!response.destroyed) readinessRefusals++; }); response.writeHead(200); response.end('not-ready\n'); }
+      }
+      heldReadiness.clear(); started = await pendingStart;
+    } finally {
+      // Failure here acquires no additional process authority; release only our
+      // own HTTP responses and settle the single already-requested command.
+      for (const response of heldReadiness) if (!response.destroyed && !response.writableEnded) { response.writeHead(200); response.end('not-ready\n'); }
+      heldReadiness.clear(); if (!started) await pendingStart;
+    }
+    report.phase = 'b_failed'; check();
+    if (!captured || readinessRefusals < 1 || !same(effects, effectsBefore)) refuse('failed_start_refused');
+    const failed = await properties(ctxB), inv = await ctl(['show', ctxB.unitName, '--property=InvocationID'], 2500);
+    const hook = await ctl(['show', ctxB.unitName, '--property=ExecStartPost'], 2500);
+    if (!inv.ok || inv.stderr !== '' || parseInvocationProperty(inv.stdout) !== captured.invocation || !hook.ok || hook.stderr !== '') refuse('failed_start_refused');
+    assessFailedReadinessStart(started, failed, hook.stdout, { nodeExecutable: node, launcher: ctxB.launcher, hookPID: captured.hookPID });
+    const failedAgain = await properties(ctxB), invAgain = await ctl(['show', ctxB.unitName, '--property=InvocationID'], 2500);
+    if (!invAgain.ok || invAgain.stderr !== '' || parseInvocationProperty(invAgain.stdout) !== captured.invocation) refuse('failed_start_refused');
+    assessFailedReadinessStart(started, failedAgain, hook.stdout, { nodeExecutable: node, launcher: ctxB.launcher, hookPID: captured.hookPID });
+    await until(async () => {
+      check(); const life = await record(`${captured.sessionPrefix}/lifecycle.json`);
+      return life.session === captured.registry.current && life.stage === 'stopped'
+        && life.lastExit?.code === 0 && life.lastExit?.signal === null && same(life.runtime, captured.identity) && await allRetired(ctxB);
+    });
+    if (!await absent(`${ctxB.prefix}/control.sock`) || !await operatorLocksAbsent(ctxB)
+        || !await closedPort(gatewayPort) || !await closedPort(healthPort) || !same(effects, effectsBefore)) refuse('failed_start_refused');
+    // The launcher and its locks are now absent; only here may an ordinary
+    // installed status inspection acquire those locks and confirm no binding.
+    const stoppedB = await current(ctxB);
+    if (stoppedB.registry.current !== captured.registry.current || stoppedB.status.binding !== null || stoppedB.status.pending !== null) refuse('failed_start_refused');
+    phases.push('b_failed');
+    report.phase = 'a_retention'; await requireRetained(ctxA, retainedA); await assertTransition(ctxA);
+    // Reset only the current hash/link-verified failed B unit AFTER all recorded
+    // launcher/native identities, listeners, locks and socket are absent.
+    const still = await properties(ctxB);
+    if (still.ActiveState !== 'failed' || still.MainPID !== '0' || still.Result !== 'exit-code' || !await allRetired(ctxB)) refuse('failed_start_refused');
+    const reset = await ctl(['reset-failed', ctxB.unitName], 2500), resetState = await properties(ctxB);
+    if (!reset.ok || reset.stderr !== '' || resetState.ActiveState !== 'inactive' || resetState.SubState !== 'dead'
+        || resetState.MainPID !== '0' || resetState.Result !== 'success') refuse('failed_start_refused');
+    const retirement = await retireUnit(ctxB); phases.push('b_retired');
+    await requireRetained(ctxA, retainedA); await assertTransition(ctxB); phases.push('a_retention_verified');
+    const failedIdentityOrdinals = { installation: ordinal('installation', captured.manifest.installationId), unit: ordinal('unit', ctxB.unitName),
+      session: ordinal('session', captured.registry.current), revision: ordinal('revision', captured.revision.id), invocation: ordinal('invocation', captured.invocation) };
+    const priorA = await current(ctxA);
+    if (priorA.registry.current !== legA.registry.current || priorA.revision.id !== legA.revision.id || !same(priorA.revision.input, inputP)) refuse('reactivation_refused');
+    report.phase = 'prepare_a'; await cli(ctxA.launcher, ['prepare-run']);
+    const prepA = await current(ctxA);
+    if (!assessKeptAReactivationPreparation(priorA, prepA) || !same(await packageIdentity(ctxA.prefix), identityA)
+        || !await allRetired(ctxA) || !await absent(`${ctxA.prefix}/control.sock`)) refuse('reactivation_refused');
+    const priorLife = await record(`${legA.sessionPrefix}/lifecycle.json`);
+    if (priorLife.stage !== 'stopped' || priorLife.lastExit?.code !== 0 || priorLife.lastExit?.signal !== null
+        || !same(priorLife.runtime, legA.identity)) refuse('reactivation_refused');
+    phases.push('a_prepared'); readinessBlocked = false;
+    const ctxFallback = await createContext(ctxA.prefix);
+    if (ctxFallback.unitName === ctxA.unitName || ctxFallback.unitName === ctxB.unitName) refuse('reactivation_refused');
+    await assertTransition(ctxB); report.phase = 'start_a_fallback'; await start(ctxFallback); phases.push('a_reactivated');
+    const legFallback = await traffic(ctxFallback, 'a_fallback', inputP, tagP, true); phases.push('a_fallback_served'); await journal(ctxFallback);
+    if (legFallback.manifest.installationId !== legA.manifest.installationId || legFallback.registry.current !== prepA.registry.current
+        || legFallback.registry.current === legA.registry.current || legFallback.registry.current === captured.registry.current
+        || legFallback.invocation === legA.invocation || legFallback.invocation === captured.invocation
+        || same(legFallback.status.binding, legA.status.binding) || !same(await packageIdentity(ctxFallback.prefix), identityA)) refuse('reactivation_refused');
+    report.phase = 'stop_a_fallback'; const afterFallback = await stop(ctxFallback); Object.assign(afterFallback, await retireUnit(ctxFallback)); phases.push('a_fallback_stopped');
+    for (const [file, expected] of retainedFiles) if (!same(await snapshot(file), expected)) refuse('backup_preservation');
+    if (!same(await snapshot(bundle), savedBundle) || !same(await snapshot(oldBundle), savedOldBundle)
+        || effects.length !== 2 || streams !== 2 || journalChecks !== 2) refuse('final_observation');
+    return { schemaVersion: 1, kind: 'nginx-x10-managed-operator-package-fallback-proof', packages: { a: identityA, b: identityB, aFallback: identityA },
+      inputs: { pSha256: legA.revision.inputSha256, bStagedSha256: prepB.revision.inputSha256, aFallbackSha256: legFallback.revision.inputSha256 },
+      failedB: { identityOrdinals: failedIdentityOrdinals, readinessHeld: true, activatingLauncherCaptured: true, nativeCaptured: true, invocationCaptured: true,
+        hookCaptured: true, wrongBodyObserved: true, managerRefused: true, hookExitObserved: true, bindingAbsent: true, noPOSTEffects: true,
+        failedSessionStopped: true, launcherExited: true, nativeGroupsAbsent: true, listeningPortsClosed: true, controlSocketAbsent: true,
+        operatorLocksAbsent: true, managerResetConfirmed: true, runtimeLinkAbsent: retirement.runtimeLinkAbsent, unitNotFound: retirement.unitNotFound },
+      transitions: { beforeB, afterFallback },
+      preparation: { freshSession: true, freshRevision: true, nullInitialBinding: true, inputPPreserved: true, registryTwoSessions: true, oldSessionPreservedStopped: true, oneFreshHistoryEntry: true },
+      retention: { retainedAAllFilesPreservedThroughBFailure: true, retainedABackupPreserved: true, keptAPrefixReused: true,
+        keptAInstallationPreserved: true, oldAExplicitlyPrepared: true, oldAInputPreserved: true } };
   };
   process.once('SIGINT', cancel); process.once('SIGTERM', cancel);
   try {
@@ -393,7 +572,11 @@ export async function main(argv = process.argv.slice(2)) {
     report.phase = 'application';
     app = http.createServer((req, res) => {
       res.setHeader('X-TLS-App', 'managed-return-http-origin');
-      if (req.method === 'GET' && req.url === '/ready') { res.end('ready\n'); return; }
+      if (req.method === 'GET' && req.url === '/ready') {
+        if (readinessBlocked && !readinessCaptureDone) { heldReadiness.add(res); res.once('close', () => heldReadiness.delete(res)); return; }
+        if (readinessBlocked) { res.once('finish', () => { if (!res.destroyed) readinessRefusals++; }); res.end('not-ready\n'); return; }
+        res.end('ready\n'); return;
+      }
       if (req.method === 'GET' && req.url === '/stream') { streams++; res.write(Buffer.alloc(32768, 0x62)); res.end(Buffer.alloc(32769, 0x62)); return; }
       if (req.method === 'POST' && req.url === '/echo') {
         const chunks = []; let size = 0;
@@ -427,12 +610,16 @@ export async function main(argv = process.argv.slice(2)) {
     if (!same(prepB.revision.input, inputP) || identityA.runtimePayloadSha256 === identityB.runtimePayloadSha256
         || identityA.operatorPayloadSha256 === identityB.operatorPayloadSha256 || identityA.nativeBinarySha256 !== identityB.nativeBinarySha256) refuse('package_identity');
     phases.push('b_staged'); await requireRetained(ctxA, retainedA); await assertTransition(ctxA);
+    let legB, beforeA2, prepA2, identityA2;
+    if (fallback) {
+      fallbackFacts = await failBAndReactivateA(ctxA, ctxB, retainedA, identityA, identityB, inputP, tagP, legA, prepB, beforeB);
+    } else {
     report.phase = 'start_b'; await start(ctxB); phases.push('b_started');
     const initialB = await probe(); if (initialB.status !== 200 || initialB.body.toString() !== 'managed HTTP application\n'
         || initialB.headers['x-tls-app'] !== 'managed-return-http-origin' || initialB.headers['x-x10-tls-probe'] !== tagP) refuse('initial_b_unconfirmed');
     initialBGetChecks++; phases.push('b_initial_p_observed'); await journal(ctxB);
     report.phase = 'apply_q'; await applyInput(ctxB, inputQ, 'input-q.json'); phases.push('b_q_applied');
-    const legB = await traffic(ctxB, 'b', inputQ, tagQ, true); phases.push('b_served'); await journal(ctxB);
+    legB = await traffic(ctxB, 'b', inputQ, tagQ, true); phases.push('b_served'); await journal(ctxB);
     report.phase = 'restart_b'; const oldB = await observe(ctxB); phases.push('b_restart_started');
     const restarted = await ctl(['restart', ctxB.unitName], 35000); if (!restarted.ok) refuse('unit_restart');
     await until(async () => await absent(`/proc/${oldB.launcher.pid}`) && await inspectMaster(ctxB.binary, oldB.sessionPrefix, oldB.identity, false) === null
@@ -441,23 +628,26 @@ export async function main(argv = process.argv.slice(2)) {
     if (newB.registry.current === oldB.registry.current || newB.invocation === oldB.invocation || same(newB.status.binding, oldB.status.binding)
         || same(newB.launcher, oldB.launcher) || !same(newB.revision.input, inputQ)) refuse('restart_identity');
     const legRestart = await traffic(ctxB, 'b_restart', inputQ, tagQ, null); phases.push('b_restarted_served'); await journal(ctxB);
-    report.phase = 'stop_b'; const beforeA2 = await stop(ctxB); Object.assign(beforeA2, await retireUnit(ctxB)); phases.push('b_stopped');
+    report.phase = 'stop_b'; beforeA2 = await stop(ctxB); Object.assign(beforeA2, await retireUnit(ctxB)); phases.push('b_stopped');
     const backupB = await backup(ctxB, `${parent}/backup-b.json`); if (!same(backupB.input, inputQ)) refuse('backup_refused');
     await requireRetained(ctxA, retainedA); await assertTransition(ctxB);
     report.phase = 'restore_a2'; const prefixA2 = `${parent}/a2`;
     const restored = await cli(oldInstaller, ['install', '--prefix', prefixA2, '--restore', `${parent}/backup-b.json`]);
     if (restored.declarativeRestored !== true || restored.nativeStarted !== false) refuse('restore_refused');
-    const ctxA2 = await createContext(prefixA2), prepA2 = await prepared(ctxA2), identityA2 = await packageIdentity(prefixA2);
+    const ctxA2 = await createContext(prefixA2); prepA2 = await prepared(ctxA2); identityA2 = await packageIdentity(prefixA2);
     if (!same(identityA, identityA2) || !same(prepA2.revision.input, inputQ) || prepA2.revision.inputSha256 !== backupB.inputSha256) refuse('restore_refused');
     phases.push('a2_restored'); await assertTransition(ctxB); await requireRetained(ctxA, retainedA);
     report.phase = 'start_a2'; await start(ctxA2); phases.push('a2_started'); await traffic(ctxA2, 'a2', inputQ, tagQ, true); phases.push('a2_served'); await journal(ctxA2);
     report.phase = 'stop_a2'; await stop(ctxA2); await retireUnit(ctxA2); phases.push('a2_stopped');
     await requireRetained(ctxA, retainedA);
     if (!same(await snapshot(bundle), savedBundle) || !same(await snapshot(oldBundle), savedOldBundle) || effects.length !== 4 || streams !== 4 || journalChecks !== 5) refuse('final_observation');
+    }
     report.phase = 'cleanup';
-    for (const ctx of [...contexts].reverse()) {
-      await assertTransition(ctx); await cli(ctx.launcher, ['uninstall']);
+    await forEachUniqueRetiredInstallation(contexts, assertTransition, async ctx => {
+      await cli(ctx.launcher, ['uninstall']);
       if (!await absent(ctx.prefix)) refuse('uninstall_unconfirmed'); states.get(ctx).installed = false;
+    });
+    for (const ctx of contexts) {
       if (digest((await regularBytes(ctx.unitFile, 8192, { mode: 0o600 })).bytes) !== ctx.unitSha256) refuse('unit_authority'); await rm(ctx.unitFile);
     }
     if (!same(await snapshot(oldBundle), savedOldBundle)) refuse('snapshot_refused'); await rm(oldBundle, { recursive: true });
@@ -468,6 +658,15 @@ export async function main(argv = process.argv.slice(2)) {
     if (!same(await snapshot(bundle), savedBundle)) refuse('snapshot_refused'); await rm(bundle, { recursive: true });
     if ((await readdir(parent)).length !== 0) refuse('snapshot_refused'); await rmdir(parent);
     phases.push('cleanup'); await dependenciesUnchanged();
+    if (fallback) {
+      report.proof = { ...fallbackFacts, phases, legs,
+        counts: { units: 3, installations: 2, successfulInvocations: 2, failedAttempts: 1, restarts: 0, journalChecks, trafficGets: 2, posts: effects.length, streams },
+        cleanup: { known: true, ownedProcessesAbsent: true, ownedLaunchersAbsent: true, ownedListenersClosed: true, ownedUnitsRemoved: 3,
+          ownedInstallationsRemoved: 2, historicalBundleRemoved: true, backupFilesRemoved: true },
+        limits: { consistencyOnly: true, nativeBinaryUpgradeAccepted: false, liveConnectionPreserved: false, applicationSideEffectsReversed: false,
+          productionAccepted: false, automaticMigrationAccepted: false, allTrafficFenceAccepted: false, automaticFallbackAccepted: false } };
+      if (checkManagedOperatorFallbackProof(report.proof).ok !== true) refuse('proof_refused');
+    } else {
     report.proof = { schemaVersion: 1, kind: 'nginx-x10-managed-operator-package-return-proof', packages: { a: identityA, b: identityB, a2: identityA2 },
       inputs: { pSha256: legA.revision.inputSha256, qSha256: legB.revision.inputSha256, a2RestoredSha256: prepA2.revision.inputSha256 }, phases, legs,
       transitions: { beforeB, beforeA2 },
@@ -480,19 +679,20 @@ export async function main(argv = process.argv.slice(2)) {
       limits: { consistencyOnly: true, nativeBinaryUpgradeAccepted: false, liveConnectionPreserved: false, applicationSideEffectsReversed: false,
         productionAccepted: false, automaticMigrationAccepted: false, allTrafficFenceAccepted: false, restartPreparedBindingObserved: false } };
     if (checkManagedOperatorReturnProof(report.proof).ok !== true) refuse('proof_refused');
-    report.ok = true; report.code = 'managed_operator_return_verified'; report.phase = 'complete'; finished = true;
+    }
+    report.ok = true; report.code = fallback ? 'managed_operator_fallback_verified' : 'managed_operator_return_verified'; report.phase = 'complete'; finished = true;
   } catch (error) {
     const allowed = new Set(['usage_refused', 'input_refused', 'file_refused', 'historical_cli_refused', 'dependency_source_refused', 'manager_unavailable',
       'archive_refused', 'session_identity', 'controller_state', 'preparation_refused', 'unit_directory', 'unit_authority', 'manager_query', 'unit_cgroup', 'launcher_identity',
       'unit_not_active', 'invocation_changed', 'native_identity', 'binding_identity', 'journal_unconfirmed', 'unit_stop', 'unit_retirement', 'unit_collision', 'unit_link',
       'unit_start', 'input_mismatch', 'traffic_unconfirmed', 'traffic_identity_changed', 'apply_refused', 'backup_refused', 'source_preservation', 'backup_preservation',
-      'transition_refused', 'stage_refused', 'package_identity', 'initial_b_unconfirmed', 'unit_restart', 'restart_identity', 'restore_refused', 'final_observation',
+      'failed_start_refused', 'failed_start_unconfirmed', 'reactivation_refused', 'fallback_refused', 'transition_refused', 'stage_refused', 'package_identity', 'initial_b_unconfirmed', 'unit_restart', 'restart_identity', 'restore_refused', 'final_observation',
       'uninstall_unconfirmed', 'snapshot_refused', 'origin_cleanup', 'proof_refused', 'cancelled', 'observation_timeout', 'installed_command_failed', 'installed_response_invalid']);
     let originalCode;
     try { const descriptor = Object.getOwnPropertyDescriptor(error, 'code');
       if (descriptor && Object.hasOwn(descriptor, 'value') && typeof descriptor.value === 'string') originalCode = descriptor.value;
     } catch { /* Untrusted exception metadata is never evaluated or published. */ }
-    const primary = allowed.has(originalCode) ? originalCode : 'managed_operator_return_refused';
+    const primary = allowed.has(originalCode) ? originalCode : (fallback ? 'fallback_refused' : 'managed_operator_return_refused');
     // Keep the first finite failure even if conservative cleanup later refuses.
     report.primaryFailure = primary; report.ok = false; report.code = primary; report.proof = null;
   } finally {
@@ -514,13 +714,15 @@ export async function main(argv = process.argv.slice(2)) {
     process.removeListener('SIGINT', cancel); process.removeListener('SIGTERM', cancel);
   }
   if (report.cleanupFailureCount) {
-    report.primaryFailure ??= 'managed_operator_return_refused';
+    report.primaryFailure ??= fallback ? 'fallback_refused' : 'managed_operator_return_refused';
     report.ok = false; report.code = 'cleanup_unconfirmed'; report.proof = null;
   }
   if (Buffer.byteLength(encode(report)) > 12288)
     return { ...report, ok: false, code: 'report_bound', primaryFailure: report.primaryFailure ?? 'report_bound', proof: null };
   return report;
 }
+export async function main(argv = process.argv.slice(2)) { return runManagedFixture(argv, false); }
+export async function mainFallback(argv = process.argv.slice(2)) { return runManagedFixture(argv, true); }
 let invoked = false;
 try { invoked = Boolean(process.argv[1]) && await realpath(process.argv[1]) === await realpath(fileURLToPath(import.meta.url)); } catch { /* Import never starts a fixture. */ }
 if (invoked) { const result = await main(); process.stdout.write(encode(result)); process.exitCode = result.ok ? 0 : 1; }

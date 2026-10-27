@@ -1243,3 +1243,55 @@ that difference is not a package-upgrade acceptance. Next: implement the
 explicit side-by-side package transition/state-compatibility contract and
 verify meaningful A-to-B-to-A, preserving known-good files and prior failures.
 Evidence: x10/evidence/g4-restored-service-hosted.json.
+
+## Unhealthy operator package and explicit kept-A fallback candidate
+
+The separate `operator-package-fallback.mjs` entry checks one additional HTTP
+failure outcome on the supported ephemeral nonroot systemd-user profile. This
+is an acceptance fixture for an explicit operator action. It adds no automatic
+production fallback command and does not reverse application side effects.
+
+The actual historical A operator first serves input P. Its unit and owned native
+processes must retire before distinct B is staged from the retained installation.
+Only B's fixture readiness response is held. The checker captures the activating
+launcher, native session, invocation and exact readiness hook before releasing a
+controlled wrong-body response. A passing outcome requires the known hook's
+failure, a null B binding, no B POST effect, and confirmed B resource absence
+before its owned failed state and runtime unit can be retired. A timeout or
+unknown process identity cannot substitute for that observation.
+
+All retained A files and its backup are compared while B is failed. The operator
+then explicitly prepares the SAME retained A installation and starts a third
+fresh unit, with fresh session, revision, invocation and binding identities.
+Only lifecycle records required by this explicit preparation may change. The
+operator code, installation identity, input P and backup remain known-good.
+Exact GET, unique POST and streaming observations must preserve prior effects
+without replay. The third context does not create a third installation: all
+unit contexts are checked before each unique owned prefix is uninstalled once.
+
+This profile has its own strict proof/report schema and separate observation
+units: three units, two installations, two successful native invocations, one
+failed B attempt, zero manager restarts and two successful bounded journal
+checks. Journal checks are not an exact count of journalctl queries; GET checks
+are not an exact count of idempotent acquisition attempts. The accepted normal
+return profile remains separately bounded at three units, four successful
+invocations, one B restart and five journal checks. The original restored-service
+18-proof / five-session / two-restart / six-journal-check and TLS requirements
+remain unchanged.
+
+The hosted bootstrap must run all three source-pinned children, retain the
+separate `service-package-fallback.json` artifact, and admit private Node removal
+only after all three strict reports and their owned cleanup pass. A started
+attempt, arbitrary JSON, absent report or success-shaped failure does not admit
+cleanup. The combined envelope keeps its existing 32 KiB raw-byte bound. The
+historical CLI and bootstrap files remain until known dependency cleanup; any
+uncertainty retains them.
+
+Authored source and local pure, temporary-file or virtual controls are not
+actual managed-service acceptance. Physical native/process-group/signal/systemd
+fixtures must run only in the supported hosted CI, not this nested local PID
+environment. Exact candidate hosted results are pending. The native NGINX binary
+is unchanged; historical A is reassembled, not a permanently published archive.
+TLS restore, all-traffic fencing, a complete failure matrix, permanent release,
+independent published replay, the 60-minute soak and full G3/G4/V1 remain open.
+Earlier c2 and 6401 CI failures and local cleanup FAIL_UNKNOWN remain preserved.

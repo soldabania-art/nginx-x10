@@ -3169,3 +3169,28 @@ Next: distinct B fails readiness after A was retired, with zero B POSTs,
 verified failed-target quiescence and explicit retained-A reactivation. The
 legacy refusal primitive already exists; this next gate covers the separate
 cross-package fallback. Evidence: x10/evidence/g4-managed-package-return-hosted.json.
+
+
+## Kept-A fallback candidate — 27 October 2026
+
+The separate managed HTTP failure profile stages distinct operator B after A
+has stopped, captures B while its owned readiness response is held, and
+requires the exact failed hook before B retirement. Only after failed B is
+quiescent and every retained A file/backup is checked does the operator
+explicitly prepare and restart the SAME old A installation with fresh unit,
+session, revision, invocation and binding, then verify P traffic without replay.
+This fixture does not add automatic production fallback or change native code.
+
+Fallback counts are separate:3 units,2 installations,2 successful invocations,
+1 failed B attempt,0 restarts,2 successful journal CHECKS,2 traffic legs.
+Normal3/4/1/5 and legacy18/5/2/6/TLS3 contracts stay unchanged. The private Node
+consumer requires all three strict reports and source pins within32KiB before
+dependency removal. Local physical fixtures were not run; exact hosted artifact
+acceptance and fullG3/G4/V1 remain OPEN. Earlier c2/6401 failures and local
+FAIL_UNKNOWN remain preserved. Evidence: x10/evidence/g4-kept-a-fallback.json.
+
+The owner renewed work for40 hours from27Oct11:24:15UTC through
+29Oct03:24:15UTC (29Oct07:24:15 Europe/Samara), then report/owned cleanup only
+through04:24:15UTC. Previous20h/10h/60h/70h windows remain history. This does
+not guarantee continuous processes or completion. Deferred Windows remains
+UNVERIFIED after separately accepted LinuxV1, with no automatic queue change.

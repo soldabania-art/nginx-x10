@@ -1,18 +1,12 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-g4-kept-a-fallback-20261027T112518Z",
-    "owner": "x10-coordinator",
-    "baseCommit": "74aeb0bd373194a397bc9c18007671e914fad38f",
-    "acquiredAtUTC": "2026-10-27T11:25:18.000Z",
-    "expiresAtUTC": "2026-10-27T12:10:18.000Z"
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
-    "requestedAtUTC": "2026-10-27T03:45:59.000Z",
-    "hours": 20,
-    "codeStopAtUTC": "2026-10-27T23:45:59.000Z",
-    "reportOnlyUntilUTC": "2026-10-28T00:45:59.000Z",
+    "requestedAtUTC": "2026-10-27T11:24:15.000Z",
+    "hours": 40,
+    "codeStopAtUTC": "2026-10-29T03:24:15.000Z",
+    "reportOnlyUntilUTC": "2026-10-29T04:24:15.000Z",
     "completionIsEvidenceGated": true,
     "fullReleaseIsNotGuaranteedByElapsedHours": true,
     "continuousProcessesGuaranteed": false,
@@ -35,6 +29,16 @@
       "hours": 10,
       "codeStopAtUTC": "2026-10-27T03:23:06.000Z",
       "reportOnlyUntilUTC": "2026-10-27T04:23:06.000Z",
+      "completionIsEvidenceGated": true,
+      "fullReleaseIsNotGuaranteedByElapsedHours": true,
+      "continuousProcessesGuaranteed": false,
+      "afterCodeStop": "Only safe owned cleanup, result readback and final reporting; no code changes."
+    },
+    {
+      "requestedAtUTC": "2026-10-27T03:45:59.000Z",
+      "hours": 20,
+      "codeStopAtUTC": "2026-10-27T23:45:59.000Z",
+      "reportOnlyUntilUTC": "2026-10-28T00:45:59.000Z",
       "completionIsEvidenceGated": true,
       "fullReleaseIsNotGuaranteedByElapsedHours": true,
       "continuousProcessesGuaranteed": false,
@@ -512,115 +516,386 @@
     }
   },
   "lastV1DevelopmentPass": {
-    "state": "EXACT_SCOPED_MANAGED_HTTP_OPERATOR_PACKAGE_RETURN_SUCCESS",
-    "sourceBase": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
-    "publicationParent": "e0ef02aab16ae6c956449ef19e69403000701262",
-    "scope": "Fixture-only immutable revision reader contract correction and finite primary-error preservation for the separate managed HTTP operator-package return; physical acceptance pending.",
+    "state": "CODE_PRESENT_FROZEN_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+    "sourceBase": "74aeb0bd373194a397bc9c18007671e914fad38f",
+    "publicationParent": "23da45f7c0d4675ae4a335c3907679d46a60335e",
+    "scope": "Explicit owned managed HTTP fallback from failed distinct operator B to KEPT old A; unchanged native binary; no automatic product recovery.",
     "sourceBindings": {
       "x10/service/operator-package-return.mjs": {
-        "beforeSha256": "de0aeeea7562df808fc7c72050743606f31273ca7e881fc909a7d172a824d5f9",
-        "afterSha256": "89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d",
-        "bytes": 46700
+        "beforeSha256": "89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d",
+        "afterSha256": "215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83",
+        "bytes": 65297
       },
-      "x10/service/operator-package-return-proof.mjs": {
-        "beforeSha256": "e92ea85477297193b1400f0c1d590ee0a94e9cdebf2cd152201cf4a29fe521ad",
-        "afterSha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de",
-        "bytes": 12890
+      "x10/service/operator-package-fallback.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3",
+        "bytes": 630
       },
-      "x10/service/operator-package-return.test.mjs": {
-        "beforeSha256": "32c455b090a171acb2855cbd88d837f04e30322e34a56a5024ea9a561c3eb223",
-        "afterSha256": "1d2c7e7a3acafe2258ba16f320e8c9ddef505e4a1d6d87fb5d36517b9d134f8b",
-        "bytes": 18646
+      "x10/service/operator-package-fallback-proof.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb",
+        "bytes": 13468
       },
-      "x10/service/operator-package-return-proof.test.mjs": {
-        "beforeSha256": "efd69c053af02add57b078525fda2b6d62adb931a3eeaa031ff16463cd945af8",
-        "afterSha256": "a371fb330b15c796ef0c5f082d0667ff62527c9803b1886d5de98afeea649b93",
-        "bytes": 22388
+      "x10/service/operator-package-fallback-proof.test.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "017e1658984b18549f32a6f430ab08b7fe8943c8dc915696e2dcd4b7b90d5508",
+        "bytes": 22838
+      },
+      "x10/service/operator-package-fallback.test.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "d62a10ca15c34974e0c56539744ba74708339e4a93c5c74605e97a760915fb7c",
+        "bytes": 21014
       },
       "x10/service/verified-node.mjs": {
-        "beforeSha256": "f856f4574c3484792b7960eb3c8ae50c58283ff311d1582a844def464212b615",
-        "afterSha256": "9fbc3fd883f19943644f12602bfcc68e770eb290e8cca81e300d4f290f4232cb",
-        "bytes": 30571
+        "beforeSha256": "9fbc3fd883f19943644f12602bfcc68e770eb290e8cca81e300d4f290f4232cb",
+        "afterSha256": "bc0eeece79c388ced76a57787f4fbcba7489ce9ca56cb9af03025c09e2f594ff",
+        "bytes": 32439
       },
       "x10/service/verified-node.test.mjs": {
-        "beforeSha256": "e925a8ae1d89d3d68f2af4312f45e9509f79b685663d1ed539c088a3680c9b25",
-        "afterSha256": "22188a10a6e99e11c35d268720310518377d4dc617422316c834a9a020b076b6",
-        "bytes": 59488
+        "beforeSha256": "22188a10a6e99e11c35d268720310518377d4dc617422316c834a9a020b076b6",
+        "afterSha256": "7a210550ca332b42d1e60fb73d3a34b8998b870115d35b8b4adbd26e0e75131b",
+        "bytes": 78487
       },
       ".github/workflows/x10-native.yml": {
-        "beforeSha256": "ea1c66d6db16b4379263c37ad9761cd9edd1c759e146864cbe7b37f96ac6b87b",
-        "afterSha256": "e2e954642138e9f80ae09eb873c35343f5cf35709928d2286e7043ebccdb6d8f",
-        "bytes": 23053
+        "beforeSha256": "e2e954642138e9f80ae09eb873c35343f5cf35709928d2286e7043ebccdb6d8f",
+        "afterSha256": "e829ed8e073bd2132006ce834bf95ec264b980bc124718142b64ff0694e1ed67",
+        "bytes": 25506
       }
     },
-    "evidence": "x10/evidence/g4-managed-package-return.json",
-    "perFileLedger": "x10/review/g4-managed-package-return-ledger.json",
+    "evidence": "x10/evidence/g4-kept-a-fallback.json",
+    "perFileLedger": "x10/review/g4-kept-a-fallback-ledger.json",
     "localSelectedTAP": {
-      "exitCode": 0,
-      "nodeVersion": "v24.22.1",
-      "tests": 662,
-      "pass": 662,
+      "tests": 1227,
+      "pass": 1227,
       "fail": 0,
       "cancelled": 0,
       "skipped": 0,
       "todo": 0,
-      "newFixControlsIncludedOnce": 31,
-      "previousFrozenManagedControls": 631,
-      "separateUnchangedSourceBaselineControls": 3,
-      "workflowYAMLAndInlineSyntaxPassed": true,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
       "physicalNativeExecuted": false,
       "systemdExecuted": false,
-      "networkFixtureExecuted": false
+      "networkFixtureExecuted": false,
+      "newControlsIncludedOnce": 565,
+      "priorFrozenControls": 662
     },
-    "newFixControlsIncludedOnce": 31,
-    "separateUnchangedSourceBaselineControls": 3,
+    "independentReview": {
+      "schemaVersion": 1,
+      "state": "SCOPED_INDEPENDENT_REVIEW_PASS_FROZEN_SOURCES",
+      "sourceBase": "74aeb0bd373194a397bc9c18007671e914fad38f",
+      "kind": "x10-managed-kept-a-fallback-independent-review",
+      "independentPureControls": {
+        "kind": "independent-fallback-pure-heldouts",
+        "controls": 25,
+        "pass": 25,
+        "fail": 0,
+        "physicalFixturesExecuted": 0,
+        "networkFixturesExecuted": 0,
+        "managerQueriesExecuted": 0,
+        "signalsSent": 0,
+        "productAcceptance": false
+      },
+      "commands": [
+        "node .build/independent-heldout.mjs",
+        "read-only recursive Git JSON reference and blob-pin audit",
+        "node .build/independent-held-reader.mjs"
+      ],
+      "ancestryAudit": {
+        "jsonDocumentsParsedCompletely": 22,
+        "mandatoryReferenceEdgesTraversed": 129,
+        "blobPinnedEdgesChecked": 74,
+        "distinctBlobPinTargets": 3,
+        "missingReferences": 0,
+        "blobPinMismatches": 0,
+        "seedPaths": [
+          "x10/continuum/BACKGROUND.json",
+          "x10/continuation-2026-10-24/GATES.json",
+          "x10/evidence/g4-managed-package-return-hosted.json",
+          "x10/review/g4-managed-package-return-hosted-ledger.json"
+        ],
+        "documents": [
+          {
+            "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 53568,
+            "sha256": "10c92091da23c2dbc49b0490db9fc770f7e978d646c25ac0a1922ea893b48191"
+          },
+          {
+            "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+            "path": "x10/continuation-2026-10-24/GATES.json",
+            "bytes": 40963,
+            "sha256": "2c9923802950d36c6b34291e747a7f13951493295bbb0cf73292f2cdc0a21a8f"
+          },
+          {
+            "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+            "path": "x10/evidence/g4-managed-package-return-hosted.json",
+            "bytes": 45532,
+            "sha256": "747b0a974beb72d24dabc1634f48579f0543b0099887badf8f1835d18e17bace"
+          },
+          {
+            "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+            "path": "x10/review/g4-managed-package-return-hosted-ledger.json",
+            "bytes": 3622,
+            "sha256": "c965a18f2e65e08e3ce2e85da1dec6e611b4ed3c438b4b62523de1a81c3c8dca"
+          },
+          {
+            "commit": "a276533d8472bfdd8cc74322864a350d6f15e107",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 463627,
+            "sha256": "41ac751f4efbaccd35eeda5d949d1ffbd2d8be9607feeaed2de95b63bb04101b"
+          },
+          {
+            "commit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 25445,
+            "sha256": "713d3f9b06c1dd2aac825ac67c56a3cfa43120344af347fd9683146708a6ba9d"
+          },
+          {
+            "commit": "face7a77d6f9f93fc0c5657dc3bd6b44fa962cff",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 20711,
+            "sha256": "10b286e0b6ec8f58cc04d71bdc3f86529e7ab8bd8176c7cee73f3bfbf0d98e19"
+          },
+          {
+            "commit": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 23801,
+            "sha256": "b83b0b9f23553fcdf13182d73d9afbae5bac1bcc382375f59b03160034c2df41"
+          },
+          {
+            "commit": "bdcc39c85399a2252daa6e1928f6a99f82d31eaf",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 30122,
+            "sha256": "1362800aeb8a08311167cff03061ef0275a7fba47a169efd86ed8afc0d42e08f"
+          },
+          {
+            "commit": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 31224,
+            "sha256": "a809a2483e25769abff862a8814ed996f31a9387c605c3009c1a391e85ffb7cd"
+          },
+          {
+            "commit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 34076,
+            "sha256": "26537e98631d7a39bee413b083e0ff662a0d45762b44ce79799407145893f23e"
+          },
+          {
+            "commit": "ee2daa0385f654e96fd5b75c09da4e0179bb90a1",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 41437,
+            "sha256": "82e0ac0ce84591defc342ec8f0c5260c340aada7715c304c7c823397ac6a7722"
+          },
+          {
+            "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 45958,
+            "sha256": "1e8f5b42a009fb22df6de5749aa2effc46402b93bbffd93cb13527f435643a1d"
+          },
+          {
+            "commit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 46061,
+            "sha256": "a75563d60a73088f2151d43a6b580e8fe9165757977e1a7c1efbbd8697042156"
+          },
+          {
+            "commit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+            "path": "x10/continuation-2026-10-24/GATES.json",
+            "bytes": 336392,
+            "sha256": "a1f2cde447b5b5a64bf6bc41b849b9734473f4c2dfe83bb33ea7082af3663a42"
+          },
+          {
+            "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+            "path": "x10/continuation-2026-10-24/GATES.json",
+            "bytes": 35738,
+            "sha256": "8d30178e531fdc5fe7d33b5f32d6a71cc3f62dcf936f7b9b26825782f8192e6f"
+          },
+          {
+            "commit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+            "path": "x10/evidence/g4-managed-package-return.json",
+            "bytes": 28616,
+            "sha256": "f118429294faca4809a148809fcc90d87fdb4541fd7d2ad6e49da4157c08da8d"
+          },
+          {
+            "commit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 21898,
+            "sha256": "59934c75cf757be16962806a6f52b369e179044dec3ef4ac4be5cf3a8558d26f"
+          },
+          {
+            "commit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 18176,
+            "sha256": "ae3d7198b653f5af86d6054e3a43887c432e2d0e0fd3dbcb9b03d4d0a11b290e"
+          },
+          {
+            "commit": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 13864,
+            "sha256": "a3469ed9a034bf505a4b88bca174340fbd70cec67970727ad5a5f2f36aa04a76"
+          },
+          {
+            "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+            "path": "x10/evidence/g4-managed-package-return.json",
+            "bytes": 13078,
+            "sha256": "f275ffb3111e3c58bf1b7e2c8da0d372758a0fcf0361571db07052b8aa3eae1f"
+          },
+          {
+            "commit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 12380,
+            "sha256": "accb7f583f70b3882e3f84060e1697deb557e3b9f5dd9b6f761856fb69a11b6c"
+          }
+        ],
+        "semanticReviewScope": "Applicable coordination, release gates, preserved acceptance/adverse history and the next explicit fallback contract; parsing and edge counts are not runtime controls."
+      },
+      "staticOperationalReview": {
+        "blockingFindings": 0,
+        "heldBInventoryCapturedBeforeRelease": true,
+        "actualResponseIsStatus200WrongBody": true,
+        "strictKnownHookNonTimeoutFailureRequired": true,
+        "nullBBindingAndNoPOSTEffectsRequired": true,
+        "capturedBResourcesAbsentBeforeOwnedResetAndRetirement": true,
+        "retainedASnapshotCheckedBeforeExplicitPreparation": true,
+        "sameAPrefixAndInstallationWithFreshSessionUnitRevisionAndBinding": true,
+        "allUnitContextsCheckedBeforeUniquePrefixRemoval": true,
+        "normalAndLegacyProofsNotRelaxed": true,
+        "thirdClosedFallbackReportRequiredBeforePrivateNodeCleanup": true,
+        "combinedEnvelope32768ByteBoundPreserved": true,
+        "sameUIDAndConservativeUnknownCleanupScopePreserved": true,
+        "heldCaptureDoesNotInvokeInstalledCLI": true,
+        "postHookCLIOnlyAfterCapturedProcessesAndLocksAbsent": true,
+        "rawControllerStateIsNotMisrepresentedAsChecksummed": true
+      },
+      "reviewFindingsResolved": [
+        "Finite failed_start_unconfirmed from imported strict helper is now preserved by the producer allowlist.",
+        "Fallback failure phase/code allowlists exclude unreachable normal-only labels.",
+        "Coordinator caught unpublished draft held-capture installed status competing with wait-bind alpha lock. Replaced by strict raw-record capture, repeated around launcher/invocation observation. Raw stopped lifecycle and captured process/lock absence are required before any post-hook CLI status. Independently reviewed and tested on temporary records with alpha/controller lock sentinels preserved."
+      ],
+      "pendingChecks": [
+        "Coordinator final frozen aggregate and exact hosted jobs/artifacts remain required; this review does not grant physical acceptance."
+      ],
+      "limits": [
+        "The25 heldouts use synthetic finite facts and invalid argument entry only; they are not physical service acceptance.",
+        "The ancestry audit parses every full required JSON document and recursively follows mandatory reference flags; semantic review is scoped to applicable contracts, accepted/adverse histories and this next task.",
+        "No native process, signal, process-group, systemd or network fixture was executed locally.",
+        "This case deliberately makes B application readiness unhealthy under distinct reviewed operator bytes; it does not establish a defect in B binary or automatic production fallback.",
+        "Full G3/G4/V1, native binary upgrade, TLS restore, permanent release, independent published replay,60-minute soak and semantic Continuum remain open.",
+        "The10 independent reader checks use only temporary synthetic records; existing alpha/controller lock sentinels remain unchanged. Controller state.json has no checksum in the current schema and is compared to exact prior prepared state."
+      ],
+      "physicalFixturesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "signalsSent": 0,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "rawHostPathsPIDsOrSecretsPublished": false,
+      "independentHeldReaderTempfileControls": {
+        "kind": "independent-held-reader-tempfile-controls",
+        "controls": 10,
+        "pass": 10,
+        "fail": 0,
+        "lockSentinelsPreserved": true,
+        "physicalFixturesExecuted": 0,
+        "networkFixturesExecuted": 0,
+        "managerQueriesExecuted": 0,
+        "subprocessesExecuted": 0,
+        "productAcceptance": false
+      },
+      "privateTestSetupAdverse": {
+        "count": 1,
+        "kind": "independent_synthetic_fixture_setup_refusal",
+        "cause": "First private held-reader fixture omitted required schemaVersion/kind fields; actual reader correctly refused. Synthetic fixture corrected, then10/10 PASS.",
+        "notPhysicalFailure": true,
+        "notHistoricalCause": true,
+        "productSourceChangedForThisTestSetup": false
+      },
+      "frozenSourceBindings": {
+        "x10/service/operator-package-return.mjs": {
+          "bytes": 65297,
+          "sha256": "215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83"
+        },
+        "x10/service/operator-package-fallback.mjs": {
+          "bytes": 630,
+          "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+        },
+        "x10/service/operator-package-fallback-proof.mjs": {
+          "bytes": 13468,
+          "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+        },
+        "x10/service/verified-node.mjs": {
+          "bytes": 32439,
+          "sha256": "bc0eeece79c388ced76a57787f4fbcba7489ce9ca56cb9af03025c09e2f594ff"
+        },
+        ".github/workflows/x10-native.yml": {
+          "bytes": 25506,
+          "sha256": "e829ed8e073bd2132006ce834bf95ec264b980bc124718142b64ff0694e1ed67"
+        }
+      },
+      "sourcePinVerification": {
+        "producerFiles": 4,
+        "literalLocationsEach": 2,
+        "all8LiteralBindingsMatchActualBytes": true,
+        "provisionalPinsRemain": false,
+        "normalProofSha256Unchanged": true,
+        "legacyLifecycleSha256Unchanged": true,
+        "consumerRequiresAllThreeReports": true,
+        "envelopeByteLimit": 32768
+      }
+    },
     "expectedHostedCounts": {
-      "reportFields": 13,
-      "proofTopSections": 12,
-      "orderedPhases": 16,
       "units": 3,
-      "successfulNativeInvocations": 4,
-      "managerRestarts": 1,
-      "boundedJournalChecks": 5,
-      "trafficLegGETChecks": 4,
-      "separateInitialBInputPGETCheck": 1,
-      "uniqueCompletedSyntheticPOSTEffects": 4,
+      "installations": 2,
+      "successfulNativeInvocations": 2,
+      "failedNativeAttempts": 1,
+      "managerRestarts": 0,
+      "boundedSuccessfulJournalChecks": 2,
+      "trafficLegGETChecks": 2,
+      "uniquePOSTEffects": 2,
+      "streamChecks": 2,
       "postBytesEach": 65551,
-      "exactStreamChecks": 4,
       "streamBytesEach": 65537,
-      "stopFieldsBeforeEachNewUnit": 11,
-      "restartProofFields": 12,
-      "ownedUnitsRemoved": 3,
-      "ownedInstallationsRemoved": 3,
-      "reportSchemaVersion": 2,
-      "primaryFailureOnSuccess": null,
-      "proofSchemaVersion": 1
+      "reportSchemaVersion": 1,
+      "reportFields": 13,
+      "proofSchemaVersion": 1,
+      "proofTopSections": 13,
+      "orderedPhases": 13,
+      "failedBBooleanFacts": 19,
+      "failedBIdentityOrdinals": 5,
+      "preparationFacts": 7,
+      "retentionFacts": 6
     },
     "expectedCountsAreNotLocalRuntimeObservations": true,
-    "strictImmutableRevisionMode": "0400",
-    "revisionMode0600Accepted": false,
-    "historicalPrimaryCIFailureObserved": false,
-    "managedServicePackageTransitionAccepted": true,
+    "unhealthyPackageFallbackAccepted": false,
     "packageUpgradeRollbackAccepted": false,
     "nativeBinaryVersionChangeAccepted": false,
     "tlsBackupAccepted": false,
+    "permanentDistributionAccepted": false,
+    "independentPublishedReplayAccepted": false,
+    "soakAccepted": false,
     "fullG3Accepted": false,
     "fullG4Accepted": false,
     "productionAccepted": false,
-    "verifiedOnImplementationCommit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
-    "hostedEvidence": "x10/evidence/g4-managed-package-return-hosted.json",
-    "backwardDeclarativeHTTPCompatibilityAccepted": true
+    "separateWorkflowVirtualControls": {
+      "tests": 20,
+      "pass": 20,
+      "fail": 0,
+      "notAddedToSelectedTAP": true,
+      "physicalRuntimeExercised": false
+    },
+    "workflowYAMLAndInlineNodeSyntaxPassed": true,
+    "expectedActualNativeSteps": 36,
+    "expectedStepsAreNotHostedObservations": true
   },
   "pendingVerification": [
-    "Reconcile actual jobs of the resulting evidence-only successor; accepted runtime remains exact0ebded94ea331c1b28c52e71fa725dc35bb2f08a, not a guessed metadata checkout.",
-    "Implement and verify ONE distinct-package unhealthy-candidate fallback outcome: actual old A serves P then stops and retires its unit; B stages from retained A. Hold only owned B readiness responses long enough to capture the real activating launcher/native/InvocationID and exact hook, then return controlled wrong-body health. Require manager start failure from the known hook (not an unobserved timeout), null B binding and zero B POST effects; confirm B launcher/native groups/socket/ports absent before own reset-failed and unit retirement/not-found. Verify every known-good A file and backup unchanged while B failed. Explicitly reactivate the KEPT old A under fresh unit/session/invocation/binding and serve exact P GET/uniquePOST/stream without replay. This is an explicit operator fallback fixture, not a new automatic production feature. Existing legacy hold/capture/failed-start/reset primitives and stage126pure/4actual refusals are already covered; the missing result is service from kept A after distinct B failure. Keep the new failure-profile proof/counts separate from accepted normal3units/4invocations/1restart/5journalCHECKS and legacy18/5/2/6/TLS3; do not relax any consumer. Use only local pure/tempfile/virtual checks here, physical manager acceptance only supported hosted CI. Reconcile evidence-only successor actual jobs without rerunning unchanged0eb runtime. Preserve c2 failures/original primary unknown, older6401 failure, localFAIL_UNKNOWN and CLA. Permanent release/publisher capability, independent published replay,60minsoak, nativebinaryupgrade,TLSrestore, fullG3/G4/V1 and semantic Continuum remain open."
+    "First inspect exact resulting implementation native push/PR jobs and actual service-package-fallback.json. Require the separate strict failed-B-to-KEPT-A proof, actual captured failed-start identities, known hook exit1 rather than timeout, null B binding and zero B POST effects, complete B quiescence before own reset/retirement, A preservation until explicit prepare-run, same old A installation with fresh session/unit/invocation/binding and exact P GET/uniquePOST/stream without replay. Require all three independently source-pinned child reports and complete owned/private Node cleanup. Keep fallback3units/2installations/2successful invocations/1failed attempt/0restarts/2successful journal CHECKS separate from normal3/4/1/5 and legacy18 restored proofs/5sessions/2restarts/6journalCHECKS/TLS3. A workflow conclusion alone does not validate artifact contents. No unchanged reruns without cause. Retain c2/6401 failures, original primary unknown, local FAIL_UNKNOWN and CLA. Permanent release/publisher capability, independent published replay,60minsoak, full security/recovery, native binary version change,TLSrestore, fullG3/G4/V1 and semanticContinuum remain OPEN."
   ],
-  "nextConcreteTask": "Implement and verify ONE distinct-package unhealthy-candidate fallback outcome: actual old A serves P then stops and retires its unit; B stages from retained A. Hold only owned B readiness responses long enough to capture the real activating launcher/native/InvocationID and exact hook, then return controlled wrong-body health. Require manager start failure from the known hook (not an unobserved timeout), null B binding and zero B POST effects; confirm B launcher/native groups/socket/ports absent before own reset-failed and unit retirement/not-found. Verify every known-good A file and backup unchanged while B failed. Explicitly reactivate the KEPT old A under fresh unit/session/invocation/binding and serve exact P GET/uniquePOST/stream without replay. This is an explicit operator fallback fixture, not a new automatic production feature. Existing legacy hold/capture/failed-start/reset primitives and stage126pure/4actual refusals are already covered; the missing result is service from kept A after distinct B failure. Keep the new failure-profile proof/counts separate from accepted normal3units/4invocations/1restart/5journalCHECKS and legacy18/5/2/6/TLS3; do not relax any consumer. Use only local pure/tempfile/virtual checks here, physical manager acceptance only supported hosted CI. Reconcile evidence-only successor actual jobs without rerunning unchanged0eb runtime. Preserve c2 failures/original primary unknown, older6401 failure, localFAIL_UNKNOWN and CLA. Permanent release/publisher capability, independent published replay,60minsoak, nativebinaryupgrade,TLSrestore, fullG3/G4/V1 and semantic Continuum remain open.",
+  "nextConcreteTask": "First inspect exact resulting implementation native push/PR jobs and actual service-package-fallback.json. Require the separate strict failed-B-to-KEPT-A proof, actual captured failed-start identities, known hook exit1 rather than timeout, null B binding and zero B POST effects, complete B quiescence before own reset/retirement, A preservation until explicit prepare-run, same old A installation with fresh session/unit/invocation/binding and exact P GET/uniquePOST/stream without replay. Require all three independently source-pinned child reports and complete owned/private Node cleanup. Keep fallback3units/2installations/2successful invocations/1failed attempt/0restarts/2successful journal CHECKS separate from normal3/4/1/5 and legacy18 restored proofs/5sessions/2restarts/6journalCHECKS/TLS3. A workflow conclusion alone does not validate artifact contents. No unchanged reruns without cause. Retain c2/6401 failures, original primary unknown, local FAIL_UNKNOWN and CLA. Permanent release/publisher capability, independent published replay,60minsoak, full security/recovery, native binary version change,TLSrestore, fullG3/G4/V1 and semanticContinuum remain OPEN.",
   "nextTasks": [
     {
       "id": "G4-unhealthy-distinct-package-explicit-kept-A-fallback",
-      "state": "OPEN_NOT_IMPLEMENTED",
-      "goal": "Implement and verify ONE distinct-package unhealthy-candidate fallback outcome: actual old A serves P then stops and retires its unit; B stages from retained A. Hold only owned B readiness responses long enough to capture the real activating launcher/native/InvocationID and exact hook, then return controlled wrong-body health. Require manager start failure from the known hook (not an unobserved timeout), null B binding and zero B POST effects; confirm B launcher/native groups/socket/ports absent before own reset-failed and unit retirement/not-found. Verify every known-good A file and backup unchanged while B failed. Explicitly reactivate the KEPT old A under fresh unit/session/invocation/binding and serve exact P GET/uniquePOST/stream without replay. This is an explicit operator fallback fixture, not a new automatic production feature. Existing legacy hold/capture/failed-start/reset primitives and stage126pure/4actual refusals are already covered; the missing result is service from kept A after distinct B failure. Keep the new failure-profile proof/counts separate from accepted normal3units/4invocations/1restart/5journalCHECKS and legacy18/5/2/6/TLS3; do not relax any consumer. Use only local pure/tempfile/virtual checks here, physical manager acceptance only supported hosted CI. Reconcile evidence-only successor actual jobs without rerunning unchanged0eb runtime. Preserve c2 failures/original primary unknown, older6401 failure, localFAIL_UNKNOWN and CLA. Permanent release/publisher capability, independent published replay,60minsoak, nativebinaryupgrade,TLSrestore, fullG3/G4/V1 and semantic Continuum remain open."
+      "state": "CODE_PRESENT_FROZEN_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+      "goal": "First inspect exact resulting implementation native push/PR jobs and actual service-package-fallback.json. Require the separate strict failed-B-to-KEPT-A proof, actual captured failed-start identities, known hook exit1 rather than timeout, null B binding and zero B POST effects, complete B quiescence before own reset/retirement, A preservation until explicit prepare-run, same old A installation with fresh session/unit/invocation/binding and exact P GET/uniquePOST/stream without replay. Require all three independently source-pinned child reports and complete owned/private Node cleanup. Keep fallback3units/2installations/2successful invocations/1failed attempt/0restarts/2successful journal CHECKS separate from normal3/4/1/5 and legacy18 restored proofs/5sessions/2restarts/6journalCHECKS/TLS3. A workflow conclusion alone does not validate artifact contents. No unchanged reruns without cause. Retain c2/6401 failures, original primary unknown, local FAIL_UNKNOWN and CLA. Permanent release/publisher capability, independent published replay,60minsoak, full security/recovery, native binary version change,TLSrestore, fullG3/G4/V1 and semanticContinuum remain OPEN.",
+      "evidence": "x10/evidence/g4-kept-a-fallback.json"
     },
     {
       "id": "G4-managed-service-operator-package-return",
@@ -710,7 +985,7 @@
   },
   "portfolioContinuation": {
     "activeProject": "x10",
-    "currentGate": "TLS_VERIFIED_ROUTE_FIXTURE_EXACT_HOSTED_PENDING",
+    "currentGate": "G4_KEPT_A_FALLBACK_EXACT_HOSTED_PENDING",
     "fullVisionAndDeferredResearchReference": {
       "path": "x10/continuum/PLAN.md",
       "historicalAssignmentReference": {
@@ -950,17 +1225,26 @@
     "allPriorAcceptanceFailuresAndUnknownsRetained": true
   },
   "precedingReceiptCIStepReadback": {
-    "commit": "ee2daa0385f654e96fd5b75c09da4e0179bb90a1",
-    "nativePushRunId": 40482751385,
-    "nativePRRunId": 40482758798,
+    "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+    "nativeRunIds": [
+      40493693956,
+      40493701498
+    ],
+    "nativeJobIds": [
+      122153766914,
+      122153794485
+    ],
     "nativeConclusions": "completed_success",
-    "researchPRRunId": 40482758669,
+    "all35ActualNativeStepsEach": true,
+    "researchPRRunId": 40493701526,
+    "researchPRJobId": 122153820709,
     "researchPRConclusion": "completed_success",
-    "researchPushRunId": 40482751421,
-    "researchPushRuntimeAccepted": false,
-    "claRunId": 40482756450,
+    "researchActualSteps": 11,
+    "researchPushRunId": 40493693969,
+    "researchPushRuntimeSkipped": true,
+    "claRunId": 40493698149,
     "claConclusion": "failure",
-    "readbackScope": "Workflow conclusions only; no new artifact download or transfer of ac2 acceptance to changed bytes."
+    "scope": "Fresh actual jobs/steps only; no new artifact download or transfer of exact0eb runtime acceptance to different bytes."
   },
   "managedPackageRevisionFixPriorCheckpointReference": {
     "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
@@ -996,6 +1280,14 @@
   "managedReturnHostedPriorCheckpointReference": {
     "commit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
     "path": "x10/continuum/BACKGROUND.json",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
+  },
+  "keptAFallbackPriorCheckpointReference": {
+    "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+    "path": "x10/continuum/BACKGROUND.json",
+    "blobSha": "87dee5e99f7039e3ba7baf7b90cceef2978989e3",
     "requiredReadBeforeNextTask": true,
     "readCompleteHistoricalDocument": true,
     "allPriorAcceptanceFailuresAndUnknownsRetained": true

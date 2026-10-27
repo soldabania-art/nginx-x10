@@ -7,17 +7,22 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { checkManagedOperatorReturnReport } from './operator-package-return-proof.mjs';
+import { checkManagedOperatorFallbackReport, MAX_MANAGED_OPERATOR_FALLBACK_REPORT_BYTES } from './operator-package-fallback-proof.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const PIN = Object.freeze({ version: 'v22.23.3', root: 'node-v22.23.3-linux-x64',
   filename: 'node-v22.23.3-linux-x64.tar.xz',
   sha256: 'df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de',
   fingerprint: '5BE8A3F6C8A5C01D106C0AD820B1A390B168D356' });
-// The coordinator freezes both literals together with the producer and workflow.
+// The coordinator freezes these literals together with the producers and workflow.
 // These are source consistency pins, not signatures or acceptance authority.
 export const MANAGED_PACKAGE_CLEANUP_SOURCE = Object.freeze({
-  checkerSha256: '89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d',
+  checkerSha256: '215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83',
   proofSha256: 'baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de',
+});
+export const FALLBACK_PACKAGE_CLEANUP_SOURCE = Object.freeze({
+  checkerSha256: 'a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3',
+  proofSha256: '6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb',
 });
 const MAX_ARCHIVE = 64 * 1024 ** 2, MAX_TAR = 512 * 1024 ** 2;
 const MAX_NODE = 256 * 1024 ** 2, MAX_LICENSE = 2 * 1024 ** 2;
@@ -218,8 +223,28 @@ function managedPackageCleanupEvidence(envelope) {
     return typeof encoded === 'string' && Buffer.byteLength(encoded, 'utf8') <= 12288;
   } catch { return false; }
 }
+function fallbackPackageCleanupEvidence(envelope) {
+  try {
+    const own = key => {
+      const descriptor = Object.getOwnPropertyDescriptor(envelope, key);
+      if (!descriptor || descriptor.enumerable !== true || !Object.hasOwn(descriptor, 'value')) return undefined;
+      return descriptor.value;
+    };
+    if (!envelope || typeof envelope !== 'object' || Array.isArray(envelope)
+        || ![Object.prototype, null].includes(Object.getPrototypeOf(envelope))
+        || own('fallbackPackageCheckerExited') !== true || !Object.is(own('fallbackPackageCheckerExitCode'), 0)
+        || own('sourceFallbackPackageSha256') !== FALLBACK_PACKAGE_CLEANUP_SOURCE.checkerSha256
+        || own('sourceFallbackPackageProofSha256') !== FALLBACK_PACKAGE_CLEANUP_SOURCE.proofSha256) return false;
+    const report = own('fallbackPackageReport');
+    if (checkManagedOperatorFallbackReport(report).ok !== true) return false;
+    const encoded = JSON.stringify(report);
+    return typeof encoded === 'string' && Buffer.byteLength(encoded, 'utf8') <= MAX_MANAGED_OPERATOR_FALLBACK_REPORT_BYTES;
+  } catch { return false; }
+}
 export function cleanupEvidence(e) {
-  if (!managedPackageCleanupEvidence(e)) return false;
+  // Three independently collected, closed reports are required. A successful
+  // legacy or normal-return child cannot authorize an unobserved fallback child.
+  if (!managedPackageCleanupEvidence(e) || !fallbackPackageCleanupEvidence(e)) return false;
   const r = e?.report;
   if (e?.checkerExited !== true || e.checkerExitCode !== 0 || r?.ok !== true
       || r.code !== 'basic_lifecycle_verified' || r.phase !== 'complete'
@@ -412,7 +437,9 @@ export async function main(argv = process.argv.slice(2)) {
       const e = JSON.parse(receipt.bytes);
       if (!cleanupEvidence(e) || e.sourceLifecycleSha256 !== 'e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370') refuse('runtime_retained_cleanup_unconfirmed');
       for (const [name, expected] of [['operator-package-return.mjs', MANAGED_PACKAGE_CLEANUP_SOURCE.checkerSha256],
-        ['operator-package-return-proof.mjs', MANAGED_PACKAGE_CLEANUP_SOURCE.proofSha256]]) {
+        ['operator-package-return-proof.mjs', MANAGED_PACKAGE_CLEANUP_SOURCE.proofSha256],
+        ['operator-package-fallback.mjs', FALLBACK_PACKAGE_CLEANUP_SOURCE.checkerSha256],
+        ['operator-package-fallback-proof.mjs', FALLBACK_PACKAGE_CLEANUP_SOURCE.proofSha256]]) {
         const source = await regular(path.join(HERE, name), 256 * 1024, { uid: process.getuid() });
         if (sha(source.bytes) !== expected) refuse('runtime_retained_cleanup_unconfirmed');
       }

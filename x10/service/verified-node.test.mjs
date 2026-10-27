@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, writeFile, mkdir, symlink, readdir, lstat, unlink, rmdir, readFile } from 'node:fs/promises';
+import { mkdtemp, writeFile, mkdir, symlink, readdir, lstat, unlink, rmdir, readFile, rm } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { PIN, MANAGED_PACKAGE_CLEANUP_SOURCE, parseTar, parseChecksumText, parseSignatureStatus, cleanupEvidence, main } from './verified-node.mjs';
+import { PIN, MANAGED_PACKAGE_CLEANUP_SOURCE, FALLBACK_PACKAGE_CLEANUP_SOURCE, parseTar, parseChecksumText, parseSignatureStatus, cleanupEvidence, main } from './verified-node.mjs';
 const hash = b => createHash('sha256').update(b).digest('hex');
 const nodeMember = `${PIN.root}/bin/node`, licenseMember = `${PIN.root}/LICENSE`;
 function member(name, data = Buffer.from('SYNTHETIC_NONEXECUTABLE'), type = '0', mode = 0o755, link = '') {
@@ -50,8 +50,51 @@ function managedPackageReport() {
     cleanupFailures:[],cleanupFailureCount:0,cleanupFailuresTruncated:false,
     serviceAccepted:false,productionAccepted:false,subprocessOutputsPublished:false };
 }
+// Independent public synthetic fallback observations; never actual runtime proof.
+function fallbackPackageReport() {
+  const digest=label=>hash(`public-synthetic-node-fallback:${label}`);
+  const a={runtimePayloadSha256:digest('a'),operatorPayloadSha256:digest('a-operator'),nativeBinarySha256:digest('native')};
+  const b={runtimePayloadSha256:digest('b'),operatorPayloadSha256:digest('b-operator'),nativeBinarySha256:a.nativeBinarySha256};
+  const input=digest('input-p');
+  const facts=keys=>Object.fromEntries(keys.map(key=>[key,true]));
+  const stopped=()=>facts(['unitInactive','invocationRetired','launcherExited','masterAbsent','nativeGroupsAbsent',
+    'portsClosed','controlSocketAbsent','operatorLocksAbsent','pendingAbsent','runtimeLinkAbsent','unitNotFound']);
+  return {schemaVersion:1,kind:'nginx-x10-managed-operator-fallback-report',ok:true,
+    code:'managed_operator_fallback_verified',phase:'complete',primaryFailure:null,
+    cleanupFailures:[],cleanupFailureCount:0,cleanupFailuresTruncated:false,
+    serviceAccepted:false,productionAccepted:false,subprocessOutputsPublished:false,
+    proof:{schemaVersion:1,kind:'nginx-x10-managed-operator-package-fallback-proof',
+      packages:{a,b,aFallback:{...a}},inputs:{pSha256:input,bStagedSha256:input,aFallbackSha256:input},
+      phases:['a_started','a_served','a_stopped','b_staged','b_start_requested','b_failed','b_retired',
+        'a_retention_verified','a_prepared','a_reactivated','a_fallback_served','a_fallback_stopped','cleanup'],
+      legs:['a','a_fallback'].map((name,index)=>({name,
+        identityOrdinals:{installation:1,unit:index?3:1,session:index?3:1,revision:index?3:1,binding:index?2:1,invocation:index?3:1},
+        inputSha256:input,initialBindingAbsent:true,readinessAccepted:true,bindingMatchesOwnedRuntime:true,
+        getExact:true,postExact:true,streamExact:true,postEffectsBefore:index,postEffectsAfter:index+1})),
+      failedB:{identityOrdinals:{installation:2,unit:2,session:2,revision:2,invocation:2},
+        ...facts(['readinessHeld','activatingLauncherCaptured','nativeCaptured','invocationCaptured','hookCaptured',
+          'wrongBodyObserved','managerRefused','hookExitObserved','bindingAbsent','noPOSTEffects','failedSessionStopped',
+          'launcherExited','nativeGroupsAbsent','listeningPortsClosed','controlSocketAbsent','operatorLocksAbsent',
+          'managerResetConfirmed','runtimeLinkAbsent','unitNotFound'])},
+      transitions:{beforeB:stopped(),afterFallback:stopped()},
+      preparation:facts(['freshSession','freshRevision','nullInitialBinding','inputPPreserved','registryTwoSessions',
+        'oldSessionPreservedStopped','oneFreshHistoryEntry']),
+      retention:facts(['retainedAAllFilesPreservedThroughBFailure','retainedABackupPreserved','keptAPrefixReused',
+        'keptAInstallationPreserved','oldAExplicitlyPrepared','oldAInputPreserved']),
+      counts:{units:3,installations:2,successfulInvocations:2,failedAttempts:1,restarts:0,journalChecks:2,
+        trafficGets:2,posts:2,streams:2},
+      cleanup:{known:true,ownedProcessesAbsent:true,ownedLaunchersAbsent:true,ownedListenersClosed:true,
+        ownedUnitsRemoved:3,ownedInstallationsRemoved:2,historicalBundleRemoved:true,backupFilesRemoved:true},
+      limits:{consistencyOnly:true,nativeBinaryUpgradeAccepted:false,liveConnectionPreserved:false,
+        applicationSideEffectsReversed:false,productionAccepted:false,automaticMigrationAccepted:false,
+        allTrafficFenceAccepted:false,automaticFallbackAccepted:false}}};
+}
 function receipt() {
   return { checkerExited:true, checkerExitCode:0,
+    fallbackPackageCheckerExited:true,fallbackPackageCheckerExitCode:0,
+    sourceFallbackPackageSha256:FALLBACK_PACKAGE_CLEANUP_SOURCE.checkerSha256,
+    sourceFallbackPackageProofSha256:FALLBACK_PACKAGE_CLEANUP_SOURCE.proofSha256,
+    fallbackPackageReport:fallbackPackageReport(),
     managedPackageCheckerExited:true,managedPackageCheckerExitCode:0,
     sourceManagedPackageSha256:MANAGED_PACKAGE_CLEANUP_SOURCE.checkerSha256,
     sourceManagedPackageProofSha256:MANAGED_PACKAGE_CLEANUP_SOURCE.proofSha256,
@@ -786,4 +829,211 @@ test('legacy or non-null managed primary failure preserves private runtime files
       assert.equal(JSON.stringify(result).includes(p),false);
     }
   } finally {await unlink(prefix+'/sentinel');await unlink(file);await rmdir(prefix);await rmdir(p);}
+});
+
+test('the accepted two-child envelope cannot authorize an unobserved fallback child',()=>{
+  const e=receipt();
+  for(const key of ['fallbackPackageCheckerExited','fallbackPackageCheckerExitCode','sourceFallbackPackageSha256',
+    'sourceFallbackPackageProofSha256','fallbackPackageReport'])delete e[key];
+  assert.equal(e.report.nativeSessionsStopped,5);assert.equal(e.managedPackageReport.proof.counts.invocations,4);
+  assert.equal(cleanupEvidence(e),false);
+});
+test('fallback child must close successfully and independently match wrapper and proof pins',()=>{
+  const cases={fallbackPackageCheckerExited:[undefined,false,1,'true'],
+    fallbackPackageCheckerExitCode:[undefined,1,-0,null,'0'],
+    sourceFallbackPackageSha256:[undefined,'f'.repeat(63),'g'.repeat(64),FALLBACK_PACKAGE_CLEANUP_SOURCE.checkerSha256+'\n'],
+    sourceFallbackPackageProofSha256:[undefined,'f'.repeat(63),'g'.repeat(64),FALLBACK_PACKAGE_CLEANUP_SOURCE.proofSha256+'\n']};
+  for(const[key,values]of Object.entries(cases))for(const value of values){
+    const e=receipt();e[key]=value;assert.equal(cleanupEvidence(e),false,key);
+  }
+  assert.equal(cleanupEvidence(receipt()),true);
+});
+test('fallback envelope fields require own enumerable data and never evaluate accessors',()=>{
+  let reads=0;
+  for(const key of ['fallbackPackageCheckerExited','fallbackPackageCheckerExitCode','sourceFallbackPackageSha256',
+    'sourceFallbackPackageProofSha256','fallbackPackageReport']){
+    const accessor=receipt();Object.defineProperty(accessor,key,{get(){reads++;return true;}});
+    assert.equal(cleanupEvidence(accessor),false,key);
+    const inherited=receipt(),value=inherited[key];delete inherited[key];Object.setPrototypeOf(inherited,{[key]:value});
+    assert.equal(cleanupEvidence(inherited),false,key);
+    const hidden=receipt();Object.defineProperty(hidden,key,{value:hidden[key],enumerable:false});
+    assert.equal(cleanupEvidence(hidden),false,key);
+  }
+  assert.equal(reads,0);
+});
+test('fallback success is a complete separate bounded report with no adverse primary or cleanup',()=>{
+  const mutations=[e=>{delete e.fallbackPackageReport;},e=>e.fallbackPackageReport=null,
+    e=>e.fallbackPackageReport.schemaVersion=2,e=>e.fallbackPackageReport.kind='nginx-x10-managed-operator-return-report',
+    e=>e.fallbackPackageReport.ok=false,e=>e.fallbackPackageReport.code='managed_operator_fallback_refused',
+    e=>e.fallbackPackageReport.phase='b_failed',e=>e.fallbackPackageReport.proof=null,
+    e=>e.fallbackPackageReport.primaryFailure='failed_start_refused',e=>{delete e.fallbackPackageReport.primaryFailure;},
+    e=>e.fallbackPackageReport.cleanupFailures=['owned_unit_cleanup_unconfirmed'],
+    e=>e.fallbackPackageReport.cleanupFailureCount=1,e=>e.fallbackPackageReport.cleanupFailuresTruncated=true,
+    e=>e.fallbackPackageReport.serviceAccepted=true,e=>e.fallbackPackageReport.productionAccepted=true,
+    e=>e.fallbackPackageReport.subprocessOutputsPublished=true,e=>e.fallbackPackageReport.unknown=true,
+    e=>e.fallbackPackageReport.padding='x'.repeat(12289)];
+  for(const mutate of mutations){const e=receipt();mutate(e);assert.equal(cleanupEvidence(e),false);}
+});
+test('normal return reports cannot substitute for fallback or conversely',()=>{
+  const normal=receipt();normal.fallbackPackageReport=normal.managedPackageReport;
+  assert.equal(cleanupEvidence(normal),false);
+  const fallback=receipt();fallback.managedPackageReport=fallback.fallbackPackageReport;
+  assert.equal(cleanupEvidence(fallback),false);
+});
+test('fallback report accessors and inherited data are refused without evaluation',()=>{
+  let reads=0;
+  for(const key of Object.keys(receipt().fallbackPackageReport)){
+    const e=receipt();Object.defineProperty(e.fallbackPackageReport,key,{enumerable:true,get(){reads++;return null;}});
+    assert.equal(cleanupEvidence(e),false,key);
+  }
+  const inherited=receipt();Object.setPrototypeOf(inherited.fallbackPackageReport,{unverified:true});
+  assert.equal(cleanupEvidence(inherited),false);assert.equal(reads,0);
+});
+test('fallback cleanup can consume exact null-prototype observation records',()=>{
+  const e=receipt();e.fallbackPackageReport=Object.assign(Object.create(null),e.fallbackPackageReport);
+  e.fallbackPackageReport.proof.failedB=Object.assign(Object.create(null),e.fallbackPackageReport.proof.failedB);
+  assert.equal(cleanupEvidence(e),true);
+});
+test('each distinct failed-B capture, hook, absence and retirement fact remains mandatory',()=>{
+  for(const key of Object.keys(receipt().fallbackPackageReport.proof.failedB).filter(key=>key!=='identityOrdinals')){
+    for(const value of [undefined,false,1,'true']){
+      const e=receipt();e.fallbackPackageReport.proof.failedB[key]=value;assert.equal(cleanupEvidence(e),false,key);
+    }
+  }
+});
+test('fallback cannot use fresh installation or reuse retired session invocation and binding ordinals',()=>{
+  for(const[key,values]of Object.entries({installation:[2,3],unit:[1,2],session:[1,2],revision:[1,2],binding:[1,3],invocation:[1,2]})){
+    for(const value of values){const e=receipt();e.fallbackPackageReport.proof.legs[1].identityOrdinals[key]=value;
+      assert.equal(cleanupEvidence(e),false,key);}
+  }
+  for(const key of Object.keys(receipt().fallbackPackageReport.proof.failedB.identityOrdinals)){
+    const e=receipt();e.fallbackPackageReport.proof.failedB.identityOrdinals[key]=1;assert.equal(cleanupEvidence(e),false,key);
+  }
+});
+test('all kept-A preparation and retention facts remain required through explicit reactivation',()=>{
+  for(const section of ['preparation','retention'])for(const key of Object.keys(receipt().fallbackPackageReport.proof[section])){
+    const e=receipt();e.fallbackPackageReport.proof[section][key]=false;assert.equal(cleanupEvidence(e),false,`${section}:${key}`);
+  }
+});
+test('failure-profile counters cannot be replaced by normal return or legacy counts',()=>{
+  for(const[key,value]of Object.entries(receipt().fallbackPackageReport.proof.counts)){
+    const e=receipt();e.fallbackPackageReport.proof.counts[key]=value+1;assert.equal(cleanupEvidence(e),false,key);
+  }
+  const zero=receipt();zero.fallbackPackageReport.proof.counts.restarts=-0;assert.equal(cleanupEvidence(zero),false);
+});
+test('fallback requires both successful traffic legs without replay or extra B POST effects',()=>{
+  for(const index of [0,1])for(const key of ['getExact','postExact','streamExact','initialBindingAbsent','readinessAccepted','bindingMatchesOwnedRuntime']){
+    const e=receipt();e.fallbackPackageReport.proof.legs[index][key]=false;assert.equal(cleanupEvidence(e),false,key);
+  }
+  for(const[key,value]of [['postEffectsBefore',2],['postEffectsAfter',3]]){
+    const e=receipt();e.fallbackPackageReport.proof.legs[1][key]=value;assert.equal(cleanupEvidence(e),false,key);
+  }
+});
+test('kept-A fallback must retain old package bytes and input P with unchanged native binary',()=>{
+  const candidate=receipt();candidate.fallbackPackageReport.proof.packages.aFallback={...candidate.fallbackPackageReport.proof.packages.b};
+  assert.equal(cleanupEvidence(candidate),false);
+  const input=receipt();input.fallbackPackageReport.proof.inputs.aFallbackSha256=hash('public-synthetic-different-input');
+  assert.equal(cleanupEvidence(input),false);
+  const native=receipt();native.fallbackPackageReport.proof.packages.aFallback.nativeBinarySha256=hash('public-synthetic-different-native');
+  assert.equal(cleanupEvidence(native),false);
+});
+test('fallback final cleanup requires all contexts retired and exactly two unique installations removed',()=>{
+  for(const section of ['beforeB','afterFallback'])for(const key of Object.keys(receipt().fallbackPackageReport.proof.transitions[section])){
+    const e=receipt();e.fallbackPackageReport.proof.transitions[section][key]=false;assert.equal(cleanupEvidence(e),false,key);
+  }
+  for(const[key,value]of Object.entries(receipt().fallbackPackageReport.proof.cleanup)){
+    const e=receipt();e.fallbackPackageReport.proof.cleanup[key]=typeof value==='number'?value-1:false;
+    assert.equal(cleanupEvidence(e),false,key);
+  }
+});
+test('fallback receipt cannot claim automatic fallback, native upgrade or full acceptance',()=>{
+  for(const key of Object.keys(receipt().fallbackPackageReport.proof.limits).filter(key=>key!=='consistencyOnly')){
+    const e=receipt();e.fallbackPackageReport.proof.limits[key]=true;assert.equal(cleanupEvidence(e),false,key);
+  }
+});
+test('a third report never relaxes accepted normal and legacy source or lifecycle admission',()=>{
+  const cases=[e=>{delete e.managedPackageReport;},e=>e.managedPackageReport.proof.counts.invocations=2,
+    e=>e.managedPackageReport.proof.transitions.beforeA2.unitNotFound=false,e=>e.sourceManagedPackageSha256+='\n',
+    e=>e.report.nativeSessionsStopped=4,e=>e.report.journalChecks=5,e=>e.report.restoredHTTPProof.sourceUnitRemoved=false];
+  for(const mutate of cases){const e=receipt();mutate(e);assert.equal(cleanupEvidence(e),false);}
+});
+test('missing, failed or malformed fallback evidence retains exact private runtime directory and sentinel bytes',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-fallback-test-'),prefix=p+'/runtime',file=p+'/receipt.json';
+  await mkdir(prefix,{mode:0o700});await writeFile(prefix+'/sentinel','public-synthetic-retain',{mode:0o600});
+  const before=await lstat(prefix),source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
+  const lifecyclePin=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];
+  const mutations=[e=>{delete e.fallbackPackageReport;},e=>e.fallbackPackageCheckerExited=false,
+    e=>e.fallbackPackageCheckerExitCode=1,e=>e.sourceFallbackPackageSha256+='\n',e=>e.sourceFallbackPackageProofSha256+='\n',
+    e=>e.fallbackPackageReport.proof.failedB.hookExitObserved=false,e=>e.fallbackPackageReport.proof.failedB.noPOSTEffects=false,
+    e=>e.fallbackPackageReport.proof.retention.retainedAAllFilesPreservedThroughBFailure=false,
+    e=>e.fallbackPackageReport.proof.preparation.registryTwoSessions=false,
+    e=>e.fallbackPackageReport.primaryFailure='SYNTHETIC_PRIVATE_FALLBACK_MUST_NOT_LEAK'];
+  try{
+    for(const mutate of mutations){
+      const e=receipt();e.sourceLifecycleSha256=lifecyclePin;mutate(e);await writeFile(file,JSON.stringify(e),{mode:0o600});
+      const result=await main(['--cleanup','--prefix',prefix,'--service-evidence',file]);
+      assert.equal(result.code,'runtime_retained_cleanup_unconfirmed');assert.equal(result.ok,false);
+      assert.equal(await readFile(prefix+'/sentinel','utf8'),'public-synthetic-retain');
+      const after=await lstat(prefix);assert.equal(after.dev,before.dev);assert.equal(after.ino,before.ino);
+      assert.deepEqual(await readdir(prefix),['sentinel']);
+      assert.equal(JSON.stringify(result).includes('SYNTHETIC_PRIVATE_FALLBACK'),false);assert.equal(JSON.stringify(result).includes(p),false);
+    }
+  } finally {await unlink(prefix+'/sentinel');await unlink(file);await rmdir(prefix);await rmdir(p);}
+});
+test('the three complete synthetic reports fit the unchanged 32KiB envelope bound',()=>{
+  const e=receipt();
+  assert(Buffer.byteLength(JSON.stringify(e),'utf8')<32768);
+  assert.equal(cleanupEvidence(e),true);
+});
+
+// This local cleanup fixture uses an inert regular file, never an executable
+// dependency or service. It checks admission reaches actual owned-file removal.
+async function syntheticRuntime(prefix) {
+  await mkdir(prefix,{mode:0o700});await mkdir(prefix+'/bin',{mode:0o700});
+  const inert=Buffer.from('PUBLIC_SYNTHETIC_NONEXECUTABLE_NODE_PLACEHOLDER');
+  await writeFile(prefix+'/bin/node',inert,{mode:0o500});
+  await writeFile(prefix+'/LICENSE','public synthetic license',{mode:0o400});
+  const identity=s=>({uid:s.uid,dev:s.dev,ino:s.ino});
+  const m={schemaVersion:1,kind:'x10-verified-node-dependency',version:PIN.version,installationId:'a'.repeat(32),
+    archiveSha256:PIN.sha256,prefix,rootIdentity:identity(await lstat(prefix)),binIdentity:identity(await lstat(prefix+'/bin')),files:{}};
+  for(const name of ['bin/node','LICENSE'])m.files[name]={sha256:hash(await readFile(prefix+'/'+name)),identity:identity(await lstat(prefix+'/'+name))};
+  await writeFile(prefix+'/.verified-node.json',JSON.stringify({...m,sha256:hash(JSON.stringify(m))})+'\n',{mode:0o400});
+  return m;
+}
+function sourceBoundReceipt(source,runtime) {
+  const e=receipt();e.sourceLifecycleSha256=/sourceLifecycleSha256 !== '([a-f0-9]{64})'/.exec(source)[1];
+  e.runtimeNodeSha256=runtime.files['bin/node'].sha256;e.runtimeInstallationId=runtime.installationId;
+  return e;
+}
+test('all three exact-source synthetic reports permit removal of an owned inert dependency without execution',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-inert-test-'),prefix=p+'/runtime',file=p+'/receipt.json';
+  try {
+    const runtime=await syntheticRuntime(prefix),source=await readFile(new URL('./verified-node.mjs',import.meta.url),'utf8');
+    await writeFile(file,JSON.stringify(sourceBoundReceipt(source,runtime)),{mode:0o600});
+    const result=await main(['--cleanup','--prefix',prefix,'--service-evidence',file]);
+    assert.equal(result.code,'verified_node_removed');assert.equal(result.ok,true);assert.equal(result.runtimeRemoved,true);
+    await assert.rejects(lstat(prefix),{code:'ENOENT'});assert.deepEqual(await readdir(p),['receipt.json']);
+  } finally {await rm(p,{recursive:true,force:true});}
+});
+test('actual reread of every changed package source retains inert dependency despite matching envelope pins',async()=>{
+  const p=await mkdtemp('/tmp/x10-node-source-test-'),prefix=p+'/runtime',file=p+'/receipt.json',copy=p+'/checker';
+  try {
+    await mkdir(copy,{mode:0o700});
+    for(const name of ['verified-node.mjs','operator-package-return.mjs','operator-package-return-proof.mjs',
+      'operator-package-fallback.mjs','operator-package-fallback-proof.mjs'])
+      await writeFile(copy+'/'+name,await readFile(new URL('./'+name,import.meta.url)),{mode:0o600});
+    const source=await readFile(copy+'/verified-node.mjs','utf8'),runtime=await syntheticRuntime(prefix);
+    const e=sourceBoundReceipt(source,runtime);await writeFile(file,JSON.stringify(e),{mode:0o600});
+    const isolated=await import(new URL('file://'+copy+'/verified-node.mjs'));
+    const before=await lstat(prefix),bytes=await readFile(prefix+'/bin/node');
+    for(const name of ['operator-package-return.mjs','operator-package-return-proof.mjs',
+      'operator-package-fallback.mjs','operator-package-fallback-proof.mjs']){
+      const original=await readFile(copy+'/'+name);
+      await writeFile(copy+'/'+name,Buffer.concat([original,Buffer.from('\n// public synthetic drift\n')]));
+      const result=await isolated.main(['--cleanup','--prefix',prefix,'--service-evidence',file]);
+      assert.equal(result.code,'runtime_retained_cleanup_unconfirmed',name);assert.equal(result.ok,false,name);
+      assert.deepEqual(await readFile(prefix+'/bin/node'),bytes);assert.equal((await lstat(prefix)).ino,before.ino);
+      assert.equal(JSON.stringify(result).includes(p),false);await writeFile(copy+'/'+name,original);
+    }
+  } finally {await rm(p,{recursive:true,force:true});}
 });
