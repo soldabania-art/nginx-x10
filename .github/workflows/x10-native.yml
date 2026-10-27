@@ -82,6 +82,7 @@ jobs:
           node --test --test-reporter=tap \
             x10/service/operator-package-return-proof.test.mjs \
             x10/service/operator-package-return.test.mjs \
+            x10/service/legacy-cli-peers.test.mjs \
             > x10/.build/ci-evidence/service-package-return-contract.tap
       - name: Validate managed unhealthy-package fallback refusal controls
         run: |
@@ -152,7 +153,7 @@ jobs:
           const source = 'x10/service/lifecycle-check.mjs';
           const sourceSha = 'e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370';
           const managedSource = 'x10/service/operator-package-return.mjs';
-          const managedSourceSha = '215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83';
+          const managedSourceSha = '612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7';
           const managedProofSource = 'x10/service/operator-package-return-proof.mjs';
           const managedProofSha = 'baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de';
           const fallbackSource = 'x10/service/operator-package-fallback.mjs';
@@ -215,10 +216,21 @@ jobs:
             if (!identity.stdout.equals(Buffer.from(historicalBlob + '\n')) || identity.stderr.length) throw new Error('historical_cli_refused');
             const raw = await execute('/usr/bin/git', ['show', object], options);
             if (raw.stderr.length || raw.stdout.length !== 68551 || hash(raw.stdout) !== historicalSha) throw new Error('historical_cli_refused');
-            const peers = ['cli.mjs', 'manager.mjs', 'listeners.mjs', 'generations.mjs', 'status-format.mjs'].map(n => 'x10/control/' + n);
-            peers.push('x10/alpha/runtime.mjs', 'x10/alpha/upstream-example.mjs', 'x10/service/user-unit.mjs');
-            const unchanged = await execute('/usr/bin/git', ['diff', '--exit-code', historicalCommit, '--', ...peers], options);
+            // This is a legacy-CLI/current-peer fixture, not the full acb package.
+            // Import only after the literal checker source pin has been checked.
+            await checkerPins();
+            const { SHARED_OPERATOR_PEERS, assessSharedPeerBytes } = await import(pathToFileURL(path.resolve(managedSource)).href);
+            if (SHARED_OPERATOR_PEERS.profile !== 'LEGACY_CLI_WITH_REVIEWED_CURRENT_PEERS'
+                || SHARED_OPERATOR_PEERS.commit !== '98bc32d4ee9a6c1d6ed198135df01065ad1a65e7'
+                || SHARED_OPERATOR_PEERS.files.length !== 8) throw new Error('shared_operator_peers_refused');
+            const peers = SHARED_OPERATOR_PEERS.files.map(row => row.path);
+            const unchanged = await execute('/usr/bin/git', ['diff', '--exit-code', SHARED_OPERATOR_PEERS.commit, '--', ...peers], options);
             if (unchanged.stdout.length || unchanged.stderr.length) throw new Error('historical_runtime_peers_changed');
+            for (const row of SHARED_OPERATOR_PEERS.files) {
+              const identity = await execute('/usr/bin/git', ['rev-parse', SHARED_OPERATOR_PEERS.commit + ':' + row.path], options);
+              if (!identity.stdout.equals(Buffer.from(row.blob + '\n')) || identity.stderr.length
+                  || !assessSharedPeerBytes(row.path, await readFile(row.path)).valid) throw new Error('shared_operator_peers_refused');
+            }
             return raw.stdout;
           }
           async function run(exe, args, timeout, maxOutput = 1024 * 1024) {

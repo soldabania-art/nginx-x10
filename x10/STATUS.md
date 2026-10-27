@@ -3355,3 +3355,30 @@ Full G3/G4/G5/G7/V1, orphan incident/disposal, native binary upgrade,TLS restore
 permanent release,published replay,60minsoak and semanticContinuum stay OPEN.
 Owner40h/history, Windows deferral and all earlier adverse evidence preserved.
 Evidence: x10/evidence/g5-controller-record-bounds.json.
+
+
+## 27 October 2026: explicit legacy-CLI/shared-peer fixture repair
+
+Exact `98bc32d` native push40533686304/job122293218632 and
+PR40533697675/job122293256424 failed19/20 groups. Managed controller passed162
+TAP including new76 reader controls; alpha614PASS/3FAIL was a non-timeout
+historical-peer precondition failure after intentional controller byte changes.
+The full failed-alpha cleanup is unconfirmed; later service/package gates skipped.
+[Actual adverse receipt](evidence/g5-controller-record-bounds-hosted-failure.json)
+keeps both event/build identities and artifact digests separately.
+
+The repaired profile explicitly combines exactacb legacyCLI with8reviewed98b
+shared peers, checks actual bundle bytes before reassembly, and retains all3
+Git preflights plus strict source-pinned reports/cleanup admission. This is a
+new assembled pair, not the full historicalacb package or old-controller downgrade.
+New pure/tempfile79/79TAP and independent74heldouts+21static passed separately.
+Existing return544/fallback545/verifiedNode138/declaration119 pure contracts
+passed separately; workflow names/order/count/budget and installed runtime bytes
+remain unchanged from98b. [Candidate evidence](evidence/g5-legacy-cli-shared-peers.json)
+and [per-file ledger](review/g5-legacy-cli-shared-peers-ledger.json) record scope.
+
+Exact successor hosted compatibility is pending; capacity remains dependent.
+FullG3/G4/G5/G7/V1, orphan incident replay/disposal,TLSrestore,nativebinaryupgrade,
+permanent release/publisher capability,published replay,60minsoak and semantic
+Continuum remainOPEN. Prior7b/26d acceptance and all adverse/unknown history,
+40h owner window and deferredWindows are preserved. Localphysicalfixtures0.

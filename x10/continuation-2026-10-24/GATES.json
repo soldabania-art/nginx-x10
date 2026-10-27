@@ -1785,11 +1785,12 @@
   "supportedPathOpenFindings": [
     {
       "id": "CONTROL_JSON_RESOURCE_BOUNDS_OPEN",
-      "state": "LOCAL_FIX_VERIFIED_HOSTED_PENDING",
+      "state": "LOCAL_READER_COMPONENT_VERIFIED_HOSTED_COMPATIBILITY_BLOCKED_FIXTURE_REPAIR_PENDING",
       "fact": "Actual unbound controller accepts settings with ignored extra3MiB; CLI2MiB refusal follows full read.",
       "limits": "Local operator-owned input-bound gap; no OOM, remote exploit or severity demonstrated.",
       "candidateEvidence": "x10/evidence/g5-controller-record-bounds.json",
-      "scope": "ControllerJSON/history/controlCLI acquisition only; other reads and fullsecurity remain open."
+      "scope": "ControllerJSON/history/controlCLI acquisition only; other reads and fullsecurity remain open.",
+      "hostedFailureEvidence": "x10/evidence/g5-controller-record-bounds-hosted-failure.json"
     },
     {
       "id": "ALPHA_SESSION_INVENTORY_CAPACITY_OPEN",
@@ -1862,5 +1863,120 @@
     "fullG4Accepted": false,
     "fullG5Accepted": false,
     "productionAccepted": false
-  }
+  },
+  "controllerRecordBoundsHostedFailure": {
+    "state": "HOSTED_COMPATIBILITY_FAILED_HISTORICAL_FIXTURE_PRECONDITION",
+    "implementationCommit": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+    "evidence": "x10/evidence/g5-controller-record-bounds-hosted-failure.json",
+    "nativeRuns": [
+      40533686304,
+      40533697675
+    ],
+    "nativeJobs": [
+      122293218632,
+      122293256424
+    ],
+    "managedControllerTAP": {
+      "pass": 162,
+      "fail": 0,
+      "newReaderControlsIncluded": 76
+    },
+    "nativeGroups": {
+      "pass": 19,
+      "total": 20
+    },
+    "alpha": {
+      "pass": 614,
+      "fail": 3,
+      "tests": 617,
+      "timedOut": false
+    },
+    "fullFailedAlphaOwnedCleanupConfirmed": false,
+    "laterServiceAndPackageGates": "SKIPPED",
+    "productionAccepted": false
+  },
+  "reviewedHistoricalCliSharedPeerCandidate": {
+    "state": "LOCAL_VERIFIED_SHARED_PEER_FIXTURE_HOSTED_PENDING",
+    "sourceBase": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+    "publicationParent": "42e458c97594d57fe061204f3b53eec0970d6be7",
+    "evidence": "x10/evidence/g5-legacy-cli-shared-peers.json",
+    "perFileLedger": "x10/review/g5-legacy-cli-shared-peers-ledger.json",
+    "profile": "LEGACY_CLI_WITH_REVIEWED_CURRENT_PEERS",
+    "sharedPeerCommit": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+    "sharedPeerCount": 8,
+    "legacyCliCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "legacyCliBlob": "f036791f3e843c3628964f5c61b0bc0ab903d6f9",
+    "legacyCliBytes": 68551,
+    "legacyCliSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+    "sourceBindings": {
+      "x10/service/operator-package-return.mjs": {
+        "bytes": 68575,
+        "sha256": "612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7"
+      },
+      "x10/service/verified-node.mjs": {
+        "bytes": 32439,
+        "sha256": "2febc8bdb6d890e738a426e4a80121ea840d143d9a718768ef10b5b09e839090"
+      },
+      "x10/service/legacy-cli-peers.test.mjs": {
+        "bytes": 15203,
+        "sha256": "807848cd6b9fc9dba52febeabc6831467c2e1d42010c06276149a71f90a5c7f8"
+      },
+      "x10/test/alpha.test.mjs": {
+        "bytes": 115239,
+        "sha256": "5d4b32db5d2045bee88b56c318ca463e57f1f6cea023598c324a96e1e23f7abb"
+      },
+      "x10/test/package-return.mjs": {
+        "bytes": 29856,
+        "sha256": "9c22b71a99f8952318aaccc9b5119b7b5edf6873ff84d1ee1577c17ad12d1629"
+      },
+      ".github/workflows/x10-native.yml": {
+        "bytes": 26465,
+        "sha256": "d3f92329a396b02d045b45736733cdb711bf55af10b30504bc24f1a0efc8eb73"
+      },
+      "x10/service/README.md": {
+        "bytes": 88285,
+        "sha256": "27cbc1b90b751445964716ad3c8fada5d3d319da09889776147062da99e49db9"
+      },
+      "x10/release/SUPPORTED-PATH-REVIEW.md": {
+        "bytes": 9064,
+        "sha256": "a3fa47d5336516ca400a16ddd15a7c2edc7b646d2605fb04bdcf6143e347c962"
+      }
+    },
+    "localNewPureTempfileTAP": {
+      "tests": 79,
+      "pass": 79,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0
+    },
+    "independentPureTempfileHeldouts": 74,
+    "independentStaticChecks": 21,
+    "controllerBytesChangedFrom98b": false,
+    "nativeCChanged": false,
+    "workflowStepNamesChanged": false,
+    "workflowBudgetChanged": false,
+    "fixedBundleFileInventoryChanged": false,
+    "physicalFixturesExecuted": 0,
+    "fullG4Accepted": false,
+    "fullG5Accepted": false,
+    "productionAccepted": false
+  },
+  "controllerRecordBoundsPriorCandidateReferences": [
+    {
+      "commit": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+      "path": "x10/evidence/g5-controller-record-bounds.json",
+      "blobSha": "77e20310391216e5a3645e7a052d7c7320ad4799",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+      "path": "x10/review/g5-controller-record-bounds-ledger.json",
+      "blobSha": "d81cdd54ae80ae8070718c752c437b7ff85d531f",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ]
 }

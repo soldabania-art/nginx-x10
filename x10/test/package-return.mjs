@@ -1,6 +1,7 @@
 // Supported-host fixture only. Importing this module starts no process.
-// Reviewed historical operator code is combined with the current native build;
-// the resulting private fixture is not a historical published package.
+// A fixed legacy CLI plus separately reviewed current shared modules are
+// combined with the current native build. This newly assembled private pair
+// is not the complete historical runtime or a historical published package.
 import assert from 'node:assert/strict';
 import { constants } from 'node:fs';
 import { chmod, copyFile, lstat, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
@@ -12,6 +13,7 @@ import http from 'node:http';
 import net from 'node:net';
 import { digest, inspectMaster, remainingNativeGroup } from '../alpha/runtime.mjs';
 import { checkOperatorReturnProof, canActivateOperatorPackage } from './package-return-proof.mjs';
+import { SHARED_OPERATOR_PEERS, verifySharedOperatorPeerFiles } from '../service/operator-package-return.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const execute = promisify(execFile), delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -102,9 +104,12 @@ async function reassembleHistoricalBundle(parent, bundle) {
   assert.equal(identity.stdout.trim(), historicalBlob); assert.equal(identity.stderr, '');
   const source = await execute('git', ['show', object], { cwd: root, timeout: 5000, encoding: 'buffer', maxBuffer: 256 * 1024 });
   assert.equal(digest(source.stdout), historicalCliSha256); assert.equal(source.stderr.length, 0);
-  const peers = [...controlNames.map(name => `x10/control/${name}`), ...alphaNames.filter(name => name !== 'cli.mjs').map(name => `x10/alpha/${name}`), 'x10/service/user-unit.mjs'];
-  const unchanged = await execute('git', ['diff', '--exit-code', historicalCommit, '--', ...peers], { cwd: root, timeout: 5000, maxBuffer: 256 * 1024 });
+  // The old CLI pin and the reviewed current shared-peer pin are independent.
+  // This assembled pair is not the complete historical runtime package.
+  const peers = SHARED_OPERATOR_PEERS.files.map(row => row.path);
+  const unchanged = await execute('git', ['diff', '--exit-code', SHARED_OPERATOR_PEERS.commit, '--', ...peers], { cwd: root, timeout: 5000, maxBuffer: 256 * 1024 });
   assert.equal(unchanged.stdout, ''); assert.equal(unchanged.stderr, '');
+  await verifySharedOperatorPeerFiles(bundle);
   assert.notEqual(digest(await readFile(path.join(bundle, 'x10/alpha/cli.mjs'))), historicalCliSha256);
   const selected = path.join(parent, 'return-historical-bundle'), original = await treeSnapshot(bundle);
   assert.equal(await absent(selected), true);

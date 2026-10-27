@@ -17,7 +17,7 @@ export const PIN = Object.freeze({ version: 'v22.23.3', root: 'node-v22.23.3-lin
 // The coordinator freezes these literals together with the producers and workflow.
 // These are source consistency pins, not signatures or acceptance authority.
 export const MANAGED_PACKAGE_CLEANUP_SOURCE = Object.freeze({
-  checkerSha256: '215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83',
+  checkerSha256: '612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7',
   proofSha256: 'baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de',
 });
 export const FALLBACK_PACKAGE_CLEANUP_SOURCE = Object.freeze({

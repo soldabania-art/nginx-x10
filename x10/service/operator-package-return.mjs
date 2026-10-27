@@ -26,6 +26,32 @@ const execute = promisify(execFile), TOOL = '/usr/bin/systemctl';
 export const HISTORICAL_OPERATOR = Object.freeze({ bytes: 68551,
   commit: 'acb648392e745b5246a5620f2ea6a6286dc06d42', blob: 'f036791f3e843c3628964f5c61b0bc0ab903d6f9',
   sha256: '4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d' });
+
+// This fixture combines one fixed legacy alpha CLI with separately reviewed
+// current shared modules. It is not a reconstruction of the complete acb
+// runtime package, and it does not reuse acceptance of a prior assembled pair.
+export const SHARED_OPERATOR_PEERS = Object.freeze({
+  profile: 'LEGACY_CLI_WITH_REVIEWED_CURRENT_PEERS',
+  commit: '98bc32d4ee9a6c1d6ed198135df01065ad1a65e7',
+  files: Object.freeze([
+    Object.freeze({ path: 'x10/control/cli.mjs', blob: 'fca0a871aa86e96366aae289714498ff52bd28bf', bytes: 4766,
+      sha256: '2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac' }),
+    Object.freeze({ path: 'x10/control/manager.mjs', blob: '544f318607696879fb23e695097f853e5f8064b0', bytes: 51246,
+      sha256: 'd6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289' }),
+    Object.freeze({ path: 'x10/control/listeners.mjs', blob: 'd61efff79ed8d20db4ce924bc52d2b43565ef071', bytes: 18828,
+      sha256: 'd2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2' }),
+    Object.freeze({ path: 'x10/control/generations.mjs', blob: 'dbdb2eaf872d2ca7aa0c60318519cf25aaf3152e', bytes: 13323,
+      sha256: 'dba28810084f0cbb84275cc200f5bec93150406306c6bd78b06ac2b585815789' }),
+    Object.freeze({ path: 'x10/control/status-format.mjs', blob: '40a39eb3993df1c31ca9c3f54af731504c994ea4', bytes: 4312,
+      sha256: '522d932cbfe9ca8493a5f472207da910eb71476ed47f1148dda589a4171929f8' }),
+    Object.freeze({ path: 'x10/alpha/runtime.mjs', blob: 'c4fd0e3cc565fcaf36096d76d0cbc4cc715d4db7', bytes: 7540,
+      sha256: 'bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51' }),
+    Object.freeze({ path: 'x10/alpha/upstream-example.mjs', blob: '853821879e87f61d43a4696f121938ad29b62516', bytes: 4989,
+      sha256: '18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c' }),
+    Object.freeze({ path: 'x10/service/user-unit.mjs', blob: 'b4ffdff44de65a429bcfba742d357e3d4446d94d', bytes: 9481,
+      sha256: 'ae8e34acd2d16a0bbe04884b92d692c2e7e3c76c632c6a26eaa1b0cd38d65d9f' })
+  ]),
+});
 const controls = ['cli.mjs', 'manager.mjs', 'listeners.mjs', 'generations.mjs', 'status-format.mjs'];
 const alphas = ['cli.mjs', 'runtime.mjs', 'upstream-example.mjs'];
 const PROPERTIES = ['LoadState', 'ActiveState', 'SubState', 'Result', 'FragmentPath', 'MainPID', 'ControlGroup'];
@@ -51,6 +77,18 @@ export function parseOperatorReturnArguments(argv) {
 export function assessHistoricalOperatorBytes(bytes) {
   const valid = Buffer.isBuffer(bytes) && bytes.length === HISTORICAL_OPERATOR.bytes && digest(bytes) === HISTORICAL_OPERATOR.sha256;
   return { valid, bytes: valid ? HISTORICAL_OPERATOR.bytes : 0, sha256: valid ? HISTORICAL_OPERATOR.sha256 : null };
+}
+// A finite, pure byte admission check. Only its sanitized decision is returned.
+// No string coercion or caller-provided hash/length declaration is trusted.
+export function assessSharedPeerBytes(relative, bytes) {
+  let valid = false;
+  try {
+    if (typeof relative === 'string' && Buffer.isBuffer(bytes)) {
+      const pin = SHARED_OPERATOR_PEERS.files.find(row => row.path === relative);
+      valid = Boolean(pin && bytes.length === pin.bytes && digest(bytes) === pin.sha256);
+    }
+  } catch { /* Invalid proxies or buffers have no byte authority. */ }
+  return Object.freeze({ valid, code: valid ? 'ok' : 'shared_peer_refused' });
 }
 export function createImmutableUnitContext(value) {
   const v = fields(value, ['prefix', 'node', 'unitName', 'unitFile', 'runtimeLink', 'unitSha256']);
@@ -88,6 +126,16 @@ export async function readHistoricalOperatorFile(file) {
   const value = await regularBytes(file, HISTORICAL_OPERATOR.bytes, { mode: 0o400 });
   if (!assessHistoricalOperatorBytes(value.bytes).valid) refuse('historical_cli_refused');
   return value.bytes;
+}
+// Imported by checkout-owned staging/foreground fixtures as well. This only
+// acquires eight bounded regular files and never starts a process or network I/O.
+export async function verifySharedOperatorPeerFiles(bundle) {
+  if (!simple(bundle)) refuse('historical_cli_refused');
+  for (const pin of SHARED_OPERATOR_PEERS.files) {
+    const value = await regularBytes(`${bundle}/${pin.path}`, pin.bytes, { mode: 0o400 });
+    if (!assessSharedPeerBytes(pin.path, value.bytes).valid) refuse('historical_cli_refused');
+  }
+  return true;
 }
 async function record(file) {
   const value = JSON.parse((await regularBytes(file, 2 * 1024 * 1024, { mode: 0o600 })).bytes), { sha256, ...body } = value;
@@ -559,6 +607,7 @@ async function runManagedFixture(argv, fallback) {
     const archiveCopy = `${parent}/candidate.tar.gz`; await writeFile(archiveCopy, archive.bytes, { mode: 0o600, flag: 'wx' }); await rememberFile(archiveCopy);
     const unpack = await command('/usr/bin/tar', ['-xzf', archiveCopy, '-C', parent]); if (!unpack.ok) refuse('archive_refused');
     bundle = `${parent}/nginx-x10-alpha`; savedBundle = await snapshot(bundle);
+    await verifySharedOperatorPeerFiles(bundle);
     report.phase = 'historical'; oldBundle = `${parent}/historical`;
     for (const entry of savedBundle.filter(v => v.directory).sort((a, b) => a.path.length - b.path.length)) await mkdir(path.join(oldBundle, entry.path), { mode: 0o700 });
     for (const entry of savedBundle.filter(v => !v.directory)) { await copyFile(path.join(bundle, entry.path), path.join(oldBundle, entry.path), constants.COPYFILE_EXCL); await chmod(path.join(oldBundle, entry.path), entry.mode & 0o7777); }

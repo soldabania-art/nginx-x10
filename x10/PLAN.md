@@ -2788,3 +2788,18 @@ Full G3/G4/G5/G7/V1, orphan incident/disposal, native binary upgrade,TLS restore
 permanent release,published replay,60minsoak and semanticContinuum stay OPEN.
 Owner40h/history, Windows deferral and all earlier adverse evidence preserved.
 Evidence: x10/evidence/g5-controller-record-bounds.json.
+
+
+## Next after legacy-CLI/shared-peer fixture repair
+
+First reconcile exact successor CI and actual artifacts: new79 controls in
+the same contract step, controller162 including new76, full native/alpha and
+installed/service compatibility with owned/privateNode/history/bootstrap cleanup.
+LegacyCLIacb+8shared98bpeers is a new explicitly assembled profile; never transfer
+prior7b/26d acceptance or claim fullhistoricalacb/old-controller downgrade.
+Both98b precondition failures are preserved, including unconfirmed fullalpha
+cleanup. No blind rerun or budget increase: both failures were non-timeout.
+Only after scoped reader compatibility is accepted, implement cumulative
+session/inventory refusal before publishing uninspectable state, using the
+immutable source-pinned virtual baseline and preserving existing records.
+AllfullV1/release/recovery/security/Continuum gates and40h/Windows policies remain.

@@ -18,6 +18,7 @@ import '../alpha/backup.test.mjs';
 import '../alpha/package-info.test.mjs';
 import '../alpha/stage.test.mjs';
 import { assertHostedOperatorReturn } from './package-return.mjs';
+import { SHARED_OPERATOR_PEERS, verifySharedOperatorPeerFiles } from '../service/operator-package-return.mjs';
 import './package-return-proof.test.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url)), source = path.join(root, 'x10/alpha/cli.mjs');
@@ -331,6 +332,7 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
 
 // Supported-host-only staging proof. The historical CLI is read from a fixed
 // reviewed Git blob, never created by editing labels or injecting fake behavior.
+// Its current shared peers are separately source-pinned and byte-checked.
 async function assertHostedPackageStage(t, { parent, bundle, installer, recipeNode,
   currentSource, backupFile, backupBytes, sourceRevision, port, healthPort }) {
   const historicalCommit = 'acb648392e745b5246a5620f2ea6a6286dc06d42';
@@ -342,13 +344,14 @@ async function assertHostedPackageStage(t, { parent, bundle, installer, recipeNo
   const historical = await execute('git', ['show', historicalObject],
     { cwd: root, timeout: 5000, encoding: 'buffer', maxBuffer: 256 * 1024 });
   assert.equal(digest(historical.stdout), historicalCliSha256); assert.equal(historical.stderr.length, 0);
-  const historicalPeers = [...recipeControlNames.map(name => `x10/control/${name}`),
-    ...recipeAlphaNames.filter(name => name !== 'cli.mjs').map(name => `x10/alpha/${name}`),
-    'x10/service/user-unit.mjs'];
-  const unchangedPeers = await execute('git', ['diff', '--exit-code', historicalCommit, '--', ...historicalPeers],
+  // Legacy CLI and reviewed shared peers have independent fixed source pins.
+  // This is a newly assembled pair, not the complete historical acb package.
+  const sharedPeers = SHARED_OPERATOR_PEERS.files.map(row => row.path);
+  const unchangedPeers = await execute('git', ['diff', '--exit-code', SHARED_OPERATOR_PEERS.commit, '--', ...sharedPeers],
     { cwd: root, timeout: 5000, maxBuffer: 256 * 1024 });
   assert.equal(unchangedPeers.stdout, ''); assert.equal(unchangedPeers.stderr, '',
-    'Other reviewed historical operator modules must match the current candidate');
+    'Shared operator modules must match their separately reviewed source');
+  await verifySharedOperatorPeerFiles(bundle);
   const candidateCli = await readFile(path.join(bundle, 'x10/alpha/cli.mjs'));
   assert.notEqual(digest(candidateCli), historicalCliSha256,
     'Historical and candidate operator code are genuinely different reviewed bytes');

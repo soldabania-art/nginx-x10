@@ -1337,3 +1337,57 @@ editing. Release-record step completeness/cap also needs reconciliation.
 Permanent release, independent published replay,60minsoak, full recovery/
 security, TLS restore,fullG3/G4/V1 and semantic Continuum remain OPEN.
 Evidence: x10/evidence/g4-kept-a-fallback-hosted.json.
+
+
+## Legacy CLI with reviewed current runtime peers — candidate
+
+The next fixture profile is explicitly
+`LEGACY_CLI_WITH_REVIEWED_CURRENT_PEERS`. It keeps the reviewed legacy alpha CLI
+from `acb648392e745b5246a5620f2ea6a6286dc06d42` (68551 bytes, SHA256
+`4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d`), while
+separately pinning all eight shared runtime peers to
+`98bc32d4ee9a6c1d6ed198135df01065ad1a65e7`:
+
+- `control/cli.mjs`, `manager.mjs`, `listeners.mjs`, `generations.mjs` and
+  `status-format.mjs`;
+- `alpha/runtime.mjs` and `alpha/upstream-example.mjs`;
+- `service/user-unit.mjs`.
+
+The control CLI and manager are the two peers changed since acb. Both the legacy
+CLI leg A and candidate B use the reviewed98b controller. The fixture must check
+all eight paths against that explicit source pin, reject unknown drift and bind
+every peer to the actual candidate bundle bytes before using the legacy CLI.
+The reassembled bundle replaces only `alpha/cli.mjs`; every other copied payload
+byte and native build provenance must remain unchanged. These unsigned checks
+establish consistency within the trusted operator profile, not publisher
+identity or an OS fence against a hostile same-UID process.
+
+This profile is not the complete historical acb runtime, an old-controller
+downgrade, an independently published old archive or a native binary upgrade.
+Existing strict normal, fallback and legacy proof/report schemas, observation
+counts, source pins and owned/private-Node cleanup gates stay required. A generic
+historical-A label in a collector report refers only to the exact legacy CLI
+within this expressly declared shared-peer profile. New acceptance must name
+this profile and its exact source/build; it cannot borrow the earlier7b
+fallback or26d archive acceptance. Those dated records and their narrower
+boundaries remain unchanged.
+
+The need for this repair is observed on exact98b: native
+push40533686304/job122293218632 and PR40533697675/job122293256424 each failed
+only the local-alpha-lifecycle group, leaving19/20 native groups successful.
+The controller suite actually passed162 tests, including the new76 reader
+controls and86 prior controls. Alpha reported614 PASS/3 FAIL/617 total without
+timeout because the CLI-only reassembly precondition still compared the eight
+peers with acb. The later installed TLS/package/service/private-Node steps were
+skipped. Complete failed-alpha cleanup remains UNKNOWN; a finally block or a
+separate successful diagnostic cannot establish that cleanup.
+
+The repaired profile is pending new exact hosted execution. It does not accept
+full recovery/security, orphan replay or disposal, TLS restore, permanent
+release/publisher capability, independent published-file replay,60-minute soak,
+full G3/G4/G5/G7/V1 or semantic Continuum. The prior34f timeout and cleanup
+UNKNOWN, c2 unrecorded primary and dependency-cleanup uncertainty, and local
+cleanup FAIL_UNKNOWN remain preserved. The earlier6401 failed-TLS-fixture cleanup
+observations remain separate from its skipped service/private-Node gates; no
+later success changes that historical distinction. Windows remains deferred and
+unverified after a separately accepted Linux V1.
