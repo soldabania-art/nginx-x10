@@ -22,8 +22,14 @@ function fixture({ stage = 'stopped', failure = null, sessions = 1, corrupt = nu
   if (corrupt === 'record') revision.recordSha256 = '0'.repeat(64);
   if (corrupt === 'input') { revision.inputSha256 = '0'.repeat(64); revision.recordSha256 = digest(JSON.stringify({ input, inputSha256: revision.inputSha256 })); }
   const operation = name => { events.push(name); if (failure?.at === name) fail(failure.code); };
+  let capacityCalls = 0;
   const dependencies = {
-    path, digest, fail,
+    path, digest, fail, NEW_SESSION_MINIMUM_ENTRIES: 17, REGISTRY_PUBLICATION_RESERVE: 1,
+    requireSessionInventoryCapacity: async (prefix, reserve) => {
+      assert.equal(prefix, context.prefix); assert.equal(reserve, capacityCalls === 0 ? 18 : 1);
+      assert.equal(context.registry.current, original.session); assert.equal(context.registry.sessions.length, sessions);
+      operation(capacityCalls++ === 0 ? 'capacity-pre' : 'capacity-post');
+    },
     lifecycle: async actual => { assert.equal(actual, context); operation('lifecycle'); return original; },
     stopped: async (actual, life) => { assert.equal(actual, context); assert.equal(life, original); operation('stopped'); },
     sessionStatus: async (actual, life) => { assert.equal(actual, context); assert.equal(life, original); operation('status'); return { result: { lastConfirmedRevision: 'b'.repeat(32) } }; },
@@ -43,14 +49,14 @@ test('source preparation reuses a guarded prepared session without writes', asyn
 test('source preparation publishes only after absence, operator integrity and exact confirmed input', async () => {
   const f = fixture(), life = await f.prepare();
   assert.equal(life.stage, 'prepared'); assert.equal(life.runtime, null);
-  assert.deepEqual(f.events, ['lifecycle', 'stopped', 'status', 'revision', 'create', 'publish']);
+  assert.deepEqual(f.events, ['lifecycle', 'stopped', 'status', 'revision', 'capacity-pre', 'create', 'capacity-post', 'publish']);
   assert.equal(f.context.registry.current, life.session); assert.equal(f.context.registry.sessions.length, 2);
 });
-for (const [at, code] of [['lifecycle', 'alpha_integrity'], ['stopped', 'alpha_live'], ['stopped', 'abnormal_exit'], ['status', 'operator_conflict'], ['revision', 'alpha_integrity'], ['create', 'fixture_create_failed'], ['publish', 'fixture_publish_failed']]) {
+for (const [at, code, expected = code] of [['lifecycle', 'alpha_integrity'], ['stopped', 'alpha_live'], ['stopped', 'abnormal_exit'], ['status', 'operator_conflict'], ['revision', 'alpha_integrity'], ['capacity-pre', 'inventory_limit'], ['create', 'fixture_create_failed'], ['capacity-post', 'inventory_limit', 'session_capacity_unresolved'], ['publish', 'fixture_publish_failed']]) {
   test(`source preparation preserves ${code} at ${at} without claiming success`, async () => {
     const f = fixture({ failure: { at, code } });
-    await assert.rejects(f.prepare(), { code }); assert.equal(f.events.at(-1), at);
-    if (!['create', 'publish'].includes(at)) { assert(!f.events.includes('create')); assert(!f.events.includes('publish')); }
+    await assert.rejects(f.prepare(), { code: expected }); assert.equal(f.events.at(-1), at);
+    if (!['create', 'capacity-post', 'publish'].includes(at)) { assert(!f.events.includes('create')); assert(!f.events.includes('publish')); }
     if (at === 'create') assert(!f.events.includes('publish'));
   });
 }
@@ -70,3 +76,16 @@ for (const corrupt of ['record', 'input']) {
     assert.deepEqual(f.events, ['lifecycle', 'stopped', 'status', 'revision']);
   });
 }
+
+test('post-creation capacity refusal preserves the old registry and requires inspection without publication', async () => {
+  const f = fixture({ failure: { at: 'capacity-post', code: 'unsafe_path' } });
+  const before = JSON.stringify(f.context.registry), oldLife = JSON.stringify(f.original);
+  await assert.rejects(f.prepare(), error => {
+    assert.equal(error.code, 'session_capacity_unresolved'); assert.equal(error.cause.code, 'unsafe_path');
+    assert.match(error.message, /STOP:.*operator inspection.*do not retry/);
+    assert.doesNotMatch(error.message, /\/synthetic/); return true;
+  });
+  assert.deepEqual(f.events, ['lifecycle', 'stopped', 'status', 'revision', 'capacity-pre', 'create', 'capacity-post']);
+  assert.equal(JSON.stringify(f.context.registry), before); assert.equal(JSON.stringify(f.original), oldLife);
+  assert(!f.events.includes('publish'));
+});

@@ -142,7 +142,9 @@ input is transferred. Bind explicitly to the new master. Old configurations,
 revision journals and histories stay in their old session directories; `history`
 shows the current session, and `info` identifies it. Pending, conflicting or
 modified state blocks restart until inspected/recovered. No automatic rebind
-or process-lifetime continuation is claimed. Up to 256 sessions are supported.
+or process-lifetime continuation is claimed. The registry has a 256-session
+schema ceiling, but cumulative inventory headroom can refuse preparation earlier;
+256 is not a verified operational capacity guarantee.
 
 The native control API stays closed by default. For explicit private Unix
 inspection only, start with an absent socket directly inside the installation:
@@ -906,3 +908,40 @@ failure and zero B POSTs, confirm failed B is quiescent, then explicitly reactiv
 the preserved known-good A. This extends already tested legacy refusal primitives
 to the separate cross-package fallback. Windows and the G9 portfolio handoff
 remain deferred/unchanged. See the [exact hosted receipt](../evidence/g4-managed-package-return-hosted.json).
+
+
+## Stopped-session capacity admission — candidate
+
+Before a stopped session can create and register its successor, the candidate
+counts the whole existing private installation tree under the alpha lock. This
+includes retained sessions and revision files, not just the session count. The
+entry bound remains4096; the walker now refuses a4097th entry instead of
+allowing one extra entry at the traversal boundary. No old session or history is
+pruned to make room. A prepared current session remains an idempotent path.
+
+A pre-creation capacity refusal leaves the registry and existing session tree
+unchanged. Creation can add more files than its minimum structure because native
+configuration checking may create logs or other files. The candidate therefore
+counts the actual tree again before changing the registry, reserving one entry
+for atomic registry publication. If that second check fails, the command returns
+`session_capacity_unresolved`: **STOP, preserve the installation for inspection
+and do not retry preparation.** The old registry stays unchanged, but the newly
+created, unregistered session is retained. That is a partial unresolved outcome,
+not a clean refusal or a session that may safely be deleted automatically.
+
+This admission applies only to stopped-session registry publication through
+`prepare-run` or the corresponding `run` path. It does not bound transient
+`nginx -t` files, later application temporary files, cumulative `apply`/`revert`
+revision growth, direct controller use or same-UID concurrent writers. Those
+capacity boundaries remain open. Initial install, restore and side-by-side
+staging call `createSession` outside this stopped-session guard; a fresh prefix
+is normally small, but custom native configuration checks are not a universal
+growth guarantee there either. Existing stop/recover/uninstall commands are
+not given this new admission check; their own state, ownership, unknown-file and
+faulted/orphan refusals still apply. An already over-limit or unknown tree must
+be preserved for manual inspection, without history editing or forced removal.
+
+The fixed counters and reserves are consistency checks for the declared
+cooperative profile, not a filesystem resource quota or an OS fencing mechanism.
+The candidate still needs exact hosted operator/service compatibility; local
+pure, virtual or tempfile checks are not physical runtime acceptance.

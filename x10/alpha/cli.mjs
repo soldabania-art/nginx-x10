@@ -14,6 +14,11 @@ const execute = promisify(execFile), root = fileURLToPath(new URL('../../', impo
 const controlNames = ['cli.mjs', 'manager.mjs', 'listeners.mjs', 'generations.mjs', 'status-format.mjs'];
 const alphaNames = ['cli.mjs', 'runtime.mjs', 'upstream-example.mjs'];
 const staticDirectories = ['bin', 'lib', 'lib/control', 'lib/alpha', 'licenses', 'examples', 'runs'];
+const INVENTORY_ENTRY_LIMIT = 4096;
+// A new stopped preparation retains ten directories and seven files. This is
+// minimum structure, not a bound on native -t or later native temporary files.
+const NEW_SESSION_MINIMUM_ENTRIES = 17;
+const REGISTRY_PUBLICATION_RESERVE = 1;
 const recipePath = 'lib/service/user-unit.mjs';
 const supportedSchema = version => version === 1 || version === 2;
 const installedNames = version => ['bin/nginx', 'bin/x10', 'build.json', 'licenses/NGINX-LICENSE', 'licenses/UPSTREAM.txt', 'examples/candidate-b.json',
@@ -710,7 +715,20 @@ async function prepareRun(context) {
     const revision = await load(path.join(life.prefix, '.x10-control/revisions', `${prior.result.lastConfirmedRevision}.json`));
     const { recordSha256, ...body } = revision;
     if (digest(JSON.stringify(body)) !== recordSha256 || digest(JSON.stringify(revision.input)) !== revision.inputSha256) fail('alpha_integrity', 'Last-confirmed input failed integrity');
-    const next = await createSession(prefix, context.manifest, revision.input); life = next.lifecycle;
+    // Count the whole existing tree, including retained revisions, under the
+    // alpha lock before allocating a session. Reserve its minimum structure and
+    // one atomic registry-publication temporary without raising the walker bound.
+    await requireSessionInventoryCapacity(prefix, NEW_SESSION_MINIMUM_ENTRIES + REGISTRY_PUBLICATION_RESERVE);
+    const next = await createSession(prefix, context.manifest, revision.input);
+    try { await requireSessionInventoryCapacity(prefix, REGISTRY_PUBLICATION_RESERVE); }
+    catch (cause) {
+      // Native syntax checks or unexpected concurrent files may add more than
+      // the minimum. Keep the old registry and the new unregistered tree intact.
+      // It is no longer a clean pre-creation refusal: never clean up or retry it.
+      throw Object.assign(new Error('STOP: New session was not registered; preserve the installation for operator inspection and do not retry preparation'),
+        { code: 'session_capacity_unresolved', cause });
+    }
+    life = next.lifecycle;
     context.registry.sessions.push(next.session); context.registry.current = next.session;
     await saveRecord(path.join(prefix, '.alpha-registry.json'), context.registry);
   }
@@ -815,7 +833,7 @@ async function inventory(prefix) {
   while (stack.length) {
     const relative = stack.pop(), directory = path.join(prefix, relative); await owned(directory, true, true);
     for (const name of await readdir(directory)) {
-      if (entries.length > 4096) fail('inventory_limit', 'Installation inventory exceeds supported bound');
+      if (entries.length >= INVENTORY_ENTRY_LIMIT) fail('inventory_limit', 'Installation inventory exceeds supported bound');
       const child = path.posix.join(relative, name), stat = await lstat(path.join(prefix, child));
       if (stat.isSymbolicLink() || stat.uid !== process.getuid()) fail('unsafe_path', `Unowned/symlink entry preserved: ${child}`);
       entries.push({ relative: child, stat }); if (stat.isDirectory()) stack.push(child);
@@ -823,6 +841,17 @@ async function inventory(prefix) {
   }
   return entries;
 }
+// Stopped-session registry-publication admission only. This sampled inventory
+// does not fence direct controller writers, native temporary-file growth or a
+// same-UID concurrent process. Existing stop/recover/uninstall paths are ungated.
+async function requireSessionInventoryCapacity(prefix, reserve) {
+  if (!Number.isSafeInteger(reserve) || reserve < 1 || reserve > INVENTORY_ENTRY_LIMIT)
+    fail('inventory_limit', 'A supported finite inventory reserve is required');
+  const entries = await inventory(prefix);
+  if (entries.length > INVENTORY_ENTRY_LIMIT - reserve)
+    fail('inventory_limit', 'Installation lacks inventory headroom; preserve history and prepare a new installation');
+}
+
 async function uninstall(context, moved) {
   const knownFiles = new Set([...Object.keys(context.manifest.immutable), '.alpha-install.json', '.alpha-registry.json', '.alpha-lock']);
   const knownDirs = new Set([...staticDirectories, ...(context.manifest.schemaVersion === 2 ? ['lib/service'] : [])]);

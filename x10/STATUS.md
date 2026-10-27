@@ -3427,3 +3427,32 @@ local results separately. Exact successor physical compatibility remains pending
 capacity and fullG3/G4/G5/G7/V1/release/recovery/Continuum gates remainOPEN.
 No localphysical/native/network/processgroup/signal/systemd fixtures ran.
 Owner40h/history/Windows and allprior adverse evidence are preserved.
+
+
+## 27 October 2026: reader compatibility and stopped-session capacity
+
+Exactf0 native push40560031478/job122386444347 andPR40560042605/
+job122386474502 passed36steps/native20/managed224/alpha600 each, zero-skip.
+Three strict service reports/sourcepins andowned/privateNode/history/bootstrap
+cleanup confirmed both. [Exact scoped receipt](evidence/g5-alpha-inventory-bindings-hosted.json)
+accepts reader/shared-peer compatibility only; prior timeout/error/UNKNOWN
+history is unchanged and timings are not a controlled speedup comparison.
+
+The new installedalphaCLI candidate counts the actual cumulative prefix tree
+including retained revisions before creating a stopped replacement session,
+reserving17minimum structural entries plus1registry temporary. It counts the
+actual resulting tree again with1publication slot before any registry mutation.
+The walker now enforces4096 inclusively rather than accepting4097 at its lastleaf.
+A pre-creation capacity refusal preserves records; a post-creation failure preserves
+the old registry ANDthe new unregistered tree and reports STOP/manualinspection
+without automatic cleanup/retry. That partial outcome may be uninspectable.
+[Candidate evidence](evidence/g5-stopped-session-capacity.json) and
+[ledger](review/g5-stopped-session-capacity-ledger.json) record localverification;
+new physical compatibility is pending and is not inherited from f0.
+
+This is narrow registry-publication admission, not complete capacity closure.
+Initialinstall/restore/stage,apply/revert,directcontroller andnative/temp/concurrent
+/transient growth remainOPEN; no OSfence is claimed. No new capacity gate blocks
+stop/recover; stage/uninstall inspection preserves overbound/unknowndata. FullG3/
+G4/G5/G7/V1,orphanreplay/disposal,TLSrestore,nativebinaryupgrade,release/replay/soak
+andsemanticContinuum remainOPEN. Owner40h/history/Windows remainunchanged.

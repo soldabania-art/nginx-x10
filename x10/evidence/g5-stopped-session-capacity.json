@@ -1,0 +1,580 @@
+{
+  "schemaVersion": 1,
+  "kind": "stopped-session-registry-publication-capacity-admission",
+  "state": "LOCAL_NARROW_COMPONENT_VERIFIED_HOSTED_PENDING_FULL_CAPACITY_OPEN",
+  "sourceBase": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+  "publicationParent": "c36456f0d71b52df30c01a7726e4c9f5d52812d9",
+  "sourceBindings": {
+    "x10/alpha/cli.mjs": {
+      "bytes": 89441,
+      "sha256": "7fda15b58a3579f628b6cdb3b0352cf3cc2fff9baa83a2f11cc0c76e7ac3bdaf"
+    },
+    "x10/alpha/prepare-run.test.mjs": {
+      "bytes": 7370,
+      "sha256": "f277589c30d05fa34296bddb37f868b1a0d8342a2cbf9ae89dcf709d4c1b2c02"
+    },
+    "x10/alpha/session-capacity.test.mjs": {
+      "bytes": 13560,
+      "sha256": "152904a595ed64c65b6c0d16df96cb9db35cfcb3e1e44c7ef0a66fccbc879a70"
+    },
+    "x10/test/all.mjs": {
+      "bytes": 32244,
+      "sha256": "b27cf670c35cbe8a5aa19ba184a5cb191026d7da0cb7aae38948c16700adefb4"
+    },
+    "x10/alpha/README.md": {
+      "bytes": 56093,
+      "sha256": "30561dc56ae272bb00aa486067b682593cc15f0a5ad4127a89c6ab6f120603c6"
+    },
+    "x10/release/SUPPORTED-PATH-REVIEW.md": {
+      "bytes": 11921,
+      "sha256": "2c945cb441079f720266696f5ba1d7bf6d516a1f4ea42460fe282530680672fe"
+    }
+  },
+  "evidence": "x10/evidence/g5-stopped-session-capacity.json",
+  "perFileLedger": "x10/review/g5-stopped-session-capacity-ledger.json",
+  "scope": "Stopped new-session preparation registry-publication admission only. It does not close the whole cumulative session/inventory capacity finding, fullG5, physical compatibility or V1.",
+  "baseline": {
+    "finding": "ALPHA_SESSION_INVENTORY_CAPACITY_OPEN",
+    "producer": "x10/review/alpha-session-capacity-counterexample.mjs",
+    "producerBinding": {
+      "bytes": 4982,
+      "sha256": "ce2dfb9292d5321f9c205589e65035ecb8d9aa1086b7b748dae3bab3b1ee7abb"
+    },
+    "producerUnchanged": true,
+    "runOnExactCommit": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+    "producerReportSourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+    "sameImmutableReplayControls": 3,
+    "replayPass": 3,
+    "notAdditionalCandidateControls": true,
+    "originalPinnedAlphaCLIsha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa",
+    "currentCandidateSourcePinRefusalIntentional": true,
+    "observations": [
+      {
+        "name": "200-minimal-sessions-within-current-inventory-bound",
+        "sessions": 200,
+        "minimumTreeEntries": 3401,
+        "seen": 3401,
+        "ok": true,
+        "returned": 3401
+      },
+      {
+        "name": "documented256-minimal-sessions-exceed-inventory-bound",
+        "sessions": 256,
+        "minimumTreeEntries": 4353,
+        "seen": 4097,
+        "ok": false,
+        "code": "inventory_limit"
+      },
+      {
+        "name": "prepareRun-accepts255-to256-source-sessions",
+        "sessions": 256,
+        "published": true,
+        "observationsVirtual": true
+      }
+    ],
+    "independentWalkerBoundaryBaseline": {
+      "checks": 4,
+      "passed": 4,
+      "results": [
+        {
+          "entryCount": 4095,
+          "returned": 4095,
+          "code": null,
+          "seen": 4095
+        },
+        {
+          "entryCount": 4096,
+          "returned": 4096,
+          "code": null,
+          "seen": 4096
+        },
+        {
+          "entryCount": 4097,
+          "returned": 4097,
+          "code": null,
+          "seen": 4097
+        },
+        {
+          "entryCount": 4098,
+          "returned": null,
+          "code": "inventory_limit",
+          "seen": 4097
+        }
+      ],
+      "scope": "Prior walker accepts4097 final entries due >4096 pre-push guard;4098 refuses. These baseline controls are separate from candidate22virtual review."
+    }
+  },
+  "implementation": {
+    "inventoryLimit": 4096,
+    "newSessionMinimumEntries": 17,
+    "registryPublicationReserve": 1,
+    "preCreationReserve": 18,
+    "postCreationReserve": 1,
+    "postCheckPrecedesLifecycleLocalAssignmentAndRegistryMutation": true,
+    "postFailureCode": "session_capacity_unresolved",
+    "causePreservedInternally": true,
+    "sanitizedSTOPInspectionNoRetryMessage": true,
+    "registryUnchangedOnPostCapacityFailure": true,
+    "newUnregisteredTreePreserved": true,
+    "noAutomaticCleanup": true,
+    "preparedIdempotentPathUngated": true,
+    "recoverStopUninstallNoAdmissionGuard": true,
+    "walkerOffByOneFixed": true,
+    "entryLimitNotRaised": true,
+    "recordSessionMaximum256Unchanged": true
+  },
+  "outcomes": [
+    {
+      "phase": "before createSession",
+      "outcome": "inventory_limit or existing inventory safety refusal",
+      "preservation": "No new session creation/registry publication; existing records retain bytes, identity, modes and checked timestamps. Actual whole-prefix count includes retained revisions and current alpha lock.",
+      "preCreationReserve": 18,
+      "reserveDerivation": "17minimum new-session structural entries (10directories including session root+7files) plus1atomicregistrypublicationtemporary; this is not transient/native-t high-water capacity."
+    },
+    {
+      "phase": "after completed createSession before registry mutation",
+      "outcome": "success only if actual inventory leaves1entry for registry temporary",
+      "registryPublicationReserve": 1,
+      "ordering": "The postcheck precedes life assignment, registry.sessions.push, registry.current assignment and saveRecord."
+    },
+    {
+      "phase": "post-creation inventory recheck failure",
+      "outcome": "session_capacity_unresolved",
+      "guidance": "STOP, preserve installation for operator inspection and do not retry preparation",
+      "preservation": "Old registry object/file and existing lifecycle remain unchanged, but the newly created unregistered session tree is retained; may remain over the inspection bound. No automatic cleanup, reaping, lifecycle editing or registry repair.",
+      "notCleanPreCreationRefusal": true,
+      "originalCausePreservedInternally": true
+    }
+  ],
+  "strictWalker": {
+    "maximumEntries": 4096,
+    "boundRaised": false,
+    "checkBeforeNextEntryLstat": true,
+    "exact4096Accepted": true,
+    "4097FinalEntryRefused": true,
+    "oldOffByOneAcceptanceIntentionallyTightened": true,
+    "schemaSessionCeiling": 256,
+    "schemaCeilingNotOperationalCapacityGuarantee": true,
+    "sharedConsumerEffect": "Existing stage/uninstall consumers retain their code but now share the strict4096 walker. This is not a promise that previously4097-entry states remain inspectable; preserve/refuse them rather than delete history."
+  },
+  "candidateVerification": {
+    "newSuite": {
+      "command": "node --test --test-reporter=tap x10/alpha/session-capacity.test.mjs",
+      "nodeVersion": "v24.22.1",
+      "tests": 46,
+      "pass": 46,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "durationMs": 1923.216255,
+      "runs": 1,
+      "scope": "Source-extracted production inventory/admission/prepareRun functions with virtual lifecycle/controller observers and one owned tempfile capacity-refusal case. No installer/controller/native process, network or signal execution. Counts are this suite, not unique new controls or a sum with overlapping prior prepare-run regressions."
+    },
+    "newSuiteSource": {
+      "bytes": 13560,
+      "sha256": "152904a595ed64c65b6c0d16df96cb9db35cfcb3e1e44c7ef0a66fccbc879a70"
+    },
+    "existingPreparationControls": {
+      "command": "node --test --test-reporter=tap x10/alpha/prepare-run.test.mjs",
+      "tests": 18,
+      "pass": 18,
+      "fail": 0,
+      "cancelled": 0,
+      "skip": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "priorControlsRetained": 15,
+      "newOrderAndFailureControls": 3,
+      "physicalFixturesExecuted": 0
+    },
+    "countsNotSummed": true,
+    "notClaimedUniqueNewControls": true,
+    "scope": "Source-extracted production inventory/admission/prepareRun logic, virtual controller/lifecycle/native observations and owned tempfiles. No actual256native-session installation, native process, network, systemd, signal or live resource boundary is exercised."
+  },
+  "independentReview": {
+    "candidateVirtualChecks": 22,
+    "candidateVirtualPass": 22,
+    "candidateStaticChecks": 12,
+    "candidateStaticPass": 12,
+    "findingsWithinNarrowScope": [],
+    "virtualResults": [
+      {
+        "name": "invalid-reserve-0",
+        "pass": true
+      },
+      {
+        "name": "invalid-reserve--1",
+        "pass": true
+      },
+      {
+        "name": "invalid-reserve-NaN",
+        "pass": true
+      },
+      {
+        "name": "invalid-reserve-Infinity",
+        "pass": true
+      },
+      {
+        "name": "invalid-reserve-1.1",
+        "pass": true
+      },
+      {
+        "name": "invalid-reserve-4097",
+        "pass": true
+      },
+      {
+        "name": "invalid-reserve-undefined",
+        "pass": true
+      },
+      {
+        "name": "invalid-reserve-1",
+        "pass": true
+      },
+      {
+        "name": "headroom-4078-18",
+        "pass": true
+      },
+      {
+        "name": "headroom-4079-18",
+        "pass": true
+      },
+      {
+        "name": "headroom-4095-1",
+        "pass": true
+      },
+      {
+        "name": "headroom-4096-1",
+        "pass": true
+      },
+      {
+        "name": "success",
+        "pass": true,
+        "created": 1,
+        "saved": 1,
+        "inventoryCalls": 2,
+        "code": null
+      },
+      {
+        "name": "pre-limit",
+        "pass": true,
+        "created": 0,
+        "saved": 0,
+        "inventoryCalls": 1,
+        "code": "inventory_limit"
+      },
+      {
+        "name": "post-limit",
+        "pass": true,
+        "created": 1,
+        "saved": 0,
+        "inventoryCalls": 2,
+        "code": "session_capacity_unresolved"
+      },
+      {
+        "name": "post-unsafe",
+        "pass": true,
+        "created": 1,
+        "saved": 0,
+        "inventoryCalls": 2,
+        "code": "session_capacity_unresolved"
+      },
+      {
+        "name": "prepared",
+        "pass": true,
+        "created": 0,
+        "saved": 0,
+        "inventoryCalls": 0,
+        "code": null
+      },
+      {
+        "name": "faulted",
+        "pass": true,
+        "created": 0,
+        "saved": 0,
+        "inventoryCalls": 0,
+        "code": "abnormal_exit"
+      },
+      {
+        "name": "strict-walker-4095",
+        "pass": true,
+        "n": 4095,
+        "returned": 4095,
+        "code": null,
+        "seen": 4095
+      },
+      {
+        "name": "strict-walker-4096",
+        "pass": true,
+        "n": 4096,
+        "returned": 4096,
+        "code": null,
+        "seen": 4096
+      },
+      {
+        "name": "strict-walker-4097",
+        "pass": true,
+        "n": 4097,
+        "returned": null,
+        "code": "inventory_limit",
+        "seen": 4096
+      },
+      {
+        "name": "strict-walker-4098",
+        "pass": true,
+        "n": 4098,
+        "returned": null,
+        "code": "inventory_limit",
+        "seen": 4096
+      }
+    ],
+    "staticResults": [
+      {
+        "name": "pre-count-before-session-create",
+        "pass": true
+      },
+      {
+        "name": "post-count-before-life-and-registry-mutation",
+        "pass": true
+      },
+      {
+        "name": "post-refusal-no-auto-cleanup",
+        "pass": true
+      },
+      {
+        "name": "post-refusal-preserves-cause",
+        "pass": true
+      },
+      {
+        "name": "two-admission-calls-only",
+        "pass": true
+      },
+      {
+        "name": "registry-ceiling-unchanged",
+        "pass": true
+      },
+      {
+        "name": "controller-manager-byte-unchanged",
+        "pass": true
+      },
+      {
+        "name": "native-runtime-byte-unchanged",
+        "pass": true
+      },
+      {
+        "name": "three-new-finite-constants",
+        "pass": true
+      },
+      {
+        "name": "prepared-reuse-outside-stopped-guard",
+        "pass": true
+      },
+      {
+        "name": "docs-initial-install-restore-stage-open",
+        "pass": true
+      },
+      {
+        "name": "matrix-full-gap-open",
+        "pass": true
+      }
+    ],
+    "reportBinding": {
+      "bytes": 7318,
+      "sha256": "e5f3e6de93501eeddc7194354ed6af498310484852d66a39d77e1a180622bdff"
+    },
+    "scope": "Independent source-extracted virtual and static controls, not physical/runtime or fullsecurity acceptance."
+  },
+  "mandatoryAncestryRead": {
+    "sourceBase": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+    "documents": 52,
+    "mandatoryEdges": 177,
+    "blobPinComparisons": 103,
+    "distinctPinnedTargets": 14,
+    "distinctAncestorCommits": 20,
+    "missingReferences": 0,
+    "mismatches": 0,
+    "semanticChecks": 148,
+    "allPriorRecordsRetained": true,
+    "scope": "Document/reference/source checks only; NOT TAP/runtime."
+  },
+  "priorHostedAcceptance": {
+    "evidence": "x10/evidence/g5-alpha-inventory-bindings-hosted.json",
+    "implementation": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+    "scope": "Exactf0 reader/decomposition/shared-peer compatibility in both events, with strict service/owned/privateNode cleanup; it does not accept this newalphaCLI capacity candidate."
+  },
+  "residualOpenBoundaries": [
+    "Initial install/restore/stage createSession paths are outside the stopped-session admission; normally fresh prefixes are small, but arbitrary custom native-t writes are not universally bounded.",
+    "Apply/revert/controller revision accumulation, recovery-created revisions, direct controller CLI/API and trusted operator writes can grow the tree after preparation.",
+    "Native configuration checking, body/temp/cache/log/PID/control-socket growth and concurrent same-UID/native writers are not fenced by sampled alpha-lock inventory.",
+    "The18minimum pre-reserve is not a proven transientOS/high-water reserve; postfailure explicitly retains partial/unregistered/possibly-overbudget state. Existing creation failure paths are not given a universal cleanup/rollback guarantee.",
+    "Prepared-session reuse is not newly capacity-gated. Stop/recover/uninstall have no new admission guard, while their existing ownership/unknown-file/faulted/orphan rules and strict shared inventory consumers still apply.",
+    "Directory readdir allocation, filesystem/kernel timing, total bytes/memory, native transient files and every future writer are not bounded by this4096entry admission component.",
+    "No broad signals, forced uninstall, permanent release, TLS-state restore, native binary upgrade, independent published replay,60-minute soak or semanticContinuation acceptance is supplied."
+  ],
+  "alphaRuntimeBytesChanged": true,
+  "controllerBytesChanged": false,
+  "nativeCChanged": false,
+  "nativeBinaryUpgradeAccepted": false,
+  "fixedBundleFileInventoryChanged": false,
+  "workflowChanged": false,
+  "workflowStepNamesOrderOrBudgetChanged": false,
+  "nativeGroupNamesOrderOrBudgetChanged": false,
+  "newTestWiring": "Existing managed-native-control group adds session-capacity.test.mjs and modified prepare-run.test.mjs; complete zero-skip TAP remains mandatory. No new group or workflow step. Actual successor counts must be read, not inferred.",
+  "localPhysicalFixturesExecuted": 0,
+  "networkFixturesExecuted": 0,
+  "signalsSent": 0,
+  "fullCapacityFindingClosed": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "fullG5Accepted": false,
+  "fullG7Accepted": false,
+  "productionAccepted": false,
+  "nextConcreteTask": "Inspect exact successor native push/PR jobs and actual artifacts. Require newcapacity46 and retainedpreparation18 controls actually included, allpeer/source/strictservice/owned/privateNode cleanup compatibility, and no guessed aggregate counts. Keep full capacity finding OPEN for other writers; choose its next bounded writer only after actual hosted candidate compatibility. Preserve all prior adverse/UNKNOWN,40h/history/Windows and fullV1/Continuum gates.",
+  "existingRegressionSuites": [
+    {
+      "suite": "stage",
+      "TAP": {
+        "tests": 126,
+        "pass": 126,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "exitCode": 0,
+      "scope": "Existing pure/tempfile/read-only installed recipe controls on finalcandidate; separate overlapping suites, not summed or native acceptance."
+    },
+    {
+      "suite": "backup",
+      "TAP": {
+        "tests": 82,
+        "pass": 82,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "exitCode": 0,
+      "scope": "Existing pure/tempfile/read-only installed recipe controls on finalcandidate; separate overlapping suites, not summed or native acceptance."
+    },
+    {
+      "suite": "package-info",
+      "TAP": {
+        "tests": 86,
+        "pass": 86,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "exitCode": 0,
+      "scope": "Existing pure/tempfile/read-only installed recipe controls on finalcandidate; separate overlapping suites, not summed or native acceptance."
+    },
+    {
+      "suite": "alpha-recipe",
+      "TAP": {
+        "tests": 17,
+        "pass": 17,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "exitCode": 0,
+      "scope": "Existing pure/tempfile/read-only installed recipe controls on finalcandidate; separate overlapping suites, not summed or native acceptance."
+    },
+    {
+      "suite": "alpha-decomposition",
+      "TAP": {
+        "tests": 45,
+        "pass": 45,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "exitCode": 0,
+      "scope": "Existing pure/tempfile/read-only installed recipe controls on finalcandidate; separate overlapping suites, not summed or native acceptance."
+    }
+  ],
+  "localStageDiagnostic": {
+    "initialCommandExitCode": 0,
+    "initialCompleteTAPSummaryPresent": false,
+    "lastRetainedCompleteOrdinal": 118,
+    "ordinalIsNotTotalPass": true,
+    "cause": "UNKNOWN",
+    "productAssertionFailureEstablished": false,
+    "boundedIsolatedVerificationReruns": 1,
+    "rerunReason": "The first retained TAP file lacks a complete summary despite commandexit0; isolated Python-waited run required to verify completion.",
+    "finalCompleteTAPPass": 126,
+    "finalCommandExitCode": 0,
+    "finalStderrBytes": 0,
+    "controlsNotDoubled": true,
+    "scope": "Local pure/tempfile stage verification diagnostic, not hosted runtime or physicalcleanup evidence."
+  },
+  "unchangedControllerRuntimeWorkflowProofAndBaselineProducerBindings": {
+    "x10/control/manager.mjs": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "x10/control/cli.mjs": {
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+    },
+    "x10/alpha/runtime.mjs": {
+      "bytes": 7540,
+      "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51"
+    },
+    "x10/alpha/upstream-example.mjs": {
+      "bytes": 4989,
+      "sha256": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c"
+    },
+    ".github/workflows/x10-native.yml": {
+      "bytes": 26465,
+      "sha256": "d3f92329a396b02d045b45736733cdb711bf55af10b30504bc24f1a0efc8eb73"
+    },
+    "x10/service/operator-package-return.mjs": {
+      "bytes": 68575,
+      "sha256": "612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7"
+    },
+    "x10/service/operator-package-return-proof.mjs": {
+      "bytes": 12890,
+      "sha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de"
+    },
+    "x10/service/operator-package-fallback.mjs": {
+      "bytes": 630,
+      "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+    },
+    "x10/service/operator-package-fallback-proof.mjs": {
+      "bytes": 13468,
+      "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+    },
+    "x10/service/lifecycle-check.mjs": {
+      "bytes": 147483,
+      "sha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370"
+    },
+    "x10/service/verified-node.mjs": {
+      "bytes": 32439,
+      "sha256": "2febc8bdb6d890e738a426e4a80121ea840d143d9a718768ef10b5b09e839090"
+    },
+    "x10/review/alpha-session-capacity-counterexample.mjs": {
+      "bytes": 4982,
+      "sha256": "ce2dfb9292d5321f9c205589e65035ecb8d9aa1086b7b748dae3bab3b1ee7abb"
+    }
+  },
+  "coordinatorDocumentationReconciliation": "Current matrix now qualifies exact26d archive and exactf0 both-event reader/shared-peer hosted acceptance separately from the new pending capacity alphaCLI; historical source/security draft pins remain in their private reports. The legacy-peer section now also distinguishes exactf0 acceptance from historical98b failure and the new pending capacity candidate.",
+  "finalWiringVerification": {
+    "exitCode": 0,
+    "stderrBytes": 0,
+    "TAP": {
+      "tests": 45,
+      "pass": 45,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "reason": "Changed managed suite arguments to include the modified preparation suite; controls are repeated verification, not additional coverage."
+  }
+}

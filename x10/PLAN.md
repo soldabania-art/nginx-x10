@@ -2825,3 +2825,15 @@ transferred from oldsource or guessed by arithmetic. Both844 failures were
 ReferenceError/non-timeout; retain unknown wholefailedalpha cleanup. Capacity
 remains dependent on accepted compatibility, and the earlier timeout histories
 are not explained or cleared by this test binding repair. Allfullgates remain.
+
+
+## After stopped-session publication admission
+
+First verify both exact successor jobs/artifacts for changed installedalphaCLI:
+capacity controls included, zero-skip fullgroups/strictreports and allownedcleanup.
+Do not transfer f0runtime acceptance or guess TAP totals. Then separately close
+other entry-growth writer contracts and native/concurrent/transient boundaries.
+Pre18/post1 admits only stopped replacement registry publication; postfailure
+can retain an unregistered tree and must stop for inspection, not auto-retry.
+Preserve oldrecords/revisions, unsupported/faulted refusals, no compaction and no
+blind capincrease. Fullcapacity/G5/V1 and allprior adverse/40h/Windows limits remain.
