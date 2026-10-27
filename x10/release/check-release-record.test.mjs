@@ -1,11 +1,51 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, rmSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, rmSync, symlinkSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { validateReleaseRecord, MAX_RECORD_BYTES } from './check-release-record.mjs';
+import { validateReleaseRecord, MAX_RECORD_BYTES, REQUIRED_NATIVE_CI_STEPS, MAX_EXECUTED_STEPS } from './check-release-record.mjs';
+
+// Independent literal current native receipt names. No runtime/artifact is fetched.
+const receiptNames = [
+  "Set up job",
+  "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+  "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+  "Validate release-record contract and refusal controls",
+  "Validate alpha archive refusal controls",
+  "Validate guarded user-service recipe",
+  "Validate fail-closed user-manager preflight",
+  "Validate actual-service harness refusal controls",
+  "Validate bounded owned-service journal observations",
+  "Validate bounded downstream HTTPS fixture controls",
+  "Validate bounded verified HTTPS origin fixture controls",
+  "Validate bounded paused TLS client controls",
+  "Validate owned operator interruption controls",
+  "Validate failed interruption containment controls",
+  "Validate authenticated Node dependency refusal controls",
+  "Validate managed operator-package return refusal controls",
+  "Validate managed unhealthy-package fallback refusal controls",
+  "Build dependencies and optional test clients",
+  "Install pinned HTTP3 interoperability client",
+  "Install independent HTTP3 HEAD client",
+  "Compile native profile",
+  "Native regressions and pinned official compatibility sample",
+  "Verify installed HTTPS upstream trust and hostname",
+  "Verify managed frontend HTTPS and certificate lifecycle",
+  "Verify native tenant cache contract experiment",
+  "Verify private Unix control transport",
+  "Build profile without control API",
+  "Package local Linux alpha",
+  "Checksum local Linux alpha",
+  "Verify packed alpha before extraction",
+  "Verify temporary user-service with authenticated private Node",
+  "Preserve JSON evidence",
+  "Preserve local Linux alpha",
+  "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+  "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+  "Complete job"
+];
 
 // Invented unit-only identities and URLs. No artifact exists or is fetched.
 function record(stage = 'alpha') {
@@ -20,9 +60,7 @@ function record(stage = 'alpha') {
     build: { eventHead: commit, checkoutCommit: commit, prMergeCommit: null,
       binarySha256: hash, manifestSha256: hash, configurationSha256: hash,
       ci: [{ workflow: 'X10 native compatibility', runId: 1, jobId: 2, attempt: 1, eventHead: commit, checkoutCommit: commit, conclusion: 'success',
-        executedSteps: ['Validate release-record contract and refusal controls', 'Compile native profile', 'Native regressions and pinned official compatibility sample',
-          'Verify private Unix control transport', 'Build profile without control API', 'Package local Linux alpha',
-          'Checksum local Linux alpha'].map(name => ({ name, conclusion: 'success' })) }],
+        executedSteps: receiptNames.map(name => ({ name, conclusion: 'success' })) }],
       nodeVersion: '22.0.0', nodeExecutableSha256: hash, os: 'ubuntu', osVersion: '24.04', arch: 'x86_64',
       dependencies: Object.fromEntries(['glibc', 'pcre2', 'openssl', 'zlib', 'libcrypt'].map(k => [k, { version: 'synthetic-unit-only', sha256: hash }])) },
     artifact: { url: `https://github.com/soldabania-art/nginx-x10/releases/download/v${version}/synthetic-unit-only.tar.gz`,
@@ -120,4 +158,87 @@ test('tree and executed native CI declarations are required and cannot be skippe
   reject(mutate(x => x.build.ci[0].executedSteps[0].conclusion = 'skipped'));
   reject(mutate(x => x.build.ci[0].executedSteps[0].name = 'Metadata scope only'));
   reject(mutate(x => x.build.ci[0].eventHead = '4'.repeat(40)));
+});
+
+test('independent complete receipt agrees with every configured native workflow step', () => {
+  const lines = readFileSync(new URL('../../.github/workflows/x10-native.yml', import.meta.url), 'utf8').split('\n');
+  const start = lines.indexOf('  linux:');
+  assert.ok(start >= 0);
+  let end = lines.findIndex((line, index) => index > start && /^  [A-Za-z_][A-Za-z0-9_-]*:\s*$/.test(line));
+  if (end < 0) end = lines.length;
+  const job = lines.slice(start, end), stepsStart = job.indexOf('    steps:');
+  assert.ok(stepsStart >= 0);
+  const configured = [], unnamedActions = [];
+  for (const line of job.slice(stepsStart + 1)) {
+    if (!/^      -/.test(line)) continue;
+    const named = /^      - name: ([^'"#\r\n]+)$/.exec(line);
+    if (named) { configured.push(named[1]); continue; }
+    const used = /^      - uses: (actions\/(?:checkout|setup-node)@[0-9a-f]{40})(?:\s+#.*)?$/.exec(line);
+    assert.ok(used, 'Unrecognized native step declaration must not silently escape coverage');
+    configured.push(`Run ${used[1]}`); unnamedActions.push(used[1]);
+  }
+  assert.equal(unnamedActions.length, 2);
+  const all = ['Set up job', ...configured, ...unnamedActions.toReversed().map(name => `Post Run ${name}`), 'Complete job'];
+  assert.deepEqual(receiptNames, all);
+  assert.deepEqual(REQUIRED_NATIVE_CI_STEPS, receiptNames);
+  assert.equal(receiptNames.length, 36);
+  assert.equal(MAX_EXECUTED_STEPS, 64);
+  assert.equal(Object.isFrozen(REQUIRED_NATIVE_CI_STEPS), true);
+});
+
+test('complete36 receipt passes but selected32 and historical7 receipts refuse', () => {
+  assert.equal(validateReleaseRecord(record()).valid, true);
+  reject(mutate(x => x.build.ci[0].executedSteps = x.build.ci[0].executedSteps.slice(1, 33)));
+  const historical = ['Validate release-record contract and refusal controls', 'Compile native profile',
+    'Native regressions and pinned official compatibility sample', 'Verify private Unix control transport',
+    'Build profile without control API', 'Package local Linux alpha', 'Checksum local Linux alpha'];
+  reject(mutate(x => x.build.ci[0].executedSteps = historical.map(name => ({ name, conclusion: 'success' }))));
+});
+
+for (const [index, name] of receiptNames.entries()) {
+  test(`same-length padding cannot replace mandatory receipt step: ${name}`, () => {
+    reject(mutate(x => x.build.ci[0].executedSteps[index].name = `Unrelated successful padding ${index}`));
+  });
+}
+for (let index = 0; index < receiptNames.length - 1; index++) {
+  test(`receipt order refuses adjacent swap ${index + 1}/${index + 2}`, () => {
+    reject(mutate(x => {
+      const steps = x.build.ci[0].executedSteps;
+      [steps[index], steps[index + 1]] = [steps[index + 1], steps[index]];
+    }));
+  });
+}
+
+function extraReceipt(count) {
+  const value = record(), steps = value.build.ci[0].executedSteps;
+  steps.splice(steps.length - 1, 0, ...Array.from({ length: count }, (_, index) => ({
+    name: `Synthetic additional successful step ${index}`, conclusion: 'success',
+  })));
+  return value;
+}
+test('finite receipt bound allows64 complete ordered steps and refuses65', () => {
+  assert.equal(validateReleaseRecord(extraReceipt(28)).valid, true);
+  reject(extraReceipt(29));
+});
+test('extra steps cannot precede setup or follow completion', () => {
+  const before = record(); before.build.ci[0].executedSteps.unshift({ name: 'Extra before setup', conclusion: 'success' }); reject(before);
+  const after = record(); after.build.ci[0].executedSteps.push({ name: 'Extra after completion', conclusion: 'success' }); reject(after);
+});
+test('complete required coverage cannot hide duplicate or unsuccessful extra steps', () => {
+  const duplicate = record(); duplicate.build.ci[0].executedSteps.splice(4, 0, { ...duplicate.build.ci[0].executedSteps[4] }); reject(duplicate);
+  for (const conclusion of ['failure', 'skipped', 'cancelled']) {
+    const required = record(); required.build.ci[0].executedSteps[16].conclusion = conclusion; reject(required);
+    const extra = extraReceipt(1); extra.build.ci[0].executedSteps.at(-2).conclusion = conclusion; reject(extra);
+  }
+});
+test('multiple complete CI declarations keep one exact build checkout identity', () => {
+  const value = record(); value.build.ci.push({ ...structuredClone(value.build.ci[0]), runId: 3, jobId: 4 });
+  assert.equal(validateReleaseRecord(value).valid, true);
+  value.build.ci[1].checkoutCommit = '3'.repeat(40); reject(value);
+});
+test('complete receipt arrays reject sparse slots and accessors without invoking getters', () => {
+  const sparse = record(); delete sparse.build.ci[0].executedSteps[10]; reject(sparse);
+  let reads = 0; const accessor = record();
+  Object.defineProperty(accessor.build.ci[0].executedSteps, '10', { enumerable: true, get() { reads++; throw Error('canary'); } });
+  reject(accessor); assert.equal(reads, 0);
 });

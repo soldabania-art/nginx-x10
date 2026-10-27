@@ -5,6 +5,49 @@ import { fileURLToPath } from 'node:url';
 
 const schema = JSON.parse(readFileSync(new URL('./release-record.schema.json', import.meta.url)));
 export const MAX_RECORD_BYTES = 262144;
+// Current native job receipt in observed execution order, including setup and
+// post-actions. This is a bounded declaration contract, not a workflow query
+// or authentication of the external job. Keep it aligned with the pinned
+// configured steps and independently recorded actual job receipts.
+export const MAX_EXECUTED_STEPS = 64;
+export const REQUIRED_NATIVE_CI_STEPS = Object.freeze([
+  'Set up job',
+  'Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd',
+  'Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38',
+  'Validate release-record contract and refusal controls',
+  'Validate alpha archive refusal controls',
+  'Validate guarded user-service recipe',
+  'Validate fail-closed user-manager preflight',
+  'Validate actual-service harness refusal controls',
+  'Validate bounded owned-service journal observations',
+  'Validate bounded downstream HTTPS fixture controls',
+  'Validate bounded verified HTTPS origin fixture controls',
+  'Validate bounded paused TLS client controls',
+  'Validate owned operator interruption controls',
+  'Validate failed interruption containment controls',
+  'Validate authenticated Node dependency refusal controls',
+  'Validate managed operator-package return refusal controls',
+  'Validate managed unhealthy-package fallback refusal controls',
+  'Build dependencies and optional test clients',
+  'Install pinned HTTP3 interoperability client',
+  'Install independent HTTP3 HEAD client',
+  'Compile native profile',
+  'Native regressions and pinned official compatibility sample',
+  'Verify installed HTTPS upstream trust and hostname',
+  'Verify managed frontend HTTPS and certificate lifecycle',
+  'Verify native tenant cache contract experiment',
+  'Verify private Unix control transport',
+  'Build profile without control API',
+  'Package local Linux alpha',
+  'Checksum local Linux alpha',
+  'Verify packed alpha before extraction',
+  'Verify temporary user-service with authenticated private Node',
+  'Preserve JSON evidence',
+  'Preserve local Linux alpha',
+  'Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38',
+  'Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd',
+  'Complete job',
+]);
 const failure = code => ({ valid: false, errors: [code] });
 
 function plainJson(value, seen = new Set(), depth = 0, budget = { n: 0 }) {
@@ -70,9 +113,6 @@ export function validateReleaseRecord(value) {
     if (value.build.prMergeCommit === null ? value.build.checkoutCommit !== value.source.commit
         : value.build.checkoutCommit !== value.build.prMergeCommit || value.build.prMergeCommit === value.source.commit)
       return failure('record_identity');
-    const requiredSteps = ['Validate release-record contract and refusal controls', 'Compile native profile', 'Native regressions and pinned official compatibility sample',
-      'Verify private Unix control transport', 'Build profile without control API',
-      'Package local Linux alpha', 'Checksum local Linux alpha'];
     const ciIds = new Set();
     for (const ci of value.build.ci) {
       if (ci.eventHead !== value.source.commit || ci.checkoutCommit !== value.build.checkoutCommit)
@@ -82,8 +122,18 @@ export function validateReleaseRecord(value) {
       ciIds.add(identity);
       const names = ci.executedSteps.map(step => step.name);
       if (ci.conclusion !== 'success' || ci.executedSteps.some(step => step.conclusion !== 'success')
-          || new Set(names).size !== names.length || requiredSteps.some(name => !names.includes(name)))
+          || names.length > MAX_EXECUTED_STEPS || new Set(names).size !== names.length
+          || names[0] !== REQUIRED_NATIVE_CI_STEPS[0] || names.at(-1) !== REQUIRED_NATIVE_CI_STEPS.at(-1))
         return failure('record_ci');
+      // Preserve receipt order; a sorted set of selected historical steps is
+      // insufficient. Additional actual steps must remain unique, successful,
+      // inside the setup/completion boundaries and within the schema cap.
+      let previous = -1;
+      for (const name of REQUIRED_NATIVE_CI_STEPS) {
+        const index = names.indexOf(name);
+        if (index <= previous) return failure('record_ci');
+        previous = index;
+      }
     }
     const canonicalURL = text => {
       const url = new URL(text);

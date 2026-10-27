@@ -297,8 +297,8 @@
               },
               "executedSteps": {
                 "type": "array",
-                "minItems": 7,
-                "maxItems": 32,
+                "minItems": 36,
+                "maxItems": 64,
                 "items": {
                   "type": "object",
                   "additionalProperties": false,
@@ -798,5 +798,5 @@
       }
     }
   ],
-  "$comment": "Necessary shape constraints only. check-release-record.mjs additionally checks source/build identities, evidence ID references, gate ordering/kinds and minimum soak duration. Neither authenticates evidence or grants production acceptance. Required CI declaration uses actual named native steps; run/job/attempt/steps are not authenticated by this checker. Prior failed attempts belong in separately retained evidence."
+  "$comment": "Necessary shape constraints only. check-release-record.mjs additionally checks source/build identities, evidence ID references, gate ordering/kinds and minimum soak duration. Neither authenticates evidence or grants production acceptance. Required CI declaration preserves complete ordered named native steps, including setup and post-actions, bounded to 64; the checker requires all 36 current names and setup/completion boundaries. Run/job/attempt/steps are not authenticated by this checker. Prior failed attempts belong in separately retained evidence."
 }

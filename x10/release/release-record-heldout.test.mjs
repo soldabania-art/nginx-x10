@@ -12,6 +12,46 @@ import { validateReleaseRecord, MAX_RECORD_BYTES } from './check-release-record.
 const repository = 'https://github.com/soldabania-art/nginx-x10';
 const source = '1'.repeat(40), merge = '2'.repeat(40), digest = 'a'.repeat(64);
 const kinds = ['authority', 'contract', 'alpha-install', 'service', 'rollback', 'security', 'soak', 'distribution', 'independent'];
+// Independent literal receipt from the current native workflow and observed
+// setup/post/completion steps; intentionally not imported from the checker.
+const nativeReceiptNames = [
+  'Set up job',
+  'Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd',
+  'Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38',
+  'Validate release-record contract and refusal controls',
+  'Validate alpha archive refusal controls',
+  'Validate guarded user-service recipe',
+  'Validate fail-closed user-manager preflight',
+  'Validate actual-service harness refusal controls',
+  'Validate bounded owned-service journal observations',
+  'Validate bounded downstream HTTPS fixture controls',
+  'Validate bounded verified HTTPS origin fixture controls',
+  'Validate bounded paused TLS client controls',
+  'Validate owned operator interruption controls',
+  'Validate failed interruption containment controls',
+  'Validate authenticated Node dependency refusal controls',
+  'Validate managed operator-package return refusal controls',
+  'Validate managed unhealthy-package fallback refusal controls',
+  'Build dependencies and optional test clients',
+  'Install pinned HTTP3 interoperability client',
+  'Install independent HTTP3 HEAD client',
+  'Compile native profile',
+  'Native regressions and pinned official compatibility sample',
+  'Verify installed HTTPS upstream trust and hostname',
+  'Verify managed frontend HTTPS and certificate lifecycle',
+  'Verify native tenant cache contract experiment',
+  'Verify private Unix control transport',
+  'Build profile without control API',
+  'Package local Linux alpha',
+  'Checksum local Linux alpha',
+  'Verify packed alpha before extraction',
+  'Verify temporary user-service with authenticated private Node',
+  'Preserve JSON evidence',
+  'Preserve local Linux alpha',
+  'Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38',
+  'Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd',
+  'Complete job',
+];
 function declaration(stage = 'alpha') {
   const version = stage === 'v1' ? '1.0.0' : stage === 'candidate' ? '1.0.0-rc.1' : '0.1.0-alpha.1';
   return {
@@ -25,9 +65,7 @@ function declaration(stage = 'alpha') {
       os: 'ubuntu', osVersion: '24.04', arch: 'x86_64',
       ci: [{ workflow: 'X10 native compatibility', runId: 1, jobId: 2, attempt: 1,
         eventHead: source, checkoutCommit: source, conclusion: 'success',
-        executedSteps: ['Validate release-record contract and refusal controls', 'Compile native profile', 'Native regressions and pinned official compatibility sample',
-          'Verify private Unix control transport', 'Build profile without control API',
-          'Package local Linux alpha', 'Checksum local Linux alpha']
+        executedSteps: nativeReceiptNames
           .map(name => ({ name, conclusion: 'success' })) }],
       dependencies: Object.fromEntries(['glibc', 'pcre2', 'openssl', 'zlib', 'libcrypt']
         .map(name => [name, { version: 'synthetic-only', sha256: digest }])) },
@@ -193,3 +231,77 @@ test('build declarations require exact tree and executed native CI identities', 
   rejected(v => { v.build.ci[0].executedSteps[0].conclusion = 'skipped'; });
   rejected(v => { v.build.ci[0].conclusion = 'failure'; });
 });
+
+
+function fourCIRecords() {
+  const value = declaration();
+  value.build.ci = Array.from({ length: 4 }, (_, i) => ({
+    ...structuredClone(value.build.ci[0]), runId: 100 + i, jobId: 200 + i,
+  }));
+  return value;
+}
+function paddedReceipt() {
+  const steps = declaration().build.ci[0].executedSteps;
+  steps.splice(-1, 0, ...Array.from({ length: 28 }, (_, i) => ({
+    name: `Independent successful extra ${i}`, conclusion: 'success',
+  })));
+  return steps;
+}
+
+test('independent complete CI receipts retain the four-job schema bound', () => {
+  const value = fourCIRecords();
+  assert.equal(validateReleaseRecord(value).valid, true);
+  value.build.ci.push({ ...structuredClone(value.build.ci[0]), runId: 500, jobId: 600 });
+  assert.deepEqual(validateReleaseRecord(value), { valid: false, errors: ['record_schema'] });
+});
+
+test('a later CI record cannot mix checkout identity into one declared build', () => {
+  const value = fourCIRecords();
+  value.build.ci[3].checkoutCommit = merge;
+  assert.deepEqual(validateReleaseRecord(value), { valid: false, errors: ['record_identity'] });
+  value.build.checkoutCommit = merge; value.build.prMergeCommit = merge;
+  for (const ci of value.build.ci) ci.checkoutCommit = merge;
+  assert.equal(validateReleaseRecord(value).valid, true);
+});
+
+test('every CI receipt must retain current fallback and service checks despite filler', () => {
+  for (const missing of ['Validate managed unhealthy-package fallback refusal controls',
+    'Verify temporary user-service with authenticated private Node', 'Verify packed alpha before extraction']) {
+    const value = fourCIRecords(), steps = value.build.ci[3].executedSteps;
+    steps[steps.findIndex(step => step.name === missing)] = { name: 'Successful unrelated filler', conclusion: 'success' };
+    assert.equal(steps.length, 36);
+    assert.deepEqual(validateReleaseRecord(value), { valid: false, errors: ['record_ci'] });
+  }
+});
+
+test('nonrequired bounded extra steps must succeed in every receipt', () => {
+  for (const conclusion of ['failure', 'skipped', 'cancelled']) {
+    const value = fourCIRecords(); value.build.ci[3].executedSteps = paddedReceipt();
+    assert.equal(value.build.ci[3].executedSteps.length, 64);
+    value.build.ci[3].executedSteps.at(-2).conclusion = conclusion;
+    assert.equal(validateReleaseRecord(value).valid, false);
+  }
+});
+
+test('executed-step structural rejection does not invoke getters or tolerate holes', () => {
+  const value = declaration(); let getters = 0;
+  Object.defineProperty(value.build.ci[0].executedSteps, '1', {
+    enumerable: true, get() { getters++; return { name: 'SYNTHETIC_SECRET_CANARY', conclusion: 'success' }; },
+  });
+  assert.deepEqual(validateReleaseRecord(value), { valid: false, errors: ['record_input'] });
+  assert.equal(getters, 0);
+  const sparse = declaration(); delete sparse.build.ci[0].executedSteps[10];
+  assert.deepEqual(validateReleaseRecord(sparse), { valid: false, errors: ['record_input'] });
+  const symbolic = declaration(); symbolic.build.ci[0].executedSteps[Symbol('hidden')] = 'SYNTHETIC_SECRET_CANARY';
+  assert.deepEqual(validateReleaseRecord(symbolic), { valid: false, errors: ['record_input'] });
+});
+
+test('CLI accepts a full bounded receipt without authenticating its synthetic evidence', () => withFiles(root => {
+  const value = declaration(); value.build.ci[0].executedSteps = paddedReceipt();
+  assert.equal(value.build.ci[0].executedSteps.length, 64);
+  const file = join(root, 'complete-receipt.json'); writeFileSync(file, JSON.stringify(value));
+  const result = invoke([file]);
+  assert.equal(result.code, 0); assert.equal(result.result.valid, true);
+  assert.equal(result.result.evidenceAuthenticated, false);
+  assert.equal(result.result.productionAccepted, false);
+}));

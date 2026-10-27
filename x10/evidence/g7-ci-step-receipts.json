@@ -1,0 +1,510 @@
+{
+  "schemaVersion": 1,
+  "kind": "complete-bounded-ci-step-declaration-candidate",
+  "state": "LOCAL_DECLARATION_VALIDATOR_VERIFIED_HOSTED_PENDING",
+  "sourceBase": "34f713c411b73fdf1e10337c4539f35b64a31235",
+  "publicationParent": "042b8e1e352cc514bdf85368c640809fd41cbe4a",
+  "evidence": "x10/evidence/g7-ci-step-receipts.json",
+  "perFileLedger": "x10/review/g7-ci-step-receipts-ledger.json",
+  "minimumSteps": 36,
+  "maximumSteps": 64,
+  "orderedRequiredNames": 36,
+  "setupCompletionBoundariesRequired": true,
+  "uniqueSuccessfulExtraStepsAllowedInsideEndpoints": true,
+  "selectedTruncatedReceiptsRefused": true,
+  "sourceBindings": {
+    "x10/release/check-release-record.mjs": {
+      "bytes": 11557,
+      "sha256": "52a5f6b1ec36e0c6cf77a02a2d4c3e1d8f1e542afcbfdcbf9c3228858a2f7490"
+    },
+    "x10/release/release-record.schema.json": {
+      "bytes": 20082,
+      "sha256": "82a916172b95dff5a32ae58d675be0d3eb107de6ddc35f63c0fedcd5583763ce"
+    },
+    "x10/release/check-release-record.test.mjs": {
+      "bytes": 15670,
+      "sha256": "019f07020ed239342b8146ab40a90b69de8322ce593a639b977f338393550d80"
+    },
+    "x10/release/release-record-heldout.test.mjs": {
+      "bytes": 16747,
+      "sha256": "383498435cfeaf15c00a65749d0c22f90f35146bbbaad9a50a40093a44e6d11f"
+    },
+    "x10/release/README.md": {
+      "bytes": 9934,
+      "sha256": "65f78e9250b357c8671bc23b5aea8ab357217b82ca91e3c182679baf5fa632f9"
+    }
+  },
+  "localSelectedTAP": {
+    "tests": 119,
+    "pass": 119,
+    "fail": 0,
+    "skip": 0,
+    "todo": 0,
+    "cancelled": 0,
+    "exitCode": 0,
+    "nodeVersion": "v24.22.1",
+    "newControlsIncludedOnce": 84,
+    "priorControls": 35
+  },
+  "baselineCounterexampleControls": {
+    "controls": 12,
+    "pass": 12,
+    "notAddedToTAP": true
+  },
+  "scope": "Declared record shape and consistency only; array order/name/conclusion projection, not authenticated external job evidence.",
+  "evidenceAuthenticated": false,
+  "runtimeChanged": false,
+  "workflowChanged": false,
+  "physicalFixturesExecuted": 0,
+  "fullG7Accepted": false,
+  "productionAccepted": false,
+  "baselineDefects": [
+    "Full actual36-step declaration was refused by old schema max32.",
+    "Selected32 and historical7 successful steps were accepted despite missing current mandatory contracts/service/TLS/archive steps.",
+    "Raising the cap alone still admitted omitted current steps."
+  ],
+  "changes": [
+    "Schema executedSteps36..64.",
+    "Checker requires all36 observed current native step names in relative order, unique success steps and fixed setup/completion endpoints.",
+    "Additional declared successful unique steps may occur inside endpoints, bounded to64.",
+    "Independent literal fixtures plus workflow-derived coverage prevent checker/test-list mirroring.",
+    "Event head, PR merge checkout, build checkout and ci run/job/attempt identity guards stay distinct."
+  ],
+  "testsCommand": "node --test --test-reporter=tap x10/release/check-release-record.test.mjs x10/release/release-record-heldout.test.mjs",
+  "testUnitsNotSummedWithSeparateBaselineOrReviews": true,
+  "mandatoryAncestralRead": {
+    "state": "PASS",
+    "documents": 29,
+    "mandatoryEdges": 165,
+    "blobPinComparisons": 91,
+    "distinctPinnedTargets": 8,
+    "distinctAncestorCommits": 17,
+    "missingReferences": 0,
+    "mismatches": 0
+  },
+  "priorDocumentCheckpointCI": {
+    "sourceCommit": "34f713c411b73fdf1e10337c4539f35b64a31235",
+    "nativePush": {
+      "runId": 40506508582,
+      "jobId": 122197159188,
+      "conclusion": "success",
+      "actualSuccessfulSteps": 36,
+      "artifactNotDownloaded": true
+    },
+    "nativePR": {
+      "schemaVersion": 1,
+      "kind": "exact-metadata-native-pr-failure-diagnostic",
+      "sourceCommit": "34f713c411b73fdf1e10337c4539f35b64a31235",
+      "sourceTree": "f77ab2198fa5d9d81140f70b8d4eb8ea2b168064",
+      "runId": 40506515300,
+      "jobId": 122197224051,
+      "attempt": 1,
+      "jobConclusion": "failure",
+      "failedActualStep": 22,
+      "failedStepName": "Native regressions and pinned official compatibility sample",
+      "actualSteps": 36,
+      "successfulActualSteps": 24,
+      "failedActualSteps": 1,
+      "skippedActualSteps": 11,
+      "actualBuildCheckout": "9cfa8c29007b99d0baa625d7ec35a1a15c3e4b11",
+      "actualMergeTree": "f77ab2198fa5d9d81140f70b8d4eb8ea2b168064",
+      "actualMergeOrderedParents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "34f713c411b73fdf1e10337c4539f35b64a31235"
+      ],
+      "mergeCommitTreeParentsReadViaAPI": true,
+      "artifact": {
+        "id": 12735397811,
+        "name": "x10-native-evidence",
+        "zipBytes": 119021,
+        "zipSha256": "fd3b6fa0bb3f42cc6c88d78bffcf494b1dbd08c385adf24260d5e0bf8fcb0307",
+        "apiDigestVerified": true,
+        "downloadedOnce": true,
+        "expirationUTC": "2026-11-10T12:55:33Z",
+        "files": 16
+      },
+      "aggregate": {
+        "success": false,
+        "groups": 20,
+        "passedGroups": 19,
+        "failedGroups": 1,
+        "failingGroup": "local-alpha-lifecycle",
+        "exitCode": 1,
+        "signal": null,
+        "elapsedMs": 120006,
+        "timedOut": true,
+        "outputLimitExceeded": false,
+        "tapSummary": {
+          "format": "node-test-tap",
+          "pass": null,
+          "fail": null,
+          "valid": false,
+          "total": null,
+          "skipped": null,
+          "todo": null,
+          "cancelled": null
+        },
+        "retainedStdoutTailBytes": 32768,
+        "diagnosticBytes": 0,
+        "lastCompletedRetainedTAPOrdinal": 572,
+        "lastCompletedRetainedTAPName": "installed recipe command validates helper bytes before dynamic import",
+        "retainedTailContainsAssertionFailure": false,
+        "ordinalIsNotTotalPassCount": true
+      },
+      "officialSeparate": {
+        "passed": true,
+        "summary": {
+          "files": 35,
+          "filesPassed": 34,
+          "filesSkipped": 1,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1131,
+            "passed": 1105,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        },
+        "notEnoughToAcceptWholeAggregate": true
+      },
+      "classifiedOutcome": "CONFIRMED_AGGREGATE_ALPHA_SUITE_TIMEOUT_ROOT_CAUSE_UNKNOWN",
+      "causeBoundary": "The unchanged all.mjs default suite timeout is120000ms; this actual alpha group expired at120006ms while emitting successful test progress. It lacks a complete TAP summary. Why this host/suite took that long is not established. No particular source assertion failure, transient condition or exclusive timeout cause is proven by the retained tail.",
+      "cleanupBoundary": "The aggregate runner requests bounded SIGTERM/SIGKILL on its detached fixture group after timeout, but this artifact has no alpha cleanup receipt. Timed-out alpha resource cleanup remains UNKNOWN; success of other groups does not confirm it.",
+      "downstreamSkipped": [
+        "installed HTTPS upstream trust and hostname",
+        "managed frontend HTTPS/certificate lifecycle",
+        "native tenant cache experiment",
+        "private Unix control transport",
+        "control-API-disabled build",
+        "alpha package/checksum/archive verification",
+        "temporary user-service/private-Node acceptance",
+        "alpha archive upload",
+        "post setup-node"
+      ],
+      "serviceReportPresent": false,
+      "alphaArchivePresent": false,
+      "newServiceAcceptance": false,
+      "privateNodeCleanupAccepted": false,
+      "physicalIncidentRecoveryAccepted": false,
+      "productionAccepted": false,
+      "sourceAnchors": [
+        {
+          "path": "x10/test/all.mjs",
+          "lines": [
+            93,
+            130
+          ],
+          "fact": "Detached bounded runner timeout/stop mechanics and result fields."
+        },
+        {
+          "path": "x10/test/all.mjs",
+          "lines": [
+            279,
+            290
+          ],
+          "fact": "local-alpha suite has no override, defaults120000ms."
+        },
+        {
+          "path": "x10/test/all.mjs",
+          "lines": [
+            389,
+            396
+          ],
+          "fact": "Success requires no timeout and valid complete TAP; retains last32768 stdout characters."
+        },
+        {
+          "path": ".github/workflows/x10-native.yml",
+          "lines": [
+            113,
+            116
+          ],
+          "fact": "Aggregate stdout redirects into checks.json; later acceptance steps require success."
+        }
+      ],
+      "recommendedNext": "Preserve failure/unknown cleanup and do not promote failed PR as complete native receipt. G7 declaration checker work can use successful push transcript separately. If fixing this aggregate timeout, inspect cumulative alpha durations/cleanup and choose a separately justified bounded suite decomposition/budget; do not raise limits merely to relabel this historical run PASS.",
+      "activities": {
+        "logReads": 1,
+        "artifactMetadataReads": 1,
+        "artifactDownloads": 1,
+        "alphaArchiveDownloads": 0,
+        "manualReruns": 0,
+        "localPhysicalFixtures": 0,
+        "localNetworkFixtures": 0,
+        "signalsSent": 0,
+        "sourceEdits": 0,
+        "remoteWrites": 0
+      }
+    },
+    "researchPR": {
+      "runId": 40506515530,
+      "jobId": 122197187445,
+      "conclusion": "success",
+      "actualSuccessfulSteps": 11,
+      "countsNotInferred": true
+    },
+    "researchPush": {
+      "runId": 40506508620,
+      "runtimeConclusion": "skipped"
+    },
+    "cla": {
+      "runId": 40506512931,
+      "jobId": 122197072982,
+      "conclusion": "failure",
+      "failedStep": 3
+    }
+  },
+  "actualAcceptedFallbackRuntimeUnchanged": "7b32841d28a8b155b5783cef1a0c56337bb45a06",
+  "limits": [
+    "Validation never fetches/authenticates evidence, verifies a signature, runs a package or accepts a release.",
+    "Current named workflow declaration is stricter; historical records and failed attempts remain preserved separately, not rewritten as current success.",
+    "No native/process-group/signal/systemd/network fixture was executed locally.",
+    "New actual hosted verification remains pending.",
+    "Full release/operator recovery/security acceptance remains OPEN."
+  ],
+  "nextConcreteTask": "First reconcile exact implementation CI jobs/steps, particularly the release-record contract step and any new native aggregate result. Preserve the34f PR alpha timeout120006ms, missing TAP summary and cleanup UNKNOWN; later success never explains that historical failure. Diagnose any repeated timeout from actual group/test durations and cleanup evidence before proposing a bounded decomposition or budget change; do not blindly raise limits or rerun unchanged jobs. Then perform independent whole supported operator-path G4/G5 security/recovery review against current source, accepted receipts and runbook, with explicit unsupported/STOP outcomes. Permanent publisher capability/release, independent published replay,60-minute soak, actual orphan incident replay/disposal, native binary upgrade,TLS restore,fullG3/G4/G5/G7/V1 and semantic Continuum remain OPEN. Only local pure/tempfile checks; supported hosted physical acceptance only. Preserve owner40h/history and deferred Windows.",
+  "independentPureAndStaticReview": {
+    "kind": "independent-ci-declaration-review",
+    "sourceBase": "34f713c411b73fdf1e10337c4539f35b64a31235",
+    "checks": 47,
+    "pass": 47,
+    "fail": 0,
+    "blockingFindings": [],
+    "workflowConfiguredSteps": 32,
+    "workflowDerivedRequiredSteps": 36,
+    "checkerMatchesWorkflow": true,
+    "maxSteps": 64,
+    "cases": [
+      {
+        "name": "all36fromcurrentworkflow",
+        "valid": true
+      },
+      {
+        "name": "64uniqueextraactualsuccesses-inside-boundaries",
+        "valid": true
+      },
+      {
+        "name": "extra-before-setup",
+        "valid": false
+      },
+      {
+        "name": "extra-after-completion",
+        "valid": false
+      },
+      {
+        "name": "second-ci-missing-required-with-filler",
+        "valid": false
+      },
+      {
+        "name": "second-ci-mixed-checkout",
+        "valid": false
+      },
+      {
+        "name": "extra-skipped-step",
+        "valid": false
+      },
+      {
+        "name": "all36-reversed-inner",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-0",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-1",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-2",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-3",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-4",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-5",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-6",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-7",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-8",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-9",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-10",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-11",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-12",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-13",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-14",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-15",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-16",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-17",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-18",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-19",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-20",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-21",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-22",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-23",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-24",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-25",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-26",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-27",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-28",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-29",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-30",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-31",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-32",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-33",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-34",
+        "valid": false
+      },
+      {
+        "name": "missing-mandatory-with36-filler-35",
+        "valid": false
+      }
+    ],
+    "sourceBindings": {
+      "x10/release/check-release-record.mjs": {
+        "bytes": 11557,
+        "sha256": "52a5f6b1ec36e0c6cf77a02a2d4c3e1d8f1e542afcbfdcbf9c3228858a2f7490"
+      },
+      "x10/release/release-record.schema.json": {
+        "bytes": 20082,
+        "sha256": "82a916172b95dff5a32ae58d675be0d3eb107de6ddc35f63c0fedcd5583763ce"
+      },
+      ".github/workflows/x10-native.yml": {
+        "bytes": 25506,
+        "sha256": "e829ed8e073bd2132006ce834bf95ec264b980bc124718142b64ff0694e1ed67"
+      },
+      "x10/release/check-release-record.test.mjs": {
+        "bytes": 15670,
+        "sha256": "019f07020ed239342b8146ab40a90b69de8322ce593a639b977f338393550d80"
+      },
+      "x10/release/release-record-heldout.test.mjs": {
+        "bytes": 16747,
+        "sha256": "383498435cfeaf15c00a65749d0c22f90f35146bbbaad9a50a40093a44e6d11f"
+      }
+    },
+    "physicalFixturesExecuted": 0,
+    "networkFixturesExecuted": 0,
+    "systemdExecuted": 0,
+    "declaredEvidenceAuthenticated": false,
+    "productionAccepted": false,
+    "privateTestSetupAdverse": "First private fixture extraction omitted new nativeReceiptNames argument and raised ReferenceError before validation; corrected harness only, no product failure.",
+    "staticReview": {
+      "current32ConfiguredNamesAnd36ActualReceiptMatch": true,
+      "min36Max64Schema": true,
+      "frozenRequiredList": true,
+      "fixedSetupCompleteEndpoints": true,
+      "allRequiredRelativeOrder": true,
+      "everyMandatoryMissingAtSame36LengthRefused": true,
+      "allCICheckoutIdentityRetained": true,
+      "allIndividualAndExtraStepsMustSucceed": true,
+      "uniqueNamesRequired": true,
+      "getterSparseCyclesInputGuardsUnchanged": true,
+      "cliMaxRecordBytes262144Unchanged": true,
+      "inputTreeBudget8192Unchanged": true,
+      "CLIFalseEvidenceAuthAndProductionFlagsUnchanged": true,
+      "testsUseIndependentLiteralFixture": true,
+      "workflowUnknownStepFormFailsCoverageTest": true,
+      "workflowAndNativeAlphaControlRuntimeUnchanged": true
+    },
+    "staticBoundaryChecks": 16,
+    "limits": [
+      "47 independent pure data controls and16 static source checks are separate from product test TAP and not physical runtime acceptance.",
+      "Current workflow receipt matching is declaration consistency; actual external job receipts/artifact bytes still need independent inspection.",
+      "G7/full V1 remain unaccepted; earlier PR native failure is not hidden by synthetic success.",
+      "Current fixed profile contract intentionally rejects historical/truncated CI declarations, rather than treating them as full current receipts."
+    ]
+  }
+}

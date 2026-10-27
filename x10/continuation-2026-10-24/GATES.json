@@ -1647,5 +1647,64 @@
     "independentPublishedReplayAccepted": false,
     "soakAccepted": false,
     "semanticContinuumAccepted": false
+  },
+  "completeCIStepDeclarationCandidate": {
+    "state": "LOCAL_DECLARATION_VALIDATOR_VERIFIED_HOSTED_PENDING",
+    "sourceBase": "34f713c411b73fdf1e10337c4539f35b64a31235",
+    "publicationParent": "042b8e1e352cc514bdf85368c640809fd41cbe4a",
+    "evidence": "x10/evidence/g7-ci-step-receipts.json",
+    "perFileLedger": "x10/review/g7-ci-step-receipts-ledger.json",
+    "minimumSteps": 36,
+    "maximumSteps": 64,
+    "orderedRequiredNames": 36,
+    "setupCompletionBoundariesRequired": true,
+    "uniqueSuccessfulExtraStepsAllowedInsideEndpoints": true,
+    "selectedTruncatedReceiptsRefused": true,
+    "sourceBindings": {
+      "x10/release/check-release-record.mjs": {
+        "bytes": 11557,
+        "sha256": "52a5f6b1ec36e0c6cf77a02a2d4c3e1d8f1e542afcbfdcbf9c3228858a2f7490"
+      },
+      "x10/release/release-record.schema.json": {
+        "bytes": 20082,
+        "sha256": "82a916172b95dff5a32ae58d675be0d3eb107de6ddc35f63c0fedcd5583763ce"
+      },
+      "x10/release/check-release-record.test.mjs": {
+        "bytes": 15670,
+        "sha256": "019f07020ed239342b8146ab40a90b69de8322ce593a639b977f338393550d80"
+      },
+      "x10/release/release-record-heldout.test.mjs": {
+        "bytes": 16747,
+        "sha256": "383498435cfeaf15c00a65749d0c22f90f35146bbbaad9a50a40093a44e6d11f"
+      },
+      "x10/release/README.md": {
+        "bytes": 9934,
+        "sha256": "65f78e9250b357c8671bc23b5aea8ab357217b82ca91e3c182679baf5fa632f9"
+      }
+    },
+    "localSelectedTAP": {
+      "tests": 119,
+      "pass": 119,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0,
+      "cancelled": 0,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "newControlsIncludedOnce": 84,
+      "priorControls": 35
+    },
+    "baselineCounterexampleControls": {
+      "controls": 12,
+      "pass": 12,
+      "notAddedToTAP": true
+    },
+    "scope": "Declared record shape and consistency only; array order/name/conclusion projection, not authenticated external job evidence.",
+    "evidenceAuthenticated": false,
+    "runtimeChanged": false,
+    "workflowChanged": false,
+    "physicalFixturesExecuted": 0,
+    "fullG7Accepted": false,
+    "productionAccepted": false
   }
 }

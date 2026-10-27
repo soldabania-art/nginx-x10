@@ -2698,3 +2698,30 @@ old-prefix disposal, full recovery/security, native binary upgrade, TLS restore,
 permanent release, published replay,60-minute soak, fullG3/G4/G5/V1 and semantic
 Continuum remain OPEN. Existing adverse histories, owner40h policy and deferred
 Windows are preserved. Evidence: x10/evidence/g4-incident-runbook.json.
+
+
+## Complete bounded CI declarations — 27 October 2026
+
+The release-record schema/checker now accepts complete36-step declarations
+within a finite64 bound and requires every current native step in order,
+including setup/post-actions/completion and current service/TLS/archive gates.
+Selected/truncated lists, reordered or missing required steps, duplicates and
+non-successful entries refuse. Additional unique successful steps fit only
+inside the setup/completion endpoints. Existing source/build/checkout identity
+guards and declared-only/non-authentication limits remain unchanged.
+
+Frozen local pure/tempfile TAP passed119/119, including84 new controls once;
+the separate12 baseline counterexamples are not added. No local physical
+native/network/systemd/signal fixture ran. New exact hosted CI is pending.
+
+The preceding34f native push40506508582 succeeded36 steps, but PR40506515300
+failed step22: actual aggregate19/20, local-alpha-lifecycle timeout120006ms,
+no complete TAP summary. The reason for slowness and its cleanup remain UNKNOWN.
+The failed evidence ZIP was downloaded once and API digest verified; no manual
+rerun occurred. Later service/TLS/package gates skipped. Research PR succeeded
+11 actual steps, push runtime skipped and CLA failed. None is a complete
+successful PR receipt or new incident recovery acceptance. Existing7b scoped
+fallback remains separate. Full G3/G4/G5/G7/V1, permanent release, published
+replay,60-minute soak and semantic Continuum remain OPEN. Owner40h/history,
+Windows deferral and earlier adverse evidence are preserved.
+Evidence: x10/evidence/g7-ci-step-receipts.json.
