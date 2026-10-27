@@ -4,11 +4,11 @@
   "branch": "x10-continuum-development",
   "authority": "AGENTS.md and the owner-authorized Continuum development scope",
   "executionLease": {
-    "runId": "x10-restored-recovery-20261027T013141823050Z",
-    "owner": "codex-coordinator-restored-recovery",
-    "baseCommit": "c149112a58f3e145a77585c986642c1abe3a2b3c",
-    "acquiredAtUTC": "2026-10-27T01:31:41.823Z",
-    "expiresAtUTC": "2026-10-27T02:15:41.823Z"
+    "runId": "x10-sanitized-checkpoint-20261027T024113Z",
+    "owner": "codex-coordinator-sanitized-checkpoint",
+    "baseCommit": "bb51167b7fffa48ec3664ae40830a4e38eb48191",
+    "acquiredAtUTC": "2026-10-27T02:41:13.112Z",
+    "expiresAtUTC": "2026-10-27T03:20:00.000Z"
   },
   "leasePolicy": {
     "maximumMinutes": 45,
@@ -16,16 +16,6 @@
     "branchUpdate": "nonforce with expected_sha; reread and stop on conflict",
     "releaseInCheckpoint": true,
     "identity": "Public runId plus exact lease-commit ancestry; no credential or bearer token in the repository"
-  },
-  "automation": {
-    "state": "enabled",
-    "cadence": "hourly bounded cloud development passes; not continuous execution",
-    "id": "6adb7b11dea0819199d7924f912610d7",
-    "schedule": "BEGIN:VEVENT\nDTSTART:20261023T151945Z\nRRULE:FREQ=HOURLY;UNTIL=20261026T201736Z\nEND:VEVENT",
-    "timezone": "Europe/Samara",
-    "createdAtUTC": "2026-10-23T15:19:46.868904+00:00",
-    "lastRunVerified": false,
-    "scheduleRecordAuthority": "Owner-supplied current schedule; no automation mutation performed in this development pass."
   },
   "acceptedCheckpoint": {
     "nativeCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
@@ -3880,7 +3870,6 @@
     "C2a remaining inventory: other control/alert/partial/EOF states remain unsupported/fail-closed. Conservative initial-key sequence usage observation is accepted; future record budget and a complete first-profile C2b readiness inventory remain unaccepted.",
     "C2b semantic export/import, actual TLS-code release change and native NGINX integration remain unimplemented.",
     "Current PR base divergence conservatively reruns expensive profiles on metadata-only commits.",
-    "First scheduled cloud development run has not been independently verified by recorded run history.",
     "Three workspace native aggregates refused EACCES after same-byte binary0755-to0644 mode drift:12/20,12/20,13/20. Fresh private isolated native20/20 retained0755 with strict provenance and no mid-test repairs; this does not identify or fix the original mode-mutation cause. No repeated unchanged rerun needed.",
     "Held-source API metadata has ALPN/profile/Finished lengths/no-client-auth observations only. Different Finished bytes at the same lengths remain intentionally indistinguishable; no actual Finished/exporter/session/authentication values are preserved or transferred. Review the first-fixture semantic capsule contract before extending protected state or constructing a target."
   ],
@@ -4031,12 +4020,6 @@
       "goal": "Controlled transition only after accepted G0-G8."
     }
   ],
-  "money": {
-    "incrementalTargetUSD": 0,
-    "planningReserveUSD": 100,
-    "reserveIsNotPurchaseAuthorization": true,
-    "newPaidInfrastructureRequired": false
-  },
   "publication": "Public source, plans and sanitized evidence only; no credentials, real traffic secrets, host identifiers or raw runtime logs",
   "notifications": "Brief Russian result after meaningful change, verified checkpoint or new blocker; no repeated unchanged blocker notices",
   "branchTransition": {
@@ -4185,7 +4168,7 @@
     "fullReleaseIsNotGuaranteedByElapsedHours": true,
     "spendingPolicyUnchanged": true,
     "plan": "x10/continuum/PLAN.md",
-    "afterCodeStop": "No code changes. Safely stop owned fixtures, read results, give one honest final report and disable this automation. Extra UNTIL hour is reporting only."
+    "afterCodeStop": "After the authorized code cutoff, perform only safe owned cleanup, result readback and an honest final report."
   },
   "ciOptimizationHostedObservation": {
     "implementationCommit": "193afe99f338b9435082b002f2b5e21eda058449",
@@ -4211,25 +4194,6 @@
     "shaConcurrency": "Implementation jobs completed despite newer metadata SHA"
   },
   "nextTaskNotes": "x10/continuum/C2A-PROFILE.md",
-  "commercialStrategy": {
-    "state": "documented-hypotheses-not-launched-offer",
-    "updatedDate": "2026-10-23",
-    "plan": "x10/continuum/COMMERCIAL.md",
-    "economics": "x10/continuum/ECONOMICS.md",
-    "firstICP": "B2B realtime SaaS with Linux NGINX and long-lived WebSocket/TLS sessions, measured reconnect or old-code retirement cost",
-    "productModel": "Open native core plus paid validated release compatibility, fleet management and bounded support after technical acceptance",
-    "pricingHypothesisMonthlyUSD": {
-      "team": 1000,
-      "fleet": 3000
-    },
-    "pricingIsNotConfirmedDemand": true,
-    "salesAndRevenueValidated": false,
-    "unitEconomicsIncludeLaborCACAndChurn": true,
-    "nativeFeaturePriorityUnchanged": "C2a then semantic export/import and opt-in native/application integration",
-    "commercialInfrastructurePurchased": false,
-    "outreachAuthorizedByThisDocument": false,
-    "historical8000USDModel": "Retained as an illustration, not the selected launch-price hypothesis"
-  },
   "lastDevelopmentPass": {
     "runId": "continuum-api-20261024T101550264Z",
     "baseCommit": "ad5351f475c4dc35d292cfd1ec3384cbc9579e3b",
@@ -4356,7 +4320,6 @@
       "maximumUsefulHelpers": 6,
       "coordinatorSeparate": true,
       "notPermanentAgentProcesses": true,
-      "cloudCadenceUnchanged": true,
       "deadlineUnchanged": true,
       "checkpointBeforeBudgetOrLeaseEnd": true
     },
