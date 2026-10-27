@@ -3508,3 +3508,27 @@ bytes. Older producer pins are unchanged; candidate drift refusal is intentional
 Controller durable writers, schemas, nativeC/workflow and stop/recover remain
 unchanged. Directcontroller/initialcreation/recovery/native/transient/concurrent
 growth, stopped postpartial STOP and fullcapacity/G5/V1 remainOPEN.
+
+
+## 27 October 2026: exactcd8 apply/revert installed compatibility
+
+Exactcd8 native push40587313424/job122482213383 and PR40587322289/
+job122482266086 passed36steps/native20of20 each, actual managed325 and
+alpha603 complete zero-skip TAP. All3strictreports/sourcepins andowned/private
+Node/history/bootstrapcleanup confirmed. [Scoped hosted receipt](evidence/g5-alpha-revision-capacity-hosted.json)
+accepts normal installed compatibility, not physical4096-entry exhaustion or
+allOS-failure proof. Runtime/workflow bytes are unchanged in this receipt.
+
+New37 inclusion uses exact seven-file commands, source registrations, strict
+manager pin and complete summaries; its labels,46 and preparation18 lie outside
+the bounded retained tails. Preparation18 also runs through alpha's existing
+import, so these series overlap. Timings are separate observations, not a
+controlled speedup or explanation/cleanup confirmation for historical failures.
+
+Next controlled writer review is alpha bind in BOTH proxy and waitBind's direct
+controller call, preserving readiness/cancel/deadline/commit uncertainty. Prove
+its temporary/event/lock high-water before choosing any reserve. Initial registry
+publication remains separately open: first alpha and controller read locks
+require more than just a registry slot. No guessed reserve closes that path.
+Native/transient/concurrent/direct/recovery growth and stopped postpartial STOP
+remainOPEN, alongside fullcapacity/G5/V1 and allprior broader gates.

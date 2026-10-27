@@ -2867,3 +2867,17 @@ rollback and retained atomic temporaries. Native/concurrent/transient/direct
 controller/initialcreation/recovery growth and stopped postpartial STOP remain
 separate. Preserve oldrecords/revisions/durablewriters/stop/recover; no compaction,
 deletion, blindcapincrease, universal OS fence or fullcapacity/G5/V1 closure.
+
+
+## After exactcd8 apply/revert normal compatibility
+
+Both events accepted scoped installed compatibility only:36steps/native20,
+actual325managed/603alpha with37pure revision controls and allstrictreports/
+ownedcleanup. Per-suite overlap and bounded-tail limits remain explicit.
+
+Next: pinned alpha bind baseline and independently proven control-entry budget,
+covering both proxy and waitBind direct binding before mutation while retaining
+readiness/cancellation/deadline/commit-uncertainty semantics. No newstop/recover
+gate or durablewriter rewrite. Initial publication plus future lock headroom
+is a separate contract; no blind+1/+2/+3. Direct/native/concurrent/transient/
+recovery growth, partialorphan STOP, fullcapacity/G5/V1/40h/Windows remainOPEN.

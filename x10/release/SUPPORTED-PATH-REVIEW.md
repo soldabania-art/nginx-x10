@@ -13,9 +13,9 @@ an exhaustive native security audit or an actual incident recovery replay.
 | Packaged operator documentation | Alpha README linked a source-only sibling service document absent from bundle inventory | Link now points to the exact reviewed public runbook commit; no new payload entry or runtime-package identity is claimed. |
 | Runtime ownership | Recorded UID, namespace, executable, command and start identity; guarded stop and retained unknown outcomes | Sampled checks have a verification-to-signal race and do not isolate a malicious same-UID actor. |
 | Config change/revert | Explicit readiness/revision observation, retained history and guarded durable transaction recovery | No all-traffic fence or reversal of completed application side effects; controller recovery does not clear alpha faulted state. |
-| Controller disk input | Baseline unbound status accepted settings with an ignored extra3MiB string; CLI's2MiB check followed full read | **SCOPED_EXACT_f0_HOSTED_VERIFIED:** both f0 native events completed the installed/service path and owned cleanup with reader76 included. The earlier98b fixture failures remain historical. Exact447 stopped-session alphaCLI compatibility is also scoped accepted; the new apply/revert admission candidate needs new compatibility; other alpha/config/binary/proc reads and full security remain outside the reader correction. |
-| Session/inventory capacity | Baseline virtual prepare permits255→256; minimum256-session tree4353entries exceeds inventory4096 | **OPEN, narrow stopped-session component compatibility accepted:** stopped preparation counts the whole tree before creation and again before registry publication; minimum17 structural entries plus one registry temporary are reserved before creation, then one publication entry after creation. A post-creation refusal preserves the old registry and new unregistered tree with explicit STOP/do-not-retry. The new alpha apply/revert candidate separately reserves seven controller entries before spawn; direct controller, native/transient/concurrent growth and full capacity acceptance remain open. No actual256-native-session installation was exercised. |
-| Package staging/return | Accepted exact historical/current operator HTTP staging/return/fallback receipts preserve identities and separate counters | Exactf0 scoped compatibility of **LEGACY_CLI_WITH_REVIEWED_CURRENT_PEERS** is hosted-verified for both events: exact acb CLI plus eight shared98b runtime peers. Exact447 stopped-session alphaCLI compatibility is separately accepted; the newer apply/revert alphaCLI candidate remains pending. It is not the complete historical acb package or an old-controller downgrade. Native binary change, TLS-state restore, permanent historical package and broader recovery remain unaccepted. |
+| Controller disk input | Baseline unbound status accepted settings with an ignored extra3MiB string; CLI's2MiB check followed full read | **SCOPED_EXACT_f0_HOSTED_VERIFIED:** both f0 native events completed the installed/service path and owned cleanup with reader76 included. The earlier98b fixture failures remain historical. Exact447 stopped-session alphaCLI compatibility is also scoped accepted; exactcd8 apply/revert normal installed compatibility is separately scoped accepted; other alpha/config/binary/proc reads and full security remain outside the reader correction. |
+| Session/inventory capacity | Baseline virtual prepare permits255→256; minimum256-session tree4353entries exceeds inventory4096 | **OPEN, narrow stopped-session component compatibility accepted:** stopped preparation counts the whole tree before creation and again before registry publication; minimum17 structural entries plus one registry temporary are reserved before creation, then one publication entry after creation. A post-creation refusal preserves the old registry and new unregistered tree with explicit STOP/do-not-retry. The exactcd8 alpha apply/revert component separately reserves seven controller entries before spawn with scoped normal installed compatibility accepted; direct controller, native/transient/concurrent growth and full capacity acceptance remain open. No actual256-native-session installation was exercised. |
+| Package staging/return | Accepted exact historical/current operator HTTP staging/return/fallback receipts preserve identities and separate counters | Exactf0 scoped compatibility of **LEGACY_CLI_WITH_REVIEWED_CURRENT_PEERS** is hosted-verified for both events: exact acb CLI plus eight shared98b runtime peers. Exact447 stopped-session alphaCLI compatibility is separately accepted; exactcd8 apply/revert normal installed compatibility is also separately scoped accepted. It is not the complete historical acb package or an old-controller downgrade. Native binary change, TLS-state restore, permanent historical package and broader recovery remain unaccepted. |
 | Faulted/orphan incident | Existing commands refuse unsafe restart/uninstall; runbook requires exact observations and STOP_UNRESOLVED | Original prefix stays in place even after a separate fresh restore. No lifecycle-clear/reaper/forced-uninstall path or accepted orphan incident replay. |
 | User service and private Node | Local canonical bus/tool prerequisites, bounded observations, source-pinned strict reports and owned cleanup | A clean environment for a control client does not prove a clean environment inherited by the user-manager's service. Trusted manager/Node/loader environment remains an unverified profile prerequisite. |
 | Release declaration | Exact60a hosted evidence ZIPs contain119 successful declaration checks; complete ordered36-step contract is verified separately | JSON declaration validation never authenticates external evidence or accepts a release. Permanent versioned publication, independent published-file replay and60-minute soak remain open. |
@@ -32,7 +32,7 @@ The controller record-reader correction has76 frozen pure/tempfile tests and
 recorded in the [scoped receipt](../evidence/g5-alpha-inventory-bindings-hosted.json).
 Exact447 stopped-session alphaCLI compatibility is separately recorded in
 [its scoped receipt](../evidence/g5-stopped-session-capacity-hosted.json). The
-new apply/revert admission candidate needs its own new exact compatibility. These are separate changes to runtime
+exactcd8 apply/revert normal compatibility is recorded in [its scoped receipt](../evidence/g5-alpha-revision-capacity-hosted.json). These are separate changes to runtime
 contracts and need their own compatibility/evidence review. Do not turn known
 failures into PASS by changing a cap without validating the resulting states.
 
@@ -94,7 +94,8 @@ controller compatibility through the exactf0 both-event hosted receipt. Prior7b 
 26d archive acceptance remain facts about their own exact sources and artifacts.
 The exactf0 receipt accepts the declared combination and reader compatibility.
 Exact447 separately accepts normal stopped-session alphaCLI compatibility;
-neither receipt accepts the newer apply/revert alphaCLI or full G5.
+neither earlier receipt accepts the separate apply/revert alphaCLI or full G5;
+exactcd8 normal compatibility is recorded separately below.
 
 Exact98b native push40533686304/job122293218632 and
 PR40533697675/job122293256424 each passed19 of20 native groups. Their managed
@@ -107,8 +108,8 @@ cleanup attempts do not prove resource absence. The later exactf0 native push/PR
 passed the full declared compatibility path and confirmed owned cleanup, as
 recorded in [the scoped receipt](../evidence/g5-alpha-inventory-bindings-hosted.json).
 That acceptance enabled the stopped-session component, whose exact447 normal
-compatibility is separately accepted. The newer apply/revert alphaCLI still
-needs exact hosted compatibility. Full G3/G4/G5/G7/V1 remains open.
+compatibility is separately accepted. Exactcd8 apply/revert normal compatibility is now separately scoped accepted.
+Full G3/G4/G5/G7/V1 remains open.
 
 
 ## Narrow stopped-session registry publication admission — exact447 compatible
@@ -143,7 +144,7 @@ fixture or fullcapacity acceptance is implied. Preparation18 overlaps managed
 and alpha via an existing import; actual288/603 TAP series are not summed.
 
 
-## Alpha apply/revert controller-entry admission — candidate
+## Alpha apply/revert controller-entry admission — exactcd8 compatible
 
 The installed alpha CLI candidate counts the whole prefix under the existing
 alpha lock before spawning the controller for `apply` or `revert`. It keeps the
@@ -168,9 +169,10 @@ controller calls and initial install/restore/stage growth remain outside this
 admission. The stopped-preparation post-refusal can still retain an
 unregistered or uninspectable tree with STOP; this change does not clean it.
 Controller durable writers/schema, old records/revisions, unknown/faulted STOP
-and the fixed bundle inventory are preserved. New installed alphaCLI hosted
-compatibility is pending, and fullcapacity/G5/V1/recovery/release/Continuum
-remain open. See [candidate evidence](../evidence/g5-alpha-revision-capacity.json).
+and the fixed bundle inventory are preserved. Exactcd8 normal installed alphaCLI hosted compatibility is scoped accepted by
+[its receipt](../evidence/g5-alpha-revision-capacity-hosted.json); physical
+capacity exhaustion, allOS-failure proof and fullcapacity/G5/V1/recovery/release/
+Continuum remain open. See [candidate evidence](../evidence/g5-alpha-revision-capacity.json).
 
 The new [revision baseline producer](../review/alpha-revision-capacity-counterexample.mjs)
 is pinned to exact447 alphaCLI and manager bytes. Run it in a clean447 checkout

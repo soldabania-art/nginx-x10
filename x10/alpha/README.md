@@ -946,10 +946,10 @@ cooperative profile, not a filesystem resource quota or an OS fencing mechanism.
 Exact447 normal installed operator/service compatibility is accepted for both
 events in the [scoped receipt](../evidence/g5-stopped-session-capacity-hosted.json).
 Its4096-entry exhaustion controls remain pure/virtual; this does not accept
-physical capacity exhaustion, the new apply/revert candidate below or full G5/V1.
+physical capacity exhaustion, the separate apply/revert component below or full G5/V1.
 
 
-## Apply/revert control-entry admission — candidate
+## Apply/revert control-entry admission — exactcd8 compatibility accepted
 
 Before the installed alpha CLI forwards `apply` or `revert` to the controller,
 it counts the actual whole installation tree while holding the existing alpha
@@ -980,6 +980,8 @@ reuse remain outside this new reserve. It does not repair an existing
 unregistered session or replace the stopped-preparation STOP/manual-inspection
 contract above. Capacity, full security/recovery and V1 remain open.
 
-The changed installed alpha CLI requires new exact hosted compatibility. Local
-pure/tempfile tests and virtual fault paths are separate from that acceptance.
+Exactcd8 normal installed compatibility is accepted for both events in the
+[scoped hosted receipt](../evidence/g5-alpha-revision-capacity-hosted.json).
+Local pure/tempfile boundary tests and virtual fault paths do not establish
+physical4096-entry exhaustion or an allOS-failure guarantee.
 See [candidate evidence](../evidence/g5-alpha-revision-capacity.json).
