@@ -1,13 +1,7 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-stage-review-20261027T075536Z",
-    "owner": "codex-x10-staging-review-coordinator",
-    "baseCommit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
-    "acquiredAtUTC": "2026-10-27T07:55:36Z",
-    "expiresAtUTC": "2026-10-27T08:40:36.000Z"
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
     "requestedAtUTC": "2026-10-27T03:45:59.000Z",
     "hours": 20,
@@ -262,10 +256,70 @@
       "fullG4Accepted": false,
       "productionAccepted": false,
       "actualFailureContainmentExercised": false
+    },
+    "sideBySidePackageStageHosted": {
+      "schemaVersion": 1,
+      "state": "EXACT_SCOPED_PACKAGE_STAGING_SUCCESS",
+      "implementationCommit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
+      "implementationTree": "7f904df2725d3e8170e89b9c0d54bd91c276004b",
+      "evidence": "x10/evidence/g4-package-stage-hosted.json",
+      "scope": "Explicit trusted historical-operator-to-current schema2 HTTP package staging into a fresh unbound prefix; no activation or traffic transition.",
+      "nativeRunIds": [
+        40468943667,
+        40468947907
+      ],
+      "nativeJobIds": [
+        122071147148,
+        122071164947
+      ],
+      "all34ActualStepsEach": true,
+      "nativeGroupsEach": 20,
+      "fullAlphaEach": 410,
+      "stageDiagnosticFieldsEach": 36,
+      "stageResultFieldsAssertedEach": 25,
+      "refusalsWithoutOverwriteEach": 4,
+      "runtimePayloadFilesEach": 11,
+      "sourceRuntimePayloadSha256": "9ab5c96813ca535d4724f5b690ca38650a5f01e808754e98fc239776b5c8e59f",
+      "targetRuntimePayloadSha256": "f81149bd4f7666fa20bd1d3d71ba425bdf9158612b11a5a91796d51d1be16b9d",
+      "sourceOperatorPayloadSha256": "9fbb29cf3245178393b5440587f807fa82accb4ffa1a57059f2141dcc4f0ad1a",
+      "targetOperatorPayloadSha256": "be4c71ca7036a428287ed7f4f8a4e3279f52de1cc95dce5554fac68a56b329cb",
+      "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+      "operatorPayloadChanged": true,
+      "nativeBinaryChanged": false,
+      "stageHostedAccepted": true,
+      "sourceFilesAndBackupPreserved": true,
+      "freshPreparedUnboundTargetVerified": true,
+      "ownedStageInstallationsRemoved": true,
+      "existingRestoredServiceRegressionAcceptedOnThisImplementation": true,
+      "restoredProofFieldsEach": 18,
+      "nativeSessionsEach": 5,
+      "managerRestartsEach": 2,
+      "journalChecksEach": 6,
+      "journalChecksAreNotExactQueryCounts": true,
+      "downstreamTLSSessionsEach": 3,
+      "upstreamTLSSessionsEach": 3,
+      "all13BooleanCleanupFactsEach": true,
+      "privateNodeAndBootstrapRemovedEach": true,
+      "serviceContractEach": {
+        "tests": 618,
+        "pass": 617,
+        "skipped": 1,
+        "fail": 0,
+        "skipReason": "Root-only refusal control is not executed by the nonroot runner; actual nonroot service is separately exercised."
+      },
+      "actualFailureContainmentExercised": false,
+      "activationPerformed": false,
+      "compatibilityAccepted": false,
+      "packageUpgradeRollbackAccepted": false,
+      "nativeBinaryVersionChangeAccepted": false,
+      "tlsBackupAccepted": false,
+      "fullG3Accepted": false,
+      "fullG4Accepted": false,
+      "productionAccepted": false
     }
   },
   "lastV1DevelopmentPass": {
-    "state": "CODE_PRESENT_FROZEN_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+    "state": "CODE_PRESENT_FROZEN_LOCAL_AND_SCOPED_HOSTED_VERIFIED",
     "sourceBase": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
     "publicationParent": "a22e382fca8f34faad7f57ebe2ceee52868a2d7b",
     "scope": "Explicit trusted extracted-candidate side-by-side schema2 HTTP package staging without activation or cutover",
@@ -316,24 +370,30 @@
     "historicalOperatorArchiveReassembledNotPublished": true,
     "sameCompiledNativeBinaryInAuthoredHostedFixture": true,
     "physicalVersionAndSyntaxFixturesExecutedLocally": false,
-    "hostedPhysicalAcceptancePending": true,
+    "hostedPhysicalAcceptancePending": false,
     "activationPerformed": false,
     "compatibilityAccepted": false,
-    "packageStageHostedAccepted": false,
+    "packageStageHostedAccepted": true,
     "packageUpgradeRollbackAccepted": false,
-    "productionAccepted": false
+    "productionAccepted": false,
+    "exactHostedAcceptance": "EXACT_SCOPED_PACKAGE_STAGING_SUCCESS",
+    "stageHostedAccepted": true,
+    "verifiedOnImplementationCommit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
+    "hostedEvidence": "x10/evidence/g4-package-stage-hosted.json"
   },
   "pendingVerification": [
-    "First inspect exact resulting implementation native push/PR jobs, actual extracted package-stage diagnostic and service artifacts. Require actual historical acb operator bytes versus candidate runtime payload, all four refusals without overwrite, fresh prepared/unbound target, exact HTTP input/ports, every source file preserved, closed listeners, owned uninstall and complete existing service/private-Node cleanup. The native binary is unchanged in this staging fixture. Do not call staging an activation or A-to-B-to-A acceptance. Then implement and verify meaningful reviewed operator-package A-to-B-to-A with actual hosted traffic, explicit clean stop, reversible declared state compatibility and preserved known-good package. Old A need not expose stage or package-info. Keep TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum open; do not rerun unchanged accepted checks without cause.",
-    "Actual staging/physical/native/service acceptance is pending the new exact implementation SHA. Prior acb runtime receipts do not accept this changed CLI. Inherited CLA failure remains separate."
+    "Implement the next bounded actual foreground HTTP operator-package A-to-B-to-A return and backward declarative compatibility: exact reviewed historical acb A serves input P and unique GET/POST/stream traffic, then stops with owned absence confirmed; B stages from A, starts explicitly, refuses wrong readiness before a fresh binding, serves traffic and applies new HTTP input Q; after clean B stop/export, the exact trusted old A installer restores B-produced Q into a fresh A2 prefix. Require actual A2 payload identity equal to A and different from B, fresh session/revision/null initial binding, then real Q traffic. Preserve original known-good A files while B/A2 operate, preserve application POST effects without replay, and clean only owned resources. Native binary remains unchanged in this operator-package scope; historical reassembly is not a published historical archive. Foreground transition does not accept the separate managed-service package-transition gate. Keep native binary upgrade, TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum open.",
+    "Any metadata successor CI is separate from accepted ad0124 runtime evidence. Do not request unchanged runtime reruns without a new reason."
   ],
-  "nextConcreteTask": "First inspect exact resulting implementation native push/PR jobs, actual extracted package-stage diagnostic and service artifacts. Require actual historical acb operator bytes versus candidate runtime payload, all four refusals without overwrite, fresh prepared/unbound target, exact HTTP input/ports, every source file preserved, closed listeners, owned uninstall and complete existing service/private-Node cleanup. The native binary is unchanged in this staging fixture. Do not call staging an activation or A-to-B-to-A acceptance. Then implement and verify meaningful reviewed operator-package A-to-B-to-A with actual hosted traffic, explicit clean stop, reversible declared state compatibility and preserved known-good package. Old A need not expose stage or package-info. Keep TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum open; do not rerun unchanged accepted checks without cause.",
+  "nextConcreteTask": "Implement the next bounded actual foreground HTTP operator-package A-to-B-to-A return and backward declarative compatibility: exact reviewed historical acb A serves input P and unique GET/POST/stream traffic, then stops with owned absence confirmed; B stages from A, starts explicitly, refuses wrong readiness before a fresh binding, serves traffic and applies new HTTP input Q; after clean B stop/export, the exact trusted old A installer restores B-produced Q into a fresh A2 prefix. Require actual A2 payload identity equal to A and different from B, fresh session/revision/null initial binding, then real Q traffic. Preserve original known-good A files while B/A2 operate, preserve application POST effects without replay, and clean only owned resources. Native binary remains unchanged in this operator-package scope; historical reassembly is not a published historical archive. Foreground transition does not accept the separate managed-service package-transition gate. Keep native binary upgrade, TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum open.",
   "nextTasks": [
     {
       "id": "G4-side-by-side-package-stage-exact-CI",
-      "state": "CODE_PRESENT_FROZEN_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
-      "goal": "First inspect exact resulting implementation native push/PR jobs, actual extracted package-stage diagnostic and service artifacts. Require actual historical acb operator bytes versus candidate runtime payload, all four refusals without overwrite, fresh prepared/unbound target, exact HTTP input/ports, every source file preserved, closed listeners, owned uninstall and complete existing service/private-Node cleanup. The native binary is unchanged in this staging fixture. Do not call staging an activation or A-to-B-to-A acceptance. Then implement and verify meaningful reviewed operator-package A-to-B-to-A with actual hosted traffic, explicit clean stop, reversible declared state compatibility and preserved known-good package. Old A need not expose stage or package-info. Keep TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum open; do not rerun unchanged accepted checks without cause.",
-      "evidence": "x10/evidence/g4-package-stage.json"
+      "state": "ACCEPTED_SCOPED_STAGING_WITHOUT_ACTIVATION",
+      "goal": "Exact trusted schema2 staging verified, including actual historical operator bytes, source preservation, fresh unbound target, four refusals and owned cleanup. No A-to-B-to-A traffic or backward state compatibility accepted. Implement the next bounded actual foreground HTTP operator-package A-to-B-to-A return and backward declarative compatibility: exact reviewed historical acb A serves input P and unique GET/POST/stream traffic, then stops with owned absence confirmed; B stages from A, starts explicitly, refuses wrong readiness before a fresh binding, serves traffic and applies new HTTP input Q; after clean B stop/export, the exact trusted old A installer restores B-produced Q into a fresh A2 prefix. Require actual A2 payload identity equal to A and different from B, fresh session/revision/null initial binding, then real Q traffic. Preserve original known-good A files while B/A2 operate, preserve application POST effects without replay, and clean only owned resources. Native binary remains unchanged in this operator-package scope; historical reassembly is not a published historical archive. Foreground transition does not accept the separate managed-service package-transition gate. Keep native binary upgrade, TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum open.",
+      "evidence": "x10/evidence/g4-package-stage.json",
+      "verifiedOnImplementationCommit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
+      "hostedEvidence": "x10/evidence/g4-package-stage-hosted.json"
     },
     {
       "id": "G4-installed-package-identity-exact-CI",
@@ -390,7 +450,7 @@
   },
   "portfolioContinuation": {
     "activeProject": "x10",
-    "currentGate": "SIDE_BY_SIDE_PACKAGE_STAGE_EXACT_HOSTED_PENDING",
+    "currentGate": "SIDE_BY_SIDE_PACKAGE_STAGE_EXACT_HOSTED_VERIFIED_OPERATOR_PACKAGE_RETURN_OPEN",
     "fullVisionAndDeferredResearchReference": {
       "path": "x10/continuum/PLAN.md",
       "historicalAssignmentReference": {
@@ -424,52 +484,67 @@
   },
   "productionAccepted": false,
   "lastV1VerificationReceipt": {
-    "state": "EXACT_SCOPED_INSTALLED_PACKAGE_IDENTITY_SUCCESS",
-    "implementationCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
-    "implementationTree": "9dd8486ea965c984c4325966674d3595f662b61f",
-    "evidence": "x10/evidence/g4-package-identity-hosted.json",
-    "scope": "Read-only installed/extracted/restored package identity and existing service regressions; no package transition.",
+    "schemaVersion": 1,
+    "state": "EXACT_SCOPED_PACKAGE_STAGING_SUCCESS",
+    "implementationCommit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
+    "implementationTree": "7f904df2725d3e8170e89b9c0d54bd91c276004b",
+    "evidence": "x10/evidence/g4-package-stage-hosted.json",
+    "scope": "Explicit trusted historical-operator-to-current schema2 HTTP package staging into a fresh unbound prefix; no activation or traffic transition.",
     "nativeRunIds": [
-      40455973705,
-      40455978706
+      40468943667,
+      40468947907
     ],
     "nativeJobIds": [
-      122029316296,
-      122029337388
+      122071147148,
+      122071164947
     ],
     "all34ActualStepsEach": true,
     "nativeGroupsEach": 20,
-    "fullAlphaEach": 284,
-    "packageDiagnosticFieldsEach": 15,
+    "fullAlphaEach": 410,
+    "stageDiagnosticFieldsEach": 36,
+    "stageResultFieldsAssertedEach": 25,
+    "refusalsWithoutOverwriteEach": 4,
     "runtimePayloadFilesEach": 11,
-    "sameRuntimeAndOperatorFingerprintsAcrossContexts": true,
-    "packageIdentityHostedAccepted": true,
-    "restoredServiceRegressionsAcceptedOnThisImplementation": true,
+    "sourceRuntimePayloadSha256": "9ab5c96813ca535d4724f5b690ca38650a5f01e808754e98fc239776b5c8e59f",
+    "targetRuntimePayloadSha256": "f81149bd4f7666fa20bd1d3d71ba425bdf9158612b11a5a91796d51d1be16b9d",
+    "sourceOperatorPayloadSha256": "9fbb29cf3245178393b5440587f807fa82accb4ffa1a57059f2141dcc4f0ad1a",
+    "targetOperatorPayloadSha256": "be4c71ca7036a428287ed7f4f8a4e3279f52de1cc95dce5554fac68a56b329cb",
+    "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+    "operatorPayloadChanged": true,
+    "nativeBinaryChanged": false,
+    "stageHostedAccepted": true,
+    "sourceFilesAndBackupPreserved": true,
+    "freshPreparedUnboundTargetVerified": true,
+    "ownedStageInstallationsRemoved": true,
+    "existingRestoredServiceRegressionAcceptedOnThisImplementation": true,
     "restoredProofFieldsEach": 18,
     "nativeSessionsEach": 5,
     "managerRestartsEach": 2,
     "journalChecksEach": 6,
     "journalChecksAreNotExactQueryCounts": true,
-    "tlsSessionsEach": 3,
-    "all13CleanupFactsEach": true,
+    "downstreamTLSSessionsEach": 3,
+    "upstreamTLSSessionsEach": 3,
+    "all13BooleanCleanupFactsEach": true,
     "privateNodeAndBootstrapRemovedEach": true,
     "serviceContractEach": {
       "tests": 618,
       "pass": 617,
       "skipped": 1,
       "fail": 0,
-      "skipReason": "Root-only refusal control not executed by nonroot runner; actual nonroot service separately exercised."
+      "skipReason": "Root-only refusal control is not executed by the nonroot runner; actual nonroot service is separately exercised."
     },
+    "actualFailureContainmentExercised": false,
+    "activationPerformed": false,
     "compatibilityAccepted": false,
     "packageUpgradeRollbackAccepted": false,
+    "nativeBinaryVersionChangeAccepted": false,
     "tlsBackupAccepted": false,
     "fullG3Accepted": false,
     "fullG4Accepted": false,
-    "productionAccepted": false,
-    "actualFailureContainmentExercised": false
+    "productionAccepted": false
   },
   "previousV1VerificationReceiptReference": {
-    "commit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "commit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
     "path": "x10/continuum/BACKGROUND.json",
     "requiredReadBeforeNextTask": true,
     "readCompleteHistoricalDocument": true,
@@ -483,38 +558,38 @@
     "allPriorAcceptanceFailuresAndUnknownsRetained": true
   },
   "currentHeadCIStepReadback": {
-    "commit": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
+    "commit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
     "native": [
       {
-        "runId": 40461747767,
-        "jobId": 122047827934,
+        "runId": 40468943667,
+        "jobId": 122071147148,
         "state": "completed_success",
         "actualSuccessfulSteps": 34
       },
       {
-        "runId": 40461751675,
-        "jobId": 122047821309,
+        "runId": 40468947907,
+        "jobId": 122071164947,
         "state": "completed_success",
         "actualSuccessfulSteps": 34
       }
     ],
     "researchPR": {
-      "runId": 40461751845,
-      "jobId": 122047812777,
+      "runId": 40468947884,
+      "jobId": 122071161675,
       "state": "completed_success",
       "actualSuccessfulSteps": 11
     },
     "researchPush": {
-      "runId": 40461747830,
-      "runtimeJobId": 122047801596,
+      "runId": 40468943672,
+      "runtimeJobId": 122071144376,
       "runtime": "skipped"
     },
     "cla": {
-      "runId": 40461749812,
-      "jobId": 122047742419,
+      "runId": 40468946223,
+      "jobId": 122071080301,
       "state": "failure"
     },
-    "artifactCountsReaudited": false,
+    "actualArtifactsAudited": true,
     "noUnchangedRerunRequested": true
   },
   "deferredWindowsPlan": {

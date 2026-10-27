@@ -2337,3 +2337,33 @@ Staging, state compatibility, activation and A-to-B-to-A remain separate gates.
 No fullG3/G4/V1, TLS restore, permanent release, independent published replay,
 60-minute soak or semantic Continuum acceptance is granted. Windows stays
 deferred and unverified. Evidence: x10/evidence/g4-package-stage.json.
+
+
+## Exact side-by-side package staging acceptance — 27 October 2026
+
+Implementationad012446592488fe4bc33ff28a2f4189bb8c865a passed native
+push40468943667/job122071147148 and PR40468947907/job122071164947:
+34 actual successful steps,20 native groups and410 alpha tests each.
+Both exact artifacts contain one36-field staging diagnostic and four refusals
+without overwrite. The25-field stage result is asserted against actual bytes.
+Historical acb operator code differs from the candidate; native binary is the
+same. Source files and backup stayed unchanged, the fresh target remained
+prepared/unbound, listeners stayed closed and owned installations were removed.
+The historical bundle is an explicit checked reassembly, not a published archive.
+
+Existing service regressions passed on this new CLI:18 restored proofs,
+5 sessions,2 restarts,6 bounded journal checks,3 downstream and3 upstream TLS
+sessions, all13 cleanup facts and unit/private-Node/bootstrap removal.
+Service contract617PASS/1root-onlySKIP is explicit. Normal successful operation
+did not exercise failure containment. Research PR actually ran21/7/27/48;
+research push runtime skipped and inherited CLA failed.
+
+This accepts staging without activation. The source A is prepared/unbound
+in this proof, so no A-to-B-to-A traffic, reverse state compatibility or native
+binary upgrade is accepted. Next: A serves P, B serves and confirms Q, then
+the exact old A installer restores B-produced Q into fresh A2 and A2 serves Q.
+Keep known-good A and application effects intact; verify every owned stop.
+Foreground return and managed-service transition remain separate gates.
+FullG3/G4/V1, TLS restore, permanent release, independent published replay,
+60-minute soak and semantic Continuum stay open. Runtime is unchanged by
+this receipt. Evidence: x10/evidence/g4-package-stage-hosted.json.
