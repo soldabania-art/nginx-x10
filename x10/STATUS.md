@@ -2875,3 +2875,32 @@ files, then verify actual reviewed payload transitions and rollback.
 Hashes are consistency records, not signatures. FullG3/G4/V1, TLS restore,
 permanent release, independent published replay and60-minute soak stay open.
 Evidence: x10/evidence/g4-package-identity-hosted.json.
+
+
+## Explicit side-by-side package staging candidate — 27 October 2026
+
+The explicitly trusted extracted schema2 candidate now accepts stage with
+exact source-runtime and raw-bundle-manifest pins. It checks disjoint private
+roots, the complete package tree and all registered source sessions under an
+identity-checked cooperative source lock. Only current confirmed HTTP input
+is transferred; a different runtime payload is required. A fresh target stays
+prepared and unbound, while every known source file is retained and rechecked.
+Changed locks, unknown files and partial targets are preserved for inspection.
+Native version/dependency/syntax checks can execute, but no serving daemon,
+readiness check, user-unit activation or traffic switch is performed.
+
+Frozen local Node24 selected pure/tempfile/virtual controls passed
+374/374, including126 new staging controls once. Independent7 package-tree
+and6 lock/reader heldouts are separate. A selected actual Node CLI test on a
+NONEXECUTED synthetic native installation passed1/1 separately. Local physical
+native/process-group/signal/systemd fixtures were not run. Draft cleanup,
+preflight and hosted assertion issues were corrected before frozen validation.
+
+Authored hosted evidence uses real earlier acb operator bytes and the same
+compiled native binary; historical bundle reassembly is explicitly not a
+published historical archive or native binary upgrade. Exact new hosted CI
+must verify the actual stage result, payload bytes, preservation and cleanup.
+Staging, state compatibility, activation and A-to-B-to-A remain separate gates.
+No fullG3/G4/V1, TLS restore, permanent release, independent published replay,
+60-minute soak or semantic Continuum acceptance is granted. Windows stays
+deferred and unverified. Evidence: x10/evidence/g4-package-stage.json.

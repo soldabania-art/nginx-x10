@@ -1,13 +1,7 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-stage-20261027T072540Z",
-    "owner": "codex-x10-staging-coordinator",
-    "baseCommit": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
-    "acquiredAtUTC": "2026-10-27T07:25:40Z",
-    "expiresAtUTC": "2026-10-27T08:10:40.000Z"
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
     "requestedAtUTC": "2026-10-27T03:45:59.000Z",
     "hours": 20,
@@ -265,31 +259,32 @@
     }
   },
   "lastV1DevelopmentPass": {
-    "state": "CODE_PRESENT_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
-    "sourceBase": "face7a77d6f9f93fc0c5657dc3bd6b44fa962cff",
-    "scope": "Read-only installed package-info runtime/operator/native payload identity foundation; no package transition or rollback.",
+    "state": "CODE_PRESENT_FROZEN_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+    "sourceBase": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
+    "publicationParent": "a22e382fca8f34faad7f57ebe2ceee52868a2d7b",
+    "scope": "Explicit trusted extracted-candidate side-by-side schema2 HTTP package staging without activation or cutover",
     "sourceBindings": {
       "x10/alpha/cli.mjs": {
-        "beforeSha256": "38d92317731c155adb183eb918b86517a3474f625f2d53e4f39d608da5af68e0",
-        "afterSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
-        "bytes": 68551
+        "beforeSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+        "afterSha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa",
+        "bytes": 87522
       },
-      "x10/alpha/package-info.test.mjs": {
+      "x10/alpha/stage.test.mjs": {
         "beforeSha256": null,
-        "afterSha256": "54359382b4cfc192d42c547e4f4b4f49825e2e1dfd68d94acc09d4b49e650c83",
-        "bytes": 14701
+        "afterSha256": "483344ba19167e38a2eee25896c355348d8fa632467338125dcc7806c69b9d97",
+        "bytes": 42023
       },
       "x10/test/alpha.test.mjs": {
-        "beforeSha256": "eb7bfc20173e002086c727b9838ab20a475ca46474d21f592a838783354ee5e0",
-        "afterSha256": "602312b3ee869a1a85b53466bd68b096184d7eaed48b0ca9e162e405bf96db48",
-        "bytes": 96332
+        "beforeSha256": "602312b3ee869a1a85b53466bd68b096184d7eaed48b0ca9e162e405bf96db48",
+        "afterSha256": "12868a338f450466c8201e8ca110dda65c473db90ad043414d0a3e7e5936a1e9",
+        "bytes": 111756
       }
     },
-    "evidence": "x10/evidence/g4-package-identity.json",
-    "perFileLedger": "x10/review/g4-package-identity-ledger.json",
+    "evidence": "x10/evidence/g4-package-stage.json",
+    "perFileLedger": "x10/review/g4-package-stage-ledger.json",
     "localSelectedTAP": {
-      "total": 248,
-      "pass": 248,
+      "tests": 374,
+      "pass": 374,
       "fail": 0,
       "cancelled": 0,
       "skipped": 0,
@@ -299,30 +294,41 @@
       "physicalNativeExecuted": false,
       "systemdExecuted": false
     },
-    "newPureControlsIncludedInTAP": 86,
-    "separateIndependentPureReviewControls": 10,
-    "initialDraftAdverse": "Four existing source-extracted install checks failed because an exported helper was inserted inside their extraction boundary. Relocation fixed the integration without changing the old tests.",
-    "packageIdentityHostedAccepted": false,
-    "packageUpgradeRollbackAccepted": false,
-    "compatibilityAccepted": false,
-    "productionAccepted": false,
-    "separateActualNodeSyntheticInstallation": {
-      "total": 1,
+    "newPureControlsIncludedInTAP": 126,
+    "separateIndependentTempfileControls": 13,
+    "separateActualNodeNonexecutedInstallation": {
+      "tests": 1,
       "pass": 1,
-      "exitCode": 0,
-      "scope": "Actual installed Node CLI with private synthetic files and nonexecuted native placeholder; not actual bundle/native acceptance.",
-      "notAddedToSelectedTAP": true
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
     },
-    "exactHostedAcceptance": "EXACT_SCOPED_INSTALLED_PACKAGE_IDENTITY_SUCCESS",
-    "hostedEvidence": "x10/evidence/g4-package-identity-hosted.json",
-    "verifiedOnImplementationCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42"
+    "sourceAndTargetSchemasUnchanged": true,
+    "nativeAndControllerRuntimeUnchanged": true,
+    "historicalOperatorSource": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "historicalOperatorArchiveReassembledNotPublished": true,
+    "sameCompiledNativeBinaryInAuthoredHostedFixture": true,
+    "physicalVersionAndSyntaxFixturesExecutedLocally": false,
+    "hostedPhysicalAcceptancePending": true,
+    "activationPerformed": false,
+    "compatibilityAccepted": false,
+    "packageStageHostedAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "productionAccepted": false
   },
   "pendingVerification": [
-    "Implement bounded side-by-side package staging without implicit activation: inspect the trusted known-good installed source and declared target package, require clean stopped declarative HTTP state, preserve original files/records, create a fresh separate target prefix and identities, reject unsupported schema/dependency/state drift, and record distinct operator/native payload identities. Then verify meaningful reviewed A-to-B-to-A and reversible state compatibility with actual hosted traffic and cleanup. Old A lacks package-info: use independently verified known installed records, not an assumed new command. Keep target validation, package identity, staging, cutover and rollback as separate evidence. TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
-    "Any metadata successor CI is separate from accepted acb6483 runtime evidence. Do not request unchanged runtime reruns without a new reason."
+    "First inspect exact resulting implementation native push/PR jobs, actual extracted package-stage diagnostic and service artifacts. Require actual historical acb operator bytes versus candidate runtime payload, all four refusals without overwrite, fresh prepared/unbound target, exact HTTP input/ports, every source file preserved, closed listeners, owned uninstall and complete existing service/private-Node cleanup. The native binary is unchanged in this staging fixture. Do not call staging an activation or A-to-B-to-A acceptance. Then implement and verify meaningful reviewed operator-package A-to-B-to-A with actual hosted traffic, explicit clean stop, reversible declared state compatibility and preserved known-good package. Old A need not expose stage or package-info. Keep TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum open; do not rerun unchanged accepted checks without cause.",
+    "Actual staging/physical/native/service acceptance is pending the new exact implementation SHA. Prior acb runtime receipts do not accept this changed CLI. Inherited CLA failure remains separate."
   ],
-  "nextConcreteTask": "Implement bounded side-by-side package staging without implicit activation: inspect the trusted known-good installed source and declared target package, require clean stopped declarative HTTP state, preserve original files/records, create a fresh separate target prefix and identities, reject unsupported schema/dependency/state drift, and record distinct operator/native payload identities. Then verify meaningful reviewed A-to-B-to-A and reversible state compatibility with actual hosted traffic and cleanup. Old A lacks package-info: use independently verified known installed records, not an assumed new command. Keep target validation, package identity, staging, cutover and rollback as separate evidence. TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
+  "nextConcreteTask": "First inspect exact resulting implementation native push/PR jobs, actual extracted package-stage diagnostic and service artifacts. Require actual historical acb operator bytes versus candidate runtime payload, all four refusals without overwrite, fresh prepared/unbound target, exact HTTP input/ports, every source file preserved, closed listeners, owned uninstall and complete existing service/private-Node cleanup. The native binary is unchanged in this staging fixture. Do not call staging an activation or A-to-B-to-A acceptance. Then implement and verify meaningful reviewed operator-package A-to-B-to-A with actual hosted traffic, explicit clean stop, reversible declared state compatibility and preserved known-good package. Old A need not expose stage or package-info. Keep TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum open; do not rerun unchanged accepted checks without cause.",
   "nextTasks": [
+    {
+      "id": "G4-side-by-side-package-stage-exact-CI",
+      "state": "CODE_PRESENT_FROZEN_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+      "goal": "First inspect exact resulting implementation native push/PR jobs, actual extracted package-stage diagnostic and service artifacts. Require actual historical acb operator bytes versus candidate runtime payload, all four refusals without overwrite, fresh prepared/unbound target, exact HTTP input/ports, every source file preserved, closed listeners, owned uninstall and complete existing service/private-Node cleanup. The native binary is unchanged in this staging fixture. Do not call staging an activation or A-to-B-to-A acceptance. Then implement and verify meaningful reviewed operator-package A-to-B-to-A with actual hosted traffic, explicit clean stop, reversible declared state compatibility and preserved known-good package. Old A need not expose stage or package-info. Keep TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum open; do not rerun unchanged accepted checks without cause.",
+      "evidence": "x10/evidence/g4-package-stage.json"
+    },
     {
       "id": "G4-installed-package-identity-exact-CI",
       "state": "ACCEPTED_SCOPED_PACKAGE_IDENTITY_ONLY",
@@ -378,7 +384,7 @@
   },
   "portfolioContinuation": {
     "activeProject": "x10",
-    "currentGate": "INSTALLED_PACKAGE_IDENTITY_EXACT_HOSTED_VERIFIED_SIDE_BY_SIDE_STAGING_OPEN",
+    "currentGate": "SIDE_BY_SIDE_PACKAGE_STAGE_EXACT_HOSTED_PENDING",
     "fullVisionAndDeferredResearchReference": {
       "path": "x10/continuum/PLAN.md",
       "historicalAssignmentReference": {
@@ -471,35 +477,35 @@
     "allPriorAcceptanceFailuresAndUnknownsRetained": true
   },
   "currentHeadCIStepReadback": {
-    "commit": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
+    "commit": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
     "native": [
       {
-        "runId": 40443531553,
-        "jobId": 121989308805,
+        "runId": 40461747767,
+        "jobId": 122047827934,
         "state": "completed_success",
         "actualSuccessfulSteps": 34
       },
       {
-        "runId": 40443539041,
-        "jobId": 121989333442,
+        "runId": 40461751675,
+        "jobId": 122047821309,
         "state": "completed_success",
         "actualSuccessfulSteps": 34
       }
     ],
     "researchPR": {
-      "runId": 40443538988,
-      "jobId": 121989338014,
+      "runId": 40461751845,
+      "jobId": 122047812777,
       "state": "completed_success",
       "actualSuccessfulSteps": 11
     },
     "researchPush": {
-      "runId": 40443531605,
-      "runtimeJobId": 121989324761,
+      "runId": 40461747830,
+      "runtimeJobId": 122047801596,
       "runtime": "skipped"
     },
     "cla": {
-      "runId": 40443535038,
-      "jobId": 121989262771,
+      "runId": 40461749812,
+      "jobId": 122047742419,
       "state": "failure"
     },
     "artifactCountsReaudited": false,
@@ -512,5 +518,12 @@
     "changesCentralPortfolioQueue": false,
     "windowsImplemented": false,
     "windowsRuntimeAccepted": false
+  },
+  "previousPackageIdentityDevelopmentReference": {
+    "commit": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
+    "path": "x10/continuum/BACKGROUND.json",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
   }
 }

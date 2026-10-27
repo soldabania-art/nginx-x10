@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Explicit local Linux alpha. Node supervises/controls; native NGINX serves requests.
 import { constants } from 'node:fs';
-import { access, chmod, copyFile, link, lstat, mkdir, mkdtemp, open, readFile, readdir, realpath, rename, rm, writeFile } from 'node:fs/promises';
+import { access, chmod, copyFile, link, lstat, mkdir, mkdtemp, open, readFile, readdir, realpath, rename, rm, rmdir, writeFile } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
 import { execFile, spawn } from 'node:child_process';
 import { promisify, parseArgs } from 'node:util';
@@ -347,6 +347,213 @@ export function packageIdentity(manifest) {
   } catch { refuse(); }
 }
 // End installed runtime package identity.
+
+// Side-by-side package staging. Both packages and their declarative input
+// are trusted by the same local operator. Pins are consistency, not signatures.
+// This does not switch service ownership, start a daemon or migrate live state.
+const stagingHex = value => typeof value === 'string' && value.length === 64 && /^[a-f0-9]{64}$/.test(value);
+const stagingOverlap = (a, b) => a === '/' || b === '/' || a === b || a.startsWith(`${b}/`) || b.startsWith(`${a}/`);
+async function stagingRead(file, limit = 64 * 1024 * 1024) {
+  const selected = await owned(file);
+  if (selected.nlink !== 1 || selected.size > limit) fail('stage_invalid', 'Staging file exceeds its supported profile');
+  const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+  try {
+    const before = await handle.stat();
+    if (!before.isFile() || !same(backupFileIdentity(selected), backupFileIdentity(before))) fail('stage_invalid', 'Staging file identity changed');
+    const bytes = Buffer.alloc(before.size + 1); let length = 0;
+    try {
+      while (length < bytes.length) { const read = await handle.read(bytes, length, bytes.length - length, null); if (!read.bytesRead) break; length += read.bytesRead; }
+      const after = await handle.stat();
+      if (length !== before.size || !same(backupFileIdentity(before), backupFileIdentity(after))
+          || !same(backupFileIdentity(after), backupFileIdentity(await lstat(file)))) fail('stage_invalid', 'Staging file changed while reading');
+      return { ...backupFileIdentity(after), sha256: digest(bytes.subarray(0, length)) };
+    } finally { bytes.fill(0); }
+  } finally { await handle.close(); }
+}
+async function stagingBundle() {
+  const directory = root.replace(/\/$/, ''); await canonical(directory); const rootIdentity = await owned(directory, true, true);
+  const manifestFile = path.join(directory, 'bundle.json'), selected = await stagingRead(manifestFile, 256 * 1024);
+  if ((selected.mode & 0o7777) !== 0o600) fail('stage_invalid', 'Staging bundle record mode is invalid');
+  const manifest = await record(manifestFile), names = bundleNames(2);
+  if (manifest.schemaVersion !== 2 || manifest.kind !== 'nginx-x10-linux-alpha-bundle'
+      || manifest.platform?.system !== 'Linux' || manifest.platform.machine !== os.machine()
+      || !same(Object.keys(manifest.files || {}).sort(), names)) fail('stage_invalid', 'Staging requires the complete schema2 bundle');
+  const provenance = manifest.provenance, revision = value => typeof value === 'string' && value.length === 40 && /^[a-f0-9]{40}$/.test(value);
+  const text = (value, limit) => typeof value === 'string' && value.length > 0 && Buffer.byteLength(value) <= limit;
+  if (!stagingHex(manifest.nativeVersionOutputSha256) || !provenance || typeof provenance !== 'object' || Array.isArray(provenance)
+      || provenance.upstreamRepository !== 'https://github.com/nginx/nginx'
+      || !revision(provenance.upstreamRevision) || !revision(provenance.checkoutRevision) || !stagingHex(provenance.sourceDiffSha256)
+      || !text(provenance.nginxVersion, 256) || !text(provenance.compilerFlags, 64 * 1024)
+      || !Array.isArray(provenance.compiledModules) || provenance.compiledModules.length < 1 || provenance.compiledModules.length > 512
+      || new Set(provenance.compiledModules).size !== provenance.compiledModules.length
+      || provenance.compiledModules.some(name => !text(name, 128) || /[^A-Za-z0-9_]/.test(name))
+      || !provenance.dependencyVersionsFromHeaders || !same(Object.keys(provenance.dependencyVersionsFromHeaders).sort(), ['openssl', 'pcre2', 'zlib'])
+      || Object.values(provenance.dependencyVersionsFromHeaders).some(value => !text(value, 4096))
+      || !Array.isArray(provenance.configureFlags) || provenance.configureFlags.length < 1 || provenance.configureFlags.length > 128
+      || provenance.configureFlags.some(value => !text(value, 8192)))
+    fail('stage_invalid', 'Staging bundle native and provenance declarations are incomplete');
+  const directories = new Set(['bin', 'x10', 'x10/alpha', 'x10/control', 'x10/service']);
+  const files = new Set(['bundle.json', ...names]), snapshot = [{ path: '', directory: true, dev: rootIdentity.dev, ino: rootIdentity.ino, uid: rootIdentity.uid, mode: rootIdentity.mode }];
+  for (const entry of await inventory(directory)) {
+    const { relative, stat } = entry;
+    if (stat.isDirectory()) {
+      if (!directories.has(relative) || (stat.mode & 0o7777) !== 0o700) fail('stage_invalid', 'Unknown staging bundle directory');
+      snapshot.push({ path: relative, directory: true, dev: stat.dev, ino: stat.ino, uid: stat.uid, mode: stat.mode });
+    } else {
+      if (!files.has(relative) || !stat.isFile()) fail('stage_invalid', 'Unknown staging bundle file');
+      const actual = await stagingRead(path.join(directory, relative));
+      if (relative === 'bundle.json') {
+        if (!same(selected, actual)) fail('stage_invalid', 'Staging bundle record changed');
+      } else {
+        const expected = manifest.files[relative];
+        if (!expected || !same(Object.keys(expected).sort(), ['bytes', 'mode', 'sha256'])
+            || !Number.isSafeInteger(expected.bytes) || expected.bytes < 1 || !stagingHex(expected.sha256)
+            || expected.mode !== payloadMode(relative) || expected.bytes !== actual.size || expected.sha256 !== actual.sha256
+            || (actual.mode & 0o7777).toString(8).padStart(4, '0') !== expected.mode)
+          fail('stage_invalid', 'Staging bundle payload differs from its record');
+      }
+      snapshot.push({ path: relative, directory: false, ...actual });
+    }
+  }
+  if (snapshot.length !== files.size + directories.size + 1) fail('stage_invalid', 'Staging bundle inventory is incomplete');
+  const launcher = '#!/usr/bin/env node\nimport { main } from "../lib/alpha/cli.mjs";\nimport { fileURLToPath } from "node:url";\nawait main(process.argv.slice(2), fileURLToPath(new URL("../", import.meta.url)));\n';
+  const immutable = { 'bin/nginx': manifest.files['bin/nginx'], 'bin/x10': { bytes: Buffer.byteLength(launcher), sha256: digest(launcher), mode: '0500' } };
+  for (const name of controlNames) immutable[`lib/control/${name}`] = manifest.files[`x10/control/${name}`];
+  for (const name of alphaNames) immutable[`lib/alpha/${name}`] = manifest.files[`x10/alpha/${name}`];
+  immutable[recipePath] = manifest.files['x10/service/user-unit.mjs'];
+  // packageIdentity requires the complete installed inventory; these four entries
+  // are declared here without metadata, not asserted valid. install() constructs
+  // and validates them; packageIdentity intentionally ignores their values.
+  for (const name of ['build.json', 'licenses/NGINX-LICENSE', 'licenses/UPSTREAM.txt', 'examples/candidate-b.json'])
+    immutable[name] = null;
+  return { manifestSha256: selected.sha256, identity: packageIdentity({ schemaVersion: 2, immutable }),
+    snapshot: snapshot.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0) };
+}
+async function stagingSourceSnapshot(context) {
+  const files = new Set([...Object.keys(context.manifest.immutable), '.alpha-install.json', '.alpha-registry.json', '.alpha-lock']);
+  const directories = new Set([...staticDirectories, 'lib/service']);
+  for (const session of context.registry.sessions) {
+    const life = await lifecycle(context, session);
+    if (!['prepared', 'stopped'].includes(life.stage)) fail('stage_requires_stopped', 'Every source session must be cleanly stopped or prepared');
+    await stopped(context, life); const state = await sessionStatus(context, life), history = await state.control.history(state.state), references = new Set();
+    const collect = value => { if (typeof value === 'string' && /^[a-f0-9]{32}$/.test(value)) references.add(value); else if (value && typeof value === 'object') for (const item of Object.values(value)) collect(item); };
+    collect(history.records); collect(state.result.lastConfirmedRevision);
+    const base = `runs/${session}`;
+    for (const suffix of ['', '/logs', '/temp', '/temp/client', '/temp/proxy', '/temp/fastcgi', '/temp/uwsgi', '/temp/scgi', '/.x10-control', '/.x10-control/revisions']) directories.add(base + suffix);
+    for (const suffix of ['nginx.conf', 'managed.conf', 'nginx.pid', 'lifecycle.json', 'logs/error.log', '.x10-control/settings.json', '.x10-control/state.json', '.x10-control/history.jsonl']) files.add(`${base}/${suffix}`);
+    for (const name of await readdir(path.join(life.prefix, '.x10-control/revisions'))) {
+      const key = /^([a-f0-9]{32})\.json$/.exec(name)?.[1];
+      if (!key || !references.has(key)) fail('stage_invalid', 'Unknown source revision requires inspection');
+      const revision = await load(path.join(life.prefix, '.x10-control/revisions', name)), { recordSha256, ...body } = revision;
+      if (digest(JSON.stringify(body)) !== recordSha256) fail('stage_invalid', 'Source revision integrity changed');
+      files.add(`${base}/.x10-control/revisions/${name}`);
+    }
+  }
+  const snapshot = []; let total = 0;
+  for (const { relative, stat } of await inventory(context.prefix)) {
+    if (stat.isDirectory()) {
+      if (!directories.has(relative) || (stat.mode & 0o7777) !== 0o700) fail('stage_invalid', 'Unknown source directory requires inspection');
+      snapshot.push({ path: relative, directory: true, dev: stat.dev, ino: stat.ino, uid: stat.uid, mode: stat.mode });
+    } else {
+      if (!files.has(relative) || !stat.isFile()) fail('stage_invalid', 'Unknown source file requires inspection');
+      total += stat.size; if (total > 256 * 1024 * 1024) fail('stage_invalid', 'Source snapshot exceeds its supported bound');
+      snapshot.push({ path: relative, directory: false, ...await stagingRead(path.join(context.prefix, relative)) });
+    }
+  }
+  return snapshot.sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
+}
+async function stagingLock(prefix, fn) {
+  const file = path.join(prefix, '.alpha-lock'); let handle, expected = null;
+  try { handle = await open(file, constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_NOFOLLOW, 0o600); }
+  catch (error) { if (error.code === 'EEXIST') fail('stage_invalid', 'Source is locked; preserve it for operator inspection'); throw error; }
+  try {
+    const bytes = Buffer.from(encode({ pid: process.pid, at: new Date().toISOString() }));
+    try { await handle.writeFile(bytes); await handle.sync(); expected = { ...backupFileIdentity(await handle.stat()), sha256: digest(bytes) }; }
+    finally { bytes.fill(0); }
+    if (!same(expected, await stagingRead(file, 4096))) fail('stage_invalid', 'Staging source lock identity is unconfirmed');
+    return await fn();
+  } finally {
+    let unchanged = false; try { unchanged = expected !== null && same(expected, await stagingRead(file, 4096)); } catch { /* Preserve an unconfirmed replacement. */ }
+    await handle.close();
+    if (!unchanged) fail('stage_invalid', 'Changed source lock preserved for inspection');
+    await rm(file);
+  }
+}
+async function stagePackage(values) {
+  const prefix = values.prefix, source = values['source-prefix'], directory = root.replace(/\/$/, '');
+  if (!simple(source) || !simple(prefix) || prefix === process.env.HOME || path.dirname(prefix) === '/' || stagingOverlap(source, prefix) || stagingOverlap(source, directory) || stagingOverlap(prefix, directory)
+      || !stagingHex(values['expected-source-payload']) || !stagingHex(values['expected-bundle-manifest']))
+    fail('stage_invalid', 'Staging requires disjoint canonical prefixes and exact consistency pins');
+  await canonical(source); await canonical(path.dirname(prefix));
+  if (await exists(prefix)) fail('stage_invalid', 'Staging target must be absent');
+  await backupParent(path.dirname(prefix));
+  const inspectedSource = await installed(source);
+  if (inspectedSource.manifest.schemaVersion !== 2 || packageIdentity(inspectedSource.manifest).runtimePayloadSha256 !== values['expected-source-payload'])
+    fail('stage_invalid', 'Staging requires the pinned checked schema2 source');
+  const candidate = await stagingBundle();
+  if (candidate.manifestSha256 !== values['expected-bundle-manifest']) fail('stage_invalid', 'Declared bundle consistency pin differs');
+  return stagingLock(source, async () => {
+    const context = await installed(source);
+    if (!same(inspectedSource.manifest, context.manifest) || !same(inspectedSource.registry, context.registry))
+      fail('stage_invalid', 'Source changed before staging lock');
+    if (context.manifest.schemaVersion !== 2) fail('stage_invalid', 'Only a checked schema2 source can be staged');
+    const original = packageIdentity(context.manifest);
+    if (original.runtimePayloadSha256 !== values['expected-source-payload'] || original.runtimePayloadSha256 === candidate.identity.runtimePayloadSha256)
+      fail('stage_invalid', 'Source pin differs or candidate runtime payload is unchanged');
+    const before = await stagingSourceSnapshot(context), parent = path.dirname(prefix);
+    await backupParent(parent);
+    const temporary = await mkdtemp(path.join(parent, '.x10-stage-')); await chmod(temporary, 0o700);
+    const temporaryIdentity = await owned(temporary, true, true), file = path.join(temporary, 'declarative.json');
+    let backupIdentity = null;
+    try {
+      await backup(context, file); backupIdentity = await stagingRead(file, 2 * 1024 * 1024);
+      const backupValue = await readBackup(file), beforeInstallSource = await installed(source);
+      if (!same(context.manifest, beforeInstallSource.manifest) || !same(context.registry, beforeInstallSource.registry)
+          || !same(before, await stagingSourceSnapshot(beforeInstallSource)) || !same(candidate, await stagingBundle()))
+        fail('stage_invalid', 'Staging inputs changed before target validation');
+      const result = await install({ prefix, restore: file });
+      const target = await installed(prefix), life = await lifecycle(target), status = await sessionStatus(target, life);
+      const targetIdentity = packageIdentity(target.manifest), freshSource = await installed(source);
+      const revision = await load(path.join(life.prefix, '.x10-control/revisions', `${status.result.lastConfirmedRevision}.json`));
+      const { recordSha256, ...revisionBody } = revision, history = await status.control.history(status.state);
+      if (!same(context.manifest, freshSource.manifest) || !same(context.registry, freshSource.registry)
+          || !same(before, await stagingSourceSnapshot(freshSource)) || !same(candidate, await stagingBundle())
+          || !same(targetIdentity, candidate.identity) || target.registry.sessions.length !== 1
+          || target.manifest.installationId === context.manifest.installationId || life.session === backupValue.source.session
+          || status.result.lastConfirmedRevision === backupValue.source.revision || life.stage !== 'prepared'
+          || life.runtime !== null || life.controlSocket !== null || status.result.binding !== null || !result.declarativeRestored
+          || target.manifest.port !== backupValue.port || target.manifest.healthPort !== backupValue.healthPort
+          || revision.id !== status.result.lastConfirmedRevision || revision.parent !== null || revision.sourceRevision !== null
+          || digest(JSON.stringify(revisionBody)) !== recordSha256 || !same(revision.input, backupValue.input)
+          || revision.inputSha256 !== backupValue.inputSha256 || !Array.isArray(history.records) || history.records.length !== 1
+          || history.records[0].type !== 'initialized_unbound' || history.records[0].details?.revision !== revision.id)
+        fail('stage_invalid', 'Staging postconditions failed; preserve both installations');
+      return { ok: true, outcome: 'package_staged', schemaVersion: 1, kind: 'nginx-x10-side-by-side-package-stage',
+        sourceRuntimePayloadSha256: original.runtimePayloadSha256, targetRuntimePayloadSha256: targetIdentity.runtimePayloadSha256,
+        sourceOperatorPayloadSha256: original.operatorPayloadSha256, targetOperatorPayloadSha256: targetIdentity.operatorPayloadSha256,
+        sourceNativeBinarySha256: original.nativeBinarySha256, targetNativeBinarySha256: targetIdentity.nativeBinarySha256,
+        bundleManifestSha256: candidate.manifestSha256, runtimePayloadChanged: true,
+        operatorPayloadChanged: original.operatorPayloadSha256 !== targetIdentity.operatorPayloadSha256,
+        nativeBinaryChanged: original.nativeBinarySha256 !== targetIdentity.nativeBinarySha256,
+        sourcePreserved: true, freshTargetIdentities: true, consistencyOnly: true, nativeStarted: false, readinessChecked: false,
+        activationPerformed: false, compatibilityAccepted: false, upgradePerformed: false,
+        rollbackAccepted: false, serviceAccepted: false, productionAccepted: false };
+    } finally {
+      const selected = await owned(temporary, true, true);
+      if (!same({ dev: selected.dev, ino: selected.ino, uid: selected.uid }, { dev: temporaryIdentity.dev, ino: temporaryIdentity.ino, uid: temporaryIdentity.uid }))
+        fail('stage_invalid', 'Staging temporary identity changed; preserve for inspection');
+      const contents = await readdir(temporary);
+      if (contents.some(name => name !== 'declarative.json')) fail('stage_invalid', 'Unknown staging temporary data preserved');
+      if (contents.length) {
+        if (!backupIdentity || !same(backupIdentity, await stagingRead(file, 2 * 1024 * 1024)))
+          fail('stage_invalid', 'Changed staging backup preserved for inspection');
+        await rm(file);
+      }
+      await rmdir(temporary);
+    }
+  });
+}
+// End side-by-side package staging.
 
 export async function install(values) {
   if (process.platform !== 'linux' || Number(process.versions.node.split('.')[0]) < 22) fail('unsupported', 'Linux and Node 22+ are required');
@@ -737,14 +944,20 @@ async function proxy(context, command, values) {
 
 export async function main(argv, installedPrefix = null) {
   const oldMask = process.umask(0o077);
-  let packageInfoRequested = argv.includes('package-info');
+  let packageInfoRequested = argv.includes('package-info'), stageRequested = argv.includes('stage');
   try {
     const { values, positionals } = parseArgs({ args: argv, allowPositionals: true, options: Object.fromEntries([
-      ...['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'output', 'file', 'revision', 'control-socket', 'control-address', 'timeout-ms', 'restore'].map(name => [name, { type: 'string' }]),
+      ...['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'output', 'file', 'revision', 'control-socket', 'control-address', 'timeout-ms', 'restore', 'source-prefix', 'expected-source-payload', 'expected-bundle-manifest'].map(name => [name, { type: 'string' }]),
       ['auto-readiness', { type: 'boolean' }], ['human', { type: 'boolean' }], ['help', { type: 'boolean', short: 'h' }],
     ]) });
     const [command] = positionals;
-    packageInfoRequested = command === 'package-info';
+    packageInfoRequested = command === 'package-info'; stageRequested = command === 'stage';
+    if (stageRequested && (argv.length !== 9 || argv[0] !== 'stage'
+        || argv[1] !== '--source-prefix' || argv[3] !== '--prefix'
+        || argv[5] !== '--expected-source-payload' || argv[7] !== '--expected-bundle-manifest'
+        || values['source-prefix'] !== argv[2] || values.prefix !== argv[4]
+        || values['expected-source-payload'] !== argv[6] || values['expected-bundle-manifest'] !== argv[8]))
+      fail('arguments', 'Use stage with exact source, target and consistency pin options');
     if (command === 'package-info' && (argv.length !== 1 || argv[0] !== 'package-info'))
       fail('arguments', 'Use package-info with no options');
     if (command === 'service-unit' && (argv[0] !== 'service-unit' || ![1, 2].includes(argv.length)
@@ -758,9 +971,9 @@ export async function main(argv, installedPrefix = null) {
           || ['port', 'health-port', 'upstream-port'].some(key => values[key] !== undefined))
         fail('arguments', 'Use install --prefix NEW_ABSOLUTE --restore BACKUP_FILE with no repeated options');
     }
-    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nRestore: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --restore BACKUP_FILE [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nInstalled: bin/x10 package-info | backup --output NEW_ABSOLUTE_FILE | service-unit [--auto-readiness] | prepare-run | run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
+    if (values.help) { process.stdout.write('Source: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --port 9080 --health-port 9081 [--upstream-port PORT] [--manifest FILE]\nRestore: node x10/alpha/cli.mjs install --prefix NEW_ABSOLUTE --restore BACKUP_FILE [--manifest FILE]\nBundle: node x10/alpha/cli.mjs pack --output FILE.tar.gz [--manifest FILE]\nStaging: node TRUSTED_BUNDLE/install.mjs stage --source-prefix OLD_ABSOLUTE --prefix NEW_ABSOLUTE --expected-source-payload SHA256 --expected-bundle-manifest SHA256\nInstalled: bin/x10 package-info | backup --output NEW_ABSOLUTE_FILE | service-unit [--auto-readiness] | prepare-run | run [--control-socket PRIVATE_ABSOLUTE] | bind | wait-bind [--timeout-ms 1..30000] | status [--human] | info | apply --file JSON | revert --revision ID | history | recover | inspect-generations --control-socket PRIVATE_ABSOLUTE | stop | uninstall\n'); return; }
     if (positionals.length !== 1) fail('arguments', 'Exactly one command is required; use --help');
-    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'restore'], pack: ['output', 'manifest', 'binary'], 'package-info': [], backup: ['output'], run: ['control-socket'], 'service-unit': ['auto-readiness'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
+    const allowed = { stage: ['source-prefix', 'prefix', 'expected-source-payload', 'expected-bundle-manifest'], install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary', 'restore'], pack: ['output', 'manifest', 'binary'], 'package-info': [], backup: ['output'], run: ['control-socket'], 'service-unit': ['auto-readiness'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };
     if (!allowed[command] || Object.keys(values).some(key => !allowed[command].includes(key))) fail('arguments', 'Unsupported command or option for this command');
     let waitTimeout = 10000;
     if (command === 'wait-bind' && values['timeout-ms'] !== undefined) {
@@ -769,7 +982,8 @@ export async function main(argv, installedPrefix = null) {
       waitTimeout = Number(values['timeout-ms']);
     }
     let result;
-    if (command === 'install' || command === 'pack') { if (installedPrefix) fail('arguments', 'Use the source checkout or extracted bundle for installation'); result = command === 'install' ? await install(values) : await pack(values); }
+    if (command === 'stage') { if (installedPrefix) fail('arguments', 'Use the trusted extracted candidate bundle for staging'); result = await stagePackage(values); }
+    else if (command === 'install' || command === 'pack') { if (installedPrefix) fail('arguments', 'Use the source checkout or extracted bundle for installation'); result = command === 'install' ? await install(values) : await pack(values); }
     else {
       if (!installedPrefix) fail('arguments', 'Use the installed PREFIX/bin/x10 launcher for lifecycle commands');
       const prefix = path.resolve(installedPrefix), allowDrift = ['stop', 'uninstall', 'info', 'status', 'history'].includes(command); const inspected = await installed(prefix, allowDrift);
@@ -796,6 +1010,10 @@ export async function main(argv, installedPrefix = null) {
     }
     if (result) { process.stdout.write(encode(result)); if (!result.ok) process.exitCode = 1; }
   } catch (error) {
+    if (stageRequested) {
+      process.stdout.write(encode({ ok: false, code: 'stage_refused', error: 'Package staging refused; preserve any created target for operator inspection' }));
+      process.exitCode = 1; return;
+    }
     if (packageInfoRequested) {
       process.stdout.write(encode({ ok: false, code: 'package_info_refused', error: 'Installed package identity inspection refused' }));
       process.exitCode = 1; return;

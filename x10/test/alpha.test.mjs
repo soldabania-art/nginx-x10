@@ -16,6 +16,7 @@ import './alpha-pid.test.mjs';
 import '../alpha/prepare-run.test.mjs';
 import '../alpha/backup.test.mjs';
 import '../alpha/package-info.test.mjs';
+import '../alpha/stage.test.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url)), source = path.join(root, 'x10/alpha/cli.mjs');
 const manifestFile = path.resolve(process.env.X10_BUILD_MANIFEST || path.join(root, 'x10/.build/manifest.json'));
@@ -55,7 +56,7 @@ async function amendRecord(file, mutate) {
   await writeFile(file, `${JSON.stringify({ ...body, sha256: digest(JSON.stringify(body)) }, null, 2)}\n`);
 }
 
-test('isolated Linux alpha installs, controls native sessions, restarts and removes only owned data', { timeout: 65000 }, async t => {
+test('isolated Linux alpha installs, controls native sessions, restarts and removes only owned data', { timeout: 90000 }, async t => {
   const build = JSON.parse(await readFile(manifestFile, 'utf8'));
   assert.equal(build.binary.path, binary, 'Aggregate-selected manifest and binary must be identical');
   assert.equal(build.binary.sha256, digest(await readFile(binary)));
@@ -277,6 +278,11 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
         exactInputRestored: true, portsPreserved: true, freshHistory: true, bindingAbsent: true, nativeStarted: false,
         readinessChecked: false, listeningPortsClosed: true, sourcePreserved: true, freshInstallationRemoved: true,
         serviceAccepted: false, productionAccepted: false }));
+      // A reviewed historical operator payload and the current candidate are
+      // genuinely different code bytes with the same compiled native binary.
+      // This prepares an unbound target only: it is not an A-to-B-to-A replay.
+      await assertHostedPackageStage(t, { parent, bundle, installer, recipeNode,
+        currentSource: target, backupFile, backupBytes, sourceRevision, port, healthPort });
       // Interrupt the startup path as soon as a fresh session publishes its native PID.
       let interruptedOutput = '', interruptedStdout = '', interruptedPid;
       await verifyRecipeNode(recipeNode);
@@ -320,6 +326,193 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
     await rm(parent, { recursive: true, force: true });
   }
 });
+
+// Supported-host-only staging proof. The historical CLI is read from a fixed
+// reviewed Git blob, never created by editing labels or injecting fake behavior.
+async function assertHostedPackageStage(t, { parent, bundle, installer, recipeNode,
+  currentSource, backupFile, backupBytes, sourceRevision, port, healthPort }) {
+  const historicalCommit = 'acb648392e745b5246a5620f2ea6a6286dc06d42';
+  const historicalBlob = 'f036791f3e843c3628964f5c61b0bc0ab903d6f9';
+  const historicalCliSha256 = '4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d';
+  const historicalObject = `${historicalCommit}:x10/alpha/cli.mjs`;
+  const resolved = await execute('git', ['rev-parse', historicalObject], { cwd: root, timeout: 5000, maxBuffer: 4096 });
+  assert.equal(resolved.stdout.trim(), historicalBlob); assert.equal(resolved.stderr, '');
+  const historical = await execute('git', ['show', historicalObject],
+    { cwd: root, timeout: 5000, encoding: 'buffer', maxBuffer: 256 * 1024 });
+  assert.equal(digest(historical.stdout), historicalCliSha256); assert.equal(historical.stderr.length, 0);
+  const historicalPeers = [...recipeControlNames.map(name => `x10/control/${name}`),
+    ...recipeAlphaNames.filter(name => name !== 'cli.mjs').map(name => `x10/alpha/${name}`),
+    'x10/service/user-unit.mjs'];
+  const unchangedPeers = await execute('git', ['diff', '--exit-code', historicalCommit, '--', ...historicalPeers],
+    { cwd: root, timeout: 5000, maxBuffer: 256 * 1024 });
+  assert.equal(unchangedPeers.stdout, ''); assert.equal(unchangedPeers.stderr, '',
+    'Other reviewed historical operator modules must match the current candidate');
+  const candidateCli = await readFile(path.join(bundle, 'x10/alpha/cli.mjs'));
+  assert.notEqual(digest(candidateCli), historicalCliSha256,
+    'Historical and candidate operator code are genuinely different reviewed bytes');
+  const historicalBundle = path.join(parent, 'historical-operator-bundle');
+  const bundleTree = await recipeTree(bundle);
+  for (const relative of bundleTree.directories)
+    await mkdir(path.join(historicalBundle, relative), { mode: 0o700 });
+  for (const relative of bundleTree.files) {
+    const mode = (await lstat(path.join(bundle, relative))).mode & 0o7777;
+    await copyFile(path.join(bundle, relative), path.join(historicalBundle, relative), constants.COPYFILE_EXCL);
+    await chmod(path.join(historicalBundle, relative), mode);
+  }
+  const historicalCli = path.join(historicalBundle, 'x10/alpha/cli.mjs');
+  await chmod(historicalCli, 0o600); await writeFile(historicalCli, historical.stdout); await chmod(historicalCli, 0o400);
+  await amendRecord(path.join(historicalBundle, 'bundle.json'), record => {
+    record.files['x10/alpha/cli.mjs'] = { bytes: historical.stdout.length,
+      sha256: historicalCliSha256, mode: '0400' };
+  });
+  assert.deepEqual(await recipeTree(historicalBundle), bundleTree);
+  for (const relative of bundleTree.files) {
+    if (['bundle.json', 'x10/alpha/cli.mjs'].includes(relative)) continue;
+    assert.deepEqual(await readFile(path.join(historicalBundle, relative)), await readFile(path.join(bundle, relative)),
+      'Historical package reassembly preserves every other checked payload byte');
+  }
+  const candidateBundle = JSON.parse(await readFile(path.join(bundle, 'bundle.json'), 'utf8'));
+  const priorBundle = JSON.parse(await readFile(path.join(historicalBundle, 'bundle.json'), 'utf8'));
+  const priorBody = { ...priorBundle }; delete priorBody.sha256;
+  const candidateBody = { ...candidateBundle }; delete candidateBody.sha256;
+  const priorFiles = { ...priorBody.files }; delete priorFiles['x10/alpha/cli.mjs'];
+  const candidateFiles = { ...candidateBody.files }; delete candidateFiles['x10/alpha/cli.mjs'];
+  assert.deepEqual(priorFiles, candidateFiles);
+  assert.deepEqual({ ...priorBody, files: null }, { ...candidateBody, files: null },
+    'Native build provenance remains unchanged; this is not a historical published bundle');
+  const sourceA = path.join(parent, 'stage-source-a'), launcherA = path.join(sourceA, 'bin/x10');
+  const sourceInstall = await recipeNodeCommand(recipeNode, path.join(historicalBundle, 'install.mjs'),
+    'install', '--prefix', sourceA, '--restore', backupFile);
+  assert.equal(sourceInstall.code, 0, sourceInstall.stdout); assert.equal(sourceInstall.json.declarativeRestored, true);
+  assert.equal(sourceInstall.json.nativeStarted, false); assert.equal(sourceInstall.json.readinessChecked, false);
+  const sourceManifest = JSON.parse(await readFile(path.join(sourceA, '.alpha-install.json'), 'utf8'));
+  const sourceIdentity = await stagingPayloadIdentity(sourceA);
+  assert.equal(sourceManifest.immutable['lib/alpha/cli.mjs'].sha256, historicalCliSha256);
+  const candidateIdentity = await stagingPayloadIdentity(currentSource);
+  assert.notEqual(sourceIdentity.runtimePayloadSha256, candidateIdentity.runtimePayloadSha256);
+  assert.notEqual(sourceIdentity.operatorPayloadSha256, candidateIdentity.operatorPayloadSha256);
+  assert.equal(sourceIdentity.nativeBinarySha256, candidateIdentity.nativeBinarySha256);
+  const beforeTree = await recipeTree(sourceA);
+  const beforeFiles = await Promise.all(beforeTree.files.map(async relative => {
+    const file = path.join(sourceA, relative), stat = await lstat(file);
+    return { relative, bytes: await readFile(file), identity: {
+      dev: stat.dev, ino: stat.ino, uid: stat.uid, nlink: stat.nlink,
+      mode: stat.mode, size: stat.size, mtimeMs: stat.mtimeMs, ctimeMs: stat.ctimeMs } };
+  }));
+  const bundleManifestSha256 = digest(await readFile(path.join(bundle, 'bundle.json')));
+  const stageArgs = (sourcePrefix, targetPrefix, sourcePin = sourceIdentity.runtimePayloadSha256,
+    bundlePin = bundleManifestSha256) => ['stage', '--source-prefix', sourcePrefix, '--prefix', targetPrefix,
+    '--expected-source-payload', sourcePin, '--expected-bundle-manifest', bundlePin];
+  const changedHash = hash => (hash[0] === '0' ? '1' : '0') + hash.slice(1);
+  let refusals = 0;
+  for (const [name, args] of [
+    ['source-pin', stageArgs(sourceA, path.join(parent, 'stage-wrong-source-pin'), changedHash(sourceIdentity.runtimePayloadSha256))],
+    ['bundle-pin', stageArgs(sourceA, path.join(parent, 'stage-wrong-bundle-pin'), sourceIdentity.runtimePayloadSha256, changedHash(bundleManifestSha256))],
+    ['same-payload', stageArgs(currentSource, path.join(parent, 'stage-same-payload'), candidateIdentity.runtimePayloadSha256)]
+  ]) {
+    const result = await recipeNodeCommand(recipeNode, installer, ...args);
+    assert.equal(result.code, 1, `Staging ${name} refusal`); assert.equal(result.json.ok, false);
+    assert.equal(await absent(args[4]), true, 'Refused staging does not create its requested target'); refusals++;
+  }
+  const targetB = path.join(parent, 'stage-target-b'), launcherB = path.join(targetB, 'bin/x10');
+  const staged = await recipeNodeCommand(recipeNode, installer, ...stageArgs(sourceA, targetB));
+  assert.equal(staged.code, 0, staged.stdout); assert.equal(staged.json.ok, true);
+  const manifestB = JSON.parse(await readFile(path.join(targetB, '.alpha-install.json'), 'utf8'));
+  const registryB = JSON.parse(await readFile(path.join(targetB, '.alpha-registry.json'), 'utf8'));
+  const registryA = JSON.parse(await readFile(path.join(sourceA, '.alpha-registry.json'), 'utf8'));
+  const sessionB = path.join(targetB, 'runs', registryB.current);
+  const lifecycleB = JSON.parse(await readFile(path.join(sessionB, 'lifecycle.json'), 'utf8'));
+  const statusB = await recipeNodeCommand(recipeNode, launcherB, 'status');
+  assert.equal(statusB.code, 0, statusB.stdout); assert.equal(statusB.json.binding, null); assert.equal(statusB.json.pending, null);
+  assert.equal(statusB.json.configUnchanged, true); assert.equal(statusB.json.fragmentMatchesLastConfirmed, true);
+  assert.equal(statusB.json.history.entries, 1);
+  const revisionB = JSON.parse(await readFile(path.join(sessionB, '.x10-control/revisions', `${statusB.json.lastConfirmedRevision}.json`), 'utf8'));
+  assert.notEqual(manifestB.installationId, sourceManifest.installationId);
+  assert.notEqual(registryB.current, registryA.current); assert.deepEqual(registryB.sessions, [registryB.current]);
+  assert.equal(registryB.installationId, manifestB.installationId);
+  const statusA = await recipeNodeCommand(recipeNode, launcherA, 'status'); assert.equal(statusA.code, 0, statusA.stdout);
+  assert.notEqual(revisionB.id, statusA.json.lastConfirmedRevision);
+  assert.deepEqual(revisionB.input, sourceRevision.input); assert.equal(revisionB.inputSha256, sourceRevision.inputSha256);
+  assert.equal(revisionB.parent, null); assert.equal(revisionB.sourceRevision, null);
+  assert.equal(manifestB.port, port); assert.equal(manifestB.healthPort, healthPort);
+  assert.equal(lifecycleB.stage, 'prepared'); assert.equal(lifecycleB.runtime, null); assert.equal(lifecycleB.controlSocket, null);
+  assert.equal(lifecycleB.installationId, manifestB.installationId); assert.equal(lifecycleB.session, registryB.current);
+  const historyB = await recipeNodeCommand(recipeNode, launcherB, 'history');
+  assert.equal(historyB.code, 0, historyB.stdout); assert.equal(historyB.json.records.length, 1);
+  assert.equal(historyB.json.records[0].type, 'initialized_unbound');
+  const targetIdentity = await stagingPayloadIdentity(targetB);
+  assert.deepEqual(targetIdentity, candidateIdentity);
+  assert.deepEqual(staged.json, { ok: true, outcome: 'package_staged', schemaVersion: 1,
+    kind: 'nginx-x10-side-by-side-package-stage',
+    sourceRuntimePayloadSha256: sourceIdentity.runtimePayloadSha256,
+    targetRuntimePayloadSha256: targetIdentity.runtimePayloadSha256,
+    sourceOperatorPayloadSha256: sourceIdentity.operatorPayloadSha256,
+    targetOperatorPayloadSha256: targetIdentity.operatorPayloadSha256,
+    sourceNativeBinarySha256: sourceIdentity.nativeBinarySha256,
+    targetNativeBinarySha256: targetIdentity.nativeBinarySha256, bundleManifestSha256,
+    runtimePayloadChanged: true, operatorPayloadChanged: true, nativeBinaryChanged: false,
+    sourcePreserved: true, freshTargetIdentities: true, consistencyOnly: true,
+    nativeStarted: false, readinessChecked: false, activationPerformed: false,
+    compatibilityAccepted: false, upgradePerformed: false, rollbackAccepted: false,
+    serviceAccepted: false, productionAccepted: false });
+  assert.equal(staged.stderr, '');
+  assert.notEqual(targetIdentity.runtimePayloadSha256, sourceIdentity.runtimePayloadSha256);
+  assert.notEqual(targetIdentity.operatorPayloadSha256, sourceIdentity.operatorPayloadSha256);
+  assert.equal(targetIdentity.nativeBinarySha256, sourceIdentity.nativeBinarySha256);
+  const existingTree = await recipeTree(targetB);
+  const existingBytes = await Promise.all(existingTree.files.map(relative => readFile(path.join(targetB, relative))));
+  const existingRefusal = await recipeNodeCommand(recipeNode, installer, ...stageArgs(sourceA, targetB));
+  assert.equal(existingRefusal.code, 1); assert.equal(existingRefusal.json.ok, false); refusals++;
+  assert.deepEqual(await recipeTree(targetB), existingTree);
+  for (let index = 0; index < existingTree.files.length; index++)
+    assert.deepEqual(await readFile(path.join(targetB, existingTree.files[index])), existingBytes[index],
+      'An existing target is refused without overwriting any owned file');
+  assert.deepEqual(await recipeTree(sourceA), beforeTree);
+  for (const expected of beforeFiles) {
+    const file = path.join(sourceA, expected.relative), stat = await lstat(file);
+    assert.deepEqual(await readFile(file), expected.bytes, 'Staging preserves every source file byte');
+    for (const [key, value] of Object.entries(expected.identity)) assert.equal(stat[key], value, `Source file ${key} preserved`);
+  }
+  assert.deepEqual(await readFile(backupFile), backupBytes);
+  assert.equal(await absent(path.join(sourceA, '.alpha-lock')), true);
+  assert.equal(await absent(path.join(targetB, '.alpha-lock')), true);
+  await assert.rejects(request(port)); await assert.rejects(request(healthPort));
+  assert.equal((await recipeNodeCommand(recipeNode, launcherB, 'uninstall')).code, 0); assert(await absent(targetB));
+  assert.equal((await recipeNodeCommand(recipeNode, launcherA, 'uninstall')).code, 0); assert(await absent(sourceA));
+  await rm(historicalBundle, { recursive: true }); assert(await absent(historicalBundle));
+  t.diagnostic(JSON.stringify({ suite: 'x10-package-stage', profile: 'historical-operator-to-current-extracted-native-syntax-unbound',
+    historicalOperatorCommit: historicalCommit, historicalOperatorBlob: historicalBlob,
+    historicalOperatorSha256: historicalCliSha256, historicalBundleReassembled: true,
+    nativeBuildProvenanceUnchanged: true, runtimePayloadFiles: targetIdentity.runtimeFiles.length,
+    sourceRuntimePayloadSha256: sourceIdentity.runtimePayloadSha256,
+    targetRuntimePayloadSha256: targetIdentity.runtimePayloadSha256,
+    sourceOperatorPayloadSha256: sourceIdentity.operatorPayloadSha256,
+    targetOperatorPayloadSha256: targetIdentity.operatorPayloadSha256,
+    nativeBinarySha256: targetIdentity.nativeBinarySha256,
+    runtimePayloadChanged: true, operatorPayloadChanged: true, nativeBinaryChanged: false,
+    exactInputAndPortsPreserved: true, freshInstallation: true, freshSession: true, freshRevision: true,
+    freshHistory: true, bindingAbsent: true, nativeStarted: false, readinessChecked: false,
+    activationPerformed: false, sourceFilesPreserved: true, backupPreserved: true,
+    refusedWithoutOverwrite: refusals, listeningPortsClosed: true, ownedInstallationsRemoved: true,
+    historicalBundleRemoved: true, compatibilityAccepted: false, upgradePerformed: false,
+    rollbackAccepted: false, serviceAccepted: false, productionAccepted: false }));
+}
+
+// Independent actual-byte identity calculation, not the runtime helper under test.
+async function stagingPayloadIdentity(prefix) {
+  const manifest = JSON.parse(await readFile(path.join(prefix, '.alpha-install.json'), 'utf8'));
+  const names = ['bin/nginx', 'bin/x10', ...recipeControlNames.map(name => `lib/control/${name}`),
+    ...recipeAlphaNames.map(name => `lib/alpha/${name}`),
+    ...(manifest.schemaVersion === 2 ? ['lib/service/user-unit.mjs'] : [])].sort();
+  const files = await Promise.all(names.map(async relative => {
+    const file = path.join(prefix, relative), bytes = await readFile(file), stat = await lstat(file);
+    assert.equal(stat.isFile(), true); assert.equal(stat.isSymbolicLink(), false); assert.equal(stat.nlink, 1);
+    return { path: relative, bytes: bytes.length, sha256: digest(bytes), mode: (stat.mode & 0o7777).toString(8).padStart(4, '0') };
+  }));
+  const fingerprint = selected => digest(JSON.stringify({ schemaVersion: 1, files: selected }));
+  return { runtimePayloadSha256: fingerprint(files), operatorPayloadSha256: fingerprint(files.filter(file => file.path !== 'bin/nginx')),
+    nativeBinarySha256: files.find(file => file.path === 'bin/nginx').sha256, runtimeFiles: files };
+}
 
 // G2 opt-in upstream controls. The original demo lifecycle above stays intact.
 async function upstreamTransfer(port, route = '/', { method = 'GET', body = null, limit = 9 * 1024 * 1024 } = {}) {

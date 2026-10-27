@@ -50,8 +50,8 @@
   },
   "attribution": {
     "site_path": "/cases/",
-    "section_title": "\u041d\u0430\u0448\u0438 \u043f\u0440\u043e\u0435\u043a\u0442\u044b",
-    "developer_label": "\u0420\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a \u2014 \u0410\u0412\u0415\u0420\u041a\u0420\u041e\u041d",
+    "section_title": "Наши проекты",
+    "developer_label": "Разработчик — АВЕРКРОН",
     "preserve_upstream_license_authorship_history": true,
     "card_status_requires_confirmed_release": true
   },
@@ -322,7 +322,7 @@
         "All G0-G8 accepted with evidence",
         "Local Alpha alone did not trigger transition",
         "Unfinished broad platform/Continuum not marked completed",
-        "Final queue remains X10\u2192AVERKRON\u2192TEXTORA/AI Index\u2192TROVENDI\u2192Replyscope"
+        "Final queue remains X10→AVERKRON→TEXTORA/AI Index→TROVENDI→Replyscope"
       ],
       "required_evidence": [
         "central_transition_commit",
@@ -532,5 +532,64 @@
     "fullG4Accepted": false,
     "productionAccepted": false,
     "actualFailureContainmentExercised": false
+  },
+  "sideBySidePackageStageCandidate": {
+    "state": "CODE_PRESENT_FROZEN_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+    "sourceBase": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
+    "publicationParent": "a22e382fca8f34faad7f57ebe2ceee52868a2d7b",
+    "scope": "Explicit trusted extracted-candidate side-by-side schema2 HTTP package staging without activation or cutover",
+    "sourceBindings": {
+      "x10/alpha/cli.mjs": {
+        "beforeSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+        "afterSha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa",
+        "bytes": 87522
+      },
+      "x10/alpha/stage.test.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "483344ba19167e38a2eee25896c355348d8fa632467338125dcc7806c69b9d97",
+        "bytes": 42023
+      },
+      "x10/test/alpha.test.mjs": {
+        "beforeSha256": "602312b3ee869a1a85b53466bd68b096184d7eaed48b0ca9e162e405bf96db48",
+        "afterSha256": "12868a338f450466c8201e8ca110dda65c473db90ad043414d0a3e7e5936a1e9",
+        "bytes": 111756
+      }
+    },
+    "evidence": "x10/evidence/g4-package-stage.json",
+    "perFileLedger": "x10/review/g4-package-stage-ledger.json",
+    "localSelectedTAP": {
+      "tests": 374,
+      "pass": 374,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "physicalNativeExecuted": false,
+      "systemdExecuted": false
+    },
+    "newPureControlsIncludedInTAP": 126,
+    "separateIndependentTempfileControls": 13,
+    "separateActualNodeNonexecutedInstallation": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "sourceAndTargetSchemasUnchanged": true,
+    "nativeAndControllerRuntimeUnchanged": true,
+    "historicalOperatorSource": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "historicalOperatorArchiveReassembledNotPublished": true,
+    "sameCompiledNativeBinaryInAuthoredHostedFixture": true,
+    "physicalVersionAndSyntaxFixturesExecutedLocally": false,
+    "hostedPhysicalAcceptancePending": true,
+    "activationPerformed": false,
+    "compatibilityAccepted": false,
+    "packageStageHostedAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "productionAccepted": false
   }
 }

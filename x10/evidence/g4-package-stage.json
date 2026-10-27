@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "sourceBase": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
+  "publicationParent": "a22e382fca8f34faad7f57ebe2ceee52868a2d7b",
+  "implementationCommitLocator": "Containing implementation commit; exact resulting hosted run required",
+  "state": "CODE_PRESENT_FROZEN_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+  "scope": "Explicit trusted extracted-candidate side-by-side schema2 HTTP package staging without activation or cutover",
+  "evidence": "x10/evidence/g4-package-stage.json",
+  "perFileLedger": "x10/review/g4-package-stage-ledger.json",
+  "sourceBindingsFrozen": true,
+  "sourceBindings": {
+    "x10/alpha/cli.mjs": {
+      "beforeSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+      "afterSha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa",
+      "bytes": 87522
+    },
+    "x10/alpha/stage.test.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "483344ba19167e38a2eee25896c355348d8fa632467338125dcc7806c69b9d97",
+      "bytes": 42023
+    },
+    "x10/test/alpha.test.mjs": {
+      "beforeSha256": "602312b3ee869a1a85b53466bd68b096184d7eaed48b0ca9e162e405bf96db48",
+      "afterSha256": "12868a338f450466c8201e8ca110dda65c473db90ad043414d0a3e7e5936a1e9",
+      "bytes": 111756
+    }
+  },
+  "candidateCommand": [
+    "node",
+    "CANDIDATE/install.mjs",
+    "stage",
+    "--source-prefix",
+    "OLD_ABSOLUTE",
+    "--prefix",
+    "NEW_ABSOLUTE",
+    "--expected-source-payload",
+    "SOURCE_RUNTIME_PAYLOAD_SHA256",
+    "--expected-bundle-manifest",
+    "CANDIDATE_BUNDLE_MANIFEST_SHA256"
+  ],
+  "candidateBehavior": [
+    "Run only from an explicitly trusted extracted schema2 candidate with exact source-runtime and raw candidate-manifest consistency pins; no installed-launcher or source-build fallback.",
+    "Inspect the checked source installation using the candidate inspector rather than assuming old installed commands exist.",
+    "Refuse unsafe/equal/nested roots, existing target, unsupported schema/profile, recorded dependency drift, changed payloads and unknown source files.",
+    "Under the source staging lock, verify all registered sessions are clean prepared/stopped with no live owned native processes and clean controller state; copy only the current confirmed HTTP input. Retain and recheck original files and records.",
+    "Use only an owned private temporary declarative backup to create a fresh separate target with new installation/session/revision identities and no copied runtime binding/history.",
+    "Require a different actual runtime payload; report operator and native-binary changes separately. Provenance-only changes are not distinct runtime packages.",
+    "Leave the target prepared and unbound; execute only the existing native version/dependency/syntax checks, without starting a serving daemon or activating a service.",
+    "Preserve a partially created target for operator inspection on refusal and clean only the command-owned temporary backup."
+  ],
+  "alphaRuntimeChanged": true,
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "serviceRecipeChanged": false,
+  "bundleAndInstallationSchemaChanged": false,
+  "packageInventoryChanged": false,
+  "localValidation": {
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "x10/alpha/stage.test.mjs",
+      "x10/alpha/package-info.test.mjs",
+      "x10/alpha/backup.test.mjs",
+      "x10/alpha/prepare-run.test.mjs",
+      "x10/test/alpha-runtime.test.mjs",
+      "x10/test/alpha-pid.test.mjs"
+    ],
+    "exitCode": 0,
+    "counts": {
+      "tests": 374,
+      "pass": 374,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "nodeVersion": "v24.22.1",
+    "sourceBindings": {
+      "x10/alpha/cli.mjs": {
+        "bytes": 87522,
+        "sha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa"
+      },
+      "x10/alpha/stage.test.mjs": {
+        "bytes": 42023,
+        "sha256": "483344ba19167e38a2eee25896c355348d8fa632467338125dcc7806c69b9d97"
+      },
+      "x10/test/alpha.test.mjs": {
+        "bytes": 111756,
+        "sha256": "12868a338f450466c8201e8ca110dda65c473db90ad043414d0a3e7e5936a1e9"
+      }
+    },
+    "frozen": true,
+    "physicalNativeExecuted": false,
+    "systemdExecuted": false,
+    "state": "FROZEN_SELECTED_PURE_TEMPFILE_VIRTUAL_PASS",
+    "newStageControlsIncludedOnce": 126,
+    "separateActualNodeNonexecutedInstallation": {
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-name-pattern=^installed package-info identifies checked nonexecuted payload without state or lock writes$",
+        "x10/test/alpha.test.mjs"
+      ],
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "scope": "Actual Node CLI with explicitly NONEXECUTED synthetic native payload; not stage or native acceptance."
+    },
+    "independentReviewControlsSeparate": {
+      "packageTree": 7,
+      "lockAndReader": 6
+    },
+    "allIndependentControlsUseOnlyOwnedPrivateTemporaryFiles": true,
+    "independentControlsNotAddedToSelectedTAP": true
+  },
+  "hostedVerification": {
+    "state": "PENDING_EXACT_RESULTING_NATIVE_CI",
+    "expectedEvidence": "Actual historical operator payload versus candidate bytes, strict refusal controls, fresh unbound target, preserved source files, no native activation, owned uninstall and existing service regressions.",
+    "historicalOperatorSource": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "nativeBinaryVersionChangeClaimed": false,
+    "historicalPackageIsPermanentRelease": false,
+    "expectedStageResultFields": 25,
+    "expectedFiniteStageDiagnosticFields": 36,
+    "historicalOperatorBlob": "f036791f3e843c3628964f5c61b0bc0ab903d6f9",
+    "historicalOperatorSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+    "historicalPayloadReassemblyIsNotAPublishedHistoricalArchive": true,
+    "expectedRefusalsWithoutOverwrite": 4,
+    "requiresActualInstalledPayloadHashesAndSourcePreservation": true
+  },
+  "consistencyOnly": true,
+  "signatureProvided": false,
+  "compatibilityAccepted": false,
+  "upgradePerformed": false,
+  "rollbackAccepted": false,
+  "activationPerformed": false,
+  "serviceAccepted": false,
+  "productionAccepted": false,
+  "packageUpgradeRollbackAccepted": false,
+  "nativeBinaryVersionChangeAccepted": false,
+  "tlsBackupAccepted": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "acceptedPriorPackageIdentity": {
+    "implementationCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "receiptCommit": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
+    "path": "x10/evidence/g4-package-identity-hosted.json",
+    "scope": "Read-only installed package identity and existing scoped regressions; not acceptance of changed staging code."
+  },
+  "limitations": [
+    "Executing a candidate installer requires explicit operator trust; checksums are consistency observations, not signatures, package authenticity or malicious same-UID isolation.",
+    "The same-UID source lock and repeated snapshots are cooperative observations, not an OS-level process/filesystem/supervisor fence or an atomic live-state migration.",
+    "Native -V and -t checks can execute and open operator-supplied configuration references; no claim of zero native execution is made.",
+    "Staging creates a stopped unbound target only; activation, cutover, application readiness, state compatibility, upgrade and rollback require separate actual evidence.",
+    "Historical real operator CLI bytes with an unchanged compiled native binary demonstrate an operator-package difference, not a native NGINX binary version change or a permanent published package.",
+    "TLS backup/restore, external files, application/database state, in-flight requests, transaction rollback and semantic TLS connection migration are unsupported by this stage.",
+    "Local pure/tempfile/virtual controls are not physical native/process-group/signal/systemd acceptance; physical fixtures run only in supported hosted CI.",
+    "Prior local cleanup FAIL_UNKNOWN, inherited CLA failure, unexercised actual failure containment and unresolved historical causes remain preserved in mandatory checkpoint history.",
+    "Meaningful reviewed A-to-B-to-A/state compatibility, permanent distribution, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
+    "Windows/WSL2 plans remain deferred and unverified; Linux staging does not change the central portfolio transition protocol."
+  ],
+  "initialDraftFindings": [
+    "Independent review reproduced rm on an empty directory refusing with ERR_FS_EISDIR; replaced with identity-checked rmdir before frozen verification.",
+    "Review strengthened open-handle lock preservation, candidate metadata and pre-execution readback, and exact target input/history postconditions before the frozen run.",
+    "Static integration review found the authored hosted exact-object assertion missing consistencyOnly; corrected before physical execution. Local selected controls did not execute that hosted helper.",
+    "Interim author test-harness failures reflected evolving fixture dependencies and inventory expectations; final frozen results are recorded separately."
+  ]
+}

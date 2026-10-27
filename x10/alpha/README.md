@@ -504,3 +504,67 @@ files, then verify actual reviewed payload transitions and rollback.
 Hashes are consistency records, not signatures. FullG3/G4/V1, TLS restore,
 permanent release, independent published replay and60-minute soak stay open.
 Evidence: x10/evidence/g4-package-identity-hosted.json.
+
+
+## Explicit side-by-side package staging — 27 October 2026
+
+A candidate containing `stage` can prepare a different checked operator package
+in a new private prefix while retaining the old installation. Invoke the
+**explicitly trusted, extracted candidate bundle**, not the old installed
+launcher and not a source checkout:
+
+```sh
+node nginx-x10-alpha/install.mjs stage \
+  --source-prefix /absolute/private/old-install \
+  --prefix /absolute/private/new-install \
+  --expected-source-payload SOURCE_RUNTIME_PAYLOAD_SHA256 \
+  --expected-bundle-manifest CANDIDATE_BUNDLE_MANIFEST_SHA256
+```
+
+Replace both SHA256 placeholders with independently checked lowercase hashes.
+The source pin names the original installed runtime payload; the candidate pin
+hashes the exact raw `bundle.json` bytes. Neither a hash nor a manifest obtained
+from the same untrusted download establishes publisher authenticity. The
+operator must trust the candidate and configuration before executing its
+installer. The new inspector reads the source's checked installed records; an
+old installation need not contain `stage` or `package-info`, and its code is
+not silently updated to gain those commands.
+
+This bounded path requires schema2 source and candidate installations, a new
+absent target, safe canonical private paths and disjoint source, bundle and
+target roots. All registered source sessions must be prepared or cleanly
+stopped; unknown files, pending or changed controller state, faulted/live
+sessions, unsupported HTTP input or recorded dependency drift cause refusal.
+The current confirmed declarative HTTP input and ports are transferred through
+an owned private temporary backup under the source alpha lock. Source files,
+records and histories are retained and rechecked. The lock is cooperative
+same-UID coordination, not a security or supervisor fence.
+
+The staged target receives fresh installation, session and revision identities
+and remains prepared and unbound. Native version and configuration syntax
+checks (`-V`, `ldd` and `-t`) may execute during verification/installation;
+`stage` does not start a serving daemon, check application readiness, install
+or activate a user unit, change listeners or switch traffic. It does not copy
+old bindings, process identities, histories, live TLS state or application data.
+A differing operator payload can still contain the identical native NGINX
+binary; runtime, operator and native identities must be assessed separately.
+Metadata or provenance labels alone do not make a different runtime package.
+
+A failed command returns a redacted refusal. If a target was already created,
+keep it for inspection rather than retrying or recursively deleting unknown
+files. Only the command's own temporary backup is cleaned automatically. The
+source package is not uninstalled, renamed or replaced. Retain the known-good
+package and state until independently accepted target validation and a separately
+reviewed switch/return procedure are available.
+
+The new pure/tempfile/virtual controls exercise the declared boundary; their
+counts and frozen bytes belong to [candidate evidence](../evidence/g4-package-stage.json).
+The authored hosted fixture uses actual earlier operator CLI bytes and the
+same compiled native binary to distinguish real operator-payload staging from
+a metadata-only edit. Until exact resulting CI is checked, it is not a physical
+staging acceptance. Even a passing staging fixture does not accept A-to-B-to-A,
+reversible application-state migration, a native binary upgrade, package
+rollback or a permanent published release. TLS restore, independent published
+replay, the60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.
+Windows remains a separately assigned, deferred and unverified plan after an
+accepted Linux V1; this command adds no Windows support.
