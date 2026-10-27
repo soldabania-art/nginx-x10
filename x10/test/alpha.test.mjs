@@ -20,6 +20,8 @@ import '../alpha/stage.test.mjs';
 import { assertHostedOperatorReturn } from './package-return.mjs';
 import { SHARED_OPERATOR_PEERS, verifySharedOperatorPeerFiles } from '../service/operator-package-return.mjs';
 import './package-return-proof.test.mjs';
+import { amendRecord, recipeControlNames, recipeAlphaNames, assertInstalledPackageInfo,
+  recipeTree, prepareRecipeNode, verifyRecipeNode, recipeNodeCommand, assertRecipeResult } from './alpha-recipe-helpers.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url)), source = path.join(root, 'x10/alpha/cli.mjs');
 const manifestFile = path.resolve(process.env.X10_BUILD_MANIFEST || path.join(root, 'x10/.build/manifest.json'));
@@ -54,10 +56,6 @@ async function request(port, route = '/') {
 }
 // A sampled reload gate is not an all-request cutover: old workers may overlap.
 async function observedBody(port, expected) { await until(async () => (await request(port)).body === expected); }
-async function amendRecord(file, mutate) {
-  const record = JSON.parse(await readFile(file, 'utf8')), { sha256, ...body } = record; mutate(body);
-  await writeFile(file, `${JSON.stringify({ ...body, sha256: digest(JSON.stringify(body)) }, null, 2)}\n`);
-}
 
 test('isolated Linux alpha installs, controls native sessions, restarts and removes only owned data', { timeout: 90000 }, async t => {
   const build = JSON.parse(await readFile(manifestFile, 'utf8'));
@@ -622,7 +620,7 @@ test('extracted bundle proxies an independent app and preserves application read
     const installed = await cli(installer, 'install', '--prefix', prefix, '--port', String(port), '--health-port', String(healthPort), '--upstream-port', String(upstreamPort));
     assert.equal(installed.code, 0, installed.stdout); assert.match(installed.json.healthNote, /application readiness/);
     const beforePackageRequests = { appRequests, echoRequests };
-    await assertInstalledPackageInfo(prefix, launcher);
+    await assertInstalledPackageInfo(prefix, launcher, cli);
     assert.deepEqual({ appRequests, echoRequests }, beforePackageRequests,
       'Package inspection must not call application health or replay traffic');
     const first = await start();
@@ -1032,244 +1030,3 @@ test('prepare-run preserves live, faulted, locked and malformed prepared records
   assert.deepEqual(await readFile(marker), registry); await f.stop();
   assert.equal((await cli(f.launcher, 'uninstall')).code, 0);
 });
-
-// Read-only installed-command controls use real installed modules and Node,
-// synthetic NONEXECUTED native bytes and no session/native/process-group start.
-const recipeControlNames=['cli.mjs','manager.mjs','listeners.mjs','generations.mjs','status-format.mjs'];
-const recipeAlphaNames=['cli.mjs','runtime.mjs','upstream-example.mjs'];
-const recipeV2Names=['bin/nginx','bin/x10','build.json','licenses/NGINX-LICENSE','licenses/UPSTREAM.txt','examples/candidate-b.json',
-  ...recipeControlNames.map(n=>'lib/control/'+n),...recipeAlphaNames.map(n=>'lib/alpha/'+n),'lib/service/user-unit.mjs'].sort();
-const recipeV2Dirs=['bin','lib','lib/control','lib/alpha','lib/service','licenses','examples','runs'];
-// Independent installed-byte comparison. This never imports the package helper
-// under test and grants no process, compatibility, upgrade or rollback authority.
-async function assertInstalledPackageInfo(prefix, launcher, invoke = cli) {
-  const manifest = JSON.parse(await readFile(path.join(prefix, '.alpha-install.json'), 'utf8'));
-  const names = ['bin/nginx', 'bin/x10',
-    ...recipeControlNames.map(name => `lib/control/${name}`),
-    ...recipeAlphaNames.map(name => `lib/alpha/${name}`),
-    ...(manifest.schemaVersion === 2 ? ['lib/service/user-unit.mjs'] : [])].sort();
-  const files = await Promise.all(names.map(async relative => {
-    const bytes = await readFile(path.join(prefix, relative)), stat = await lstat(path.join(prefix, relative));
-    assert.equal(stat.isFile(), true); assert.equal(stat.isSymbolicLink(), false);
-    return { path: relative, bytes: bytes.length, sha256: digest(bytes),
-      mode: (stat.mode & 0o7777).toString(8).padStart(4, '0') };
-  }));
-  const fingerprint = selected => digest(JSON.stringify({ schemaVersion: 1, files: selected }));
-  const expected = { ok: true, outcome: 'package_identified', schemaVersion: 1,
-    kind: 'nginx-x10-installed-package-identity', installationSchemaVersion: manifest.schemaVersion,
-    runtimePayloadSha256: fingerprint(files),
-    operatorPayloadSha256: fingerprint(files.filter(file => file.path !== 'bin/nginx')),
-    nativeBinarySha256: files.find(file => file.path === 'bin/nginx').sha256, runtimeFiles: files,
-    consistencyOnly: true, compatibilityAccepted: false, upgradePerformed: false,
-    rollbackAccepted: false, serviceAccepted: false, productionAccepted: false };
-  const lock = path.join(prefix, '.alpha-lock'), sentinel = Buffer.from('package-info-owned-lock-sentinel\n');
-  await writeFile(lock, sentinel, { mode: 0o600, flag: 'wx' });
-  const lockIdentity = await lstat(lock);
-  try {
-    const before = await recipeTree(prefix);
-    const beforeBytes = await Promise.all(before.files.map(relative => readFile(path.join(prefix, relative))));
-    const result = await invoke(launcher, 'package-info');
-    assert.equal(result.code, 0, 'Installed package inspection succeeds with an existing operator lock');
-    assert.equal(result.stderr, ''); assert.deepEqual(result.json, expected);
-    assert.equal(result.stdout.includes(prefix), false);
-    assert.equal(result.stdout.includes(manifest.installationId), false);
-    for (const args of [['package-info', '--human'], ['package-info', 'package-info']]) {
-      const refused = await invoke(launcher, ...args);
-      assert.equal(refused.code, 1); assert.equal(refused.json.code, 'package_info_refused');
-      assert.equal(refused.stdout.includes(prefix), false);
-    }
-    // Excluding a file from the runtime fingerprint must not bypass the full
-    // existing immutable-installation and host-dependency verification.
-    const example = path.join(prefix, 'examples/candidate-b.json'), exampleBytes = await readFile(example);
-    try {
-      await chmod(example, 0o600); await writeFile(example, Buffer.concat([exampleBytes, Buffer.from(' ')]));
-      const refused = await invoke(launcher, 'package-info');
-      assert.equal(refused.code, 1); assert.equal(refused.json.code, 'package_info_refused');
-      assert.equal(refused.stdout.includes(prefix), false);
-    } finally { await writeFile(example, exampleBytes); await chmod(example, 0o400); }
-    const marker = path.join(prefix, '.alpha-install.json'), markerBytes = await readFile(marker);
-    try {
-      await amendRecord(marker, value => { value.dependencies.files[0].sha256 = '0'.repeat(64); });
-      const refused = await invoke(launcher, 'package-info');
-      assert.equal(refused.code, 1); assert.equal(refused.json.code, 'package_info_refused');
-      assert.equal(refused.stdout.includes(prefix), false);
-    } finally { await writeFile(marker, markerBytes); }
-    assert.deepEqual(await recipeTree(prefix), before);
-    for (let index = 0; index < before.files.length; index++)
-      assert.deepEqual(await readFile(path.join(prefix, before.files[index])), beforeBytes[index],
-        'Package inspection and refusals preserve every prepared installation file');
-    const afterLock = await lstat(lock);
-    for (const key of ['dev', 'ino', 'uid', 'mode', 'size', 'mtimeMs', 'ctimeMs'])
-      assert.equal(afterLock[key], lockIdentity[key], 'Package inspection preserves the existing lock identity');
-    assert.deepEqual(await readFile(lock), sentinel);
-    return result.json;
-  } finally {
-    const current = await lstat(lock);
-    assert.equal(current.dev, lockIdentity.dev); assert.equal(current.ino, lockIdentity.ino);
-    await rm(lock);
-  }
-}
-async function recipeTree(base){
-  const directories=[],files=[];
-  async function visit(relative){directories.push(relative);for(const name of await readdir(path.join(base,relative))){const child=relative?relative+'/'+name:name,stat=await lstat(path.join(base,child));if(stat.isDirectory())await visit(child);else{assert.equal(stat.isFile(),true);assert.equal(stat.isSymbolicLink(),false);files.push(child);}}}
-  await visit('');return{directories:directories.sort(),files:files.sort()};
-}
-async function prepareRecipeNode(parent){
-  const directory=await lstat(parent),sourceNode=await realpath(process.execPath),sourceStat=await lstat(sourceNode);
-  assert.ok(await realpath(parent)===parent,'recipe Node parent is canonical');
-  assert.ok(directory.isDirectory()&&directory.uid===process.getuid()&&(directory.mode&0o7777)===0o700,'recipe Node parent is private and owned');
-  assert.ok(sourceStat.isFile()&&sourceStat.size>0&&sourceStat.size<=256*1024*1024,'trusted current Node source is regular and bounded');
-  const sourceHash=digest(await readFile(sourceNode)),nodeExecutable=path.join(parent,'recipe-node');
-  await copyFile(sourceNode,nodeExecutable,constants.COPYFILE_EXCL);await chmod(nodeExecutable,0o500);
-  const afterSource=await lstat(sourceNode),afterHash=digest(await readFile(sourceNode));
-  assert.ok(['dev','ino','uid','size','mode','mtimeMs','ctimeMs'].every(key=>sourceStat[key]===afterSource[key])&&afterHash===sourceHash,'trusted current Node source stayed stable across copy');
-  const sourceObservations=Object.freeze({sourceCanonical:true,sourceRegular:true,sourceBounded:true,sourceStableBytes:true,
-    sourceOwnerEligibleForService:[0,process.getuid()].includes(sourceStat.uid),sourceModeEligibleForService:(sourceStat.mode&0o7022)===0&&(sourceStat.mode&0o100)!==0});
-  const receipt=Object.freeze({nodeExecutable,version:process.version,sha256:sourceHash,bytes:sourceStat.size,sourceObservations});
-  await verifyRecipeNode(receipt);return receipt;
-}
-async function observeRecipeNode(receipt){
-  const stat=await lstat(receipt.nodeExecutable),canonical=await realpath(receipt.nodeExecutable);
-  const observations={regularFile:stat.isFile()&&!stat.isSymbolicLink(),canonicalPath:canonical===receipt.nodeExecutable,ownedByRunner:stat.uid===process.getuid(),
-    exactMode:(stat.mode&0o7777)===0o500,singleLink:stat.nlink===1,boundedSize:stat.size>0&&stat.size<=256*1024*1024,
-    byteCountMatched:stat.size===receipt.bytes,hashMatched:false};
-  // File identity and bounded bytes must be checked before executing the copy.
-  // Refused metadata never grants authority to run an identity probe.
-  if(Object.entries(observations).some(([key,value])=>key!=='hashMatched'&&value!==true))
-    return{...observations,identityCommandExecuted:false,versionMatched:false,executableMatched:false,stderrEmpty:false};
-  const bytes=await readFile(receipt.nodeExecutable);observations.byteCountMatched=bytes.length===receipt.bytes;
-  observations.hashMatched=digest(bytes)===receipt.sha256;
-  if(!observations.byteCountMatched||!observations.hashMatched)
-    return{...observations,identityCommandExecuted:false,versionMatched:false,executableMatched:false,stderrEmpty:false};
-  const result=await execute(receipt.nodeExecutable,['-p','JSON.stringify({version:process.version,executable:process.execPath})'],{timeout:12000,maxBuffer:4096});
-  let observed;try{observed=JSON.parse(result.stdout);}catch{assert.fail('recipe Node bounded identity output is valid JSON');}
-  return{...observations,identityCommandExecuted:true,versionMatched:observed?.version===receipt.version,
-    executableMatched:observed?.executable===receipt.nodeExecutable,stderrEmpty:result.stderr===''};
-}
-async function verifyRecipeNode(receipt){
-  const observations=await observeRecipeNode(receipt);
-  for(const [key,value] of Object.entries(observations))assert.ok(value===true,'recipe Node prerequisite: '+key);
-  return observations;
-}
-async function rawRecipeNodeCommand(receipt,file,...args){
-  try{const r=await execute(receipt.nodeExecutable,[file,...args],{timeout:12000,maxBuffer:2*1024*1024});return{code:0,...r,json:JSON.parse(r.stdout)};}
-  catch(error){if(!Number.isInteger(error.code))throw error;return{code:error.code,stdout:error.stdout,stderr:error.stderr,json:JSON.parse(error.stdout)};}
-}
-async function recipeNodeCommand(receipt,file,...args){await verifyRecipeNode(receipt);return rawRecipeNodeCommand(receipt,file,...args);}
-async function installedRecipeFixture(fn){
-  const parent=await mkdtemp(path.join(os.tmpdir(),'x10-installed-recipe-'));await chmod(parent,0o700);
-  const prefix=parent+'/install',launcher=prefix+'/bin/x10';
-  try{
-    await mkdir(prefix,{mode:0o700});for(const name of recipeV2Dirs)await mkdir(prefix+'/'+name,{mode:0o700});
-    const immutable={},put=async(relative,bytes,mode=0o400)=>{await writeFile(prefix+'/'+relative,bytes,{mode});immutable[relative]={bytes:bytes.length,sha256:digest(bytes),mode:mode.toString(8).padStart(4,'0')};};
-    await put('bin/nginx',Buffer.from('#!/bin/sh\n# Synthetic nonexecuted native placeholder.\nexit 99\n'),0o500);
-    await put('bin/x10',Buffer.from('#!/usr/bin/env node\nimport { main } from "../lib/alpha/cli.mjs";\nimport { fileURLToPath } from "node:url";\nawait main(process.argv.slice(2), fileURLToPath(new URL("../", import.meta.url)));\n'),0o500);
-    for(const name of recipeControlNames)await put('lib/control/'+name,await readFile(root+'x10/control/'+name));
-    for(const name of recipeAlphaNames)await put('lib/alpha/'+name,await readFile(root+'x10/alpha/'+name));
-    await put('lib/service/user-unit.mjs',await readFile(root+'x10/service/user-unit.mjs'));
-    for(const name of ['build.json','licenses/NGINX-LICENSE','licenses/UPSTREAM.txt','examples/candidate-b.json'])await put(name,Buffer.from('{}\n'));
-    const dep=Buffer.from('synthetic private dependency\n'),depfile=parent+'/dependency';await writeFile(depfile,dep,{mode:0o600});
-    const st=await lstat(prefix),recipeNode=await prepareRecipeNode(parent),nodeExecutable=recipeNode.nodeExecutable,installId='a'.repeat(32),session='b'.repeat(32);
-    const manifest={schemaVersion:2,kind:'nginx-x10-local-alpha',installationId:installId,prefix,rootIdentity:{dev:st.dev,ino:st.ino,uid:st.uid},
-      immutable,dependencies:{kind:'dynamic-host-libraries',files:[{path:depfile,bytes:dep.length,sha256:digest(dep)}]},
-      nodeRuntime:{version:recipeNode.version,executable:nodeExecutable,sha256:recipeNode.sha256},compiledModules:['synthetic_nonexecuted']};
-    const save=async()=>{await writeFile(prefix+'/.alpha-install.json',JSON.stringify({...manifest,sha256:digest(JSON.stringify(manifest))}),{mode:0o600});};
-    const registry={schemaVersion:1,installationId:installId,current:session,sessions:[session]};
-    await writeFile(prefix+'/.alpha-registry.json',JSON.stringify({...registry,sha256:digest(JSON.stringify(registry))}),{mode:0o600});await save();
-    await fn({parent,prefix,launcher,manifest,save,nodeExecutable,recipeNode,put});
-  }finally{await rm(parent,{recursive:true,force:true});}
-}
-async function recipeCli(f,...args){return recipeNodeCommand(f.recipeNode,f.launcher,...args);}
-test('installed package-info identifies checked nonexecuted payload without state or lock writes',
-  { timeout: 20000 }, () => installedRecipeFixture(async f => {
-    const result = await assertInstalledPackageInfo(f.prefix, f.launcher,
-      (file, ...args) => recipeNodeCommand(f.recipeNode, file, ...args));
-    assert.equal(result.runtimeFiles.length, 11);
-    assert.equal(result.nativeBinarySha256, f.manifest.immutable['bin/nginx'].sha256);
-    assert.equal(result.compatibilityAccepted, false); assert.equal(result.upgradePerformed, false);
-    assert.equal(result.rollbackAccepted, false); assert.equal(result.productionAccepted, false);
-  }));
-function assertRecipeResult(result,{prefix,nodeExecutable,automatic=false}){
-  assert.equal(result.code,0,result.stdout);assert.equal(result.stderr,'');
-  assert.deepEqual(Object.keys(result.json),['ok','unit','scope','readinessAutomated','startupHealthAccepted','serviceAccepted','productionAccepted','outcome','activationPerformed']);
-  assert.equal(result.json.ok,true);assert.equal(result.json.outcome,'service_unit_generated');assert.equal(result.json.scope,'systemd-user-recipe-only');
-  for(const key of ['activationPerformed','startupHealthAccepted','serviceAccepted','productionAccepted'])assert.equal(result.json[key],false);
-  assert.equal(result.json.readinessAutomated,automatic);assert(result.json.unit.includes(`ExecStart=${nodeExecutable} ${prefix}/bin/x10 run --control-socket ${prefix}/control.sock\n`));
-  assert.equal(result.json.unit.includes('ExecStartPre='),automatic);assert.equal(result.json.unit.includes('ExecStartPost='),automatic);
-  assert.doesNotMatch(result.json.unit,/systemctl|enable-linger|\/bin\/sh|killall/);
-}
-test('installed recipe command emits manual and automatic units from installed files without activation or alpha lock',{timeout:15000},()=>installedRecipeFixture(async f=>{
-  const marker=await readFile(f.prefix+'/.alpha-install.json'),registry=await readFile(f.prefix+'/.alpha-registry.json');
-  const lock=f.prefix+'/.alpha-lock';await writeFile(lock,'operator-owned-lock\n',{mode:0o600});const lockBefore=await readFile(lock),lockStat=await lstat(lock);
-  for(const automatic of [false,true]){
-    const r=await recipeCli(f,'service-unit',...(automatic?['--auto-readiness']:[]));assertRecipeResult(r,{...f,automatic});
-    assert.deepEqual(await readFile(lock),lockBefore);assert.equal((await lstat(lock)).ino,lockStat.ino);
-  }
-  assert.deepEqual(await readFile(f.prefix+'/.alpha-install.json'),marker);assert.deepEqual(await readFile(f.prefix+'/.alpha-registry.json'),registry);
-  assert.deepEqual(await readdir(f.prefix+'/runs'),[]);assert.equal(await absent(f.prefix+'/control.sock'),true);
-}));
-test('installed recipe command exactflags refuse unknown values duplicates and lifecycle options',{timeout:20000},()=>installedRecipeFixture(async f=>{
-  for(const args of [['--auto-readiness','--auto-readiness'],['--auto-readiness=true'],['--auto-readiness','true'],['--node',f.nodeExecutable],['--prefix',f.prefix],['--output',f.parent+'/unit'],['--control-socket',f.prefix+'/sock'],['--help'],['extra']]){
-    const r=await recipeCli(f,'service-unit',...args);assert.equal(r.code,1);assert.equal(r.json.ok,false);
-    assert.equal(await absent(f.prefix+'/.alpha-lock'),true);assert.equal(await absent(f.parent+'/unit'),true);
-  }
-}));
-test('installed recipe command preserves strict legacyv1 profile and refuses recipe without sniffing optional helper',{timeout:15000},()=>installedRecipeFixture(async f=>{
-  const helper=f.prefix+'/lib/service/user-unit.mjs';await rm(helper);await rmdir(f.prefix+'/lib/service');delete f.manifest.immutable['lib/service/user-unit.mjs'];f.manifest.schemaVersion=1;await f.save();
-  const record=await readFile(f.prefix+'/.alpha-install.json');const r=await recipeCli(f,'service-unit');assert.equal(r.code,1);assert.equal(r.json.code,'service_recipe_unavailable');
-  assert.deepEqual(await readFile(f.prefix+'/.alpha-install.json'),record);assert.equal(await absent(f.prefix+'/.alpha-lock'),true);assert.equal(await absent(helper),true);
-  await mkdir(f.prefix+'/lib/service',{mode:0o700});await writeFile(helper,'throw new Error("must not import optional legacy helper");',{mode:0o400});
-  const again=await recipeCli(f,'service-unit');assert.equal(again.code,1);assert.equal(again.json.code,'service_recipe_unavailable');assert.deepEqual(await readFile(f.prefix+'/.alpha-install.json'),record);
-}));
-test('installed recipe command validates helper bytes before dynamic import',{timeout:15000},()=>installedRecipeFixture(async f=>{
-  const helper=f.prefix+'/lib/service/user-unit.mjs',sentinel=f.parent+'/imported';await chmod(helper,0o600);
-  await writeFile(helper,`await (await import('node:fs/promises')).writeFile(${JSON.stringify(sentinel)},'unexpected import');\nthrow new Error('must not import tampered helper');\n`);await chmod(helper,0o400);
-  const r=await recipeCli(f,'service-unit');assert.equal(r.code,1);assert.equal(r.json.code,'alpha_integrity');assert.equal(await absent(sentinel),true);assert.equal(await absent(f.prefix+'/.alpha-lock'),true);
-}));
-for(const key of ['version','executable','sha256'])test('installed recipe command validates actual recordedNode '+key+' before dynamic import',{timeout:15000},()=>installedRecipeFixture(async f=>{
-  const helper=f.prefix+'/lib/service/user-unit.mjs',sentinel=f.parent+'/imported',bytes=Buffer.from(`await (await import('node:fs/promises')).writeFile(${JSON.stringify(sentinel)},'unexpected import');\nthrow new Error('must not import before recorded node validation');\n`);
-  await chmod(helper,0o600);await writeFile(helper,bytes);await chmod(helper,0o400);f.manifest.immutable['lib/service/user-unit.mjs']={bytes:bytes.length,sha256:digest(bytes),mode:'0400'};
-  if(key==='version')f.manifest.nodeRuntime.version='v22.0.0';if(key==='executable')f.manifest.nodeRuntime.executable=f.parent+'/different-node';if(key==='sha256')f.manifest.nodeRuntime.sha256='0'.repeat(64);await f.save();
-  const r=await recipeCli(f,'service-unit');assert.equal(r.code,1);assert.equal(await absent(sentinel),true);assert.equal(await absent(f.prefix+'/.alpha-lock'),true);
-}));
-for(const mutation of ['missingHelper','unknownVersion','missingOtherFile','wrongHelperMode','wrongDirectoryMode','helperHardlink'])test('installed recipe command refuses fullprofile '+mutation,{timeout:15000},()=>installedRecipeFixture(async f=>{
-  if(mutation==='missingHelper')delete f.manifest.immutable['lib/service/user-unit.mjs'];if(mutation==='unknownVersion')f.manifest.schemaVersion=3;
-  if(mutation==='missingOtherFile')delete f.manifest.immutable['lib/control/listeners.mjs'];
-  if(mutation==='helperHardlink')await link(f.prefix+'/lib/service/user-unit.mjs',f.parent+'/helper-alias');
-  if(mutation==='wrongHelperMode')await chmod(f.prefix+'/lib/service/user-unit.mjs',0o600);if(mutation==='wrongDirectoryMode')await chmod(f.prefix+'/lib/service',0o750);await f.save();
-  const r=await recipeCli(f,'service-unit');assert.equal(r.code,1);assert.equal(await absent(f.prefix+'/.alpha-lock'),true);
-}));
-
-// Exact prior command admission gate; no fake native execution is involved.
-const recipeBaselineGate="    const allowed = { install: ['prefix', 'port', 'health-port', 'upstream-port', 'manifest', 'binary'], pack: ['output', 'manifest', 'binary'], run: ['control-socket'], 'prepare-run': [], 'wait-bind': ['timeout-ms'], status: ['human'], apply: ['file'], revert: ['revision'], 'inspect-generations': ['control-socket', 'control-address'], 'snapshot-listeners': [], 'inspect-listeners': ['file'], bind: [], info: [], history: [], recover: [], stop: [], uninstall: [] };\n    if (!allowed[command] || Object.keys(values).some(key => !allowed[command].includes(key))) fail('arguments', 'Unsupported command or option for this command');";
-test('installed recipe baseline exact command gate rejects service-unit before any runtime action',()=>{
-  assert.equal(Buffer.byteLength(recipeBaselineGate),631);assert.equal(digest(recipeBaselineGate),'c2fd2c9011e1e9ec0e6c4b4f046a71168067a30e27ad9089a1ecb07450e2df04');
-  const gate=new Function('command','values','fail',recipeBaselineGate+';return true;');
-  assert.throws(()=>gate('service-unit',{},code=>{throw Object.assign(new Error(code),{code});}),{code:'arguments'});
-  assert.equal(gate('info',{},()=>assert.fail('legacy info must remain available')),true);
-});
-
-test('installed recipe controlled unsafe Node mode refuses unchanged product guard',{timeout:15000},async t=>installedRecipeFixture(async f=>{
-  const installBefore=await readFile(f.prefix+'/.alpha-install.json');await chmod(f.nodeExecutable,0o520);
-  try{
-    const unsafe=await observeRecipeNode(f.recipeNode);assert.equal(unsafe.exactMode,false);assert.equal(unsafe.identityCommandExecuted,false);assert.equal(unsafe.versionMatched,false);assert.equal(unsafe.executableMatched,false);
-    assert.ok(digest(await readFile(f.nodeExecutable))===f.recipeNode.sha256,'controlled unsafe mode leaves exact known Node bytes unchanged');
-    t.diagnostic(JSON.stringify({suite:'x10-recipe-node-prerequisites',profile:'controlled-unsafe-mode',...unsafe}));
-    await assert.rejects(verifyRecipeNode(f.recipeNode),/recipe Node prerequisite: exactMode/);
-    // Explicit negative control deliberately bypasses fixture preflight only;
-    // the unchanged product must refuse this current unsafe Node executable.
-    const refused=await rawRecipeNodeCommand(f.recipeNode,f.launcher,'service-unit');assert.equal(refused.code,1);assert.equal(refused.json.code,'service_recipe_invalid');
-    assert.equal(await absent(f.prefix+'/.alpha-lock'),true);assert.deepEqual(await readFile(f.prefix+'/.alpha-install.json'),installBefore);
-  }finally{await chmod(f.nodeExecutable,0o500);}
-  assert.deepEqual(await readFile(f.prefix+'/.alpha-install.json'),installBefore);
-}));
-
-test('installed recipe Node preflight refuses changed executable bytes before any identity child runs',{timeout:15000},()=>installedRecipeFixture(async f=>{
-  const sentinel=f.parent+'/unsafe-node-ran',replacement=f.parent+'/changed-node';
-  const changed=Buffer.alloc(f.recipeNode.bytes,0x20);changed.write(`#!/bin/sh\nprintf unexpected > ${sentinel}\nexit 0\n#`);
-  // Replace only the newly owned copy; never write into a previously executed
-  // inode, which can legitimately refuse an in-place write with ETXTBSY.
-  await writeFile(replacement,changed,{mode:0o500,flag:'wx'});await rename(replacement,f.nodeExecutable);
-  const refused=await observeRecipeNode(f.recipeNode);assert.equal(refused.byteCountMatched,true);assert.equal(refused.hashMatched,false);assert.equal(refused.identityCommandExecuted,false);assert.equal(refused.versionMatched,false);assert.equal(await absent(sentinel),true);
-  await assert.rejects(verifyRecipeNode(f.recipeNode),/recipe Node prerequisite: (byteCountMatched|hashMatched)/);assert.equal(await absent(sentinel),true);
-}));

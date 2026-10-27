@@ -3382,3 +3382,25 @@ FullG3/G4/G5/G7/V1, orphan incident replay/disposal,TLSrestore,nativebinaryupgra
 permanent release/publisher capability,published replay,60minsoak and semantic
 Continuum remainOPEN. Prior7b/26d acceptance and all adverse/unknown history,
 40h owner window and deferredWindows are preserved. Localphysicalfixtures0.
+
+
+## 27 October 2026: mixed reader CI and bounded alpha decomposition
+
+Exact9b PR40541973327/job122322645757 passed36steps/native20/alpha617;
+controller162 includes new76 and returncontract623 includes new79. All3strict
+service reports and owned/privateNode/history/bootstrap cleanup confirmed there.
+Push40541963582/job122322581694 instead failed19/20: alpha120008ms against
+120000budget, no completeTAPsummary; lastordinal568 is NOTtotalPASS. Whole
+timed-out alpha cleanup remainsUNKNOWN. PR116866ms does not explain push
+slowness. [Exact mixed receipt](evidence/g5-reader-shared-peers-hosted.json)
+keeps separate events, actualbuild identities and once-downloaded artifact hashes.
+
+The candidate extracts17nonexecuted-native installed-recipe controls and shared
+test helpers into a separate file within the existing managed controller group.
+Physical assertions/cleanup,20groups, workflow steps and deadlines remain intact;
+managed TAP now also requires a complete zero-skip summary. A decomposition guard
+checks coverage. This is test scheduling, not a measured speedup or runtime fix.
+[Candidate evidence](evidence/g5-alpha-bounded-decomposition.json) records local
+verification separately; exact successor hosted compatibility is pending.
+Capacity remains dependent; fullG3/G4/G5/G7/V1 and earlier adverse/owner40h/Windows
+boundaries are preserved. No localphysical/native/network/signals/systemd ran.

@@ -2803,3 +2803,14 @@ Only after scoped reader compatibility is accepted, implement cumulative
 session/inventory refusal before publishing uninspectable state, using the
 immutable source-pinned virtual baseline and preserving existing records.
 AllfullV1/release/recovery/security/Continuum gates and40h/Windows policies remain.
+
+
+## After bounded alpha decomposition
+
+Verify actual successor CI for both events: moved recipe cases exactly once,
+complete zero-skip TAP in existing controller/alpha groups,20nativegroups,
+new79/new76 inclusion, strict3service reports and allowned cleanup. Do not infer
+new totals by subtracting17 from617 or adding it to162. No blind budget raise
+or unchanged rerun. PR-only9b compatibility does not clear push9b timeout or
+unknown wholealpha cleanup. Capacity implementation waits for this gate.
+Preserve all release/recovery/security/Continuum and40h/Windows constraints.

@@ -1978,5 +1978,56 @@
       "requiredReadBeforeNextTask": true,
       "fullPriorRecordRequired": true
     }
+  ],
+  "readerSharedPeersMixedHosted": {
+    "state": "PR_SCOPED_COMPATIBILITY_SUCCESS_PUSH_TIMEOUT",
+    "implementationCommit": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+    "evidence": "x10/evidence/g5-reader-shared-peers-hosted.json",
+    "nativePRRun": 40541973327,
+    "nativePRJob": 122322645757,
+    "nativePushRun": 40541963582,
+    "nativePushJob": 122322581694,
+    "prOnlyScopedCompatibilityAccepted": true,
+    "bothEventCompatibilityAccepted": false,
+    "pushAlphaElapsedMs": 120008,
+    "pushAlphaBudgetMs": 120000,
+    "pushCompleteTAPSummary": false,
+    "pushFullAlphaOwnedCleanupConfirmed": false,
+    "prAlphaElapsedMs": 116866,
+    "prAlphaTAP": 617,
+    "controllerTAP": 162,
+    "actualReturnContractTAP": 623,
+    "newSharedPeerControlsIncluded": 79,
+    "newReaderControlsIncluded": 76,
+    "fullG5Accepted": false,
+    "productionAccepted": false
+  },
+  "alphaBoundedDecompositionCandidate": {
+    "state": "BOUNDED_DECOMPOSITION_LOCAL_VERIFICATION_HOSTED_PENDING",
+    "sourceBase": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+    "publicationParent": "e2fa32cf282e8e312877dae40751ff5a4b646892",
+    "evidence": "x10/evidence/g5-alpha-bounded-decomposition.json",
+    "perFileLedger": "x10/review/g5-alpha-bounded-decomposition-ledger.json",
+    "scope": "Move17installed-recipe NONEXECUTED-native controls into existing managed-native-control group with shared test helpers and a static decomposition guard. Preserve physical test bodies, finite budgets,20groups/workflowsteps and tighten managed requireCompleteTAP. No claimed measured speedup or physical successor acceptance.",
+    "capacityRemainsDependent": true,
+    "physicalFixturesExecuted": 0,
+    "fullG5Accepted": false,
+    "productionAccepted": false
+  },
+  "legacyCliSharedPeersPriorReferences": [
+    {
+      "commit": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+      "path": "x10/evidence/g5-legacy-cli-shared-peers.json",
+      "blobSha": "bf3145330bbe24a2c64aa42390176ebc0f09b8e1",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+      "path": "x10/review/g5-legacy-cli-shared-peers-ledger.json",
+      "blobSha": "7b08a6f8f18a2fc84f70006344c89be1afb6b3db",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
   ]
 }

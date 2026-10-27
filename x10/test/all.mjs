@@ -274,7 +274,7 @@ async function main() {
     { name: 'quic-generated-sanitized', file: 'bash', args: ['x10/test/quic-generated.sh', '--source', p.source, '--objs', p.objects], kind: 'generated' },
     { name: 'quic-frame-boundaries', file: 'bash', args: ['x10/test/quic-frames.sh', '--source', p.source, '--objs', p.objects], kind: 'generated', frame: true },
     { name: 'native-load-client-verification', file: process.execPath, args: ['x10/bench/native-load.mjs', '--verify'], kind: 'load-client' },
-    { name: 'managed-native-control', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/control.test.mjs', 'x10/control/record-input.test.mjs'], kind: 'tap' },
+    { name: 'managed-native-control', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/control.test.mjs', 'x10/control/record-input.test.mjs', 'x10/test/alpha-recipe.test.mjs', 'x10/test/alpha-decomposition.test.mjs'], kind: 'tap', requireCompleteTAP: true },
     { name: 'operator-status', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/operator-status.test.mjs'], kind: 'tap', requireCompleteTAP: true },
     { name: 'local-alpha-lifecycle', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/alpha.test.mjs'], kind: 'tap', requireCompleteTAP: true },
     { name: 'listener-observer-boundaries', file: process.execPath, args: ['--test', '--test-reporter=tap', 'x10/test/listeners.test.mjs'], kind: 'tap' },
