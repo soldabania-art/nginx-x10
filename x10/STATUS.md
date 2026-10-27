@@ -2665,3 +2665,90 @@ for resumption; the three frozen source files were copied without byte changes.
 The coordinator reran125 selected controls in the fresh copy, with separate
 82-case QA and named independent resumption reviews. Old results are retained
 as old results. This does not extend the owner work window or prove new hosted CI.
+
+
+## Restored HTTP application fixture and exact backup CI — 26 October 2026
+
+Exact backup implementation `1c257bd85c27e905ddc8d7d2725a7ebc579b81d7` is
+reconciled from native push40282133430/job121437617601 and
+PR40282138842/job121437649271: both completed all34 actual steps successfully,
+with20/20 native groups and160/160 full-alpha TAP tests per job. Actual fresh
+unbound restore retained16 finite observations and completed native `-t`; no
+restored daemon or application readiness was exercised. Both separate normal
+service paths retained challenge6/operator14/drain14/startup11, combinedTLS3,
+restart1/journal3, all13 owned cleanup confirmations and private Node/bootstrap
+removal. Actual failure containment remained unexercised.
+
+Research PR40282138736/job121437645059 actually ran21/7/27/48; research push
+runtime was skipped and CLA40282136447 failed without agreement or bypass.
+A separate synthetic source-extracted counterexample showed that an existing
+fixture stdout handler accepted an incomplete numeric PID prefix before the
+newline. No real native process or signal was used in that counterexample.
+The shared fixture parser now requires a complete bounded stdout line and a
+safe PID greater than one before registration; persistent controls cover the
+refusal boundary. This is a fixture correction, not a native runtime or
+PID-to-signal race fix.
+
+The historical195 Node comparison, earlier failing interleavings, initial
+UTF-8 backup counterexample and local cleanup FAIL_UNKNOWN remain preserved.
+No unchanged workflow rerun was requested to obtain these observations.
+
+Only the alpha test fixture and its new persistent PID-framing controls change now. It authors actual restored foreground
+HTTP application start/bind/readiness/traffic/stop/owned-removal and original
+source/backup preservation checks. Frozen local selected controls and independent
+source/security/semantic reviews are recorded in [restored-app evidence](evidence/g4-restored-app.json).
+The full physical native aggregate and service were not executed locally in the
+nested namespace. Exact resulting native CI remains pending, so the new actual
+restored application path is not yet accepted by this checkpoint.
+
+The owner directly requested another10-hour X10 window on26October.
+The current code cutoff is27October2026 03:23:06UTC (07:23Samara),
+with report-only cleanup until04:23:06UTC. The old60-hour window
+and its history remain recorded.
+
+FullG3/G4-G8/V1, separately restored managed service, TLS backup, meaningful
+runtime-package A-to-B-to-A, permanent distribution, independent published replay,
+60-minute soak and full semantic Continuum remain open.
+
+
+## Recovery checkpoint after expired coordination lease — 27 October 2026
+
+A preceding candidate tree remained unconfirmed after an attempted
+Git object write. Fresh branch readback still named the preceding
+lease-only commit, and the candidate tree lookup returned404 without
+confirming remote creation. No implementation commit or implementation
+ref update had been attempted. The unknown Git-write outcome remains
+unaccepted.
+
+The preceding lease had expired before resumption. The coordinator obtained
+a new lease with a new run identifier, exact ancestry and state readback,
+then recreated a clean worktree. This was a new acquisition, not renewal of
+the expired term. The two reviewed source files remained byte-identical.
+Fresh selected162 TAP and46 separate virtual controls passed under the new
+lease. Physical native/service checks remain pending exact resulting CI.
+The earlier valid renewal and all adverse/unknown outcomes remain history.
+The owner window still ends27October2026 03:23:06UTC.
+
+
+## Reviewed fixture checkpoint after sanitized bootstrap — 27 October 2026
+
+The owner approved a single technical checkpoint cleanup together with new
+lease acquisition. Exact parent, tree and lease readback were verified.
+The coordinator recreated a clean worktree and retained the two reviewed
+source files without changing their bytes. Fresh assigned-tester selected162 TAP and46
+separate virtual controls passed; actual restored native application
+acceptance remains pending exact resulting CI. Existing technical evidence,
+adverse outcomes and private spending/authority limits were preserved.
+This does not accept managed-service restore, package rollback or V1.
+
+
+Gate-plan synchronization remains pending as a separate write. This
+fixture checkpoint leaves GATES.json unchanged; fullG3/G4/V1 is not
+accepted. Exact resulting implementation CI remains required.
+
+
+The compact technical BACKGROUND requires readback of the complete prior
+acceptance, pending work and adverse history at commit
+`a276533d8472bfdd8cc74322864a350d6f15e107`. That Git history is unchanged.
+Private operational policy remains in force; compaction changes no gate,
+spending allowance, native capability or acceptance claim.

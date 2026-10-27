@@ -12,6 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { digest } from '../alpha/runtime.mjs';
 import './alpha-runtime.test.mjs';
+import './alpha-pid.test.mjs';
 import '../alpha/prepare-run.test.mjs';
 import '../alpha/backup.test.mjs';
 
@@ -19,6 +20,19 @@ const root = fileURLToPath(new URL('../../', import.meta.url)), source = path.jo
 const manifestFile = path.resolve(process.env.X10_BUILD_MANIFEST || path.join(root, 'x10/.build/manifest.json'));
 const binary = path.resolve(process.env.X10_NGINX_BINARY || path.join(root, 'x10/.build/objs/nginx'));
 const execute = promisify(execFile), delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+// Native PID report framing. A complete stdout field is a fixture observation,
+// not process ownership or an OS-level signal fence.
+function nativePidReport(output, candidateOnly = false) {
+  if (typeof output !== 'string' || typeof candidateOnly !== 'boolean') return null;
+  const match = (candidateOnly
+    ? /(?:^|\n)[ \t]*"candidatePid": ([0-9]+),?\r?\n/
+    : /(?:^|\n)[ \t]*"(?:pid|candidatePid)": ([0-9]+),?\r?\n/).exec(output);
+  if (!match) return null;
+  const pid = Number(match[1]);
+  return Number.isSafeInteger(pid) && pid > 1 && pid <= 2147483647 && String(pid) === match[1] ? pid : null;
+}
+// End native PID report framing.
+
 async function unusedPort() { const server = net.createServer(); server.listen(0, '127.0.0.1'); await once(server, 'listening'); const port = server.address().port; await new Promise(resolve => server.close(resolve)); return port; }
 async function absent(file) { return lstat(file).then(() => false, error => { if (error.code === 'ENOENT') return true; throw error; }); }
 async function until(fn, timeout = 6500) {
@@ -47,14 +61,14 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
   const parent = await mkdtemp(path.join(os.tmpdir(), 'x10-alpha-')); await chmod(parent, 0o700);
   const prefix = path.join(parent, 'install'), launcher = path.join(prefix, 'bin/x10');
   const port = await unusedPort(); let healthPort; do { healthPort = await unusedPort(); } while (healthPort === port);
-  let runChild, runOutput = '', nativePid, firstSession, firstRevision, secondRevision, cancelled = false;
+  let runChild, runOutput = '', runStdout = '', nativePid, firstSession, firstRevision, secondRevision, cancelled = false;
   const nativeGroups = new Set(), launchers = new Set();
   const emergency = () => { cancelled = true; for (const pid of nativeGroups) { try { process.kill(-pid, 'SIGTERM'); } catch {} } for (const child of launchers) if (child.exitCode === null && child.signalCode === null) child.kill('SIGTERM'); };
   process.once('SIGINT', emergency); process.once('SIGTERM', emergency);
   const check = (name, fn) => t.test(name, async () => { assert.equal(cancelled, false); await fn(); });
   const start = async () => {
-    runOutput = ''; runChild = spawn(process.execPath, [launcher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); launchers.add(runChild);
-    runChild.stdout.on('data', b => { runOutput += b; const m = /"(?:pid|candidatePid)": (\d+)/.exec(runOutput); if (m) { nativePid = Number(m[1]); nativeGroups.add(nativePid); } });
+    runOutput = ''; runStdout = ''; runChild = spawn(process.execPath, [launcher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); launchers.add(runChild);
+    runChild.stdout.on('data', b => { runOutput += b; runStdout += b; const pid = nativePidReport(runStdout); if (pid !== null) { nativePid = pid; nativeGroups.add(nativePid); } });
     runChild.stderr.on('data', b => runOutput += b);
     await until(() => { if (runChild.exitCode !== null || runChild.signalCode !== null) throw new Error(`run exited: ${runOutput}`); return runOutput.includes('"outcome": "running"'); });
     const result = await cli(launcher, 'info'); assert.equal(result.code, 0, result.stdout); return result.json;
@@ -185,10 +199,10 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
         assert.equal(recipe.json.unit,generator.renderUserUnit({prefix:target,nodeExecutable:recordedNode,autoReadiness:automatic}));
         assert.equal(await absent(path.join(target,'.alpha-lock')),true);
       }
-      let output = '', pid;
+      let output = '', nativeStdout = '', pid;
       await verifyRecipeNode(recipeNode);
       const child = spawn(recipeNode.nodeExecutable, [targetLauncher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); launchers.add(child);
-      child.stdout.on('data', b => { output += b; const match = /"(?:pid|candidatePid)": (\d+)/.exec(output); if (match) { pid = Number(match[1]); nativeGroups.add(pid); } }); child.stderr.on('data', b => output += b);
+      child.stdout.on('data', b => { output += b; nativeStdout += b; const reportedPid = nativePidReport(nativeStdout); if (reportedPid !== null) { pid = reportedPid; nativeGroups.add(pid); } }); child.stderr.on('data', b => output += b);
       await until(() => { if (child.exitCode !== null || child.signalCode !== null) throw new Error(output); return output.includes('"outcome": "running"'); });
       assert.equal((await recipeNodeCommand(recipeNode,targetLauncher, 'bind')).code, 0); assert.equal((await request(port)).body, 'NGINX X10 local alpha\n');
       assert.equal((await recipeNodeCommand(recipeNode,targetLauncher, 'apply', '--file', path.join(target, 'examples/candidate-b.json'))).code, 0);
@@ -248,13 +262,13 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
         readinessChecked: false, listeningPortsClosed: true, sourcePreserved: true, freshInstallationRemoved: true,
         serviceAccepted: false, productionAccepted: false }));
       // Interrupt the startup path as soon as a fresh session publishes its native PID.
-      let interruptedOutput = '', interruptedPid;
+      let interruptedOutput = '', interruptedStdout = '', interruptedPid;
       await verifyRecipeNode(recipeNode);
       const interrupted = spawn(recipeNode.nodeExecutable, [targetLauncher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); launchers.add(interrupted);
       interrupted.stdout.on('data', b => {
-        interruptedOutput += b;
-        const match = /"candidatePid": (\d+)/.exec(interruptedOutput);
-        if (match && !interruptedPid) { interruptedPid = Number(match[1]); nativeGroups.add(interruptedPid); interrupted.kill('SIGTERM'); }
+        interruptedOutput += b; interruptedStdout += b;
+        const reportedPid = nativePidReport(interruptedStdout, true);
+        if (reportedPid !== null && !interruptedPid) { interruptedPid = reportedPid; nativeGroups.add(interruptedPid); interrupted.kill('SIGTERM'); }
       });
       interrupted.stderr.on('data', b => interruptedOutput += b);
       await until(() => interrupted.exitCode !== null || interrupted.signalCode !== null);
@@ -267,10 +281,10 @@ test('isolated Linux alpha installs, controls native sessions, restarts and remo
       // SIGKILL of the master leaves native workers outside graceful completion.
       const fault = path.join(parent, 'faulted-install'), faultLauncher = path.join(fault, 'bin/x10');
       assert.equal((await recipeNodeCommand(recipeNode,installer, 'install', '--prefix', fault, '--port', String(port), '--health-port', String(healthPort))).code, 0);
-      let faultOutput = '', faultPid;
+      let faultOutput = '', faultStdout = '', faultPid;
       await verifyRecipeNode(recipeNode);
       const faultRun = spawn(recipeNode.nodeExecutable, [faultLauncher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); launchers.add(faultRun);
-      faultRun.stdout.on('data', b => { faultOutput += b; const match = /"(?:pid|candidatePid)": (\d+)/.exec(faultOutput); if (match) { faultPid = Number(match[1]); nativeGroups.add(faultPid); } }); faultRun.stderr.on('data', b => faultOutput += b);
+      faultRun.stdout.on('data', b => { faultOutput += b; faultStdout += b; const reportedPid = nativePidReport(faultStdout); if (reportedPid !== null) { faultPid = reportedPid; nativeGroups.add(faultPid); } }); faultRun.stderr.on('data', b => faultOutput += b);
       await until(() => faultOutput.includes('"outcome": "running"')); assert.equal((await recipeNodeCommand(recipeNode,faultLauncher, 'bind')).code, 0);
       process.kill(faultPid, 'SIGKILL'); await until(() => faultRun.exitCode !== null || faultRun.signalCode !== null); assert.equal(faultRun.exitCode, 1);
       assert.equal((await recipeNodeCommand(recipeNode,faultLauncher, 'info')).json.stage, 'faulted');
@@ -327,9 +341,9 @@ test('application upstream port syntax and collisions refuse before creating a p
   } finally { await rm(parent, { recursive: true, force: true }); }
 });
 
-test('extracted bundle proxies an independent app and preserves application readiness across config and sessions', { timeout: 65000 }, async () => {
+test('extracted bundle proxies an independent app and preserves application readiness across config and sessions', { timeout: 65000 }, async t => {
   const parent = await mkdtemp(path.join(os.tmpdir(), 'x10-alpha-upstream-')); await chmod(parent, 0o700);
-  let ready = false, readinessBody = 'ready\n', appRequests = 0, echoRequests = 0, runChild, output = '', nativePid;
+  let ready = false, readinessBody = 'ready\n', appRequests = 0, echoRequests = 0, runChild, output = '', appStdout = '', nativePid;
   const groups = new Set(), children = new Set();
   const app = http.createServer((req, res) => {
     appRequests++; res.setHeader('X-App-Marker', 'independent-upstream');
@@ -349,8 +363,8 @@ test('extracted bundle proxies an independent app and preserves application read
   const emergency = () => { for (const pid of groups) { try { process.kill(-pid, 'SIGTERM'); } catch {} } for (const child of children) if (child.exitCode === null && child.signalCode === null) child.kill('SIGTERM'); };
   process.once('SIGINT', emergency); process.once('SIGTERM', emergency);
   const start = async () => {
-    output = ''; runChild = spawn(process.execPath, [launcher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); children.add(runChild);
-    runChild.stdout.on('data', chunk => { output += chunk; const match = /"(?:pid|candidatePid)": (\d+)/.exec(output); if (match) { nativePid = Number(match[1]); groups.add(nativePid); } });
+    output = ''; appStdout = ''; runChild = spawn(process.execPath, [launcher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); children.add(runChild);
+    runChild.stdout.on('data', chunk => { output += chunk; appStdout += chunk; const reportedPid = nativePidReport(appStdout); if (reportedPid !== null) { nativePid = reportedPid; groups.add(nativePid); } });
     runChild.stderr.on('data', chunk => output += chunk);
     await until(() => { if (runChild.exitCode !== null || runChild.signalCode !== null) throw new Error(output); return output.includes('"outcome": "running"'); });
     const info = await cli(launcher, 'info'); assert.equal(info.code, 0, info.stdout); return info.json;
@@ -409,8 +423,127 @@ test('extracted bundle proxies an independent app and preserves application read
     assert.equal((await cli(launcher, 'bind')).code, 0);
     const afterRestart = await upstreamTransfer(port, '/echo', { method: 'POST', body: payload }); assert.deepEqual(afterRestart.body, payload);
     assert.equal(afterRestart.headers['x-x10-example'], 'application-b'); assert(appRequests > 0); assert.equal(echoRequests, 2, 'POST bodies must not be replayed by gateway operations');
-    await stop(); assert.equal((await cli(launcher, 'uninstall')).code, 0); assert.equal(await absent(prefix), true);
+    await stop();
+    // Restored application acceptance.
+    // A fresh restored foreground runtime serves the same confirmed HTTP input;
+    // source history/identity and the backup remain data, never live authority.
+    const retainedArchiveBytes = await readFile(archive);
+    const sourceRegistry = JSON.parse(await readFile(path.join(prefix, '.alpha-registry.json'), 'utf8'));
+    const sourceSession = path.join(prefix, 'runs', sourceRegistry.current);
+    const sourceStatus = await cli(launcher, 'status');
+    assert.equal(sourceStatus.code, 0, sourceStatus.stdout); assert.equal(sourceStatus.json.pending, null);
+    const sourceRevisionPath = path.join(sourceSession, '.x10-control/revisions', `${sourceStatus.json.lastConfirmedRevision}.json`);
+    const sourceRevisionBytes = await readFile(sourceRevisionPath), sourceRevision = JSON.parse(sourceRevisionBytes);
+    const preservedSourcePaths = ['.alpha-install.json', '.alpha-registry.json',
+      `runs/${sourceRegistry.current}/lifecycle.json`, `runs/${sourceRegistry.current}/.x10-control/state.json`,
+      `runs/${sourceRegistry.current}/.x10-control/history.jsonl`];
+    const preservedSourceBytes = await Promise.all(preservedSourcePaths.map(relative => readFile(path.join(prefix, relative))));
+    const sourceManifest = JSON.parse(preservedSourceBytes[0]);
+    const sourceLife = JSON.parse(preservedSourceBytes[2]); assert.equal(sourceLife.stage, 'stopped');
     assert.equal(groups.size, 0); assert.equal(children.size, 0);
+    await assert.rejects(request(port)); await assert.rejects(request(healthPort));
+    const backupFile = path.join(parent, 'application-backup.json');
+    const backedUp = await cli(launcher, 'backup', '--output', backupFile);
+    assert.equal(backedUp.code, 0, backedUp.stdout); assert.equal(backedUp.json.outcome, 'declarative_backup_created');
+    assert.equal(backedUp.json.nativeStarted, false); assert.equal(backedUp.json.serviceAccepted, false); assert.equal(backedUp.json.productionAccepted, false);
+    const backupBytes = await readFile(backupFile), backupValue = JSON.parse(backupBytes);
+    assert.equal((await lstat(backupFile)).mode & 0o7777, 0o600); assert.equal(digest(backupBytes), backedUp.json.sha256);
+    assert.deepEqual(backupValue.source, { installationId: sourceManifest.installationId, session: sourceRegistry.current, revision: sourceRevision.id });
+    assert.deepEqual(backupValue.input, sourceRevision.input); assert.deepEqual(backupValue.input, seed);
+    assert.equal(backupValue.inputSha256, sourceRevision.inputSha256); assert.equal(backupValue.port, port); assert.equal(backupValue.healthPort, healthPort);
+    const restoredPrefix = path.join(parent, 'restored-application'), restoredLauncher = path.join(restoredPrefix, 'bin/x10');
+    const restored = await cli(installer, 'install', '--prefix', restoredPrefix, '--restore', backupFile);
+    assert.equal(restored.code, 0, restored.stdout); assert.equal(restored.json.declarativeRestored, true);
+    for (const key of ['nativeStarted', 'readinessChecked', 'serviceAccepted', 'productionAccepted']) assert.equal(restored.json[key], false);
+    const restoredSession = path.join(restoredPrefix, 'runs', restored.json.session);
+    const restoredManifest = JSON.parse(await readFile(path.join(restoredPrefix, '.alpha-install.json'), 'utf8'));
+    const restoredRegistry = JSON.parse(await readFile(path.join(restoredPrefix, '.alpha-registry.json'), 'utf8'));
+    const restoredLife = JSON.parse(await readFile(path.join(restoredSession, 'lifecycle.json'), 'utf8'));
+    const restoredRevision = JSON.parse(await readFile(path.join(restoredSession, '.x10-control/revisions', `${restored.json.revision}.json`), 'utf8'));
+    assert.notEqual(restoredManifest.installationId, sourceManifest.installationId); assert.notEqual(restored.json.session, sourceRegistry.current);
+    assert.notEqual(restored.json.revision, sourceRevision.id); assert.equal(restoredRegistry.installationId, restoredManifest.installationId);
+    assert.equal(restoredRegistry.current, restored.json.session); assert.deepEqual(restoredRegistry.sessions, [restored.json.session]);
+    assert.equal(restoredLife.stage, 'prepared'); assert.equal(restoredLife.runtime, null); assert.equal(restoredLife.controlSocket, null);
+    assert.equal(restoredLife.installationId, restoredManifest.installationId); assert.equal(restoredLife.session, restored.json.session); assert.equal(restoredLife.prefix, restoredSession);
+    assert.deepEqual(restoredRevision.input, sourceRevision.input); assert.equal(restoredRevision.inputSha256, sourceRevision.inputSha256);
+    assert.equal(restoredRevision.parent, null); assert.equal(restoredRevision.sourceRevision, null);
+    assert.equal(restoredManifest.port, port); assert.equal(restoredManifest.healthPort, healthPort);
+    const preparedStatus = await cli(restoredLauncher, 'status');
+    assert.equal(preparedStatus.code, 0, preparedStatus.stdout); assert.equal(preparedStatus.json.binding, null); assert.equal(preparedStatus.json.pending, null);
+    assert.equal(preparedStatus.json.lastConfirmedRevision, restored.json.revision); assert.equal(preparedStatus.json.history.entries, 1);
+    const preparedHistory = await cli(restoredLauncher, 'history'); assert.equal(preparedHistory.code, 0, preparedHistory.stdout);
+    assert.equal(preparedHistory.json.records.length, 1); assert.equal(preparedHistory.json.records[0].type, 'initialized_unbound');
+    await assert.rejects(request(port)); await assert.rejects(request(healthPort)); assert.equal(echoRequests, 2);
+    let restoredOutput = '', restoredNativePid, restoredSpawnError;
+    const restoredChild = spawn(process.execPath, [restoredLauncher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); children.add(restoredChild);
+    restoredChild.once('error', error => { restoredSpawnError = error; });
+    restoredChild.stdout.on('data', chunk => {
+      restoredOutput += chunk;
+      const reportedPid = nativePidReport(restoredOutput);
+      if (reportedPid !== null) { restoredNativePid = reportedPid; groups.add(restoredNativePid); }
+    });
+    // Drain stderr separately; it cannot provide lifecycle/PID observations.
+    restoredChild.stderr.on('data', () => {});
+    await until(() => {
+      if (restoredSpawnError) throw new Error('Restored application launcher spawn failed');
+      if (restoredChild.exitCode !== null || restoredChild.signalCode !== null) throw new Error('Restored application launcher exited before running');
+      return restoredOutput.includes('"outcome": "running"');
+    });
+    assert(Number.isSafeInteger(restoredNativePid) && restoredNativePid > 1);
+    const runningLife = JSON.parse(await readFile(path.join(restoredSession, 'lifecycle.json'), 'utf8'));
+    assert.equal(runningLife.stage, 'running'); assert.equal(runningLife.session, restored.json.session); assert.equal(runningLife.prefix, restoredSession);
+    assert.equal(runningLife.runtime.pid, restoredNativePid); assert.equal(runningLife.runtime.executable, path.join(restoredPrefix, 'bin/nginx'));
+    ready = true; readinessBody = 'private-restored-wrong-readiness-body\n';
+    assert.equal((await request(port, '/__x10_health')).status, 200);
+    const restoredWrongBody = await cli(restoredLauncher, 'bind');
+    assert.equal(restoredWrongBody.code, 1); assert.equal(restoredWrongBody.json.code, 'health_gate_failed');
+    assert.equal(restoredWrongBody.stdout.includes(readinessBody.trim()), false);
+    const refusedStatus = await cli(restoredLauncher, 'status');
+    assert.equal(refusedStatus.code, 0, refusedStatus.stdout); assert.equal(refusedStatus.json.binding, null); assert.equal(refusedStatus.json.pending, null);
+    assert.equal(refusedStatus.json.lastConfirmedRevision, restored.json.revision); assert.equal(echoRequests, 2);
+    readinessBody = 'ready\n'; const restoredBound = await cli(restoredLauncher, 'bind');
+    assert.equal(restoredBound.code, 0, restoredBound.stdout); assert.equal(restoredBound.json.outcome, 'bound'); assert.equal(restoredBound.json.revision, restored.json.revision);
+    const observedRestoredRevision = await request(port, '/__x10_revision');
+    assert.equal(observedRestoredRevision.status, 200); assert.equal(observedRestoredRevision.body, restored.json.revision);
+    assert.equal(observedRestoredRevision.headers['x-x10-revision'], restored.json.revision);
+    const boundStatus = await cli(restoredLauncher, 'status');
+    assert.equal(boundStatus.code, 0, boundStatus.stdout); assert.equal(boundStatus.json.pending, null);
+    assert.equal(boundStatus.json.lastConfirmedRevision, restored.json.revision); assert.equal(boundStatus.json.runtime.identityValid, true);
+    assert.equal(boundStatus.json.runtime.observedRevision, restored.json.revision);
+    const { networkNamespace, ...restoredBinding } = runningLife.runtime; assert.deepEqual(boundStatus.json.binding, restoredBinding);
+    const restoredGet = await upstreamTransfer(port);
+    assert.equal(restoredGet.status, 200); assert.equal(restoredGet.body.toString(), 'independent application\n');
+    assert.equal(restoredGet.headers['x-app-marker'], 'independent-upstream'); assert.equal(restoredGet.headers['x-x10-example'], 'application-b');
+    assert.equal(echoRequests, 2);
+    const restoredEcho = await upstreamTransfer(port, '/echo', { method: 'POST', body: payload });
+    assert.equal(restoredEcho.status, 200); assert.deepEqual(restoredEcho.body, payload); assert.equal(restoredEcho.headers['x-x10-example'], 'application-b');
+    assert.equal(echoRequests, 3, 'Restore/readiness/GET must not replay POST bodies');
+    const restoredStopped = await cli(restoredLauncher, 'stop');
+    assert.equal(restoredStopped.code, 0, restoredStopped.stdout); assert.equal(restoredStopped.json.outcome, 'stopped'); assert.equal(restoredStopped.json.session, restored.json.session);
+    await until(() => restoredChild.exitCode !== null || restoredChild.signalCode !== null);
+    assert.equal(restoredChild.exitCode, 0); assert.equal(restoredChild.signalCode, null);
+    const stoppedLife = JSON.parse(await readFile(path.join(restoredSession, 'lifecycle.json'), 'utf8'));
+    assert.equal(stoppedLife.stage, 'stopped'); assert.equal(stoppedLife.lastExit.code, 0); assert.equal(stoppedLife.lastExit.signal, null);
+    await assert.rejects(request(port)); await assert.rejects(request(healthPort));
+    children.delete(restoredChild); groups.delete(restoredNativePid);
+    assert.equal((await cli(restoredLauncher, 'uninstall')).code, 0); assert.equal(await absent(restoredPrefix), true);
+    for (let index = 0; index < preservedSourcePaths.length; index++) assert.deepEqual(await readFile(path.join(prefix, preservedSourcePaths[index])), preservedSourceBytes[index]);
+    assert.deepEqual(await readFile(sourceRevisionPath), sourceRevisionBytes); assert.deepEqual(await readFile(backupFile), backupBytes);
+    assert.equal(echoRequests, 3); assert.equal(groups.size, 0); assert.equal(children.size, 0);
+    assert.deepEqual(await readFile(archive), retainedArchiveBytes);
+    assert.equal((await cli(launcher, 'uninstall')).code, 0); assert.equal(await absent(prefix), true);
+    assert.equal(echoRequests, 3); assert.equal(groups.size, 0); assert.equal(children.size, 0);
+    // Finite observations only: no PID, path, config, request or readiness body.
+    t.diagnostic(JSON.stringify({ suite: 'x10-restored-application', profile: 'extracted-bundle-foreground-http',
+      stoppedConfirmedSource: true, privateBackupCreated: true, freshInstallation: true, freshSession: true, freshRevision: true,
+      exactInputRestored: true, portsPreserved: true, freshHistory: true, bindingInitiallyAbsent: true, sourceListenersClosedBeforeRestore: true,
+      runtimeOwned: true, wrongBodyBindRefused: true, failedBindingAbsent: true, freshRevisionVerified: true, readinessBound: true,
+      getExact: true, postExact: true, restoredPostRequests: 1, totalEchoRequests: echoRequests, postReplayObserved: false,
+      gracefulStopCompleted: true, ownedProcessGroupAbsent: true, listeningPortsClosed: true, restoredInstallationRemoved: true,
+      sourceRecordsPreservedBeforeUninstall: true, sourceInstallationRemoved: true, backupPreserved: true, archivePreserved: true,
+      foregroundHTTPAccepted: true, managedServiceAccepted: false,
+      tlsBackupAccepted: false, packageUpgradeRollbackAccepted: false, productionAccepted: false }));
+    // End restored application acceptance.
   } finally {
     process.removeListener('SIGINT', emergency); process.removeListener('SIGTERM', emergency);
     for (const signal of ['SIGQUIT', 'SIGTERM', 'SIGKILL']) { for (const pid of groups) { try { process.kill(-pid, signal); } catch {} } for (const child of children) if (child.exitCode === null && child.signalCode === null) { try { child.kill('SIGTERM'); } catch {} } if (groups.size || children.size) await delay(75); }
@@ -451,7 +584,7 @@ async function waitBindFixture(t, { upstream = false } = {}) {
   const parent = await mkdtemp(path.join(os.tmpdir(), 'x10-wait-bind-')); await chmod(parent, 0o700);
   const prefix = path.join(parent, 'installed'), launcher = path.join(prefix, 'bin/x10');
   const port = await unusedPort(); let healthPort; do { healthPort = await unusedPort(); } while (healthPort === port);
-  let app, upstreamPort, readyBody = 'ready\n', appRequests = 0, runChild, nativePid, output = '';
+  let app, upstreamPort, readyBody = 'ready\n', appRequests = 0, runChild, nativePid, output = '', nativeStdout = '';
   const children = new Set();
   if (upstream) {
     app = http.createServer((req, res) => { appRequests++; res.end(readyBody); });
@@ -472,9 +605,9 @@ async function waitBindFixture(t, { upstream = false } = {}) {
     return { child, done, ready };
   };
   const start = async () => {
-    output = '';
+    output = ''; nativeStdout = '';
     runChild = spawn(process.execPath, [launcher, 'run'], { stdio: ['ignore', 'pipe', 'pipe'] }); children.add(runChild);
-    runChild.stdout.on('data', b => { output += b; const m = /"(?:pid|candidatePid)": (\d+)/.exec(output); if (m) nativePid = Number(m[1]); }); runChild.stderr.on('data', b => output += b);
+    runChild.stdout.on('data', b => { output += b; nativeStdout += b; const reportedPid = nativePidReport(nativeStdout); if (reportedPid !== null) nativePid = reportedPid; }); runChild.stderr.on('data', b => output += b);
     await until(() => { if (runChild.exitCode !== null || runChild.signalCode !== null) throw new Error(output); return output.includes('"outcome": "running"'); });
   };
   const stop = async () => { assert.equal((await cli(launcher, 'stop')).code, 0); await until(() => runChild.exitCode !== null || runChild.signalCode !== null); assert.equal(runChild.exitCode, 0, output); children.delete(runChild); nativePid = null; };

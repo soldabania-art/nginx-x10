@@ -2108,3 +2108,62 @@ frozen60-minute soak remain independent release gates. Existing release/asset
 publication access limits do not authorize credential or workflow bypass. The
 full G3/G4-G8/V1 and deferred semantic Continuum scope remain open; AVERKRON
 starts only through accepted V1 and the central transition protocol.
+
+
+## Next acceptance: restored foreground HTTP application — 26 October 2026
+
+The prior exact1c backup implementation passed both actual native contexts with
+160/160 alpha tests. Its restored target remained prepared/UNBOUND after native
+`-t`; that result is accepted only within the narrow syntax/identity/removal
+scope. It does not substitute for a restored running application or service.
+
+First reconcile exact resulting CI for the new alpha fixture. Require last-
+confirmed application-B input, new installation/session/revision identities,
+initially null binding, an explicit readiness refusal without committed binding,
+then exact readiness success, fresh restored revision, GET/POST and no replay,
+owned graceful stop/removal and unchanged source/backup. Keep all runtime,
+controller, installer, recipe, package inventories and fixture timeouts unchanged.
+A shared complete-line bounded stdout PID parser and persistent negative controls
+correct the separate fixture registration hazard without changing signal policy.
+
+After scoped foreground HTTP acceptance, obtain separate restored managed-service
+proofs. The backup foundation still refuses its unsupported HTTPS object and
+never copies TLS keys or external application data. Package upgrade/rollback
+requires meaningfully distinct supported runtime payloads; a test-only successor
+or changed archive timestamps are not a second runtime package. Preserve old
+known-good packages and source records until target acceptance.
+
+New direct owner authority permits X10 work until27October2026 03:23:06UTC,
+with the historical60-hour window retained. This does not expand system,
+connector, spending, deployment, DNS/mail or other-project permissions. Permanent
+release, independent published replay, frozen60-minute soak, fullG3/G4-G8/V1 and
+all deferred semantic Continuum obligations stay open.
+
+
+## Recovery coordination — 27 October 2026
+
+Publish the unchanged reviewed fixture only under the newly acquired lease.
+Read back its resulting commit/tree/parent and lease release, then reconcile
+the exact new native CI. Prior prepared trees and pure controls do not
+constitute a published implementation or physical restored-application PASS.
+The current owner cutoff remains27October2026 03:23:06UTC.
+
+
+## Exact checkpoint verification after sanitized bootstrap
+
+Save the reviewed source fixture under the current lease, read back the
+resulting implementation and lease release, then inspect its exact native
+CI. Preserve foreground HTTP acceptance boundaries and all older failures.
+Do not attribute prior runtime CI to this newly published fixture.
+
+
+Gate-plan synchronization remains pending as a separate write. This
+fixture checkpoint leaves GATES.json unchanged; fullG3/G4/V1 is not
+accepted. Exact resulting implementation CI remains required.
+
+
+The compact technical BACKGROUND requires readback of the complete prior
+acceptance, pending work and adverse history at commit
+`a276533d8472bfdd8cc74322864a350d6f15e107`. That Git history is unchanged.
+Private operational policy remains in force; compaction changes no gate,
+spending allowance, native capability or acceptance claim.

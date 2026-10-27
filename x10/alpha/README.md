@@ -390,3 +390,31 @@ Use the ordinary explicit run/bind or supported service path only after target
 validation. This foundation is not package upgrade/downgrade, a full backup of
 application data, portable TLS recovery, authenticated disaster recovery or V1.
 Exact resulting native and restored-service CI remains pending in the checkpoint.
+
+
+## Restored foreground HTTP application acceptance fixture — 26 October 2026
+
+The preceding backup implementation `1c257bd85c27e905ddc8d7d2725a7ebc579b81d7`
+passed both exact native CI contexts:20 native groups and160/160 full-alpha
+TAP tests per job. That extracted-bundle path exported stopped confirmed input,
+ran native `-t` in a new installation, verified fresh identities/null binding and
+removed the still-unbound target. It did not start a restored daemon or check
+application readiness. The existing normal managed-service path also passed its
+separate TLS/restart/journal and owned-cleanup observations. Neither result
+accepts full recovery, package rollback or Production V1.
+
+The new acceptance fixture exercises the next narrower question: restore a
+stopped last-confirmed HTTP application configuration, explicitly start its fresh
+native session, refuse incorrect application readiness before binding, then
+accept the exact ready response and observe the restored revision and application
+traffic. It checks a POST counter to distinguish successful delivery from replay,
+graceful stop and owned target removal, with the source records and backup bytes
+preserved. The installed runtime, backup parser, controller, package inventory,
+service recipe and existing fixture budgets are unchanged.
+
+This authored path needs actual exact resulting hosted native CI. Local pure or
+source-extracted controls do not execute its physical native lifecycle. Its scope
+is foreground loopback HTTP application acceptance: it does not establish a
+restored managed service, HTTPS/PKI backup, application-data/database recovery or
+an upgrade between distinct runtime packages. Preserve the original installation
+and known-good package until a new target is independently accepted.
