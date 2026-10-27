@@ -13,9 +13,9 @@ an exhaustive native security audit or an actual incident recovery replay.
 | Packaged operator documentation | Alpha README linked a source-only sibling service document absent from bundle inventory | Link now points to the exact reviewed public runbook commit; no new payload entry or runtime-package identity is claimed. |
 | Runtime ownership | Recorded UID, namespace, executable, command and start identity; guarded stop and retained unknown outcomes | Sampled checks have a verification-to-signal race and do not isolate a malicious same-UID actor. |
 | Config change/revert | Explicit readiness/revision observation, retained history and guarded durable transaction recovery | No all-traffic fence or reversal of completed application side effects; controller recovery does not clear alpha faulted state. |
-| Controller disk input | Baseline unbound status accepted settings with an ignored extra3MiB string; CLI's2MiB check followed full read | **SCOPED_EXACT_f0_HOSTED_VERIFIED:** both f0 native events completed the installed/service path and owned cleanup with reader76 included. The earlier98b fixture failures remain historical. Exact447 stopped-session alphaCLI compatibility is also scoped accepted; exactcd8 apply/revert normal installed compatibility is separately scoped accepted; other alpha/config/binary/proc reads and full security remain outside the reader correction. |
-| Session/inventory capacity | Baseline virtual prepare permits255→256; minimum256-session tree4353entries exceeds inventory4096 | **OPEN, narrow stopped-session component compatibility accepted:** stopped preparation counts the whole tree before creation and again before registry publication; minimum17 structural entries plus one registry temporary are reserved before creation, then one publication entry after creation. A post-creation refusal preserves the old registry and new unregistered tree with explicit STOP/do-not-retry. The exactcd8 alpha apply/revert component separately reserves seven controller entries before spawn with scoped normal installed compatibility accepted; direct controller, native/transient/concurrent growth and full capacity acceptance remain open. No actual256-native-session installation was exercised. |
-| Package staging/return | Accepted exact historical/current operator HTTP staging/return/fallback receipts preserve identities and separate counters | Exactf0 scoped compatibility of **LEGACY_CLI_WITH_REVIEWED_CURRENT_PEERS** is hosted-verified for both events: exact acb CLI plus eight shared98b runtime peers. Exact447 stopped-session alphaCLI compatibility is separately accepted; exactcd8 apply/revert normal installed compatibility is also separately scoped accepted. It is not the complete historical acb package or an old-controller downgrade. Native binary change, TLS-state restore, permanent historical package and broader recovery remain unaccepted. |
+| Controller disk input | Baseline unbound status accepted settings with an ignored extra3MiB string; CLI's2MiB check followed full read | **SCOPED_EXACT_f0_HOSTED_VERIFIED:** both f0 native events completed the installed/service path and owned cleanup with reader76 included. The earlier98b fixture failures remain historical. Exact447 stopped-session alphaCLI compatibility is also scoped accepted; exactcd8 apply/revert normal installed compatibility is separately scoped accepted; the newer bind admission candidate needs its own compatibility; other alpha/config/binary/proc reads and full security remain outside the reader correction. |
+| Session/inventory capacity | Baseline virtual prepare permits255→256; minimum256-session tree4353entries exceeds inventory4096 | **OPEN, narrow stopped-session component compatibility accepted:** stopped preparation counts the whole tree before creation and again before registry publication; minimum17 structural entries plus one registry temporary are reserved before creation, then one publication entry after creation. A post-creation refusal preserves the old registry and new unregistered tree with explicit STOP/do-not-retry. The exactcd8 alpha apply/revert component separately reserves seven controller entries before spawn with scoped normal installed compatibility accepted. The new bind candidate reserves three control entries for both proxy and waitBind paths; direct controller, native/transient/concurrent growth and full capacity acceptance remain open. No actual256-native-session installation was exercised. |
+| Package staging/return | Accepted exact historical/current operator HTTP staging/return/fallback receipts preserve identities and separate counters | Exactf0 scoped compatibility of **LEGACY_CLI_WITH_REVIEWED_CURRENT_PEERS** is hosted-verified for both events: exact acb CLI plus eight shared98b runtime peers. Exact447 stopped-session alphaCLI compatibility is separately accepted; exactcd8 apply/revert normal installed compatibility is also separately scoped accepted. The new bind alphaCLI candidate remains pending. It is not the complete historical acb package or an old-controller downgrade. Native binary change, TLS-state restore, permanent historical package and broader recovery remain unaccepted. |
 | Faulted/orphan incident | Existing commands refuse unsafe restart/uninstall; runbook requires exact observations and STOP_UNRESOLVED | Original prefix stays in place even after a separate fresh restore. No lifecycle-clear/reaper/forced-uninstall path or accepted orphan incident replay. |
 | User service and private Node | Local canonical bus/tool prerequisites, bounded observations, source-pinned strict reports and owned cleanup | A clean environment for a control client does not prove a clean environment inherited by the user-manager's service. Trusted manager/Node/loader environment remains an unverified profile prerequisite. |
 | Release declaration | Exact60a hosted evidence ZIPs contain119 successful declaration checks; complete ordered36-step contract is verified separately | JSON declaration validation never authenticates external evidence or accepts a release. Permanent versioned publication, independent published-file replay and60-minute soak remain open. |
@@ -183,3 +183,39 @@ working directory, so no baseline commit or pin must be rewritten. It reproduces
 virtual revision accumulation and unguarded forwarding;
 its refusal against changed candidate bytes is intentional. The older three
 baseline producers and their source pins remain immutable.
+
+
+## Alpha bind control-entry admission — candidate
+
+The candidate checks cumulative whole-prefix inventory before CLI proxy `bind`
+execution and before the first controller operation in waitBind's running locked
+path. The existing alpha lock is counted. Its three-entry reserve leaves the
+4096-entry bound unchanged:4093 may be admitted;4094 are refused without
+starting a controller bind. The stopped-session18/1 and apply/revert7 reserves
+are separate components and remain unchanged.
+
+The reviewed controller control flow takes a status lock, releases it, and
+then binds with a fresh controller lock. Bind's event intent and state atomic
+temporary can coexist with that lock. Actual source-extracted lock/atomic/event
+functions and modeled filesystem failures include cleanup/close/sync and
+ambiguous post-effect failures. Unsupported pending/already-bound/commit/lock
+states refuse through their existing paths. The model is finite and source-pinned;
+its paths/executions are not independent runtime TAP or an all-OS proof.
+
+Prepared waiting, exact runtime identity, readiness, cancellation, deadline and
+bindingMayHaveCommitted behavior remain explicit. A pre-attempt refusal is not
+a durable bind; an already attempted bind is awaited without retry. Controller
+durable writers/schema and stop/recover are unchanged. Direct controller, native,
+transient and concurrent growth, initial registry publication/first-command
+headroom and stopped postpartial orphan STOP remain OPEN. This admission does
+not prune data or introduce a reaper, forced uninstall or an OS resource quota.
+
+The new [bind baseline producer](../review/alpha-bind-capacity-counterexample.mjs)
+is pinned to exactcd8 CLI/manager bytes (also present at2331). Invoke the checked-in
+producer by absolute path with a clean matching checkout as its working directory.
+Its refusal against changed candidate CLI bytes is intentional. The older four
+baseline producers and their pins remain immutable. New installed/service
+compatibility is pending exact successor hosted evidence; priorcd8 success does
+not transfer to changed CLI bytes. Fullcapacity/G3/G4/G5/G7/V1, release/recovery,
+physical4096 exhaustion and semantic Continuum remain OPEN. See
+[candidate evidence](../evidence/g5-alpha-bind-capacity.json).

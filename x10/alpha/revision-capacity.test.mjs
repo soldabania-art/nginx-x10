@@ -20,7 +20,7 @@ function body(name) {
   const end = source.indexOf('\n}', start); assert(end > start); return source.slice(start, end + 2);
 }
 function constant(name) { const m = new RegExp(`\\b${name}\\s*=\\s*([0-9]+)\\s*;`).exec(source); assert(m, `Missing finite ${name}`); return Number(m[1]); }
-const limit = constant('INVENTORY_ENTRY_LIMIT'), reserve = constant('CONTROLLER_MUTATION_ENTRY_RESERVE');
+const limit = constant('INVENTORY_ENTRY_LIMIT'), reserve = constant('CONTROLLER_MUTATION_ENTRY_RESERVE'), bindReserve = constant('CONTROLLER_BIND_ENTRY_RESERVE');
 const extracted = ['inventory', 'requireSessionInventoryCapacity', 'proxy'].map(body).join('\n');
 async function runtime(deps) {
   return new AsyncFunction(...Object.keys(deps), `${extracted}\nreturn {inventory, requireSessionInventoryCapacity, proxy};`)(...Object.values(deps));
@@ -31,7 +31,7 @@ function virtual({ count = 0, failure = null, unsafe = null, stdout = 'synthetic
   if (unsafe === 'symlink' && count) rows.set(rows.keys().next().value, 'symlink');
   const context = { prefix, manifest: {}, registry: { current: session, sessions: [session] } }, before = JSON.stringify(context);
   const deps = {
-    path, fail, INVENTORY_ENTRY_LIMIT: limit, CONTROLLER_MUTATION_ENTRY_RESERVE: reserve,
+    path, fail, INVENTORY_ENTRY_LIMIT: limit, CONTROLLER_MUTATION_ENTRY_RESERVE: reserve, CONTROLLER_BIND_ENTRY_RESERVE: bindReserve,
     process: { execPath: '/synthetic/node', getuid: () => 1000, stdout: { write: value => outputs.stdout.push(value) }, stderr: { write: value => outputs.stderr.push(value) } },
     owned: async file => { events.push('owned'); assert.equal(file, prefix); if (failure === 'owned') fail('synthetic_owned'); },
     readdir: async file => { events.push('readdir'); assert.equal(file, prefix); if (failure === 'readdir') fail('synthetic_readdir'); return [...rows.keys()]; },
@@ -62,7 +62,12 @@ for (const command of ['apply', 'revert']) {
     const f = virtual({ count: 1, unsafe }); const before = [...f.rows]; await assert.rejects(f.run(command), { code: 'unsafe_path' }); assert.equal(f.calls.length, 0); assert.deepEqual([...f.rows], before);
   });
 }
-for (const command of ['bind', 'status', 'history', 'recover', 'inspect-generations', 'snapshot-listeners', 'inspect-listeners'])
+test('bind uses its separate reviewed reserve without changing apply/revert reserve7', async () => {
+  assert.equal(bindReserve, 3); const f = virtual({ count: limit - bindReserve });
+  await f.run('bind'); assert.equal(f.calls.length, 1); assert(f.events.includes('readdir'));
+  assert.equal(reserve, 7);
+});
+for (const command of ['status', 'history', 'recover', 'inspect-generations', 'snapshot-listeners', 'inspect-listeners'])
   test(`${command} keeps its existing independent path without new inventory admission`, async () => {
     const f = virtual({ count: 4097, failure: 'owned' }); await f.run(command); assert.deepEqual(f.events, ['lifecycle', 'controllerState', 'execute']); assert.equal(f.calls.length, 1);
   });

@@ -2881,3 +2881,18 @@ readiness/cancellation/deadline/commit-uncertainty semantics. No newstop/recover
 gate or durablewriter rewrite. Initial publication plus future lock headroom
 is a separate contract; no blind+1/+2/+3. Direct/native/concurrent/transient/
 recovery growth, partialorphan STOP, fullcapacity/G5/V1/40h/Windows remainOPEN.
+
+
+## After both alpha binding paths admission candidate
+
+Verify exact new push/PR artifacts before accepting changed installedCLI:
+new51 and retainedtranslated37 in the existingmanagedsuite, completezero-skip
+TAP/per-suite overlap,20groups/36steps/budgets, startup/service compatibility,
+three strictreports/sourcepins and allowned/privateNode/history/bootstrapcleanup.
+No inferred totals or transfer from acceptedcd8 runtime.
+
+After scoped bind acceptance, separately prove initial install/restore/stage
+registry publication plus first-inspection lock headroom. Do not blindly use
+1/2/3/5 slots or claim abilitytoactivate nearcapacity. Preserve incompleteprefix
+inspection, oldrecords, stopped postpartial STOP and stop/recover; no capraise,
+compaction/deletion/durablewriter rewrite or fullcapacity/G5/V1 closure.

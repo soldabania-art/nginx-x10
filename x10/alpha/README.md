@@ -972,8 +972,10 @@ is a model of the pinned controller control flow, not physical filesystem
 high-water measurement or a guarantee about arbitrary native configuration.
 
 The controller's durable writers, record schemas and recovery behavior are
-unchanged. `stop`, `recover` and other forwarded commands do not receive this
-new admission gate. Direct controller CLI/API use bypasses this alpha guard.
+unchanged. `stop` and `recover` do not receive a new admission gate. Other
+forwarded commands do not receive this seven-entry apply/revert gate; the
+separate bind candidate below uses its own reviewed reserve. Direct controller
+CLI/API use bypasses these alpha guards.
 Native application files, configuration-test temporary writes, same-UID
 concurrent writers, initial install/restore/stage growth and prepared-session
 reuse remain outside this new reserve. It does not repair an existing
@@ -985,3 +987,47 @@ Exactcd8 normal installed compatibility is accepted for both events in the
 Local pure/tempfile boundary tests and virtual fault paths do not establish
 physical4096-entry exhaustion or an allOS-failure guarantee.
 See [candidate evidence](../evidence/g5-alpha-revision-capacity.json).
+
+
+## Bind control-entry admission — candidate
+
+The installed alpha CLI candidate counts the whole installation tree before
+forwarding `bind` to the controller. It also checks the running, locked branch
+of `wait-bind` before its first controller status observation and subsequent
+direct bind. Checking only the CLI proxy would leave this service startup path
+unguarded. The existing alpha lock is already included in the inventory. The
+unchanged4096-entry limit requires three free entries:4093 existing entries
+may pass admission, while4094 are refused before controller activity.
+
+The three-entry reserve covers only the pinned controller's declared control
+files for status followed by bind. A status observation releases its controller
+lock before binding; a failure during its cleanup propagates rather than starting
+bind. Binding can hold its controller lock together with an event intent and
+a state-file atomic temporary. Bind creates no revision, rollback or retry.
+The source-extracted virtual model evaluates the actual lock, atomic and durable
+event flow with declared filesystem failure classes, including retained
+temporaries and failures before or after a filesystem effect. This is not a
+physical filesystem high-water measurement or an enumeration of every OS failure.
+
+The prepared-session wait path is unchanged and does not repeatedly take the
+startup lock. Exact runtime identity validation, readiness checks, cancellation,
+deadline decisions and `bindingMayHaveCommitted` semantics remain in their
+existing order. A capacity refusal occurs before bind is attempted; it does not
+claim that a durable binding happened. A bind already attempted is still awaited
+once and reported as potentially committed on a late/cancelled/error outcome.
+`stop` and `recover` remain available under their existing state and ownership
+checks, without this new capacity gate. No controller durable writer or schema
+is changed, and old records and revisions are preserved rather than deleted.
+
+This cooperative admission does not fence direct controller calls, native or
+configuration-test files, arbitrary concurrent same-UID writers or kernel timing.
+Initial install/restore/stage registry publication and later lock headroom remain
+a separate open contract. Prepared reuse, recovery-created revisions and the
+stopped-preparation partial unregistered tree/STOP outcome are not repaired by
+this change. Full capacity, security/recovery and V1 remain open.
+
+The changed installed alpha CLI requires its own exact hosted compatibility.
+The accepted exactcd8 receipt above applies to the earlier apply/revert bytes;
+it does not accept this new bind candidate. Pure/tempfile and modeled fault
+controls remain separate from physical capacity exhaustion. See
+[candidate evidence](../evidence/g5-alpha-bind-capacity.json).

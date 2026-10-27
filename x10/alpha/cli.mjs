@@ -22,6 +22,8 @@ const REGISTRY_PUBLICATION_RESERVE = 1;
 // Includes candidate/rollback revisions and retained atomic temporaries across
 // controller failure paths; native and concurrent file growth are not fenced.
 const CONTROLLER_MUTATION_ENTRY_RESERVE = 7;
+// Reserve the bind control flow's lock, event intent and atomic temporary.
+const CONTROLLER_BIND_ENTRY_RESERVE = 3;
 const recipePath = 'lib/service/user-unit.mjs';
 const supportedSchema = version => version === 1 || version === 2;
 const installedNames = version => ['bin/nginx', 'bin/x10', 'build.json', 'licenses/NGINX-LICENSE', 'licenses/UPSTREAM.txt', 'examples/candidate-b.json',
@@ -844,9 +846,9 @@ async function inventory(prefix) {
   }
   return entries;
 }
-// Alpha stopped-session publication and apply/revert admission only. This sampled
-// inventory does not fence direct controller writers, native temporary-file growth
-// or a same-UID concurrent process. Existing stop/recover/uninstall paths are ungated.
+// Alpha stopped-session publication, apply/revert and bind admission only. This
+// sampled inventory does not fence direct controller writers, native temporary-file
+// growth or a same-UID concurrent process. Stop/recover/uninstall remain ungated.
 async function requireSessionInventoryCapacity(prefix, reserve) {
   if (!Number.isSafeInteger(reserve) || reserve < 1 || reserve > INVENTORY_ENTRY_LIMIT)
     fail('inventory_limit', 'A supported finite inventory reserve is required');
@@ -930,6 +932,7 @@ export async function waitBind(prefix, timeoutMs = 10000) {
           }
           if (!life.runtime || !await inspectMaster(path.join(prefix, 'bin/nginx'), life.prefix, life.runtime))
             fail('runtime_identity', 'Running session lacks its exact recorded native master');
+          await requireSessionInventoryCapacity(context.prefix, CONTROLLER_BIND_ENTRY_RESERVE);
           const { control, state } = await sessionStatus(context, life);
           const settings = await load(path.join(state, 'settings.json'));
           // Alpha creates a 3000 ms readiness gate. Changed gate budgets require
@@ -967,6 +970,7 @@ export async function waitBind(prefix, timeoutMs = 10000) {
 async function proxy(context, command, values) {
   const life = await lifecycle(context), args = [path.join(context.prefix, 'lib/control/cli.mjs'), command, '--state', await controllerState(context.prefix, life.session)];
   if (command === 'apply' || command === 'revert') await requireSessionInventoryCapacity(context.prefix, CONTROLLER_MUTATION_ENTRY_RESERVE);
+  if (command === 'bind') await requireSessionInventoryCapacity(context.prefix, CONTROLLER_BIND_ENTRY_RESERVE);
   for (const flag of ['file', 'revision', 'control-socket', 'control-address']) if (values[flag]) args.push(`--${flag}`, values[flag]);
   if (values.human) args.push('--human');
   const result = await execute(process.execPath, args, { timeout: 70000, maxBuffer: 2 * 1024 * 1024 }).catch(error => {

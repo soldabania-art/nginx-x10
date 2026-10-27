@@ -3532,3 +3532,30 @@ publication remains separately open: first alpha and controller read locks
 require more than just a registry slot. No guessed reserve closes that path.
 Native/transient/concurrent/direct/recovery growth and stopped postpartial STOP
 remainOPEN, alongside fullcapacity/G5/V1 and allprior broader gates.
+
+
+## 27 October 2026 UTC: both alpha binding paths capacity candidate
+
+Exact2331 metadata nativepush40595688056/job122510976877 and
+PR40595696258/job122511004079 completed36successfulsteps each; researchPR
+40595696123/job122511023231 completed11. CLA40595692599/job122510911097
+failedstep3. No newartifacts/buildidentities/runtimecounts inferred; accepted
+exactcd8 apply/revert compatibility remains separate from this changedalphaCLI.
+
+The CLI now requires3 free controller entries before proxy bind executes and
+before waitBind's running locked path calls sessionStatus. The existingalpha
+lock is already included. Prepared waiting, identity/readiness checks, existing
+cancel/deadline/possible-commit transitions and stop/recover remain unchanged.
+The pinned actual bind/status/atomic/lock/event flow with virtual syscall errors
+reaches3 additional control entries; it is not everyOSfault or physicalhighwater.
+[Candidate evidence](evidence/g5-alpha-bind-capacity.json) and
+[ledger](review/g5-alpha-bind-capacity-ledger.json) separate new51TAP, retained
+translated37, model1715paths/3165executions, baseline6 and existingregressions.
+New installed/service/startup compatibility requires exact successor CI.
+
+A new immutable [bind baseline producer](review/alpha-bind-capacity-counterexample.mjs)
+was frozen beforeCLI edits with exactcd8 CLI/manager pins. Candidate pinrefusal
+is intentional; allolderbaseline producers remain unchanged. Controller
+durablewriters/schema/native/workflow remain unchanged. Initialregistry/first
+inspection headroom, direct/recovery/native/transient/concurrent growth, stopped
+postpartial STOP and fullcapacity/G5/V1 remainOPEN. No localphysical fixtures ran.
