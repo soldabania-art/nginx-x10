@@ -184,6 +184,14 @@ manually; this alpha is not an orphan reaper. Startup cancellation after native
 spawn requests the same verified SIGQUIT and waits a bounded five seconds.
 Unresolved startup cleanup is preserved and reported.
 
+Use the [faulted/orphan incident runbook](../service/INCIDENT-RUNBOOK.md)
+before acting on an abnormal exit. Preserve the original prefix in place.
+Installed `info`, `status` and `history` acquire locks; `status` may also make
+an HTTP revision observation. They are not passive initial diagnostics.
+There is no supported command to clear `faulted` or force uninstall it.
+Fresh HTTP restore needs a preexisting confirmed backup and independently
+safe original listener/resources; unknown facts require `STOP_UNRESOLVED`.
+
 A failed/incomplete installation is preserved for
 operator inspection rather than recursively erased.
 

@@ -3228,3 +3228,40 @@ editing. Release-record step completeness/cap also needs reconciliation.
 Permanent release, independent published replay,60minsoak, full recovery/
 security, TLS restore,fullG3/G4/V1 and semantic Continuum remain OPEN.
 Evidence: x10/evidence/g4-kept-a-fallback-hosted.json.
+
+
+## Reviewed faulted/orphan incident procedure — 27 October 2026
+
+The [incident runbook](service/INCIDENT-RUNBOOK.md) now gives the trusted
+nonroot operator concrete bounded observations, STOP_UNRESOLVED outcomes and
+a conditional fresh HTTP restore from a preexisting confirmed backup.
+The old potentially live prefix stays IN PLACE; no command clears faulted
+lifecycle or permits its forced uninstall. Unknown identity/resources/ports/
+locks stop the procedure. Original X10 listeners must be safe; a separately
+owned compatible upstream may remain running. Restore preserves declared
+ports/input and does not repair the old installation or replay side effects.
+
+Independent final review checked14 CLI command specifications,9 Bash blocks
+for syntax only,15 relative links,26 security boundaries and13 desk cases.
+These are source/document reviews, not TAP or actual incidents. Corrections
+cover restore result versus separately checked installationId, diagnostic
+status-write errors, absent/safe output files, clean local manager endpoint
+and explicit queued-job observation. Runtime and workflow bytes are unchanged.
+No runbook command or physical native/network/systemd/signal fixture ran here.
+
+The preceding receipt F native push40501089044/job122178775321 and
+PR40501096395/job122178756176 each completed36 successful actual steps;
+research PR40501096469/job122178757773 completed11. Research push runtime
+skipped; CLA40501093063/job122178662944 failed step3. No new artifacts were
+downloaded or unchanged manual reruns requested, and no guessed merge/build
+checkout or research counts are attributed to this read. The accepted actual
+fallback remains exact7b32841d28a8b155b5783cef1a0c56337bb45a06.
+
+Next: fix the release-record32-step cap and missing current-step completeness
+against the full ordered36-step native receipt, with a finite64 bound and
+independent pure refusal controls. Never truncate receipts or treat declared
+JSON as authenticated runtime evidence. Actual orphan incident replay and
+old-prefix disposal, full recovery/security, native binary upgrade, TLS restore,
+permanent release, published replay,60-minute soak, fullG3/G4/G5/V1 and semantic
+Continuum remain OPEN. Existing adverse histories, owner40h policy and deferred
+Windows are preserved. Evidence: x10/evidence/g4-incident-runbook.json.

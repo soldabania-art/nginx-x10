@@ -1,5 +1,13 @@
 # X10: systemd user recipe и приёмочные fixtures
 
+Для abnormal master exit, `faulted`, orphan workers или неизвестных locks
+используйте [incident runbook](INCIDENT-RUNBOOK.md). Он сохраняет исходный
+prefix на месте и различает безопасный отказ, условное восстановление из
+прежнего подтверждённого HTTP backup и ещё не принятую полную recovery.
+`info/status/history` не являются начальной диагностикой без записи locks;
+`recover` не очищает faulted lifecycle. При неизвестном владении ресурсами
+результат — `STOP_UNRESOLVED`, а не разрешение restart или uninstall.
+
 Генератор recipe выдаёт предложенный unit и не запускает systemctl, не
 устанавливает сервис, не меняет автозапуск или linger. Отдельный source helper
 `lifecycle-check.mjs` проверяет временный сервис на разрешённом nonroot хосте;
