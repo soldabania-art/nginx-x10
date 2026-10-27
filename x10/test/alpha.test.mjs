@@ -17,6 +17,8 @@ import '../alpha/prepare-run.test.mjs';
 import '../alpha/backup.test.mjs';
 import '../alpha/package-info.test.mjs';
 import '../alpha/stage.test.mjs';
+import { assertHostedOperatorReturn } from './package-return.mjs';
+import './package-return-proof.test.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url)), source = path.join(root, 'x10/alpha/cli.mjs');
 const manifestFile = path.resolve(process.env.X10_BUILD_MANIFEST || path.join(root, 'x10/.build/manifest.json'));
@@ -550,9 +552,11 @@ test('application upstream port syntax and collisions refuse before creating a p
   } finally { await rm(parent, { recursive: true, force: true }); }
 });
 
-test('extracted bundle proxies an independent app and preserves application readiness across config and sessions', { timeout: 65000 }, async t => {
+test('extracted bundle proxies an independent app and preserves application readiness across config and sessions', { timeout: 120000 }, async t => {
   const parent = await mkdtemp(path.join(os.tmpdir(), 'x10-alpha-upstream-')); await chmod(parent, 0o700);
   let ready = false, readinessBody = 'ready\n', appRequests = 0, echoRequests = 0, runChild, output = '', appStdout = '', nativePid;
+  let streamRequests = 0, retainReturnFixture = false;
+  const completedPostEffects = []; // Bounded synthetic in-memory echo receipts, not durable business state.
   const groups = new Set(), children = new Set();
   const app = http.createServer((req, res) => {
     appRequests++; res.setHeader('X-App-Marker', 'independent-upstream');
@@ -561,7 +565,30 @@ test('extracted bundle proxies an independent app and preserves application read
       echoRequests++;
       const chunks = []; let bytes = 0;
       req.on('data', chunk => { bytes += chunk.length; if (bytes > 1024 * 1024) req.destroy(); else chunks.push(chunk); });
-      req.on('end', () => { res.writeHead(200); res.end(Buffer.concat(chunks)); }); return;
+      req.on('end', () => {
+        if (completedPostEffects.length >= 16) { res.destroy(); return; }
+        const body = Buffer.concat(chunks);
+        completedPostEffects.push({ bytes: body.length, sha256: digest(body) });
+        res.writeHead(200); res.end(body);
+      }); return;
+    }
+    if (req.method === 'GET' && req.url === '/stream') {
+      streamRequests++;
+      const total = 256 * 1024, chunk = Buffer.alloc(16 * 1024, 0x73);
+      let sent = 0, closed = false;
+      const closedStream = () => { closed = true; res.removeListener('drain', pump); };
+      function pump() {
+        if (closed || res.destroyed) return;
+        while (sent < total) {
+          sent += chunk.length;
+          if (!res.write(chunk)) { res.once('drain', pump); return; }
+        }
+        res.end();
+      }
+      res.once('close', closedStream); req.once('aborted', closedStream);
+      res.writeHead(200, { 'Content-Type': 'application/octet-stream', 'Content-Length': total });
+      res.setTimeout(3000, () => res.destroy());
+      pump(); return;
     }
     res.writeHead(200); res.end('independent application\n');
   });
@@ -757,10 +784,40 @@ test('extracted bundle proxies an independent app and preserves application read
       foregroundHTTPAccepted: true, managedServiceAccepted: false,
       tlsBackupAccepted: false, packageUpgradeRollbackAccepted: false, productionAccepted: false }));
     // End restored application acceptance.
+    // Separate foreground operator-code A-to-B-to-A replay. The old restored
+    // diagnostic above keeps its own three-POST scope; this helper proves new
+    // traffic only after verified stops and fresh unbound preparations.
+    const returnNode = await prepareRecipeNode(parent);
+    const returnEchoBase = echoRequests, returnStreamBase = streamRequests, returnEffectsBase = completedPostEffects.length;
+    try {
+      await assertHostedOperatorReturn(t, { parent, bundle, installer,
+        recipeNode: returnNode, verifyNode: () => verifyRecipeNode(returnNode),
+        command: (file, ...args) => recipeNodeCommand(returnNode, file, ...args),
+        port, healthPort, upstreamPort, nativePidReport,
+        setReadiness: body => { ready = true; readinessBody = body; },
+        getEchoRequests: () => echoRequests, getStreamRequests: () => streamRequests,
+        getPostEffects: () => completedPostEffects.map(effect => ({ ...effect })),
+        preserveForInspection: () => { retainReturnFixture = true; } });
+      assert.equal(echoRequests, returnEchoBase + 3,
+        'Each separate operator-return leg sends exactly one new POST');
+      assert.equal(streamRequests, returnStreamBase + 3,
+        'Each separate operator-return leg reads exactly one bounded stream');
+      assert.equal(completedPostEffects.length, returnEffectsBase + 3,
+        'Three operator-return POST bodies complete at the synthetic application');
+      assert.equal(new Set(completedPostEffects.slice(returnEffectsBase).map(effect => effect.sha256)).size, 3,
+        'The three new completed synthetic POST effects have distinct payloads');
+      assert.equal(groups.size, 0); assert.equal(children.size, 0);
+      assert.deepEqual(await readFile(archive), retainedArchiveBytes);
+      assert.deepEqual(await readFile(backupFile), backupBytes);
+    } catch (error) {
+      if (error?.packageReturnCleanupUnknown === true) retainReturnFixture = true;
+      throw error;
+    }
   } finally {
     process.removeListener('SIGINT', emergency); process.removeListener('SIGTERM', emergency);
     for (const signal of ['SIGQUIT', 'SIGTERM', 'SIGKILL']) { for (const pid of groups) { try { process.kill(-pid, signal); } catch {} } for (const child of children) if (child.exitCode === null && child.signalCode === null) { try { child.kill('SIGTERM'); } catch {} } if (groups.size || children.size) await delay(75); }
-    app.closeAllConnections(); await new Promise(resolve => app.close(resolve)); await rm(parent, { recursive: true, force: true });
+    app.closeAllConnections(); await new Promise(resolve => app.close(resolve));
+    if (!retainReturnFixture) await rm(parent, { recursive: true, force: true });
   }
 });
 

@@ -651,5 +651,60 @@
     "fullG3Accepted": false,
     "fullG4Accepted": false,
     "productionAccepted": false
+  },
+  "foregroundOperatorReturnCandidate": {
+    "state": "FROZEN_FIXTURE_PURE_CONTROLS_VERIFIED_EXACT_HOSTED_PENDING",
+    "sourceBase": "bdcc39c85399a2252daa6e1928f6a99f82d31eaf",
+    "publicationParent": "78ab11d84b99cabe223984159d35b52a2c0bca75",
+    "scope": "Actual foreground HTTP operator-package A(P)-to-B(Q)-to-old-A2(Q) fixture and bounded declarative backward compatibility, using one unchanged compiled native binary",
+    "sourceBindings": {
+      "x10/test/package-return.mjs": {
+        "bytes": 29574,
+        "afterSha256": "ceff1dcb3debb31f98ca75582ed43ca2c60de494a0d58cb3b27c2d8a2cc1bd86",
+        "beforeSha256": null
+      },
+      "x10/test/package-return-proof.mjs": {
+        "bytes": 7719,
+        "afterSha256": "65540f4a5db5deb1ddaa2950e70f81e67d7304ba8cc4616d43a67facbbc4fd6d",
+        "beforeSha256": null
+      },
+      "x10/test/package-return-proof.test.mjs": {
+        "bytes": 14089,
+        "afterSha256": "9e39dc372b499c582bc7c230c7470d986bc2bd242c1380a7e11158ab7f7cc668",
+        "beforeSha256": null
+      },
+      "x10/test/alpha.test.mjs": {
+        "bytes": 114990,
+        "afterSha256": "1314f97f176a1fccf75a79d664aed7f777ce401873f795b0a801cc9c9844cedf",
+        "beforeSha256": "12868a338f450466c8201e8ca110dda65c473db90ad043414d0a3e7e5936a1e9"
+      }
+    },
+    "evidence": "x10/evidence/g4-operator-return.json",
+    "perFileLedger": "x10/review/g4-operator-return-ledger.json",
+    "fixtureOnlyChange": true,
+    "alphaRuntimeChanged": false,
+    "nativeRuntimeChanged": false,
+    "controllerRuntimeChanged": false,
+    "serviceRecipeChanged": false,
+    "localSelectedTAP": {
+      "tests": 581,
+      "pass": 581,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "nodeVersion": "v24.22.1",
+      "exitCode": 0,
+      "physicalNativeExecuted": false,
+      "systemdExecuted": false
+    },
+    "newPureControlsIncludedOnce": 207,
+    "independentPureHeldoutsSeparate": 12,
+    "independentVirtualStreamControlsSeparate": 4,
+    "foregroundOperatorReturnAccepted": false,
+    "backwardDeclarativeCompatibilityAccepted": false,
+    "managedServicePackageTransitionAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "productionAccepted": false
   }
 }

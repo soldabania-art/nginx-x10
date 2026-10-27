@@ -598,3 +598,57 @@ Foreground return and managed-service transition remain separate gates.
 FullG3/G4/V1, TLS restore, permanent release, independent published replay,
 60-minute soak and semantic Continuum stay open. Runtime is unchanged by
 this receipt. Evidence: x10/evidence/g4-package-stage-hosted.json.
+
+
+## Foreground operator-package return fixture — 27 October 2026
+
+The next authored acceptance fixture exercises a narrower return path than
+managed-service package rollback. It uses an explicitly checked reassembly of
+the earlier operator package A and the current operator package B. Their actual
+operator payloads differ; the compiled native NGINX binary is identical. The
+historical reassembly is not a previously published archive, and hashes are
+consistency records rather than package signatures.
+
+The declared sequence is A(P) → B(Q) → A2(Q). First, A serves a checked HTTP
+input P and application traffic, then stops with owned process/listener absence
+confirmed. B is staged into its own new private prefix, explicitly started,
+and must refuse wrong readiness before establishing a fresh binding. It then
+serves HTTP traffic and confirms a different supported HTTP input Q. After B
+is cleanly stopped, its checked backup is restored by the **exact trusted old
+A installer** into a new A2 prefix. A2 must have the original A payload identity,
+fresh installation/session/revision identities and no initial binding; after
+an explicit start/bind it must actually serve Q. An old A installer is not
+assumed to contain the newer `stage` command.
+
+The fresh reinstall is the return mechanism. Old source records are not edited
+to look like the new target, and B's runtime binding, session history, PIDs,
+pending state and journal are not copied into A2. The declared compatibility
+question concerns only the supported declarative HTTP backup/input format.
+Native syntax acceptance or matching hashes alone do not demonstrate that A2
+can serve the B-produced input; actual hosted readiness and traffic are required.
+The original known-good A installation and package are retained unchanged while
+B and A2 operate. Each owned serving process must stop before the next uses
+the same listeners; no seamless or all-traffic atomic cutover is claimed.
+
+The application observes distinct POST effects in the A, B and A2 phases. A
+package return must not replay these requests, reset their counters or undo
+already accepted application effects. GET and streamed response observations
+remain separate from readiness, and all traffic and cleanup assertions must
+come from the exact resulting hosted fixture, not a virtual receipt alone.
+This is a test extension using the existing installation/operator commands;
+it introduces no new general-purpose rollback command or runtime CLI behavior.
+
+Local pure controls validate the finite proof/receipt contract only. Local
+native/process-group/signal/systemd fixtures are not run in the current nested
+execution environment. Exact resulting hosted native CI and artifact review
+are pending for this authored scenario; see
+[candidate evidence](../evidence/g4-operator-return.json) for frozen identities
+and the actual verification state. Earlier staging-only or service receipts
+do not accept this newly authored traffic path.
+
+Even a passing foreground A(P) → B(Q) → A2(Q) fixture does not accept the
+separate managed-service package-transition gate, a different native binary
+upgrade/downgrade, arbitrary state/database/journal migration, TLS-state restore,
+permanent distribution, independent published replay, the60-minute soak or full
+G3/G4/V1. Semantic Continuum and the deferred Windows plan remain unverified;
+the central G9 portfolio handoff is unchanged.

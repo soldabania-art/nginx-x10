@@ -2934,3 +2934,26 @@ Foreground return and managed-service transition remain separate gates.
 FullG3/G4/V1, TLS restore, permanent release, independent published replay,
 60-minute soak and semantic Continuum stay open. Runtime is unchanged by
 this receipt. Evidence: x10/evidence/g4-package-stage-hosted.json.
+
+
+## Foreground operator return candidate — 27 October 2026
+
+A new supported-host fixture exercises reviewed old operator A serving P,
+current B staging and serving a newly confirmed HTTP input Q, then the exact
+old installer restoring B-produced Q into fresh A2 and serving Q. The native
+binary stays identical; historical operator reassembly is not a published
+historical archive. Each leg requires explicit owned stop and TCP refusal
+before the next launch. Known-good A files remain preserved throughout.
+Three distinct completed synthetic in-memory POST receipts are retained
+without replay/reset, and three bounded256KiB streams are compared exactly.
+These are scoped observations, not database durability or release load budgets.
+
+Frozen local Node24 selected pure/tempfile/virtual controls passed581/581,
+including207 new proof controls once. Independent12 proof heldouts and4
+virtual stream controls are separate; selected actual Node/NONEXECUTED native
+installation passed1/1 separately. No physical native/process-group/signal/
+systemd fixture ran locally. Only test harness/checker/evidence changed.
+Actual foreground return acceptance awaits the new exact hosted CI artifact.
+This does not accept managed-service package return, arbitrary state/journal
+migration, native binary upgrade, TLS restore, permanent release, soak or V1.
+Evidence: x10/evidence/g4-operator-return.json.
