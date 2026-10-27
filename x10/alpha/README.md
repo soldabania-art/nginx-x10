@@ -698,3 +698,49 @@ No zero-downtime, all-worker drain, request replay, live connection migration,
 Continuum, package rollback, permanent release or Production V1 claim follows
 from the pin. The operator-return/managed-service transition and the remaining
 G3–G8 gates retain their separately declared acceptance requirements.
+
+
+## Exact foreground return and HTTPS fixture receipt — 27 October 2026
+
+Implementation `ac2ae992d47907d82817cbd2dfb23480972c056a` completed both
+native push40480203383/job122108410221 and PR40480208863/job122108417175
+successfully:34 actual steps,20 native groups and617 alpha tests each.
+The separate HTTPS-upstream fixture passed76 TAP tests per event, including
+58 virtual controls. Its14-field diagnostic confirms the selected actual verified GET,
+one65551-byte POST and one65537-byte stream on the same checked downstream
+HTTP connection, exactly one origin POST and no POST retry. All existing
+CA/hostname/plaintext refusal controls and owned cleanup passed.
+
+Both events also verify foreground A(P) → B(Q) → old-A2(Q):13 phases,
+3 real traffic legs and19 diagnostic fields. The old A installer restores
+B-produced HTTP Q into a fresh unbound A2, then A2 explicitly starts/binds
+and serves Q. Its checked operator/runtime payload equals A and differs from
+B; the native NGINX binary remains identical. Original known-good A files
+stay unchanged, with confirmed owned stop/listener absence between starts.
+Three unique65551-byte POST receipts remain in the synthetic origin's memory
+without replay/reset, and three256KiB streams match exactly. This does not
+establish database/disk durability or the release upload/stream/load budgets.
+Input hashes contain run-specific ports: P!=Q=A2 holds within each run;
+complete proofs need not be identical between push and PR. The old operator
+bundle is a checked historical reassembly, not a published historical archive.
+
+The same implementation passed existing restored managed-service regressions:
+18 restored proofs,5 sessions,2 restarts,6 bounded journal checks, the existing
+three-session service TLS profile and complete unit/private-Node/bootstrap
+cleanup. This accepts those regressions, not a managed-service package switch.
+The full failure-containment matrix was not exercised by normal cleanup.
+
+The accepted new scope is foreground operator-package return, backward
+compatibility of the supported HTTP declarative input and the corrected
+verified-route TLS fixture. The historical6401 PR step21 POST503 failure
+with zero origin POSTs is retained, and its cause remains unknown. A later
+passing connection-pinned fixture is not evidence of a native runtime fix,
+an all-worker fence or seamless connection migration. Earlier dated pending
+paragraphs preserve their historical candidate scope; this receipt records
+the newly checked implementation.
+
+The separate managed-service package-transition/recovery gate is next. Native
+binary upgrade/downgrade, TLS restore, permanent release, independent published
+replay, the60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.
+The deferred Windows plan and central G9 transition are unchanged. See the
+[exact hosted receipt](../evidence/g4-operator-return-hosted.json).

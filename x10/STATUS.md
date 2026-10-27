@@ -2983,3 +2983,45 @@ signal/systemd fixture ran locally. Actual correction and overall return
 acceptance remain pending exact new hosted CI; all-worker readiness,
 managed-service package return, native binary upgrade and fullV1 stay open.
 Evidence: x10/evidence/g3-tls-verified-route.json.
+
+
+## Exact foreground operator return and verified-route acceptance — 27 October 2026
+
+Implementation `ac2ae992d47907d82817cbd2dfb23480972c056a` passed native
+push40480203383/job122108410221 and PR40480208863/job122108417175:
+all34 actual steps,20 native groups and617 alpha tests per context. Each
+HTTPS-upstream job passed76 TLS TAP tests, including58 virtual controls;
+these counts are not76 TLS sessions. Both artifacts contain the14-field
+verified-route diagnostic: the actual good GET, one65551-byte POST and one
+65537-byte stream used the same checked downstream HTTP socket, with one
+origin POST and no POST retry. The existing CA/hostname/plaintext refusal
+controls and owned fixture cleanup passed.
+
+Both exact events also contain the foreground operator A(P) → B(Q) → A2(Q)
+proof:19 diagnostic fields,13 phases and3 traffic legs, with P!=Q=A2 checked
+within each event. The exact old A installer consumed B-produced Q into fresh
+A2, whose operator/runtime payload equals A and differs from B. The native
+binary is identical throughout. Three distinct65551-byte completed synthetic
+in-memory origin POST receipts and three256KiB streams were retained/compared
+without replay or counter reset; these are not database durability or release
+load-budget evidence. Known-good A files stayed unchanged and each owned
+serving process/listener stopped before the next phase. The historical acb
+operator bundle remains an explicit checked reassembly, not a published archive.
+
+Existing restored-service regressions passed separately on the same runtime:
+18 restored proofs,5 successful native sessions,2 manager restarts,6 bounded
+journal checks, the existing three-session service TLS profile and complete
+owned cleanup, including unit/private-Node/bootstrap removal. Six checks do
+not imply exactly six journal queries. Normal cleanup success does not exercise
+the full failure-containment matrix.
+
+Accepted scope is foreground operator-package return, backward compatibility
+of the declared HTTP backup/input and the verified-route TLS fixture only.
+The historical6401 PR40475365565 step21 POST503/originPOST0 failure remains
+preserved; its cause is unknown. The passing correction changes test routing
+assumptions, not native/controller code, and does not prove all-worker readiness.
+Managed-service package return, native binary upgrade/downgrade, TLS restore,
+permanent release, independent published replay,60-minute soak, fullG3/G4/V1
+and semantic Continuum remain open. Next: the separately verified managed-service
+package-transition/recovery gate. Windows and G9 remain deferred/unchanged.
+Evidence: x10/evidence/g4-operator-return-hosted.json.

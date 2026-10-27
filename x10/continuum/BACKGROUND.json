@@ -1,13 +1,7 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-return-receipt-20261027T093502Z",
-    "owner": "codex-x10-return-receipt-coordinator",
-    "baseCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
-    "acquiredAtUTC": "2026-10-27T09:35:02.000Z",
-    "expiresAtUTC": "2026-10-27T10:20:02.000Z"
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
     "requestedAtUTC": "2026-10-27T03:45:59.000Z",
     "hours": 20,
@@ -322,10 +316,92 @@
       "fullG3Accepted": false,
       "fullG4Accepted": false,
       "productionAccepted": false
+    },
+    "foregroundOperatorReturnAndTLSFixtureHosted": {
+      "schemaVersion": 1,
+      "state": "EXACT_SCOPED_FOREGROUND_OPERATOR_RETURN_AND_TLS_FIXTURE_SUCCESS",
+      "implementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+      "implementationTree": "8ce1cfa36cea6f4b2c0e55fd72305104f60eb67f",
+      "evidence": "x10/evidence/g4-operator-return-hosted.json",
+      "scope": "Foreground HTTP operator-package A(P) to B(Q) to old A2(Q), bounded backward declarative HTTP compatibility and the verified downstream HTTP connection TLS-upstream fixture; one unchanged compiled native binary.",
+      "nativeRunIds": [
+        40480203383,
+        40480208863
+      ],
+      "nativeJobIds": [
+        122108410221,
+        122108417175
+      ],
+      "all34ActualStepsEach": true,
+      "nativeGroupsEach": 20,
+      "fullAlphaEach": 617,
+      "foregroundReturnDiagnosticFieldsEach": 19,
+      "strictReturnProofFieldsEach": 10,
+      "foregroundReturnOrderedPhasesEach": 13,
+      "foregroundReturnTrafficLegsEach": 3,
+      "completedSyntheticPOSTEffectsEach": 3,
+      "completed256KiBStreamsEach": 3,
+      "compareInputHashesWithinEachEventOnly": true,
+      "payloadAEqualsA2AndDiffersFromBEach": true,
+      "nativeBinaryUnchangedEach": true,
+      "historicalBundleReassembledNotPublished": true,
+      "knownGoodSourceFilesPreservedEach": true,
+      "ownedForegroundInstallationsRemovedEach": 3,
+      "tlsTAPEach": {
+        "tests": 76,
+        "pass": 76,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "tlsVirtualControlsIncludedOnceEach": 58,
+      "tlsRouteDiagnosticFieldsEach": 14,
+      "tlsRouteAssertedResultFieldsEach": 11,
+      "tlsVerifiedGETAttemptsEach": 1,
+      "tlsPOSTAttemptsEach": 1,
+      "tlsPOSTBytesEach": 65551,
+      "tlsStreamBytesEach": 65537,
+      "tlsOriginPOSTRequestsEach": 1,
+      "tlsSamePrivatelyCheckedDownstreamSocketEach": true,
+      "tlsPOSTRetriedEach": false,
+      "tlsAgentDestroyedEach": true,
+      "tlsOriginalNegativeControlsPreservedEach": true,
+      "restoredHTTPProofFieldsEach": 18,
+      "serviceNativeSessionsEach": 5,
+      "serviceManagerRestartsEach": 2,
+      "serviceJournalChecksEach": 6,
+      "journalChecksAreNotExactQueryCounts": true,
+      "downstreamTLSSessionsEach": 3,
+      "upstreamTLSSessionsEach": 3,
+      "all13BooleanServiceCleanupFactsEach": true,
+      "privateNodeAndBootstrapRemovedEach": true,
+      "serviceContractEach": {
+        "tests": 618,
+        "pass": 617,
+        "fail": 0,
+        "skipped": 1,
+        "skipReason": "Root-only refusal control skipped by nonroot runner; actual nonroot service exercised separately."
+      },
+      "actualFailureContainmentExercised": false,
+      "foregroundOperatorReturnAccepted": true,
+      "backwardDeclarativeHTTPCompatibilityAccepted": true,
+      "tlsFixtureCorrectionHostedAccepted": true,
+      "managedServicePackageTransitionAccepted": false,
+      "packageUpgradeRollbackAccepted": false,
+      "nativeBinaryVersionChangeAccepted": false,
+      "tlsBackupAccepted": false,
+      "allWorkerFenceAccepted": false,
+      "zeroDowntimeAccepted": false,
+      "liveConnectionMigrationAccepted": false,
+      "permanentDistributionAccepted": false,
+      "fullG3Accepted": false,
+      "fullG4Accepted": false,
+      "productionAccepted": false
     }
   },
   "lastV1DevelopmentPass": {
-    "state": "FROZEN_FIXTURE_PURE_CONTROLS_VERIFIED_EXACT_HOSTED_PENDING",
+    "state": "EXACT_SCOPED_FOREGROUND_OPERATOR_RETURN_AND_TLS_FIXTURE_SUCCESS",
     "sourceBase": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
     "publicationParent": "d80ab8694c807b85be13b0ab839d74957f01d713",
     "scope": "Fixture-only verified downstream HTTP route connection selection before a unique application POST and stream through the native HTTPS upstream proxy",
@@ -378,29 +454,42 @@
     "independentVirtualControlsSeparate": 9,
     "rootCauseEstablished": false,
     "nativeRuntimeFixClaimed": false,
-    "tlsFixtureCorrectionHostedAccepted": false,
-    "foregroundOperatorReturnAccepted": false,
+    "tlsFixtureCorrectionHostedAccepted": true,
+    "foregroundOperatorReturnAccepted": true,
     "managedServicePackageTransitionAccepted": false,
     "packageUpgradeRollbackAccepted": false,
-    "productionAccepted": false
+    "productionAccepted": false,
+    "verifiedOnImplementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+    "hostedEvidence": "x10/evidence/g4-operator-return-hosted.json",
+    "backwardDeclarativeHTTPCompatibilityAccepted": true
   },
   "pendingVerification": [
-    "First inspect exact resulting implementation native push/PR jobs and actual installed HTTPS artifact: require the new14-field x10-tls-verified-route diagnostic,11 asserted result fields, bounded verifiedGET acquisition, one unretried POST and exact stream on the same privately checked downstream socket, originPOSTcount1 and agent cleanup. Preserve all original CA/hostname/plaintext candidate-tag-bound TLS refusal controls, direct trust checks and owned cleanup. Recheck unchanged actual617-alpha foreground A/P-B/Q-oldA2/Q proof (19fields/13phases/3legs), within-event P!=Q=A2, source preservation and full service/TLS/private-Node regressions. Historical6401push success andPRstep21POST503 failure remain separate; possible old-route generation interleaving is not established. Do not call this a native/controller fix or all-worker fence. Only after exact successful hosted evidence accept narrowly named fixture and foreground return/backward HTTP compatibility, then continue the separate managed-service package-transition/recovery gate. Native binary upgrade, permanent release, independent published replay,60-minute soak, TLS restore, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason.",
-    "Input hashes are run-specific; compare P!=Q=A2 within each event and preserve both proofs. Original617-positive return observations do not make the failed PR workflow successful."
+    "Next substantive package is the separately scoped managed-service package-return checker and cleanup consumer; not yet implemented or accepted.",
+    "On the resulting evidence-only successor, reconcile actual run jobs only. Do not transfer ac2 runtime acceptance to changed bytes or request an unchanged rerun. Inherited CLA remains failed; do not sign or change credentials.",
+    "Keep fullG3/G4/G5-G8/V1, permanent release/independent published replay/60minsoak/native binary upgrade/TLS restore and semantic Continuum OPEN."
   ],
-  "nextConcreteTask": "First inspect exact resulting implementation native push/PR jobs and actual installed HTTPS artifact: require the new14-field x10-tls-verified-route diagnostic,11 asserted result fields, bounded verifiedGET acquisition, one unretried POST and exact stream on the same privately checked downstream socket, originPOSTcount1 and agent cleanup. Preserve all original CA/hostname/plaintext candidate-tag-bound TLS refusal controls, direct trust checks and owned cleanup. Recheck unchanged actual617-alpha foreground A/P-B/Q-oldA2/Q proof (19fields/13phases/3legs), within-event P!=Q=A2, source preservation and full service/TLS/private-Node regressions. Historical6401push success andPRstep21POST503 failure remain separate; possible old-route generation interleaving is not established. Do not call this a native/controller fix or all-worker fence. Only after exact successful hosted evidence accept narrowly named fixture and foreground return/backward HTTP compatibility, then continue the separate managed-service package-transition/recovery gate. Native binary upgrade, permanent release, independent published replay,60-minute soak, TLS restore, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason.",
+  "nextConcreteTask": "Implement the separate bounded nonroot systemd-user operator-package A(P)-to-B(Q)-to-old-A2(Q) return checker. Preserve legacy18restored proofs/5sessions/2manager restarts/6journal CHECKS/3downstream+3upstream TLS sessions exactly. Use three owned units/prefixes and immutable per-leg contexts: A serves P, fully stops and retires its link; trusted B stages from A, serves P then Q and completes one actual manager restart with fresh InvocationID/session/binding and absence of its previous launcher/native group; after B stop/export, exact old A installer restores B-produced Q in fresh A2 and serves it. Keep new counters separate (planned3units/4successful native invocations/1B manager restart; journal count declared before implementation), known-good A snapshots/backups preserved and all owned cleanup. Checkout-owner preflight supplies bounded literal-hash-checked nonexecuted old CLI bytes outside the candidate bundle; private Node checker must not execute Git or change permissions/security. Integrate a second source-pinned mandatory service artifact into verified-node cleanup admission; merely appending ignored envelope fields is insufficient. Keep combined cleanup evidence within existing32KiB bound; require both strict legacy and new success before private Node removal. Local only pure/tempfile/virtual checks, physical manager acceptance only existing supported hosted CI. Narrow foreground return/backward HTTP and TLS fixture are accepted on exact ac2 events; original6401 PR503/origin0 failure and unknown cause persist. Managed-service package return/recovery, native binary change, TLS restore, permanent release, independent published replay,60minsoak, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason.",
   "nextTasks": [
     {
+      "id": "G4-managed-service-operator-package-return",
+      "state": "OPEN_NOT_IMPLEMENTED",
+      "goal": "Implement the separate bounded nonroot systemd-user operator-package A(P)-to-B(Q)-to-old-A2(Q) return checker. Preserve legacy18restored proofs/5sessions/2manager restarts/6journal CHECKS/3downstream+3upstream TLS sessions exactly. Use three owned units/prefixes and immutable per-leg contexts: A serves P, fully stops and retires its link; trusted B stages from A, serves P then Q and completes one actual manager restart with fresh InvocationID/session/binding and absence of its previous launcher/native group; after B stop/export, exact old A installer restores B-produced Q in fresh A2 and serves it. Keep new counters separate (planned3units/4successful native invocations/1B manager restart; journal count declared before implementation), known-good A snapshots/backups preserved and all owned cleanup. Checkout-owner preflight supplies bounded literal-hash-checked nonexecuted old CLI bytes outside the candidate bundle; private Node checker must not execute Git or change permissions/security. Integrate a second source-pinned mandatory service artifact into verified-node cleanup admission; merely appending ignored envelope fields is insufficient. Keep combined cleanup evidence within existing32KiB bound; require both strict legacy and new success before private Node removal. Local only pure/tempfile/virtual checks, physical manager acceptance only existing supported hosted CI. Narrow foreground return/backward HTTP and TLS fixture are accepted on exact ac2 events; original6401 PR503/origin0 failure and unknown cause persist. Managed-service package return/recovery, native binary change, TLS restore, permanent release, independent published replay,60minsoak, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason."
+    },
+    {
       "id": "G3-verified-TLS-route-fixture-exact-CI",
-      "state": "FROZEN_FIXTURE_PURE_CONTROLS_VERIFIED_EXACT_HOSTED_PENDING",
-      "goal": "First inspect exact resulting implementation native push/PR jobs and actual installed HTTPS artifact: require the new14-field x10-tls-verified-route diagnostic,11 asserted result fields, bounded verifiedGET acquisition, one unretried POST and exact stream on the same privately checked downstream socket, originPOSTcount1 and agent cleanup. Preserve all original CA/hostname/plaintext candidate-tag-bound TLS refusal controls, direct trust checks and owned cleanup. Recheck unchanged actual617-alpha foreground A/P-B/Q-oldA2/Q proof (19fields/13phases/3legs), within-event P!=Q=A2, source preservation and full service/TLS/private-Node regressions. Historical6401push success andPRstep21POST503 failure remain separate; possible old-route generation interleaving is not established. Do not call this a native/controller fix or all-worker fence. Only after exact successful hosted evidence accept narrowly named fixture and foreground return/backward HTTP compatibility, then continue the separate managed-service package-transition/recovery gate. Native binary upgrade, permanent release, independent published replay,60-minute soak, TLS restore, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason.",
-      "evidence": "x10/evidence/g3-tls-verified-route.json"
+      "state": "ACCEPTED_SCOPED_FOREGROUND_HTTP_AND_VERIFIED_TLS_FIXTURE",
+      "goal": "Scoped exact hosted acceptance recorded. Implement the separate bounded nonroot systemd-user operator-package A(P)-to-B(Q)-to-old-A2(Q) return checker. Preserve legacy18restored proofs/5sessions/2manager restarts/6journal CHECKS/3downstream+3upstream TLS sessions exactly. Use three owned units/prefixes and immutable per-leg contexts: A serves P, fully stops and retires its link; trusted B stages from A, serves P then Q and completes one actual manager restart with fresh InvocationID/session/binding and absence of its previous launcher/native group; after B stop/export, exact old A installer restores B-produced Q in fresh A2 and serves it. Keep new counters separate (planned3units/4successful native invocations/1B manager restart; journal count declared before implementation), known-good A snapshots/backups preserved and all owned cleanup. Checkout-owner preflight supplies bounded literal-hash-checked nonexecuted old CLI bytes outside the candidate bundle; private Node checker must not execute Git or change permissions/security. Integrate a second source-pinned mandatory service artifact into verified-node cleanup admission; merely appending ignored envelope fields is insufficient. Keep combined cleanup evidence within existing32KiB bound; require both strict legacy and new success before private Node removal. Local only pure/tempfile/virtual checks, physical manager acceptance only existing supported hosted CI. Narrow foreground return/backward HTTP and TLS fixture are accepted on exact ac2 events; original6401 PR503/origin0 failure and unknown cause persist. Managed-service package return/recovery, native binary change, TLS restore, permanent release, independent published replay,60minsoak, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason.",
+      "evidence": "x10/evidence/g3-tls-verified-route.json",
+      "verifiedOnImplementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+      "hostedEvidence": "x10/evidence/g4-operator-return-hosted.json"
     },
     {
       "id": "G4-foreground-operator-return-exact-CI",
-      "state": "FROZEN_FIXTURE_PURE_CONTROLS_VERIFIED_EXACT_HOSTED_PENDING",
-      "goal": "Inspect exact resulting implementation native push/PR jobs and actual x10-operator-package-return artifact diagnostic:19 top-level fields,13 ordered phases,3 real A/P-B/Q-oldA2/Q traffic legs,3 distinct completed synthetic POST receipts and3 exact256KiB streams. Require actual payload A=A2!=B with identical native binary, B-produced HTTP Q consumed by the exact old A installer, fresh identities/bindings, explicit TCP refusal plus owned master/group/launcher absence between starts, all known-good A files preserved and all owned cleanup confirmed. Check full unchanged service/TLS/private-Node regressions; local pure checks do not accept physical return. Then close only scoped foreground operator return/backward HTTP compatibility and continue the separate managed-service package-transition/recovery gate. Native binary upgrade, TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum stay open. Do not rerun unchanged accepted CI without cause.",
-      "evidence": "x10/evidence/g4-operator-return.json"
+      "state": "ACCEPTED_SCOPED_FOREGROUND_HTTP_AND_VERIFIED_TLS_FIXTURE",
+      "goal": "Scoped exact hosted acceptance recorded. Implement the separate bounded nonroot systemd-user operator-package A(P)-to-B(Q)-to-old-A2(Q) return checker. Preserve legacy18restored proofs/5sessions/2manager restarts/6journal CHECKS/3downstream+3upstream TLS sessions exactly. Use three owned units/prefixes and immutable per-leg contexts: A serves P, fully stops and retires its link; trusted B stages from A, serves P then Q and completes one actual manager restart with fresh InvocationID/session/binding and absence of its previous launcher/native group; after B stop/export, exact old A installer restores B-produced Q in fresh A2 and serves it. Keep new counters separate (planned3units/4successful native invocations/1B manager restart; journal count declared before implementation), known-good A snapshots/backups preserved and all owned cleanup. Checkout-owner preflight supplies bounded literal-hash-checked nonexecuted old CLI bytes outside the candidate bundle; private Node checker must not execute Git or change permissions/security. Integrate a second source-pinned mandatory service artifact into verified-node cleanup admission; merely appending ignored envelope fields is insufficient. Keep combined cleanup evidence within existing32KiB bound; require both strict legacy and new success before private Node removal. Local only pure/tempfile/virtual checks, physical manager acceptance only existing supported hosted CI. Narrow foreground return/backward HTTP and TLS fixture are accepted on exact ac2 events; original6401 PR503/origin0 failure and unknown cause persist. Managed-service package return/recovery, native binary change, TLS restore, permanent release, independent published replay,60minsoak, fullG3/G4/V1 and semantic Continuum remain open. No unchanged reruns without reason.",
+      "evidence": "x10/evidence/g4-operator-return.json",
+      "verifiedOnImplementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+      "hostedEvidence": "x10/evidence/g4-operator-return-hosted.json"
     },
     {
       "id": "G4-side-by-side-package-stage-exact-CI",
@@ -413,7 +502,7 @@
     {
       "id": "G4-installed-package-identity-exact-CI",
       "state": "ACCEPTED_SCOPED_PACKAGE_IDENTITY_ONLY",
-      "goal": "First inspect exact resulting implementation native push/PR jobs and actual extracted-bundle package-info observations. Require finite runtime/operator/native fingerprints independently derived from actual installed bytes, no installation/session/host metadata, same-package fingerprint stability across fresh restored identities, unchanged prepared records and owned lock, refusal of malformed arguments/tampered excluded immutable files/dependency drift, and no application request or POST replay. This is only package identity. Then implement explicit side-by-side staging, state-compatibility and rollback with meaningfully distinct reviewed runtime payloads, preserving old known-good files. Old A has no package-info command; verify its payload through the known installed manifest rather than assuming the new API exists. Native binary identity and operator package identity remain separate. TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum stay open.",
+      "goal": "First inspect exact resulting implementation native push/PR jobs and actual extracted-bundle package-info observations. Require finite runtime/operator/native fingerprints independently derived from actual installed bytes, no installation/session/host metadata, same-package fingerprint stability across fresh restored identities, unchanged prepared records and owned lock, refusal of malformed arguments/tampered excluded immutable files/dependency drift, and no application request or POST replay. This is only package identity. Then implement explicit side-by-side staging, state-compatibility and rollback with meaningfully distinct reviewed runtime payloads, preserving old known-good files. Reviewed acb A has package-info but no stage command; verify installed bytes independently and inspect exact historical command availability. Native binary identity and operator package identity remain separate. TLS restore, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum stay open.",
       "evidence": "x10/evidence/g4-package-identity.json",
       "verifiedOnImplementationCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
       "hostedEvidence": "x10/evidence/g4-package-identity-hosted.json"
@@ -500,60 +589,82 @@
   "productionAccepted": false,
   "lastV1VerificationReceipt": {
     "schemaVersion": 1,
-    "state": "EXACT_SCOPED_PACKAGE_STAGING_SUCCESS",
-    "implementationCommit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
-    "implementationTree": "7f904df2725d3e8170e89b9c0d54bd91c276004b",
-    "evidence": "x10/evidence/g4-package-stage-hosted.json",
-    "scope": "Explicit trusted historical-operator-to-current schema2 HTTP package staging into a fresh unbound prefix; no activation or traffic transition.",
+    "state": "EXACT_SCOPED_FOREGROUND_OPERATOR_RETURN_AND_TLS_FIXTURE_SUCCESS",
+    "implementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+    "implementationTree": "8ce1cfa36cea6f4b2c0e55fd72305104f60eb67f",
+    "evidence": "x10/evidence/g4-operator-return-hosted.json",
+    "scope": "Foreground HTTP operator-package A(P) to B(Q) to old A2(Q), bounded backward declarative HTTP compatibility and the verified downstream HTTP connection TLS-upstream fixture; one unchanged compiled native binary.",
     "nativeRunIds": [
-      40468943667,
-      40468947907
+      40480203383,
+      40480208863
     ],
     "nativeJobIds": [
-      122071147148,
-      122071164947
+      122108410221,
+      122108417175
     ],
     "all34ActualStepsEach": true,
     "nativeGroupsEach": 20,
-    "fullAlphaEach": 410,
-    "stageDiagnosticFieldsEach": 36,
-    "stageResultFieldsAssertedEach": 25,
-    "refusalsWithoutOverwriteEach": 4,
-    "runtimePayloadFilesEach": 11,
-    "sourceRuntimePayloadSha256": "9ab5c96813ca535d4724f5b690ca38650a5f01e808754e98fc239776b5c8e59f",
-    "targetRuntimePayloadSha256": "f81149bd4f7666fa20bd1d3d71ba425bdf9158612b11a5a91796d51d1be16b9d",
-    "sourceOperatorPayloadSha256": "9fbb29cf3245178393b5440587f807fa82accb4ffa1a57059f2141dcc4f0ad1a",
-    "targetOperatorPayloadSha256": "be4c71ca7036a428287ed7f4f8a4e3279f52de1cc95dce5554fac68a56b329cb",
-    "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
-    "operatorPayloadChanged": true,
-    "nativeBinaryChanged": false,
-    "stageHostedAccepted": true,
-    "sourceFilesAndBackupPreserved": true,
-    "freshPreparedUnboundTargetVerified": true,
-    "ownedStageInstallationsRemoved": true,
-    "existingRestoredServiceRegressionAcceptedOnThisImplementation": true,
-    "restoredProofFieldsEach": 18,
-    "nativeSessionsEach": 5,
-    "managerRestartsEach": 2,
-    "journalChecksEach": 6,
+    "fullAlphaEach": 617,
+    "foregroundReturnDiagnosticFieldsEach": 19,
+    "strictReturnProofFieldsEach": 10,
+    "foregroundReturnOrderedPhasesEach": 13,
+    "foregroundReturnTrafficLegsEach": 3,
+    "completedSyntheticPOSTEffectsEach": 3,
+    "completed256KiBStreamsEach": 3,
+    "compareInputHashesWithinEachEventOnly": true,
+    "payloadAEqualsA2AndDiffersFromBEach": true,
+    "nativeBinaryUnchangedEach": true,
+    "historicalBundleReassembledNotPublished": true,
+    "knownGoodSourceFilesPreservedEach": true,
+    "ownedForegroundInstallationsRemovedEach": 3,
+    "tlsTAPEach": {
+      "tests": 76,
+      "pass": 76,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "tlsVirtualControlsIncludedOnceEach": 58,
+    "tlsRouteDiagnosticFieldsEach": 14,
+    "tlsRouteAssertedResultFieldsEach": 11,
+    "tlsVerifiedGETAttemptsEach": 1,
+    "tlsPOSTAttemptsEach": 1,
+    "tlsPOSTBytesEach": 65551,
+    "tlsStreamBytesEach": 65537,
+    "tlsOriginPOSTRequestsEach": 1,
+    "tlsSamePrivatelyCheckedDownstreamSocketEach": true,
+    "tlsPOSTRetriedEach": false,
+    "tlsAgentDestroyedEach": true,
+    "tlsOriginalNegativeControlsPreservedEach": true,
+    "restoredHTTPProofFieldsEach": 18,
+    "serviceNativeSessionsEach": 5,
+    "serviceManagerRestartsEach": 2,
+    "serviceJournalChecksEach": 6,
     "journalChecksAreNotExactQueryCounts": true,
     "downstreamTLSSessionsEach": 3,
     "upstreamTLSSessionsEach": 3,
-    "all13BooleanCleanupFactsEach": true,
+    "all13BooleanServiceCleanupFactsEach": true,
     "privateNodeAndBootstrapRemovedEach": true,
     "serviceContractEach": {
       "tests": 618,
       "pass": 617,
-      "skipped": 1,
       "fail": 0,
-      "skipReason": "Root-only refusal control is not executed by the nonroot runner; actual nonroot service is separately exercised."
+      "skipped": 1,
+      "skipReason": "Root-only refusal control skipped by nonroot runner; actual nonroot service exercised separately."
     },
     "actualFailureContainmentExercised": false,
-    "activationPerformed": false,
-    "compatibilityAccepted": false,
+    "foregroundOperatorReturnAccepted": true,
+    "backwardDeclarativeHTTPCompatibilityAccepted": true,
+    "tlsFixtureCorrectionHostedAccepted": true,
+    "managedServicePackageTransitionAccepted": false,
     "packageUpgradeRollbackAccepted": false,
     "nativeBinaryVersionChangeAccepted": false,
     "tlsBackupAccepted": false,
+    "allWorkerFenceAccepted": false,
+    "zeroDowntimeAccepted": false,
+    "liveConnectionMigrationAccepted": false,
+    "permanentDistributionAccepted": false,
     "fullG3Accepted": false,
     "fullG4Accepted": false,
     "productionAccepted": false
@@ -573,42 +684,30 @@
     "allPriorAcceptanceFailuresAndUnknownsRetained": true
   },
   "currentHeadCIStepReadback": {
-    "commit": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
-    "native": [
-      {
-        "runId": 40475357966,
-        "jobId": 122092247049,
-        "state": "completed_success",
-        "actualSuccessfulSteps": 34
-      },
-      {
-        "runId": 40475365565,
-        "jobId": 122092230894,
-        "state": "completed_failure",
-        "failedStep": 21,
-        "actualSuccessfulSteps": 23,
-        "nativeAggregateComponentSucceeded": true,
-        "serviceRegressionExecuted": false
-      }
+    "observedImplementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+    "nativeRunIds": [
+      40480203383,
+      40480208863
     ],
-    "researchPR": {
-      "runId": 40475365639,
-      "jobId": 122092235172,
-      "state": "completed_success",
-      "actualSuccessfulSteps": 11
-    },
-    "researchPush": {
-      "runId": 40475357972,
-      "runtimeJobId": 122092216429,
-      "runtime": "skipped"
-    },
-    "cla": {
-      "runId": 40475360520,
-      "jobId": 122092142522,
-      "state": "failure"
-    },
-    "actualArtifactsAudited": true,
-    "noUnchangedRerunRequested": true
+    "nativeJobIds": [
+      122108410221,
+      122108417175
+    ],
+    "nativeConclusionEach": "success",
+    "all34ActualStepsEach": true,
+    "researchPRRunId": 40480208754,
+    "researchPRJobId": 122108425653,
+    "researchActualSteps": 11,
+    "researchCounts": [
+      21,
+      7,
+      27,
+      48
+    ],
+    "researchPushRuntimeSkipped": true,
+    "claRunId": 40480205852,
+    "claConclusion": "failure",
+    "metadataSuccessorIsNotRuntimeVerification": true
   },
   "deferredWindowsPlan": {
     "state": "DEFERRED_UNVERIFIED",
@@ -656,5 +755,12 @@
     "rootCauseEstablished": false,
     "evidence": "x10/evidence/g3-tls-verified-route.json",
     "noUnchangedRerunRequested": true
+  },
+  "operatorReturnHostedPriorCheckpointReference": {
+    "commit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+    "path": "x10/continuum/BACKGROUND.json",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
   }
 }
