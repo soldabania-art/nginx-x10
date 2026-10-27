@@ -1,13 +1,7 @@
 {
   "schemaVersion": 2,
   "project": "x10",
-  "executionLease": {
-    "runId": "x10-managed-receipt-20261027T105627Z",
-    "owner": "codex-x10-managed-receipt-coordinator",
-    "baseCommit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
-    "acquiredAtUTC": "2026-10-27T10:56:27.000Z",
-    "expiresAtUTC": "2026-10-27T11:41:27.000Z"
-  },
+  "executionLease": null,
   "ownerWorkWindow": {
     "requestedAtUTC": "2026-10-27T03:45:59.000Z",
     "hours": 20,
@@ -404,10 +398,115 @@
       "fullG3Accepted": false,
       "fullG4Accepted": false,
       "productionAccepted": false
+    },
+    "managedHTTPPackageReturnHosted": {
+      "schemaVersion": 1,
+      "state": "EXACT_SCOPED_MANAGED_HTTP_OPERATOR_PACKAGE_RETURN_SUCCESS",
+      "implementationCommit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+      "implementationTree": "1e15d2bc12f6aeab6d1c53cc1510288df588f3fc",
+      "evidence": "x10/evidence/g4-managed-package-return-hosted.json",
+      "scope": "Ephemeral nonroot systemd-user HTTP operator-package A(P)-B(Q)-actual B manager restart-old A2(Q), with unchanged compiled NGINX binary and backward compatibility of the supported declarative HTTP input.",
+      "nativeRunIds": [
+        40490525329,
+        40490532178
+      ],
+      "nativeJobIds": [
+        122143117385,
+        122143157669
+      ],
+      "all35ActualStepsEach": true,
+      "nativeGroupsEach": 20,
+      "fullAlphaEach": 617,
+      "upstreamTLSFixtureTAPEach": {
+        "tests": 76,
+        "pass": 76,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "managedReportSchemaEach": 2,
+      "managedReportFieldsEach": 13,
+      "primaryFailureEach": null,
+      "managedProofSchemaEach": 1,
+      "managedProofTopSectionsEach": 12,
+      "orderedManagedPhasesEach": 16,
+      "managedTrafficLegsEach": 4,
+      "newOwnedUnitsEach": 3,
+      "newSuccessfulNativeInvocationsEach": 4,
+      "newManagerRestartsEach": 1,
+      "newBoundedJournalChecksEach": 5,
+      "journalChecksAreNotExactQueryCounts": true,
+      "successfulTrafficLegGETChecksEach": 4,
+      "separateInitialBInputPGETCheckEach": 1,
+      "trafficGETChecksAreNotExactRawRequestCounts": true,
+      "maximumIdempotentGETAcquisitionAttemptsPerLeg": 8,
+      "uniqueCompletedSyntheticPOSTEffectsEach": 4,
+      "bytesPerPOSTFromPinnedExecutedAssertions": 65551,
+      "exactStreamChecksEach": 4,
+      "bytesPerStreamFromPinnedExecutedAssertions": 65537,
+      "noPOSTRetryEach": true,
+      "operatorPayloadAEqualsA2AndDiffersFromBEach": true,
+      "nativeBinaryUnchangedWithinEachEvent": true,
+      "comparePNotEqualQEqualA2WithinEachEventOnly": true,
+      "stopTransitionProofFieldsEach": 11,
+      "restartProofFieldsEach": 12,
+      "restartIntermediatePreparedBindingObserved": false,
+      "restartLegInitialBindingAbsent": null,
+      "knownGoodAFilesAndBackupsPreservedEach": true,
+      "newOwnedUnitsRemovedEach": 3,
+      "newOwnedInstallationsRemovedEach": 3,
+      "legacyRestoredProofFieldsEach": 18,
+      "legacySuccessfulNativeSessionsEach": 5,
+      "legacyManagerRestartsEach": 2,
+      "legacyBoundedJournalChecksEach": 6,
+      "legacyDownstreamTLSSessionsEach": 3,
+      "legacyUpstreamTLSSessionsEach": 3,
+      "all13LegacyBooleanCleanupFactsEach": true,
+      "privateNodeHistoricalCLIHistoryAndBootstrapRootRemovedEach": true,
+      "managedPureContractsEach": {
+        "tests": 544,
+        "pass": 544,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "verifiedNodeContractsEach": {
+        "tests": 118,
+        "pass": 118,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "legacyServiceContractEach": {
+        "tests": 618,
+        "pass": 617,
+        "fail": 0,
+        "skipped": 1,
+        "skipReason": "Root-only refusal control skipped by nonroot runner; real nonroot lifecycle separately exercised."
+      },
+      "managedServicePackageTransitionAccepted": true,
+      "backwardDeclarativeHTTPCompatibilityAccepted": true,
+      "sameUIDTrustedOperatorScope": true,
+      "historicalOperatorArchiveReassembledNotPublished": true,
+      "unhealthyPackageFallbackAccepted": false,
+      "actualCompleteFailureContainmentExercised": false,
+      "packageUpgradeRollbackAccepted": false,
+      "nativeBinaryVersionChangeAccepted": false,
+      "tlsBackupAccepted": false,
+      "allTrafficFenceAccepted": false,
+      "zeroDowntimeAccepted": false,
+      "liveConnectionMigrationAccepted": false,
+      "permanentDistributionAccepted": false,
+      "fullG3Accepted": false,
+      "fullG4Accepted": false,
+      "productionAccepted": false
     }
   },
   "lastV1DevelopmentPass": {
-    "state": "FROZEN_IMMUTABLE_REVISION_READER_FIX_LOCAL_VERIFIED_EXACT_HOSTED_PENDING",
+    "state": "EXACT_SCOPED_MANAGED_HTTP_OPERATOR_PACKAGE_RETURN_SUCCESS",
     "sourceBase": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
     "publicationParent": "e0ef02aab16ae6c956449ef19e69403000701262",
     "scope": "Fixture-only immutable revision reader contract correction and finite primary-error preservation for the separate managed HTTP operator-package return; physical acceptance pending.",
@@ -495,25 +594,35 @@
     "strictImmutableRevisionMode": "0400",
     "revisionMode0600Accepted": false,
     "historicalPrimaryCIFailureObserved": false,
-    "managedServicePackageTransitionAccepted": false,
+    "managedServicePackageTransitionAccepted": true,
     "packageUpgradeRollbackAccepted": false,
     "nativeBinaryVersionChangeAccepted": false,
     "tlsBackupAccepted": false,
     "fullG3Accepted": false,
     "fullG4Accepted": false,
-    "productionAccepted": false
+    "productionAccepted": false,
+    "verifiedOnImplementationCommit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+    "hostedEvidence": "x10/evidence/g4-managed-package-return-hosted.json",
+    "backwardDeclarativeHTTPCompatibilityAccepted": true
   },
   "pendingVerification": [
-    "First inspect exact resulting fix native push/PR jobs and actual mandatory service-package-return.json. Require schema2/13 fields with primaryFailure:null only on success, proof schema1/12sections/16phases and actual3units/4invocations/1Bmanagerrestart/5bounded JOURNAL CHECKS. Require4successful traffic-leg GET CHECKS (each may acquire with up to8idempotent attempts),1separate B/P GET check,4unique unretried65551-byte POST effects and4exact65537-byte streams, per-event P!=Q=A2 and actual operator payloadA=A2!=B with the same compiled native binary. Check STOP11, restart12, unobserved restart prepared binding:null, source/backup preservation and all3owned units/installations removed. Require unchanged legacy18proofs/5sessions/2restarts/6journalCHECKS/3+3TLS separately, then both source-pinned successful reports and complete privateNode/history/bootstrap cleanup. Preserve original c2push40486053822/PR40486064789 FAILstep30/install_a/cleanup_unconfirmed/proofnull; original primary remains unobserved. The exact c2 reader0400-refusal/0600-acceptance defect was reproduced with safe tempfiles and corrected without chmod/0600 fallback. No unchanged reruns without reason. Only after real hosted acceptance continue distinct-B unhealthy-readiness refusal followed by explicit preserved-A reactivation; do not invent missing legacy failure primitives. Recovery/security, native binary upgrade, TLS restore, permanent versioned release and publisher capability, independent published replay,60minsoak, fullG3/G4/V1 and semantic Continuum remain open.",
-    "Do not call the corrected reader a proven exclusive cause of the old physical failure. Do not accept a new managed service from pure/tempfile tests, successful legacy components, or research CI."
+    "Reconcile actual jobs of the resulting evidence-only successor; accepted runtime remains exact0ebded94ea331c1b28c52e71fa725dc35bb2f08a, not a guessed metadata checkout.",
+    "Implement and verify ONE distinct-package unhealthy-candidate fallback outcome: actual old A serves P then stops and retires its unit; B stages from retained A. Hold only owned B readiness responses long enough to capture the real activating launcher/native/InvocationID and exact hook, then return controlled wrong-body health. Require manager start failure from the known hook (not an unobserved timeout), null B binding and zero B POST effects; confirm B launcher/native groups/socket/ports absent before own reset-failed and unit retirement/not-found. Verify every known-good A file and backup unchanged while B failed. Explicitly reactivate the KEPT old A under fresh unit/session/invocation/binding and serve exact P GET/uniquePOST/stream without replay. This is an explicit operator fallback fixture, not a new automatic production feature. Existing legacy hold/capture/failed-start/reset primitives and stage126pure/4actual refusals are already covered; the missing result is service from kept A after distinct B failure. Keep the new failure-profile proof/counts separate from accepted normal3units/4invocations/1restart/5journalCHECKS and legacy18/5/2/6/TLS3; do not relax any consumer. Use only local pure/tempfile/virtual checks here, physical manager acceptance only supported hosted CI. Reconcile evidence-only successor actual jobs without rerunning unchanged0eb runtime. Preserve c2 failures/original primary unknown, older6401 failure, localFAIL_UNKNOWN and CLA. Permanent release/publisher capability, independent published replay,60minsoak, nativebinaryupgrade,TLSrestore, fullG3/G4/V1 and semantic Continuum remain open."
   ],
-  "nextConcreteTask": "First inspect exact resulting fix native push/PR jobs and actual mandatory service-package-return.json. Require schema2/13 fields with primaryFailure:null only on success, proof schema1/12sections/16phases and actual3units/4invocations/1Bmanagerrestart/5bounded JOURNAL CHECKS. Require4successful traffic-leg GET CHECKS (each may acquire with up to8idempotent attempts),1separate B/P GET check,4unique unretried65551-byte POST effects and4exact65537-byte streams, per-event P!=Q=A2 and actual operator payloadA=A2!=B with the same compiled native binary. Check STOP11, restart12, unobserved restart prepared binding:null, source/backup preservation and all3owned units/installations removed. Require unchanged legacy18proofs/5sessions/2restarts/6journalCHECKS/3+3TLS separately, then both source-pinned successful reports and complete privateNode/history/bootstrap cleanup. Preserve original c2push40486053822/PR40486064789 FAILstep30/install_a/cleanup_unconfirmed/proofnull; original primary remains unobserved. The exact c2 reader0400-refusal/0600-acceptance defect was reproduced with safe tempfiles and corrected without chmod/0600 fallback. No unchanged reruns without reason. Only after real hosted acceptance continue distinct-B unhealthy-readiness refusal followed by explicit preserved-A reactivation; do not invent missing legacy failure primitives. Recovery/security, native binary upgrade, TLS restore, permanent versioned release and publisher capability, independent published replay,60minsoak, fullG3/G4/V1 and semantic Continuum remain open.",
+  "nextConcreteTask": "Implement and verify ONE distinct-package unhealthy-candidate fallback outcome: actual old A serves P then stops and retires its unit; B stages from retained A. Hold only owned B readiness responses long enough to capture the real activating launcher/native/InvocationID and exact hook, then return controlled wrong-body health. Require manager start failure from the known hook (not an unobserved timeout), null B binding and zero B POST effects; confirm B launcher/native groups/socket/ports absent before own reset-failed and unit retirement/not-found. Verify every known-good A file and backup unchanged while B failed. Explicitly reactivate the KEPT old A under fresh unit/session/invocation/binding and serve exact P GET/uniquePOST/stream without replay. This is an explicit operator fallback fixture, not a new automatic production feature. Existing legacy hold/capture/failed-start/reset primitives and stage126pure/4actual refusals are already covered; the missing result is service from kept A after distinct B failure. Keep the new failure-profile proof/counts separate from accepted normal3units/4invocations/1restart/5journalCHECKS and legacy18/5/2/6/TLS3; do not relax any consumer. Use only local pure/tempfile/virtual checks here, physical manager acceptance only supported hosted CI. Reconcile evidence-only successor actual jobs without rerunning unchanged0eb runtime. Preserve c2 failures/original primary unknown, older6401 failure, localFAIL_UNKNOWN and CLA. Permanent release/publisher capability, independent published replay,60minsoak, nativebinaryupgrade,TLSrestore, fullG3/G4/V1 and semantic Continuum remain open.",
   "nextTasks": [
     {
+      "id": "G4-unhealthy-distinct-package-explicit-kept-A-fallback",
+      "state": "OPEN_NOT_IMPLEMENTED",
+      "goal": "Implement and verify ONE distinct-package unhealthy-candidate fallback outcome: actual old A serves P then stops and retires its unit; B stages from retained A. Hold only owned B readiness responses long enough to capture the real activating launcher/native/InvocationID and exact hook, then return controlled wrong-body health. Require manager start failure from the known hook (not an unobserved timeout), null B binding and zero B POST effects; confirm B launcher/native groups/socket/ports absent before own reset-failed and unit retirement/not-found. Verify every known-good A file and backup unchanged while B failed. Explicitly reactivate the KEPT old A under fresh unit/session/invocation/binding and serve exact P GET/uniquePOST/stream without replay. This is an explicit operator fallback fixture, not a new automatic production feature. Existing legacy hold/capture/failed-start/reset primitives and stage126pure/4actual refusals are already covered; the missing result is service from kept A after distinct B failure. Keep the new failure-profile proof/counts separate from accepted normal3units/4invocations/1restart/5journalCHECKS and legacy18/5/2/6/TLS3; do not relax any consumer. Use only local pure/tempfile/virtual checks here, physical manager acceptance only supported hosted CI. Reconcile evidence-only successor actual jobs without rerunning unchanged0eb runtime. Preserve c2 failures/original primary unknown, older6401 failure, localFAIL_UNKNOWN and CLA. Permanent release/publisher capability, independent published replay,60minsoak, nativebinaryupgrade,TLSrestore, fullG3/G4/V1 and semantic Continuum remain open."
+    },
+    {
       "id": "G4-managed-service-operator-package-return",
-      "state": "FROZEN_IMMUTABLE_REVISION_READER_FIX_LOCAL_VERIFIED_EXACT_HOSTED_PENDING",
-      "goal": "First inspect exact resulting fix native push/PR jobs and actual mandatory service-package-return.json. Require schema2/13 fields with primaryFailure:null only on success, proof schema1/12sections/16phases and actual3units/4invocations/1Bmanagerrestart/5bounded JOURNAL CHECKS. Require4successful traffic-leg GET CHECKS (each may acquire with up to8idempotent attempts),1separate B/P GET check,4unique unretried65551-byte POST effects and4exact65537-byte streams, per-event P!=Q=A2 and actual operator payloadA=A2!=B with the same compiled native binary. Check STOP11, restart12, unobserved restart prepared binding:null, source/backup preservation and all3owned units/installations removed. Require unchanged legacy18proofs/5sessions/2restarts/6journalCHECKS/3+3TLS separately, then both source-pinned successful reports and complete privateNode/history/bootstrap cleanup. Preserve original c2push40486053822/PR40486064789 FAILstep30/install_a/cleanup_unconfirmed/proofnull; original primary remains unobserved. The exact c2 reader0400-refusal/0600-acceptance defect was reproduced with safe tempfiles and corrected without chmod/0600 fallback. No unchanged reruns without reason. Only after real hosted acceptance continue distinct-B unhealthy-readiness refusal followed by explicit preserved-A reactivation; do not invent missing legacy failure primitives. Recovery/security, native binary upgrade, TLS restore, permanent versioned release and publisher capability, independent published replay,60minsoak, fullG3/G4/V1 and semantic Continuum remain open.",
-      "evidence": "x10/evidence/g4-managed-package-return.json"
+      "state": "EXACT_SCOPED_MANAGED_HTTP_OPERATOR_PACKAGE_RETURN_SUCCESS",
+      "goal": "Named normal managed HTTP operator return accepted. Next: Implement and verify ONE distinct-package unhealthy-candidate fallback outcome: actual old A serves P then stops and retires its unit; B stages from retained A. Hold only owned B readiness responses long enough to capture the real activating launcher/native/InvocationID and exact hook, then return controlled wrong-body health. Require manager start failure from the known hook (not an unobserved timeout), null B binding and zero B POST effects; confirm B launcher/native groups/socket/ports absent before own reset-failed and unit retirement/not-found. Verify every known-good A file and backup unchanged while B failed. Explicitly reactivate the KEPT old A under fresh unit/session/invocation/binding and serve exact P GET/uniquePOST/stream without replay. This is an explicit operator fallback fixture, not a new automatic production feature. Existing legacy hold/capture/failed-start/reset primitives and stage126pure/4actual refusals are already covered; the missing result is service from kept A after distinct B failure. Keep the new failure-profile proof/counts separate from accepted normal3units/4invocations/1restart/5journalCHECKS and legacy18/5/2/6/TLS3; do not relax any consumer. Use only local pure/tempfile/virtual checks here, physical manager acceptance only supported hosted CI. Reconcile evidence-only successor actual jobs without rerunning unchanged0eb runtime. Preserve c2 failures/original primary unknown, older6401 failure, localFAIL_UNKNOWN and CLA. Permanent release/publisher capability, independent published replay,60minsoak, nativebinaryupgrade,TLSrestore, fullG3/G4/V1 and semantic Continuum remain open.",
+      "evidence": "x10/evidence/g4-managed-package-return.json",
+      "verifiedOnImplementationCommit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+      "hostedEvidence": "x10/evidence/g4-managed-package-return-hosted.json"
     },
     {
       "id": "G3-verified-TLS-route-fixture-exact-CI",
@@ -630,35 +739,23 @@
   "productionAccepted": false,
   "lastV1VerificationReceipt": {
     "schemaVersion": 1,
-    "state": "EXACT_SCOPED_FOREGROUND_OPERATOR_RETURN_AND_TLS_FIXTURE_SUCCESS",
-    "implementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
-    "implementationTree": "8ce1cfa36cea6f4b2c0e55fd72305104f60eb67f",
-    "evidence": "x10/evidence/g4-operator-return-hosted.json",
-    "scope": "Foreground HTTP operator-package A(P) to B(Q) to old A2(Q), bounded backward declarative HTTP compatibility and the verified downstream HTTP connection TLS-upstream fixture; one unchanged compiled native binary.",
+    "state": "EXACT_SCOPED_MANAGED_HTTP_OPERATOR_PACKAGE_RETURN_SUCCESS",
+    "implementationCommit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+    "implementationTree": "1e15d2bc12f6aeab6d1c53cc1510288df588f3fc",
+    "evidence": "x10/evidence/g4-managed-package-return-hosted.json",
+    "scope": "Ephemeral nonroot systemd-user HTTP operator-package A(P)-B(Q)-actual B manager restart-old A2(Q), with unchanged compiled NGINX binary and backward compatibility of the supported declarative HTTP input.",
     "nativeRunIds": [
-      40480203383,
-      40480208863
+      40490525329,
+      40490532178
     ],
     "nativeJobIds": [
-      122108410221,
-      122108417175
+      122143117385,
+      122143157669
     ],
-    "all34ActualStepsEach": true,
+    "all35ActualStepsEach": true,
     "nativeGroupsEach": 20,
     "fullAlphaEach": 617,
-    "foregroundReturnDiagnosticFieldsEach": 19,
-    "strictReturnProofFieldsEach": 10,
-    "foregroundReturnOrderedPhasesEach": 13,
-    "foregroundReturnTrafficLegsEach": 3,
-    "completedSyntheticPOSTEffectsEach": 3,
-    "completed256KiBStreamsEach": 3,
-    "compareInputHashesWithinEachEventOnly": true,
-    "payloadAEqualsA2AndDiffersFromBEach": true,
-    "nativeBinaryUnchangedEach": true,
-    "historicalBundleReassembledNotPublished": true,
-    "knownGoodSourceFilesPreservedEach": true,
-    "ownedForegroundInstallationsRemovedEach": 3,
-    "tlsTAPEach": {
+    "upstreamTLSFixtureTAPEach": {
       "tests": 76,
       "pass": 76,
       "fail": 0,
@@ -666,43 +763,78 @@
       "skipped": 0,
       "todo": 0
     },
-    "tlsVirtualControlsIncludedOnceEach": 58,
-    "tlsRouteDiagnosticFieldsEach": 14,
-    "tlsRouteAssertedResultFieldsEach": 11,
-    "tlsVerifiedGETAttemptsEach": 1,
-    "tlsPOSTAttemptsEach": 1,
-    "tlsPOSTBytesEach": 65551,
-    "tlsStreamBytesEach": 65537,
-    "tlsOriginPOSTRequestsEach": 1,
-    "tlsSamePrivatelyCheckedDownstreamSocketEach": true,
-    "tlsPOSTRetriedEach": false,
-    "tlsAgentDestroyedEach": true,
-    "tlsOriginalNegativeControlsPreservedEach": true,
-    "restoredHTTPProofFieldsEach": 18,
-    "serviceNativeSessionsEach": 5,
-    "serviceManagerRestartsEach": 2,
-    "serviceJournalChecksEach": 6,
+    "managedReportSchemaEach": 2,
+    "managedReportFieldsEach": 13,
+    "primaryFailureEach": null,
+    "managedProofSchemaEach": 1,
+    "managedProofTopSectionsEach": 12,
+    "orderedManagedPhasesEach": 16,
+    "managedTrafficLegsEach": 4,
+    "newOwnedUnitsEach": 3,
+    "newSuccessfulNativeInvocationsEach": 4,
+    "newManagerRestartsEach": 1,
+    "newBoundedJournalChecksEach": 5,
     "journalChecksAreNotExactQueryCounts": true,
-    "downstreamTLSSessionsEach": 3,
-    "upstreamTLSSessionsEach": 3,
-    "all13BooleanServiceCleanupFactsEach": true,
-    "privateNodeAndBootstrapRemovedEach": true,
-    "serviceContractEach": {
+    "successfulTrafficLegGETChecksEach": 4,
+    "separateInitialBInputPGETCheckEach": 1,
+    "trafficGETChecksAreNotExactRawRequestCounts": true,
+    "maximumIdempotentGETAcquisitionAttemptsPerLeg": 8,
+    "uniqueCompletedSyntheticPOSTEffectsEach": 4,
+    "bytesPerPOSTFromPinnedExecutedAssertions": 65551,
+    "exactStreamChecksEach": 4,
+    "bytesPerStreamFromPinnedExecutedAssertions": 65537,
+    "noPOSTRetryEach": true,
+    "operatorPayloadAEqualsA2AndDiffersFromBEach": true,
+    "nativeBinaryUnchangedWithinEachEvent": true,
+    "comparePNotEqualQEqualA2WithinEachEventOnly": true,
+    "stopTransitionProofFieldsEach": 11,
+    "restartProofFieldsEach": 12,
+    "restartIntermediatePreparedBindingObserved": false,
+    "restartLegInitialBindingAbsent": null,
+    "knownGoodAFilesAndBackupsPreservedEach": true,
+    "newOwnedUnitsRemovedEach": 3,
+    "newOwnedInstallationsRemovedEach": 3,
+    "legacyRestoredProofFieldsEach": 18,
+    "legacySuccessfulNativeSessionsEach": 5,
+    "legacyManagerRestartsEach": 2,
+    "legacyBoundedJournalChecksEach": 6,
+    "legacyDownstreamTLSSessionsEach": 3,
+    "legacyUpstreamTLSSessionsEach": 3,
+    "all13LegacyBooleanCleanupFactsEach": true,
+    "privateNodeHistoricalCLIHistoryAndBootstrapRootRemovedEach": true,
+    "managedPureContractsEach": {
+      "tests": 544,
+      "pass": 544,
+      "fail": 0,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "verifiedNodeContractsEach": {
+      "tests": 118,
+      "pass": 118,
+      "fail": 0,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "legacyServiceContractEach": {
       "tests": 618,
       "pass": 617,
       "fail": 0,
       "skipped": 1,
-      "skipReason": "Root-only refusal control skipped by nonroot runner; actual nonroot service exercised separately."
+      "skipReason": "Root-only refusal control skipped by nonroot runner; real nonroot lifecycle separately exercised."
     },
-    "actualFailureContainmentExercised": false,
-    "foregroundOperatorReturnAccepted": true,
+    "managedServicePackageTransitionAccepted": true,
     "backwardDeclarativeHTTPCompatibilityAccepted": true,
-    "tlsFixtureCorrectionHostedAccepted": true,
-    "managedServicePackageTransitionAccepted": false,
+    "sameUIDTrustedOperatorScope": true,
+    "historicalOperatorArchiveReassembledNotPublished": true,
+    "unhealthyPackageFallbackAccepted": false,
+    "actualCompleteFailureContainmentExercised": false,
     "packageUpgradeRollbackAccepted": false,
     "nativeBinaryVersionChangeAccepted": false,
     "tlsBackupAccepted": false,
-    "allWorkerFenceAccepted": false,
+    "allTrafficFenceAccepted": false,
     "zeroDowntimeAccepted": false,
     "liveConnectionMigrationAccepted": false,
     "permanentDistributionAccepted": false,
@@ -725,19 +857,19 @@
     "allPriorAcceptanceFailuresAndUnknownsRetained": true
   },
   "currentHeadCIStepReadback": {
-    "observedImplementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+    "observedImplementationCommit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
     "nativeRunIds": [
-      40480203383,
-      40480208863
+      40490525329,
+      40490532178
     ],
     "nativeJobIds": [
-      122108410221,
-      122108417175
+      122143117385,
+      122143157669
     ],
     "nativeConclusionEach": "success",
-    "all34ActualStepsEach": true,
-    "researchPRRunId": 40480208754,
-    "researchPRJobId": 122108425653,
+    "all35ActualStepsEach": true,
+    "researchPRRunId": 40490532200,
+    "researchPRJobId": 122143155554,
     "researchActualSteps": 11,
     "researchCounts": [
       21,
@@ -746,7 +878,7 @@
       48
     ],
     "researchPushRuntimeSkipped": true,
-    "claRunId": 40480205852,
+    "claRunId": 40490528776,
     "claConclusion": "failure",
     "metadataSuccessorIsNotRuntimeVerification": true
   },
@@ -854,5 +986,12 @@
     "privateNodeAndBootstrapRemovalConfirmedEach": false,
     "evidence": "x10/evidence/g4-managed-package-return.json",
     "modeContractCounterexampleReproducedSeparately": true
+  },
+  "managedReturnHostedPriorCheckpointReference": {
+    "commit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+    "path": "x10/continuum/BACKGROUND.json",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
   }
 }

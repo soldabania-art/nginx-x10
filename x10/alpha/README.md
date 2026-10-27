@@ -843,3 +843,55 @@ The prior failed results and earlier6401 POST503/cause-unknown observation stay
 in history. Recovery/security, native binary upgrade, TLS restore, permanent
 release, independent published replay, the60-minute soak and fullG3/G4/V1/
 Continuum gates remain open. See [candidate evidence](../evidence/g4-managed-package-return.json).
+
+
+## Exact managed HTTP operator return receipt — 27 October 2026
+
+Implementation `0ebded94ea331c1b28c52e71fa725dc35bb2f08a` completed native
+push40490525329/job122143117385 and PR40490532178/job122143157669 with
+all35 actual steps successful. Both actual `service-package-return.json`
+artifacts have the13-field schema2 success report with `primaryFailure:null`;
+its schema1 proof has12 sections and16 ordered phases. The observed sequence
+uses3 distinct owned units and4 invocations: A/P, B/Q, a real B manager restart
+preserving Q, then the old A installer restoring B-produced Q into fresh A2/Q.
+
+Each run confirms5 bounded journal CHECKS,4 successful traffic-leg GET checks
+and1 separate initial B/P GET check. An individual route acquisition may make
+up to8 idempotent attempts; these are not exact raw GET or journal-query counts.
+The4 successful legs each deliver one unique unretried65551-byte POST and one
+exact65537-byte stream over the verified route. POST receipts persist in the
+synthetic origin's memory without replay/reset, not a database or durable disk.
+The fixture sizes do not establish the release upload/stream/soak budgets.
+
+Actual checked payloads satisfy A=A2!=B for operator/runtime code, while the
+native NGINX binary stays identical. P!=Q=A2 is verified within each event;
+run-specific ports mean complete input digests can differ between events.
+The historical A bundle is an explicit checked reassembly, not a published
+historical archive. Eleven stop/link/not-found facts gate target activation;
+12 restart facts verify old-process retirement and actual fresh identities.
+The intermediate prepared null binding during B's automatic restart was not
+observed: its proof value is null/unknown, not a claimed observation. The final
+fresh binding/invocation is verified. Known-good A files and backups remain
+unchanged until owned cleanup. All3 units/installations and the authenticated
+private Node, historical input/history and bootstrap root were removed only
+after both source-pinned service reports succeeded.
+
+The same jobs passed20 native groups,617 alpha tests and76 TLS TAP tests;
+the separate legacy service retained its18 restored proofs/5 sessions/2 restarts/
+6 bounded journal checks/3 downstream and3 upstream TLS sessions and owned cleanup.
+Research PR40490532200 actually ran21/7/27/48; research push runtime skipped and CLA failed.
+Normal cleanup success is separate from the still-open full failure-containment matrix.
+
+This accepts only scoped managed HTTP operator-package return and backward
+compatibility of the declared HTTP input. The prior c2 failures, unavailable
+historical primary reason,0400/0600 reader baseline and earlier6401 POST503
+with unknown cause are preserved. The receipt does not accept native binary
+upgrade/downgrade, TLS restore, arbitrary state/database/journal migration,
+permanent distribution, independent published replay, the60-minute soak,
+full recovery/security/package-failure gates, fullG3/G4/V1 or Continuum.
+
+The next gate is a distinct unhealthy B after A retirement: verify readiness
+failure and zero B POSTs, confirm failed B is quiescent, then explicitly reactivate
+the preserved known-good A. This extends already tested legacy refusal primitives
+to the separate cross-package fallback. Windows and the G9 portfolio handoff
+remain deferred/unchanged. See the [exact hosted receipt](../evidence/g4-managed-package-return-hosted.json).

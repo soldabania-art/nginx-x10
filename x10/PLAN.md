@@ -2557,3 +2557,48 @@ physical managed-service return. Full recovery/security gates,
 native binary upgrade, TLS restore, permanent release, independent published
 replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.
 Evidence: x10/evidence/g4-managed-package-return.json.
+
+
+## Exact managed HTTP operator-package return acceptance — 27 October 2026
+
+Implementation `0ebded94ea331c1b28c52e71fa725dc35bb2f08a` passed both
+native contexts: push40490525329/job122143117385 and
+PR40490532178/job122143157669, all35 actual steps each. Both actual artifacts
+contain schema2 reports with13 fields and `primaryFailure:null`, plus the
+schema1 proof's12 sections and16 ordered phases. The managed path exercised
+3 distinct owned units,4 invocations and1 actual B manager restart.
+
+Each event verifies5 bounded journal CHECKS,4 successful traffic-leg GET
+CHECKS plus1 separate initial B/P check,4 unretried65551-byte POSTs and4 exact
+65537-byte streams. Route acquisition may use up to8 idempotent GET attempts
+per leg; neither GET checks nor journal checks are exact raw request/query
+counts. Synthetic POST effects remain in origin memory, not durable business
+storage; these sizes do not satisfy the release upload/stream/load budgets.
+
+Actual operator/runtime payloads satisfy A=A2!=B with one unchanged compiled
+native binary; P!=Q=A2 holds within each event, with run-specific input hashes.
+The old installer consumes B-produced Q into fresh A2. Eleven stop/link/not-found
+facts gate transitions;12 restart freshness/retirement facts were confirmed.
+The intermediate prepared binding during automatic B restart is explicitly
+unobserved/null, while its actual fresh final binding/invocation is verified.
+Known-good A files/backups stayed intact. All3 owned units/installations and
+private Node/history/bootstrap resources were removed after both mandatory
+source-pinned service reports succeeded. Historical A remains a checked CLI
+reassembly, not an independently published historical archive.
+
+Separate regressions passed in each context:20 native groups,617 alpha tests,
+76 TLS TAP tests and legacy18 restored proofs/5 sessions/2 restarts/6 journal
+checks/3 downstream+3 upstream TLS sessions. Research PR40490532200 actually
+ran21/7/27/48; research push runtime skipped and inherited CLA failed.
+Normal successful cleanup does not accept the complete failure-containment matrix.
+
+Accepted scope is managed HTTP operator-package return and backward compatibility
+of the declared HTTP input only. Earlier c2 step30 failures, masked primary
+refusal, exact0400/0600 baseline and6401 POST503/cause-unknown history remain
+preserved. No full package-failure/recovery/security, native binary upgrade,
+TLS restore, permanent release, independent published replay,60-minute soak,
+fullG3/G4/V1 or semantic Continuum acceptance follows.
+Next: distinct B fails readiness after A was retired, with zero B POSTs,
+verified failed-target quiescence and explicit retained-A reactivation. The
+legacy refusal primitive already exists; this next gate covers the separate
+cross-package fallback. Evidence: x10/evidence/g4-managed-package-return-hosted.json.
