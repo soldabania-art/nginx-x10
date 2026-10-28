@@ -207,7 +207,8 @@ bindingMayHaveCommitted behavior remain explicit. A pre-attempt refusal is not
 a durable bind; an already attempted bind is awaited without retry. Controller
 durable writers/schema and stop/recover are unchanged. Direct controller, native,
 transient and concurrent growth and stopped postpartial orphan STOP remain OPEN.
-Initial registry publication has the separate narrow candidate boundary below. This admission does
+Initial registry publication has the separate exact759 compatibility boundary
+below. This admission does
 not prune data or introduce a reaper, forced uninstall or an OS resource quota.
 
 The new [bind baseline producer](../review/alpha-bind-capacity-counterexample.mjs)
@@ -237,7 +238,7 @@ runtime evidence. The finite max3 control-entry model is not an all-OS proof or
 physical4096 exhaustion. Fullcapacity/G3/G4/G5/G7/V1, release/recovery and semantic
 Continuum remain OPEN. See [candidate evidence](../evidence/g5-alpha-bind-capacity.json).
 
-## Initial registry publication / first ordinary inspection — candidate
+## Initial registry publication / first ordinary inspection — exact759 compatible
 
 The new postcreate admission counts the actual whole installation prefix before
 its first registry write in the shared install/restore/stage path. Three free
@@ -263,9 +264,45 @@ inspectability does not promise near-full bind/apply admission; their separate
 Controller durable writers/schema/native code/workflow budgets remain unchanged.
 
 [Candidate evidence](../evidence/g5-alpha-initial-capacity.json) records local
-pure/tempfile controls and finite model paths separately. Changed installed CLI
-compatibility is pending exact successor hosted evidence; acceptedb1d does not
-transfer. Direct/recovery/native/transient/concurrent/initialcreation/prepared
-reuse growth, postpartial orphan STOP, fullcapacity/G3/G4/G5/G7/V1, release/
-recovery, physical4096 exhaustion, semantic Continuum, WindowsDEFERRED_UNVERIFIED,
-40h owner limits and prior adverse UNKNOWN/CLA history remain unchanged.
+pure/tempfile controls and finite model paths separately. Exact759 normal
+installed/startup/service compatibility is scoped accepted in both native events:
+push40614974129/job122575285448 and PR40614980193/job122575308500 completed
+36 successful steps/native20of20 each, with actual managed405 and alpha603
+complete zero-skip TAP. All three strict reports/source pins and owned/private
+Node/history/bootstrap cleanup are confirmed in the
+[hosted receipt](../evidence/g5-alpha-initial-capacity-hosted.json) and
+[ledger](../review/g5-alpha-initial-capacity-hosted-ledger.json). This receipt
+changes no runtime. Packaged README documentation changes, while fixed bundle
+inventory, workflow groups/steps and budgets remain unchanged.
+
+The new29 labels and retained51/37/46/18 are outside32768-character managed tails;
+actual nine-file commands, exact source VM registration, strict manager pins and
+complete405 summaries establish inclusion. Guard45/recipe17 labels appear once.
+Backup82 remains imported in alpha:15 labels appear once in the PR retained tail;
+other PR labels and all82 push labels are outside. Import/source registrations
+plus complete603 summary
+establish inclusion. Preparation18 overlaps suites. No unique aggregate count is
+claimed. The25425-execution finite model is not embedded in new29, so this result
+does not claim hosted replay of that model or physical4096-entry exhaustion.
+Pure JSON revalidation is not new runtime evidence.
+
+Next product-facing G4 work is an actual owned faulted-prefix incident replay
+in supported hosted CI. Its fixture and strict report need source pins, exact
+owned process/resource identities and preservation of the original faulted
+prefix/records in place. Unknown identity, resources, ports or locks retain the
+runbook's STOP/manual-inspection outcome; no automatic reaper, broad signals,
+forced uninstall, lifecycle editing or full-recovery claim. Full G4 stays OPEN
+until the concrete replay and required containment/cleanup evidence pass.
+
+Alpha `load()`/`record()` bounded descriptor acquisition remains optional narrow
+hardening, not an automatically added V1 blocker: deterministic post-stat
+replacement requires concurrency outside the declared exclusive-operator
+profile. Owned synthetic tempfiles reproduced small selected-stat then3MiB
+replacement acceptance and final-component symlink following; stable3MiB input
+already refuses. A future fix requires an immutable exact759 baseline plus
+module/installed/bundle/legacy review and preserved bounds/errors, stable modes/
+hardlinks and BOM/JSON semantics. No exploit-severity, malicious same-UID fence
+or closure of all alpha/config/binary/proc reads is established. Direct/recovery/
+native/transient/concurrent/initialcreation/prepared reuse growth, postpartial
+orphan STOP, fullcapacity/G3/G4/G5/G7/V1, release/recovery, semantic Continuum,
+WindowsDEFERRED_UNVERIFIED,40h owner limits and adverse UNKNOWN/CLA remain open.

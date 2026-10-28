@@ -1051,12 +1051,12 @@ fault controls do not establish physical4096-entry exhaustion, every OS-failure
 case or full capacity/G5/V1 acceptance. See
 [candidate evidence](../evidence/g5-alpha-bind-capacity.json).
 
-Initial registry publication now has the separate candidate boundary below.
-Accepted bind compatibility remains attached to exactb1d, not to the newly
-changed installed CLI.
+Initial registry publication has the separate exact759 compatibility boundary
+below. Accepted bind compatibility remains attached to exactb1d; exact759 has
+its own scoped receipt for the changed installed CLI.
 
 
-## Initial registry publication and first inspection — candidate
+## Initial registry publication and first inspection — exact759 compatible
 
 After `createSession` completes, installation counts the actual whole prefix
 before publishing its first registry. The same installation path is used for
@@ -1097,7 +1097,48 @@ is pinned to exactb1d CLI/manager bytes, also present at16b. Run its checked-in
 absolute path with a clean matching checkout as the working directory. Candidate
 source-pin refusal is intentional; the older five producers remain immutable.
 [Candidate evidence](../evidence/g5-alpha-initial-capacity.json) separates pure/
-tempfile controls and modeled failure paths from installed acceptance. The
-changed installed CLI requires its own exact push/PR hosted compatibility;
-priorb1d success does not transfer. Fullcapacity/G3/G4/G5/G7/V1, recovery/release
-and semantic Continuum remain OPEN; Windows remains DEFERRED_UNVERIFIED.
+tempfile controls and modeled failure paths from installed acceptance.
+Exact759 normal installed, startup and service compatibility is scoped accepted
+for both native events in the
+[hosted receipt](../evidence/g5-alpha-initial-capacity-hosted.json) and
+[per-file ledger](../review/g5-alpha-initial-capacity-hosted-ledger.json).
+Push40614974129/job122575285448 and PR40614980193/job122575308500 completed
+36 successful steps/native20of20 each. Actual managed405 and alpha603 TAP are
+complete and zero-skip; all three strict reports/source pins and owned/private
+Node/history/bootstrap cleanup are confirmed. This receipt changes no runtime;
+this README changes packaged documentation bytes, while fixed bundle inventory,
+workflow groups/steps and budgets remain unchanged.
+
+New initial29 executes once per actual nine-file managed command. Its labels,
+and bind51/revision37/capacity46/preparation18, fall outside the retained32768-
+character managed tails. Inclusion uses exact commands, source VM registrations,
+strict manager pins and complete405 summaries; guard45/recipe17 labels appear
+once in each retained tail. Backup82 remains imported by alpha's actual command;
+15 of its labels appear once in the PR alpha tail; the other PR labels and all
+82 push labels lie outside the retained tails.
+Its inclusion also uses the exact import/source registration and complete603
+summary. Preparation18 overlaps managed and alpha; these are not unique totals.
+The separate25425-execution finite failure model is not embedded in initial29,
+and this hosted result does not claim to replay that proof. Pure JSON report
+revalidation is separate from new runtime evidence. Managed65889/73517ms and
+alpha96078/96113ms remain below the unchanged120000ms budget; these observations
+are not a controlled speedup or clearance of older failures.
+
+Next, prioritize an actual owned faulted-prefix incident replay in supported
+hosted CI, with source-pinned fixture/report contracts and exact owned resource
+identities. Preserve the original faulted prefix and records in place; unknown
+identity, resources, ports or locks require the runbook's STOP/manual-inspection
+outcome. No automatic orphan reaper, broad signal, forced uninstall, lifecycle
+editing or claim of full incident recovery is introduced. Full G4 remains OPEN
+until that concrete replay and its required containment/cleanup evidence pass.
+
+The alpha `load()`/`record()` acquisition review is optional narrow hardening,
+not an automatically added V1 blocker: its deterministic post-stat replacement
+requires concurrency outside the declared exclusive-operator profile. Owned
+synthetic tempfiles showed acceptance of a3MiB replacement after a small selected
+stat, and following a final-component symlink replacement; stable3MiB input is
+already refused. Any future fix first needs a new immutable exact759 baseline,
+module/installed/bundle/legacy compatibility review and preserved error/mode/
+hardlink/BOM/JSON semantics. This is not an exploit-severity, malicious same-UID
+isolation or all-alpha-read-closure claim. Fullcapacity/G3/G4/G5/G7/V1, recovery/
+release and semantic Continuum remain OPEN; Windows remains DEFERRED_UNVERIFIED.

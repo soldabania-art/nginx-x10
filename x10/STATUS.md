@@ -3606,3 +3606,35 @@ prefix. Refusal preserves that prefix for inspection; no automatic retry, cleanu
 or rollback. Inspectability differs from activation nearcapacity. Direct/native/
 transient/concurrent/recovery/preparedreuse growth, fullcapacity/G5/V1 and all
 prior adverse/40h/Windows/release/recovery/Continuum boundaries remainOPEN.
+
+
+## 28 October 2026 UTC: Exact759 initial publication installed compatibility
+
+Exact759 nativepush40614974129/job122575285448 and PR40614980193/
+job122575308500 completed36successfulsteps/native20 each, actual405managed/
+603alpha completezero-skip TAP and all3strictreports/sourcepins/ownedprivate
+Node/history/bootstrapcleanup. [Hosted receipt](evidence/g5-alpha-initial-capacity-hosted.json)
+accepts normal installed/startup/service compatibility only. Runtime/workflow
+bytes do not change in this receipt; packaged README documentation changes,
+while fixed bundle inventory remains unchanged.
+
+Initial29 inclusion uses actualninefilecommand/sourceVM registration/complete405;
+29/51/37/46/18 labels lie outside the bounded managed tails,45/17 retainedonce.
+Backup82 executes through alpha import: push0/82 and PR15/82 labels retainedonce,
+remaining inclusion from exactsource/import/command and actual603 summary.
+Preparation18 overlaps managed and alpha. Separate25425 model is not embedded
+in29 and is not claimed as hosted replay. Timings are not controlled speedup
+or explanations/cleanup clearance for earlier failures.
+
+Next product-facing task is actual G4 incident-runbook replay: preincident HTTP
+backup, exact owned resource cleanup, original faulted prefix retained IN PLACE,
+fresh independent restore only after known-safe resources. Existingalpha already
+exercises masterkill/faulted/refusals; do not duplicate that as new acceptance.
+A separate fourth strictreport/sourcepins must be integrated before private Node
+cleanup while old3proofs/counters remain unchanged, with finite envelope proof
+and no newgroup/step/budget. UNKNOWN identity/resources means STOP_UNRESOLVED;
+no reaper, lifecycle editing, forceuninstall or OSfence claim. Optional alpha
+reader hardening under concurrent pathname mutation is outside the exclusive
+operator profile and is not automatically a critical V1 blocker. Fullcapacity/
+G3/G4/G5/G7/V1 and all prior recovery/release/Continuum/40h/Windows/adverse gates
+remainOPEN. Local physical fixtures remain forbidden; existing hosted CI only.
