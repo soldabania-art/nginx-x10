@@ -185,9 +185,9 @@ its refusal against changed candidate bytes is intentional. The older three
 baseline producers and their source pins remain immutable.
 
 
-## Alpha bind control-entry admission — candidate
+## Alpha bind control-entry admission — exactb1d compatibility accepted
 
-The candidate checks cumulative whole-prefix inventory before CLI proxy `bind`
+The installed alpha CLI checks cumulative whole-prefix inventory before CLI proxy `bind`
 execution and before the first controller operation in waitBind's running locked
 path. The existing alpha lock is counted. Its three-entry reserve leaves the
 4096-entry bound unchanged:4093 may be admitted;4094 are refused without
@@ -214,8 +214,36 @@ The new [bind baseline producer](../review/alpha-bind-capacity-counterexample.mj
 is pinned to exactcd8 CLI/manager bytes (also present at2331). Invoke the checked-in
 producer by absolute path with a clean matching checkout as its working directory.
 Its refusal against changed candidate CLI bytes is intentional. The older four
-baseline producers and their pins remain immutable. New installed/service
-compatibility is pending exact successor hosted evidence; priorcd8 success does
-not transfer to changed CLI bytes. Fullcapacity/G3/G4/G5/G7/V1, release/recovery,
-physical4096 exhaustion and semantic Continuum remain OPEN. See
-[candidate evidence](../evidence/g5-alpha-bind-capacity.json).
+baseline producers and their pins remain immutable.
+
+Exactb1d normal installed/startup/service compatibility is scoped accepted in
+both native events: push40603217925/job122536307484 and
+PR40603226496/job122536335129 completed36 successful steps/native20of20 each;
+actual managed376 and alpha603 TAP are complete and zero-skip. All three strict
+reports/source pins and owned/private Node/history/bootstrap cleanup are
+confirmed by the [hosted receipt](../evidence/g5-alpha-bind-capacity-hosted.json)
+and [ledger](../review/g5-alpha-bind-capacity-hosted-ledger.json). The receipt
+changes no runtime. The packaged README changes documentation bytes; fixed
+bundle inventory, workflow groups/steps and budgets remain unchanged.
+
+Newbind51 and retainedtranslatedrevision37 execute once per actual eight-file
+managed command. Their labels and46/18 are outside32768-character retained tails;
+inclusion is established by exact commands, source VM registrations, strict
+manager pins before model evaluation and complete376 summaries. Guard45/recipe17
+labels remain visible once in each tail. Preparation18 also executes through
+alpha's existing import; suite counts overlap and are not global unique totals.
+Priorcd8 acceptance remains separate, and pure JSON revalidation is not new
+runtime evidence. The finite max3 control-entry model is not an all-OS proof or
+physical4096 exhaustion. Fullcapacity/G3/G4/G5/G7/V1, release/recovery and semantic
+Continuum remain OPEN. See [candidate evidence](../evidence/g5-alpha-bind-capacity.json).
+
+Next separately bound initial registry publication after createSession in
+install/restore/stage plus first-inspection alpha/controller locks and atomic
+temporaries. Reproduce a pinned baseline and independently prove that precise
+contract before selecting a reserve; do not adopt1/2/3/5 by assertion.
+Inspectability is distinct from activation: near-full bind/apply may refuse.
+Keep incomplete-prefix preservation, old records/revisions and stopped partial
+unregistered/uninspectable STOP, without compaction/deletion/reaper/cap increase
+or a new stop/recover gate. Direct/recovery/native/transient/concurrent growth,
+Windows DEFERRED_UNVERIFIED, the40h owner window and adverse UNKNOWN/CLA history
+retain their existing boundaries.

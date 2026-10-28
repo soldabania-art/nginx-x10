@@ -974,7 +974,7 @@ high-water measurement or a guarantee about arbitrary native configuration.
 The controller's durable writers, record schemas and recovery behavior are
 unchanged. `stop` and `recover` do not receive a new admission gate. Other
 forwarded commands do not receive this seven-entry apply/revert gate; the
-separate bind candidate below uses its own reviewed reserve. Direct controller
+separate bind admission below uses its own reviewed reserve. Direct controller
 CLI/API use bypasses these alpha guards.
 Native application files, configuration-test temporary writes, same-UID
 concurrent writers, initial install/restore/stage growth and prepared-session
@@ -989,9 +989,9 @@ physical4096-entry exhaustion or an allOS-failure guarantee.
 See [candidate evidence](../evidence/g5-alpha-revision-capacity.json).
 
 
-## Bind control-entry admission — candidate
+## Bind control-entry admission — exactb1d compatibility accepted
 
-The installed alpha CLI candidate counts the whole installation tree before
+The installed alpha CLI counts the whole installation tree before
 forwarding `bind` to the controller. It also checks the running, locked branch
 of `wait-bind` before its first controller status observation and subsequent
 direct bind. Checking only the CLI proxy would leave this service startup path
@@ -1026,8 +1026,35 @@ a separate open contract. Prepared reuse, recovery-created revisions and the
 stopped-preparation partial unregistered tree/STOP outcome are not repaired by
 this change. Full capacity, security/recovery and V1 remain open.
 
-The changed installed alpha CLI requires its own exact hosted compatibility.
-The accepted exactcd8 receipt above applies to the earlier apply/revert bytes;
-it does not accept this new bind candidate. Pure/tempfile and modeled fault
-controls remain separate from physical capacity exhaustion. See
+Exactb1d normal installed, startup and service compatibility is scoped accepted
+for both native events in the
+[hosted receipt](../evidence/g5-alpha-bind-capacity-hosted.json) and
+[per-file ledger](../review/g5-alpha-bind-capacity-hosted-ledger.json).
+Push40603217925/job122536307484 and PR40603226496/job122536335129 completed
+36 successful steps and20/20 native groups each, with actual complete zero-skip
+managed376 and alpha603 TAP. All three strict reports, source pins and owned/
+private Node/history/bootstrap cleanup are confirmed. This receipt changes no
+runtime; this README changes packaged documentation bytes, while the fixed
+bundle inventory remains unchanged.
+
+The actual eight-file managed commands include new bind51 and the retained,
+translated revision37 series once per managed suite. Their individual labels,
+and capacity46/preparation18, lie outside the retained32768-character tails;
+inclusion uses the exact command, source VM registrations, strict manager pins
+before model evaluation and complete376 summaries. All45 decomposition and17
+recipe labels appear once in each retained tail. Preparation18 also runs through
+alpha's existing import, so these counts overlap and are not unique totals.
+
+The accepted exactcd8 receipt above remains separate. Pure/tempfile and modeled
+fault controls do not establish physical4096-entry exhaustion, every OS-failure
+case or full capacity/G5/V1 acceptance. See
 [candidate evidence](../evidence/g5-alpha-bind-capacity.json).
+
+Next, separately reproduce and source-pin initial registry publication after
+createSession in install/restore/stage. Independently prove its precise
+publication/first-inspection contract, including registry atomic temporaries and
+alpha/controller read locks, before choosing a reserve;1/2/3/5 are not accepted
+by assertion. Inspectability does not imply ability to activate: a near-full
+installation may legitimately refuse bind/apply. Preserve the incomplete-prefix
+catch, existing records and stopped postpartial STOP/manual-inspection outcome;
+no cap increase, compaction, deletion, reaper or new stop/recover gate is implied.

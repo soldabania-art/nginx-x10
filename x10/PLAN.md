@@ -2896,3 +2896,20 @@ registry publication plus first-inspection lock headroom. Do not blindly use
 1/2/3/5 slots or claim abilitytoactivate nearcapacity. Preserve incompleteprefix
 inspection, oldrecords, stopped postpartial STOP and stop/recover; no capraise,
 compaction/deletion/durablewriter rewrite or fullcapacity/G5/V1 closure.
+
+
+## After exactb1d both binding paths normal compatibility
+
+Both events accepted scoped installed/startup/service compatibility:36steps/
+native20, actual376managed/603alpha and allstrictreports/ownedcleanup. Newbind51
+and translatedretained37 inclusion uses actual eight-file commands, source
+registrations/pins and complete summaries; bounded-tail limits and preparation
+overlap remain explicit. No runtime or workflow change in this receipt.
+
+Next: NEWimmutable exactb1d baseline, then independently derive initialregistry
+publication plus first ordinary info/status/history inspection headroom for
+install/restore/stage. Include atomictemporary/final registry plus futurealpha/
+controller read locks and failure preservation. No blind1/2/3/5 reserve; ordinary
+inspectability differs from activation nearcapacity. Preserve incompleteprefix
+catch, oldrecords/revisions, postpartial STOP and ungatedstop/recover. Native/
+concurrent/transient/direct/recovery growth and fullcapacity/G5/V1 remainOPEN.

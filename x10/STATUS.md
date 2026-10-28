@@ -3559,3 +3559,30 @@ is intentional; allolderbaseline producers remain unchanged. Controller
 durablewriters/schema/native/workflow remain unchanged. Initialregistry/first
 inspection headroom, direct/recovery/native/transient/concurrent growth, stopped
 postpartial STOP and fullcapacity/G5/V1 remainOPEN. No localphysical fixtures ran.
+
+
+## 28 October 2026 UTC: exactb1d both binding paths compatibility
+
+Exactb1d push40603217925/job122536307484 and PR40603226496/
+job122536335129 completed36successfulsteps/native20of20 each. Actual managed
+376 and alpha603 complete zero-skip TAP, all3strictreports/sourcepins and all
+owned/privateNode/history/bootstrapcleanup confirmed. [Hosted receipt](evidence/g5-alpha-bind-capacity-hosted.json)
+accepts normal installed/startup/service compatibility of both bind paths only.
+This receipt changes no runtime/native/controller/workflow bytes; packaged
+README documentation changes, while fixed bundle inventory remains unchanged.
+
+The actual eight-file managed commands include newbind51 and retainedtranslated
+revision37 once per suite. Their labels and capacity46/preparation18 are outside
+the bounded retained tails; exact source registrations, strict manager pins and
+complete376 summary establish inclusion. Guard45/recipe17 labels remain once.
+Preparation18 also runs through alpha's existing import; these are overlapping
+series, not unique aggregate totals. Managed67320/66058ms and alpha101973/99750ms
+are separate observations under unchanged120000ms, not a controlled speedup or
+an explanation/cleanup confirmation for older failures.
+
+Next separately reproduce and pin initialregistry publication after createSession
+in install/restore/stage plus first ordinary inspection locks/atomictemporary.
+No guessed reserve is accepted. Inspectability does not promise bind/apply near
+capacity; incompleteprivateprefix preservation and stopped postpartial STOP stay.
+Direct/recovery/native/transient/concurrent/initialcreation growth, fullcapacity/
+G3/G4/G5/G7/V1, releases/replay/soak/semanticContinuum remainOPEN.
