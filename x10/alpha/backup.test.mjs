@@ -209,7 +209,10 @@ test('backup source recheck catches changed current confirmed input before link'
 
 function installFunction(dependencies) {
   const text=source.slice(source.indexOf('export async function install(values) {'),source.indexOf('\nasync function installed(prefix,'));
-  return new AsyncFunction(...Object.keys(dependencies),text.replace('export async function','async function')+'\nreturn install;')(...Object.values(dependencies));
+  const finite=Object.fromEntries(['INVENTORY_ENTRY_LIMIT','INITIAL_PUBLICATION_INSPECTION_RESERVE'].map(name=>{const m=new RegExp(`\\b${name}\\s*=\\s*([0-9]+)\\s*;`).exec(source);assert(m,name);return[name,Number(m[1])];}));
+  const capacity=['inventory','requireSessionInventoryCapacity'].map(name=>{const start=source.indexOf(`async function ${name}(`),end=source.indexOf('\n}',start);assert(start>=0&&end>start);return source.slice(start,end+2);}).join('\n');
+  const bound={...dependencies,...finite};
+  return new AsyncFunction(...Object.keys(bound),capacity+'\n'+text.replace('export async function','async function')+'\nreturn install;')(...Object.values(bound));
 }
 for(const key of ['port','health-port','upstream-port'])test(`restore install refuses ${key} before any build or prefix write`,()=>temporary(async parent=>{
   const prefix=path.join(parent,'new'),backupFile=path.join(parent,'backup.json');let builds=0;

@@ -206,8 +206,8 @@ Prepared waiting, exact runtime identity, readiness, cancellation, deadline and
 bindingMayHaveCommitted behavior remain explicit. A pre-attempt refusal is not
 a durable bind; an already attempted bind is awaited without retry. Controller
 durable writers/schema and stop/recover are unchanged. Direct controller, native,
-transient and concurrent growth, initial registry publication/first-command
-headroom and stopped postpartial orphan STOP remain OPEN. This admission does
+transient and concurrent growth and stopped postpartial orphan STOP remain OPEN.
+Initial registry publication has the separate narrow candidate boundary below. This admission does
 not prune data or introduce a reaper, forced uninstall or an OS resource quota.
 
 The new [bind baseline producer](../review/alpha-bind-capacity-counterexample.mjs)
@@ -237,13 +237,35 @@ runtime evidence. The finite max3 control-entry model is not an all-OS proof or
 physical4096 exhaustion. Fullcapacity/G3/G4/G5/G7/V1, release/recovery and semantic
 Continuum remain OPEN. See [candidate evidence](../evidence/g5-alpha-bind-capacity.json).
 
-Next separately bound initial registry publication after createSession in
-install/restore/stage plus first-inspection alpha/controller locks and atomic
-temporaries. Reproduce a pinned baseline and independently prove that precise
-contract before selecting a reserve; do not adopt1/2/3/5 by assertion.
-Inspectability is distinct from activation: near-full bind/apply may refuse.
-Keep incomplete-prefix preservation, old records/revisions and stopped partial
-unregistered/uninspectable STOP, without compaction/deletion/reaper/cap increase
-or a new stop/recover gate. Direct/recovery/native/transient/concurrent growth,
-Windows DEFERRED_UNVERIFIED, the40h owner window and adverse UNKNOWN/CLA history
-retain their existing boundaries.
+## Initial registry publication / first ordinary inspection — candidate
+
+The new postcreate admission counts the actual whole installation prefix before
+its first registry write in the shared install/restore/stage path. Three free
+entries are reserved under the unchanged4096 bound:4093 may pass,4094 refuses
+before publishing registry. One registry temporary OR final name plus alpha and
+controller read locks bound one ordinary unbound info/status/history inspection.
+An info observation needs no controller lock; status/history can hold both.
+Retained locks and post-rename directory-sync failures are part of the finite
+source-extracted failure model, not exhaustive OS or physical high-water proof.
+
+The source-pinned baseline reproduces occupancy crossing, not an actual
+status/history inventory refusal. The new [immutable producer](../review/alpha-initial-capacity-counterexample.mjs)
+requires exactb1d CLI/manager bytes (also at16b); invoke its absolute checked-in
+path from a clean matching baseline checkout. Candidate pin refusal is expected;
+older five producers and their pins remain unchanged.
+
+Refusal retains the incomplete private prefix and prepared session through the
+existing catch. Native createSession can already exceed4096 before this check;
+manual STOP/inspection remains necessary, with no automatic retry or cleanup,
+reaper, record deletion, compaction or clean-rollback claim. Ordinary first
+inspectability does not promise near-full bind/apply admission; their separate
+3/7 guards and stopped18/1 remain unchanged. Stop/recover are not newly gated.
+Controller durable writers/schema/native code/workflow budgets remain unchanged.
+
+[Candidate evidence](../evidence/g5-alpha-initial-capacity.json) records local
+pure/tempfile controls and finite model paths separately. Changed installed CLI
+compatibility is pending exact successor hosted evidence; acceptedb1d does not
+transfer. Direct/recovery/native/transient/concurrent/initialcreation/prepared
+reuse growth, postpartial orphan STOP, fullcapacity/G3/G4/G5/G7/V1, release/
+recovery, physical4096 exhaustion, semantic Continuum, WindowsDEFERRED_UNVERIFIED,
+40h owner limits and prior adverse UNKNOWN/CLA history remain unchanged.

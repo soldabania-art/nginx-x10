@@ -1,0 +1,754 @@
+{
+  "schemaVersion": 1,
+  "kind": "alpha-initial-registry-publication-first-inspection-entry-admission",
+  "state": "LOCAL_NARROW_COMPONENT_VERIFIED_EXACT_HOSTED_PENDING_FULL_CAPACITY_OPEN",
+  "sourceBase": "16b91eae25ce5349c0cfeff2eaf3dfe5031cca3b",
+  "publicationParent": "805a58ca4213c61b9eaaeee35638573d10193a2c",
+  "sourceBindings": {
+    "x10/alpha/cli.mjs": {
+      "bytes": 90336,
+      "sha256": "1268bcfca5118ec5d54e7492b219d0ee1bef25e75fa42f3691961e3e982f0747"
+    },
+    "x10/alpha/initial-capacity.test.mjs": {
+      "bytes": 13839,
+      "sha256": "352e53847db11ef5879e9f3521c10bfc182165a038d535a1b53ebbafc2c797eb"
+    },
+    "x10/alpha/backup.test.mjs": {
+      "bytes": 28971,
+      "sha256": "a17a6c0c829324afacb25e17a7ef0ddb786e9360d74a920d989d26e3ceb6e530"
+    },
+    "x10/review/alpha-initial-capacity-counterexample.mjs": {
+      "bytes": 7228,
+      "sha256": "d0dd4663b5e29a0940e76df8fa0f4b7058174cabaf9d4ee2c76e35cf0893b61b"
+    },
+    "x10/test/all.mjs": {
+      "bytes": 32359,
+      "sha256": "bcacbd9d4b3fedb741bbc2365fb900249a50385e345d811a844854d89ca0702a"
+    },
+    "x10/alpha/README.md": {
+      "bytes": 66215,
+      "sha256": "2e3fbef32a4f3bd95f9d0b576d918477db9c65b64c4e83f37714449b8e46f64b"
+    },
+    "x10/release/SUPPORTED-PATH-REVIEW.md": {
+      "bytes": 21578,
+      "sha256": "1387bb9c20e29ab74df9b9803d3e55bdc6359f4fb2d2db9bc68959e18bb1310e"
+    }
+  },
+  "scope": "Postcreate initial registry publication admission in shared install/restore/stage target path plus one ordinary unbound info/status/history inspection control-entry headroom only. Native creation itself and activation are outside this cooperative contract.",
+  "entryLimit": 4096,
+  "initialPublicationInspectionReserve": 3,
+  "thresholds": {
+    "existingEntries4093": "may pass publication admission; registry plus alpha/controller read locks can reach4096",
+    "existingEntries4094": "refused before first registry save; incomplete prefix and prepared session preserved"
+  },
+  "admissionOrdering": [
+    "Validate and capture source inputs and create private prefix using unchanged install flow",
+    "Publish installation manifest and complete createSession including existing native syntax test",
+    "Count actual whole prefix before initial registry save with reserve3",
+    "If refused, existing incomplete-prefix catch preserves all partial output for inspection/STOP; no registry publication or cleanup/retry",
+    "If admitted, registry atomic temporary or final registry occupies one slot; one ordinary unbound inspection can add alpha and controller lock names"
+  ],
+  "newAlphaLockAddedToInstall": false,
+  "exclusiveTrustedOperatorPrecondition": true,
+  "inspectionContract": {
+    "ordinaryUnboundCommands": [
+      "info",
+      "status",
+      "history"
+    ],
+    "registryTemporaryOrFinalEntries": 1,
+    "alphaLockEntries": 1,
+    "controllerLockEntries": 1,
+    "infoMaximumAdditionalEntries": 2,
+    "statusHistoryMaximumAdditionalEntries": 3,
+    "directoryDescriptorsAreEntries": false,
+    "notActivationGuarantee": true,
+    "statusHistoryCurrentlyInventoryRefuse": false,
+    "baseline4094To4097IsModeledOccupancyCrossing": true
+  },
+  "immutableBaseline": {
+    "producer": "x10/review/alpha-initial-capacity-counterexample.mjs",
+    "producerBinding": {
+      "bytes": 7228,
+      "sha256": "d0dd4663b5e29a0940e76df8fa0f4b7058174cabaf9d4ee2c76e35cf0893b61b"
+    },
+    "sourceCommit": "b1d4333923f4c633d841316eae0e864cb6fe94ac",
+    "sameSourceBytesAt": "16b91eae25ce5349c0cfeff2eaf3dfe5031cca3b",
+    "sourceBindings": {
+      "x10/alpha/cli.mjs": {
+        "bytes": 90119,
+        "sha256": "82d7537dbcc3be45b8590c84d414cb7215093e4aed1cc02e0debaf8d54ce32f2"
+      },
+      "x10/control/manager.mjs": {
+        "bytes": 51246,
+        "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+      }
+    },
+    "frozenBeforeCandidateCLIEdit": true,
+    "virtualControls": 8,
+    "pass": 8,
+    "exitCode": 0,
+    "stderrBytes": 0,
+    "staticDelegationChecks": [
+      {
+        "name": "stage delegates to install with restore",
+        "pass": true
+      },
+      {
+        "name": "CLI install routes to same install function",
+        "pass": true
+      }
+    ],
+    "staticChecksNotAdditionalVirtualControls": true,
+    "scope": "Actual source install and restore with mocked filesystem/build/native createSession outcomes, actual registry atomic and alpha/controller lock functions surrounding a mocked nonallocating inspection callback. Stage inheritance is static source delegation, not executed staging.",
+    "limitations": [
+      "Virtual createSession occupancy can exceed the budget before any future postcheck; this is not observed native growth.",
+      "Actual alpha/controller lock functions surround a mocked nonallocating inspection callback; controller child orchestration and actual status/history validation do not execute.",
+      "4094 to4097 is modeled occupancy crossing, not a status/history refusal; these commands do not call inventory.",
+      "Install and restore execute the actual install function with virtual I/O; stage delegation checks are static only, not executed staging.",
+      "Pin drift on candidate CLI is intentional; replay only from the exact matching baseline working directory."
+    ],
+    "candidateSourcePinRefusalIntentional": true,
+    "olderFiveProducersImmutable": true,
+    "privateHarnessCorrectionBeforeFreeze": "Initial private stage heading sentinel used nonexistent stage function; corrected to actual stagePackage before freeze. No product assertion failure."
+  },
+  "candidatePureTempfileSuite": {
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "x10/alpha/initial-capacity.test.mjs"
+    ],
+    "exitCode": 0,
+    "stderrBytes": 0,
+    "source": {
+      "path": "x10/alpha/initial-capacity.test.mjs",
+      "bytes": 13839,
+      "sha256": "352e53847db11ef5879e9f3521c10bfc182165a038d535a1b53ebbafc2c797eb"
+    },
+    "TAP": {
+      "tests": 29,
+      "pass": 29,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "durationMs": 1345.704599,
+    "completeTAP": true,
+    "priorRunNote": "One preliminary complete29PASS/0stderr run did not persist the child exit separately before its shell collector; this one bounded repeat captures actual child exit before parsing. Repeated verification is not58 controls; no product assertion failure observed."
+  },
+  "translatedExistingBackupSuite": {
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "x10/alpha/backup.test.mjs"
+    ],
+    "exitCode": 0,
+    "stderrBytes": 0,
+    "source": {
+      "path": "x10/alpha/backup.test.mjs",
+      "bytes": 28971,
+      "sha256": "a17a6c0c829324afacb25e17a7ef0ddb786e9360d74a920d989d26e3ceb6e530"
+    },
+    "TAP": {
+      "tests": 82,
+      "pass": 82,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "durationMs": 390.659408,
+    "completeTAP": true,
+    "retainedControlsNotNew82": true,
+    "translation": "Existing source-extracted install fixture now includes real inventory/capacity helper bodies and finite constants; it does not bypass the new guard."
+  },
+  "existingRegressionSuites": [
+    {
+      "suite": "x10/alpha/session-capacity.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 46,
+        "pass": 46,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "runsThisPass": 1
+    },
+    {
+      "suite": "x10/alpha/prepare-run.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 18,
+        "pass": 18,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "runsThisPass": 1
+    },
+    {
+      "suite": "x10/test/alpha-recipe.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 17,
+        "pass": 17,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "runsThisPass": 1
+    },
+    {
+      "suite": "x10/test/alpha-decomposition.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 45,
+        "pass": 45,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "runsThisPass": 1
+    },
+    {
+      "suite": "x10/alpha/revision-capacity.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 37,
+        "pass": 37,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "runsThisPass": 1
+    },
+    {
+      "suite": "x10/alpha/bind-capacity.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 51,
+        "pass": 51,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "runsThisPass": 1
+    }
+  ],
+  "independentReservationReview": {
+    "state": "FINITE_CONTROL_BOUND_VERIFIED",
+    "sourceCommit": "16b91eae25ce5349c0cfeff2eaf3dfe5031cca3b",
+    "recommendedReserve": 3,
+    "recommendedContract": "After complete createSession, initial registry publication plus one ordinary unbound info/status/history inspection under existing cooperative alpha/controller locks. Not activation or full install growth.",
+    "staticChecks": {
+      "pass": 37,
+      "total": 37,
+      "findings": [],
+      "checks": [
+        {
+          "name": "exact-CLI-pin-before-evaluation",
+          "pass": true
+        },
+        {
+          "name": "exact-manager-pin-before-evaluation",
+          "pass": true
+        },
+        {
+          "name": "initial-registry-after-session",
+          "pass": true
+        },
+        {
+          "name": "one-initial-registry-publication",
+          "pass": true
+        },
+        {
+          "name": "no-baseline-postcreate-admission",
+          "pass": true
+        },
+        {
+          "name": "preserved-incomplete-prefix-catch",
+          "pass": true
+        },
+        {
+          "name": "atomic-one-create",
+          "pass": true
+        },
+        {
+          "name": "atomic-one-rename",
+          "pass": true
+        },
+        {
+          "name": "atomic-dir-open-readonly",
+          "pass": true
+        },
+        {
+          "name": "atomic-no-loop",
+          "pass": true
+        },
+        {
+          "name": "alpha-one-lock-create",
+          "pass": true
+        },
+        {
+          "name": "alpha-close-before-remove",
+          "pass": true
+        },
+        {
+          "name": "controller-one-lock-create",
+          "pass": true
+        },
+        {
+          "name": "controller-close-before-remove",
+          "pass": true
+        },
+        {
+          "name": "controller-syncDirectory-readonly",
+          "pass": true
+        },
+        {
+          "name": "ordinary-handler-alpha-lock",
+          "pass": true
+        },
+        {
+          "name": "info-handler-lifecycle-read",
+          "pass": true
+        },
+        {
+          "name": "status-cli-direct-dispatch",
+          "pass": true
+        },
+        {
+          "name": "history-cli-direct-dispatch",
+          "pass": true
+        },
+        {
+          "name": "proxy-status-history-no-capacity-gate",
+          "pass": true
+        },
+        {
+          "name": "status-history-no-durable-mutation",
+          "pass": true
+        },
+        {
+          "name": "unbound-status-no-runtime-request",
+          "pass": true
+        },
+        {
+          "name": "nonallocating-read-path:installed",
+          "pass": true
+        },
+        {
+          "name": "nonallocating-read-path:lifecycle",
+          "pass": true
+        },
+        {
+          "name": "nonallocating-read-path:load",
+          "pass": true
+        },
+        {
+          "name": "nonallocating-read-path:readRevision",
+          "pass": true
+        },
+        {
+          "name": "nonallocating-read-path:readHistory",
+          "pass": true
+        },
+        {
+          "name": "fault-replay-actual-exit0-stderr0",
+          "pass": true
+        },
+        {
+          "name": "faultplans-include-three-distinct-operation-failures",
+          "pass": true
+        },
+        {
+          "name": "actual-finite-executions-terminal-signatures",
+          "pass": true
+        },
+        {
+          "name": "maximum-three",
+          "pass": true
+        },
+        {
+          "name": "info-max-two",
+          "pass": true
+        },
+        {
+          "name": "status-history-max-three",
+          "pass": true
+        },
+        {
+          "name": "both-locks-retained-witness",
+          "pass": true
+        },
+        {
+          "name": "4093-witness",
+          "pass": true
+        },
+        {
+          "name": "4094-counterexample-to-two",
+          "pass": true
+        },
+        {
+          "name": "notphysical-notallOS",
+          "pass": true
+        }
+      ]
+    },
+    "faultModel": {
+      "executions": 25425,
+      "terminalSignatures": 2463,
+      "maximumAdditionalControlEntries": 3,
+      "representativeOperationLabels": 19,
+      "beforeAfterModes": 38,
+      "plansPerCommand": 8475,
+      "maximumFaultsPerPlan": 3,
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "boundaryExamplesSeparate": 4,
+      "notTAP": true
+    },
+    "sourceExtracted": [
+      "install",
+      "alpha atomic/saveRecord",
+      "alpha lock",
+      "controller lock",
+      "controller status",
+      "controller history"
+    ],
+    "derivation": [
+      "Initial registry creates one temporary name; rename exchanges that slot for the final registry. A failed pre-rename write can retain its temp, and a post-effect rename or directory-sync failure can leave the final registry; neither branch creates a second registry name.",
+      "Read-only inspection source paths are nonallocating for directory entries; alpha lock contributes one name; status/history controller lock contributes one name. Directory-open/sync handles create no entries.",
+      "Cleanup failures may retain both lock names; error propagation prevents continuation/retry. Model includes explicit inspection of a visible registry after failed rename/directory-sync but does not declare installation success.",
+      "Therefore max3 fits4093+3=4096. Reserve2 permits4094 then registry+two locks=4097. Info alone requires only2 but the common inspection contract includes status/history."
+    ],
+    "limitations": [
+      "Model extends prior private actual-source harness to triples; independent structural/source validation supplies derivation. Exact baseline pins are checked before extraction/evaluation.",
+      "Virtual native output occupancy, readonly validation and child orchestration are mocked or inspected; status/history absence of inventory means4097 is occupancy crossing, not observed command refusal.",
+      "Representative failures only, not allOS/crash/concurrent/direct-controller/native/transient-fence proof.",
+      "Postcreate check cannot prevent already-overbound native-created incomplete prefix.",
+      "No implementation acceptance: future guard requires immutable baseline frozen BEFORE edits, candidate threshold/preservation/wiring tests and final independent integration review.",
+      "Nearfull bind/apply may legitimately refuse via existing3/7; inspectability is not activation."
+    ],
+    "reportBinding": {
+      "bytes": 6463,
+      "sha256": "be0bf85c468ca27e0284e04cbd5b6e7bd763d81073d12cbeb0059643f4eecbf1"
+    },
+    "modelReportBinding": {
+      "bytes": 12511,
+      "sha256": "1ce6b547b5c24ce2e4401244e0a4868171f087b46169e03770438f916489aeb2"
+    },
+    "modelSourceBinding": {
+      "bytes": 11853,
+      "sha256": "0c0f1f33c65bc9461703a74e47d7563cfb317151f8fb08e2183d4baccbc44454"
+    },
+    "modelEmbeddedInNew29Suite": false,
+    "modelExecutionsAreNotAdditionalTAP": true,
+    "allOSFailuresEnumerated": false,
+    "physicalHighwaterAccepted": false
+  },
+  "unchangedBindings": {
+    "x10/control/manager.mjs": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "x10/control/cli.mjs": {
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+    },
+    "x10/alpha/runtime.mjs": {
+      "bytes": 7540,
+      "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51"
+    },
+    "x10/alpha/upstream-example.mjs": {
+      "bytes": 4989,
+      "sha256": "18c9acbe7d76ed29f4528454fd22608d5da1658b7a760ea1dc26537cd302cd0c"
+    },
+    "x10/service/operator-package-return.mjs": {
+      "bytes": 68575,
+      "sha256": "612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7"
+    },
+    "x10/service/operator-package-return-proof.mjs": {
+      "bytes": 12890,
+      "sha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de"
+    },
+    "x10/service/operator-package-fallback.mjs": {
+      "bytes": 630,
+      "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+    },
+    "x10/service/operator-package-fallback-proof.mjs": {
+      "bytes": 13468,
+      "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+    },
+    "x10/service/lifecycle-check.mjs": {
+      "bytes": 147483,
+      "sha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370"
+    },
+    "x10/service/verified-node.mjs": {
+      "bytes": 32439,
+      "sha256": "2febc8bdb6d890e738a426e4a80121ea840d143d9a718768ef10b5b09e839090"
+    },
+    ".github/workflows/x10-native.yml": {
+      "bytes": 26465,
+      "sha256": "d3f92329a396b02d045b45736733cdb711bf55af10b30504bc24f1a0efc8eb73"
+    },
+    ".github/workflows/x10-continuum.yml": {
+      "bytes": 2258,
+      "sha256": "73615307894060c0838606adb6f0661470d2109ba2860ae35e9e881a5cf6e387"
+    }
+  },
+  "preservation": {
+    "initialIncompletePrefixCatchChanged": false,
+    "initialRefusalCanRetainAlreadyOverboundNativePartialTree": true,
+    "registryWriteAttemptedOnAdmissionRefusal": false,
+    "automaticCleanupRetryOrRollbackAdded": false,
+    "oldRecordsRevisionsAndHistoryDeleted": false,
+    "stoppedPre18Post1Apply7Bind3Changed": false,
+    "stopRecoverReceiveNewCapacityGate": false,
+    "controllerDurableWritersOrRecordSchemasChanged": false,
+    "nativeCChanged": false,
+    "workflowStepsNamesOrderGroupsOrBudgetsChanged": false,
+    "fixedBundleInventoryChanged": false,
+    "installedAlphaCLIChanged": true,
+    "physicalCapacityFindingClosed": false
+  },
+  "managedWiring": {
+    "existingGroup": "managed-native-control",
+    "newInitialTestArgumentCount": 1,
+    "managedCommandFiles": 9,
+    "requireCompleteTAP": true,
+    "newGroupAdded": false,
+    "nativeGroupsUnchanged": 20,
+    "workflowStepsUnchanged": 36,
+    "budgetMsUnchanged": 120000,
+    "hostedTAPTotalsInferred": false,
+    "new29AndRetained82NotUniqueAggregate": true,
+    "preparation18AlsoImportedByAlpha": true,
+    "perSuiteOverlapNotSummed": true
+  },
+  "precedingMetadataCI": {
+    "sourceCommit": "16b91eae25ce5349c0cfeff2eaf3dfe5031cca3b",
+    "native": [
+      {
+        "event": "push",
+        "runId": 40609053653,
+        "jobId": 122555875484,
+        "status": "completed",
+        "conclusion": "success",
+        "actualSteps": 36
+      },
+      {
+        "event": "pull_request",
+        "runId": 40609060012,
+        "jobId": 122555886530,
+        "status": "completed",
+        "conclusion": "success",
+        "actualSteps": 36
+      }
+    ],
+    "researchPR": {
+      "runId": 40609060100,
+      "jobId": 122555909571,
+      "status": "completed",
+      "conclusion": "success",
+      "actualSteps": 11
+    },
+    "cla": {
+      "runId": 40609057502,
+      "jobId": 122555817901,
+      "conclusion": "failure",
+      "failedStep": 3
+    },
+    "newArtifactDownloads": 0,
+    "manualReruns": 0,
+    "mergeBuildIdentityGuessed": false,
+    "runtimeCountsTransferredFromB1d": false
+  },
+  "hostedVerification": {
+    "state": "PENDING_EXACT_CHANGED_INSTALLED_ALPHA_CLI",
+    "priorExactB1dCompatibilityAcceptedSeparately": true,
+    "priorReceipt": "x10/evidence/g5-alpha-bind-capacity-hosted.json",
+    "requirements": [
+      "Both actual new native jobs/artifacts, newinitial29 once in actual managed command and translatedretainedbackup82 in actual alpha command",
+      "Complete zero-skip managed/alpha TAP and retained46/prep18/17recipe/45guard/37revision/51bind/76reader/shared79 source inclusion with known overlap; read actual totals rather than arithmetic",
+      "Unchanged20groups/36steps/budgets, installed/source/bundle/restore/stage/service compatibility and all3strictreports/sourcepins",
+      "All owned processes, units, installations, listeners, sockets, locks, privateNode/history/bootstrap cleanup confirmed"
+    ],
+    "newInstalledCompatibilityAccepted": false
+  },
+  "remainingOpenBoundaries": [
+    "The guard cannot bound native createSession output before its postcreate sample; already-overbound incomplete prefix can remain preserved and uninspectable by bounded inventory.",
+    "Direct controller, recovery-created revisions, native/configuration-test/transient/concurrent writes, repeated later operations and prepared-session reuse are outside this narrow publication plus one inspection contract.",
+    "Separate bind3/apply7 reserves can legitimately refuse nearfull installations even when ordinary first inspection was budgeted; inspectability is not activation.",
+    "Existing stopped-session postfailure can preserve old registry plus unregistered or uninspectable partial session; STOP/manual inspection/no automatic retry remains, not clean rollback/full orphan recovery.",
+    "No compaction/deletion/reaper, cap raise, new stop/recover gate, universal OS quota, allOS fault proof or physical4096/native256-session exhaustion is claimed."
+  ],
+  "historyPreserved": [
+    "844 and98b adverse failures and wholefailedalpha cleanup UNKNOWN/UNCONFIRMED",
+    "9b/34f timeout causes and wholealpha cleanup UNKNOWN",
+    "c2 original primary UNKNOWN and cleanup UNCONFIRMED",
+    "6401 cause UNKNOWN with failed-fixture cleanup confirmed separately from skipped downstream cleanup",
+    "historical localphysical FAIL_UNKNOWN and inherited CLA failures"
+  ],
+  "broaderOpenGates": [
+    "fullcapacity",
+    "fullG3/G4/G5/G7/V1",
+    "orphanincidentreplay/disposal",
+    "TLSrestore",
+    "nativebinaryupgrade",
+    "permanentrelease/publishercapability",
+    "independentpublishedreplay",
+    "60minsoak",
+    "semanticContinuum",
+    "WindowsDEFERRED_UNVERIFIED"
+  ],
+  "owner40hWindowUnchanged": true,
+  "localPhysicalNativeProcessgroupNetworkSystemdSignalsExecuted": 0,
+  "fullCapacityFindingClosed": false,
+  "fullG5Accepted": false,
+  "productionAccepted": false,
+  "independentCandidateReview": {
+    "state": "PASS",
+    "sourceBindings": {
+      "x10/alpha/cli.mjs": {
+        "bytes": 90336,
+        "sha256": "1268bcfca5118ec5d54e7492b219d0ee1bef25e75fa42f3691961e3e982f0747"
+      },
+      "x10/control/manager.mjs": {
+        "bytes": 51246,
+        "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+      }
+    },
+    "virtualHeldouts": {
+      "pass": 20,
+      "total": 20,
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "notTAP": true
+    },
+    "staticChecks": {
+      "pass": 24,
+      "total": 24,
+      "findings": [],
+      "checks": [
+        {
+          "name": "only-intended-two-line-logic-and-scope-comment-change",
+          "pass": true
+        },
+        {
+          "name": "one-guard-after-create-before-initialregistry",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:atomic",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:saveRecord",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:lock",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:createSession",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:stagePackage",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:installed",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:prepareRun",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:inventory",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:waitBind",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:proxy",
+          "pass": true
+        },
+        {
+          "name": "unchangedfunction:uninstall",
+          "pass": true
+        },
+        {
+          "name": "retainedconstant:INVENTORY_ENTRY_LIMIT",
+          "pass": true
+        },
+        {
+          "name": "retainedconstant:NEW_SESSION_MINIMUM_ENTRIES",
+          "pass": true
+        },
+        {
+          "name": "retainedconstant:REGISTRY_PUBLICATION_RESERVE",
+          "pass": true
+        },
+        {
+          "name": "retainedconstant:CONTROLLER_MUTATION_ENTRY_RESERVE",
+          "pass": true
+        },
+        {
+          "name": "retainedconstant:CONTROLLER_BIND_ENTRY_RESERVE",
+          "pass": true
+        },
+        {
+          "name": "managerdurablewriters-unchanged",
+          "pass": true
+        },
+        {
+          "name": "olderimmutablebaseline:controller-input-counterexample.mjs",
+          "pass": true
+        },
+        {
+          "name": "olderimmutablebaseline:controller-loader-counterexample.mjs",
+          "pass": true
+        },
+        {
+          "name": "olderimmutablebaseline:alpha-session-capacity-counterexample.mjs",
+          "pass": true
+        },
+        {
+          "name": "olderimmutablebaseline:alpha-revision-capacity-counterexample.mjs",
+          "pass": true
+        },
+        {
+          "name": "olderimmutablebaseline:alpha-bind-capacity-counterexample.mjs",
+          "pass": true
+        }
+      ]
+    },
+    "reportBinding": {
+      "bytes": 3764,
+      "sha256": "fc0631fb92820f4b66e54fa698a9a409385d0045d8d9fd449310ef8c49c381ce"
+    },
+    "notAdditionalAuthorTAP": true
+  }
+}

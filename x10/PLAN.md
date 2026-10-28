@@ -2913,3 +2913,23 @@ controller read locks and failure preservation. No blind1/2/3/5 reserve; ordinar
 inspectability differs from activation nearcapacity. Preserve incompleteprefix
 catch, oldrecords/revisions, postpartial STOP and ungatedstop/recover. Native/
 concurrent/transient/direct/recovery growth and fullcapacity/G5/V1 remainOPEN.
+
+
+## 28 October 2026 UTC: After initial publication admission candidate
+
+The installed CLI checks whole-prefix inventory after createSession and before
+initial registry publication, leaving three control-entry slots for the registry
+temporary/final name and an ordinary alpha/controller read-lock pair. The same
+install path serves restore and stage. Existing incomplete-prefix preservation
+and stopped18/1/apply7/bind3 guards remain; no durablewriter/native/workflow change.
+[Evidence](evidence/g5-alpha-initial-capacity.json) separates baseline, finite
+fault-model, pure/tempfile tests and independent review. Exact successor hosted
+compatibility is pending; prior16b metadata both36/research11 success does not
+accept these changed CLI bytes. CLA step3 failure retained; no new artifact
+download or unchanged rerun.
+
+A postcreate check cannot prevent native creation of an already-overbound partial
+prefix. Refusal preserves that prefix for inspection; no automatic retry, cleanup
+or rollback. Inspectability differs from activation nearcapacity. Direct/native/
+transient/concurrent/recovery/preparedreuse growth, fullcapacity/G5/V1 and all
+prior adverse/40h/Windows/release/recovery/Continuum boundaries remainOPEN.

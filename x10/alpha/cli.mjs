@@ -19,6 +19,8 @@ const INVENTORY_ENTRY_LIMIT = 4096;
 // minimum structure, not a bound on native -t or later native temporary files.
 const NEW_SESSION_MINIMUM_ENTRIES = 17;
 const REGISTRY_PUBLICATION_RESERVE = 1;
+// Initial registry name plus one ordinary alpha/controller read-lock pair.
+const INITIAL_PUBLICATION_INSPECTION_RESERVE = 3;
 // Includes candidate/rollback revisions and retained atomic temporaries across
 // controller failure paths; native and concurrent file growth are not fenced.
 const CONTROLLER_MUTATION_ENTRY_RESERVE = 7;
@@ -629,6 +631,7 @@ export async function install(values) {
         : 'Configured application readiness via loopback HTTP /ready with expected HTTP 200 and exact ready newline body; installation has not checked application health.' };
     await saveRecord(path.join(prefix, '.alpha-install.json'), manifest);
     const prepared = await createSession(prefix, manifest, seed);
+    await requireSessionInventoryCapacity(prefix, INITIAL_PUBLICATION_INSPECTION_RESERVE);
     await saveRecord(path.join(prefix, '.alpha-registry.json'), { schemaVersion: 1, installationId: manifest.installationId, current: prepared.session, sessions: [prepared.session] });
     return { ok: true, outcome: 'installed', prefix, launcher: path.join(prefix, 'bin/x10'), session: prepared.session, sessionPrefix: prepared.lifecycle.prefix, revision: prepared.initial.revision, port, healthPort, controlApiEnabled: false, healthNote: manifest.healthNote,
       ...(restored ? { declarativeRestored: true, nativeStarted: false, readinessChecked: false, serviceAccepted: false, productionAccepted: false } : {}) };
@@ -846,7 +849,7 @@ async function inventory(prefix) {
   }
   return entries;
 }
-// Alpha stopped-session publication, apply/revert and bind admission only. This
+// Alpha initial/stopped publication, apply/revert and bind admission only. This
 // sampled inventory does not fence direct controller writers, native temporary-file
 // growth or a same-UID concurrent process. Stop/recover/uninstall remain ungated.
 async function requireSessionInventoryCapacity(prefix, reserve) {

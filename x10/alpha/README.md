@@ -1021,8 +1021,9 @@ is changed, and old records and revisions are preserved rather than deleted.
 
 This cooperative admission does not fence direct controller calls, native or
 configuration-test files, arbitrary concurrent same-UID writers or kernel timing.
-Initial install/restore/stage registry publication and later lock headroom remain
-a separate open contract. Prepared reuse, recovery-created revisions and the
+Initial install/restore/stage registry publication and ordinary first-inspection
+lock headroom have the narrow candidate admission described below; native growth
+and broader future operations remain outside that contract. Prepared reuse, recovery-created revisions and the
 stopped-preparation partial unregistered tree/STOP outcome are not repaired by
 this change. Full capacity, security/recovery and V1 remain open.
 
@@ -1050,11 +1051,53 @@ fault controls do not establish physical4096-entry exhaustion, every OS-failure
 case or full capacity/G5/V1 acceptance. See
 [candidate evidence](../evidence/g5-alpha-bind-capacity.json).
 
-Next, separately reproduce and source-pin initial registry publication after
-createSession in install/restore/stage. Independently prove its precise
-publication/first-inspection contract, including registry atomic temporaries and
-alpha/controller read locks, before choosing a reserve;1/2/3/5 are not accepted
-by assertion. Inspectability does not imply ability to activate: a near-full
-installation may legitimately refuse bind/apply. Preserve the incomplete-prefix
-catch, existing records and stopped postpartial STOP/manual-inspection outcome;
-no cap increase, compaction, deletion, reaper or new stop/recover gate is implied.
+Initial registry publication now has the separate candidate boundary below.
+Accepted bind compatibility remains attached to exactb1d, not to the newly
+changed installed CLI.
+
+
+## Initial registry publication and first inspection — candidate
+
+After `createSession` completes, installation counts the actual whole prefix
+before publishing its first registry. The same installation path is used for
+fresh install, HTTP restore and package stage. Admission reserves three entries
+under the unchanged4096-entry inventory bound:4093 existing entries may pass;
+4094 are refused before the registry write. This is the newly created private
+prefix, before its initial registry publication; no existing alpha lock is
+added to this install path. Exclusive operator use remains a precondition,
+and this cooperative admission is not an OS fence.
+
+The three-entry contract covers exactly one registry publication followed by
+one ordinary unbound `info`, `status` or `history` inspection. Registry atomic
+publication holds one temporary or final registry name; an ordinary inspection
+can add an alpha lock and a controller lock. Directory handles do not add names.
+The reviewed source model includes before/after-effect open, write, sync, close,
+rename and cleanup failures, including retained locks and registry visibility
+after rename. It is finite virtual accounting, not every possible OS failure or
+a physical4096-entry high-water measurement. The baseline crossing4094→4097 is
+an occupancy observation; status/history themselves do not inventory-refuse.
+
+A refusal before registry publication preserves the incomplete private prefix
+and prepared session through the existing install catch; no automatic cleanup,
+retry, registry repair or rollback is introduced. Native creation may already
+have produced an overbound partial tree before this postcreate check. Preserve
+it for manual inspection/STOP; this change cannot promise that every failed
+installation remains inspectable by the bounded walker. Existing old records
+and revisions are not compacted or deleted.
+
+Ordinary inspectability does not promise activation near capacity. Bind and
+apply/revert retain their separate3 and7 reserves; stopped preparation retains
+its18/1 checks. `stop` and `recover` receive no new capacity gate. Controller
+durable writers, schemas, native code and workflow budgets remain unchanged.
+Direct controller, recovery, native/configuration-test, transient, concurrent
+and prepared-reuse growth remain outside this narrow contract.
+
+The new immutable [baseline producer](../review/alpha-initial-capacity-counterexample.mjs)
+is pinned to exactb1d CLI/manager bytes, also present at16b. Run its checked-in
+absolute path with a clean matching checkout as the working directory. Candidate
+source-pin refusal is intentional; the older five producers remain immutable.
+[Candidate evidence](../evidence/g5-alpha-initial-capacity.json) separates pure/
+tempfile controls and modeled failure paths from installed acceptance. The
+changed installed CLI requires its own exact push/PR hosted compatibility;
+priorb1d success does not transfer. Fullcapacity/G3/G4/G5/G7/V1, recovery/release
+and semantic Continuum remain OPEN; Windows remains DEFERRED_UNVERIFIED.
