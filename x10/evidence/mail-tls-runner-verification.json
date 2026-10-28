@@ -1,0 +1,23 @@
+{
+  "suite": "mail-tls-interruption-negative-control",
+  "passed": true,
+  "nativeStartupObserved": true,
+  "signal": "SIGTERM",
+  "expectedHarnessExitCode": 1,
+  "observedHarnessExitCode": 1,
+  "resultPassed": false,
+  "cleanup": {
+    "nativeStopped": true,
+    "fixturesStopped": true,
+    "openSockets": 0,
+    "temporaryRootRemoved": true,
+    "commandChildren": 0,
+    "errors": [],
+    "nativeExit": {
+      "code": null,
+      "signal": "SIGTERM"
+    }
+  },
+  "harnessSha256": "c5662a3941090d75ca371c45c157236c53757d90708ab2de13add25cf58550fd",
+  "testsFinishedBeforeInterruption": 1
+}

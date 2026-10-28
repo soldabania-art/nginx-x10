@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-local-control",
+  "startedAt": "2026-10-23T10:15:16.364Z",
+  "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+  "binarySha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+  "tests": [
+    {
+      "name": "initialization-is-unbound-and-keeps-operator-config",
+      "passed": true
+    },
+    {
+      "name": "bind-verifies-native-master-pid-namespace-and-fresh-health",
+      "passed": true
+    },
+    {
+      "name": "explicit-listener-cli-snapshot-observes-current-owner-and-refuses-tampering",
+      "passed": true
+    },
+    {
+      "name": "valid-apply-acknowledges-new-native-revision",
+      "passed": true
+    },
+    {
+      "name": "explicit-listener-inspection-observes-captured-processes-closed-after-apply",
+      "passed": true
+    },
+    {
+      "name": "invalid-native-config-is-rejected-without-runtime-switch",
+      "passed": true
+    },
+    {
+      "name": "health-failure-rolls-back-with-a-fresh-activation-id",
+      "passed": true
+    },
+    {
+      "name": "trickle-health-cannot-hold-lock-past-bounded-gate",
+      "passed": true
+    },
+    {
+      "name": "manual-revert-reuses-content-with-a-new-revision",
+      "passed": true
+    },
+    {
+      "name": "concurrent-operator-edit-stays-untouched-and-requires-recovery",
+      "passed": true
+    },
+    {
+      "name": "exclusive-lock-is-not-auto-deleted",
+      "passed": true
+    },
+    {
+      "name": "unsafe-health-urls-and-fragment-escapes-are-rejected",
+      "passed": true
+    },
+    {
+      "name": "operator-config-mutation-refuses-signal",
+      "passed": true
+    },
+    {
+      "name": "managed-fragment-tamper-and-symlink-refuse-signal",
+      "passed": true
+    },
+    {
+      "name": "wrong-pid-file-refuses-runtime-attachment",
+      "passed": true
+    },
+    {
+      "name": "revision-and-history-tampering-are-detected",
+      "passed": true
+    },
+    {
+      "name": "killed-cli-leaves-pending-and-stale-lock-for-explicit-recovery",
+      "passed": true
+    },
+    {
+      "name": "history-chain-and-final-config-integrity",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "Linux/local trusted-operator tool; one managed loopback HTTP server, no remote administration or general nginx.conf editing.",
+    "Native -t/reload can have early filesystem/shared-resource side effects; successful sampled probes are not ACID or a proof about every worker.",
+    "Same-uid adversarial filesystem mutation and the residual identity-check-to-kill PID-reuse race are outside the security boundary.",
+    "Recovery test kills a real CLI during a pending transaction; stale lock removal is an explicit operator step after confirmed process exit."
+  ],
+  "sourceFilesSha256": {
+    "x10/control/manager.mjs": "65ce6e5f3ccd6099786abf0a6253309febef5bdefcfeba1849f86f2b394c83b9",
+    "x10/control/cli.mjs": "7c6227f1f48ddc68bdfdf07e5a0b26b4387f34be1bfd9e9acacadcda8b8dad76",
+    "x10/control/listeners.mjs": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+    "x10/test/control.test.mjs": "e35f193d6056ae2b64a0f5f1b3bc27f8793f1b8e26b3c0f4abf51377d99cc7f1"
+  },
+  "runtimeIdentity": {
+    "pidNamespaceMappingVerified": true,
+    "masterMode": true
+  },
+  "listenerSnapshot": {
+    "schemaVersion": 1,
+    "scope": "captured-processes-only",
+    "capturedAt": "2026-10-23T10:15:16.727Z",
+    "port": 36117,
+    "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+    "master": {
+      "pid": 293,
+      "procPid": 34977,
+      "pidNamespace": "pid:[4026532277]",
+      "startTicks": "2282696",
+      "uid": 0,
+      "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+      "commandSha256": "b519f5c5a3f0081605c72324a4fcc13376aa035f9912b13035877122fade6980"
+    },
+    "networkNamespace": "net:[4026532278]",
+    "listenerInode": "228055",
+    "processes": [
+      {
+        "procPid": 34978,
+        "pid": 294,
+        "parentProcPid": 34977,
+        "startTicks": "2282696",
+        "uid": 0,
+        "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+        "pidNamespace": "pid:[4026532277]",
+        "networkNamespace": "net:[4026532278]",
+        "ownedListenerFds": [
+          "5"
+        ]
+      },
+      {
+        "procPid": 34979,
+        "pid": 295,
+        "parentProcPid": 34977,
+        "startTicks": "2282696",
+        "uid": 0,
+        "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+        "pidNamespace": "pid:[4026532277]",
+        "networkNamespace": "net:[4026532278]",
+        "ownedListenerFds": []
+      },
+      {
+        "procPid": 34980,
+        "pid": 296,
+        "parentProcPid": 34977,
+        "startTicks": "2282696",
+        "uid": 0,
+        "executable": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+        "pidNamespace": "pid:[4026532277]",
+        "networkNamespace": "net:[4026532278]",
+        "ownedListenerFds": []
+      }
+    ],
+    "sha256": "f13aa2c774d9837806bd0d990cd517cb98c517a88fdbbc464e9ca66c8f5cda44"
+  },
+  "listenerObservation": {
+    "scope": "captured-processes-only",
+    "state": "closed",
+    "closed": true,
+    "masterVerified": true,
+    "port": 36117,
+    "listenerInode": "228055",
+    "snapshotSha256": "f13aa2c774d9837806bd0d990cd517cb98c517a88fdbbc464e9ca66c8f5cda44",
+    "observedAt": "2026-10-23T10:15:17.261Z",
+    "elapsedMs": 17,
+    "processes": [
+      {
+        "procPid": 34978,
+        "pid": 294,
+        "state": "exited",
+        "ownedListenerFds": []
+      },
+      {
+        "procPid": 34979,
+        "pid": 295,
+        "state": "exited",
+        "ownedListenerFds": []
+      },
+      {
+        "procPid": 34980,
+        "pid": 296,
+        "state": "exited",
+        "ownedListenerFds": []
+      }
+    ],
+    "limitations": [
+      "Only captured processes are observed; unobserved churn and later generations are outside this snapshot.",
+      "Listener absence is not process exit, application health, accepted-connection drain or all-traffic cutover.",
+      "Proc identities and descriptor inventories are sampled, with residual check-to-use races."
+    ]
+  },
+  "history": {
+    "entries": 16,
+    "chainValid": true
+  },
+  "operatorConfigUnchanged": true,
+  "passed": true,
+  "shutdown": {
+    "exitCode": 0,
+    "signal": null
+  },
+  "sourceUnchangedDuringTest": true,
+  "finishedAt": "2026-10-23T10:15:22.070Z"
+}

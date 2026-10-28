@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "suite": "continuum-c2a-interruption-native-regression",
+  "date": "2026-10-23",
+  "sourceBaselineCommit": "2e6fb8af405bd02177459ee4d0c57bdb123e9de9",
+  "passed": true,
+  "nativeSourceChanged": false,
+  "freshCheckoutBuild": true,
+  "binaryIdentityWithEarlierCheckpointClaimed": false,
+  "binarySha256": "bef184f3cd60573fd9ed563ff9c62cf7800d37927716e9fd2674090a60c28cc0",
+  "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+  "buildManifestSha256": "215a845485ff48b3b64e50375e27d4b175ff7960d0901cc5a61cb882e2d88257",
+  "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+  "compiledModuleCount": 105,
+  "binaryMode": "0755",
+  "dependencyHeaderVersions": {
+    "pcre2": "10.42",
+    "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+    "zlib": "1.3"
+  },
+  "compiler": "cc",
+  "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+  "dependencyVersionsFromPkgConfig": {},
+  "optionalClientLocks": {
+    "aioquicSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+    "curlCffiSha256": "3ccf1913a2c5cca06e8d1af2660c08d7447943f10839777d038bd4df63ad5b0f",
+    "requireHashes": true,
+    "onlyBinary": true,
+    "pipChecksPassed": true
+  },
+  "configureFeatureFlags": [
+    "--with-http_ssl_module",
+    "--with-http_v2_module",
+    "--with-http_v3_module",
+    "--with-stream",
+    "--with-stream_ssl_module",
+    "--with-stream_ssl_preread_module",
+    "--with-mail",
+    "--with-mail_ssl_module",
+    "--with-threads",
+    "--with-file-aio",
+    "--with-http_realip_module",
+    "--with-http_stub_status_module",
+    "--with-http_auth_request_module",
+    "--with-http_addition_module",
+    "--with-http_sub_module",
+    "--with-http_dav_module",
+    "--with-http_slice_module",
+    "--with-http_gunzip_module",
+    "--with-http_gzip_static_module",
+    "--with-compat",
+    "--with-control-api"
+  ],
+  "generatedFiles": {
+    "ngx_auto_config.h": {
+      "sha256": "9d0264662e1d95f1deb84ca088bae3f904774cce22a069a8defec9a55ff19443",
+      "bytes": 10156,
+      "mode": "0644"
+    },
+    "ngx_auto_headers.h": {
+      "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+      "bytes": 657,
+      "mode": "0644"
+    },
+    "ngx_modules.c": {
+      "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+      "bytes": 11820,
+      "mode": "0644"
+    }
+  },
+  "groups": [
+    {
+      "name": "http-tls-http2-reload",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "stream-mail",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "mail-tls-starttls",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "protocol-adapters",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "http3-interop",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "http3-head-independent-client",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-features",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "quic-regression",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "quic-generated-sanitized",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "quic-frame-boundaries",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-load-client-verification",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "managed-native-control",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "operator-status",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "local-alpha-lifecycle",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "listener-observer-boundaries",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "reload-listener-observation",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-control-api",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-process-generations",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "native-generation-boundaries",
+      "passed": true,
+      "exitCode": 0
+    },
+    {
+      "name": "official-nginx-tests",
+      "passed": true,
+      "exitCode": 0
+    }
+  ],
+  "official": {
+    "files": 35,
+    "filesPassed": 32,
+    "filesSkipped": 3,
+    "filesFailed": 0,
+    "assertions": {
+      "run": 1109,
+      "passed": 1083,
+      "failed": 0,
+      "skipped": 25,
+      "todoFailed": 1,
+      "todoPassed": 0
+    }
+  },
+  "rawRecordSha256": "20a119666d2b4c3222604381eb9116e25a124d411f704b6422ecfd186c8b265f",
+  "limitations": [
+    "Native regression only; isolated C2a fixture changes are not linked into NGINX.",
+    "Fresh checkout/prefix build produces a separately identified binary; identical bytes with older checkout are not claimed.",
+    "Curated official sample keeps dependency skips and expected TODO, reported separately.",
+    "No TLS migration, performance, complete compatibility or production acceptance."
+  ],
+  "publication": "Allowlisted identities, counts and flags only; no host paths, PIDs, keys/certificates, runtime payloads or raw logs."
+}

@@ -1,0 +1,593 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-protocol-adapters",
+  "startedAt": "2026-10-23T08:51:38.199Z",
+  "identity": {
+    "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+    "binarySha256": "adf05f3088bf8ee1ed7c886e424a2d92258323dd78e036276b41e009fbaf634e",
+    "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+    "checkoutRevision": "29746068bfca299b85062e981df250aa3e12abb8",
+    "sourceFiles": {
+      "src/http/modules/ngx_http_fastcgi_module.c": "e8c9055c44bb4d9a5e7d4f0a2e0360ffbbde799e7e6d0db91e4797800e0cb567",
+      "src/http/modules/ngx_http_scgi_module.c": "e19e835f59699d81db294fdc09ade6f5f2e5ad211d15cef4f409c4124fd10780",
+      "src/http/modules/ngx_http_uwsgi_module.c": "846eb02e4eb3808a9901542f34b140065523fd7668ca1a559ba19111b20fb732",
+      "x10/test/adapters-baseline.mjs": "4e4f9599788c98ec1a4eb112b56363822539fc91a6990d5ded0efca1bb856f63"
+    },
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64",
+    "binaryUnchangedDuringTest": true
+  },
+  "tests": [
+    {
+      "name": "fastcgi-get-wire-metadata-and-exact-response",
+      "status": "passed",
+      "durationMs": 27.53,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "records": [
+          {
+            "type": 1,
+            "length": 8,
+            "padding": 0
+          },
+          {
+            "type": 4,
+            "length": 440,
+            "padding": 0
+          },
+          {
+            "type": 4,
+            "length": 0,
+            "padding": 0
+          },
+          {
+            "type": 5,
+            "length": 0,
+            "padding": 0
+          }
+        ],
+        "paramsEnded": true,
+        "stdinEnded": true
+      },
+      "responseStatus": 201,
+      "responseBytes": 8,
+      "responseBodySha256": "704064c0f7e69d5e8a79a8faa5fe62761c797eb58a6021017409883cdc84d539",
+      "responseComplete": true
+    },
+    {
+      "name": "fastcgi-binary-wire-metadata-and-exact-response",
+      "status": "passed",
+      "durationMs": 24.98,
+      "requestBytes": 71687,
+      "requestBodySha256": "4d8d56e297eebcca9c4fcd06213aaf89f743a94cd4da0b0202474b9ea16ff80f",
+      "upstreamReceipts": 1,
+      "framing": {
+        "records": [
+          {
+            "type": 1,
+            "length": 8,
+            "padding": 0
+          },
+          {
+            "type": 4,
+            "length": 542,
+            "padding": 2
+          },
+          {
+            "type": 4,
+            "length": 0,
+            "padding": 0
+          },
+          {
+            "type": 5,
+            "length": 32768,
+            "padding": 0
+          },
+          {
+            "type": 5,
+            "length": 32768,
+            "padding": 0
+          },
+          {
+            "type": 5,
+            "length": 6151,
+            "padding": 1
+          },
+          {
+            "type": 5,
+            "length": 0,
+            "padding": 0
+          }
+        ],
+        "paramsEnded": true,
+        "stdinEnded": true
+      },
+      "responseStatus": 201,
+      "responseBytes": 71687,
+      "responseBodySha256": "4d8d56e297eebcca9c4fcd06213aaf89f743a94cd4da0b0202474b9ea16ff80f",
+      "responseComplete": true
+    },
+    {
+      "name": "fastcgi-chunked-wire-metadata-and-exact-response",
+      "status": "passed",
+      "durationMs": 25.89,
+      "requestBytes": 4099,
+      "requestBodySha256": "60a62725a6589b4c56d914f383935cf1f09fdb4c6e6814c1545d5ade78281416",
+      "upstreamReceipts": 1,
+      "framing": {
+        "records": [
+          {
+            "type": 1,
+            "length": 8,
+            "padding": 0
+          },
+          {
+            "type": 4,
+            "length": 547,
+            "padding": 5
+          },
+          {
+            "type": 4,
+            "length": 0,
+            "padding": 0
+          },
+          {
+            "type": 5,
+            "length": 4099,
+            "padding": 5
+          },
+          {
+            "type": 5,
+            "length": 0,
+            "padding": 0
+          }
+        ],
+        "paramsEnded": true,
+        "stdinEnded": true
+      },
+      "responseStatus": 201,
+      "responseBytes": 4099,
+      "responseBodySha256": "60a62725a6589b4c56d914f383935cf1f09fdb4c6e6814c1545d5ade78281416",
+      "responseComplete": true
+    },
+    {
+      "name": "fastcgi-invalid-upstream-failure",
+      "status": "passed",
+      "durationMs": 2.68,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "records": [
+          {
+            "type": 1,
+            "length": 8,
+            "padding": 0
+          },
+          {
+            "type": 4,
+            "length": 444,
+            "padding": 4
+          },
+          {
+            "type": 4,
+            "length": 0,
+            "padding": 0
+          },
+          {
+            "type": 5,
+            "length": 0,
+            "padding": 0
+          }
+        ],
+        "paramsEnded": true,
+        "stdinEnded": true
+      },
+      "responseStatus": 502,
+      "responseComplete": true,
+      "responseBytes": 157,
+      "failureElapsedMs": 2
+    },
+    {
+      "name": "fastcgi-truncated-header-upstream-failure",
+      "status": "passed",
+      "durationMs": 1.42,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "records": [
+          {
+            "type": 1,
+            "length": 8,
+            "padding": 0
+          },
+          {
+            "type": 4,
+            "length": 453,
+            "padding": 3
+          },
+          {
+            "type": 4,
+            "length": 0,
+            "padding": 0
+          },
+          {
+            "type": 5,
+            "length": 0,
+            "padding": 0
+          }
+        ],
+        "paramsEnded": true,
+        "stdinEnded": true
+      },
+      "responseStatus": 502,
+      "responseComplete": true,
+      "responseBytes": 157,
+      "failureElapsedMs": 1.33
+    },
+    {
+      "name": "fastcgi-truncated-body-upstream-failure",
+      "status": "passed",
+      "durationMs": 2.01,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "records": [
+          {
+            "type": 1,
+            "length": 8,
+            "padding": 0
+          },
+          {
+            "type": 4,
+            "length": 451,
+            "padding": 5
+          },
+          {
+            "type": 4,
+            "length": 0,
+            "padding": 0
+          },
+          {
+            "type": 5,
+            "length": 0,
+            "padding": 0
+          }
+        ],
+        "paramsEnded": true,
+        "stdinEnded": true
+      },
+      "responseStatus": 200,
+      "responseComplete": false,
+      "responseBytes": 5,
+      "failureElapsedMs": 1.96
+    },
+    {
+      "name": "fastcgi-timeout-upstream-failure",
+      "status": "passed",
+      "durationMs": 302.16,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "records": [
+          {
+            "type": 1,
+            "length": 8,
+            "padding": 0
+          },
+          {
+            "type": 4,
+            "length": 444,
+            "padding": 4
+          },
+          {
+            "type": 4,
+            "length": 0,
+            "padding": 0
+          },
+          {
+            "type": 5,
+            "length": 0,
+            "padding": 0
+          }
+        ],
+        "paramsEnded": true,
+        "stdinEnded": true
+      },
+      "responseStatus": 504,
+      "responseComplete": true,
+      "responseBytes": 167,
+      "failureElapsedMs": 301.99
+    },
+    {
+      "name": "scgi-get-wire-metadata-and-exact-response",
+      "status": "passed",
+      "durationMs": 24.93,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "netstringBytes": 436,
+        "firstParameter": "CONTENT_LENGTH"
+      },
+      "responseStatus": 201,
+      "responseBytes": 8,
+      "responseBodySha256": "704064c0f7e69d5e8a79a8faa5fe62761c797eb58a6021017409883cdc84d539",
+      "responseComplete": true
+    },
+    {
+      "name": "scgi-binary-wire-metadata-and-exact-response",
+      "status": "passed",
+      "durationMs": 24.73,
+      "requestBytes": 71687,
+      "requestBodySha256": "4d8d56e297eebcca9c4fcd06213aaf89f743a94cd4da0b0202474b9ea16ff80f",
+      "upstreamReceipts": 1,
+      "framing": {
+        "netstringBytes": 537,
+        "firstParameter": "CONTENT_LENGTH"
+      },
+      "responseStatus": 201,
+      "responseBytes": 71687,
+      "responseBodySha256": "4d8d56e297eebcca9c4fcd06213aaf89f743a94cd4da0b0202474b9ea16ff80f",
+      "responseComplete": true
+    },
+    {
+      "name": "scgi-chunked-wire-metadata-and-exact-response",
+      "status": "passed",
+      "durationMs": 24.3,
+      "requestBytes": 4099,
+      "requestBodySha256": "60a62725a6589b4c56d914f383935cf1f09fdb4c6e6814c1545d5ade78281416",
+      "upstreamReceipts": 1,
+      "framing": {
+        "netstringBytes": 542,
+        "firstParameter": "CONTENT_LENGTH"
+      },
+      "responseStatus": 201,
+      "responseBytes": 4099,
+      "responseBodySha256": "60a62725a6589b4c56d914f383935cf1f09fdb4c6e6814c1545d5ade78281416",
+      "responseComplete": true
+    },
+    {
+      "name": "scgi-invalid-upstream-failure",
+      "status": "passed",
+      "durationMs": 1.21,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "netstringBytes": 440,
+        "firstParameter": "CONTENT_LENGTH"
+      },
+      "responseStatus": 502,
+      "responseComplete": true,
+      "responseBytes": 157,
+      "failureElapsedMs": 1.14
+    },
+    {
+      "name": "scgi-truncated-header-upstream-failure",
+      "status": "passed",
+      "durationMs": 0.86,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "netstringBytes": 449,
+        "firstParameter": "CONTENT_LENGTH"
+      },
+      "responseStatus": 502,
+      "responseComplete": true,
+      "responseBytes": 157,
+      "failureElapsedMs": 0.84
+    },
+    {
+      "name": "scgi-truncated-body-upstream-failure",
+      "status": "passed",
+      "durationMs": 1.3,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "netstringBytes": 447,
+        "firstParameter": "CONTENT_LENGTH"
+      },
+      "responseStatus": 200,
+      "responseComplete": false,
+      "responseBytes": 5,
+      "failureElapsedMs": 1.26
+    },
+    {
+      "name": "scgi-timeout-upstream-failure",
+      "status": "passed",
+      "durationMs": 303.57,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "netstringBytes": 440,
+        "firstParameter": "CONTENT_LENGTH"
+      },
+      "responseStatus": 504,
+      "responseComplete": true,
+      "responseBytes": 167,
+      "failureElapsedMs": 301.85
+    },
+    {
+      "name": "uwsgi-get-wire-metadata-and-exact-response",
+      "status": "passed",
+      "durationMs": 25.1,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "modifier1": 0,
+        "modifier2": 0,
+        "packetBytes": 451
+      },
+      "responseStatus": 201,
+      "responseBytes": 8,
+      "responseBodySha256": "704064c0f7e69d5e8a79a8faa5fe62761c797eb58a6021017409883cdc84d539",
+      "responseComplete": true
+    },
+    {
+      "name": "uwsgi-binary-wire-metadata-and-exact-response",
+      "status": "passed",
+      "durationMs": 24.59,
+      "requestBytes": 71687,
+      "requestBodySha256": "4d8d56e297eebcca9c4fcd06213aaf89f743a94cd4da0b0202474b9ea16ff80f",
+      "upstreamReceipts": 1,
+      "framing": {
+        "modifier1": 0,
+        "modifier2": 0,
+        "packetBytes": 557
+      },
+      "responseStatus": 201,
+      "responseBytes": 71687,
+      "responseBodySha256": "4d8d56e297eebcca9c4fcd06213aaf89f743a94cd4da0b0202474b9ea16ff80f",
+      "responseComplete": true
+    },
+    {
+      "name": "uwsgi-chunked-wire-metadata-and-exact-response",
+      "status": "passed",
+      "durationMs": 24.49,
+      "requestBytes": 4099,
+      "requestBodySha256": "60a62725a6589b4c56d914f383935cf1f09fdb4c6e6814c1545d5ade78281416",
+      "upstreamReceipts": 1,
+      "framing": {
+        "modifier1": 0,
+        "modifier2": 0,
+        "packetBytes": 562
+      },
+      "responseStatus": 201,
+      "responseBytes": 4099,
+      "responseBodySha256": "60a62725a6589b4c56d914f383935cf1f09fdb4c6e6814c1545d5ade78281416",
+      "responseComplete": true
+    },
+    {
+      "name": "uwsgi-invalid-upstream-failure",
+      "status": "passed",
+      "durationMs": 1.26,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "modifier1": 0,
+        "modifier2": 0,
+        "packetBytes": 455
+      },
+      "responseStatus": 502,
+      "responseComplete": true,
+      "responseBytes": 157,
+      "failureElapsedMs": 1.17
+    },
+    {
+      "name": "uwsgi-truncated-header-upstream-failure",
+      "status": "passed",
+      "durationMs": 1.39,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "modifier1": 0,
+        "modifier2": 0,
+        "packetBytes": 464
+      },
+      "responseStatus": 502,
+      "responseComplete": true,
+      "responseBytes": 157,
+      "failureElapsedMs": 1.21
+    },
+    {
+      "name": "uwsgi-truncated-body-upstream-failure",
+      "status": "passed",
+      "durationMs": 1.45,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "modifier1": 0,
+        "modifier2": 0,
+        "packetBytes": 462
+      },
+      "responseStatus": 200,
+      "responseComplete": false,
+      "responseBytes": 5,
+      "failureElapsedMs": 1.41
+    },
+    {
+      "name": "uwsgi-timeout-upstream-failure",
+      "status": "passed",
+      "durationMs": 301.72,
+      "requestBytes": 0,
+      "requestBodySha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "upstreamReceipts": 1,
+      "framing": {
+        "modifier1": 0,
+        "modifier2": 0,
+        "packetBytes": 455
+      },
+      "responseStatus": 504,
+      "responseComplete": true,
+      "responseBytes": 167,
+      "failureElapsedMs": 301.67
+    }
+  ],
+  "skips": [],
+  "fixtureErrors": [],
+  "cleanup": {
+    "errors": [],
+    "nativeStopped": true,
+    "nativeExit": {
+      "code": 0,
+      "signal": null
+    },
+    "signal": "SIGQUIT",
+    "fixturesStopped": true,
+    "openSockets": 0,
+    "temporaryRootRemoved": true
+  },
+  "options": {
+    "bind": "127.0.0.1",
+    "masterProcess": false,
+    "requestBuffering": true,
+    "responseBuffering": false,
+    "readTimeoutMs": 300,
+    "maximumWireBytes": 262144
+  },
+  "limitations": [
+    "Synthetic loopback FastCGI RESPONDER, SCGI and uWSGI fixtures; no real application runtime, keepalive pool, TLS, cache, retry or multiplexing coverage.",
+    "Request buffering is explicitly on and response buffering off. Chunked client input is decoded by native NGINX before adapter framing; this does not test unbuffered request backpressure.",
+    "Source hashes identify local adapter translation units and this harness; binary identity is separate and does not attest that those files built the executable.",
+    "Baseline and candidate are expected to agree. These are compatibility checks, not newly fixed adapter defects or performance improvements."
+  ],
+  "nativeErrorLogTail": "2026/10/23 12:51:38 [notice] 20#20: using the \"epoll\" event method\n2026/10/23 12:51:38 [notice] 20#20: nginx/1.31.9\n2026/10/23 12:51:38 [notice] 20#20: built by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \n2026/10/23 12:51:38 [notice] 20#20: OS: Linux 6.18.55\n2026/10/23 12:51:38 [notice] 20#20: getrlimit(RLIMIT_NOFILE): 16384:16384\n2026/10/23 12:51:38 [warn] 20#20: control API unavailable in single process mode\n2026/10/23 12:51:38 [warn] 20#20: *4 a client request body is buffered to a temporary file /tmp/x10-native-adapters-q5FL13/body/0000000001, client: 127.0.0.1, server: fixture.test, request: \"POST /fastcgi/binary?id=fastcgi&value=a%2Fb HTTP/1.1\", host: \"fixture.test\"\n2026/10/23 12:51:38 [warn] 20#20: *6 a client request body is buffered to a temporary file /tmp/x10-native-adapters-q5FL13/body/0000000002, client: 127.0.0.1, server: fixture.test, request: \"POST /fastcgi/chunked?id=fastcgi&value=a%2Fb HTTP/1.1\", host: \"fixture.test\"\n2026/10/23 12:51:38 [error] 20#20: *8 upstream sent invalid header: \"Bad\\x00...\" while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /fastcgi/invalid?id=fastcgi&value=a%2Fb HTTP/1.1\", upstream: \"fastcgi://127.0.0.1:38039\", host: \"fixture.test\"\n2026/10/23 12:51:38 [error] 20#20: *10 upstream prematurely closed connection while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /fastcgi/truncated-header?id=fastcgi&value=a%2Fb HTTP/1.1\", upstream: \"fastcgi://127.0.0.1:38039\", host: \"fixture.test\"\n2026/10/23 12:51:38 [error] 20#20: *14 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /fastcgi/timeout?id=fastcgi&value=a%2Fb HTTP/1.1\", upstream: \"fastcgi://127.0.0.1:38039\", host: \"fixture.test\"\n2026/10/23 12:51:38 [warn] 20#20: *18 a client request body is buffered to a temporary file /tmp/x10-native-adapters-q5FL13/body/0000000003, client: 127.0.0.1, server: fixture.test, request: \"POST /scgi/binary?id=scgi&value=a%2Fb HTTP/1.1\", host: \"fixture.test\"\n2026/10/23 12:51:38 [warn] 20#20: *20 a client request body is buffered to a temporary file /tmp/x10-native-adapters-q5FL13/body/0000000004, client: 127.0.0.1, server: fixture.test, request: \"POST /scgi/chunked?id=scgi&value=a%2Fb HTTP/1.1\", host: \"fixture.test\"\n2026/10/23 12:51:38 [error] 20#20: *22 upstream sent invalid header: \"Bad\\x00...\" while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /scgi/invalid?id=scgi&value=a%2Fb HTTP/1.1\", upstream: \"scgi://127.0.0.1:46877\", host: \"fixture.test\"\n2026/10/23 12:51:38 [error] 20#20: *24 upstream prematurely closed connection while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /scgi/truncated-header?id=scgi&value=a%2Fb HTTP/1.1\", upstream: \"scgi://127.0.0.1:46877\", host: \"fixture.test\"\n2026/10/23 12:51:38 [error] 20#20: *26 upstream prematurely closed connection while reading upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /scgi/truncated-body?id=scgi&value=a%2Fb HTTP/1.1\", upstream: \"scgi://127.0.0.1:46877\", host: \"fixture.test\"\n2026/10/23 12:51:39 [error] 20#20: *28 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /scgi/timeout?id=scgi&value=a%2Fb HTTP/1.1\", upstream: \"scgi://127.0.0.1:46877\", host: \"fixture.test\"\n2026/10/23 12:51:39 [warn] 20#20: *32 a client request body is buffered to a temporary file /tmp/x10-native-adapters-q5FL13/body/0000000005, client: 127.0.0.1, server: fixture.test, request: \"POST /uwsgi/binary?id=uwsgi&value=a%2Fb HTTP/1.1\", host: \"fixture.test\"\n2026/10/23 12:51:39 [warn] 20#20: *34 a client request body is buffered to a temporary file /tmp/x10-native-adapters-q5FL13/body/0000000006, client: 127.0.0.1, server: fixture.test, request: \"POST /uwsgi/chunked?id=uwsgi&value=a%2Fb HTTP/1.1\", host: \"fixture.test\"\n2026/10/23 12:51:39 [error] 20#20: *36 upstream sent invalid header: \"Bad\\x00...\" while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /uwsgi/invalid?id=uwsgi&value=a%2Fb HTTP/1.1\", upstream: \"uwsgi://127.0.0.1:46863\", host: \"fixture.test\"\n2026/10/23 12:51:39 [error] 20#20: *38 upstream prematurely closed connection while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /uwsgi/truncated-header?id=uwsgi&value=a%2Fb HTTP/1.1\", upstream: \"uwsgi://127.0.0.1:46863\", host: \"fixture.test\"\n2026/10/23 12:51:39 [error] 20#20: *40 upstream prematurely closed connection while reading upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /uwsgi/truncated-body?id=uwsgi&value=a%2Fb HTTP/1.1\", upstream: \"uwsgi://127.0.0.1:46863\", host: \"fixture.test\"\n2026/10/23 12:51:39 [error] 20#20: *42 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /uwsgi/timeout?id=uwsgi&value=a%2Fb HTTP/1.1\", upstream: \"uwsgi://127.0.0.1:46863\", host: \"fixture.test\"\n2026/10/23 12:51:39 [notice] 20#20: signal 3 (SIGQUIT) received from 5, shutting down\n2026/10/23 12:51:39 [notice] 20#20: exit\n",
+  "nativeLogRead": true,
+  "sourceUnchangedDuringTest": true,
+  "unexpectedNativeErrors": [],
+  "expectedFailureDiagnostics": [
+    "2026/10/23 12:51:38 [error] 20#20: *8 upstream sent invalid header: \"Bad\\x00...\" while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /fastcgi/invalid?id=fastcgi&value=a%2Fb HTTP/1.1\", upstream: \"fastcgi://127.0.0.1:38039\", host: \"fixture.test\"",
+    "2026/10/23 12:51:38 [error] 20#20: *10 upstream prematurely closed connection while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /fastcgi/truncated-header?id=fastcgi&value=a%2Fb HTTP/1.1\", upstream: \"fastcgi://127.0.0.1:38039\", host: \"fixture.test\"",
+    "2026/10/23 12:51:38 [error] 20#20: *14 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /fastcgi/timeout?id=fastcgi&value=a%2Fb HTTP/1.1\", upstream: \"fastcgi://127.0.0.1:38039\", host: \"fixture.test\"",
+    "2026/10/23 12:51:38 [error] 20#20: *22 upstream sent invalid header: \"Bad\\x00...\" while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /scgi/invalid?id=scgi&value=a%2Fb HTTP/1.1\", upstream: \"scgi://127.0.0.1:46877\", host: \"fixture.test\"",
+    "2026/10/23 12:51:38 [error] 20#20: *24 upstream prematurely closed connection while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /scgi/truncated-header?id=scgi&value=a%2Fb HTTP/1.1\", upstream: \"scgi://127.0.0.1:46877\", host: \"fixture.test\"",
+    "2026/10/23 12:51:38 [error] 20#20: *26 upstream prematurely closed connection while reading upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /scgi/truncated-body?id=scgi&value=a%2Fb HTTP/1.1\", upstream: \"scgi://127.0.0.1:46877\", host: \"fixture.test\"",
+    "2026/10/23 12:51:39 [error] 20#20: *28 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /scgi/timeout?id=scgi&value=a%2Fb HTTP/1.1\", upstream: \"scgi://127.0.0.1:46877\", host: \"fixture.test\"",
+    "2026/10/23 12:51:39 [error] 20#20: *36 upstream sent invalid header: \"Bad\\x00...\" while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /uwsgi/invalid?id=uwsgi&value=a%2Fb HTTP/1.1\", upstream: \"uwsgi://127.0.0.1:46863\", host: \"fixture.test\"",
+    "2026/10/23 12:51:39 [error] 20#20: *38 upstream prematurely closed connection while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /uwsgi/truncated-header?id=uwsgi&value=a%2Fb HTTP/1.1\", upstream: \"uwsgi://127.0.0.1:46863\", host: \"fixture.test\"",
+    "2026/10/23 12:51:39 [error] 20#20: *40 upstream prematurely closed connection while reading upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /uwsgi/truncated-body?id=uwsgi&value=a%2Fb HTTP/1.1\", upstream: \"uwsgi://127.0.0.1:46863\", host: \"fixture.test\"",
+    "2026/10/23 12:51:39 [error] 20#20: *42 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 127.0.0.1, server: fixture.test, request: \"GET /uwsgi/timeout?id=uwsgi&value=a%2Fb HTTP/1.1\", upstream: \"uwsgi://127.0.0.1:46863\", host: \"fixture.test\""
+  ],
+  "childOutputTail": "nginx: [warn] control API unavailable in single process mode\n",
+  "summary": {
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0
+  },
+  "finishedAt": "2026-10-23T08:51:39.479Z",
+  "success": true
+}

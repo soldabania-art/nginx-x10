@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 1,
+  "suite": "nginx-x10-native-http-baseline",
+  "startedAt": "2026-10-22T13:44:49.950Z",
+  "identity": {
+    "sourceCheckout": "/workspace/scratch/d8c3d94bb512/nginx-x10/",
+    "source": {
+      "commit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "tree": "8c48f3bef5a865cc5602ee2c667d9663b7db05e1",
+      "branch": "x10-development",
+      "trackedChanges": "M src/event/quic/ngx_event_quic_transport.c"
+    },
+    "binary": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+    "binarySha256": "adf05f3088bf8ee1ed7c886e424a2d92258323dd78e036276b41e009fbaf634e",
+    "binarySize": 8547008,
+    "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+    "node": "v24.19.0",
+    "platform": "linux",
+    "arch": "x64",
+    "certificates": {
+      "caSha256": "706e28bc4b47d9729a311c9c50e312c0c50ed499916a7ddb026fb5e04548a580",
+      "serverSha256": "03e37e52b1e313c688eab99db4fc07f7e065c2b2ab912ad6f99e44016781f55f"
+    },
+    "masterPid": 27
+  },
+  "options": {
+    "bind": "127.0.0.1",
+    "prefix": "/tmp/nginx-x10-native-InnLVy",
+    "privatePrefixMode": "0700",
+    "publicPort": 39381,
+    "tlsPort": 46375,
+    "fixturePorts": [
+      33459,
+      37193
+    ],
+    "args": [
+      "-p",
+      "/tmp/nginx-x10-native-InnLVy/",
+      "-c",
+      "/tmp/nginx-x10-native-InnLVy/conf/nginx.conf",
+      "-e",
+      "/tmp/nginx-x10-native-InnLVy/logs/error.log"
+    ],
+    "workerProcesses": 1,
+    "workerUid": 0,
+    "workerUserPolicy": "retain invoking UID in private loopback fixtures",
+    "proxyHttpVersion": "1.1",
+    "retryNonIdempotent": false,
+    "nativeWorkerShutdownTimeoutMs": 10000,
+    "cleanupGraceMs": 3000,
+    "tlsVerificationDisabled": false,
+    "configurations": [
+      {
+        "label": "initial-a",
+        "sha256": "fdf3e3810eddc999eeac2d919b19d19c7c69173d36c3bcc3833d08d65e86343e",
+        "bytes": 1390
+      },
+      {
+        "label": "valid-reload-b",
+        "sha256": "dfd80840d02e61d302d8b31f013d4df6dc708137f257c4cb3b90b9a3551805f6",
+        "bytes": 1390
+      },
+      {
+        "label": "syntax-invalid-reload",
+        "sha256": "e05ceebfd7c16d1c3b9b7b695f10c73a5fce74c4c870499389965ad24589cea3",
+        "bytes": 1414
+      },
+      {
+        "label": "valid-file-restored-for-cleanup",
+        "sha256": "dfd80840d02e61d302d8b31f013d4df6dc708137f257c4cb3b90b9a3551805f6",
+        "bytes": 1390
+      }
+    ]
+  },
+  "tests": [
+    {
+      "name": "valid-config-native-t",
+      "status": "passed"
+    },
+    {
+      "name": "invalid-config-native-t-rejected",
+      "exitCode": 1,
+      "status": "passed"
+    },
+    {
+      "name": "http1-round-robin-two-real-upstreams",
+      "requests": 16,
+      "receipts": {
+        "a": 8,
+        "b": 8
+      },
+      "status": "passed"
+    },
+    {
+      "name": "post-body-preserved-once",
+      "upstreamReceipts": 1,
+      "bodySha256": "436367a4e5fbd5cfd02cd2a7c72221a657f64c9089773821880d6b96ad0eb493",
+      "status": "passed"
+    },
+    {
+      "name": "post-transport-failure-never-replayed",
+      "httpStatus": 502,
+      "upstreamReceipts": 1,
+      "receiptPeer": "b",
+      "status": "passed"
+    },
+    {
+      "name": "tls-trusted-ca-and-hostname-validation",
+      "trustedRequest": 200,
+      "untrustedCaRejected": true,
+      "wrongHostnameRejected": true,
+      "status": "passed"
+    },
+    {
+      "name": "downstream-http2-over-verified-tls",
+      "httpStatus": 200,
+      "alpn": "h2",
+      "status": "passed"
+    },
+    {
+      "name": "proxy-stream-first-chunk-before-completion",
+      "firstChunk": "first:a",
+      "fixtureCompletionHeld": true,
+      "status": "passed"
+    },
+    {
+      "name": "valid-reload-new-route-and-live-old-stream",
+      "routeBefore": "a",
+      "routeAfter": "b",
+      "newWorkerPids": [
+        30
+      ],
+      "oldStreamStillOpen": true,
+      "status": "passed"
+    },
+    {
+      "name": "syntax-invalid-reload-keeps-serving-route-and-stream",
+      "retainedRoute": "b",
+      "successfulRequests": 4,
+      "actualRejectionLogged": true,
+      "oldStreamStillOpen": true,
+      "status": "passed"
+    },
+    {
+      "name": "accepted-old-stream-completes-after-both-reloads",
+      "completeBody": "first:a\nlast:a",
+      "firstBeforeEnd": true,
+      "status": "passed"
+    }
+  ],
+  "limitations": [
+    "Regression fixtures are not load benchmarks or a performance-superiority claim.",
+    "HTTP/2 test covers downstream TLS HTTP/2 to native NGINX with HTTP/1 upstream fixtures; upstream HTTP/2 and multiplexing are untested.",
+    "HTTP/3/QUIC, mail, stream, control API, FastCGI/SCGI/uWSGI/memcached and exhaustive platform/module failure paths are untested.",
+    "Reload rejection covers invalid syntax, not arbitrary late module initialization or shared-memory side effects.",
+    "Checkout identity and binary hash/version/options are recorded separately; this harness does not cryptographically attest the build source."
+  ],
+  "success": true,
+  "cleanup": {
+    "started": true,
+    "mode": "SIGQUIT",
+    "exitCode": 0,
+    "signal": null,
+    "exited": true
+  },
+  "finishedAt": "2026-10-22T13:44:52.296Z"
+}

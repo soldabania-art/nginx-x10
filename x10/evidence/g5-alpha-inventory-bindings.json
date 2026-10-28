@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 1,
+  "kind": "alpha-extracted-inventory-binding-correction",
+  "state": "LOCAL_BINDING_CORRECTION_VERIFIED_HOSTED_PENDING",
+  "sourceBase": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+  "publicationParent": "51178f96d8eb3e63fd909a614e5509e93b03f8d0",
+  "evidence": "x10/evidence/g5-alpha-inventory-bindings.json",
+  "perFileLedger": "x10/review/g5-alpha-inventory-bindings-ledger.json",
+  "sourceBindings": {
+    "x10/test/alpha.test.mjs": {
+      "bytes": 91776,
+      "sha256": "241d1822d2d5f64e2e652e45d1d6f0d86b0eb3100a18b79dbe441de0e15a8760"
+    },
+    "x10/test/alpha-recipe-helpers.mjs": {
+      "bytes": 14556,
+      "sha256": "0fb4ab5a6e08d6867a37d54538b57e3659aeeb917d2304fec7e026a3d25d9d2e"
+    },
+    "x10/test/alpha-decomposition.test.mjs": {
+      "bytes": 13853,
+      "sha256": "b046ee374c535a45842ae17e3ae89adeffbfc22b5dc0295eb921b5f2e8f249d3"
+    }
+  },
+  "scope": "Narrow fixture extraction dependency correction, not installed runtime/native change, physical/service compatibility, measured test scheduling improvement or fullG5/V1 acceptance.",
+  "observedBaseline": {
+    "evidence": "x10/evidence/g5-alpha-inventory-bindings-hosted-failure.json",
+    "bothNativeEventsFailed": true,
+    "nativeGroupsPassed": 19,
+    "nativeGroupsTotal": 20,
+    "managedTAP": {
+      "tests": 201,
+      "pass": 201,
+      "fail": 0
+    },
+    "alphaTAP": {
+      "tests": 600,
+      "pass": 598,
+      "fail": 2
+    },
+    "alphaNonTimeoutElapsedMs": {
+      "push": 83235,
+      "pullRequest": 83115
+    },
+    "observedRuntimeError": "recipeV2Names is not defined",
+    "latentSourceGap": "recipeV2Dirs at the following statement; source confirmed, not independently observed as a second runtime ReferenceError",
+    "failedBodyCount": 1,
+    "parentPropagationCount": 1,
+    "wholeFailedAlphaCleanupConfirmed": false,
+    "newLocalSuccessDoesNotClearAdverse": true
+  },
+  "implementation": {
+    "helperChange": "Only two export modifiers added for recipeV2Names and recipeV2Dirs. Both arrays and all helper function bodies remain exact baseline bytes.",
+    "consumerChange": "Only both named inventory imports added to actual alpha helper import clause. All physical alpha test bodies, inventory assertions, assertions order and cleanup remain exact baseline text.",
+    "guardChange": "Retain22 existing body-preservation/decomposition controls and add23 new module-binding and inventory-consumption controls. Do not replace body preservation with linking checks.",
+    "sharedDeclarationCount": 15,
+    "exactImportedInventoryFiles": 15,
+    "exactImportedInventoryDirectories": 8,
+    "guardsAreNotGeneralJavaScriptStaticAnalysis": "Finite known shared-helper contract and two actual extracted assertion statements only.",
+    "physicalBodiesChanged": false,
+    "budgetsChanged": false,
+    "workflowStepNamesChanged": false,
+    "nativeGroupSequenceChanged": false,
+    "completeTAPRequirementsChanged": false,
+    "nameOrSkipFiltersAdded": false,
+    "nativeCChanged": false,
+    "installedRuntimeBytesChanged": false,
+    "fixedBundleFileInventoryChanged": false
+  },
+  "verification": {
+    "guardTAP": {
+      "command": "node --test --test-reporter=tap x10/test/alpha-decomposition.test.mjs",
+      "tests": 45,
+      "pass": 45,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "priorControls": 22,
+      "newControlsOnce": 23,
+      "scope": "Actual helper definitions and actual consumer import clauses linked through ESM without importing alpha.test.mjs. Fifteen individually missing helper exports refused; exact two inventory assertions evaluated in VM with fake records/lstat and actual exported arrays."
+    },
+    "retainedRecipeTAP": {
+      "command": "node --test --test-reporter=tap x10/test/alpha-recipe.test.mjs",
+      "tests": 17,
+      "pass": 17,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "retainedCoverageNotNewControls": true,
+      "executions": 1,
+      "scope": "Private Node identity and read-only installed commands with synthetic NONEXECUTED native bytes. No native session, network, process-group, signal or manager fixture."
+    },
+    "guardHistory": [
+      "Initial guard43/45 had two VM cross-realm Object.keys array-prototype false failures; corrected harness by supplying host Object without changing exact extracted assertion statements or product files.",
+      "Final45/45 was repeated once only to capture its own exitCode explicitly after the recipe command; repeated executions are not additional controls."
+    ],
+    "independentBaselineReview": {
+      "checks": 4,
+      "passed": 4,
+      "scope": "Independent read-only source and pure ESM-link checks; no physical/runtime/native/network/signal fixture",
+      "note": "Initial exactmissing-name expectation assumed Names first, but engine reported Dirs first; matcher corrected for either missing identifier; source unchanged.",
+      "notAddedToAuthorTAP": true
+    },
+    "independentFinalCandidateReview": {
+      "checks": 24,
+      "passed": 24,
+      "failed": 0,
+      "scope": "Independent read-only static/data/ESM-link/VM inventory assertion checks. No alpha test module or physical callback is imported/executed; only safe shared helper definitions are evaluated with original root substituted in private data URLs.",
+      "sourceAndGuardPinsReviewed": true,
+      "reportBinding": {
+        "bytes": 6133,
+        "sha256": "99093898f7930a019a4ced0330d271cd829e57c82047ce237ce5260f1f026064"
+      },
+      "note": "Initial private VM used its own Object.keys array realm with an outer-module exported array, causing two prototype mismatches. Injecting the original Object constructor reflects the same-realm production module semantics; source unchanged. Initial finalguard prefix check included the intentionally clarified first-line comment; guard implementation comparison now starts at first import, no product edit.",
+      "notAddedToAuthorTAP": true,
+      "initial16IncludedInFinal24NotSummed": true
+    },
+    "mandatoryRead": {
+      "baseCommit": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+      "documents": 47,
+      "mandatoryEdges": 173,
+      "blobPinComparisons": 99,
+      "distinctPinnedTargets": 12,
+      "distinctAncestorCommits": 19,
+      "missingReferences": 0,
+      "mismatches": 0,
+      "semanticChecks": 138,
+      "scope": "Document/source/ancestry checks, separate from runtime TAP."
+    },
+    "localPhysicalAggregateExecuted": false,
+    "newHostedAccepted": false,
+    "countsAreSeparateNotSummed": true
+  },
+  "unchangedBindings": {
+    "x10/test/all.mjs": {
+      "bytes": 32171,
+      "sha256": "ca43fcbc8388d76673c6d8bde061a94d1689b109af346b6d6efb9947f29deb82"
+    },
+    "x10/test/alpha-recipe.test.mjs": {
+      "bytes": 10577,
+      "sha256": "99530dcb2135b99c91eee30e87dfe21a7cd6cfd67aefaf1cef0ba58d6bebe5f4"
+    },
+    ".github/workflows/x10-native.yml": {
+      "bytes": 26465,
+      "sha256": "d3f92329a396b02d045b45736733cdb711bf55af10b30504bc24f1a0efc8eb73"
+    },
+    "x10/alpha/cli.mjs": {
+      "bytes": 87522,
+      "sha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa"
+    },
+    "x10/alpha/runtime.mjs": {
+      "bytes": 7540,
+      "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51"
+    },
+    "x10/control/manager.mjs": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "x10/control/cli.mjs": {
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+    },
+    "x10/service/operator-package-return.mjs": {
+      "bytes": 68575,
+      "sha256": "612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7"
+    },
+    "x10/service/operator-package-return-proof.mjs": {
+      "bytes": 12890,
+      "sha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de"
+    },
+    "x10/service/operator-package-fallback.mjs": {
+      "bytes": 630,
+      "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+    },
+    "x10/service/operator-package-fallback-proof.mjs": {
+      "bytes": 13468,
+      "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+    },
+    "x10/service/verified-node.mjs": {
+      "bytes": 32439,
+      "sha256": "2febc8bdb6d890e738a426e4a80121ea840d143d9a718768ef10b5b09e839090"
+    },
+    "x10/service/lifecycle-check.mjs": {
+      "bytes": 147483,
+      "sha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370"
+    }
+  },
+  "limits": [
+    "The exact844 native managed group201PASS did not establish successful remaining physical alpha execution; its two alpha failures and cleanupunknown remain preserved.",
+    "New45guardTAP and17retainedrecipeTAP do not prove corrected physical alpha or installed service compatibility.",
+    "Do not infer successor aggregate TAP totals by adding23 to prior201 or carrying prior600; inspect actual complete receipts.",
+    "Shorter failed844 alpha elapsed times do not prove corrected scheduling gains or explain older timeout variance.",
+    "The shared legacy-CLI/acb plus reviewed98b-peer profile is not a full historicalacb package or old-controller downgrade.",
+    "Controller bounded record reads retain their narrow prior scope; other alpha/config/binary/proc reads, user-manager environment and session/inventory capacity remain open."
+  ],
+  "nextTask": "Read exact new push/PR native jobs and actual artifacts. Require complete zero-skip controller/alpha TAP with actual new45 guards, retained17 recipe controls,76 reader and79 shared-peer controls, all20nativegroups/36steps and fullinstalled/service/strict3report+owned/privateNode/history/bootstrapcleanup. Do not transfer oldsource PR acceptance. Only after scoped both-event compatibility, separately repair cumulative session/inventory capacity before publication of uninspectable state. Preserve all earlier adverse/unknown history and fullrelease/recovery/security/V1/Continuum gates.",
+  "physicalFixturesExecuted": 0,
+  "networkFixturesExecuted": 0,
+  "signalsSent": 0,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "fullG5Accepted": false,
+  "fullG7Accepted": false,
+  "productionAccepted": false
+}

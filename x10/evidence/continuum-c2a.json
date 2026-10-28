@@ -1,0 +1,715 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "suite": "continuum-c2a-pinned-openssl-read-only-state",
+  "date": "2026-10-23",
+  "baselineCommit": "a882c9505271ab49abbdd6293177f3683d72f3a4",
+  "publicationParent": "941fc3ea2f58ed8df45539841ff28aaf736f5c4e",
+  "profile": "x10/continuum/C2A-PROFILE.md",
+  "implementationCommitRule": "First commit introducing this evidence file; exact hosted SHA and run IDs are recorded after publication.",
+  "scope": {
+    "readOnlyObservation": true,
+    "fullInventoryAccepted": false,
+    "trafficGrant": false,
+    "semanticExportImport": false,
+    "actualLibraryVersionChange": false,
+    "sameConnectionMigration": false,
+    "nativeNginxIntegration": false,
+    "automaticAdapterCompiler": false
+  },
+  "sourceSha256": {
+    "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+    "openssl-probe-run.mjs": "54557d1cde15f221bdd1f1a12a71e2e95ed3be57318281cf005ba7ec1b5d9387",
+    "openssl-probe.test.mjs": "5db079b22967707ad3dd1ca925b6c9f1e154dfd37a95cff9776e949c446434d3",
+    "openssl-probe-fixture.c": "7ed329d5da30d2a16d2e4ef95659315a649f714657c6a2e9ad23b8b75d1c840a",
+    "openssl-probe.c": "453091bbfb54439bf1304ea15ad3de9bbe9b9bf1ce465da5c7723fef9f11e9ca",
+    "openssl-probe.h": "ca4c0d5e86a4e008a59c7788057fa03dc8c6fb64237beb06b0edfbee473fb0d8",
+    "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+    "openssl-probe-check.mjs": "45da87fdb75ee404b8403c3c80afa51c55a4b6d8713e5040ee88354c8b9d313a",
+    "handshake-oracle.mjs": "b551e55d6d20ebb687f6d49c38a0cd6b144acd5981047fc24c502b2fccd4c835",
+    "record.mjs": "124baea5d841b3036041ee46aa8992a8c348cc9ffe13e3661b391bed0927e272"
+  },
+  "localAggregate": {
+    "command": "node x10/continuum/openssl-probe-check.mjs",
+    "result": {
+      "schemaVersion": 1,
+      "suite": "continuum-pinned-openssl-state-probe",
+      "passed": true,
+      "testFiles": 1,
+      "scope": "pinned-openssl-read-only-state-observation",
+      "nativeNginxMigration": false,
+      "realSessionMigration": false,
+      "counts": {
+        "tests": 8,
+        "suites": 0,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "interrupted": false,
+      "runnerError": null
+    },
+    "recordSha256": "5445bbf980cf6a214f25d720777e6f79137ed0d6777eba270d5fc62e4525899c",
+    "sourceWasUnmodified": true
+  },
+  "actualRuntimeMatrix": [
+    "quiescent",
+    "partial-header",
+    "partial-body",
+    "unread-plaintext",
+    "empty-read-retry",
+    "write-backpressure",
+    "queued-key-update",
+    "completed-key-update"
+  ],
+  "localRegressions": {
+    "c0Core": {
+      "tests": 21,
+      "suites": 0,
+      "pass": 21,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "c0Process": {
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 0,
+      "exitCode": 0,
+      "privateRecordSha256": "7597a3fa61f46101253fb0f15896aa3ab14d10297727ac7e8ab5946564293857"
+    },
+    "c1": {
+      "tests": 22,
+      "suites": 0,
+      "pass": 22,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "nativeEvidence": "x10/evidence/continuum-c2a-native-regression.json",
+    "nativeSourceAndBinaryChanged": false
+  },
+  "buildOwnerControls": {
+    "executedBy": "isolated-build owner",
+    "freshExactSourceBuild": true,
+    "verifiedRestrictiveFlags": 13,
+    "actualTamperDenials": [
+      "ignored-source-addition",
+      "generated-configuration-header",
+      "static-libssl-archive"
+    ],
+    "restoredIdentityPass": true,
+    "doubleCleanupAndRootAbsence": true,
+    "actualBuildAbortRootAbsentAndNoLiveChildren": true,
+    "compilerWasObservedAtAbort": false,
+    "separateExactCommandProcessGroupControl": {
+      "shellAndSleepTerminated": true,
+      "realTls": false
+    }
+  },
+  "aggregateProducerControls": {
+    "schemaVersion": 1,
+    "suite": "c2a-aggregate-producer-controls",
+    "sourceSha256": "45da87fdb75ee404b8403c3c80afa51c55a4b6d8713e5040ee88354c8b9d313a",
+    "controls": [
+      {
+        "case": "valid",
+        "passed": true
+      },
+      {
+        "case": "empty",
+        "passed": true
+      },
+      {
+        "case": "failure-canary",
+        "passed": true
+      },
+      {
+        "case": "exit-failure",
+        "passed": true
+      },
+      {
+        "case": "oversize",
+        "passed": true
+      },
+      {
+        "case": "forged-count",
+        "passed": true
+      },
+      {
+        "case": "skip",
+        "passed": true
+      },
+      {
+        "case": "actual-interruption",
+        "passed": true
+      },
+      {
+        "case": "unexpected-argument",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "rawTAPPublished": false
+  },
+  "independentReview": {
+    "privateRecordSha256": "b7edd6254d4f884522708fff645efb6085bb7e8032a6fad24dc572be0d5da34f",
+    "privateRunnerChange": "append-only trusted private harness-access export",
+    "nativeProbeFixtureHeaderPatchBuilderCopiedUnchanged": true,
+    "exactFrozenRootAggregateIsSeparate": true,
+    "actualTLSControls": 4,
+    "observations": [
+      {
+        "options": {
+          "scenario": "quiescent",
+          "payloadBytes": 33331
+        },
+        "outcome": "pass",
+        "probe": {
+          "event": "probe",
+          "scenario": "quiescent",
+          "sample": 1,
+          "allowed": true,
+          "reasons": "0",
+          "monitorKnown": true,
+          "readGeneration": "0",
+          "writeGeneration": "0",
+          "mutationSerial": "2",
+          "readNextSequence": "0000000000000003",
+          "writeNextSequence": "0000000000000003",
+          "sslPending": 0,
+          "sslHasPending": false,
+          "packetLength": 0,
+          "rbufLeft": 0,
+          "rbufOffset": 588,
+          "rbufLength": 16712,
+          "unreadRecordBytes": 0,
+          "unreadControlBytes": 0,
+          "wbufLeft": 0,
+          "wbufOffset": 588,
+          "wbufLength": 16584,
+          "wnum": 0,
+          "staleWpendTot": 563,
+          "staleWpendRet": 563,
+          "readRecordSlots": 1,
+          "writeBufferSlots": 1,
+          "rstate": 240,
+          "rwstate": 1,
+          "flowState": 4,
+          "handshakeState": 1,
+          "inInit": 0,
+          "inHandshake": 0,
+          "encReadState": 0,
+          "encWriteState": 0,
+          "keyUpdate": -1,
+          "alertDispatch": 0,
+          "shutdown": 0,
+          "handshakeFragmentLength": 0,
+          "initNum": 0,
+          "ledgerLastCall": 3,
+          "ledgerRetryCall": 0,
+          "ledgerLastOutcome": 1,
+          "ledgerCallSerial": "8"
+        },
+        "immutableSelectedMetadata": true,
+        "wire": {
+          "schemaVersion": 1,
+          "recordKind": "tls13-handshake-wire-oracle",
+          "passed": true,
+          "protocol": "TLSv1.3",
+          "cipher": "TLS_AES_128_GCM_SHA256",
+          "alpn": "continuum-c1",
+          "endpointAuthorizationObserved": true,
+          "authenticatedHandshakeBoundary": true,
+          "independentFinishedMacVerification": false,
+          "fullHandshakeVerifier": false,
+          "directions": {
+            "client": {
+              "captureRecords": 7,
+              "preApplicationRecords": 3,
+              "helloRecords": 1,
+              "compatibilityCCSRecords": 1,
+              "encryptedHandshakeRecords": 1,
+              "applicationRecords": 3,
+              "applicationBytes": 33331,
+              "keyUpdates": 0,
+              "closeNotify": true,
+              "trailingBytes": 0
+            },
+            "server": {
+              "captureRecords": 10,
+              "preApplicationRecords": 6,
+              "helloRecords": 1,
+              "compatibilityCCSRecords": 1,
+              "encryptedHandshakeRecords": 4,
+              "applicationRecords": 3,
+              "applicationBytes": 33331,
+              "keyUpdates": 0,
+              "closeNotify": true,
+              "trailingBytes": 0
+            }
+          },
+          "capturedStreamComplete": true,
+          "stateExportImport": false,
+          "migration": false,
+          "nativeNginxIntegration": false
+        },
+        "fixtureGracefulShutdown": true
+      },
+      {
+        "options": {
+          "scenario": "partial-header",
+          "payloadBytes": 613,
+          "fragmentPrefix": 2
+        },
+        "outcome": "pass",
+        "probe": {
+          "event": "probe",
+          "scenario": "partial-header",
+          "sample": 1,
+          "allowed": false,
+          "reasons": "1172",
+          "monitorKnown": true,
+          "readGeneration": "0",
+          "writeGeneration": "0",
+          "mutationSerial": "2",
+          "readNextSequence": "0000000000000000",
+          "writeNextSequence": "0000000000000000",
+          "sslPending": 0,
+          "sslHasPending": true,
+          "packetLength": 0,
+          "rbufLeft": 2,
+          "rbufOffset": 3,
+          "rbufLength": 16712,
+          "unreadRecordBytes": 0,
+          "unreadControlBytes": 0,
+          "wbufLeft": 0,
+          "wbufOffset": 61,
+          "wbufLength": 16584,
+          "wnum": 0,
+          "staleWpendTot": 36,
+          "staleWpendRet": 36,
+          "readRecordSlots": 0,
+          "writeBufferSlots": 1,
+          "rstate": 240,
+          "rwstate": 3,
+          "flowState": 4,
+          "handshakeState": 1,
+          "inInit": 0,
+          "inHandshake": 0,
+          "encReadState": 0,
+          "encWriteState": 0,
+          "keyUpdate": -1,
+          "alertDispatch": 0,
+          "shutdown": 0,
+          "handshakeFragmentLength": 0,
+          "initNum": 0,
+          "ledgerLastCall": 2,
+          "ledgerRetryCall": 2,
+          "ledgerLastOutcome": 2,
+          "ledgerCallSerial": "4"
+        },
+        "immutableSelectedMetadata": false,
+        "wire": null,
+        "fixtureGracefulShutdown": false
+      },
+      {
+        "options": {
+          "scenario": "partial-body",
+          "payloadBytes": 2077,
+          "fragmentPrefix": 29
+        },
+        "outcome": "pass",
+        "probe": {
+          "event": "probe",
+          "scenario": "partial-body",
+          "sample": 1,
+          "allowed": false,
+          "reasons": "1172",
+          "monitorKnown": true,
+          "readGeneration": "0",
+          "writeGeneration": "0",
+          "mutationSerial": "2",
+          "readNextSequence": "0000000000000000",
+          "writeNextSequence": "0000000000000000",
+          "sslPending": 0,
+          "sslHasPending": true,
+          "packetLength": 5,
+          "rbufLeft": 24,
+          "rbufOffset": 8,
+          "rbufLength": 16712,
+          "unreadRecordBytes": 0,
+          "unreadControlBytes": 0,
+          "wbufLeft": 0,
+          "wbufOffset": 61,
+          "wbufLength": 16584,
+          "wnum": 0,
+          "staleWpendTot": 36,
+          "staleWpendRet": 36,
+          "readRecordSlots": 0,
+          "writeBufferSlots": 1,
+          "rstate": 241,
+          "rwstate": 3,
+          "flowState": 4,
+          "handshakeState": 1,
+          "inInit": 0,
+          "inHandshake": 0,
+          "encReadState": 0,
+          "encWriteState": 0,
+          "keyUpdate": -1,
+          "alertDispatch": 0,
+          "shutdown": 0,
+          "handshakeFragmentLength": 0,
+          "initNum": 0,
+          "ledgerLastCall": 2,
+          "ledgerRetryCall": 2,
+          "ledgerLastOutcome": 2,
+          "ledgerCallSerial": "4"
+        },
+        "immutableSelectedMetadata": false,
+        "wire": null,
+        "fixtureGracefulShutdown": false
+      },
+      {
+        "options": {
+          "scenario": "completed-key-update",
+          "payloadBytes": 49351
+        },
+        "outcome": "pass",
+        "probe": {
+          "event": "probe",
+          "scenario": "completed-key-update",
+          "sample": 1,
+          "allowed": false,
+          "reasons": "64",
+          "monitorKnown": true,
+          "readGeneration": "0",
+          "writeGeneration": "1",
+          "mutationSerial": "3",
+          "readNextSequence": "0000000000000004",
+          "writeNextSequence": "0000000000000004",
+          "sslPending": 0,
+          "sslHasPending": false,
+          "packetLength": 0,
+          "rbufLeft": 0,
+          "rbufOffset": 224,
+          "rbufLength": 16712,
+          "unreadRecordBytes": 0,
+          "unreadControlBytes": 0,
+          "wbufLeft": 0,
+          "wbufOffset": 224,
+          "wbufLength": 16584,
+          "wnum": 0,
+          "staleWpendTot": 199,
+          "staleWpendRet": 199,
+          "readRecordSlots": 1,
+          "writeBufferSlots": 1,
+          "rstate": 240,
+          "rwstate": 1,
+          "flowState": 4,
+          "handshakeState": 1,
+          "inInit": 0,
+          "inHandshake": 0,
+          "encReadState": 0,
+          "encWriteState": 0,
+          "keyUpdate": -1,
+          "alertDispatch": 0,
+          "shutdown": 0,
+          "handshakeFragmentLength": 0,
+          "initNum": 0,
+          "ledgerLastCall": 3,
+          "ledgerRetryCall": 0,
+          "ledgerLastOutcome": 1,
+          "ledgerCallSerial": "11"
+        },
+        "immutableSelectedMetadata": true,
+        "wire": {
+          "schemaVersion": 1,
+          "recordKind": "tls13-handshake-wire-oracle",
+          "passed": true,
+          "protocol": "TLSv1.3",
+          "cipher": "TLS_AES_128_GCM_SHA256",
+          "alpn": "continuum-c1",
+          "endpointAuthorizationObserved": true,
+          "authenticatedHandshakeBoundary": true,
+          "independentFinishedMacVerification": false,
+          "fullHandshakeVerifier": false,
+          "directions": {
+            "client": {
+              "captureRecords": 8,
+              "preApplicationRecords": 3,
+              "helloRecords": 1,
+              "compatibilityCCSRecords": 1,
+              "encryptedHandshakeRecords": 1,
+              "applicationRecords": 4,
+              "applicationBytes": 49351,
+              "keyUpdates": 0,
+              "closeNotify": true,
+              "trailingBytes": 0
+            },
+            "server": {
+              "captureRecords": 12,
+              "preApplicationRecords": 6,
+              "helloRecords": 1,
+              "compatibilityCCSRecords": 1,
+              "encryptedHandshakeRecords": 4,
+              "applicationRecords": 4,
+              "applicationBytes": 49351,
+              "keyUpdates": 1,
+              "closeNotify": true,
+              "trailingBytes": 0
+            }
+          },
+          "capturedStreamComplete": true,
+          "stateExportImport": false,
+          "migration": false,
+          "nativeNginxIntegration": false
+        },
+        "fixtureGracefulShutdown": true
+      }
+    ],
+    "identityNegativeControls": [
+      {
+        "kind": "ignored-source-addition",
+        "ignoredByGit": true,
+        "identityError": "C2A_BUILD_source_changed",
+        "runtimeGateError": "probe_fixture_failed",
+        "createdPKIDirectories": 0,
+        "refused": true,
+        "restoredIdentityPass": true
+      },
+      {
+        "kind": "static-libssl-byte-tamper",
+        "identityError": "C2A_BUILD_artifact_changed",
+        "refused": true,
+        "restoredIdentityPass": true
+      }
+    ],
+    "syntheticMonitor": {
+      "realTLS": false,
+      "countsAreSeparate": true,
+      "cases": [
+        "initial-directional-installs",
+        "successful-write-key-update",
+        "update-before-initial-sticky-invalid",
+        "duplicate-initial-sticky-invalid",
+        "generation-overflow-no-wrap",
+        "serial-overflow-no-wrap",
+        "unknown-known-mask-sticky-invalid"
+      ],
+      "result": {
+        "kind": "exact-frozen-key-event-helper-recompiled-with-minimal-metadata-struct",
+        "cases": 7,
+        "passed": true,
+        "realTLS": false,
+        "helperSha256": "65685fff41eda4426050b7936b988bea1940bd00da97b6f970b23177530e4579",
+        "driverSha256": "57a43ea19f90c1955dd63f396ea9c079aefbac3b97d938de0192d6e8e9915346"
+      },
+      "retryLedgerCoverage": false
+    },
+    "cleanup": {
+      "pinnedBuildRootAbsent": true,
+      "fixtureBinaryRootAbsent": true,
+      "pkiRootEmpty": true,
+      "idempotent": true
+    },
+    "originalSourceUnchanged": true,
+    "boundedReviewBlockerFound": false
+  },
+  "observedBuildIdentity": {
+    "schemaVersion": 1,
+    "pinnedBuild": {
+      "schemaVersion": 1,
+      "suite": "continuum-openssl-pinned-build",
+      "source": {
+        "repository": "https://github.com/openssl/openssl.git",
+        "commit": "85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c",
+        "tree": "4e48caeae2374ee4982c8e44b6a15cf4753229cb",
+        "patchedTree": "f6301918a737267208ade21de6ab162d5e82f9cb",
+        "licenseSha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+      },
+      "patch": {
+        "sha256": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+      },
+      "compiler": {
+        "command": "cc",
+        "version": "13.3.0",
+        "target": "x86_64-linux-gnu",
+        "binarySha256": "6117c52522997d2aaccb2b52b3c6bf42c0a6c5edb1d718431fed6b2fc5fec234"
+      },
+      "tools": {
+        "gitSha256": "2dae8066ef4d6a926561b4b0eaca7b458d4f5b56bb83760656e6baa7fc3e974f",
+        "perlSha256": "38d70f54fd18d614e9e6cc35c960b45f54e7b991894b8308e704ae9953c86ce4",
+        "makeSha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+      },
+      "configuration": {
+        "target": "linux-x86_64",
+        "flags": [
+          "no-shared",
+          "no-module",
+          "no-engine",
+          "no-async",
+          "no-ktls",
+          "no-tests",
+          "no-legacy",
+          "no-asm",
+          "no-comp",
+          "no-zlib",
+          "no-dso",
+          "no-autoload-config",
+          "no-fips",
+          "--prefix=/continuum-research",
+          "--openssldir=/continuum-research/config",
+          "CC={compiler}",
+          "-O2",
+          "-fno-omit-frame-pointer",
+          "-fno-ident",
+          "-ffile-prefix-map={privateRoot}=/continuum-build"
+        ],
+        "disabled": [
+          "acvp-tests",
+          "afalgeng",
+          "asan",
+          "asm",
+          "async",
+          "autoload-config",
+          "buildtest-c++",
+          "capieng",
+          "comp",
+          "crypto-mdebug",
+          "crypto-mdebug-backtrace",
+          "devcryptoeng",
+          "dso",
+          "dynamic-engine",
+          "ec_nistp_64_gcc_128",
+          "egd",
+          "engine",
+          "external-tests",
+          "fips",
+          "fips-securitychecks",
+          "fuzz-afl",
+          "fuzz-libfuzzer",
+          "ktls",
+          "legacy",
+          "loadereng",
+          "md2",
+          "module",
+          "msan",
+          "padlockeng",
+          "rc5",
+          "sctp",
+          "shared",
+          "ssl3",
+          "ssl3-method",
+          "tests",
+          "trace",
+          "ubsan",
+          "unit-test",
+          "uplink",
+          "weak-ssl-ciphers",
+          "zlib",
+          "zlib-dynamic"
+        ],
+        "sourceDateEpoch": "1706621296",
+        "configDataSha256": "63cf0a0812eed8eafe6e8421fb439914020a395b3de85cbe1f9ae1633c18d604",
+        "makefileSha256": "77ae2ee2ad8421182759e74468703ca84f7b32e54dbb35ce676b817b48fbf978",
+        "configurationHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81"
+      },
+      "provider": {
+        "active": [
+          "default"
+        ],
+        "externalModules": false,
+        "autoloadConfiguration": false
+      },
+      "artifacts": {
+        "linkage": "static-libssl-and-libcrypto",
+        "systemRuntimeStatic": false,
+        "version": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)",
+        "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+        "libcryptoSha256": "0e57b29fc915e4978da23676cd57c4685dc5bbb226cff5ddfeb9fa1d787f86bf",
+        "opensslSha256": "6e7e74e60aa470f30831378a383d266427779f3c63b59587a3d1e15ec46d9d40"
+      }
+    },
+    "sourceSha256": {
+      "fixture": "7ed329d5da30d2a16d2e4ef95659315a649f714657c6a2e9ad23b8b75d1c840a",
+      "probe": "453091bbfb54439bf1304ea15ad3de9bbe9b9bf1ce465da5c7723fef9f11e9ca",
+      "header": "ca4c0d5e86a4e008a59c7788057fa03dc8c6fb64237beb06b0edfbee473fb0d8",
+      "patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+    },
+    "fixtureBinarySha256": "f271f42702493841a3b07b2d1ecdef528a9d8080ac74671ec028437f10766886",
+    "nodeBinarySha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12",
+    "nodeVersion": "v24.19.0",
+    "nodeOpenSSLVersion": "3.5.7"
+  },
+  "counterexamples": [
+    {
+      "heuristic": "SSL_pending()==0 proves no outstanding userspace obligation",
+      "observation": "Actual partial header/body yield zero public plaintext while private input and WANT_READ retry remain; candidate refuses.",
+      "isOpenSSLGetterVulnerabilityClaim": false
+    },
+    {
+      "heuristic": "Both public pending getters false plus KeyUpdate getter NONE imply initial key epoch",
+      "observation": "Completed real server KU has getters false/NONE with write generation1; candidate refuses initial-generation gate.",
+      "isOpenSSLGetterVulnerabilityClaim": false
+    },
+    {
+      "heuristic": "All write offsets and wpend metadata must be zero",
+      "observation": "Held-out valid quiescent N33331 retains staleWpendTot563 and wbufOffset588 with zero pending output; candidate permits narrow metadata profile."
+    },
+    {
+      "kind": "development-cleanup-failure",
+      "observation": "Owner observed first recursive build cleanup fail transiently; bounded retries added; subsequent fresh full build/double cleanup/root absence passed.",
+      "adverseResultRetained": true
+    },
+    {
+      "kind": "identity-review-correction",
+      "observation": "Review found ignored-source additions omitted by initial inventory command; final inventory includes ignored files and actual author/independent tamper denials pass.",
+      "oldAcceptanceRuntimeReproductionClaimed": false
+    }
+  ],
+  "hostedCI": {
+    "state": "pending-exact-publication-SHA",
+    "previousC1HostedImplementation": "193afe99f338b9435082b002f2b5e21eda058449",
+    "previousC1SuccessDoesNotAcceptC2a": true
+  },
+  "remainingWork": [
+    "Peer-requested/read key transitions and exhaustive successful-install/control paths.",
+    "Same-operation retry completion versus unrelated successful operations.",
+    "Alert/shutdown/control inventory, sequence and key usage-limit admission.",
+    "Actual TLS-runtime interruption cleanup; build/aggregate interruption controls do not substitute.",
+    "Complete reviewed semantic state inventory before export/import; no production TLS code is changed.",
+    "Distinct source/target releases, exclusive target I/O and old process/code retirement, followed by opt-in native NGINX integration."
+  ],
+  "limitations": [
+    "Trusted single-thread caller ledger is not a concurrency lock or fence.",
+    "Key-event serial counts application key installs only; selected metadata equality is not all-memory immutability or future snapshot validity.",
+    "Negative partial-I/O cases intentionally close the fixture without claiming authenticated graceful shutdown.",
+    "Two TCP relay legs are not a transferred connection.",
+    "Endpoint verifies PKI/Finished MAC; record observer does not independently perform those checks.",
+    "Pinned static OpenSSL/default provider does not pin dynamic system runtime or claim full upstream OpenSSL test coverage.",
+    "No novelty,10x,security completeness,production or performance acceptance."
+  ],
+  "publication": "Allowlisted metadata/counts/source-build identities only. No traffic secrets, payload/ciphertext, certificate/key contents, PIDs, host paths or raw TAP/logs.",
+  "formatCheck": {
+    "ordinaryFiles": "git diff --cached --check passes with empty diagnostics",
+    "unifiedPatchContextBlankLines": [
+      5,
+      7,
+      27,
+      57,
+      80
+    ],
+    "patchDiagnostic": "git diff --check flags5 single-space unified-diff context markers, preserved because they are patch syntax; no added C trailing whitespace",
+    "frozenPatchUnchanged": true
+  }
+}

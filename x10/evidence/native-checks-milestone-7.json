@@ -1,0 +1,1622 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "date": "2026-10-23",
+  "publication": {
+    "rawRecordSha256": "0ce8a777a3df2b863dd45eac55e82fd2ae658d3c629ede90e53a47d90a01738b",
+    "rawRecordRetainedLocally": true,
+    "omitted": [
+      "absolute filesystem paths",
+      "live process and namespace identities",
+      "ephemeral network endpoints",
+      "raw configuration and certificate metadata",
+      "native and child logs",
+      "embedded raw reports and command output"
+    ],
+    "note": "This is a publication summary, not a raw runner record or input to the aggregate validator."
+  },
+  "suite": "native-candidate",
+  "success": true,
+  "mode": "functional-checks",
+  "expectedGroupCount": 20,
+  "groupCount": 20,
+  "passedGroupCount": 20,
+  "provenance": {
+    "manifestSha256": "64f51d4aabcd6a04ea46521193a3c2fe3183a7a1373261f78263ff925b2856a8",
+    "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+    "sourceDiffSha256": "b511aad052c1abb29a514660ae01473e1bfaadb941026d70e9019c2245ddeea5",
+    "generatedConfigSha256": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+    "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+    "checkoutRevision": "ea150e4e47ecad2c53b0b72e088977220686207a",
+    "nginxVersion": "1.31.9",
+    "compiledModuleCount": 105,
+    "generatedFiles": {
+      "ngx_auto_config.h": {
+        "sha256": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+        "bytes": 10114,
+        "mode": "0644"
+      },
+      "ngx_auto_headers.h": {
+        "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+        "bytes": 657,
+        "mode": "0644"
+      },
+      "ngx_modules.c": {
+        "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+        "bytes": 11820,
+        "mode": "0644"
+      }
+    }
+  },
+  "suites": [
+    {
+      "name": "http-tls-http2-reload",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "nginx-x10-native-http-baseline",
+        "success": true,
+        "tests": [
+          {
+            "name": "valid-config-native-t",
+            "status": "passed"
+          },
+          {
+            "name": "invalid-config-native-t-rejected",
+            "status": "passed"
+          },
+          {
+            "name": "http1-round-robin-two-real-upstreams",
+            "status": "passed"
+          },
+          {
+            "name": "post-body-preserved-once",
+            "status": "passed"
+          },
+          {
+            "name": "post-transport-failure-never-replayed",
+            "status": "passed"
+          },
+          {
+            "name": "tls-trusted-ca-and-hostname-validation",
+            "status": "passed"
+          },
+          {
+            "name": "downstream-http2-over-verified-tls",
+            "status": "passed"
+          },
+          {
+            "name": "proxy-stream-first-chunk-before-completion",
+            "status": "passed"
+          },
+          {
+            "name": "valid-reload-new-route-and-live-old-stream",
+            "status": "passed"
+          },
+          {
+            "name": "syntax-invalid-reload-keeps-serving-route-and-stream",
+            "status": "passed"
+          },
+          {
+            "name": "accepted-old-stream-completes-after-both-reloads",
+            "status": "passed"
+          }
+        ],
+        "provenance": {
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139"
+        },
+        "cleanup": {
+          "exited": true,
+          "nativeExitedSuccessfully": true
+        }
+      }
+    },
+    {
+      "name": "stream-mail",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "native-stream-mail-baseline",
+        "passed": true,
+        "tests": [
+          {
+            "name": "stream.tcp.exact_binary_payload",
+            "passed": true
+          },
+          {
+            "name": "stream.udp.exact_binary_datagram",
+            "passed": true
+          },
+          {
+            "name": "mail.smtp.greeting_capability_quit",
+            "passed": true
+          },
+          {
+            "name": "mail.imap.greeting_capability_logout",
+            "passed": true
+          },
+          {
+            "name": "mail.pop3.greeting_capability_quit",
+            "passed": true
+          },
+          {
+            "name": "mail.smtp.auth_http_denial",
+            "passed": true
+          },
+          {
+            "name": "mail.imap.auth_http_denial",
+            "passed": true
+          },
+          {
+            "name": "mail.pop3.auth_http_denial",
+            "passed": true
+          },
+          {
+            "name": "mail.smtp.auth_proxy_success_and_tunnel",
+            "passed": true
+          },
+          {
+            "name": "mail.imap.auth_proxy_literal_handshake_and_tunnel",
+            "passed": true
+          },
+          {
+            "name": "mail.pop3.auth_proxy_success_and_tunnel",
+            "passed": true
+          },
+          {
+            "name": "fixtures.expected_auth_and_backend_counts",
+            "passed": true
+          }
+        ],
+        "fixtureErrorCount": 0,
+        "unexpectedNginxErrorCount": 0,
+        "provenance": {},
+        "cleanup": {
+          "reportedCleanupErrorCount": 0
+        }
+      }
+    },
+    {
+      "name": "mail-tls-starttls",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "native-mail-tls-baseline",
+        "passed": true,
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "config.native_validation",
+            "passed": true
+          },
+          {
+            "name": "smtp.required_upgrade_policy_capability_pipeline_and_tunnel",
+            "passed": true
+          },
+          {
+            "name": "smtp.implicit_tls_verified_auth_and_tunnel",
+            "passed": true
+          },
+          {
+            "name": "smtp.upgrade_wrong_ca_rejected",
+            "passed": true
+          },
+          {
+            "name": "smtp.implicit_wrong_hostname_rejected",
+            "passed": true
+          },
+          {
+            "name": "imap.required_upgrade_policy_capability_pipeline_and_tunnel",
+            "passed": true
+          },
+          {
+            "name": "imap.implicit_tls_verified_auth_and_tunnel",
+            "passed": true
+          },
+          {
+            "name": "imap.upgrade_wrong_ca_rejected",
+            "passed": true
+          },
+          {
+            "name": "imap.implicit_wrong_hostname_rejected",
+            "passed": true
+          },
+          {
+            "name": "pop3.required_upgrade_policy_capability_pipeline_and_tunnel",
+            "passed": true
+          },
+          {
+            "name": "pop3.implicit_tls_verified_auth_and_tunnel",
+            "passed": true
+          },
+          {
+            "name": "pop3.upgrade_wrong_ca_rejected",
+            "passed": true
+          },
+          {
+            "name": "pop3.implicit_wrong_hostname_rejected",
+            "passed": true
+          },
+          {
+            "name": "smtp.starttls_discards_pre_upgrade_helo_and_mail_state",
+            "passed": true
+          },
+          {
+            "name": "fixtures.tls_auth_metadata_and_backend_counts",
+            "passed": true
+          }
+        ],
+        "skipCount": 0,
+        "fixtureErrorCount": 0,
+        "unexpectedNginxErrorCount": 0,
+        "provenance": {
+          "sourceUnchangedDuringTest": true,
+          "binaryUnchangedDuringTest": true,
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "harnessSha256": "c5662a3941090d75ca371c45c157236c53757d90708ab2de13add25cf58550fd",
+          "sourceFilesSha256": {
+            "src/mail/ngx_mail_handler.c": "16cadb07e34d6d9244a3ddf31c0cfe02278bd89c22e563719985e6c0702d8558",
+            "src/mail/ngx_mail_ssl_module.c": "f6c41c2a2196743a3b95dfd5390327c917cce91ec5698173da2867cb5bb7f2c7",
+            "src/mail/ngx_mail_smtp_handler.c": "e6af2879ed6c260d447f13202919694556527246d6d4ec672beba63d18176a7b",
+            "src/mail/ngx_mail_imap_handler.c": "bfea2490cf6eedd418d68206801ce01aa578d0741a6d5432b73250152f02a488",
+            "src/mail/ngx_mail_pop3_handler.c": "4a0a60ac79ec11cdb4ea75d2a42da98855d59685ff0d0cdf0ddd54ef78c0f6a3",
+            "src/mail/ngx_mail_auth_http_module.c": "edb4e22957a2092bca503fac9899db28497d234073fbf8e1555cedced839b223",
+            "src/mail/ngx_mail_proxy_module.c": "b8341b104fdbc3f755d3d436c560f2bcc8c4239bb6c58ec28f42244e3cb1d6f0"
+          }
+        },
+        "cleanup": {
+          "nativeStopped": true,
+          "fixturesStopped": true,
+          "temporaryRootRemoved": true,
+          "openSockets": 0,
+          "commandChildren": 0,
+          "errorCount": 0
+        }
+      }
+    },
+    {
+      "name": "protocol-adapters",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "native-protocol-adapters",
+        "success": true,
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "fastcgi-get-wire-metadata-and-exact-response",
+            "status": "passed"
+          },
+          {
+            "name": "fastcgi-binary-wire-metadata-and-exact-response",
+            "status": "passed"
+          },
+          {
+            "name": "fastcgi-chunked-wire-metadata-and-exact-response",
+            "status": "passed"
+          },
+          {
+            "name": "fastcgi-invalid-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "fastcgi-truncated-header-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "fastcgi-truncated-body-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "fastcgi-timeout-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "scgi-get-wire-metadata-and-exact-response",
+            "status": "passed"
+          },
+          {
+            "name": "scgi-binary-wire-metadata-and-exact-response",
+            "status": "passed"
+          },
+          {
+            "name": "scgi-chunked-wire-metadata-and-exact-response",
+            "status": "passed"
+          },
+          {
+            "name": "scgi-invalid-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "scgi-truncated-header-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "scgi-truncated-body-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "scgi-timeout-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "uwsgi-get-wire-metadata-and-exact-response",
+            "status": "passed"
+          },
+          {
+            "name": "uwsgi-binary-wire-metadata-and-exact-response",
+            "status": "passed"
+          },
+          {
+            "name": "uwsgi-chunked-wire-metadata-and-exact-response",
+            "status": "passed"
+          },
+          {
+            "name": "uwsgi-invalid-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "uwsgi-truncated-header-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "uwsgi-truncated-body-upstream-failure",
+            "status": "passed"
+          },
+          {
+            "name": "uwsgi-timeout-upstream-failure",
+            "status": "passed"
+          }
+        ],
+        "skipCount": 0,
+        "fixtureErrorCount": 0,
+        "unexpectedNativeErrorCount": 0,
+        "provenance": {
+          "sourceUnchangedDuringTest": true,
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "binaryUnchangedDuringTest": true
+        },
+        "cleanup": {
+          "nativeStopped": true,
+          "fixturesStopped": true,
+          "temporaryRootRemoved": true,
+          "openSockets": 0,
+          "errorCount": 0
+        }
+      }
+    },
+    {
+      "name": "http3-interop",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "native-http3-interop",
+        "success": true,
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "verified-quic-tls13-alpn-h3-exact-binary-response",
+            "status": "passed"
+          },
+          {
+            "name": "get-range-exact-bytes-and-content-range-over-h3",
+            "status": "passed"
+          },
+          {
+            "name": "fragmented-h3-data-post-exact-native-backend-receipt",
+            "status": "passed"
+          },
+          {
+            "name": "six-concurrent-h3-streams-with-real-upstream-barrier",
+            "status": "passed"
+          },
+          {
+            "name": "cancel-observed-stream-closes-upstream-and-preserves-other-streams",
+            "status": "passed"
+          },
+          {
+            "name": "unrelated-ca-rejected-by-real-quic-tls-verification",
+            "status": "passed"
+          },
+          {
+            "name": "wrong-hostname-rejected-by-real-quic-tls-verification",
+            "status": "passed"
+          }
+        ],
+        "skipCount": 0,
+        "fixtureErrorCount": 0,
+        "unexpectedNativeErrorCount": 0,
+        "provenance": {
+          "dependencyLockSha256": "0577820a7995777c8e0e0723a5c9637be1b2fe9978882d457d6df22a7c47faa1",
+          "sourceUnchangedDuringTest": true,
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "harnessSha256": "2b657e7719bbe68bf294133bf7808d4db39a61b35fb8890a82d2641db9b68655",
+          "binaryUnchangedDuringTest": true,
+          "clientUnchangedDuringTest": true,
+          "sourceFilesSha256": {
+            "src/http/v3/ngx_http_v3_module.c": "35143d29723d05b491fe8b02a6181d4dc82b2ba215524b650d69e803704ddeee",
+            "src/http/v3/ngx_http_v3_request.c": "c9b12b01b646ecee16219ed5d801a52a864f85ed48fb1ced68e2d09ba12ed821",
+            "src/http/v3/ngx_http_v3_filter_module.c": "b0294e27cca0cb8eaf8ceb2a74da9ece61f3a71d19ebc81527e92efdf6f7629c",
+            "src/event/quic/ngx_event_quic_ssl.c": "ffd8ef9dac1580503f41b351ee68c4438fa02909a2a7ca161613aaae7002459a",
+            "src/event/quic/ngx_event_quic_openssl_compat.c": "b0468bc1d41e8b49ecf33538b09cc1ebb3113d9dae0b6d21aff7ebba48d2246d",
+            "src/event/quic/ngx_event_quic_transport.c": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a"
+          }
+        },
+        "cleanup": {
+          "nativeStopped": true,
+          "fixturesStopped": true,
+          "temporaryRootRemoved": true,
+          "udpTransportsStopped": true,
+          "openSockets": 0,
+          "udpClientsCreated": 7,
+          "udpClientsClosed": 7,
+          "errorCount": 0
+        }
+      }
+    },
+    {
+      "name": "http3-head-independent-client",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "native-http3-head-interop",
+        "success": true,
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "independent-verified-h3-get-exact-representation",
+            "status": "passed"
+          },
+          {
+            "name": "independent-verified-h3-head-status-headers-empty-api-body",
+            "status": "passed"
+          },
+          {
+            "name": "independent-h3-head-wrong-ca-rejected",
+            "status": "passed"
+          },
+          {
+            "name": "independent-h3-head-wrong-hostname-rejected",
+            "status": "passed"
+          }
+        ],
+        "skipCount": 0,
+        "fixtureErrorCount": 0,
+        "unexpectedNativeErrorCount": 0,
+        "provenance": {
+          "dependencyLockSha256": "3ccf1913a2c5cca06e8d1af2660c08d7447943f10839777d038bd4df63ad5b0f",
+          "sourceUnchangedDuringTest": true,
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "harnessSha256": "e9e7316b016d095ae7fc44fa61348e9927a82f3d7ff1d71eef11e91cc6486b6a",
+          "launcherSha256": "e0cc8c4441e2bd7ff0b7b3fc6ff085baa3b72ee479712019a2fd4da81dcac409",
+          "binaryUnchangedDuringTest": true,
+          "harnessUnchangedDuringTest": true,
+          "clientUnchangedDuringTest": true,
+          "launcherUnchangedDuringTest": true,
+          "sourceFilesSha256": {
+            "src/http/v3/ngx_http_v3_module.c": "35143d29723d05b491fe8b02a6181d4dc82b2ba215524b650d69e803704ddeee",
+            "src/http/v3/ngx_http_v3_request.c": "c9b12b01b646ecee16219ed5d801a52a864f85ed48fb1ced68e2d09ba12ed821",
+            "src/http/v3/ngx_http_v3_filter_module.c": "b0294e27cca0cb8eaf8ceb2a74da9ece61f3a71d19ebc81527e92efdf6f7629c",
+            "src/event/quic/ngx_event_quic_ssl.c": "ffd8ef9dac1580503f41b351ee68c4438fa02909a2a7ca161613aaae7002459a",
+            "src/event/quic/ngx_event_quic_transport.c": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a"
+          }
+        },
+        "cleanup": {
+          "nativeStopped": true,
+          "fixturesStopped": true,
+          "temporaryRootRemoved": true,
+          "clientSocketsClosed": true,
+          "openSockets": 0,
+          "clientProcessesCompleted": 4,
+          "errorCount": 0
+        }
+      }
+    },
+    {
+      "name": "native-features",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "nginx-x10-native-features-baseline",
+        "success": true,
+        "tests": [
+          {
+            "name": "native-config-required-modules-and-syntax",
+            "status": "passed"
+          },
+          {
+            "name": "static-get-exact-bytes",
+            "status": "passed"
+          },
+          {
+            "name": "static-head-same-length-empty-body",
+            "status": "passed"
+          },
+          {
+            "name": "static-single-byte-range",
+            "status": "passed"
+          },
+          {
+            "name": "conditional-etag-not-modified",
+            "status": "passed"
+          },
+          {
+            "name": "static-unsatisfiable-range-rejected",
+            "status": "passed"
+          },
+          {
+            "name": "gzip-negotiation-and-decompressed-integrity",
+            "status": "passed"
+          },
+          {
+            "name": "route-exact-protected-prefix-regex-and-fallback",
+            "status": "passed"
+          },
+          {
+            "name": "map-request-header-and-argument",
+            "status": "passed"
+          },
+          {
+            "name": "rewrite-last-internal-route-and-argument",
+            "status": "passed"
+          },
+          {
+            "name": "basic-auth-missing-and-wrong-credentials-denied",
+            "status": "passed"
+          },
+          {
+            "name": "basic-auth-synthetic-credentials-allowed",
+            "status": "passed"
+          },
+          {
+            "name": "realip-trusted-loopback-hop",
+            "status": "passed"
+          },
+          {
+            "name": "realip-untrusted-peer-cannot-spoof-address",
+            "status": "passed"
+          },
+          {
+            "name": "limit-req-rejects-second-request-and-isolates-keys",
+            "status": "passed"
+          },
+          {
+            "name": "limit-conn-live-stream-rejection-and-release",
+            "status": "passed"
+          },
+          {
+            "name": "proxy-cache-miss-then-hit-one-origin-receipt",
+            "status": "passed"
+          },
+          {
+            "name": "proxy-cache-query-key-isolation",
+            "status": "passed"
+          },
+          {
+            "name": "proxy-cache-lock-concurrent-fill-single-origin",
+            "status": "passed"
+          }
+        ],
+        "fixtureErrorCount": 0,
+        "unexpectedNativeErrorCount": 0,
+        "provenance": {
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "binaryUnchangedDuringTest": true
+        },
+        "cleanup": {
+          "exited": true,
+          "reportedCleanupErrorCount": 0
+        }
+      }
+    },
+    {
+      "name": "quic-regression",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "sourceUnchangedDuringTest": true,
+        "networkUsed": false,
+        "strict": {
+          "caseCount": 11,
+          "passed": 11,
+          "failed": 0,
+          "controlFailures": 0
+        },
+        "tests": [
+          {
+            "name": "valid_idle",
+            "passed": true
+          },
+          {
+            "name": "valid_nonminimal_2byte_varint",
+            "passed": true
+          },
+          {
+            "name": "valid_nonminimal_4byte_varint",
+            "passed": true
+          },
+          {
+            "name": "valid_disable_migration",
+            "passed": true
+          },
+          {
+            "name": "unknown_small_id",
+            "passed": true
+          },
+          {
+            "name": "unknown_id_65537_alias_idle",
+            "passed": true
+          },
+          {
+            "name": "unknown_id_65548_alias_disable",
+            "passed": true
+          },
+          {
+            "name": "integer_declared_length_has_trailing_byte",
+            "passed": true
+          },
+          {
+            "name": "truncated_varint",
+            "passed": true
+          },
+          {
+            "name": "length_beyond_input",
+            "passed": true
+          },
+          {
+            "name": "forbidden_server_only_parameter",
+            "passed": true
+          }
+        ],
+        "provenance": {
+          "sourceSha256": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a",
+          "generatedConfigSha256": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+          "sourceUnchangedDuringTest": true
+        },
+        "cleanup": {}
+      }
+    },
+    {
+      "name": "quic-generated-sanitized",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "quic-generated-properties",
+        "passed": true,
+        "sourceUnchangedDuringTest": true,
+        "networkUsed": false,
+        "strict": {
+          "cases": 8923,
+          "passed": 8923,
+          "failed": 0
+        },
+        "properties": [
+          {
+            "name": "known_numeric_widths_and_nonminimal_encodings",
+            "cases": 4992,
+            "passed": 4992,
+            "failed": 0
+          },
+          {
+            "name": "unknown_full_width_ids_preserve_destination",
+            "cases": 444,
+            "passed": 444,
+            "failed": 0
+          },
+          {
+            "name": "unknown_opaque_values_are_not_interpreted",
+            "cases": 65,
+            "passed": 65,
+            "failed": 0
+          },
+          {
+            "name": "truncated_id_length_or_value_is_rejected",
+            "cases": 2682,
+            "passed": 2682,
+            "failed": 0
+          },
+          {
+            "name": "numeric_value_consumes_declared_field",
+            "cases": 691,
+            "passed": 691,
+            "failed": 0
+          },
+          {
+            "name": "server_only_ids_and_zero_length_option",
+            "cases": 49,
+            "passed": 49,
+            "failed": 0
+          }
+        ],
+        "provenance": {
+          "sourceSha256": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a",
+          "harnessSha256": "877a3b230ca886ef5cadb86d41350557e28d507e7a105ec5ae149fb5c5bd5ac5",
+          "generatedConfigSha256": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+          "sourceUnchangedDuringTest": true
+        },
+        "cleanup": {}
+      }
+    },
+    {
+      "name": "quic-frame-boundaries",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "quic-frame-boundaries",
+        "passed": true,
+        "sourceUnchangedDuringTest": true,
+        "networkUsed": false,
+        "strict": {
+          "cases": 6579,
+          "passed": 6579,
+          "failed": 0
+        },
+        "properties": [
+          {
+            "name": "complete_fields_consumption_and_nonminimal_values",
+            "cases": 721,
+            "failed": 0
+          },
+          {
+            "name": "structured_frame_prefixes_are_rejected",
+            "cases": 289,
+            "failed": 0
+          },
+          {
+            "name": "declared_payload_lengths_and_borrowed_bounds",
+            "cases": 1304,
+            "failed": 0
+          },
+          {
+            "name": "client_frame_packet_eligibility",
+            "cases": 124,
+            "failed": 0
+          },
+          {
+            "name": "unknown_type_cid_and_stream_limit_boundaries",
+            "cases": 45,
+            "failed": 0
+          },
+          {
+            "name": "seeded_inputs_return_only_bounded_consumption",
+            "cases": 4096,
+            "failed": 0
+          }
+        ],
+        "provenance": {
+          "sourceSha256": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a",
+          "harnessSha256": "9a2b4e9fa60881891b4e77e09a92540702559f792f5e0fad2b9310cd2415d289",
+          "generatedConfigSha256": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+          "sourceUnchangedDuringTest": true,
+          "generatedFilesUnchangedDuringTest": true,
+          "sourceFilesSha256": {
+            "src/event/quic/ngx_event_quic_transport.c": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a",
+            "src/event/quic/ngx_event_quic_transport.h": "bfdd117254953492a1482bf52d4a8db3af6bbff0795dfb2cfd2d38552fb374dc",
+            "src/event/quic/ngx_event_quic_connection.h": "459131ac1c4ab0ea0f91bc059d20648f2ccc680b8637ddc7193c699fa562a119"
+          },
+          "generatedFilesSha256": {
+            "ngx_auto_config.h": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+            "ngx_auto_headers.h": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+            "ngx_modules.c": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f"
+          }
+        },
+        "cleanup": {
+          "temporaryRootRemoved": true
+        }
+      }
+    },
+    {
+      "name": "native-load-client-verification",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "native-http1-load-verification",
+        "passed": true,
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "fixed-keepalive",
+            "passed": true
+          },
+          {
+            "name": "concurrent-keepalive",
+            "passed": true
+          },
+          {
+            "name": "fragmented-response",
+            "passed": true
+          },
+          {
+            "name": "connection-close-reconnect",
+            "passed": true
+          },
+          {
+            "name": "empty-status-reason-with-space",
+            "passed": true
+          },
+          {
+            "name": "concurrent-failure-aborts-inflight",
+            "passed": true
+          },
+          {
+            "name": "wrong-body",
+            "passed": true
+          },
+          {
+            "name": "wrong-status",
+            "passed": true
+          },
+          {
+            "name": "status-no-space",
+            "passed": true
+          },
+          {
+            "name": "duplicate-length",
+            "passed": true
+          },
+          {
+            "name": "junk-length",
+            "passed": true
+          },
+          {
+            "name": "wrong-length",
+            "passed": true
+          },
+          {
+            "name": "no-length",
+            "passed": true
+          },
+          {
+            "name": "chunked",
+            "passed": true
+          },
+          {
+            "name": "te-plus-length",
+            "passed": true
+          },
+          {
+            "name": "encoded",
+            "passed": true
+          },
+          {
+            "name": "nul-name",
+            "passed": true
+          },
+          {
+            "name": "folded-header",
+            "passed": true
+          },
+          {
+            "name": "large-header",
+            "passed": true
+          },
+          {
+            "name": "truncated-header",
+            "passed": true
+          },
+          {
+            "name": "truncated-body",
+            "passed": true
+          },
+          {
+            "name": "extra-bytes",
+            "passed": true
+          },
+          {
+            "name": "trickle",
+            "passed": true
+          },
+          {
+            "name": "no-response",
+            "passed": true
+          },
+          {
+            "name": "asan-ubsan:fragmented-response",
+            "passed": true
+          },
+          {
+            "name": "asan-ubsan:concurrent-failure-aborts-inflight",
+            "passed": true
+          },
+          {
+            "name": "asan-ubsan:wrong-body",
+            "passed": true
+          },
+          {
+            "name": "asan-ubsan:status-no-space",
+            "passed": true
+          },
+          {
+            "name": "asan-ubsan:duplicate-length",
+            "passed": true
+          },
+          {
+            "name": "asan-ubsan:chunked",
+            "passed": true
+          },
+          {
+            "name": "asan-ubsan:large-header",
+            "passed": true
+          },
+          {
+            "name": "asan-ubsan:truncated-body",
+            "passed": true
+          },
+          {
+            "name": "asan-ubsan:trickle",
+            "passed": true
+          },
+          {
+            "name": "refused-loopback-connection",
+            "passed": true
+          },
+          {
+            "name": "SIGTERM-after-received-request",
+            "passed": true
+          },
+          {
+            "name": "options-rejected:--host",
+            "passed": true
+          },
+          {
+            "name": "options-rejected:--concurrency",
+            "passed": true
+          },
+          {
+            "name": "options-rejected:--path",
+            "passed": true
+          },
+          {
+            "name": "options-rejected:--duration-ms",
+            "passed": true
+          },
+          {
+            "name": "native-nginx-smoke-C1",
+            "passed": true
+          },
+          {
+            "name": "native-nginx-smoke-C16",
+            "passed": true
+          }
+        ],
+        "provenance": {
+          "nativeBinarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "sourceUnchangedDuringTest": true,
+          "nativeBinaryUnchangedDuringTest": true,
+          "clientBinarySha256": "97482bfa8ca73c8992bbef6efc549c8d6370dd2841ff58164d39fedd82ac06bb",
+          "clientSourceSha256": "ea0c28a2a4ec24d67978b442993ca86c86f14a823a6a24e1b7116807f0795828",
+          "wrapperSha256": "bb3befd34886d278052f209a87220a6ee9b819833c4d1a1fe93ef50663716a71",
+          "buildManifestSha256": "4a3d1855c26949f863d271859453ce77921024530c9e8b17b7f823bf3a5e4c92"
+        },
+        "cleanup": {
+          "nativeStopped": true,
+          "temporaryRootRemoved": true,
+          "fixtureServersClosed": true,
+          "openSockets": 0,
+          "activeChildren": 0,
+          "errorCount": 0
+        }
+      }
+    },
+    {
+      "name": "managed-native-control",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "format": "node-test-tap",
+        "pass": 68,
+        "fail": 0,
+        "valid": true
+      }
+    },
+    {
+      "name": "operator-status",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "format": "node-test-tap",
+        "pass": 30,
+        "fail": 0,
+        "total": 30,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "valid": true
+      }
+    },
+    {
+      "name": "local-alpha-lifecycle",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "format": "node-test-tap",
+        "pass": 9,
+        "fail": 0,
+        "total": 9,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "valid": true
+      }
+    },
+    {
+      "name": "listener-observer-boundaries",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "format": "node-test-tap",
+        "pass": 29,
+        "fail": 0,
+        "valid": true
+      }
+    },
+    {
+      "name": "reload-listener-observation",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "native-reload-listener-observation",
+        "success": true,
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "native-config-validation",
+            "status": "passed"
+          },
+          {
+            "name": "held-old-response-and-owned-tcp-listener",
+            "status": "passed"
+          },
+          {
+            "name": "new-revision-response-does-not-prove-old-listener-closure",
+            "status": "passed"
+          },
+          {
+            "name": "old-worker-alive-without-listener-while-response-held",
+            "status": "passed"
+          },
+          {
+            "name": "second-reload-preserves-first-generation-stream",
+            "status": "passed"
+          },
+          {
+            "name": "old-response-completes-exactly-after-listener-closure-and-two-reloads",
+            "status": "passed"
+          },
+          {
+            "name": "rejected-reload-retains-last-valid-revision",
+            "status": "passed"
+          }
+        ],
+        "skipCount": 0,
+        "fixtureErrorCount": 0,
+        "unexpectedNativeErrorCount": 0,
+        "provenance": {
+          "sourceUnchangedDuringTest": true,
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "harnessSha256": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612",
+          "observerSha256": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+          "binaryUnchangedDuringTest": true,
+          "harnessUnchangedDuringTest": true,
+          "observerUnchangedDuringTest": true,
+          "sourceFilesSha256": {
+            "src/os/unix/ngx_process_cycle.c": "dd2f45a62724d9a297005f080efa0dcdd34ce7760d7591ec829ff6d3407ce819",
+            "src/os/unix/ngx_process.c": "a354c634854617bed643d8db8b6218aa84cb603a7de1b15d9402427b4a471677",
+            "src/core/ngx_connection.c": "56896a9af65da2f4246a47ff27c4772ad6b0e3137752c65c997ffa6675d61c11",
+            "src/core/ngx_cycle.c": "9f4474071bc95db1e0b51e4db39c12bad09be0ac126760b3643f95abe95f9ad6"
+          }
+        },
+        "cleanup": {
+          "nativeStopped": true,
+          "fixturesStopped": true,
+          "temporaryRootRemoved": true,
+          "stoppedWorkerResumeRequested": true,
+          "openSockets": 0,
+          "errorCount": 0
+        }
+      }
+    },
+    {
+      "name": "native-control-api",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "native-control-api-baseline",
+        "success": true,
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "native-profile-and-configuration-validation",
+            "status": "passed"
+          },
+          {
+            "name": "control-api-is-not-opened-without-explicit-listen-option",
+            "status": "passed"
+          },
+          {
+            "name": "explicit-isolated-control-listener-and-api-discovery",
+            "status": "passed"
+          },
+          {
+            "name": "native-version-process-identities-and-active-configuration",
+            "status": "passed"
+          },
+          {
+            "name": "unsupported-methods-and-unknown-path-are-rejected",
+            "status": "passed"
+          },
+          {
+            "name": "accepted-old-response-is-held-before-control-reload",
+            "status": "passed"
+          },
+          {
+            "name": "control-patch-reload-starts-new-workers-with-old-response-alive",
+            "status": "passed"
+          },
+          {
+            "name": "invalid-control-reload-retains-active-workers-and-config-dump",
+            "status": "passed"
+          },
+          {
+            "name": "accepted-old-response-completes-exactly-after-both-reload-attempts",
+            "status": "passed"
+          }
+        ],
+        "skipCount": 0,
+        "fixtureErrorCount": 0,
+        "unexpectedNativeErrorCount": 0,
+        "provenance": {
+          "sourceUnchangedDuringTest": true,
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "harnessSha256": "b81d396fb7193120d505c72c668a26e2e1ce3a79af2b8884c3c7bbfa565a1786",
+          "binaryUnchangedDuringTest": true,
+          "harnessUnchangedDuringTest": true,
+          "sourceFilesSha256": {
+            "src/core/nginx.c": "e10938c9cec230d0e1f3eab17bddd69f7abf4904c760149d54005f2776c3ce17",
+            "src/os/unix/ngx_control.c": "7cfcf5ad2cdf9eb7546281c3ce2dc0254a257b7d009a6c494e913cee4a36f2e0",
+            "src/os/unix/ngx_process.c": "a354c634854617bed643d8db8b6218aa84cb603a7de1b15d9402427b4a471677",
+            "src/os/unix/ngx_process_cycle.c": "dd2f45a62724d9a297005f080efa0dcdd34ce7760d7591ec829ff6d3407ce819",
+            "src/core/ngx_cycle.c": "9f4474071bc95db1e0b51e4db39c12bad09be0ac126760b3643f95abe95f9ad6",
+            "src/os/unix/ngx_control.h": "6273ebce9a188abe9319758cd745c0c1688d24a11db151f9654b675e2dae4541",
+            "src/os/unix/ngx_process.h": "7098dfaa875fd04aff122c344f0dfa72bad5fb5f572b7177d30766303b3f27f6"
+          }
+        },
+        "cleanup": {
+          "nativeStopped": true,
+          "fixturesStopped": true,
+          "temporaryRootRemoved": true,
+          "openSockets": 0,
+          "errorCount": 0,
+          "shutdownCount": 2,
+          "successfulShutdownCount": 2
+        }
+      }
+    },
+    {
+      "name": "native-process-generations",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "native-control-generations",
+        "success": true,
+        "mode": "candidate",
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "native-profile-and-configuration-validation",
+            "status": "passed"
+          },
+          {
+            "name": "control-api-is-not-opened-without-explicit-listen-option",
+            "status": "passed"
+          },
+          {
+            "name": "initial-master-generation-one-and-unique-process-births",
+            "status": "passed"
+          },
+          {
+            "name": "successful-control-reload-advances-generation-preserving-old-drain-identity",
+            "status": "passed"
+          },
+          {
+            "name": "rejected-control-reload-does-not-advance-generation",
+            "status": "passed"
+          },
+          {
+            "name": "successful-signal-reload-advances-generation-with-old-response-held",
+            "status": "passed"
+          },
+          {
+            "name": "rejected-signal-reload-does-not-advance-generation",
+            "status": "passed"
+          },
+          {
+            "name": "real-worker-respawn-retains-generation-and-reuses-slot-with-new-birth",
+            "status": "passed"
+          },
+          {
+            "name": "generation-endpoint-is-read-only-and-legacy-process-schema-is-unchanged",
+            "status": "passed"
+          },
+          {
+            "name": "old-generation-response-completes-after-reloads-and-current-worker-respawn",
+            "status": "passed"
+          }
+        ],
+        "skipCount": 0,
+        "fixtureErrorCount": 0,
+        "unexpectedNativeErrorCount": 0,
+        "provenance": {
+          "sourceUnchangedDuringTest": true,
+          "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+          "harnessSha256": "39f335e42152dcb3022d153a32ac71fa5a0910fb24acf38975eee2010b894354",
+          "fixtureSha256": "b81d396fb7193120d505c72c668a26e2e1ce3a79af2b8884c3c7bbfa565a1786",
+          "binaryUnchangedDuringTest": true,
+          "harnessUnchangedDuringTest": true,
+          "fixtureUnchangedDuringTest": true,
+          "sourceFilesSha256": {
+            "src/core/nginx.c": "e10938c9cec230d0e1f3eab17bddd69f7abf4904c760149d54005f2776c3ce17",
+            "src/os/unix/ngx_control.c": "7cfcf5ad2cdf9eb7546281c3ce2dc0254a257b7d009a6c494e913cee4a36f2e0",
+            "src/os/unix/ngx_process.c": "a354c634854617bed643d8db8b6218aa84cb603a7de1b15d9402427b4a471677",
+            "src/os/unix/ngx_process_cycle.c": "dd2f45a62724d9a297005f080efa0dcdd34ce7760d7591ec829ff6d3407ce819",
+            "src/core/ngx_cycle.c": "9f4474071bc95db1e0b51e4db39c12bad09be0ac126760b3643f95abe95f9ad6",
+            "src/os/unix/ngx_control.h": "6273ebce9a188abe9319758cd745c0c1688d24a11db151f9654b675e2dae4541",
+            "src/os/unix/ngx_process.h": "7098dfaa875fd04aff122c344f0dfa72bad5fb5f572b7177d30766303b3f27f6"
+          }
+        },
+        "cleanup": {
+          "nativeStopped": true,
+          "fixturesStopped": true,
+          "temporaryRootRemoved": true,
+          "openSockets": 0,
+          "errorCount": 0,
+          "shutdownCount": 2,
+          "successfulShutdownCount": 2
+        }
+      }
+    },
+    {
+      "name": "native-generation-boundaries",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "native-generation-boundaries",
+        "passed": true,
+        "sourceUnchangedDuringTest": true,
+        "networkUsed": false,
+        "tests": [
+          {
+            "name": "initial-generation-and-distinct-births",
+            "passed": true
+          },
+          {
+            "name": "successful-cycle-commits-advance-before-spawn",
+            "passed": true
+          },
+          {
+            "name": "respawn-overwrites-slot-with-current-generation-and-new-birth",
+            "passed": true
+          },
+          {
+            "name": "same-pid-callback-gets-new-birth",
+            "passed": true
+          },
+          {
+            "name": "stale-slot-pid-is-unclassified",
+            "passed": true
+          },
+          {
+            "name": "unknown-cycle-keeps-known-current-but-nulls-process-generation",
+            "passed": true
+          },
+          {
+            "name": "detached-process-excluded-without-consuming-birth",
+            "passed": true
+          },
+          {
+            "name": "invalid-slot-allocation-is-noop",
+            "passed": true
+          },
+          {
+            "name": "wide-identities-are-exact-decimal-strings",
+            "passed": true
+          },
+          {
+            "name": "last-generation-uint64-value-is-exact",
+            "passed": true
+          },
+          {
+            "name": "generation-exhaustion-nulls-all-identities",
+            "passed": true
+          },
+          {
+            "name": "generation-exhaustion-remains-latched",
+            "passed": true
+          },
+          {
+            "name": "last-birth-uint64-value-is-exact",
+            "passed": true
+          },
+          {
+            "name": "birth-exhaustion-nulls-all-identities",
+            "passed": true
+          },
+          {
+            "name": "birth-exhaustion-remains-latched",
+            "passed": true
+          },
+          {
+            "name": "uninitialized-diagnostics-explicitly-unavailable",
+            "passed": true
+          },
+          {
+            "name": "inactive-hooks-do-not-change-state",
+            "passed": true
+          },
+          {
+            "name": "new-master-start-resets-scoped-counters",
+            "passed": true
+          },
+          {
+            "name": "all-responses-have-master-scope-and-pid",
+            "passed": true
+          },
+          {
+            "name": "json-flags-retain-boolean-types",
+            "passed": true
+          }
+        ],
+        "provenance": {
+          "binarySha256": "b490f9f1df264e117f52c6e7a63f20c88ee55fb03f65143288f8c99cb41faf63",
+          "sourceSha256": "7cfcf5ad2cdf9eb7546281c3ce2dc0254a257b7d009a6c494e913cee4a36f2e0",
+          "harnessSha256": "b1fc24570be6225147f7b9f190384ed53b6886f31dc42a2b61ed943e0b44a666",
+          "runnerSha256": "4817699f2a0547862ef9f5d62c6b6fd7e03e9f6a047cef7fa6b0bda6cb2527c0",
+          "generatedConfigSha256": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+          "sourceUnchangedDuringTest": true,
+          "harnessUnchangedDuringTest": true,
+          "runnerUnchangedDuringTest": true,
+          "generatedFilesUnchangedDuringTest": true,
+          "sourceFilesSha256": {
+            "src/os/unix/ngx_control.c": "7cfcf5ad2cdf9eb7546281c3ce2dc0254a257b7d009a6c494e913cee4a36f2e0",
+            "src/os/unix/ngx_control.h": "6273ebce9a188abe9319758cd745c0c1688d24a11db151f9654b675e2dae4541",
+            "src/os/unix/ngx_process.c": "a354c634854617bed643d8db8b6218aa84cb603a7de1b15d9402427b4a471677",
+            "src/os/unix/ngx_process_cycle.c": "dd2f45a62724d9a297005f080efa0dcdd34ce7760d7591ec829ff6d3407ce819",
+            "src/core/ngx_data.c": "f17cc16776d3eef02ae2a7bf3d796a0c7ef742b014efaa5188e7094481dd5443",
+            "src/core/ngx_string.c": "23554f737f5dd4c4b7a586dbe7b681adaa513423a7eb51cb78f3b996f8f8387c",
+            "src/core/ngx_json.c": "d26b5e939a4d248edb7e1cc455048b6ee6eb885807272d7dc4329d48c584a21d",
+            "src/core/ngx_palloc.c": "90b5102326963fc75a9d9a204ee5852115934f2cddbeedc44b64eb3ec78f422b",
+            "src/core/ngx_buf.c": "5c6c87caf8a7155ab39d08fba21f1a47578e570d7951c78dec9bfba0bb7438e5",
+            "src/os/unix/ngx_alloc.c": "2e3a89e84045d241241b7333e481bf471c3741ac955283c01953ad4103844779"
+          },
+          "generatedFilesSha256": {
+            "ngx_auto_config.h": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+            "ngx_auto_headers.h": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+            "ngx_modules.c": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f"
+          }
+        },
+        "cleanup": {
+          "temporaryRootRemoved": true,
+          "activeChildren": 0
+        }
+      }
+    },
+    {
+      "name": "official-nginx-tests",
+      "passed": true,
+      "exitCode": 0,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "result": {
+        "suite": "official-nginx-tests-curated",
+        "success": true,
+        "sourceUnchangedDuringTest": true,
+        "tests": [
+          {
+            "name": "http_location.t",
+            "status": "passed"
+          },
+          {
+            "name": "http_uri.t",
+            "status": "passed"
+          },
+          {
+            "name": "http_headers_multi.t",
+            "status": "passed"
+          },
+          {
+            "name": "body_chunked.t",
+            "status": "passed"
+          },
+          {
+            "name": "range.t",
+            "status": "passed"
+          },
+          {
+            "name": "gzip.t",
+            "status": "passed"
+          },
+          {
+            "name": "rewrite.t",
+            "status": "passed"
+          },
+          {
+            "name": "proxy.t",
+            "status": "passed"
+          },
+          {
+            "name": "proxy_chunked.t",
+            "status": "passed"
+          },
+          {
+            "name": "proxy_non_idempotent.t",
+            "status": "passed"
+          },
+          {
+            "name": "proxy_keepalive.t",
+            "status": "passed"
+          },
+          {
+            "name": "proxy_cache.t",
+            "status": "passed"
+          },
+          {
+            "name": "proxy_cache_vary.t",
+            "status": "passed"
+          },
+          {
+            "name": "proxy_cache_lock.t",
+            "status": "passed"
+          },
+          {
+            "name": "proxy_h2.t",
+            "status": "passed"
+          },
+          {
+            "name": "fastcgi.t",
+            "status": "skipped"
+          },
+          {
+            "name": "scgi.t",
+            "status": "skipped"
+          },
+          {
+            "name": "uwsgi.t",
+            "status": "skipped"
+          },
+          {
+            "name": "grpc.t",
+            "status": "passed"
+          },
+          {
+            "name": "h2.t",
+            "status": "passed"
+          },
+          {
+            "name": "h2_trailers.t",
+            "status": "passed"
+          },
+          {
+            "name": "stream_proxy.t",
+            "status": "passed"
+          },
+          {
+            "name": "stream_udp_proxy.t",
+            "status": "passed"
+          },
+          {
+            "name": "stream_proxy_half_close.t",
+            "status": "passed"
+          },
+          {
+            "name": "stream_upstream.t",
+            "status": "passed"
+          },
+          {
+            "name": "mail_capability.t",
+            "status": "passed"
+          },
+          {
+            "name": "mail_imap.t",
+            "status": "passed"
+          },
+          {
+            "name": "mail_pop3.t",
+            "status": "passed"
+          },
+          {
+            "name": "mail_smtp.t",
+            "status": "passed"
+          },
+          {
+            "name": "limit_conn.t",
+            "status": "passed"
+          },
+          {
+            "name": "limit_req.t",
+            "status": "passed"
+          },
+          {
+            "name": "upstream.t",
+            "status": "passed"
+          },
+          {
+            "name": "upstream_least_time.t",
+            "status": "passed"
+          },
+          {
+            "name": "upstream_sticky.t",
+            "status": "passed"
+          },
+          {
+            "name": "realip.t",
+            "status": "passed"
+          }
+        ],
+        "provenance": {
+          "sourceUnchangedDuringTest": true
+        },
+        "cleanup": {
+          "reportedCleanupErrorCount": 0
+        },
+        "officialSummary": {
+          "files": 35,
+          "filesPassed": 32,
+          "filesSkipped": 3,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1109,
+            "passed": 1083,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Counts from protocol cases, generated inputs, TAP and official assertions remain separate.",
+    "This milestone adds local operator and alpha workflows; native C and native binary bytes are unchanged from milestone6.",
+    "Local loopback transport passed; hosted Unix and clean-host acceptance remain separate gates.",
+    "No all-traffic cutover, full drain, production-readiness or performance-improvement claim."
+  ]
+}

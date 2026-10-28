@@ -1,0 +1,1267 @@
+{
+  "schemaVersion": 1,
+  "implementationCommit": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+  "implementationTree": "615f87a84e94c1219f711f08b6ae9c120fcac53b",
+  "runId": "x10-g3-wait-bind-ci-20261024T164434000Z",
+  "publicationParent": "4747f065ffb2d432a273bfe63440ec2420f9f627",
+  "verifiedAtUTC": "2026-10-24T16:52:40.983093Z",
+  "scope": "Exact hosted installed wait-bind compatibility; local observer failure remains open",
+  "native": {
+    "schemaVersion": 1,
+    "implementationCommit": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+    "verifiedAtUTC": "2026-10-24T16:51:18.296944+00:00",
+    "nativeRunsCompletedSuccess": true,
+    "runs": [
+      {
+        "runId": 40112863080,
+        "event": "push",
+        "eventHeadSha": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "jobId": 120928085258,
+        "jobs": [
+          {
+            "id": 120928033211,
+            "name": "scope",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check scope fail-closed controls",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Classify exact event delta",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          },
+          {
+            "id": 120928085258,
+            "name": "linux",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Validate release-record contract and refusal controls",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Validate alpha archive refusal controls",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Validate guarded user-service recipe",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build dependencies and optional test clients",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install pinned HTTP3 interoperability client",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install independent HTTP3 HEAD client",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Compile native profile",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Native regressions and pinned official compatibility sample",
+                "status": "in_progress",
+                "conclusion": null
+              },
+              {
+                "name": "Verify native tenant cache contract experiment",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Verify private Unix control transport",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Build profile without control API",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Package local Linux alpha",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Checksum local Linux alpha",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Verify packed alpha before extraction",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Preserve JSON evidence",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Preserve local Linux alpha",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "pending",
+                "conclusion": null
+              }
+            ]
+          }
+        ],
+        "artifact": {
+          "id": 12567392435,
+          "name": "x10-native-evidence",
+          "bytes": 91024,
+          "downloadedZipSha256": "e32c6ebd8c91c1bccb72484d8ba6e51a273a1eba3cf611b8d5790ce304e85cba",
+          "githubDigest": "sha256:e32c6ebd8c91c1bccb72484d8ba6e51a273a1eba3cf611b8d5790ce304e85cba",
+          "digestMatches": true,
+          "expiresAtUTC": "2026-11-07T16:49:13Z",
+          "permanentDistribution": false
+        },
+        "aggregateGroups": {
+          "total": 20,
+          "pass": 20,
+          "fail": 0
+        },
+        "aggregateSuccess": true,
+        "failedGroups": [],
+        "observedStepApiMatchesCompletedJob": false,
+        "requiredExecutionEvidence": {
+          "actualJobLogCommandsObserved": {
+            "node --test --test-reporter=tap x10/service/user-unit.test.mjs": true,
+            "node x10/test/all.mjs --official": true,
+            "node x10/test/control-api-baseline.mjs --transport unix": true,
+            "node x10/test/generations.mjs --transport unix": true,
+            "node --test --test-reporter=tap x10/test/operator-status.test.mjs": true,
+            "bash x10/test/control-disabled.sh": true,
+            "node x10/alpha/cli.mjs pack": true,
+            "node x10/release/verify-alpha-archive.mjs": true
+          },
+          "matchingOutcomeArtifactsVerified": true,
+          "stepApiStatusesPreservedWithoutPromotion": true
+        },
+        "stepApiInconsistency": "Observed job/run completed success while step API reported in_progress/pending. Cause is unknown. Complete job logs and digest-verified outcome artifacts independently establish the executed profiles; observed step statuses are not promoted.",
+        "executedRequiredSteps": [
+          "Validate guarded user-service recipe",
+          "Validate alpha archive refusal controls",
+          "Validate release-record contract and refusal controls",
+          "Verify packed alpha before extraction",
+          "Native regressions and pinned official compatibility sample",
+          "Verify private Unix control transport",
+          "Build profile without control API",
+          "Package local Linux alpha",
+          "Checksum local Linux alpha"
+        ],
+        "managed-native-control": {
+          "format": "node-test-tap",
+          "pass": 86,
+          "fail": 0,
+          "valid": true
+        },
+        "operator-status": {
+          "format": "node-test-tap",
+          "pass": 30,
+          "fail": 0,
+          "valid": true,
+          "total": 30,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "local-alpha-lifecycle": {
+          "format": "node-test-tap",
+          "pass": 45,
+          "fail": 0,
+          "valid": true,
+          "total": 45,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "userUnitRecipeTests": {
+          "tests": 15,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "archiveRefusalTests": {
+          "tests": 15,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "releaseRecordTests": {
+          "tests": 35,
+          "pass": 35,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "official": {
+          "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+          "summary": {
+            "files": 35,
+            "filesPassed": 34,
+            "filesSkipped": 1,
+            "filesFailed": 0,
+            "assertions": {
+              "run": 1131,
+              "passed": 1105,
+              "failed": 0,
+              "skipped": 25,
+              "todoFailed": 1,
+              "todoPassed": 0
+            }
+          },
+          "cleanupErrorCount": 0,
+          "sourceUnchangedDuringTest": true
+        },
+        "verifiedBuildIdentity": {
+          "manifestSha256": "4a1d42a01f8239a93f1f02f1f4e173d64dd0a951ad7d9b3fcdc5a90ca0e97ada",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "checkoutRevision": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+          "nginxVersion": "1.31.9",
+          "compiledModuleCount": 105
+        },
+        "buildManifestMatchesAggregate": true,
+        "actualPackedArchiveVerification": {
+          "valid": true,
+          "code": "archive_consistent",
+          "archiveSha256": "3dee4d9e750a064ba9bf678dd1e3dd37959dd8778d15daa3482ec45b1a5bf5b7",
+          "archiveBytes": 3973497,
+          "tarBytes": 8744960,
+          "payloadFiles": 13,
+          "directories": 5,
+          "bundleManifestSha256": "bbef5c913e846c56dbce54ed2c91581fe5402e5422bf4b4fa26afcd0eaf02e68",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+          "upstreamCommit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "machine": "x86_64",
+          "scope": "pre-extraction-consistency-only",
+          "evidenceAuthenticated": false,
+          "payloadExecuted": false,
+          "extracted": false,
+          "productionAccepted": false
+        },
+        "requiredUnix": {
+          "control": {
+            "control-api-unix.json": {
+              "tests": 9,
+              "pass": 9,
+              "fail": 0,
+              "transport": "unix",
+              "automaticFallback": false,
+              "cleanupErrors": 0,
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true
+            },
+            "generations-unix.json": {
+              "tests": 10,
+              "pass": 10,
+              "fail": 0,
+              "transport": "unix",
+              "automaticFallback": false,
+              "cleanupErrors": 0,
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true
+            }
+          },
+          "operator": {
+            "tests": 30,
+            "pass": 30,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        },
+        "featureOff": {
+          "checks": 4,
+          "pass": 4,
+          "sourceUnchangedDuringTest": true,
+          "defaultBuildUnchangedDuringTest": true,
+          "cleanupErrors": 0
+        },
+        "actualNodeVersion": "22.23.3",
+        "nodeVersionObservedInActualJobLog": true,
+        "requiredStepOutcomeProof": "completed-job-logs-and-artifacts"
+      },
+      {
+        "runId": 40112866760,
+        "event": "pull_request",
+        "eventHeadSha": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "jobId": 120928087505,
+        "jobs": [
+          {
+            "id": 120928044565,
+            "name": "scope",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check scope fail-closed controls",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Classify exact event delta",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          },
+          {
+            "id": 120928087505,
+            "name": "linux",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Validate release-record contract and refusal controls",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Validate alpha archive refusal controls",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Validate guarded user-service recipe",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build dependencies and optional test clients",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install pinned HTTP3 interoperability client",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Install independent HTTP3 HEAD client",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Compile native profile",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Native regressions and pinned official compatibility sample",
+                "status": "in_progress",
+                "conclusion": null
+              },
+              {
+                "name": "Verify native tenant cache contract experiment",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Verify private Unix control transport",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Build profile without control API",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Package local Linux alpha",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Checksum local Linux alpha",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Verify packed alpha before extraction",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Preserve JSON evidence",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Preserve local Linux alpha",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "pending",
+                "conclusion": null
+              }
+            ]
+          }
+        ],
+        "artifact": {
+          "id": 12567965120,
+          "name": "x10-native-evidence",
+          "bytes": 91090,
+          "downloadedZipSha256": "fcd34ce71ad5a25c84f2562fd76e7a7da82b6bfad8dab00fa627214abbc59b6b",
+          "githubDigest": "sha256:fcd34ce71ad5a25c84f2562fd76e7a7da82b6bfad8dab00fa627214abbc59b6b",
+          "digestMatches": true,
+          "expiresAtUTC": "2026-11-07T16:49:02Z",
+          "permanentDistribution": false
+        },
+        "aggregateGroups": {
+          "total": 20,
+          "pass": 20,
+          "fail": 0
+        },
+        "aggregateSuccess": true,
+        "failedGroups": [],
+        "observedStepApiMatchesCompletedJob": false,
+        "requiredExecutionEvidence": {
+          "actualJobLogCommandsObserved": {
+            "node --test --test-reporter=tap x10/service/user-unit.test.mjs": true,
+            "node x10/test/all.mjs --official": true,
+            "node x10/test/control-api-baseline.mjs --transport unix": true,
+            "node x10/test/generations.mjs --transport unix": true,
+            "node --test --test-reporter=tap x10/test/operator-status.test.mjs": true,
+            "bash x10/test/control-disabled.sh": true,
+            "node x10/alpha/cli.mjs pack": true,
+            "node x10/release/verify-alpha-archive.mjs": true
+          },
+          "matchingOutcomeArtifactsVerified": true,
+          "stepApiStatusesPreservedWithoutPromotion": true
+        },
+        "stepApiInconsistency": "Observed job/run completed success while step API reported in_progress/pending. Cause is unknown. Complete job logs and digest-verified outcome artifacts independently establish the executed profiles; observed step statuses are not promoted.",
+        "executedRequiredSteps": [
+          "Validate guarded user-service recipe",
+          "Validate alpha archive refusal controls",
+          "Validate release-record contract and refusal controls",
+          "Verify packed alpha before extraction",
+          "Native regressions and pinned official compatibility sample",
+          "Verify private Unix control transport",
+          "Build profile without control API",
+          "Package local Linux alpha",
+          "Checksum local Linux alpha"
+        ],
+        "managed-native-control": {
+          "format": "node-test-tap",
+          "pass": 86,
+          "fail": 0,
+          "valid": true
+        },
+        "operator-status": {
+          "format": "node-test-tap",
+          "pass": 30,
+          "fail": 0,
+          "valid": true,
+          "total": 30,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "local-alpha-lifecycle": {
+          "format": "node-test-tap",
+          "pass": 45,
+          "fail": 0,
+          "valid": true,
+          "total": 45,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "userUnitRecipeTests": {
+          "tests": 15,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "archiveRefusalTests": {
+          "tests": 15,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "releaseRecordTests": {
+          "tests": 35,
+          "pass": 35,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "official": {
+          "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+          "summary": {
+            "files": 35,
+            "filesPassed": 34,
+            "filesSkipped": 1,
+            "filesFailed": 0,
+            "assertions": {
+              "run": 1131,
+              "passed": 1105,
+              "failed": 0,
+              "skipped": 25,
+              "todoFailed": 1,
+              "todoPassed": 0
+            }
+          },
+          "cleanupErrorCount": 0,
+          "sourceUnchangedDuringTest": true
+        },
+        "verifiedBuildIdentity": {
+          "manifestSha256": "0eb715beda91f6023f99beb00821d8995b2c94763fab9ae4a3f75f01023e0ea6",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "checkoutRevision": "09dc8294df1848548fe15a725a7f16528c461b88",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+          "nginxVersion": "1.31.9",
+          "compiledModuleCount": 105
+        },
+        "buildManifestMatchesAggregate": true,
+        "actualPackedArchiveVerification": {
+          "valid": true,
+          "code": "archive_consistent",
+          "archiveSha256": "0ca5fbbd24908dc60cdcf44a152ead9abc07292adbf4f9d62bc08b2fe5476872",
+          "archiveBytes": 3973496,
+          "tarBytes": 8744960,
+          "payloadFiles": 13,
+          "directories": 5,
+          "bundleManifestSha256": "969a18d5fa40a481d47bc4c78bc05d9c7779c8a884415e51cbe74a158d9587e8",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "09dc8294df1848548fe15a725a7f16528c461b88",
+          "upstreamCommit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "machine": "x86_64",
+          "scope": "pre-extraction-consistency-only",
+          "evidenceAuthenticated": false,
+          "payloadExecuted": false,
+          "extracted": false,
+          "productionAccepted": false
+        },
+        "requiredUnix": {
+          "control": {
+            "control-api-unix.json": {
+              "tests": 9,
+              "pass": 9,
+              "fail": 0,
+              "transport": "unix",
+              "automaticFallback": false,
+              "cleanupErrors": 0,
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true
+            },
+            "generations-unix.json": {
+              "tests": 10,
+              "pass": 10,
+              "fail": 0,
+              "transport": "unix",
+              "automaticFallback": false,
+              "cleanupErrors": 0,
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true
+            }
+          },
+          "operator": {
+            "tests": 30,
+            "pass": 30,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        },
+        "featureOff": {
+          "checks": 4,
+          "pass": 4,
+          "sourceUnchangedDuringTest": true,
+          "defaultBuildUnchangedDuringTest": true,
+          "cleanupErrors": 0
+        },
+        "actualNodeVersion": "22.23.3",
+        "nodeVersionObservedInActualJobLog": true,
+        "requiredStepOutcomeProof": "completed-job-logs-and-artifacts"
+      }
+    ],
+    "serviceActivated": false,
+    "serviceAccepted": false,
+    "targetUserManagerAccepted": false,
+    "tlsAccepted": false,
+    "productionAccepted": false,
+    "nativeVerificationRerunsRequested": 0,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "prMergeIdentity": {
+      "sha": "09dc8294df1848548fe15a725a7f16528c461b88",
+      "parents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "3b293c570f9a4cf80e06ba6887f0799c39b755eb"
+      ]
+    },
+    "waitBindTests": {
+      "sourceDeclaredCaseNames": [
+        "wait-bind refuses malformed budgets before creating a lock and times out a prepared session",
+        "installed wait-bind releases a startup lock and binds exactly the observed native session",
+        "wait-bind refuses changed, faulted and cancelled prepared sessions without binding",
+        "wait-bind makes one real readiness attempt and refuses a wrong HTTP200 body",
+        "wait-bind retains possible durable binding after an injected alpha lock cleanup failure"
+      ],
+      "sourceFileSha256": "b49cdc228075543054d0db897ac634416c212dd72b7c8267b283e635217f378d",
+      "actualExecutionEvidence": "45 passing total cases in exact native alpha suite; individual new case names are source inventory, not separate artifact TAP"
+    },
+    "retainedLocalNativeAdverseObservation": {
+      "firstFinalRunGroupsPassed": 19,
+      "groupsTotal": 20,
+      "exitCode": 1,
+      "failedGroup": "reload-listener-observation",
+      "errorCode": "ESRCH",
+      "observationSite": "handover-baseline.mjs314/inspectTcpListeners",
+      "capturedProcessIdentified": false,
+      "exactCauseKnown": false,
+      "heldOldPreviouslyObservedStopped": true,
+      "fixtureHadNotIssuedResume": true,
+      "heldOldWorkerDisappearanceEstablished": false,
+      "changedAlphaTestsPassed": 45,
+      "controllerTestsPassed": 86,
+      "unchangedRerunPerformed": false,
+      "outOfScopeRuntimeFixMade": false,
+      "sourceBinaryModeDriftObserved": false,
+      "ownedCleanupComplete": true,
+      "noCausalRelationshipProven": false,
+      "historicalObserverFixClaimed": false
+    },
+    "localAggregateFailureFixed": false,
+    "localObserverESRCHCauseKnown": false,
+    "hostedPassExplainsLocalFailure": false,
+    "limitations": [
+      "Actual exact hosted native compatibility and installed wait-bind tests do not accept systemd-user lifecycle, TLS or Production V1.",
+      "The first local native aggregate19/20 observer ESRCH is preserved; any later hosted20/20 does not establish its cause or fix.",
+      "Aggregate groups, TAP cases and official assertions are different units.",
+      "Evidence downloads are inspected without rerunning tests or executing downloaded payloads.",
+      "CI artifacts have finite retention and are not permanent versioned distribution."
+    ],
+    "verificationHarnessObservation": {
+      "initialStepStatusGuardStoppedReceiptCreation": true,
+      "cause": "Completed job/run metadata disagreed with reported step states.",
+      "resolution": "Preserved the reported states and recorded independent completed-log plus digest-verified-artifact outcome proof.",
+      "runtimeRerun": false,
+      "metadataCauseKnown": false
+    }
+  },
+  "research": {
+    "schemaVersion": 1,
+    "implementationCommit": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+    "scope": "unchanged research compatibility only; not wait-bind/native/service acceptance",
+    "runs": [
+      {
+        "runId": 40112866743,
+        "event": "pull_request",
+        "eventHeadSha": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+        "status": "completed",
+        "conclusion": "success",
+        "attempt": 1,
+        "jobs": [
+          {
+            "id": 120928044696,
+            "name": "scope",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check scope fail-closed controls",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Classify exact event delta",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          },
+          {
+            "id": 120928100007,
+            "name": "research",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Build dependencies for TLS interoperability and isolated source probe",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Independent record and state counterexamples",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Same TCP connection across research worker versions",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Real TLS handshake and independent record observer",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Pinned OpenSSL read-only state probe",
+                "status": "in_progress",
+                "conclusion": null
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "pending",
+                "conclusion": null
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "pending",
+                "conclusion": null
+              }
+            ]
+          }
+        ],
+        "researchRuntimeExecuted": true,
+        "checkoutCommit": "09dc8294df1848548fe15a725a7f16528c461b88",
+        "checkoutParents": [
+          "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+          "3b293c570f9a4cf80e06ba6887f0799c39b755eb"
+        ],
+        "suites": [
+          {
+            "schemaVersion": 1,
+            "suite": "continuum-record-and-state-kernel",
+            "passed": true,
+            "testFiles": 2,
+            "scope": "in-memory-record-and-state-only",
+            "liveTlsProcessHandover": false,
+            "counts": {
+              "tests": 21,
+              "suites": 0,
+              "pass": 21,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimitExceeded": false,
+            "interrupted": false,
+            "runnerError": null
+          },
+          {
+            "schemaVersion": 1,
+            "suite": "continuum-real-handshake-and-record-observation",
+            "passed": true,
+            "testFiles": 2,
+            "scope": "real-handshake-and-record-observation-only",
+            "nativeNginxMigration": false,
+            "realSessionMigration": false,
+            "counts": {
+              "tests": 27,
+              "suites": 0,
+              "pass": 27,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimitExceeded": false,
+            "interrupted": false,
+            "runnerError": null
+          },
+          {
+            "schemaVersion": 1,
+            "suite": "continuum-pinned-openssl-state-probe",
+            "passed": true,
+            "testFiles": 1,
+            "scope": "pinned-openssl-read-only-state-observation",
+            "nativeNginxMigration": false,
+            "realSessionMigration": false,
+            "counts": {
+              "tests": 48,
+              "suites": 0,
+              "pass": 48,
+              "fail": 0,
+              "cancelled": 0,
+              "skipped": 0,
+              "todo": 0
+            },
+            "exitCode": 0,
+            "signal": null,
+            "timedOut": false,
+            "outputLimitExceeded": false,
+            "interrupted": false,
+            "runnerError": null
+          }
+        ],
+        "process": {
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      {
+        "runId": 40112863151,
+        "event": "push",
+        "eventHeadSha": "3b293c570f9a4cf80e06ba6887f0799c39b755eb",
+        "status": "completed",
+        "conclusion": "success",
+        "attempt": 1,
+        "jobs": [
+          {
+            "id": 120928033347,
+            "name": "scope",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Check scope fail-closed controls",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Classify exact event delta",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success"
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success"
+              }
+            ]
+          },
+          {
+            "id": 120928079479,
+            "name": "research",
+            "status": "completed",
+            "conclusion": "skipped",
+            "steps": []
+          }
+        ],
+        "researchRuntimeExecuted": false,
+        "checkoutCommit": null,
+        "scope": "scope-only; research runtime skipped; no new protocol runtime acceptance"
+      }
+    ],
+    "inheritedContributorAgreement": {
+      "runId": 40112865073,
+      "status": "completed",
+      "conclusion": "failure",
+      "separateFromRuntime": true,
+      "agreementAccepted": false
+    },
+    "newRuntimeReruns": 0,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "rawLogsPublished": false
+  },
+  "readOnlyObserverDiagnosis": {
+    "schemaVersion": 1,
+    "scope": "Read-only observer classification diagnosis using an isolated fake-proc filesystem; not historical process reproduction",
+    "sourceFilesSha256": {
+      "x10/control/listeners.mjs": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+      "x10/test/listeners.test.mjs": "5beedeeda6879a77ba1804f6a05d19f1e9d6bd009b4063bf87d712fd8a1b8dc0",
+      "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612"
+    },
+    "productionSourcesChanged": false,
+    "nativeRuntimeRerun": false,
+    "fullAggregateRerun": false,
+    "syntheticControls": {
+      "cases": 6,
+      "passed": 6,
+      "failed": 0,
+      "tapCountsIncludingOneWrapper": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "commands": [
+        "node --test --test-reporter=tap .build/wait-observer-diagnosis.test.mjs"
+      ],
+      "nodeVersion": "24.22.1"
+    },
+    "functionBoundaries": [
+      {
+        "function": "identity",
+        "boundary": "allowGone accepts only ENOENT followed by two ENOENT process-directory lookups; ESRCH is propagated."
+      },
+      {
+        "function": "descriptors",
+        "boundary": "The bounded whole-inventory retry applies only to ENOENT. ESRCH is propagated without claiming descriptor absence."
+      },
+      {
+        "function": "inspectTcpListeners",
+        "boundary": "Captured identity and descriptor exit paths accept ENOENT plus confirmed absence. ESRCH becomes unavailable through observed()."
+      },
+      {
+        "function": "observed",
+        "boundary": "Unexpected I/O error code is retained in the bounded diagnostic and returned as listener_observation_unavailable, never closed/exited."
+      }
+    ],
+    "controlOutcomes": [
+      {
+        "case": "present captured process without injected fault",
+        "result": "pending; not closed"
+      },
+      {
+        "case": "captured process status ESRCH while its fake directory remains present",
+        "result": "listener_observation_unavailable; never exited"
+      },
+      {
+        "case": "captured process status ESRCH after its fake directory is removed",
+        "result": "listener_observation_unavailable; ESRCH does not enter the existing ENOENT confirmed-absence path"
+      },
+      {
+        "case": "captured process ENOENT with two absent-directory observations",
+        "result": "exited"
+      },
+      {
+        "case": "one captured descriptor readlink ESRCH while fake process remains present",
+        "result": "listener_observation_unavailable; never false absence"
+      },
+      {
+        "case": "one captured descriptor readlink ENOENT while fake process remains present",
+        "result": "whole inventory retried; pending and not closed"
+      }
+    ],
+    "concreteConclusion": "ESRCH and ENOENT are treated differently by the existing observer. A synthetic ESRCH even with independently removed fake directory remains unresolved rather than exited. This is a fail-closed classification boundary, not a demonstrated false-closure or native-process defect.",
+    "historicalConstraints": {
+      "failingCapturedObservationIdentified": false,
+      "historicalProcessIdentityOrPIDPublished": false,
+      "actualKernelESRCHExitRaceReproduced": false,
+      "exactHistoricalInterleavingReproduced": false,
+      "causeOfRetainedNative19of20FailureProven": false,
+      "heldOldWorkerPreviouslyObservedStoppedIsInstantaneousIdentityProof": false,
+      "ESRCHAloneProvesExit": false,
+      "nativeObserverOrFixtureFixClaimed": false,
+      "newCIResultsEraseLocalFailure": false
+    },
+    "cleanup": {
+      "allAcquiredFakeProcFileHandlesClosed": true,
+      "allAcquiredFakeProcDirectoriesClosed": true,
+      "isolatedBuiltinHooksRestored": true,
+      "temporaryFakeProcRootRemoved": true,
+      "sourceUnchangedDuringControls": true,
+      "nativeProcessStarted": false,
+      "processSignalled": false
+    },
+    "limitations": [
+      "Only six focused synthetic controls ran; unchanged full boundary suites/native fixtures were not rerun.",
+      "The fake-proc injection proves the JavaScript classification branch, not Linux kernel causality for the recorded ESRCH.",
+      "Do not blanket-map ESRCH to exited: inaccessible/present/reused identities must remain unresolved, and confirmed absence requires its own acceptance.",
+      "Which captured process observation failed at handover-baseline.mjs314 remains unknown. No production source change is made."
+    ],
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "newPurchases": false
+  },
+  "implementationSourceFilesSha256": {
+    "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+    "x10/test/alpha.test.mjs": "b49cdc228075543054d0db897ac634416c212dd72b7c8267b283e635217f378d",
+    "x10/alpha/README.md": "580e9f2d0720c47acd96805c0b5308e25f83b8a1f43c96fc2878f19683621bff",
+    "x10/service/README.md": "2fa0ca2097c75660869e5f1f15f0f79f083c9ed5814e898525be19f435941e0e"
+  },
+  "unchangedSourceFilesSha256": {
+    "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+    "x10/test/alpha.test.mjs": "b49cdc228075543054d0db897ac634416c212dd72b7c8267b283e635217f378d",
+    "x10/service/README.md": "2fa0ca2097c75660869e5f1f15f0f79f083c9ed5814e898525be19f435941e0e"
+  },
+  "readmeMetadataChangedInReceipt": true,
+  "runtimeSourcesChangedInReceipt": false,
+  "newRuntimeTestsExecutedInReceipt": 0,
+  "originalLocalEvidence": "x10/evidence/g3-wait-bind.json",
+  "retainedLocalNativeAggregateAdverseObservation": {
+    "firstFinalRunGroupsPassed": 19,
+    "groupsTotal": 20,
+    "exitCode": 1,
+    "failedGroup": "reload-listener-observation",
+    "errorCode": "ESRCH",
+    "observationSite": "handover-baseline.mjs314/inspectTcpListeners",
+    "capturedProcessIdentified": false,
+    "exactCauseKnown": false,
+    "heldOldPreviouslyObservedStopped": true,
+    "fixtureHadNotIssuedResume": true,
+    "heldOldWorkerDisappearanceEstablished": false,
+    "changedAlphaTestsPassed": 45,
+    "controllerTestsPassed": 86,
+    "unchangedRerunPerformed": false,
+    "outOfScopeRuntimeFixMade": false,
+    "sourceBinaryModeDriftObserved": false,
+    "ownedCleanupComplete": true,
+    "noCausalRelationshipProven": false,
+    "historicalObserverFixClaimed": false
+  },
+  "completeLocalNativeAggregateAccepted": false,
+  "localObserverDiagnosisOpen": true,
+  "laterHostedSuccessRepairsLocalFailure": false,
+  "historicalObserverFixClaimed": false,
+  "observerRuntimeFixMadeInReceipt": false,
+  "noCausalRelationshipProven": false,
+  "serviceInstalled": false,
+  "serviceActivated": false,
+  "serviceAccepted": false,
+  "targetUserManagerAccepted": false,
+  "readinessAutomated": false,
+  "tlsAccepted": false,
+  "permanentAlphaAccepted": false,
+  "productionAccepted": false,
+  "nextConcreteTask": "First reproduce and diagnose the retained local native observer ESRCH with a bounded scoped counterexample under a new lease; make an observer fix only if that counterexample establishes the required change. Do not rerun an unchanged expensive aggregate as diagnosis. Later exact hosted native success does not repair the local19/20 failure or prove a historical fix or no causal relationship. Which captured-process observation failed and its exact cause remain unknown; ESRCH alone does not establish disappearance. The held old worker had been observed stopped before the observer call, and the fixture had not yet issued its own SIGCONT. Installed wait-bind implementation 3b293c570f9a4cf80e06ba6887f0799c39b755eb is exact-hosted verified narrowly, not automatic systemd health or actual service acceptance. Then continue verified TLS CA/hostname and actual nonroot user-manager startup/stop/restart, failed-start/drain/orphan gates. G2 permanent distribution/published-file replay remain blocked by available Release/asset writer capabilities; do not bypass credentials or permissions. G3-G8/Production V1 and full deferred Continuum remain open.",
+  "limitations": [
+    "Authored local tests, independent controls, exact CI TAP, native groups and official assertions are separate units.",
+    "Local first final native19/20 observer ESRCH remains failed, even if exact hosted aggregate succeeds.",
+    "The failed captured-process observation and exact cause are unknown; ESRCH alone is not proof of actual disappearance.",
+    "The old held worker had previously been observed stopped; the fixture had not yet issued its own SIGCONT. This is not an exact-instant state claim.",
+    "Read-only diagnosis is not a reproduced counterexample or accepted fix; no unchanged expensive aggregate rerun is made here.",
+    "Later CI success/source stability does not prove no causal relationship or any historical observer repair.",
+    "Local Unix EPERM and earlier adverse/test/setup outcomes remain in original evidence.",
+    "No automatic unit startup health, real nonroot manager lifecycle, TLS, permanent alpha or Production V1 is accepted.",
+    "Temporary CI artifacts are not permanent versioned distribution."
+  ],
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "realSessionKeysPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "newPurchases": false
+}

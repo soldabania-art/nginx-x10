@@ -1,0 +1,345 @@
+{
+  "source_commit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+  "source_version": "1.31.9",
+  "method": "Read complete source text in nontruncated tool outputs; ranges are inclusive physical source lines. Structural searches are supplemental, not full-read evidence.",
+  "files": [
+    {
+      "path": "src/http/modules/ngx_http_fastcgi_module.c",
+      "line_count": 4002,
+      "sha256": "e8c9055c44bb4d9a5e7d4f0a2e0360ffbbde799e7e6d0db91e4797800e0cb567",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          4002
+        ]
+      ],
+      "notes": [
+        "Full FastCGI responder: params bounded to 65535 bytes, configured-param suppression and duplicate HTTP header joining (Cookie semicolon), 32KiB STDIN record splitting/padding and streaming shadow ownership. Version/type/request-ID1 validation, split-header joining across records, bounded large STDERR recycling/catch patterns, Content-Length completeness and END_REQUEST exact-boundary keepalive. Native cache/store/buffering/request streaming and PATH_INFO regex variables; keep_conn default off."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_grpc_module.c",
+      "line_count": 5344,
+      "sha256": "3c82ae1016b5bed4aa6cbb91c455b6347ceb1d5de97d1ba1e1b2ebb28cb9db30",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          5344
+        ]
+      ],
+      "notes": [
+        "Complete gRPC HTTP/2 transport: always unbuffered request/response, trailers and early hints enabled, hop header suppression, static HPACK/Huffman and bounded header decoding, DATA and dual flow-control windows, SETTINGS/PING quotas, GOAWAY/RST parsing. Connection-pool cleanup owns persistent window data; sequential reuse adds stream ID 2, no concurrent multiplexing. Native grpcs TLS configuration, SNI/verification opt-in defaults, certificate cache and ALPN h2. grpc-status remains protocol trailer data, not an automatic application-level retry signal."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_memcached_module.c",
+      "line_count": 740,
+      "sha256": "79c78d0866872813ee842cd805ea7de4b68f2984f9eab8a101a408dde19dc709",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          740
+        ]
+      ],
+      "notes": [
+        "GET/HEAD only; escaped memcached key; strict VALUE key/length and END validation, 404 for missing key; nonbuffered body and protocol keepalive only after complete END."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_proxy_module.c",
+      "line_count": 5472,
+      "sha256": "9bf9bfbb93a225f848ddc0bdb620f20f050ee3237f2706479742ec7226cd345b",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          5472
+        ]
+      ],
+      "notes": [
+        "HTTP/1 request URI/header/body assembly, correct streamed chunk framing, status/header/trailer parsers, Content-Length/body completeness/reuse guards, redirects/cookie rewrites, cache and TLS configuration. This commit defaults proxy_http_version to 1.1 and can dispatch version 2."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_proxy_module.h",
+      "line_count": 126,
+      "sha256": "e45916e668f760c6421084eb64118e26adc582ce80ee334b5fda99a04aa4b6b9",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          126
+        ]
+      ],
+      "notes": []
+    },
+    {
+      "path": "src/http/modules/ngx_http_proxy_v2_module.c",
+      "line_count": 4317,
+      "sha256": "11ca94ba72529551c759fb50d86cef459851bd75b55c28f06eab3e49dd22a23a",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          4317
+        ]
+      ],
+      "notes": [
+        "HTTP/2 upstream: one request context per connection lease; sequential keepalive reuse increments odd stream ID, rejects foreign streams. HPACK static table/Huffman with dynamic table disabled, bounded header budget, frame/flow-control/padding/window validation, control frame quotas, trailers/103, GOAWAY/RST, buffered/nonbuffered filters. No concurrent upstream multiplexing in this implementation."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_scgi_module.c",
+      "line_count": 2179,
+      "sha256": "e19e835f59699d81db294fdc09ade6f5f2e5ad211d15cef4f409c4124fd10780",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          2179
+        ]
+      ],
+      "notes": [
+        "SCGI netstring with CONTENT_LENGTH first, NUL-delimited compiled params; configured HTTP param suppression, combined duplicate headers with Cookie semicolon. Raw body chain, known-length unbuffered uploads only; HTTP status-line or CGI Status/Location fallback parsing, 101 upgrade support, common Content-Length filters/cache/store/buffering and retries. No protocol keepalive confirmation in this adapter."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_upstream_hash_module.c",
+      "line_count": 787,
+      "sha256": "8f1684ab2d966bfba22cf7dd9f75540d8c59441d435d074e5a6aa8604474e4e5",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          787
+        ]
+      ],
+      "notes": [
+        "Native key hash compatible with Cache::Memcached; consistent ring with 160 points per weight compatible with Cache::Memcached::Fast; binary ring lookup, RR within selected server, configuration-generation guard."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_upstream_ip_hash_module.c",
+      "line_count": 307,
+      "sha256": "2c05d6fd467e796dc3e934e4aaccdff2d38a7471ee1d8c64c111900ed63b6099",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          307
+        ]
+      ],
+      "notes": [
+        "IPv4 first three bytes / all sixteen IPv6 bytes; weighted hash; bounded attempts before RR fallback; configuration-generation guard and shared eligibility rules."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_upstream_keepalive_module.c",
+      "line_count": 621,
+      "sha256": "6401819ab78bcd2e7b1e2b4ea7f0ddd84d25cfea8da441faf62ce88cada21bef",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          621
+        ]
+      ],
+      "notes": [
+        "Balancer runs before cache lookup; sockaddr match plus configuration tag in local mode. Explicit-upstream defaults: 32 local cache entries, one-hour max age, 60-second idle timeout, 1000 requests. Full request-body send, protocol keepalive and healthy events required; LRU cache/free queues; TLS closure may be asynchronous."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_upstream_least_conn_module.c",
+      "line_count": 342,
+      "sha256": "6ccd69a4a6d714ef82c218b83958a59dfc3e308ed4fe03d6e8631ec05ed6ea0c",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          342
+        ]
+      ],
+      "notes": [
+        "Weighted least connections via cross multiplication, smooth RR tie break, shared eligibility rules and backup handling."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_upstream_least_time_module.c",
+      "line_count": 665,
+      "sha256": "4c54b2cff8fd33124d4dac25c6f10537c7c06b42fcad8e1929e6ce13346674b4",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          665
+        ]
+      ],
+      "notes": [
+        "Native header/last-byte modes plus optional inflight measurements; EMA five percent new, 20ms clusters, five-second cap, aged slow-peer credit, weighted estimated completion time; successful attempts only."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_upstream_random_module.c",
+      "line_count": 569,
+      "sha256": "72af8c14b7ad52cec07bf36aed7b9a3390452cc52a19e6f8ccc86e7ce8861db3",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          569
+        ]
+      ],
+      "notes": [
+        "Weighted ranges with binary search; random two uses weighted least-connections comparison; bounded attempts before RR fallback; ranges rebuilt on generation change."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_upstream_sticky_module.c",
+      "line_count": 1513,
+      "sha256": "dd1bb7f49a05cadf6c0636aa4772ea3cd722da5551ea8f796eac673035148305",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          1513
+        ]
+      ],
+      "notes": [
+        "Native cookie/route/learn modes; shared session and expiry trees, MD5 session key, SID hint wrapper, default learned-session lifetime ten minutes, designated expiry worker. Initial large output was truncated in the middle; physical lines 601 through 1000 were reread completely to close the gap."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_upstream_zone_module.c",
+      "line_count": 1034,
+      "sha256": "abf6d06b97702018d4cf41fce2f6c9f9e8921e8f74b3fdf68a8022dcb91bc42e",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          1034
+        ]
+      ],
+      "notes": [
+        "Shared slab peer copies, configuration generation, refs/zombie lifecycle, DNS/SRV timers and priority backups; pre-resolution reuses addresses from the old zone; non-NXDOMAIN temporary DNS failure retains current peers."
+      ]
+    },
+    {
+      "path": "src/http/modules/ngx_http_uwsgi_module.c",
+      "line_count": 2803,
+      "sha256": "846eb02e4eb3808a9901542f34b140065523fd7668ca1a559ba19111b20fb732",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          2803
+        ]
+      ],
+      "notes": [
+        "uWSGI four-byte packet prefix, uint16 little-endian key/value lengths and 65535 total params limit, modifier bounds 0..255, optional uwsgi_string; compiled params and duplicate header joining. Known-length streaming uploads, HTTP/CGI status parsing and upgrade, generic body/cache/store/retry paths. suwsgi TLS/SNI/verification/client certificates/cache supported; TLS verification/SNI default off for compatibility. No protocol keepalive confirmation in this adapter."
+      ]
+    },
+    {
+      "path": "src/http/ngx_http_cache.h",
+      "line_count": 210,
+      "sha256": "b732d10be0c559b0f1f136c74be8beb27ace8c7a3cbe3003385d047956a505f7",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          210
+        ]
+      ],
+      "notes": []
+    },
+    {
+      "path": "src/http/ngx_http_file_cache.c",
+      "line_count": 2807,
+      "sha256": "b764093e9698d42e654d4a4e63eab37a6eeeedab2dc4f06e772ae2d8876270ee",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          2807
+        ]
+      ],
+      "notes": [
+        "Native shared slab/rbtree/LRU metadata and MD5 filename plus CRC32/full-key collision check; cache format version 5, Vary variant keys, lock age/timeout with 500ms event polling, loader/manager file/time/sleep budgets and min-free/max-size bounds. Complete-response temporary-file rename; inode/size/header guard on 304 update; deletion outside shared mutex with count/deleting guards; cleanup releases updating only for matching lock generation."
+      ]
+    },
+    {
+      "path": "src/http/ngx_http_upstream.c",
+      "line_count": 7405,
+      "sha256": "28f3bfdc7387f871454d767e5a2cfca62989d081a80641cc0d54f66e98e37087",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          7405
+        ]
+      ],
+      "notes": [
+        "Full lifecycle: create/init/cache/DNS/connect/TLS/send/header/early hints/body/upgrade/retry/finalize. POST/LOCK/PATCH after request_sent require NON_IDEMPOTENT; sent unbuffered body cannot retry; retry budget is tries plus timeout; 403/404 use PEER_NEXT rather than passive failure. Response duplicate CL and CL+TE rejected; TE only chunked. Nonbuffered chains/backpressure versus event-pipe buffers/temp files/cache/store; committed headers cannot be replaced by a new status. Cache stale/revalidate/background controls, cookie/Vary exclusions, cleanup and statistics variables."
+      ]
+    },
+    {
+      "path": "src/http/ngx_http_upstream.h",
+      "line_count": 470,
+      "sha256": "e2ac8a5a6a6ded79ef89f8dd0c3dc5035e7843ac011d38f6b2ec3204ab3424c6",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          470
+        ]
+      ],
+      "notes": []
+    },
+    {
+      "path": "src/http/ngx_http_upstream_round_robin.c",
+      "line_count": 1279,
+      "sha256": "a2faa2e209fa121476b7ac8bc0d42f1705c55df1ebde8362300762e11c477069",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          1279
+        ]
+      ],
+      "notes": [
+        "Smooth weighted RR uses configured/current/effective weights; failure reduces effective weight, which recovers one per eligible selection. Single-peer path bypasses max_fails suppression but checks down/max_conns. Per-request tried bitset, backup fallback, configuration-generation guard, refs/zombie lifecycle and shared SSL-session copy."
+      ]
+    },
+    {
+      "path": "src/http/ngx_http_upstream_round_robin.h",
+      "line_count": 292,
+      "sha256": "48d8cb2a6bab8256414ab5953c8f6bad4e92f81e58510e82f2f0ef377957fc6b",
+      "status": "fully_read",
+      "read_ranges": [
+        [
+          1,
+          292
+        ]
+      ],
+      "notes": []
+    }
+  ],
+  "summary": {
+    "assigned_files": 22,
+    "fully_read_files": 22,
+    "physical_lines": 43284,
+    "fully_read_lines": 43284,
+    "partially_read_files": 0,
+    "structural_only_files": 0,
+    "unread_files": 0,
+    "source_modified": false,
+    "runtime_validation": "No C implementation changes or new NGINX runtime/protocol benchmarks performed in this read-only review."
+  },
+  "scope_limits": [
+    "Complete textual reading covers only the assigned manifest, not every transitive function or build configuration.",
+    "Full reading is not formal verification, exhaustive branch coverage, a security certification, or a throughput result.",
+    "Conditional code was read as source; platform/feature-specific build execution is not implied."
+  ]
+}

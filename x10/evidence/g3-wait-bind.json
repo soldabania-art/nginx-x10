@@ -1,0 +1,736 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-g3-wait-bind-20261024T162521000Z",
+  "baseCommit": "ef11e68b8ca5209d04784f46fd5c62df768aa718",
+  "publicationParent": "970f5deeb6113a736910e1617abb2e90421e5389",
+  "recordedAtUTC": "2026-10-24T16:41:43.890195Z",
+  "scope": "Installed bounded startup wait-bind only; no automatic user-unit service activation",
+  "sourceFilesSha256": {
+    "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+    "x10/test/alpha.test.mjs": "b49cdc228075543054d0db897ac634416c212dd72b7c8267b283e635217f378d",
+    "x10/alpha/README.md": "580e9f2d0720c47acd96805c0b5308e25f83b8a1f43c96fc2878f19683621bff",
+    "x10/service/README.md": "2fa0ca2097c75660869e5f1f15f0f79f083c9ed5814e898525be19f435941e0e"
+  },
+  "reports": {
+    "author": {
+      "schemaVersion": 1,
+      "baseCommit": "ef11e68b8ca5209d04784f46fd5c62df768aa718",
+      "leaseCommit": "970f5deeb6113a736910e1617abb2e90421e5389",
+      "scope": "Installed wait-bind first prepared/running session only; actual loopback native fixtures and explicit synthetic state/cleanup perturbations, not systemd or TLS acceptance",
+      "nodeVersion": "24.22.1",
+      "finalFocused": {
+        "tests": 5,
+        "pass": 5,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "initialFocused": {
+        "tests": 4,
+        "pass": 3,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "intermediateDiagnostics": [
+        {
+          "counts": {
+            "tests": 4,
+            "pass": 4,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "note": "Four-case diagnostic after prepared polling became readonly; fifth cleanup-fault regression added later."
+        },
+        {
+          "counts": {
+            "tests": 1,
+            "pass": 1,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "note": "New fifth cleanup-fault case focused before final five-case frozen run."
+        }
+      ],
+      "initialFailure": {
+        "kind": "author test expectation",
+        "observation": "Negative decimal supplied as separate parseArgs option value was rejected by Node before custom timeout validation, producing ERR_PARSE_ARGS_INVALID_OPTION_VALUE. Test now accepts that parser refusal as well as invalid_wait_timeout; both precede alpha lock writes.",
+        "runtimeFixForInitialAssertion": false
+      },
+      "reviewChanges": [
+        {
+          "finding": "Repeated prepared-session alpha-lock acquisition could interfere with run startup lock acquisition.",
+          "resolution": "Prepared observations are readonly; alpha lock acquired only after running is observed, with all identity/state revalidated under lock.",
+          "actualStarvationReproductionClaimed": false
+        },
+        {
+          "finding": "Alpha lock cleanup can fail after durable bind; outer errors must retain possible commit.",
+          "resolution": "Track bind attempt outside lock cleanup and preserve bindingMayHaveCommitted:true on all post-attempt failures. Fifth authored synthetic manager wrapper performs real native bind then changes only fixture alpha-lock to directory.",
+          "nativeDefectClaimed": false
+        }
+      ],
+      "sourceSha256": {
+        "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+        "x10/test/alpha.test.mjs": "b49cdc228075543054d0db897ac634416c212dd72b7c8267b283e635217f378d"
+      },
+      "existingAlphaTestPrefixPreserved": true,
+      "originalAlphaPrefixBytes": 34622,
+      "expectedFullAlphaCases": 45,
+      "newFocusedCases": 5,
+      "commands": [
+        "node --check x10/alpha/cli.mjs",
+        "node --test --test-name-pattern=wait-bind --test-reporter=tap x10/test/alpha.test.mjs",
+        "git diff --check"
+      ],
+      "semantics": {
+        "timeoutDefaultMs": 10000,
+        "timeoutRangeMs": [
+          1,
+          30000
+        ],
+        "bindGateSupportedMs": 3000,
+        "minimumRemainingBeforeBindMs": 4000,
+        "bindAttemptsMaximum": 1,
+        "readOnlyPreparedPolling": true,
+        "retryOnlyAlphaLockBeforeBind": true,
+        "retryHealthOrIdentityRefusal": false,
+        "processesSpawnedByHelper": 0,
+        "processSignalsSentByHelper": 0,
+        "sessionReplacementSupported": false,
+        "lateOrPostAttemptCancellationMayHaveCommitted": true,
+        "cancellationBeforeMarker": "Signals before fixed waiting marker may terminate during readonly initial checks; binding has not started.",
+        "noDetachedPromiseRace": true,
+        "hardKernelStallBoundClaimed": false
+      },
+      "cleanup": {
+        "ownedTemporaryRootsRemoved": true,
+        "ownedNativeGroupsRemaining": 0,
+        "ownedLauncherChildrenRemaining": 0,
+        "sourceFilesStableAfterFinalRun": true
+      },
+      "fullAggregate": "coordinator/native helper verifies separately after source freeze",
+      "automaticUnitReadinessEnabled": false,
+      "systemdServiceActivated": false,
+      "tlsAccepted": false,
+      "productionAccepted": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "realProcessIdentifiersPublished": false
+    },
+    "native": {
+      "schemaVersion": 1,
+      "build": {
+        "builds": 1,
+        "exitCode": 0,
+        "checkoutRevision": "970f5deeb6113a736910e1617abb2e90421e5389",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+        "manifestSha256": "528196709eb25f86e8e21d3f9604111a1dc18cb85a018219576157657bc98e85",
+        "binarySha256": "cfc1f549b0eb737d7ca784569b6fd8ff38e5b692d6212fd4973a4d5c97dcb07e",
+        "binaryMode": "0755",
+        "compiledModuleCount": 105,
+        "nginxVersion": "1.31.9",
+        "dependencyVersionsFromHeaders": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        },
+        "generatedFiles": {
+          "ngx_auto_config.h": {
+            "sha256": "2333e07ac396dc0dd99401c6516acd7d274c412ca13bdca4ded8b62320717bc0",
+            "bytes": 10144,
+            "mode": "0644"
+          },
+          "ngx_auto_headers.h": {
+            "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+            "bytes": 657,
+            "mode": "0644"
+          },
+          "ngx_modules.c": {
+            "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+            "bytes": 11820,
+            "mode": "0644"
+          }
+        },
+        "licenseSha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c"
+      },
+      "environment": {
+        "nodeVersion": "v24.22.1",
+        "uid": 0,
+        "targetNonrootNode22Accepted": false
+      },
+      "dependencies": {
+        "pinnedWheelHashesVerified": 11,
+        "freshVenvs": 2,
+        "pipCheckPassed": 2,
+        "networkDependencyDownloads": 0,
+        "requireHashes": true,
+        "onlyBinary": true
+      },
+      "aggregate": {
+        "command": "node x10/test/all.mjs --official",
+        "exitCode": 1,
+        "elapsedMs": 228763,
+        "timedOut": false,
+        "stderrBytes": 679,
+        "success": false,
+        "groups": 20,
+        "passed": 19,
+        "failed": 1,
+        "suites": [
+          {
+            "name": "http-tls-http2-reload",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "stream-mail",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "mail-tls-starttls",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "protocol-adapters",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "http3-interop",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "http3-head-independent-client",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "native-features",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "quic-regression",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "quic-generated-sanitized",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "quic-frame-boundaries",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "native-load-client-verification",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "managed-native-control",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "operator-status",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "local-alpha-lifecycle",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "listener-observer-boundaries",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "reload-listener-observation",
+            "passed": false,
+            "exitCode": 1,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "native-control-api",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "native-process-generations",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "native-generation-boundaries",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          },
+          {
+            "name": "official-nginx-tests",
+            "passed": true,
+            "exitCode": 0,
+            "timedOut": false,
+            "outputLimitExceeded": false
+          }
+        ]
+      },
+      "controller": {
+        "format": "node-test-tap",
+        "pass": 86,
+        "fail": 0,
+        "valid": true
+      },
+      "alpha": {
+        "format": "node-test-tap",
+        "pass": 45,
+        "fail": 0,
+        "valid": true,
+        "total": 45,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "operatorStatus": {
+        "format": "node-test-tap",
+        "pass": 30,
+        "fail": 0,
+        "valid": true,
+        "total": 30,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "official": {
+        "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+        "summary": {
+          "files": 35,
+          "filesPassed": 32,
+          "filesSkipped": 3,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1109,
+            "passed": 1083,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        },
+        "skippedFiles": [
+          "fastcgi.t",
+          "scgi.t",
+          "uwsgi.t"
+        ],
+        "cleanupErrorCount": 0,
+        "sourceUnchangedDuringTest": true
+      },
+      "requiredUnix": {
+        "runMetadata": [
+          {
+            "kind": "unix-control",
+            "exitCode": 1,
+            "elapsedMs": 5282,
+            "timedOut": false
+          },
+          {
+            "kind": "unix-generations",
+            "exitCode": 1,
+            "elapsedMs": 5433,
+            "timedOut": false
+          },
+          {
+            "kind": "unix-operator",
+            "exitCode": 1,
+            "elapsedMs": 6583,
+            "timedOut": false
+          }
+        ],
+        "control": {
+          "success": false,
+          "testsReported": 2,
+          "passed": 2,
+          "failed": 0,
+          "actualUnixRuntimeAccepted": false,
+          "transport": "unix",
+          "cleanup": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0,
+          "fixtureErrorCount": 0,
+          "actualUnixRuntimeCases": 0
+        },
+        "generations": {
+          "success": false,
+          "testsReported": 2,
+          "passed": 2,
+          "failed": 0,
+          "actualUnixRuntimeAccepted": false,
+          "transport": "unix",
+          "cleanup": {
+            "nativeStopped": true,
+            "fixturesStopped": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true
+          },
+          "cleanupErrorCount": 0,
+          "fixtureErrorCount": 0,
+          "actualUnixRuntimeCases": 0
+        },
+        "operator": {
+          "tests": 21,
+          "pass": 20,
+          "fail": 1,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "socketCapability": {
+          "scope": "own empty socket create/close capability only; no bind or service",
+          "rows": [
+            {
+              "kind": "unix-stream",
+              "createdAndClosed": false,
+              "errno": 1,
+              "bound": false
+            },
+            {
+              "kind": "unix-seqpacket",
+              "createdAndClosed": false,
+              "errno": 1,
+              "bound": false
+            },
+            {
+              "kind": "inet-stream",
+              "createdAndClosed": true,
+              "bound": false
+            }
+          ]
+        },
+        "prechecksAreNotUnixRuntimePass": true
+      },
+      "featureOff": {
+        "success": true,
+        "tests": 4,
+        "passed": 4,
+        "defaultBuildUnchangedDuringTest": true,
+        "sourceUnchangedDuringTest": true,
+        "harnessUnchangedDuringTest": true,
+        "cleanup": {
+          "activeChild": false,
+          "temporaryRootRemoved": true,
+          "rootMakefileRestored": true,
+          "errorCount": 0
+        }
+      },
+      "nativeTrackedInputsCount": 500,
+      "nativeTrackedInputsUnchanged": true,
+      "harnessTrackedFilesCount": 58,
+      "harnessUnchanged": true,
+      "defaultManifestUnchanged": true,
+      "sourceFreezeSha256": {
+        "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+        "x10/test/alpha.test.mjs": "b49cdc228075543054d0db897ac634416c212dd72b7c8267b283e635217f378d"
+      },
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "realProcessIdentifiersPublished": false,
+      "serviceActivated": false,
+      "tlsAccepted": false,
+      "productionAccepted": false,
+      "limitations": [
+        "Local root/Node24 native compatibility is not nonroot Node22 service acceptance.",
+        "Default aggregate TCP and supplemental required Unix checks are separate; EPERM is not a native-code fix or runtime PASS.",
+        "Fresh default build records lease checkout, not future implementation commit.",
+        "Official optional-client skips and expected TODO remain explicit."
+      ],
+      "adverseAggregateObservation": {
+        "suite": "reload-listener-observation",
+        "exitCode": 1,
+        "category": "captured-process-observation-unresolved",
+        "errno": "ESRCH",
+        "location": "handover-baseline.mjs:314",
+        "reportedPrechecks": 2,
+        "passedPrechecks": 2,
+        "restrictedInitgroupsDiagnostics": 4,
+        "binaryUnchangedDuringTest": true,
+        "harnessUnchangedDuringTest": true,
+        "observerUnchangedDuringTest": true,
+        "nativeStopped": true,
+        "nativeExitCode": 0,
+        "fixturesStopped": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "cleanupErrorCount": 0,
+        "heldOldPreviouslyObservedStopped": true,
+        "freshBWhileOldStoppedObserved": true,
+        "failingCapturedProcessIdentityProven": false,
+        "causeProven": false,
+        "runtimeReruns": 0,
+        "observerOrNativeFixClaimed": false
+      }
+    },
+    "review": {
+      "schemaVersion": 1,
+      "scope": "Independent installed wait-bind controls; HTTP native paths plus two explicitly synthetic post-bind fault/delay controls",
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "checks": [
+        "invalid timeout syntax refuses without binding or alpha lock",
+        "prepared wait times out without binding",
+        "SIGTERM while prepared cancels and removes alpha lock",
+        "session change while prepared refuses without binding",
+        "legacy bind refuses held alpha lock but wait-bind permits startup progress",
+        "already-bound retry refuses rather than fake readiness success",
+        "SIGTERM during real native application health awaits commit and reports ambiguity",
+        "synthetic post-real-bind alpha-lock cleanup fault retains commit ambiguity",
+        "synthetic delayed return after real native bind awaits completion and reports late ambiguity once"
+      ],
+      "actualServiceActivated": false,
+      "tlsAccepted": false,
+      "productionAccepted": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "sourceSha256": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+      "installedCliSourceHashes": [
+        "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+        "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+        "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9"
+      ],
+      "argumentSyntaxRefusals": 7,
+      "temporaryRootsRemoved": true,
+      "remainingOwnedChildren": 0,
+      "sourceFilesSha256": {
+        "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+        "x10/test/alpha.test.mjs": "b49cdc228075543054d0db897ac634416c212dd72b7c8267b283e635217f378d"
+      },
+      "runtime": {
+        "nodeVersion": "24.22.1",
+        "nonrootTargetAccepted": false
+      },
+      "nativeBuildIdentity": {
+        "checkoutRevision": "970f5deeb6113a736910e1617abb2e90421e5389",
+        "binarySha256": "cfc1f549b0eb737d7ca784569b6fd8ff38e5b692d6212fd4973a4d5c97dcb07e",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "compiledModuleCount": 105
+      },
+      "actualHTTPNativeScenarios": true,
+      "syntheticFaultCases": 2,
+      "signalListenersRestoredOnReturnAndThrow": true,
+      "preparedObservationDoesNotCreateAlphaLock": true,
+      "actualHealthInflightCancellation": {
+        "result": "wait_bind_cancelled",
+        "bindingMayHaveCommitted": true,
+        "durableBindingObserved": true,
+        "detachedLateTaskUsed": false
+      },
+      "postBindCleanupFault": {
+        "faultKind": "synthetic-installed-manager-wrapper-after-real-bind",
+        "bindingMayHaveCommitted": true,
+        "durableBindingObserved": true,
+        "originalGapWasStaticFindingOnly": true
+      },
+      "staticReview": {
+        "blockingFindings": [],
+        "resolvedFinding": "Post-bind alpha-lock cleanup failure initially lost commit-ambiguity metadata. Author added outer bindingAttempted tracking; final synthetic cleanup-fault heldout after real native bind preserves ambiguity.",
+        "cooperativeBudgetOnly": true,
+        "noRetryAfterBindAttempt": true,
+        "noBlindHealthIdentityOrStateRetry": true,
+        "automaticUserUnitIntegrationPerformed": false
+      },
+      "adverseHarnessObservations": [
+        {
+          "stage": "private-parser",
+          "result": "Syntax correction before any fixture execution; missing promise closure fixed."
+        },
+        {
+          "stage": "private-state-reader",
+          "result": "Initial 0PASS/1FAIL because harness looked for current.json rather than existing state.json; owned fixture removed, no product failure."
+        },
+        {
+          "stage": "private-invalid-argument-expectation",
+          "result": "Initial 0PASS/1FAIL expected a custom code for separate negative option value; existing Node parseArgs refusal accepted as valid fail-closed behavior."
+        },
+        {
+          "stage": "prior-candidate-diagnostic",
+          "result": "Eight scenarios passed prior code bytes; not counted as extra independent cases or final-byte acceptance."
+        },
+        {
+          "stage": "final-incomplete-session-fixture",
+          "result": "Three passed and one expected-code assertion failed: registry pointed to nonexistent lifecycle and product refused ENOENT without binding. Refined fixture creates a complete prepared lifecycle before registry switch; final eight pass unchanged frozen product bytes."
+        }
+      ],
+      "limitations": [
+        "Nine scenario units include seven argument syntax subcontrols and two direct API signal-listener lifetime assertions; these are not extra independent installations.",
+        "Actual native HTTP readiness is not systemd activation, TLS validation, nonroot Node22 target acceptance, soak or Production V1.",
+        "Two private installed-manager injections follow real native bind: an alpha-lock cleanup fault and a delayed return beyond the helper deadline. They are synthetic fault controls, not reproduced production failures; own fixture records are rehashed explicitly.",
+        "Timeouts are cooperative around supported filesystem/runtime operations; an arbitrary kernel stall hard bound is not proven.",
+        "Cancellation after a bind attempt does not undo a durable binding; inspect state and do not retry blindly."
+      ],
+      "lateDeadlineControl": {
+        "scope": "synthetic delayed return after actual native HTTP bind commits",
+        "timeoutMs": 6500,
+        "injectedPostCommitDelayMs": 7500,
+        "result": "wait_bind_late",
+        "bindingMayHaveCommitted": true,
+        "durableBindingObserved": true,
+        "boundEventCount": 1,
+        "detachedLateTaskUsed": false,
+        "temporaryRootsRemoved": true,
+        "remainingOwnedChildren": 0
+      },
+      "additionalControlReruns": 0,
+      "priorEightCaseReceiptSha256": "27f4739cb95eb1a0f12ed34464b6c08553247670280efc2432c25e869005b1b3"
+    },
+    "root": {
+      "nodeVersion": "24.22.1",
+      "sourceFreezeSha256": {
+        "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+        "x10/test/alpha.test.mjs": "b49cdc228075543054d0db897ac634416c212dd72b7c8267b283e635217f378d",
+        "x10/alpha/README.md": "580e9f2d0720c47acd96805c0b5308e25f83b8a1f43c96fc2878f19683621bff",
+        "x10/service/README.md": "2fa0ca2097c75660869e5f1f15f0f79f083c9ed5814e898525be19f435941e0e"
+      },
+      "legacyAlpha40PrefixBytes": 34622,
+      "legacyPrefixPreserved": true,
+      "newFocusedCases": 5,
+      "independentCases": 9,
+      "nativeAggregate": {
+        "groups": 20,
+        "pass": 19,
+        "fail": 1,
+        "exitCode": 1
+      },
+      "changedAlpha": {
+        "pass": 45,
+        "fail": 0
+      },
+      "allRequiredLocalChecksPassed": false,
+      "nativeControllerUnitUnchanged": true,
+      "observerFailure": {
+        "errno": "ESRCH",
+        "fixtureLocation": "handover-baseline.mjs:314",
+        "failingProcessIdentityProven": false,
+        "causeProven": false,
+        "unchangedCodeNotProofOfCausalIndependence": true,
+        "reruns": 0,
+        "fixClaimed": false
+      },
+      "exactImplementationCI": "pending-resulting-commit",
+      "serviceActivated": false,
+      "automaticUnitReadinessAccepted": false,
+      "tlsAccepted": false,
+      "productionAccepted": false,
+      "rawLogsPublished": false
+    }
+  },
+  "hostedVerification": {
+    "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+    "runIds": []
+  },
+  "nativeSourceChanged": false,
+  "controllerImplementationChanged": false,
+  "alphaRuntimeChanged": true,
+  "bundleInventoryChanged": false,
+  "legacyAlpha40PrefixPreserved": true,
+  "completeLocalNativeAggregateAccepted": false,
+  "nativeAggregateAdverseObservation": {
+    "firstFinalRunGroupsPassed": 19,
+    "groupsTotal": 20,
+    "exitCode": 1,
+    "failedGroup": "reload-listener-observation",
+    "errorCode": "ESRCH",
+    "observationSite": "handover-baseline.mjs314/inspectTcpListeners",
+    "capturedProcessIdentified": false,
+    "exactCauseKnown": false,
+    "heldOldPreviouslyObservedStopped": true,
+    "fixtureHadNotIssuedResume": true,
+    "heldOldWorkerDisappearanceEstablished": false,
+    "changedAlphaTestsPassed": 45,
+    "controllerTestsPassed": 86,
+    "unchangedRerunPerformed": false,
+    "outOfScopeRuntimeFixMade": false,
+    "sourceBinaryModeDriftObserved": false,
+    "ownedCleanupComplete": true,
+    "noCausalRelationshipProven": false,
+    "historicalObserverFixClaimed": false
+  },
+  "lateBindingContract": "Late or cancelled in-flight bind may have committed; inspect before any next operation, no rollback or blind retry is implied.",
+  "serviceActivated": false,
+  "serviceAccepted": false,
+  "targetUserManagerAccepted": false,
+  "readinessAutomated": false,
+  "tlsAccepted": false,
+  "permanentAlphaAccepted": false,
+  "productionAccepted": false,
+  "nextConcreteTask": "First inspect exact resulting installed wait-bind implementation CI and diagnose the retained native observer failure without an unchanged rerun or an out-of-scope fix. The first final native aggregate failed19/20 with ESRCH in unchanged reload-listener-observation at handover-baseline.mjs314/inspectTcpListeners; which captured-process observation failed remains unknown. The held old worker had been observed stopped before the observer call; the fixture had not yet issued its own SIGCONT. ESRCH alone does not establish actual disappearance. Changed alpha45/45 and controller86 passed separately; those positives do not turn the full native aggregate into PASS. Unchanged source/binary/mode observations do not prove that the helper had no causal relationship. After scoped verification, continue bounded G3 verified downstream/upstream TLS CA and hostname controls and real nonroot user-manager lifecycle, startup readiness, failed-start cleanup, slow-drain and faulted/orphan acceptance. The unit still has no automatic ExecStartPost health action; explicit operator bind or the installed wait-bind remains necessary. Late or cancelled in-flight binding may have committed and must be inspected rather than blindly retried. G2 permanent versioned distribution/published-file nonroot Node22 replay remain blocked by available Release/asset publication capability; do not bypass credentials or permissions. G3-G8, Production V1 and full deferred Continuum remain open.",
+  "limitations": [
+    "Authored cases, independent heldouts, native aggregate groups and official assertions are separate units.",
+    "The installed command and direct native fixtures are not an actual systemd-user lifecycle acceptance or clean nonroot Node22 target replay.",
+    "The generated unit still has no automatic ExecStartPost health action.",
+    "Monotonic budgets do not guarantee a hard bound across uninterruptible filesystem or kernel stalls.",
+    "A late/cancelled in-flight bind may have committed; no implicit rollback or blind retry is accepted.",
+    "The first final native aggregate failed19/20 with observer ESRCH. Scoped alpha45/controller86 positives are not a complete native PASS; failed observation/cause/causal relationship remain unknown, and an unchanged rerun is not accepted as diagnosis.",
+    "Exact new implementation CI, TLS, full service failure/drain/orphan behavior, G2 permanent distribution and G4-G8 remain open."
+  ],
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "realSessionKeysPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "newPurchases": false
+}

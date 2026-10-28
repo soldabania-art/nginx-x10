@@ -1,0 +1,3038 @@
+{
+  "source_commit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+  "expected_commit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+  "owner": "console_ui",
+  "method": "Complete source displayed and inspected in bounded, untruncated source chunks. Structural inventory is not full reading.",
+  "files": [
+    {
+      "path": "src/http/modules/ngx_http_access_module.c",
+      "total_lines": 463,
+      "bytes": 11878,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          463
+        ]
+      ],
+      "evidence": [
+        "Source displayed; first combined output truncated only auth_basic middle, repaired by separate untruncated lines100\u2013300 read."
+      ],
+      "directives": [
+        {
+          "name": "allow",
+          "line": 70,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "limit_except"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "deny",
+          "line": 78,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "limit_except"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "9608222bac69a0cb5f8e15bf81472ffe4d7cd302198be79a9878b20e285b1ba0"
+    },
+    {
+      "path": "src/http/modules/ngx_http_addition_filter_module.c",
+      "total_lines": 254,
+      "bytes": 6999,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          254
+        ]
+      ],
+      "evidence": [
+        "Source displayed in bounded sequential chunks. Headers combined output tiny truncation repaired by re-reading200\u2013420. Range1\u2013500+501\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "add_before_body",
+          "line": 35,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "add_after_body",
+          "line": 42,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "addition_types",
+          "line": 49,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        }
+      ],
+      "sha256": "7a4b85ef1ad05f60227bec0cb4de7a866ca684eb790bbc4506e0c258596b46ea"
+    },
+    {
+      "path": "src/http/modules/ngx_http_auth_basic_module.c",
+      "total_lines": 441,
+      "bytes": 11822,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          441
+        ]
+      ],
+      "evidence": [
+        "Source displayed; first combined output truncated only auth_basic middle, repaired by separate untruncated lines100\u2013300 read."
+      ],
+      "directives": [
+        {
+          "name": "auth_basic",
+          "line": 38,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "limit_except"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "auth_basic_user_file",
+          "line": 46,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "limit_except"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "92b104727fc7f9d96e2d120091b7d9630a90ecc4cae9ca73aa4fe686409a9cf4"
+    },
+    {
+      "path": "src/http/modules/ngx_http_auth_request_module.c",
+      "total_lines": 450,
+      "bytes": 11653,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          450
+        ]
+      ],
+      "evidence": [
+        "Source displayed; first combined output truncated only auth_basic middle, repaired by separate untruncated lines100\u2013300 read."
+      ],
+      "directives": [
+        {
+          "name": "auth_request",
+          "line": 52,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "auth_request_set",
+          "line": 59,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "2",
+          "block": false
+        }
+      ],
+      "sha256": "0aca4bc406e618612175c10bdbcf94b27c2e07751a2f7cc764f9a7eca156e0e0"
+    },
+    {
+      "path": "src/http/modules/ngx_http_autoindex_module.c",
+      "total_lines": 1074,
+      "bytes": 30710,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1074
+        ]
+      ],
+      "evidence": [
+        "Read complete source in chunks 1\u2013550 and 551\u20131074; inspected handlers, all four encoders, directory traversal, configuration, allocation and cleanup paths."
+      ],
+      "directives": [
+        {
+          "name": "autoindex",
+          "line": 87,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "autoindex_format",
+          "line": 94,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "autoindex_localtime",
+          "line": 101,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "autoindex_exact_size",
+          "line": 108,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "00ff47b9907bec971cc0bb9be60edcbe6263cb34ac79997c9839acb08bec75ba"
+    },
+    {
+      "path": "src/http/modules/ngx_http_browser_module.c",
+      "total_lines": 712,
+      "bytes": 19921,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          712
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat output."
+      ],
+      "directives": [
+        {
+          "name": "modern_browser",
+          "line": 77,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1/2",
+          "block": false
+        },
+        {
+          "name": "ancient_browser",
+          "line": 84,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "modern_browser_value",
+          "line": 91,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ancient_browser_value",
+          "line": 98,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "15af487d17a52efb24e3ff5ea5e0656edb826099f8307c8a0e08096813187101"
+    },
+    {
+      "path": "src/http/modules/ngx_http_charset_filter_module.c",
+      "total_lines": 1694,
+      "bytes": 41619,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1694
+        ]
+      ],
+      "evidence": [
+        "Complete bounded raw source chunks inspected: charset 1\u2013560,561\u20131120,1121\u20131694; DAV 1\u2013640,641\u20131262."
+      ],
+      "directives": [
+        {
+          "name": "charset",
+          "line": 139,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "source_charset",
+          "line": 147,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "override_charset",
+          "line": 155,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "charset_types",
+          "line": 163,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "charset_map",
+          "line": 170,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "2",
+          "block": true
+        }
+      ],
+      "sha256": "821d7e83fed9d5f0055d5d7ce68cf3f3f02f3e40cbcfa827ef1dd8d17b244754"
+    },
+    {
+      "path": "src/http/modules/ngx_http_chunked_filter_module.c",
+      "total_lines": 343,
+      "bytes": 8845,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          343
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat or sequential ranges gzip1\u2013650,651\u2013EOF."
+      ],
+      "directives": [],
+      "sha256": "85274f1d726e40ee9093b88e8aa5b5fc59678c860c3c41da306b767234f47ec4"
+    },
+    {
+      "path": "src/http/modules/ngx_http_dav_module.c",
+      "total_lines": 1262,
+      "bytes": 34771,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1262
+        ]
+      ],
+      "evidence": [
+        "Complete bounded raw source chunks inspected: charset 1\u2013560,561\u20131120,1121\u20131694; DAV 1\u2013640,641\u20131262."
+      ],
+      "directives": [
+        {
+          "name": "dav_methods",
+          "line": 82,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "create_full_put_path",
+          "line": 89,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "min_delete_depth",
+          "line": 96,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "dav_access",
+          "line": 103,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1/2/3",
+          "block": false
+        }
+      ],
+      "sha256": "010c705da72fcf8e7b86d26db3f7e5c94790e7754a5aec8a43fa64c83a3f5381"
+    },
+    {
+      "path": "src/http/modules/ngx_http_degradation_module.c",
+      "total_lines": 243,
+      "bytes": 6240,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          243
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat output."
+      ],
+      "directives": [
+        {
+          "name": "degradation",
+          "line": 41,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "degrade",
+          "line": 48,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "15794360de635c40ab39e0df79ae284b67c229983ab527ff88bd4ce8815aa066"
+    },
+    {
+      "path": "src/http/modules/ngx_http_empty_gif_module.c",
+      "total_lines": 140,
+      "bytes": 5536,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          140
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat output."
+      ],
+      "directives": [
+        {
+          "name": "empty_gif",
+          "line": 17,
+          "contexts": [
+            "location"
+          ],
+          "arguments": "0",
+          "block": false
+        }
+      ],
+      "sha256": "991520de83a170efe717a38acffefc6c6e023d41bf5bbfe2145b48b80e99b4d7"
+    },
+    {
+      "path": "src/http/modules/ngx_http_flv_module.c",
+      "total_lines": 261,
+      "bytes": 6478,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          261
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat output."
+      ],
+      "directives": [
+        {
+          "name": "flv",
+          "line": 16,
+          "contexts": [
+            "location"
+          ],
+          "arguments": "0",
+          "block": false
+        }
+      ],
+      "sha256": "3dd81ee53f53d51db99bcd9c647c55c9c4b1d0c08653a320ebd77f031ee7a830"
+    },
+    {
+      "path": "src/http/modules/ngx_http_geo_module.c",
+      "total_lines": 1705,
+      "bytes": 44746,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1705
+        ]
+      ],
+      "evidence": [
+        "Complete chunks 1\u2013580,581\u20131140,1141\u20131705 inspected including range split/delete, radix lookup and binary cache readers/writers."
+      ],
+      "directives": [
+        {
+          "name": "geo",
+          "line": 116,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1/2",
+          "block": true
+        }
+      ],
+      "sha256": "e4e2da8cc51e9333b990a462f1ff43174b2d02d3fce46a3474705dec39f250fe"
+    },
+    {
+      "path": "src/http/modules/ngx_http_geoip_module.c",
+      "total_lines": 1802,
+      "bytes": 44622,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1802
+        ]
+      ],
+      "evidence": [
+        "Complete chunks 1\u2013620,621\u20131230,1231\u20131802 inspected including legacy GeoIP and MaxMindDB compile branches."
+      ],
+      "directives": [
+        {
+          "name": "geoip_country",
+          "line": 156,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1/2",
+          "block": false
+        },
+        {
+          "name": "geoip_org",
+          "line": 163,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1/2",
+          "block": false
+        },
+        {
+          "name": "geoip_city",
+          "line": 170,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1/2",
+          "block": false
+        },
+        {
+          "name": "geoip_proxy",
+          "line": 177,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "geoip_proxy_recursive",
+          "line": 184,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "2191925a41584e74e0a08eb92c624737bac57c47142cf06517f712cfb4692c44"
+    },
+    {
+      "path": "src/http/modules/ngx_http_gunzip_filter_module.c",
+      "total_lines": 697,
+      "bytes": 17183,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          697
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat or sequential ranges gzip1\u2013650,651\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "gunzip",
+          "line": 67,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "gunzip_buffers",
+          "line": 74,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "2",
+          "block": false
+        }
+      ],
+      "sha256": "c89dc90685c52a8bc6b2cb31bae46caaa80866153b7e5f34040cde69a88ab8ad"
+    },
+    {
+      "path": "src/http/modules/ngx_http_gzip_filter_module.c",
+      "total_lines": 1185,
+      "bytes": 30432,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1185
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat or sequential ranges gzip1\u2013650,651\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "gzip",
+          "line": 113,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "gzip_buffers",
+          "line": 121,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "2",
+          "block": false
+        },
+        {
+          "name": "gzip_types",
+          "line": 128,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "gzip_comp_level",
+          "line": 135,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "gzip_window",
+          "line": 142,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "gzip_hash",
+          "line": 149,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "postpone_gzipping",
+          "line": 156,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "gzip_no_buffer",
+          "line": 163,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "gzip_min_length",
+          "line": 170,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "af26e144cb0254a90649ffb4a2b60fe2ed7fdc9d8ee21e7dfde89688b8a9a007"
+    },
+    {
+      "path": "src/http/modules/ngx_http_gzip_static_module.c",
+      "total_lines": 335,
+      "bytes": 8565,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          335
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat or sequential ranges gzip1\u2013650,651\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "gzip_static",
+          "line": 40,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "f0413c9b1206a1660a0548220a88051c5364427cb22c9880edac4a0abe2c3ba2"
+    },
+    {
+      "path": "src/http/modules/ngx_http_headers_filter_module.c",
+      "total_lines": 918,
+      "bytes": 23816,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          918
+        ]
+      ],
+      "evidence": [
+        "Source displayed in bounded sequential chunks. Headers combined output tiny truncation repaired by re-reading200\u2013420. Range1\u2013500+501\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "expires",
+          "line": 117,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "1/2",
+          "block": false
+        },
+        {
+          "name": "add_header",
+          "line": 125,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "2/3",
+          "block": false
+        },
+        {
+          "name": "add_trailer",
+          "line": 133,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "2/3",
+          "block": false
+        },
+        {
+          "name": "add_header_inherit",
+          "line": 141,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "add_trailer_inherit",
+          "line": 149,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "475674b75c781ad3ac84e3b6ca8458b3a316e110083bb6e91c41479c02268357"
+    },
+    {
+      "path": "src/http/modules/ngx_http_image_filter_module.c",
+      "total_lines": 1676,
+      "bytes": 42611,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1676
+        ]
+      ],
+      "evidence": [
+        "Complete chunks 1\u2013570,571\u20131130,1131\u20131676 inspected including GD transforms, output cleanup and variable configuration."
+      ],
+      "directives": [
+        {
+          "name": "image_filter",
+          "line": 124,
+          "contexts": [
+            "location"
+          ],
+          "arguments": "1/2/3",
+          "block": false
+        },
+        {
+          "name": "image_filter_jpeg_quality",
+          "line": 131,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "image_filter_webp_quality",
+          "line": 138,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "image_filter_sharpen",
+          "line": 145,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "image_filter_transparency",
+          "line": 152,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "image_filter_interlace",
+          "line": 159,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "image_filter_buffer",
+          "line": 166,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "d730c5125d017268363a8c2c5ef9b1fd8550e939fd5ae9d13ef7e492a0f92efe"
+    },
+    {
+      "path": "src/http/modules/ngx_http_index_module.c",
+      "total_lines": 551,
+      "bytes": 15345,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          551
+        ]
+      ],
+      "evidence": [
+        "Full untruncated source output via cat."
+      ],
+      "directives": [
+        {
+          "name": "index",
+          "line": 44,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        }
+      ],
+      "sha256": "dbb83906060ca26abb892c88d83d80b5dba05aec824b55c5d09c0e147c1f7b3d"
+    },
+    {
+      "path": "src/http/modules/ngx_http_json_module.c",
+      "total_lines": 1004,
+      "bytes": 24180,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1004
+        ]
+      ],
+      "evidence": [
+        "Full untruncated tunnel; JSON1\u2013550,551\u2013EOF; userid1\u2013520,521\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "json_set",
+          "line": 101,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "3",
+          "block": false
+        },
+        {
+          "name": "json_max_depth",
+          "line": 108,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "9f4801986ae4068dcfbbddc14a921f1f67358cbd51e73a03b302848f2af6d501"
+    },
+    {
+      "path": "src/http/modules/ngx_http_limit_conn_module.c",
+      "total_lines": 774,
+      "bytes": 21003,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          774
+        ]
+      ],
+      "evidence": [
+        "Untruncated sequential source ranges: limit_conn1\u2013450,451\u2013EOF; limit_req1\u2013420,421\u2013800,801\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "limit_conn_zone",
+          "line": 95,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "2",
+          "block": false
+        },
+        {
+          "name": "limit_conn",
+          "line": 102,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "2",
+          "block": false
+        },
+        {
+          "name": "limit_conn_log_level",
+          "line": 109,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "limit_conn_status",
+          "line": 116,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "limit_conn_dry_run",
+          "line": 123,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "9423bfb128f26ed7aafbd2d64599333291185d413aeec69dc378b7dbc3e185e4"
+    },
+    {
+      "path": "src/http/modules/ngx_http_limit_req_module.c",
+      "total_lines": 1102,
+      "bytes": 28816,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1102
+        ]
+      ],
+      "evidence": [
+        "Untruncated sequential source ranges: limit_conn1\u2013450,451\u2013EOF; limit_req1\u2013420,421\u2013800,801\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "limit_req_zone",
+          "line": 106,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "3",
+          "block": false
+        },
+        {
+          "name": "limit_req",
+          "line": 113,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1/2/3",
+          "block": false
+        },
+        {
+          "name": "limit_req_log_level",
+          "line": 120,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "limit_req_status",
+          "line": 127,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "limit_req_dry_run",
+          "line": 134,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "6ad684e4eb748456b3ba26b9fa09a6f6bc4463027832c8a02a1d5f8875030ba1"
+    },
+    {
+      "path": "src/http/modules/ngx_http_log_module.c",
+      "total_lines": 2024,
+      "bytes": 52943,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          2024
+        ]
+      ],
+      "evidence": [
+        "Complete chunks 1\u2013540,541\u20131060,1061\u20131570,1571\u20132024 inspected including script escaping, buffering, syslog, gzip and dynamic paths."
+      ],
+      "directives": [
+        {
+          "name": "log_format",
+          "line": 170,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "2+",
+          "block": false
+        },
+        {
+          "name": "access_log",
+          "line": 177,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if",
+            "limit_except"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "open_log_file_cache",
+          "line": 185,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1/2/3/4",
+          "block": false
+        }
+      ],
+      "sha256": "e39a1d7a88f51fc40007f0c685324500ad37d1fae1c09d16dedbc471162316f8"
+    },
+    {
+      "path": "src/http/modules/ngx_http_map_module.c",
+      "total_lines": 589,
+      "bytes": 15012,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          589
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat output."
+      ],
+      "directives": [
+        {
+          "name": "map",
+          "line": 51,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "2",
+          "block": true
+        },
+        {
+          "name": "map_hash_max_size",
+          "line": 58,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "map_hash_bucket_size",
+          "line": 65,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "3ee1aa18f93083ef5aa24186bffc269a5c4383ddc945fea68e284e76a7d6a074"
+    },
+    {
+      "path": "src/http/modules/ngx_http_mirror_module.c",
+      "total_lines": 264,
+      "bytes": 6794,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          264
+        ]
+      ],
+      "evidence": [
+        "Source displayed in bounded sequential chunks. Headers combined output tiny truncation repaired by re-reading200\u2013420. Range1\u2013500+501\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "mirror",
+          "line": 36,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "mirror_request_body",
+          "line": 43,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "6111fffd88bf3756e25fcb459b400aa03e8427e2aed9837635001e5b3e6db941"
+    },
+    {
+      "path": "src/http/modules/ngx_http_mp4_module.c",
+      "total_lines": 3989,
+      "bytes": 119883,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          3989
+        ]
+      ],
+      "evidence": [
+        "Complete bounded chunks1\u2013560,561\u20131130,1131\u20131690,1691\u20132250,2251\u20132820,2821\u20133390,3391\u20133989 inspected; full atom parser and all sample-table update paths."
+      ],
+      "directives": [
+        {
+          "name": "mp4",
+          "line": 365,
+          "contexts": [
+            "location"
+          ],
+          "arguments": "0",
+          "block": false
+        },
+        {
+          "name": "mp4_buffer_size",
+          "line": 372,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "mp4_max_buffer_size",
+          "line": 379,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "mp4_start_key_frame",
+          "line": 386,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "8b3aa15718f3ef49a7b25b0a3402a3e4acd88c24fff60eebb3b4e5042781f3aa"
+    },
+    {
+      "path": "src/http/modules/ngx_http_not_modified_filter_module.c",
+      "total_lines": 266,
+      "bytes": 6976,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          266
+        ]
+      ],
+      "evidence": [
+        "Source displayed in bounded sequential chunks. Headers combined output tiny truncation repaired by re-reading200\u2013420. Range1\u2013500+501\u2013EOF."
+      ],
+      "directives": [],
+      "sha256": "ae1d4d249c76b748c336d9c132b2911b3e503c536e8ef838ab088fff70ef455b"
+    },
+    {
+      "path": "src/http/modules/ngx_http_random_index_module.c",
+      "total_lines": 317,
+      "bytes": 8973,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          317
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat output."
+      ],
+      "directives": [
+        {
+          "name": "random_index",
+          "line": 31,
+          "contexts": [
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "2e3f1ffd12ce44ad54f2aa8d0bf1f1534dc6fdac5dccc0b4d0d2fc99abe01e64"
+    },
+    {
+      "path": "src/http/modules/ngx_http_range_filter_module.c",
+      "total_lines": 999,
+      "bytes": 27450,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          999
+        ]
+      ],
+      "evidence": [
+        "Source displayed in bounded sequential chunks. Headers combined output tiny truncation repaired by re-reading200\u2013420. Range1\u2013500+501\u2013EOF."
+      ],
+      "directives": [],
+      "sha256": "9bc0159f43c303d7f89929d0cc71386e8bda430c1c7ca0b23ac258367e05d820"
+    },
+    {
+      "path": "src/http/modules/ngx_http_realip_module.c",
+      "total_lines": 621,
+      "bytes": 15289,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          621
+        ]
+      ],
+      "evidence": [
+        "Full untruncated source output via cat."
+      ],
+      "directives": [
+        {
+          "name": "set_real_ip_from",
+          "line": 60,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "real_ip_header",
+          "line": 67,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "real_ip_recursive",
+          "line": 74,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "c96d3af5889caccbb6016d0341bd79785ffe1fd5e7f784626eb3fd69e0fb5317"
+    },
+    {
+      "path": "src/http/modules/ngx_http_referer_module.c",
+      "total_lines": 682,
+      "bytes": 17374,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          682
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat or rewrite1\u2013550,551\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "valid_referers",
+          "line": 55,
+          "contexts": [
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "referer_hash_max_size",
+          "line": 62,
+          "contexts": [
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "referer_hash_bucket_size",
+          "line": 69,
+          "contexts": [
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "84e283ce84b69d49401266a08a197aa2782034a136822a1e3497bcd6d7cc62c3"
+    },
+    {
+      "path": "src/http/modules/ngx_http_rewrite_module.c",
+      "total_lines": 1030,
+      "bytes": 28803,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1030
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat or rewrite1\u2013550,551\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "rewrite",
+          "line": 46,
+          "contexts": [
+            "server",
+            "server-if",
+            "location",
+            "location-if"
+          ],
+          "arguments": "2/3",
+          "block": false
+        },
+        {
+          "name": "return",
+          "line": 54,
+          "contexts": [
+            "server",
+            "server-if",
+            "location",
+            "location-if"
+          ],
+          "arguments": "1/2",
+          "block": false
+        },
+        {
+          "name": "break",
+          "line": 62,
+          "contexts": [
+            "server",
+            "server-if",
+            "location",
+            "location-if"
+          ],
+          "arguments": "0",
+          "block": false
+        },
+        {
+          "name": "if",
+          "line": 70,
+          "contexts": [
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": true
+        },
+        {
+          "name": "set",
+          "line": 77,
+          "contexts": [
+            "server",
+            "server-if",
+            "location",
+            "location-if"
+          ],
+          "arguments": "2",
+          "block": false
+        },
+        {
+          "name": "rewrite_log",
+          "line": 85,
+          "contexts": [
+            "http",
+            "server",
+            "server-if",
+            "location",
+            "location-if"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "uninitialized_variable_warn",
+          "line": 93,
+          "contexts": [
+            "http",
+            "server",
+            "server-if",
+            "location",
+            "location-if"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "8e3b74ab4f5df080199554efa8c8c2c85140e0fa3b5393faf001f263debd7e6e"
+    },
+    {
+      "path": "src/http/modules/ngx_http_secure_link_module.c",
+      "total_lines": 381,
+      "bytes": 9452,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          381
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat output."
+      ],
+      "directives": [
+        {
+          "name": "secure_link",
+          "line": 39,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "secure_link_md5",
+          "line": 46,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "secure_link_secret",
+          "line": 53,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "79374cb51040de83480238e59075ca02e35d8bce58e6d9648ad7be5511d6023e"
+    },
+    {
+      "path": "src/http/modules/ngx_http_slice_filter_module.c",
+      "total_lines": 554,
+      "bytes": 14174,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          554
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat or sequential ranges gzip1\u2013650,651\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "slice",
+          "line": 53,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "549829004aab7b62d9a0bb5dd574eaff506e9257c5f8d7309914590d257e5696"
+    },
+    {
+      "path": "src/http/modules/ngx_http_split_clients_module.c",
+      "total_lines": 251,
+      "bytes": 6688,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          251
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat output."
+      ],
+      "directives": [
+        {
+          "name": "split_clients",
+          "line": 32,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "2",
+          "block": true
+        }
+      ],
+      "sha256": "cb4394cfaa7b448a5dc5edc6f635e50684d68bda1ac440ecced5dfd3e4a9ddaf"
+    },
+    {
+      "path": "src/http/modules/ngx_http_ssi_filter_module.c",
+      "total_lines": 2964,
+      "bytes": 80438,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          2964
+        ]
+      ],
+      "evidence": [
+        "Header1\u2013115; C complete chunks1\u2013470,471\u20131010,1011\u20131550,1551\u20132080,2081\u20132600,2601\u20132964 inspected including parser and async include handlers."
+      ],
+      "directives": [
+        {
+          "name": "ssi",
+          "line": 123,
+          "contexts": [
+            "http",
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "ssi_silent_errors",
+          "line": 131,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "ssi_ignore_recycled_buffers",
+          "line": 138,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "ssi_min_file_chunk",
+          "line": 145,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssi_value_length",
+          "line": 152,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssi_types",
+          "line": 159,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "ssi_last_modified",
+          "line": 166,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "e8a6f48c14334d6c65a01378eb74b299514e67a8f8ec0222fcd585cd97fb3a30"
+    },
+    {
+      "path": "src/http/modules/ngx_http_ssi_filter_module.h",
+      "total_lines": 115,
+      "bytes": 2840,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          115
+        ]
+      ],
+      "evidence": [
+        "Header1\u2013115; C complete chunks1\u2013470,471\u20131010,1011\u20131550,1551\u20132080,2081\u20132600,2601\u20132964 inspected including parser and async include handlers."
+      ],
+      "directives": [],
+      "sha256": "4d2e3df9aa3a166b61b4caf7cb23887ca6f27a1bf46495ef49b39767d53d769f"
+    },
+    {
+      "path": "src/http/modules/ngx_http_ssl_module.c",
+      "total_lines": 1554,
+      "bytes": 45459,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1554
+        ]
+      ],
+      "evidence": [
+        "Sequential full SSL1\u2013520,521\u20131000,1001\u2013EOF and full header."
+      ],
+      "directives": [
+        {
+          "name": "ssl_certificate",
+          "line": 99,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_certificate_key",
+          "line": 106,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_certificate_cache",
+          "line": 113,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1/2/3",
+          "block": false
+        },
+        {
+          "name": "ssl_ech_file",
+          "line": 120,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_password_file",
+          "line": 127,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_certificate_compression",
+          "line": 134,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "ssl_dhparam",
+          "line": 141,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_ecdh_curve",
+          "line": 148,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_protocols",
+          "line": 155,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "ssl_ciphers",
+          "line": 162,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_buffer_size",
+          "line": 169,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_verify_client",
+          "line": 176,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_verify_depth",
+          "line": 183,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_client_certificate",
+          "line": 190,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_trusted_certificate",
+          "line": 197,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_prefer_server_ciphers",
+          "line": 204,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "ssl_session_cache",
+          "line": 211,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1/2",
+          "block": false
+        },
+        {
+          "name": "ssl_session_tickets",
+          "line": 218,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "ssl_session_ticket_key",
+          "line": 225,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_session_timeout",
+          "line": 232,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_crl",
+          "line": 239,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_ocsp",
+          "line": 246,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_ocsp_responder",
+          "line": 253,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_ocsp_cache",
+          "line": 260,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_stapling",
+          "line": 267,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "ssl_stapling_file",
+          "line": 274,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_stapling_responder",
+          "line": 281,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "ssl_stapling_verify",
+          "line": 288,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "ssl_early_data",
+          "line": 295,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "ssl_conf_command",
+          "line": 302,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "2",
+          "block": false
+        },
+        {
+          "name": "ssl_reject_handshake",
+          "line": 309,
+          "contexts": [
+            "http",
+            "server"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "38fb924aa773ebec7b180a02897e946f4019455e94f3e3fc39f736808ec97e74"
+    },
+    {
+      "path": "src/http/modules/ngx_http_ssl_module.h",
+      "total_lines": 75,
+      "bytes": 2139,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          75
+        ]
+      ],
+      "evidence": [
+        "Sequential full SSL1\u2013520,521\u20131000,1001\u2013EOF and full header."
+      ],
+      "directives": [],
+      "sha256": "79d23f5a6c0a4f83d1aaf4b29b410498bf3c190ad1ae1499b58292286a0dbfcd"
+    },
+    {
+      "path": "src/http/modules/ngx_http_static_module.c",
+      "total_lines": 297,
+      "bytes": 8084,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          297
+        ]
+      ],
+      "evidence": [
+        "Full untruncated source output via cat."
+      ],
+      "directives": [],
+      "sha256": "bd4e23e54b769a25056d2e44feb34c6ddb786d51e7a4265c0a559b8ecc2f1866"
+    },
+    {
+      "path": "src/http/modules/ngx_http_stub_status_module.c",
+      "total_lines": 226,
+      "bytes": 6094,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          226
+        ]
+      ],
+      "evidence": [
+        "Full untruncated cat output."
+      ],
+      "directives": [
+        {
+          "name": "stub_status",
+          "line": 23,
+          "contexts": [
+            "server",
+            "location"
+          ],
+          "arguments": "0/1",
+          "block": false
+        }
+      ],
+      "sha256": "19a0ab1e36f553df035ddda41408375e7262d252e898a47c28a073aa94da253c"
+    },
+    {
+      "path": "src/http/modules/ngx_http_sub_filter_module.c",
+      "total_lines": 1022,
+      "bytes": 26082,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1022
+        ]
+      ],
+      "evidence": [
+        "Complete sub_filter chunks 1\u2013520,521\u20131022; XSLT chunks 1\u2013640,641\u20131252 inspected."
+      ],
+      "directives": [
+        {
+          "name": "sub_filter",
+          "line": 103,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "2",
+          "block": false
+        },
+        {
+          "name": "sub_filter_types",
+          "line": 110,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "sub_filter_once",
+          "line": 117,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "sub_filter_last_modified",
+          "line": 124,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "fcf26cfcfeffad0d3a1f9afef6fc4c06722842eca691e70ee10f9042d8aa5a85"
+    },
+    {
+      "path": "src/http/modules/ngx_http_try_files_module.c",
+      "total_lines": 419,
+      "bytes": 11213,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          419
+        ]
+      ],
+      "evidence": [
+        "Full untruncated source output via cat."
+      ],
+      "directives": [
+        {
+          "name": "try_files",
+          "line": 36,
+          "contexts": [
+            "server",
+            "location"
+          ],
+          "arguments": "2+",
+          "block": false
+        }
+      ],
+      "sha256": "ce55715286e051d59192032566d03695f3e9d90e9b2d11072eb1ca66e25237d4"
+    },
+    {
+      "path": "src/http/modules/ngx_http_tunnel_module.c",
+      "total_lines": 537,
+      "bytes": 15828,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          537
+        ]
+      ],
+      "evidence": [
+        "Full untruncated tunnel; JSON1\u2013550,551\u2013EOF; userid1\u2013520,521\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "tunnel_pass",
+          "line": 54,
+          "contexts": [
+            "server",
+            "location",
+            "location-if"
+          ],
+          "arguments": "0/1",
+          "block": false
+        },
+        {
+          "name": "tunnel_bind",
+          "line": 62,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1/2",
+          "block": false
+        },
+        {
+          "name": "tunnel_socket_keepalive",
+          "line": 69,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "tunnel_socket_rcvbuf",
+          "line": 76,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "tunnel_socket_sndbuf",
+          "line": 83,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "tunnel_connect_timeout",
+          "line": 90,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "tunnel_send_timeout",
+          "line": 97,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "tunnel_send_lowat",
+          "line": 104,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "tunnel_buffer_size",
+          "line": 111,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "tunnel_read_timeout",
+          "line": 118,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "tunnel_next_upstream",
+          "line": 125,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "tunnel_next_upstream_tries",
+          "line": 132,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "tunnel_next_upstream_timeout",
+          "line": 139,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "fa9e4fa41ef6de3fe2678add0313fa9d887c735d94be4f3f3a7c6eb96a05d095"
+    },
+    {
+      "path": "src/http/modules/ngx_http_userid_filter_module.c",
+      "total_lines": 924,
+      "bytes": 24864,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          924
+        ]
+      ],
+      "evidence": [
+        "Full untruncated tunnel; JSON1\u2013550,551\u2013EOF; userid1\u2013520,521\u2013EOF."
+      ],
+      "directives": [
+        {
+          "name": "userid",
+          "line": 122,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "userid_service",
+          "line": 129,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "userid_name",
+          "line": 136,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "userid_domain",
+          "line": 143,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "userid_path",
+          "line": 150,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "userid_expires",
+          "line": 157,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "userid_flags",
+          "line": 164,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1/2/3",
+          "block": false
+        },
+        {
+          "name": "userid_p3p",
+          "line": 171,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "userid_mark",
+          "line": 178,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        }
+      ],
+      "sha256": "564e31d8f2d474bb3f48b6b01849f1001e86a4bf7554d6895e2872fd3a0d3573"
+    },
+    {
+      "path": "src/http/modules/ngx_http_xslt_filter_module.c",
+      "total_lines": 1252,
+      "bytes": 33420,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1252
+        ]
+      ],
+      "evidence": [
+        "Complete sub_filter chunks 1\u2013520,521\u20131022; XSLT chunks 1\u2013640,641\u20131252 inspected."
+      ],
+      "directives": [
+        {
+          "name": "xml_entities",
+          "line": 129,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "xml_external_entities",
+          "line": 136,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        },
+        {
+          "name": "xslt_stylesheet",
+          "line": 143,
+          "contexts": [
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "xslt_param",
+          "line": 150,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "2",
+          "block": false
+        },
+        {
+          "name": "xslt_string_param",
+          "line": 157,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "2",
+          "block": false
+        },
+        {
+          "name": "xslt_types",
+          "line": 164,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "1+",
+          "block": false
+        },
+        {
+          "name": "xslt_last_modified",
+          "line": 171,
+          "contexts": [
+            "http",
+            "server",
+            "location"
+          ],
+          "arguments": "on/off",
+          "block": false
+        }
+      ],
+      "sha256": "7d2723746b47ea06b878a17ed2a77bd38c6c5f7a16b41e79ea8a58b5cf2cd633"
+    },
+    {
+      "path": "src/http/modules/perl/Makefile.PL",
+      "total_lines": 35,
+      "bytes": 1024,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          35
+        ]
+      ],
+      "evidence": [
+        "All six Perl source/build/interface files displayed completely; C1\u2013600,601\u2013EOF; XS1\u2013600,601\u20131234."
+      ],
+      "directives": [],
+      "sha256": "212b1d6c8aa1e9e1f5f7585512620df9a6133f2b85cbbf231c7a7b02c0833b96"
+    },
+    {
+      "path": "src/http/modules/perl/nginx.pm",
+      "total_lines": 140,
+      "bytes": 3388,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          140
+        ]
+      ],
+      "evidence": [
+        "All six Perl source/build/interface files displayed completely; C1\u2013600,601\u2013EOF; XS1\u2013600,601\u20131234."
+      ],
+      "directives": [],
+      "sha256": "24ce294a0294c8b980e9776afb36ea43ca3dc6b0f16f1d0c624b66d56c193be9"
+    },
+    {
+      "path": "src/http/modules/perl/nginx.xs",
+      "total_lines": 1234,
+      "bytes": 26623,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1234
+        ]
+      ],
+      "evidence": [
+        "All six Perl source/build/interface files displayed completely; C1\u2013600,601\u2013EOF; XS1\u2013600,601\u20131234."
+      ],
+      "directives": [],
+      "sha256": "e834c39cbab3957e8a146e0668757728ed5f84e0b33a113d68c4fd4d2db521c9"
+    },
+    {
+      "path": "src/http/modules/perl/ngx_http_perl_module.c",
+      "total_lines": 1165,
+      "bytes": 26438,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          1165
+        ]
+      ],
+      "evidence": [
+        "All six Perl source/build/interface files displayed completely; C1\u2013600,601\u2013EOF; XS1\u2013600,601\u20131234."
+      ],
+      "directives": [
+        {
+          "name": "perl_modules",
+          "line": 69,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "perl_require",
+          "line": 76,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "perl",
+          "line": 83,
+          "contexts": [
+            "location",
+            "limit_except"
+          ],
+          "arguments": "1",
+          "block": false
+        },
+        {
+          "name": "perl_set",
+          "line": 90,
+          "contexts": [
+            "http"
+          ],
+          "arguments": "2",
+          "block": false
+        }
+      ],
+      "sha256": "69ec3295c43e666631a2eb1ad7762f4f1c83773ad5fceec90cfe45b390e883cc"
+    },
+    {
+      "path": "src/http/modules/perl/ngx_http_perl_module.h",
+      "total_lines": 83,
+      "bytes": 1636,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          83
+        ]
+      ],
+      "evidence": [
+        "All six Perl source/build/interface files displayed completely; C1\u2013600,601\u2013EOF; XS1\u2013600,601\u20131234."
+      ],
+      "directives": [],
+      "sha256": "bb4d27e328a72b188742f11f1379a5f16df1e25f6f9904dacc99cdf2d13696a6"
+    },
+    {
+      "path": "src/http/modules/perl/typemap",
+      "total_lines": 3,
+      "bytes": 24,
+      "status": "full_read",
+      "read_ranges": [
+        [
+          1,
+          3
+        ]
+      ],
+      "evidence": [
+        "All six Perl source/build/interface files displayed completely; C1\u2013600,601\u2013EOF; XS1\u2013600,601\u20131234."
+      ],
+      "directives": [],
+      "sha256": "14c52d99a2ca6f7e066a46be1db2f43dbd1cfdfb0afe63878d34f985aa66fc53"
+    }
+  ],
+  "summary": {
+    "files": 53,
+    "lines": 43098,
+    "full_read_files": 53,
+    "full_read_lines": 43098,
+    "partial_files": 0,
+    "structural_files": 0,
+    "unread_files": 0,
+    "runtime_compatibility_tests_run": false,
+    "directives": 181
+  },
+  "inventory_note": "Directive metadata was cross-checked structurally only after complete source reading. Context/arity flags are source registration, not a replacement for individual parser semantics. read_ranges denote actual source inspected.",
+  "supporting_reads": [
+    {
+      "path": "auto/modules",
+      "status": "partial",
+      "read_ranges": [
+        [
+          150,
+          205
+        ],
+        [
+          385,
+          445
+        ]
+      ],
+      "purpose": "Filter registration order only; outside assigned manifest.",
+      "total_lines": 1626
+    },
+    {
+      "path": "nginx-native-build/objs-x10/ngx_modules.c",
+      "status": "full_read",
+      "purpose": "Complete generated current native profile registration inventory; outside assigned source manifest.",
+      "total_lines": 330,
+      "read_ranges": [
+        [
+          1,
+          330
+        ]
+      ]
+    },
+    {
+      "path": "src/http/v2/ngx_http_v2_filter_module.c",
+      "status": "structural",
+      "read_ranges": [
+        [
+          1745,
+          1781
+        ]
+      ],
+      "purpose": "Initializer only: header/early-hints, no body registration.",
+      "total_lines": 1781
+    },
+    {
+      "path": "src/http/v3/ngx_http_v3_filter_module.c",
+      "status": "structural",
+      "read_ranges": [
+        [
+          970,
+          1002
+        ]
+      ],
+      "purpose": "Initializer only: header/early-hints/body registration.",
+      "total_lines": 1002
+    },
+    {
+      "path": "src/http/ngx_http_copy_filter_module.c",
+      "status": "structural",
+      "read_ranges": [
+        [
+          410,
+          433
+        ]
+      ],
+      "purpose": "Body initializer only.",
+      "total_lines": 433
+    },
+    {
+      "path": "src/http/ngx_http_postpone_filter_module.c",
+      "status": "structural",
+      "read_ranges": [
+        [
+          240,
+          259
+        ]
+      ],
+      "purpose": "Body initializer only.",
+      "total_lines": 259
+    },
+    {
+      "path": "src/http/ngx_http_write_filter_module.c",
+      "status": "structural",
+      "read_ranges": [
+        [
+          355,
+          371
+        ]
+      ],
+      "purpose": "Body terminal initializer only.",
+      "total_lines": 371
+    },
+    {
+      "path": "src/http/ngx_http_header_filter_module.c",
+      "status": "structural",
+      "read_ranges": [
+        [
+          728,
+          741
+        ]
+      ],
+      "purpose": "Header/early-hints terminal initializer only.",
+      "total_lines": 741
+    },
+    {
+      "path": "src/http/ngx_http.c",
+      "status": "partial",
+      "read_ranges": [
+        [
+          440,
+          565
+        ]
+      ],
+      "purpose": "Phase engine construction and reverse registration iteration only.",
+      "total_lines": 2245
+    },
+    {
+      "path": "src/http/ngx_http_core_module.c",
+      "status": "partial",
+      "read_ranges": [
+        [
+          1275,
+          1385
+        ]
+      ],
+      "purpose": "Content-handler priority/decline semantics and nearby context only.",
+      "total_lines": 5523
+    },
+    {
+      "path": "src/http/ngx_http_core_module.h",
+      "status": "structural",
+      "read_ranges": [
+        [
+          109,
+          141
+        ]
+      ],
+      "purpose": "Phase enum and handler type inventory only.",
+      "total_lines": 604
+    },
+    {
+      "path": "src/http/ngx_http_request.c",
+      "status": "structural",
+      "read_ranges": [
+        [
+          4080,
+          4105
+        ]
+      ],
+      "purpose": "Forward LOG handler loop and nearby context only.",
+      "total_lines": 4235
+    }
+  ]
+}

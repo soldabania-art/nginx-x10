@@ -1,0 +1,62 @@
+name: X10 Continuum research checks
+
+on:
+  push:
+    branches: [x10-continuum-development, x10-development, x10-main]
+  pull_request:
+    branches: [master, x10-continuum-development, x10-development, x10-main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: x10-continuum-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  scope:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      native: ${{ steps.changed.outputs.native }}
+      research: ${{ steps.changed.outputs.research }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - name: Check scope fail-closed controls
+        run: node --test .github/scripts/x10-change-scope.test.mjs
+      - name: Classify exact event delta
+        id: changed
+        run: node .github/scripts/x10-change-scope.mjs
+
+  research:
+    needs: scope
+    if: ${{ !cancelled() && (needs.scope.result != 'success' || needs.scope.outputs.research != 'false') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - name: Build dependencies for TLS interoperability and isolated source probe
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential git perl make libssl-dev openssl
+      - name: Independent record and state counterexamples
+        run: node x10/continuum/check.mjs
+      - name: Same TCP connection across research worker versions
+        run: node --test --test-reporter=tap x10/continuum/process-handover.test.mjs
+      - name: Real TLS handshake and independent record observer
+        run: node x10/continuum/handshake-check.mjs
+      - name: Pinned OpenSSL read-only state probe
+        timeout-minutes: 12
+        run: node x10/continuum/openssl-probe-check.mjs

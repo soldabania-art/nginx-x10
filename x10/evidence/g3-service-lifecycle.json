@@ -1,0 +1,985 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-service-lifecycle-20261025T002953Z",
+  "sourceBase": "ecbbbbeda306f0b1ad664b4187ac13191bb982e6",
+  "publicationParent": "208f4b55969517decd55ead3e69808fab5d786aa",
+  "implementationCommit": null,
+  "implementationCommitLocator": "Git commit containing the service acceptance harness; resulting exact source CI reconciled by a subsequent receipt",
+  "scope": "Source-checkout acceptance harness for an ephemeral generated user-unit basic lifecycle; not installed production runtime",
+  "evidence": "x10/evidence/g3-service-lifecycle.json",
+  "localAcceptance": "SOURCE_HARNESS_LOCALLY_VERIFIED_ACTUAL_NONROOT_SERVICE_EXACT_CI_PENDING",
+  "exactHostedAcceptance": "PENDING_EXACT_RESULTING_SERVICE_HARNESS",
+  "actualLocalServiceActivated": false,
+  "actualLocalNonrootServiceAccepted": false,
+  "localRefusalIsServiceAcceptance": false,
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "alphaRuntimeChanged": false,
+  "serviceRecipeChanged": false,
+  "servicePreflightChanged": false,
+  "bundleInventoryChanged": false,
+  "sourceAcceptanceHarnessAdded": true,
+  "requiredWorkflowStepAdded": true,
+  "serviceAccepted": false,
+  "productionAccepted": false,
+  "nextConcreteTask": "First verify exact resulting service-lifecycle harness implementation CI, including actual nonroot readonly preflight and lifecycle JSON with generated ephemeral user-unit start, explicit installed wait-bind, native request and stop/start with a fresh session and owned cleanup. Refusal at root or missing manager is not actual service acceptance. Verify exact source/merge/build identities and all required native/Unix/feature-off/package/TLS steps and artifacts. Do not borrow accepted376 fixture CI for changed harness/workflow bytes or rerun accepted unchanged checks without cause. Retain original9e63 wrong-CA expected1/actual0 and unknown historical interleaving, earlier shutdown143/cleanup uncertainty and local19/20 ESRCH uncertainty. After narrow basic service evidence, complete actual logging verification, the single systemctl restart operation, cancellation/failed-start/slow-drain/orphan and combined TLS/service acceptance, package upgrade/rollback/recovery, permanent distribution/published-file replay, security/soak and final G4-G8 Production V1. Full deferred Continuum remains open.",
+  "recordedAtUTC": "2026-10-25T00:40:36.055064Z",
+  "author": {
+    "schemaVersion": 1,
+    "kind": "ephemeral-user-service-basic-lifecycle-author-report",
+    "baseCommit": "ecbbbbeda306f0b1ad664b4187ac13191bb982e6",
+    "leasedParent": "208f4b55969517decd55ead3e69808fab5d786aa",
+    "runId": "x10-service-lifecycle-20261025T002953Z",
+    "recordedAtUTC": "2026-10-25T00:38:01.271529+00:00",
+    "scope": "New actual lifecycle acceptance checker plus separate pure/refusal contract tests; unchanged generated recipe and installed native/alpha/controller runtime.",
+    "files": [
+      {
+        "path": "x10/service/lifecycle-check.mjs",
+        "sha256": "4fd4416227daf2293983e7255a203a5ba183b86e6ff23dbf13fff78e39fd1b79",
+        "bytes": 25651
+      },
+      {
+        "path": "x10/service/lifecycle-check.test.mjs",
+        "sha256": "acdff402f05ed9f57dd7e70731b534389b0814ee6c1c4c15790f608d47a5218d",
+        "bytes": 6509
+      }
+    ],
+    "actualAuthoredValidation": {
+      "syntaxCheck": {
+        "command": "node --check x10/service/lifecycle-check.mjs",
+        "exitCode": 0
+      },
+      "finalContract": {
+        "command": "node --test --test-reporter=tap x10/service/lifecycle-check.test.mjs",
+        "exitCode": 0,
+        "tapSha256": "7e37b605fe9a648ec843d64d6995af68524b15bba99a6f5c634fa7730050b97e",
+        "tests": 49,
+        "pass": 49,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "units": "pure/refusal contract tests including two actual child CLI refusals; not actual nonroot service tests"
+      },
+      "initialDiagnosticContract": {
+        "exitCode": 0,
+        "tapSha256": "12f098fe32eba6ed83c4fd63bb6ac3aca3ca53996b13212841a27589c50751f7",
+        "tests": 48,
+        "pass": 48,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "finalBytesVerified": false,
+        "reason": "Before strict primitive checksum typing and its added regression case; not counted as additional final coverage."
+      },
+      "actualCLIRootRefusal": {
+        "observedBy": "final contract actual root child CLI test",
+        "exitCode": 1,
+        "stderrEmpty": true,
+        "code": "nonroot_required",
+        "phase": "preflight",
+        "actualNonrootManagerObserved": false,
+        "actualUnitStarted": false,
+        "runtimeUnitLinked": false,
+        "nativeSessionsStarted": 0,
+        "temporaryRootCreated": false,
+        "archiveReadAttempted": false,
+        "serviceAccepted": false
+      },
+      "actualCLIUsageRefusal": {
+        "observedBy": "final contract actual invalid usage child CLI test",
+        "exitCode": 1,
+        "stderrEmpty": true,
+        "code": "usage_invalid",
+        "actualUnitStarted": false,
+        "runtimeUnitLinked": false
+      },
+      "superseded49Contract": {
+        "command": "node --test --test-reporter=tap x10/service/lifecycle-check.test.mjs",
+        "exitCode": 0,
+        "tapSha256": "1f7ec25ec583e57c0c0510698444761660065086effe7689c82d17440dbe6125",
+        "tests": 49,
+        "pass": 49,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "units": "pure/refusal contract tests including two actual child CLI refusals; not actual nonroot service tests",
+        "finalBytesVerified": false,
+        "reason": "Final inert cleanup was broadened to also uninstall an owned never-linked, never-started installation when unit path assignment had not yet occurred."
+      }
+    },
+    "initialAdverseFindings": [
+      {
+        "type": "independent pure parser diagnostic",
+        "observation": "Two malformed programmatic checksum inputs (Buffer and toString object) were accepted through RegExp coercion before explicit primitive-string typing. No CLI or manager call was executed by those pure diagnostics.",
+        "correction": "Require typeof checksum string and add authored regression. Final49/49 uses corrected frozen bytes."
+      },
+      {
+        "type": "pre-runtime source review",
+        "observation": "Initial draft normal stop called installed stop before manager stop and could race generated ExecStop. Draft corrected before any actual service execution; normal path now invokes systemctl stop first and verifies resulting installed/native exit."
+      },
+      {
+        "type": "pre-runtime source review",
+        "observation": "Initial draft archive validation and extraction reread original path. Draft corrected before actual service execution: bounded stable original FD capture, checksum/format validation of captured bytes, private exclusive0600 copy and extraction of that exact copy only."
+      },
+      {
+        "type": "pre-runtime source review",
+        "observation": "Initial cleanup session array was populated only after readiness success. Draft corrected before actual service execution: checked complete owned registry/lifecycle inventory before and after manager stop; unknown runtime retains unit/prefix and cleanup failure."
+      }
+    ],
+    "checkerContract": {
+      "arguments": "Exactly --archive PATH --sha256 LOWERCASE64HEX; canonical relative path resolves against caller cwd; malformed aliases/traversal/options/coercion refused.",
+      "importsPerformServiceMutation": false,
+      "freshRealPreflightRequiredBeforeMutation": true,
+      "fixedManagerExecutable": "/usr/bin/systemctl",
+      "minimalCurrentUIDLocalBusEnvironment": true,
+      "noEnableLingerAccountOrSecurityChanges": true,
+      "uniqueRuntimeUnitLinkOnly": true,
+      "unitUsesInstalledFilesOnly": true,
+      "unchangedRecipe": "Type=exec, Restart=no, KillMode=process, SendSIGKILL=no; no automatic readiness",
+      "happyPath": "start -> installed wait-bind -> actual HTTP body/upload/stream -> manager stop -> fresh session start -> installed wait-bind -> same proxy checks -> manager stop -> uninstall -> unlink own runtime unit -> daemon-reload -> verify unit/link/resources absent",
+      "managerRestartCommandExecuted": false,
+      "expectedNativeSessions": 2,
+      "expectedProxyBodyChecks": 2,
+      "expectedUploadChecks": 2,
+      "uploadBytesEach": 65551,
+      "expectedStreamChecks": 2,
+      "streamBytesEach": 65537,
+      "normalStopInvokesManagerFirst": true,
+      "identityChecks": [
+        "runtime parent canonical ownership/modes",
+        "own symlink exact target and unit bytes",
+        "FragmentPath exact own unit",
+        "currentUID user-manager cgroup",
+        "launcher Node executable/argv/UID/namespaces/start identity",
+        "checked install registry/lifecycle",
+        "exact native identity and remaining process group",
+        "launcher/native/control socket/listening port absence before uninstall/removal"
+      ],
+      "ambiguousMutationHandling": "No start/link retry. Requery exact own link/unit, capture current registry/lifecycle and stop only verified named unit. Unknown live runtime prevents unlink/prefix removal. No direct signals or force kills.",
+      "timeouts": {
+        "managerPropertyQueryMs": 2500,
+        "ordinaryManagerMs": 10000,
+        "managerStartMs": 15000,
+        "managerStopMs": 35000,
+        "installedCLIMs": 15000,
+        "absoluteHTTPMs": 2500,
+        "appCloseMs": 2000
+      },
+      "sanitization": "Only fixed reason/phase codes, booleans, counts and allowlisted source/archive/binary/unit hashes. No raw command stdout/stderr, journald, paths, PIDs, session IDs, environments or certificates are returned.",
+      "rootOnlyTestOnNonrootCI": "One explicit root-refusal test skips on nonroot; required actual lifecycle checker is a separate mandatory command that exits1 on unavailable prerequisites."
+    },
+    "acceptance": {
+      "localPureAndRefusalContractVerified": true,
+      "actualNonrootManagerExecutedLocally": false,
+      "actualUnitActivatedLocally": false,
+      "actualBasicLifecycleAccepted": false,
+      "exactResultingCI": "PENDING",
+      "serviceAccepted": false,
+      "startupAutomaticReadinessAccepted": false,
+      "loggingVerified": false,
+      "failedStartAccepted": false,
+      "longDrainAccepted": false,
+      "orphanRecoveryAccepted": false,
+      "tlsCombinedServiceAccepted": false,
+      "packageRollbackAccepted": false,
+      "permanentDistributionAccepted": false,
+      "productionAccepted": false
+    },
+    "limitations": [
+      "No actual service executed in the local UID0 environment. Root refusal is correct contract evidence, not a successful target service gate.",
+      "Actual runtime link/StartUnit capability on the next CI runner remains unproven until the exact required command runs.",
+      "No automatic ExecStartPost integration, startup cancellation, failed native start, long drain, abnormal-master/orphan recovery or combined TLS service lifecycle is claimed.",
+      "The two basic sessions use explicit stop then start; they do not execute systemctl restart.",
+      "A failure after linking can preserve an inactive owned installation rather than pretending uninstall succeeded. Unknown runtime or cleanup identity preserves both unit/prefix and emits cleanup_unconfirmed.",
+      "Same-UID malicious mutation and kernel/filesystem scheduling stalls are outside a hard real-time/fencing guarantee.",
+      "This checker is test tooling, not an installed service-management API or permanent deployment."
+    ],
+    "cleanupInThisLocalValidation": {
+      "managerMutations": 0,
+      "unitLinksCreated": 0,
+      "servicesStarted": 0,
+      "temporaryServicePrefixesCreated": 0,
+      "runtimeProcessesLeft": 0
+    },
+    "unchangedProductFiles": [
+      "x10/service/user-unit.mjs",
+      "x10/service/preflight.mjs",
+      "x10/alpha/cli.mjs",
+      "x10/alpha/runtime.mjs",
+      "x10/control/manager.mjs",
+      "src",
+      "auto",
+      "conf",
+      "LICENSE"
+    ]
+  },
+  "native": {
+    "schemaVersion": 1,
+    "scope": "One fresh native compatibility build and official aggregate while preparing separate actual-service lifecycle checker; aggregate does not exercise that new service checker",
+    "actualServiceLifecycleCheckerIncludedInAggregate": false,
+    "newWorkflowStepsLocallyExecutedByAggregate": false,
+    "nativeRuntimeChanged": false,
+    "controllerRuntimeChanged": false,
+    "alphaRuntimeChanged": false,
+    "build": {
+      "builds": 1,
+      "exitCode": 0,
+      "elapsedMs": 25161,
+      "timedOut": false,
+      "checkoutRevision": "208f4b55969517decd55ead3e69808fab5d786aa",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+      "manifestSha256": "392964f086da99c7c44c17490611da933573386cbc91a6328ffd970e47c6203a",
+      "binarySha256": "f40c444df3ec3842cb9fe45da9e70df967c3d76bf3f4b5f15df726100ba686b1",
+      "binaryMode": "0755",
+      "compiledModuleCount": 105,
+      "nginxVersion": "1.31.9",
+      "dependencyVersionsFromHeaders": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "generatedFiles": {
+        "ngx_auto_config.h": {
+          "sha256": "ae12d51e42a42816e29aa5ea9b77d88262628422c7fe4292381a806dbcf90a0c",
+          "bytes": 10168,
+          "mode": "0644"
+        },
+        "ngx_auto_headers.h": {
+          "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+          "bytes": 657,
+          "mode": "0644"
+        },
+        "ngx_modules.c": {
+          "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+          "bytes": 11820,
+          "mode": "0644"
+        }
+      },
+      "licenseSha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c",
+      "trackedChangesAtBuild": [
+        ".github/workflows/x10-native.yml"
+      ]
+    },
+    "environment": {
+      "nodeVersion": "v24.22.1",
+      "nonroot": false,
+      "targetNonrootNode22Accepted": false
+    },
+    "dependencies": {
+      "pinnedWheelHashesVerified": 11,
+      "freshVenvs": 2,
+      "pipCheckPassed": 2,
+      "networkDependencyDownloads": 0,
+      "requireHashes": true,
+      "onlyBinary": true,
+      "officialPinVerified": true
+    },
+    "aggregate": {
+      "command": "node x10/test/all.mjs --official",
+      "invocations": 1,
+      "exitCode": 0,
+      "elapsedMs": 226061,
+      "timedOut": false,
+      "stderrBytes": 679,
+      "success": true,
+      "groups": 20,
+      "passed": 20,
+      "failed": 0,
+      "suites": [
+        {
+          "name": "http-tls-http2-reload",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "stream-mail",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "mail-tls-starttls",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "protocol-adapters",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-interop",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-head-independent-client",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-features",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-regression",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-generated-sanitized",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-frame-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-load-client-verification",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "managed-native-control",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "operator-status",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "local-alpha-lifecycle",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "listener-observer-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "reload-listener-observation",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-control-api",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-process-generations",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-generation-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "official-nginx-tests",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        }
+      ],
+      "stderrProgressLines": 20,
+      "stderrOnlyExpectedSuiteProgress": true
+    },
+    "controller": {
+      "format": "node-test-tap",
+      "pass": 86,
+      "fail": 0,
+      "valid": true
+    },
+    "alpha": {
+      "format": "node-test-tap",
+      "pass": 45,
+      "fail": 0,
+      "valid": true,
+      "total": 45,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "operatorStatus": {
+      "format": "node-test-tap",
+      "pass": 30,
+      "fail": 0,
+      "valid": true,
+      "total": 30,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "listenerBoundaries": {
+      "format": "node-test-tap",
+      "pass": 42,
+      "fail": 0,
+      "valid": true
+    },
+    "handover": {
+      "success": true,
+      "interrupted": false,
+      "cleanup": {
+        "nativeStopped": true,
+        "nativeExitCode": 0,
+        "nativeSignal": null,
+        "mode": "SIGQUIT",
+        "stoppedWorkerResumeRequested": true,
+        "fixturesStopped": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "errors": []
+      },
+      "sourceUnchangedDuringTest": true,
+      "tests": 7,
+      "passed": 7,
+      "cleanupErrorCount": 0,
+      "fixtureErrorCount": 0
+    },
+    "official": {
+      "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+      "summary": {
+        "files": 35,
+        "filesPassed": 32,
+        "filesSkipped": 3,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1109,
+          "passed": 1083,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "skippedFiles": [
+        "fastcgi.t",
+        "scgi.t",
+        "uwsgi.t"
+      ],
+      "cleanupErrorCount": 0,
+      "sourceUnchangedDuringTest": true
+    },
+    "nativeTrackedInputsCount": 499,
+    "runtimeNativeAndLicenseInputsCount": 508,
+    "additionalDocsFrozen": 4,
+    "unchangedRuntimeNativeAndDocsInputsCount": 512,
+    "nativeTrackedInputsUnchanged": true,
+    "licenseUnchanged": true,
+    "frozenHarnessFilesCount": 37,
+    "frozenHarnessFilesUnchanged": true,
+    "binaryIdentityUnchanged": true,
+    "generatedInputsUnchanged": true,
+    "sourceFreezeSha256": {
+      "x10/control/manager.mjs": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822",
+      "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+      "x10/control/listeners.mjs": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+      "x10/test/listeners.test.mjs": "a43b12acdfedd6125f5b0bd84010581c8b28141215b804e8895c453928918b3c",
+      "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612",
+      "x10/test/alpha-tls.test.mjs": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+      "x10/test/frontend-tls.test.mjs": "9d3168f14b8d7b8f6deeba1cc53bafe60a655786f00bd341a7354376a773cac9"
+    },
+    "supplementalUnixReruns": 0,
+    "featureOffReruns": 0,
+    "historicalLocalFailurePreserved": true,
+    "historicalESRCHCauseProven": false,
+    "nativeProcessGroupSignalEscalationPerformed": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "serviceActivated": false,
+    "frontendTLSAccepted": false,
+    "productionAccepted": false,
+    "limitations": [
+      "Local root/Node24 compatibility does not accept actual nonroot Node22 user-service operation.",
+      "One fresh native build and one frozen native official aggregate; no unchanged native diagnostic rerun.",
+      "New actual-service lifecycle checker and its pure contract tests are outside this aggregate and require separate exact authored/hosted evidence.",
+      "Historical19/20 ESRCH failure process/interleaving remains unproven.",
+      "Existing restricted AF_UNIX EPERM supplemental failure was not retried unchanged; hosted required Unix evidence remains separate.",
+      "Feature-off profile not rerun locally; nativeC unchanged.",
+      "Official optional-client skips and expected TODO remain explicit."
+    ]
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "suite": "independent-basic-service-lifecycle-review",
+    "sourceBase": "ecbbbbeda306f0b1ad664b4187ac13191bb982e6",
+    "publicationParent": "208f4b55969517decd55ead3e69808fab5d786aa",
+    "checkerSha256": "4fd4416227daf2293983e7255a203a5ba183b86e6ff23dbf13fff78e39fd1b79",
+    "testsSha256": "acdff402f05ed9f57dd7e70731b534389b0814ee6c1c4c15790f608d47a5218d",
+    "blockingFindings": [],
+    "staticChecksPassed": 44,
+    "independentHeldouts": {
+      "schemaVersion": 1,
+      "suite": "independent-service-authority-heldouts",
+      "checkerSha256": "4fd4416227daf2293983e7255a203a5ba183b86e6ff23dbf13fff78e39fd1b79",
+      "checksPassed": 28,
+      "syntheticPrivateFunctionChecks": 28,
+      "actualOwnProcNegativeChecks": 0,
+      "actualProcObservation": {
+        "attempted": 1,
+        "available": false,
+        "reason": "EACCES",
+        "identityRejectionVerified": false
+      },
+      "actualUserManagerInvoked": false,
+      "actualServiceActivated": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "checks": [
+        {
+          "name": "synthetic owned canonical runtime-link authority accepts",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd foreign-owner refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd group-write refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd world-write refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd symlink refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd special-bits refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd canonical alias refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd/user foreign-owner refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd/user group-write refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd/user world-write refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd/user symlink refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd/user special-bits refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic /systemd/user canonical alias refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic foreign-link refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic regular-link refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic wrong-target refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic foreign-unit refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic public-unit refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic symlink-unit refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic changed-unit refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic exact unit launcher binds argv UID exe namespaces cgroup birth",
+          "passed": true
+        },
+        {
+          "name": "synthetic launcher foreign-owner refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic launcher foreign-executable refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic launcher wrong-argv refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic launcher extra-argv refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic launcher foreign-cgroup refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic launcher same-prefix-cgroup refuses",
+          "passed": true
+        },
+        {
+          "name": "synthetic launcher oversize-proc refuses",
+          "passed": true
+        }
+      ]
+    },
+    "independentHeldoutReportSha256": "cd14b5882fee9f3a99b024da98eeb4c67e33449ea2d0acb9897a243cc6a2d86d",
+    "authoredContractTAP": {
+      "tests": 49,
+      "pass": 49,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "authoredContractTAPSha256": "7e37b605fe9a648ec843d64d6995af68524b15bba99a6f5c634fa7730050b97e",
+    "actualServiceActivated": false,
+    "actualManagerInvokedByReview": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "resolvedPreFreezeFindings": [
+      "Happy-path CLI stop before manager stop bypassed generated ExecStop; changed to manager-owned normal stop.",
+      "Failed wait-bind could leave unobserved native session; registry/lifecycle runtime inventory before and after manager stop now refuses unknown native cleanup before unlink/removal.",
+      "Primitive SHA256 CLI typing missing allowed Buffer/toString object coercion in2pure diagnostics; strict primitive string check added."
+    ],
+    "diagnosticHistory": [
+      "28 synthetic private-function controls passed initially; additional actual own-Node proc identity attempt was unavailable with EACCES reading process executable. Initial assertion expecting codeunit_launcher_identity therefore failed. Actual identity proof is NOT PASS; no unchanged actual retry. The final review reran only synthetic controls against frozen4fd bytes after the bounded inert-install cleanup correction; the earlier9fb review is superseded."
+    ],
+    "limits": [
+      "28 heldouts use exact extracted private functions with virtual filesystem/process transcripts; they are not actual user-manager, service activation or transport tests.",
+      "Local root cannot accept nonroot Node22 manager/service. Actual lifecycle remains pending exact new CI on a fresh runner after real preflight.",
+      "Required happy-path scope is explicit start/stop/start/stop with two fresh sessions and manual installed wait-bind. No systemctl restart command is claimed.",
+      "Unit journald configuration is present, but actual journal/logging verification remains OPEN.",
+      "Failed-start, slow drain, orphan recovery, automatic startup readiness, combined service TLS, package rollback and permanent distribution remain OPEN.",
+      "The historical TLS CI wrong-CA failure and shutdown143/localESRCH causes remain unknown; this fixture does not explain them."
+    ],
+    "checks": [
+      {
+        "check": "frozenchecker4fd",
+        "passed": true
+      },
+      {
+        "check": "frozentestacdff",
+        "passed": true
+      },
+      {
+        "check": "heldout28syntheticexactsource",
+        "passed": true
+      },
+      {
+        "check": "actualprocEACCESnotPASS",
+        "passed": true
+      },
+      {
+        "check": "noactualmanagerheldouts",
+        "passed": true
+      },
+      {
+        "check": "realpreflightbeforeanymanagerlink",
+        "passed": true
+      },
+      {
+        "check": "realpreflightrefusalrequired",
+        "passed": true
+      },
+      {
+        "check": "fixedsystemctlminimalbusenv",
+        "passed": true
+      },
+      {
+        "check": "noenablelingerdisableforceordirectsignal",
+        "passed": true
+      },
+      {
+        "check": "randomunitnamespace",
+        "passed": true
+      },
+      {
+        "check": "ownedunitfileexclusive0600",
+        "passed": true
+      },
+      {
+        "check": "runtimedircanonicalownershippermissions",
+        "passed": true
+      },
+      {
+        "check": "exactfragmentandunitcgroup",
+        "passed": true
+      },
+      {
+        "check": "launcheridentityboundargvUIDexenamespacecgroup",
+        "passed": true
+      },
+      {
+        "check": "launcherprocbounded128KiB",
+        "passed": true
+      },
+      {
+        "check": "exitrequiresabsence-noPIDreuseauthority",
+        "passed": true
+      },
+      {
+        "check": "archivevalidatedcapturedbytesprivatecopy",
+        "passed": true
+      },
+      {
+        "check": "normalstopmanagerExecStopfirst",
+        "passed": true
+      },
+      {
+        "check": "inventorybeforeandafterstop",
+        "passed": true
+      },
+      {
+        "check": "unknownnativeblocksremoval",
+        "passed": true
+      },
+      {
+        "check": "stopnativeidentityandgroupabsence",
+        "passed": true
+      },
+      {
+        "check": "stopmanagerlauncherportsocketallrequired",
+        "passed": true
+      },
+      {
+        "check": "happysequence2start2stopmanualbind",
+        "passed": true
+      },
+      {
+        "check": "freshsessionprivateandmanualbinding",
+        "passed": true
+      },
+      {
+        "check": "boundedrealHTTPuploadstream",
+        "passed": true
+      },
+      {
+        "check": "linkcleanuprevalidatesbeforeunlink",
+        "passed": true
+      },
+      {
+        "check": "noambiguityblindlinkstartretry",
+        "passed": true
+      },
+      {
+        "check": "noaliveprefixremoval",
+        "passed": true
+      },
+      {
+        "check": "boundedfinallycloseandfixedreport",
+        "passed": true
+      },
+      {
+        "check": "unaccepted:automaticReadinessAccepted",
+        "passed": true
+      },
+      {
+        "check": "unaccepted:failedStartAccepted",
+        "passed": true
+      },
+      {
+        "check": "unaccepted:slowDrainAccepted",
+        "passed": true
+      },
+      {
+        "check": "unaccepted:orphanRecoveryAccepted",
+        "passed": true
+      },
+      {
+        "check": "unaccepted:tlsServiceAccepted",
+        "passed": true
+      },
+      {
+        "check": "unaccepted:permanentDistributionAccepted",
+        "passed": true
+      },
+      {
+        "check": "unaccepted:serviceAccepted",
+        "passed": true
+      },
+      {
+        "check": "unaccepted:productionAccepted",
+        "passed": true
+      },
+      {
+        "check": "actualauthor49TAP",
+        "passed": true
+      },
+      {
+        "check": "authoractualrootrefusalonly",
+        "passed": true
+      },
+      {
+        "check": "unchangedexisting:x10/service/preflight.mjs",
+        "passed": true
+      },
+      {
+        "check": "unchangedexisting:x10/service/user-unit.mjs",
+        "passed": true
+      },
+      {
+        "check": "unchangedexisting:x10/alpha/cli.mjs",
+        "passed": true
+      },
+      {
+        "check": "unchangedexisting:x10/alpha/runtime.mjs",
+        "passed": true
+      },
+      {
+        "check": "unchangedexisting:x10/control/manager.mjs",
+        "passed": true
+      }
+    ]
+  },
+  "workflowValidation": {
+    "schemaVersion": 1,
+    "workflowSha256": "2658b9b98eca63c130cfd4c13282c049c218609fc1ddedbbbb6d80d671ca58b2",
+    "yamlParsed": true,
+    "actualGateRequired": true,
+    "afterArchiveVerification": true,
+    "beforeEvidenceUpload": true,
+    "permissionsUnchanged": true,
+    "jobTimeoutMinutes": 20,
+    "actualServiceRunLocally": false,
+    "serviceAccepted": false,
+    "productionAccepted": false
+  },
+  "reportSha256": {
+    "author": "6587cb702b5f8630f1cb4497481137ae81af9737fcce7cc009c812e15bcb1014",
+    "native": "5cea51fdabf2aed1edd2fd605294d9dc77ea39ae5551eb92113fc08970edf419",
+    "independentReview": "d4adc9cab631a654c6e72a45deda8aa8318cadd321bed7ca05c19e516319edd4",
+    "workflow": "37f4e718027a26b0e45890f82f4719a081679c78858956785bfc6971b050c704"
+  },
+  "implementationSourceSha256": {
+    "x10/service/lifecycle-check.mjs": "4fd4416227daf2293983e7255a203a5ba183b86e6ff23dbf13fff78e39fd1b79",
+    "x10/service/lifecycle-check.test.mjs": "acdff402f05ed9f57dd7e70731b534389b0814ee6c1c4c15790f608d47a5218d",
+    ".github/workflows/x10-native.yml": "2658b9b98eca63c130cfd4c13282c049c218609fc1ddedbbbb6d80d671ca58b2"
+  },
+  "unchangedSourceSha256": {
+    "x10/service/preflight.mjs": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+    "x10/service/preflight.test.mjs": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3",
+    "x10/service/user-unit.mjs": "3fc67266e513a00803bbe450d23052fffd5f3b61bbb0dfaa90969841b1d9852a",
+    "x10/service/user-unit.test.mjs": "bf65c2e0b60a21d09d211c6eb869264674ffab9efdd5d9133143ee8f119a2287",
+    "x10/test/alpha-tls.test.mjs": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+    "x10/test/frontend-tls.test.mjs": "9d3168f14b8d7b8f6deeba1cc53bafe60a655786f00bd341a7354376a773cac9"
+  },
+  "runtimeFilesUnchanged": 508,
+  "originalAcceptedFixtureImplementation": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+  "originalAcceptedFixtureReceipt": "x10/evidence/g3-tls-relay-binding-hosted.json",
+  "retainedHistoricalObservation": "Accepted376 candidate-bound TLS relay exact CI remains preserved, alongside original9e63 wrong-CA expected apply exit1/actual0 and unknown historical interleaving/cause. Earlier frontend push shutdown143/skipped frontend step/absent artifact/unconfirmed final cleanup and local19/20 ESRCH process/interleaving uncertainty remain retained; no new result explains or erases those events.",
+  "localVerification": {
+    "authoredContract": {
+      "command": "node --test --test-reporter=tap x10/service/lifecycle-check.test.mjs",
+      "exitCode": 0,
+      "tapSha256": "7e37b605fe9a648ec843d64d6995af68524b15bba99a6f5c634fa7730050b97e",
+      "tests": 49,
+      "pass": 49,
+      "fail": 0,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0,
+      "units": "pure/refusal contract tests including two actual child CLI refusals; not actual nonroot service tests"
+    },
+    "independentSyntheticHeldoutsPassed": 28,
+    "independentStaticChecksPassed": 44,
+    "independentActualProcIdentityVerified": false,
+    "nativeAggregateGroupsPassed": 20,
+    "nativeAggregateGroupsTotal": 20,
+    "actualLocalServiceAccepted": false,
+    "exactResultingCI": "PENDING"
+  },
+  "actualLocalServiceInstalled": false,
+  "actualLocalServiceStarted": false,
+  "serviceInstalledForProduction": false,
+  "automaticUnitReadinessIntegrated": false,
+  "permanentAlphaAccepted": false,
+  "newPurchases": false,
+  "productionDeployChanged": false,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "privateKeysPublished": false,
+  "limitations": [
+    "Local root/prerequisite refusal is not a successful actual user-service lifecycle. Pure and injected transcript tests remain separate from actual systemd execution.",
+    "The new required CI step must run fresh readonly nonroot preflight immediately before real ephemeral user-unit operations. No prior completed runner is assumed to persist.",
+    "The source harness is not installed alpha runtime and does not change generated recipe, alpha/controller/native semantics or the bundle inventory.",
+    "Type=exec proves process exec only; the harness explicitly invokes installed wait-bind before a native request. The generated unit has no automatic ExecStartPost readiness acceptance.",
+    "Basic start/explicit bind/request and stop/start with a fresh session do not accept the single systemctl restart operation, cancelled startup, failed-start, slow drain, abnormal master/orphan recovery or TLS combined with operated service.",
+    "Report booleans actualUnitStarted:false or runtimeUnitLinked:false mean the corresponding action was not confirmed. After a timed-out or ambiguous mutation they do not prove no action occurred; cleanup must requery exact owned unit/link/runtime identities. Only the actual local nonroot_required refusal at preflight, before archive access or mutation, establishes zero local service actions.",
+    "Only its unique temporary runtime unit and owned fixtures/processes may be cleaned up. Cleanup failures retain diagnostic state; no global reset-failed, manager restart, account/linger/security change, killall or unknown-prefix removal is permitted.",
+    "The49-test local authored suite includes an actual root-only refusal. On a nonroot runner that case is explicitly skipped, so expected contract accounting is49total/48PASS/1SKIP; the separate actual service CLI step remains mandatory and cannot substitute refusal or skip for execution.",
+    "The new service checker and its pure/refusal tests are separate from the existing20 native aggregate groups; that aggregate does not execute a live user-manager lifecycle.",
+    "Accepted376 exact fixture CI remains historical scoped proof. It cannot verify newly changed service checker/test/workflow bytes. Exact resulting CI is pending.",
+    "Permanent distribution/published-file nonroot replay, package upgrade/rollback/recovery, security/soak, final Production V1 and deferred semantic Continuum remain open."
+  ]
+}

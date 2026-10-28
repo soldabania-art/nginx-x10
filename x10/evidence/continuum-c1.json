@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "suite": "continuum-c1",
+  "date": "2026-10-23",
+  "baselineCommit": "999470e643ca1b5370273125c5a3e30ec29aa5e6",
+  "passed": true,
+  "acceptanceScope": "Authenticated real TLS1.3 handshake and record observation, not migration",
+  "aggregate": {
+    "schemaVersion": 1,
+    "suite": "continuum-real-handshake-and-record-observation",
+    "passed": true,
+    "testFiles": 2,
+    "scope": "real-handshake-and-record-observation-only",
+    "nativeNginxMigration": false,
+    "realSessionMigration": false,
+    "counts": {
+      "tests": 22,
+      "suites": 0,
+      "pass": 22,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "exitCode": 0,
+    "signal": null,
+    "timedOut": false,
+    "outputLimitExceeded": false,
+    "interrupted": false,
+    "runnerError": null
+  },
+  "testFamilies": {
+    "oracleSyntheticTests": 13,
+    "realTlsPositiveTests": 2,
+    "trustAndProfileDenialTests": 5,
+    "realNativeListeningInterruptionTests": 2
+  },
+  "actualHandshake": {
+    "schemaVersion": 1,
+    "recordKind": "research-handshake-fixture-result",
+    "outcome": "pass",
+    "scenario": "valid",
+    "negotiated": {
+      "protocol": "TLSv1.3",
+      "cipher": "TLS_AES_128_GCM_SHA256",
+      "alpn": "continuum-c1",
+      "authorized": true
+    },
+    "resumed": false,
+    "applicationBytesEachDirection": 4097,
+    "freshChallenge": true,
+    "clientConnections": 1,
+    "serverConnections": 1,
+    "topology": "two-leg-recording-relay-not-migration",
+    "oracle": {
+      "schemaVersion": 1,
+      "recordKind": "tls13-handshake-wire-oracle",
+      "passed": true,
+      "protocol": "TLSv1.3",
+      "cipher": "TLS_AES_128_GCM_SHA256",
+      "alpn": "continuum-c1",
+      "endpointAuthorizationObserved": true,
+      "authenticatedHandshakeBoundary": true,
+      "independentFinishedMacVerification": false,
+      "fullHandshakeVerifier": false,
+      "directions": {
+        "client": {
+          "captureRecords": 5,
+          "preApplicationRecords": 3,
+          "helloRecords": 1,
+          "compatibilityCCSRecords": 1,
+          "encryptedHandshakeRecords": 1,
+          "applicationRecords": 1,
+          "applicationBytes": 4097,
+          "keyUpdates": 0,
+          "closeNotify": true,
+          "trailingBytes": 0
+        },
+        "server": {
+          "captureRecords": 9,
+          "preApplicationRecords": 6,
+          "helloRecords": 1,
+          "compatibilityCCSRecords": 1,
+          "encryptedHandshakeRecords": 4,
+          "applicationRecords": 1,
+          "applicationBytes": 4097,
+          "keyUpdates": 1,
+          "closeNotify": true,
+          "trailingBytes": 0
+        }
+      },
+      "capturedStreamComplete": true,
+      "stateExportImport": false,
+      "migration": false,
+      "nativeNginxIntegration": false
+    },
+    "identity": {
+      "serverSourceSha256": "4404cbb56387546e8bc9001677786f08eeb9be3703864d68bc23ff1bdbe07ff9",
+      "serverBinarySha256": "f48e918e4113e2aac4b751908695e79ef94a6f4e1d49b2c1b51cd0ae0edb7bb0",
+      "nodeBinarySha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12",
+      "nodeVersion": "v24.19.0",
+      "nodeOpenSSLVersion": "3.5.7",
+      "systemOpenSSLVersion": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)",
+      "serverRuntimeOpenSSLVersion": "OpenSSL 3.0.13 30 Jan 2024",
+      "serverRuntimeOpenSSLVersionNumber": 805306576,
+      "serverOpenSSLHeadersVersion": "OpenSSL 3.0.13 30 Jan 2024"
+    },
+    "migrationImplemented": false,
+    "openSSLStateExportImport": false,
+    "nativeNginxIntegration": false,
+    "independentFinishedMacVerification": false
+  },
+  "sourceSha256": {
+    "handshake-server.c": "4404cbb56387546e8bc9001677786f08eeb9be3703864d68bc23ff1bdbe07ff9",
+    "handshake.mjs": "1610b458ec8904bd9d6de54697f3fb1828718ff6f1c4b8f1615df284f93c7a26",
+    "handshake.test.mjs": "009fcf8be98e76d8ef9b20d10f283eb4a9413583a8fbe34b683b97cbbe072789",
+    "handshake-oracle.mjs": "b551e55d6d20ebb687f6d49c38a0cd6b144acd5981047fc24c502b2fccd4c835",
+    "handshake-oracle.test.mjs": "e087594540b1a42179573e1d8dfa33dad90c8222e1ba28f7bda388c48261e12d",
+    "handshake-check.mjs": "0d19251f9d9830dc07d48fa1bdaa3e8ae1840f7d471a5d29c860c0bba9e7bfd9",
+    "OPENSSL-STATE.md": "07c26cddcdba68cff88318fab4f574f704e23ae42aed56b56da7328d95196457"
+  },
+  "regression": {
+    "c0CoreTests": 21,
+    "c0ProcessTests": 7,
+    "allEightC0SourceHashesUnchanged": true,
+    "ciClassifierTests": 7
+  },
+  "independentReview": {
+    "wireTrustCrashControls": {
+      "passed": 7,
+      "runnerSha256": "6e5183fd364355c3b3e30cbe9506015dcd5df2de25148747a2a97f862da0bb1c",
+      "scope": "Fresh payload17/32771 rechunking, server KeyUpdate, corrupt and truncated capture, CA and hostname denials, ALPN C crash rejection; before cancellation-only patch"
+    },
+    "liveTlsInterruptionControls": {
+      "passed": 2,
+      "runnerSha256": "1610b458ec8904bd9d6de54697f3fb1828718ff6f1c4b8f1615df284f93c7a26",
+      "scope": "After authenticated TLS and actual257-byte C read/echo with client read paused; SIGINT/SIGTERM normal130/143, child gone, private directory removed, both listener ports closed",
+      "sourceHashesUnchanged": true
+    },
+    "ciClassifierControlGroups": 8,
+    "aggregateProducerControls": {
+      "schemaVersion": 1,
+      "suite": "continuum-c1-aggregate-producer-controls",
+      "passed": true,
+      "controls": [
+        {
+          "case": "valid",
+          "passed": true
+        },
+        {
+          "case": "empty-first",
+          "passed": true
+        },
+        {
+          "case": "empty-both",
+          "passed": true
+        },
+        {
+          "case": "failure-canary",
+          "passed": true
+        },
+        {
+          "case": "exit-failure",
+          "passed": true
+        },
+        {
+          "case": "oversize",
+          "passed": true
+        },
+        {
+          "case": "unexpected-args",
+          "passed": true
+        },
+        {
+          "case": "interruption",
+          "passed": true
+        }
+      ],
+      "sourceSha256": "0d19251f9d9830dc07d48fa1bdaa3e8ae1840f7d471a5d29c860c0bba9e7bfd9",
+      "sourceUnchanged": true,
+      "rawTAPPublished": false
+    }
+  },
+  "counterexamples": [
+    {
+      "case": "ALPN native crash mistaken for expected denial",
+      "before": "nonzero-or-signal child exit and reset could count as rejection",
+      "after": "precise TLS error plus normal native exit1 and static handshake failure required"
+    },
+    {
+      "case": "SIGTERM after actual private key creation",
+      "baseline": {
+        "schemaVersion": 1,
+        "suite": "continuum-c1-interruption-baseline",
+        "sourceSha256": "6e5183fd364355c3b3e30cbe9506015dcd5df2de25148747a2a97f862da0bb1c",
+        "privateKeyCreationObserved": true,
+        "exitedBySignal": true,
+        "remainingOwnedTemporaryDirectories": 1,
+        "counterexampleReproduced": true,
+        "rawOutputPublished": false
+      },
+      "candidate": {
+        "schemaVersion": 1,
+        "suite": "continuum-c1-interruption-candidate",
+        "sourceSha256": "1610b458ec8904bd9d6de54697f3fb1828718ff6f1c4b8f1615df284f93c7a26",
+        "privateKeyCreationObserved": true,
+        "exitCode": 143,
+        "terminatedBySignal": false,
+        "reason": "fixture_interrupted",
+        "remainingOwnedTemporaryDirectories": 0,
+        "rawOutputPublished": false,
+        "passed": true
+      }
+    }
+  ],
+  "opensslStudy": {
+    "upstreamTag": "openssl-3.0.13",
+    "upstreamCommit": "85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c",
+    "scope": "Scoped public API/private state map; reference resolution not signed-tag verification; system downstream binary not source-layout pin"
+  },
+  "limitations": [
+    "Two TCP relay legs; no live-session state export/import, migration or native NGINX integration.",
+    "Node endpoint authenticates CA/hostname/Finished; observer verifies AEAD/framing/sequence and structural Finished, not independent PKI/Finished MAC.",
+    "C and Node use different observed OpenSSL versions but the same backend family.",
+    "No TLS1.2, resumption, 0RTT, mTLS, arbitrary post-handshake controls, cross-release bridge or production/performance acceptance.",
+    "Native fixture/Node binaries hashed; loaded libssl/libcrypto bytes are neither pinned nor hashed.",
+    "Bounded cleanup is tested; full managed-runtime memory erasure is not proven.",
+    "Author suites, independent controls, classifier tests and native groups are separate evidence categories."
+  ],
+  "hostedCI": {
+    "state": "pending-publication",
+    "identityRule": "Record actual implementation commit and workflow conclusions separately"
+  },
+  "rawRecordSha256": {
+    "continuum-c1-checks.json": "4d568793be3dcc7d71c9bfcac4865884832c8a42045e8ed087e916c62fecafeb",
+    "continuum-c1-handshake-result.json": "f7c74c3587621f9f8c65ae18819f40fdf89e41ec6c9b994e481b17425680a364",
+    "continuum-c1-c0-core.json": "49283fd5cf983b6fdbbf512a01f91c1fe86e6019a044e4fdc8d148fb55e281cc",
+    "continuum-c1-c0-process.tap": "e87399fc222abbb58ae76252e41f27e34330999c46831c230bf9512cc1b980f1",
+    "continuum-c1-ci-scope.tap": "230ee6652e670fb3b87ca64d932f31a94bd280bd2571497866d3177a2a3b1987",
+    "continuum-c1-aggregate-controls.json": "df19062554ba0273d14f1edb62fb574600166067edf409f35a92cebc734aa527",
+    "continuum-c1-interruption-baseline.json": "6b6228abbde77e7e635a19c22ee0f8b795359a1cae025451d5d3b65b36e5c477",
+    "continuum-c1-interruption-candidate.json": "61e7e08c630e680a6167adae445e0632476eb16036be68a98c8803b6b7d56f86"
+  },
+  "publication": "Allowlisted summaries and hashes only; no real keys, certificates, client random, wire records, host paths, PIDs or raw TAP."
+}

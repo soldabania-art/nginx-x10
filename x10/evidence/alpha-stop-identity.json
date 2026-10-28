@@ -1,0 +1,266 @@
+{
+  "schemaVersion": 1,
+  "task": "alpha stop identity observation after process disappearance",
+  "baseCommit": "1b9c55ffc2dd074da415a2b8a69f0c42e4ac95e4",
+  "publicationParent": "ceb75abdba9781dd2eace89d9095a0461c11b704",
+  "runId": "continuum-stop-20261024T002456401Z",
+  "generatedAtUTC": "2026-10-24T00:34:36.744675+00:00",
+  "implementation": {
+    "changed": "findMasters runtime_identity path performs one immediate lstat of same candidate proc directory; only ENOENT resolves absence. inspectMaster retains separate recorded PID absence verification.",
+    "productFiles": [
+      "x10/alpha/runtime.mjs"
+    ],
+    "cliChanged": false,
+    "nativeCChanged": false,
+    "nativeNginxSourceFilesPreserved": 499,
+    "research13SourceFilesUnchanged": true,
+    "testHookInProduct": false
+  },
+  "baselineAndCandidate": {
+    "baseline": {
+      "exitCode": 1,
+      "counts": {
+        "tests": 28,
+        "suites": 0,
+        "pass": 20,
+        "fail": 8,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedTests": [
+        "zombie snapshot followed by two absence checks",
+        "dead snapshot followed by two absence checks",
+        "empty command snapshot followed by two absence checks",
+        "recorded PID reappearing after candidate absence is refused",
+        "directory recheck EACCES is unresolved",
+        "directory recheck EIO is unresolved",
+        "directory recheck ESRCH is unresolved",
+        "synthetic proc exit interleavings require observed directory absence"
+      ],
+      "sourceSha256": "5952dfe5eb577daa3e4e8d0bf2d7b36d5f4ce53ff901814f98a1880e6dea66e2",
+      "primaryCounterexample": {
+        "name": "zombie snapshot followed by two absence checks",
+        "observedErrorCode": "runtime_identity",
+        "expectedResult": "null only after candidate and recorded PID directory ENOENT"
+      }
+    },
+    "candidate": {
+      "exitCode": 0,
+      "counts": {
+        "tests": 28,
+        "suites": 0,
+        "pass": 28,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "failedTests": [],
+      "sourceSha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51"
+    },
+    "testSourceSha256": "e3c483bd042b47e604663eb27a3c81aa663a7b4c0cf4cfeeefd1bf426b635328",
+    "baselineCommit": "ceb75abdba9781dd2eace89d9095a0461c11b704",
+    "classification": "Controlled synthetic proc interleaving; not evidence of historical CI cause or real lifecycle success.",
+    "files": {
+      "x10/alpha/runtime.mjs": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51",
+      "x10/test/alpha-runtime.test.mjs": "e3c483bd042b47e604663eb27a3c81aa663a7b4c0cf4cfeeefd1bf426b635328",
+      "x10/test/alpha.test.mjs": "0eccb4738616f81b32661051c2a1fd93217d9d3853974c021ae427397a1b9cce"
+    }
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "scope": "Independent synthetic identity/absence controls; no real native lifecycle executed by reviewer",
+    "runtimeSha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51",
+    "fixtureSha256": "628e386d3e27cc6d1dece5a0f7becaaa9a9c5dda0f89c4ad6f8fd3c5e324ac9e",
+    "tests": 15,
+    "passed": 15,
+    "failed": 0,
+    "skipped": 0,
+    "cases": [
+      {
+        "name": "candidate-directory-EPERM-propagates",
+        "passed": true
+      },
+      {
+        "name": "candidate-directory-ENOTDIR-propagates",
+        "passed": true
+      },
+      {
+        "name": "recorded-directory-EACCES-propagates-after-absence",
+        "passed": true
+      },
+      {
+        "name": "recorded-directory-ESRCH-propagates-after-absence",
+        "passed": true
+      },
+      {
+        "name": "recorded-directory-EIO-propagates-after-absence",
+        "passed": true
+      },
+      {
+        "name": "persistent-dead-master-never-stopped",
+        "passed": true
+      },
+      {
+        "name": "duplicate-prefix-argument-refused",
+        "passed": true
+      },
+      {
+        "name": "duplicate-config-argument-refused",
+        "passed": true
+      },
+      {
+        "name": "live-reused-incarnation-refused-without-absence-check",
+        "passed": true
+      },
+      {
+        "name": "ambiguous-masters-refused",
+        "passed": true
+      },
+      {
+        "name": "symlink-pid-file-refused",
+        "passed": true
+      },
+      {
+        "name": "oversized-live-identity-refused",
+        "passed": true
+      },
+      {
+        "name": "bounded-proc-inventory-refused-before-reads",
+        "passed": true
+      },
+      {
+        "name": "absent-candidate-then-reused-recorded-pid-refused",
+        "passed": true
+      },
+      {
+        "name": "dead-snapshot-only-absent-after-two-checks",
+        "passed": true
+      }
+    ],
+    "limitations": [
+      "Filesystem adapter interleavings are synthetic, not captured historical CI ordering.",
+      "No signals or actual processes exercised; official native aggregate is separate.",
+      "No pidfd fencing or proof of atomic process snapshot."
+    ],
+    "rawRuntimeLogsIncluded": false,
+    "hostPathsIncluded": false,
+    "realPIDsIncluded": false
+  },
+  "researchRegression": {
+    "core": {
+      "exitCode": 0,
+      "stdoutSha256": "49283fd5cf983b6fdbbf512a01f91c1fe86e6019a044e4fdc8d148fb55e281cc",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "report": {
+        "schemaVersion": 1,
+        "suite": "continuum-record-and-state-kernel",
+        "passed": true,
+        "testFiles": 2,
+        "scope": "in-memory-record-and-state-only",
+        "liveTlsProcessHandover": false,
+        "counts": {
+          "tests": 21,
+          "suites": 0,
+          "pass": 21,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "exitCode": 0,
+        "signal": null,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "interrupted": false,
+        "runnerError": null
+      }
+    },
+    "process": {
+      "exitCode": 0,
+      "stdoutSha256": "3e6b3391047a873cf3294cf783fa91af408c6ef1af7f901662b2b960f861bc59",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tap": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    }
+  },
+  "nativeRegressionEvidence": "x10/evidence/alpha-stop-native-regression.json",
+  "commands": {
+    "synthetic": [
+      "node --test x10/test/alpha-runtime.test.mjs"
+    ],
+    "independent": [
+      "node x10/review/alpha-stop-heldouts.mjs"
+    ],
+    "native": [
+      "bash x10/build.sh --jobs 2",
+      "node x10/test/all.mjs --official"
+    ],
+    "research": [
+      "node x10/continuum/check.mjs",
+      "node --test x10/continuum/process-handover.test.mjs"
+    ]
+  },
+  "historicalAdverseResult": {
+    "implementationCommit": "d4bb2bc1c4b73d30b2097426863976fca691d9e8",
+    "run": 40040045133,
+    "attempt": 1,
+    "job": 120708800093,
+    "artifact": 12538224312,
+    "nativeGroupsPassed": 19,
+    "nativeGroupsTotal": 20,
+    "alphaTap": {
+      "passed": 6,
+      "failed": 3,
+      "total": 9,
+      "scope": "Two nested failures plus parent, not three independent defects"
+    },
+    "sameShaRetry": {
+      "attempt": 2,
+      "job": 120711043827,
+      "conclusion": "success",
+      "provesFix": false
+    },
+    "exactCauseProven": false
+  },
+  "limitations": [
+    "Controlled mixed-snapshot disappearance defect fixed; historical CI failure ordering remains unproven.",
+    "Synthetic filesystem tests do not signal real processes; real native lifecycle is a separate aggregate group.",
+    "Persistent Z/X or reused/foreign directories still fail closed; existing group Z/X exclusion is unchanged.",
+    "No atomic proc snapshot, pidfd signal fencing, or general identity-to-kill race fix.",
+    "No TLS-state migration, TLS library change, automatic adapter compiler, or native NGINX Continuum integration."
+  ],
+  "primaryReferences": {
+    "checkedDateUTC": "2026-10-24",
+    "urls": [
+      "https://docs.kernel.org/filesystems/proc.html",
+      "https://nodejs.org/api/fs.html#ordering-of-callback-and-promise-based-operations"
+    ]
+  },
+  "hostedVerification": {
+    "state": "pending-exact-implementation-SHA",
+    "rule": "Read exact resulting Git commit workflow runs; skipped research push does not renew protocol acceptance."
+  },
+  "publication": {
+    "rawLogsIncluded": false,
+    "hostPathsIncluded": false,
+    "realPIDsIncluded": false,
+    "sessionKeysIncluded": false
+  },
+  "spendingUSD": 0,
+  "nativeLifecycleCountInterpretation": {
+    "combinedTapTotal": 37,
+    "importedSyntheticTapTotal": 28,
+    "originalLifecycleTapTotal": 9,
+    "countsIncludeParentTests": true,
+    "doesNotMean37RealLifecycleCases": true
+  },
+  "baselineCountInterpretation": "Eight baseline failures include seven leaf changed-behavior expectations plus their parent; only the primary mixed-snapshot disappearance is claimed as the counterexample. Remaining tests verify strict behavior; these are not eight independent bugs."
+}

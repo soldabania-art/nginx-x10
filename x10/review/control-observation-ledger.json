@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "task": "controller-sampled-observation-contract",
+  "baseCommit": "c0e229d48c75e0adc4e7b727f8bfa52505da0ab6",
+  "publicationParent": "73a8925b580dc81479358d74a8f9f78fb7298622",
+  "runId": "x10-control-contract-20261024T070015878Z",
+  "files": [
+    {
+      "file": "x10/test/control.test.mjs",
+      "beforeSha256": "e35f193d6056ae2b64a0f5f1b3bc27f8793f1b8e26b3c0f4abf51377d99cc7f1",
+      "afterSha256": "795cf8ac991225a74039aa05efd07dbd563f92631e3958c19b4917fde16100b8",
+      "bytes": 65937,
+      "author": "x10_control_diagnosis",
+      "reviewer": "x10_control_review; coordinator",
+      "scope": "fixture-only; controller and native runtime unchanged"
+    },
+    {
+      "file": "x10/control/README.md",
+      "beforeSha256": "afa8f5b85d06e4b5f46c6cf5bf3793080114af443389fe8a844ef99aaa4a4d4c",
+      "afterSha256": "e2543fbc89c6eb64d837b8bf663ab2c8a6352238e562b1b4d1f8d3938d8b9535",
+      "bytes": 20248,
+      "author": "coordinator",
+      "reviewer": "coordinator integration and claims audit",
+      "scope": "docs/evidence/checkpoint supporting actual fixture change"
+    },
+    {
+      "file": "x10/continuum/BACKGROUND.json",
+      "beforeSha256": "e7b5795ccd8f4ae84d5dfecf4a11976401945350782cada9141e6c5d05a26830",
+      "afterSha256": "5e6a39020f626015f5f0dd04a8068e410867f0c946590c25dd9ca391c209536b",
+      "bytes": 48887,
+      "author": "coordinator",
+      "reviewer": "coordinator integration and claims audit",
+      "scope": "docs/evidence/checkpoint supporting actual fixture change"
+    },
+    {
+      "file": "x10/PLAN.md",
+      "beforeSha256": "ac8956b134f20900998a26d4148abb852a2c454a2782a848530e4101d23d2fb4",
+      "afterSha256": "5c0f826c073efa4578e199f0271de98b8e0e84bb86f0f453f5122eefd484ea5d",
+      "bytes": 50154,
+      "author": "coordinator",
+      "reviewer": "coordinator integration and claims audit",
+      "scope": "docs/evidence/checkpoint supporting actual fixture change"
+    },
+    {
+      "file": "x10/STATUS.md",
+      "beforeSha256": "45dea498f3ef0162243820c7d81b5ec781ccc5002850680e6c4e992155ec0e96",
+      "afterSha256": "6a55b4023b65ebb50c510231a766f8d4f012e75ea7ccfafd05b3d66e3c62546b",
+      "bytes": 102165,
+      "author": "coordinator",
+      "reviewer": "coordinator integration and claims audit",
+      "scope": "docs/evidence/checkpoint supporting actual fixture change"
+    },
+    {
+      "file": "x10/evidence/control-observation-contract.json",
+      "beforeSha256": null,
+      "afterSha256": "96266403d5f4b985f083e2bca0a3f5c7b8ec3054191b1265a40366d1cc57d5d3",
+      "bytes": 17196,
+      "author": "coordinator",
+      "reviewer": "coordinator integration and claims audit",
+      "scope": "docs/evidence/checkpoint supporting actual fixture change"
+    }
+  ],
+  "ledgerSelfHashExcluded": true,
+  "hashComparison": "before hashes compare immutable baseCommit, not metadata-only lease commit; checkpoint contains atomic lease release.",
+  "fixtureFreezeSha256": "795cf8ac991225a74039aa05efd07dbd563f92631e3958c19b4917fde16100b8",
+  "managerUnchangedSha256": "f033c4ec66973211bad096cccdbbce63d724c02458711e3ff3a04f5227d9dc53",
+  "nativeSourceChanged": false,
+  "nativeVerificationSourceChanged": true,
+  "controllerImplementationChanged": false,
+  "historicalInterleavingProven": false,
+  "verification": {
+    "syntheticTAP": 9,
+    "controllerFullTAP": 77,
+    "nativeOfficialGroups": 20,
+    "unexpectedFailures": 0,
+    "hostedCI": "pending exact implementation SHA"
+  },
+  "next": "Source-only reusable protected capsule lifetime and explicit API allowlist; no importer."
+}

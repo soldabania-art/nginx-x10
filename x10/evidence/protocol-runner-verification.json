@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "suite": "independent-protocol-runner-verification",
+  "generatedAt": "2026-10-23T08:56:35.397Z",
+  "scope": "Direct evaluation of the real aggregate validator plus actual adapter harness CLI startup/interruption controls; no full functional suite run by this review artifact.",
+  "directValidator": {
+    "reviewType": "direct-validator-negative-controls",
+    "notEndToEndCLI": true,
+    "allMjsSha256": "69a00ef5b24c04454a11e7ec038401adcbb9d276672a1ba20f4135ac02403714",
+    "positiveControls": 2,
+    "cases": [
+      {
+        "kind": "mail-tls",
+        "name": "wrongSuite",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "mail-tls",
+        "name": "emptyCases",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "mail-tls",
+        "name": "failedCase",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "mail-tls",
+        "name": "unexpectedSkip",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "mail-tls",
+        "name": "missingHash",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "mail-tls",
+        "name": "changedBinary",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "mail-tls",
+        "name": "changedSource",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "mail-tls",
+        "name": "liveNative",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "mail-tls",
+        "name": "liveSocket",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "mail-tls",
+        "name": "cleanupError",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "adapters",
+        "name": "wrongSuite",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "adapters",
+        "name": "emptyCases",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "adapters",
+        "name": "failedCase",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "adapters",
+        "name": "unexpectedSkip",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "adapters",
+        "name": "missingHash",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "adapters",
+        "name": "changedBinary",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "adapters",
+        "name": "changedSource",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "adapters",
+        "name": "liveNative",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "adapters",
+        "name": "liveSocket",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      },
+      {
+        "kind": "adapters",
+        "name": "cleanupError",
+        "expected": "reject",
+        "observed": false,
+        "passed": true
+      }
+    ],
+    "passed": true
+  },
+  "adaptersCLI": {
+    "suite": "independent-adapter-review-controls",
+    "harnessSha256": "4e4f9599788c98ec1a4eb112b56363822539fc91a6990d5ded0efca1bb856f63",
+    "cases": [
+      {
+        "name": "invalid-native-executable",
+        "exitCode": 1,
+        "success": false,
+        "failure": {
+          "message": "native readiness unavailable"
+        }
+      },
+      {
+        "name": "SIGTERM-after-native-pid",
+        "exitCode": 1,
+        "success": false,
+        "cleanup": {
+          "errors": [],
+          "nativeStopped": true,
+          "nativeExit": {
+            "code": 0,
+            "signal": null
+          },
+          "signal": null,
+          "fixturesStopped": true,
+          "openSockets": 0,
+          "temporaryRootRemoved": true
+        },
+        "nativeAliveAfter": false,
+        "prefixPresentAfter": false,
+        "elapsedMs": 4160
+      }
+    ],
+    "passed": true
+  },
+  "passed": true,
+  "limitations": [
+    "The direct validator checks do not exercise the aggregate CLI or its outer binary-path comparison.",
+    "SIGTERM cleanup is one observed interruption point after native startup, not proof of every crash window.",
+    "TLS fixture interruption evidence is recorded separately in mail-tls-runner-verification.json."
+  ]
+}

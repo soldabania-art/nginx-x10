@@ -1,0 +1,770 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-service-https-20261025T092000Z",
+  "sourceBase": "06e4db650496390374ba318d920048bac1b4ecff",
+  "publicationParent": "3a889b68eae08545979944c14c7c8ae8c8507aec",
+  "implementationCommit": null,
+  "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+  "scope": "Partial real operated-service downstream HTTPS acceptance candidate with HTTP origin; unchanged full contract still requires both verified TLS legs",
+  "result": "Extended the acceptance harness with a private downstream TLS fixture and CA/hostname positive/negative probes plus exact cleanup receipt; new actual CI pending and HTTPS-origin service remains open.",
+  "evidence": "x10/evidence/g3-service-https.json",
+  "perFileLedger": "x10/review/g3-service-https-ledger.json",
+  "localAcceptance": "LOCAL_PARTIAL_DOWNSTREAM_HTTPS_CONTRACTS_FIXTURES_VERIFIED_EXACT_NEW_SERVICE_CI_PENDING",
+  "exactHostedAcceptance": "PENDING_EXACT_RESULTING_PARTIAL_DOWNSTREAM_HTTPS_SERVICE",
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "alphaRuntimeChanged": false,
+  "serviceRecipeChanged": false,
+  "preflightChanged": false,
+  "acceptanceHarnessChanged": true,
+  "dependencyCleanupReceiptProfileChanged": true,
+  "knownGuardsPreserved": true,
+  "releaseContractOrProfileChanged": false,
+  "releaseContractNarrowed": false,
+  "tlsMilestone": "PARTIAL_DOWNSTREAM_HTTPS_WITH_HTTP_ORIGIN",
+  "originTransport": "HTTP",
+  "downstreamTransportCandidate": "HTTPS",
+  "verifiedHttpsOriginCombinedServiceAccepted": false,
+  "fullBothLegsTlsContractAccepted": false,
+  "actualHistoricalCauseProven": false,
+  "serviceAccepted": false,
+  "productionAccepted": false,
+  "nextConcreteTask": "First reconcile exact resulting partial downstream HTTPS service implementation CI, including real nonroot automatic startup/restart, positive CA/hostname payload exchange, explicit wrong-CA and wrong-host refusals, bounded journals and complete owned TLS listener/PKI/service/private Node cleanup. This bounded milestone keeps an HTTP origin and does not close the release contract that requires both downstream HTTPS and verified HTTPS origin. Preserve all identity/cancellation/refusal guards and unknown-runtime retention. Verified HTTPS origin in the combined service, adverse recovery, package upgrade/rollback, permanent release, independent security and60-minute soak remain open; fullG3/Production V1 and semantic Continuum migration stay unaccepted.",
+  "hostedVerification": {
+    "state": "PENDING_EXACT_RESULTING_PARTIAL_DOWNSTREAM_HTTPS_SERVICE"
+  },
+  "newPurchases": false,
+  "productionDeployChanged": false,
+  "recordedAtUTC": "2026-10-25T09:43:36.998571Z",
+  "baselineImplementationCommit": "06e4db650496390374ba318d920048bac1b4ecff",
+  "baselineImplementationTree": "be08a30274218a27d30af025b70421d9d9365731",
+  "currentHostedVerificationReconciliation": {
+    "state": "EXACT_HTTP_MANAGER_RESTART_JOURNAL_AND_OWNED_CLEANUP_VERIFIED",
+    "implementationCommit": "06e4db650496390374ba318d920048bac1b4ecff",
+    "implementationTree": "be08a30274218a27d30af025b70421d9d9365731",
+    "evidence": "x10/evidence/g3-service-https.json",
+    "nativeRunIds": [
+      40179031343,
+      40179034096
+    ],
+    "nativeJobIds": [
+      121125939880,
+      121125936897
+    ],
+    "researchPRRunId": 40179034089,
+    "researchPRJobId": 121125938555,
+    "actualPRMergeCheckout": "b102dfe30912b901300919a656def1c90002eec3",
+    "bothExactNativeWorkflowsSuccessful": true,
+    "actualNonrootManagerObserved": true,
+    "httpNativeStartStopReadinessAndIOChecksPerRun": 3,
+    "actualManagerRestartCommands": 1,
+    "completedManagerRestarts": 1,
+    "oldLauncherExited": true,
+    "oldNativeGroupsAbsent": true,
+    "freshSession": true,
+    "freshInvocation": true,
+    "boundedJournalChecksPerRun": 3,
+    "journalRecordsObservedPerRun": 99,
+    "journalRunningMarkersPerRun": 3,
+    "allEightOwnedServiceCleanupConfirmations": true,
+    "appSocketsRemaining": 0,
+    "runtimeUnitRemoved": true,
+    "unitEnabled": false,
+    "privateDependencyRuntimeRemoved": true,
+    "dependencyCleanupReceiptPresent": true,
+    "bootstrapRuntimeRemoved": true,
+    "bootstrapTemporaryRootRemoved": true,
+    "primaryFailure": null,
+    "cleanupFailures": [],
+    "nativeGroupsPassed": 20,
+    "alphaTestsPassed": 62,
+    "recipeTestsPassed": 28,
+    "lifecycleContractPassed": 245,
+    "lifecycleContractRootSkipped": 1,
+    "journalContractPassed": 45,
+    "dependencyContractPassed": 51,
+    "researchPRActualSuites": [
+      21,
+      7,
+      27,
+      48
+    ],
+    "researchPushRuntimeSkipped": true,
+    "historicalA03RawRejectionConditionKnown": false,
+    "completeAuditHistoryAccepted": false,
+    "downstreamHttpsServiceAccepted": false,
+    "verifiedHttpsOriginServiceAccepted": false,
+    "combinedBothLegsTlsServiceAccepted": false,
+    "fullG3ServiceAccepted": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "workflowRerunsRequested": 0
+  },
+  "freshPriorCI": {
+    "sha256": "3634a13227b3db8e41ad4bd2027d0375852d25e769791e719842e8849d65fedb",
+    "bytes": 11994,
+    "report": {
+      "schemaVersion": 1,
+      "kind": "exact_http_restart_journal_prior_ci_reconciliation",
+      "observedAtUTC": "2026-10-25T09:24:26.191141+00:00",
+      "sourceCommit": "06e4db650496390374ba318d920048bac1b4ecff",
+      "sourceTree": "be08a30274218a27d30af025b70421d9d9365731",
+      "prMerge": {
+        "sha": "b102dfe30912b901300919a656def1c90002eec3",
+        "tree": "be08a30274218a27d30af025b70421d9d9365731",
+        "parents": [
+          "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+          "06e4db650496390374ba318d920048bac1b4ecff"
+        ]
+      },
+      "native": [
+        {
+          "runId": 40179031343,
+          "jobId": 121125939880,
+          "workflowConclusion": "success",
+          "artifactId": 12593791169,
+          "artifactBytes": 109993,
+          "artifactSha256": "52be8e69174bae5d76e9662da6da00f69a8f3c40b5bbf22ad9e025948a94a170",
+          "actualBuildCheckout": "06e4db650496390374ba318d920048bac1b4ecff",
+          "service": {
+            "ok": true,
+            "code": "basic_lifecycle_verified",
+            "phase": "complete",
+            "actualNonrootManagerObserved": true,
+            "readinessAutomated": true,
+            "nativeSessionsStarted": 3,
+            "nativeSessionsStopped": 3,
+            "explicitReadinessPasses": 3,
+            "proxyBodyChecks": 3,
+            "uploadChecks": 3,
+            "streamChecks": 3,
+            "managerRestartCommands": 1,
+            "completedManagerRestarts": 1,
+            "restartProof": {
+              "oldLauncherExited": true,
+              "oldNativeGroupsAbsent": true,
+              "freshSession": true,
+              "freshInvocation": true
+            },
+            "journalChecks": 3,
+            "journalRecordsObserved": 99,
+            "journalRunningMarkers": 3,
+            "cleanup": {
+              "managerStopped": true,
+              "launcherExited": true,
+              "nativeGroupsAbsent": true,
+              "listeningPortsClosed": true,
+              "controlSocketAbsent": true,
+              "runtimeLinkAbsent": true,
+              "appSocketsRemaining": 0,
+              "installationRemoved": true,
+              "temporaryRootRemoved": true
+            },
+            "runtimeUnitRemoved": true,
+            "unitEnabled": false,
+            "primaryFailure": null,
+            "cleanupFailures": [],
+            "automaticReadinessAccepted": false,
+            "serviceAccepted": false,
+            "productionAccepted": false
+          },
+          "privateNodeRemoved": true,
+          "bootstrapRuntimeRemoved": true,
+          "bootstrapTemporaryRootRemoved": true,
+          "nativeGroups": {
+            "pass": 20,
+            "total": 20
+          },
+          "alphaTAP": {
+            "tests": 62,
+            "pass": 62,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "lifecycleContractTAP": {
+            "tests": 246,
+            "pass": 245,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 1,
+            "todo": 0
+          },
+          "journalContractTAP": {
+            "tests": 45,
+            "pass": 45,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "dependencyTAP": {
+            "tests": 51,
+            "pass": 51,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "recipeTAP": {
+            "tests": 28,
+            "pass": 28,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "official": {
+            "files": 35,
+            "filesPassed": 34,
+            "filesSkipped": 1,
+            "filesFailed": 0,
+            "assertions": {
+              "run": 1131,
+              "passed": 1105,
+              "failed": 0,
+              "skipped": 25,
+              "todoFailed": 1,
+              "todoPassed": 0
+            }
+          }
+        },
+        {
+          "runId": 40179034096,
+          "jobId": 121125936897,
+          "workflowConclusion": "success",
+          "artifactId": 12593461494,
+          "artifactBytes": 109810,
+          "artifactSha256": "abb659a3ca5d67be86773170005374fd44bbf6a2903a471f5eb606fda8af839d",
+          "actualBuildCheckout": "b102dfe30912b901300919a656def1c90002eec3",
+          "service": {
+            "ok": true,
+            "code": "basic_lifecycle_verified",
+            "phase": "complete",
+            "actualNonrootManagerObserved": true,
+            "readinessAutomated": true,
+            "nativeSessionsStarted": 3,
+            "nativeSessionsStopped": 3,
+            "explicitReadinessPasses": 3,
+            "proxyBodyChecks": 3,
+            "uploadChecks": 3,
+            "streamChecks": 3,
+            "managerRestartCommands": 1,
+            "completedManagerRestarts": 1,
+            "restartProof": {
+              "oldLauncherExited": true,
+              "oldNativeGroupsAbsent": true,
+              "freshSession": true,
+              "freshInvocation": true
+            },
+            "journalChecks": 3,
+            "journalRecordsObserved": 99,
+            "journalRunningMarkers": 3,
+            "cleanup": {
+              "managerStopped": true,
+              "launcherExited": true,
+              "nativeGroupsAbsent": true,
+              "listeningPortsClosed": true,
+              "controlSocketAbsent": true,
+              "runtimeLinkAbsent": true,
+              "appSocketsRemaining": 0,
+              "installationRemoved": true,
+              "temporaryRootRemoved": true
+            },
+            "runtimeUnitRemoved": true,
+            "unitEnabled": false,
+            "primaryFailure": null,
+            "cleanupFailures": [],
+            "automaticReadinessAccepted": false,
+            "serviceAccepted": false,
+            "productionAccepted": false
+          },
+          "privateNodeRemoved": true,
+          "bootstrapRuntimeRemoved": true,
+          "bootstrapTemporaryRootRemoved": true,
+          "nativeGroups": {
+            "pass": 20,
+            "total": 20
+          },
+          "alphaTAP": {
+            "tests": 62,
+            "pass": 62,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "lifecycleContractTAP": {
+            "tests": 246,
+            "pass": 245,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 1,
+            "todo": 0
+          },
+          "journalContractTAP": {
+            "tests": 45,
+            "pass": 45,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "dependencyTAP": {
+            "tests": 51,
+            "pass": 51,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "recipeTAP": {
+            "tests": 28,
+            "pass": 28,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "official": {
+            "files": 35,
+            "filesPassed": 34,
+            "filesSkipped": 1,
+            "filesFailed": 0,
+            "assertions": {
+              "run": 1131,
+              "passed": 1105,
+              "failed": 0,
+              "skipped": 25,
+              "todoFailed": 1,
+              "todoPassed": 0
+            }
+          }
+        }
+      ],
+      "research": {
+        "prRunId": 40179034089,
+        "prJobId": 121125938555,
+        "conclusion": "success",
+        "nodeVersion": "22.23.3",
+        "suitePasses": [
+          21,
+          7,
+          27,
+          48
+        ],
+        "pushRunId": 40179031373,
+        "pushRuntimeJobId": 121125945838,
+        "pushRuntimeConclusion": "skipped"
+      },
+      "priorActualAuditReferences": {
+        "native": {
+          "bytes": 29244,
+          "sha256": "738da653f475aad7923554770e6e1550e9c4fc1411f55ba19c496416cf3928b1",
+          "proofCount": 57
+        },
+        "security": {
+          "bytes": 21968,
+          "sha256": "6ead955e9c5b39f9d7313de915646d1a648df4e29585f4351997aab5ad3c4c9e",
+          "proofCount": 102
+        },
+        "research": {
+          "bytes": 7837,
+          "sha256": "ab7fb3666265f8d990c399b8b236898086d564b07005f460cdbd0409b434da07",
+          "proofCount": 14
+        }
+      },
+      "proofCount": 40,
+      "proofs": [
+        {
+          "name": "fresh exact merge tree",
+          "passed": true
+        },
+        {
+          "name": "fresh ordered merge parents",
+          "passed": true
+        },
+        {
+          "name": "40179031343 exact workflow completed success attempt1",
+          "passed": true
+        },
+        {
+          "name": "40179031343 actual native job all steps success",
+          "passed": true
+        },
+        {
+          "name": "40179031343 reused approved ZIP fresh size digest head",
+          "passed": true
+        },
+        {
+          "name": "40179031343 actual source checkout",
+          "passed": true
+        },
+        {
+          "name": "40179031343 successful automatic nonroot service",
+          "passed": true
+        },
+        {
+          "name": "40179031343 three observed HTTP native and IO phases",
+          "passed": true
+        },
+        {
+          "name": "40179031343 one completed manager restart",
+          "passed": true
+        },
+        {
+          "name": "40179031343 all four exact restart confirmations",
+          "passed": true
+        },
+        {
+          "name": "40179031343 three bounded attributed journal observations",
+          "passed": true
+        },
+        {
+          "name": "40179031343 all eight cleanup true and app0 unitremoved",
+          "passed": true
+        },
+        {
+          "name": "40179031343 private Node and bootstrap cleanup complete",
+          "passed": true
+        },
+        {
+          "name": "40179031343 no primary or cleanup errors",
+          "passed": true
+        },
+        {
+          "name": "40179031343 broad acceptance false",
+          "passed": true
+        },
+        {
+          "name": "40179031343 native20 actual pass",
+          "passed": true
+        },
+        {
+          "name": "40179031343 actual independent contract counts",
+          "passed": true
+        },
+        {
+          "name": "40179031343 hosted official1105PASS25SKIP1TODO",
+          "passed": true
+        },
+        {
+          "name": "40179034096 exact workflow completed success attempt1",
+          "passed": true
+        },
+        {
+          "name": "40179034096 actual native job all steps success",
+          "passed": true
+        },
+        {
+          "name": "40179034096 reused approved ZIP fresh size digest head",
+          "passed": true
+        },
+        {
+          "name": "40179034096 actual source checkout",
+          "passed": true
+        },
+        {
+          "name": "40179034096 successful automatic nonroot service",
+          "passed": true
+        },
+        {
+          "name": "40179034096 three observed HTTP native and IO phases",
+          "passed": true
+        },
+        {
+          "name": "40179034096 one completed manager restart",
+          "passed": true
+        },
+        {
+          "name": "40179034096 all four exact restart confirmations",
+          "passed": true
+        },
+        {
+          "name": "40179034096 three bounded attributed journal observations",
+          "passed": true
+        },
+        {
+          "name": "40179034096 all eight cleanup true and app0 unitremoved",
+          "passed": true
+        },
+        {
+          "name": "40179034096 private Node and bootstrap cleanup complete",
+          "passed": true
+        },
+        {
+          "name": "40179034096 no primary or cleanup errors",
+          "passed": true
+        },
+        {
+          "name": "40179034096 broad acceptance false",
+          "passed": true
+        },
+        {
+          "name": "40179034096 native20 actual pass",
+          "passed": true
+        },
+        {
+          "name": "40179034096 actual independent contract counts",
+          "passed": true
+        },
+        {
+          "name": "40179034096 hosted official1105PASS25SKIP1TODO",
+          "passed": true
+        },
+        {
+          "name": "fresh actual research21/27/48",
+          "passed": true
+        },
+        {
+          "name": "fresh full log process7 Node22 and actual merge",
+          "passed": true
+        },
+        {
+          "name": "fresh research PR success push runtime skip",
+          "passed": true
+        },
+        {
+          "name": "native frozen actual audit hash and proofs",
+          "passed": true
+        },
+        {
+          "name": "security frozen actual audit hash and proofs",
+          "passed": true
+        },
+        {
+          "name": "research frozen actual audit hash and proofs",
+          "passed": true
+        }
+      ],
+      "historicalA03RawRejectionConditionKnown": false,
+      "wholeG3Accepted": false,
+      "productionAccepted": false,
+      "limits": [
+        "Observed exact HTTP-only basic service/restart/journal path and complete owned cleanup; not downstream HTTPS, both-leg TLS, adverse restart, all G3 or V1.",
+        "Original a03 journal_response_invalid failure and unknown rejected raw condition remain immutable history; formatter compatibility does not reconstruct its cause.",
+        "Push research scope-only success does not constitute protocol PASS. Separate counts are not summed into one test total.",
+        "No raw journal data, UUIDs, PIDs, paths, session material or logs published. No redownload, rerun, tracked edits, manager action or ref update."
+      ]
+    }
+  },
+  "immutablePriorEvidence": {
+    "commit": "06e4db650496390374ba318d920048bac1b4ecff",
+    "path": "x10/evidence/g3-journal-format.json",
+    "sha256": "d4c14c08bfdbd71671b3a6400fcaedfc7184ee268ad1c568aabefa6c0fd144eb"
+  },
+  "sourceBindings": {
+    "x10/service/lifecycle-check.mjs": {
+      "beforeSha256": "747c0e9a4a4fbacb76c83406b198f90efebcd1bb38e3e34d90b5acd3a666dbbf",
+      "afterSha256": "60454daf9c04733bd25d2ac64c2688130169b37c24dfa3049731bcbfd726c226",
+      "bytes": 62084
+    },
+    "x10/service/lifecycle-check.test.mjs": {
+      "beforeSha256": "53e38cdc1084e80374eaaebfbcaab893bfa6be699ab7cf08b8b26c813baa5cb6",
+      "afterSha256": "00b93802f4b3afeb2938fc46085f06194d14c21fecddfd0d5e5add1f320f48e2",
+      "bytes": 79372
+    },
+    "x10/service/tls-fixture.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "78e87e59bbf63f1a9f714c9f624050aeccc442b3a52946eb22c51a40e382fc7a",
+      "bytes": 12822
+    },
+    "x10/service/tls-fixture.test.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "7bcb6308a4a505ea5fc0ccd3e0d482fbacc74abf51060fd2be028e66cfb91ec4",
+      "bytes": 11080
+    },
+    "x10/service/verified-node.mjs": {
+      "beforeSha256": "93800a2a815c7e0a59deba00c61e35f058a10edceace90dd3f694a62de1b037c",
+      "afterSha256": "c68897b99a0b43ed085609b899c8b21ef2bddedb433d17376608a8fc9f3568d7",
+      "bytes": 23143
+    },
+    "x10/service/verified-node.test.mjs": {
+      "beforeSha256": "8f76bdea8ab43143b428b147ec9b3fef2813dc5d20c0af1011b938d26e997134",
+      "afterSha256": "7a69720a29629e8f71b86bb354ac64bfba47fe16d6be8d6be8c0461a5e3337bb",
+      "bytes": 16926
+    },
+    ".github/workflows/x10-native.yml": {
+      "beforeSha256": "cb36808e88fd5ea7a2ffe81c6ea2da8569611ecb02224a146c75127d1a997883",
+      "afterSha256": "0091e7c2e9005c3640dac0c70535972bba93295b433b3b449963f1988301bdde",
+      "bytes": 13145
+    }
+  },
+  "releaseContractUnchanged": {
+    "path": "x10/release/RELEASE-CONTRACT.md",
+    "sha256": "fce36f6ff9575e50042d473eea52a361730216a2155da2c687feea7b9d482d6a"
+  },
+  "releaseProfileUnchanged": {
+    "path": "x10/release/profile.json",
+    "sha256": "9604e00e0dfb68e437dbc967049d3b6816580a8a1d75d96387e84169cb4f9457"
+  },
+  "localValidation": {
+    "node": "v24.22.1",
+    "uid": 0,
+    "combinedLocalTAP": {
+      "tests": 384,
+      "pass": 384,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "separateSuites": {
+      "lifecycleContracts": 267,
+      "journalContracts": 45,
+      "tlsFixtureControls": 16,
+      "dependencyReceiptControls": 56
+    },
+    "combinedStderrEmpty": true,
+    "rootIntegrationProofs": 9,
+    "workflowStructuralProofs": 7,
+    "independentReviewProofs": 135,
+    "independentReviewComponents": {
+      "actualOwnedNodeHttpsControls": 32,
+      "harnessReceiptControls": 72,
+      "lateCallbackControls": 9,
+      "authorityContractPartialPkiControls": 22
+    },
+    "independentReviewBlockers": [],
+    "harnessPreservedGuardByteProofs": 19,
+    "frozenFileComparisons": {
+      "total": 521,
+      "nativeAlphaControlLicenseFiles": 513,
+      "otherAcceptanceContractFiles": 8
+    },
+    "actualPrivateTestPkiFactoryExecutedLocally": true,
+    "actualNodeLoopbackTls12And13FixtureExecutedLocally": true,
+    "actualLocalCaAndHostnameRefusalsExecuted": true,
+    "actualLocalLeafDerCheckExecuted": true,
+    "actualFixturePostAndStreamPayloadChecked": true,
+    "ownNodeFixtureSocketsAndTemporaryRootCleanupConfirmed": true,
+    "actualNonrootManagedServiceExecutedLocally": false,
+    "nativeAlphaResearchRuntimeRerunLocally": false,
+    "historicalA03RawCauseKnown": false,
+    "exactNewManagedServiceCI": "PENDING",
+    "newRequiredObservationUnits": {
+      "serviceSessions": 3,
+      "managerRestarts": 1,
+      "boundedJournalChecks": 3,
+      "downstreamHttpsSessionChecks": 3,
+      "tls12VersionSpecificGetChecks": 3,
+      "tls13VersionSpecificGetChecks": 3,
+      "positiveTlsBodyRequests": 6,
+      "positiveTlsUploadRequests": 3,
+      "positiveTlsStreamRequests": 3,
+      "verifiedPositiveCertificateRequests": 12,
+      "wrongCaRefusals": 3,
+      "wrongHostnameRefusals": 3,
+      "versionGetCountsAreAllHandshakeCounts": false,
+      "countsAreIndependentInstallations": false
+    },
+    "tlsMilestone": "PARTIAL_DOWNSTREAM_HTTPS_WITH_HTTP_ORIGIN",
+    "upstreamHttpsCombinedServiceAccepted": false,
+    "fullBothLegsTlsContractAccepted": false,
+    "releaseContractOrProfileChanged": false
+  },
+  "reportReferences": {
+    "harness": {
+      "sha256": "7640e3ea1d54cc7d81dc0dfbbfce9b9ffe430d792395f9404f36346056030826",
+      "bytes": 2950,
+      "summary": "267/267 lifecycle contracts and19 preserved-guard byte proofs; current-attempt TLS-port closure reset strengthened; no actual local user manager."
+    },
+    "tlsFixture": {
+      "sha256": "2c3a5ebe62db3642a43ea8223130ff7defa739adfc14127d7355041787bebd1c",
+      "bytes": 5453,
+      "summary": "Final16/16 mixed PKI/ownedNodeHTTPS/event-order controls. Initial stronger16 control had15PASS1FAIL duplicate cleanup on late callback, no late success; settled guards fixed it without weakening the assertion. Full sanitized validation history retained."
+    },
+    "receipt": {
+      "sha256": "97acffeb890e77cf8352ce637ddb9c86df68dc74672933ad4561be0463f45af0",
+      "bytes": 3462,
+      "summary": "56/56 cleanup receipt controls; three downstream TLS sessions with version-specific GET/refusal/payload proofs and TLS-port closure required. Final coordinator pin is separately bound by the postpin integration report."
+    },
+    "security": {
+      "sha256": "9d8c90e8e9e0b47bc856e4de690df7dab994100a987e366f5278e08074f99e34",
+      "bytes": 22725,
+      "summary": "135/135 independent proofs with no blockers:32 real owned NodeHTTPS,72 harness/receipt,9 latecallbacks,22 authority/contract/partialPKI. Actual nonroot managed service and both-leg TLS contract remain unaccepted."
+    },
+    "runtimeCompatibility": {
+      "sha256": "9bd153774207db42c7f0c9318fdaead3c6d71ce473b557da09b5dc75220d1fa7",
+      "bytes": 98702,
+      "summary": "521 unchanged file comparisons:513 native/alpha/control/license and8 other acceptance/contract files; no new native aggregate or runtime replay claimed."
+    },
+    "integration": {
+      "sha256": "7ab5e8e5cd964c9f9d7acaccebea37b8a287551bf955a40c1594f97961395c2d",
+      "bytes": 2531,
+      "summary": "Actual root postpin combined384PASS, zeroFAIL/SKIP/cancel/TODO and stderr empty;267 lifecycle+45journal+16TLSfixture+56dependency; nine structural/frozen-source/pin/contract proofs."
+    },
+    "workflow": {
+      "sha256": "4b96ff0747bf2474e403f1528f0b72511ca41f492880940afa6496380dff8e64",
+      "bytes": 492,
+      "summary": "Seven independent coordinator workflow/sourcepin/YAML/permission/timeout/order checks; prior bytes restore by removing only one TLS contract test step and one checker pin replacement."
+    }
+  },
+  "validationHistory": [
+    {
+      "stage": "first15testdraft",
+      "counts": {
+        "pass": 15,
+        "fail": 0
+      },
+      "boundary": "Original timeout draft emitted an unattached response rather than invoking the real late response callback; superseded by stronger control."
+    },
+    {
+      "stage": "strengthened16testcontrol",
+      "counts": {
+        "pass": 15,
+        "fail": 1
+      },
+      "failedCase": "Timeout followed by actually delivered late response callback caused a second destroy of the already closed owned request (mock count2expected1).",
+      "latePromiseSuccessObserved": false,
+      "actualManagerOrNativeFailureObserved": false,
+      "rawTAPPublished": false,
+      "privateTAPBytes": 4061,
+      "privateTAPSha256": "72191440210f1b321bbcf8ba47583e538d16341dd4d5e70722f3d06e3623f27d"
+    },
+    {
+      "stage": "final16tests",
+      "counts": {
+        "tests": 16,
+        "pass": 16,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "fix": "Early settled callback guard plus settled response/error/body/timer guards; late idle callback remains inert. The strict event-order assertion was retained."
+    }
+  ],
+  "temporaryTeam": {
+    "coordinators": 1,
+    "helpers": 6,
+    "maximumConfiguredHelpersUnchanged": 6,
+    "helperScopes": [
+      "actual service HTTPS acceptance harness and controls",
+      "private test PKI and bounded TLS probes",
+      "strict dependency cleanup receipt profile",
+      "independent ownership/TLS/cleanup review",
+      "exact prior and resulting CI evidence",
+      "checkpoint/per-file ledger preparation"
+    ],
+    "integrationAndPublication": "Coordinator only",
+    "permanentProcessesPromised": false
+  },
+  "baselineCounterexampleBoundary": "Prior exact06e4 accepted the scoped HTTP-only three-session restart/journal path. It did not exercise downstream HTTPS, wrong-CA/wrong-host service probes or TLS-port/PKI cleanup. The new controls must refuse missing TLS proof/cleanup without broadening authority; earlier raw a03 rejection cause stays unknown.",
+  "candidateBehavior": "Use existing installed management to prepare private loopback downstream HTTPS and require positive CA/hostname payload exchange plus wrong-CA/wrong-host refusals across the service lifecycle. Keep HTTP origin explicit, exact live identities/cancellation/journal/retirement checks and strict TLS-port/PKI/service/private Node cleanup; full contract/profile unchanged and both-leg TLS service unaccepted.",
+  "historicalObservationRetained": "Both exact06e4 native workflows completed success with all actual required steps. Each real nonroot HTTP service report observed three native start/stop/readiness/proxy/upload/stream sessions, one manager restart, all four exact retirement/replacement proofs and three bounded journal checks with99records/3running markers. All eight owned cleanup confirmations and separate private Node/bootstrap removal were true. This is the scoped HTTP service restart/journal path, not downstream HTTPS, verified HTTPS origin or the full two-leg TLS contract. The earlier a03 journal_response_invalid raw rejected condition remains unknown and its failure is preserved in history. Separate native20/alpha62/recipe28/lifecycle245PASS1rootSKIP/journal45/dependency51 passed; research PR actually ran21/7/27/48 while push runtime was skipped.",
+  "newWorkflowReruns": 0,
+  "actualServiceStartedLocally": false,
+  "privateCoordinatorRevisionPublished": false,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "privateKeysPublished": false,
+  "limitations": [
+    "First reconcile exact resulting partial downstream HTTPS service implementation CI, including real nonroot automatic startup/restart, positive CA/hostname payload exchange, explicit wrong-CA and wrong-host refusals, bounded journals and complete owned TLS listener/PKI/service/private Node cleanup. This bounded milestone keeps an HTTP origin and does not close the release contract that requires both downstream HTTPS and verified HTTPS origin. Preserve all identity/cancellation/refusal guards and unknown-runtime retention. Verified HTTPS origin in the combined service, adverse recovery, package upgrade/rollback, permanent release, independent security and60-minute soak remain open; fullG3/Production V1 and semantic Continuum migration stay unaccepted.",
+    "This milestone uses downstream HTTPS and an HTTP origin. The unchanged release contract/profile still requires both downstream HTTPS and verified HTTPS origin before full TLS/G3/V1 acceptance.",
+    "Local fixture/PKI/client refusal controls do not accept a real nonroot TLS service or its restart/cleanup path. Exact resulting CI remains required.",
+    "The accepted prior HTTP restart/journal scope does not establish the historical raw a03 rejection cause. All older adverse and scoped-success evidence is preserved."
+  ]
+}

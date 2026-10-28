@@ -1,0 +1,1451 @@
+{
+  "schemaVersion": 1,
+  "kind": "supported-operator-path-boundary-review-and-archive-type-candidate",
+  "state": "ARCHIVE_IDENTITY_TYPE_FIX_LOCAL_VERIFIED_HOSTED_PENDING",
+  "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+  "publicationParent": "25d9b99b190b9dbfeb3d2e44b63e8a1846335277",
+  "evidence": "x10/evidence/g5-supported-path-review.json",
+  "reviewDocument": "x10/release/SUPPORTED-PATH-REVIEW.md",
+  "perFileLedger": "x10/review/g5-supported-path-review-ledger.json",
+  "sourceBindings": {
+    "x10/release/verify-alpha-archive.mjs": {
+      "bytes": 9367,
+      "sha256": "60b6d213c4d6b68db4a63d34ebf9a40f713fbd996ce298d4d65c2429541c0e12"
+    },
+    "x10/release/verify-alpha-archive.test.mjs": {
+      "bytes": 15494,
+      "sha256": "cd55e02f5a09e1c4af23d02815ef60bd5f81962dbdde2045b4a8850143b97d98"
+    },
+    "x10/alpha/README.md": {
+      "bytes": 53564,
+      "sha256": "1dbc81f2bab4096bd266133c41eb9eb7e77c109dffd2c9567e54a8f96e1dde75"
+    },
+    "x10/release/README.md": {
+      "bytes": 10626,
+      "sha256": "b451fbab47066912cc2d2fb1ca8e89e4ba2707bb007410eb85c1c3e1fbcb6513"
+    },
+    "x10/release/SUPPORTED-PATH-REVIEW.md": {
+      "bytes": 6163,
+      "sha256": "bd3deab1cd5a8224ebaafadf0360b9574d0a80924cf787689982ab9a49353d75"
+    },
+    "x10/review/controller-input-counterexample.mjs": {
+      "bytes": 5973,
+      "sha256": "f7b4527bc08bfc8dd3751fe5b9b034db0bd5dbc7c9d30b330637d3acbb086be2"
+    },
+    "x10/review/controller-loader-counterexample.mjs": {
+      "bytes": 1876,
+      "sha256": "f545c20a3f24f2f914252a405d6d3e411837717f86d6c34efe0c4158b8fe5d8a"
+    },
+    "x10/review/alpha-session-capacity-counterexample.mjs": {
+      "bytes": 4982,
+      "sha256": "ce2dfb9292d5321f9c205589e65035ecb8d9aa1086b7b748dae3bab3b1ee7abb"
+    }
+  },
+  "candidateArchiveTAP": {
+    "tests": 122,
+    "pass": 122,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "newArchiveControlsIncludedOnce": 65,
+  "priorArchiveControls": 57,
+  "baselineMalformedArchiveCases": 4,
+  "independentArchivePureHeldouts": 61,
+  "physicalFixturesExecuted": 0,
+  "runtimeOperatorNativeBytesChanged": false,
+  "workflowChanged": false,
+  "fullG4Accepted": false,
+  "fullG5Accepted": false,
+  "fullG7Accepted": false,
+  "productionAccepted": false,
+  "scope": "Source/pure/tempfile review of named supported operator boundaries; no exhaustive native security audit or actual incident replay.",
+  "reviews": {
+    "alpha": {
+      "schemaVersion": 1,
+      "kind": "independent-alpha-supported-path-boundary-review",
+      "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+      "sourceBindings": {
+        "AGENTS.md": {
+          "bytes": 6188,
+          "sha256": "7a90d27e4f1cd92a3adc4aacc8dd9eeae62f6cf0ca2b21b42cf4fc696a25ddd9"
+        },
+        "x10/continuation-2026-10-24/CONTINUATION-PROMPT.md": {
+          "bytes": 52891,
+          "sha256": "b0f641ee589b2355a5a0c587183bc468815edb40692f513efd4b0a691c408d02"
+        },
+        "x10/continuation-2026-10-24/CURRENT-STATE.md": {
+          "bytes": 21935,
+          "sha256": "c99c01243bea87d180b99e5aff4d5c7d215f91708092521c73b1c67401b06341"
+        },
+        "x10/alpha/cli.mjs": {
+          "bytes": 87522,
+          "sha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa"
+        },
+        "x10/alpha/runtime.mjs": {
+          "bytes": 7540,
+          "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51"
+        },
+        "x10/control/manager.mjs": {
+          "bytes": 47989,
+          "sha256": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822"
+        },
+        "x10/test/alpha.test.mjs": {
+          "bytes": 114990,
+          "sha256": "1314f97f176a1fccf75a79d664aed7f777ce401873f795b0a801cc9c9844cedf"
+        },
+        "x10/service/INCIDENT-RUNBOOK.md": {
+          "bytes": 29741,
+          "sha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+        },
+        "x10/release/verify-alpha-archive.mjs": {
+          "bytes": 9209,
+          "sha256": "df213e76264fd7048abe5fdb790c158f7758cac7806d186db9b0fdf73d68094a"
+        }
+      },
+      "scope": "Trusted nonroot privateprefix Linux operator profile; read-only source review plus pure/tempfile controls, not complete G5/physical acceptance.",
+      "boundaryRows": [
+        {
+          "id": "canonical-owned-private-prefix",
+          "outcome": "Refuse symlink/canonical-alias/owner/immutable-mode mismatch; require trusted safe ancestors and same-UID exclusivity",
+          "anchor": "x10/alpha/cli.mjs:630-655",
+          "existingControl": "reject-existing-prefix-symlink-ancestor-unsafe-port-and-mismatched-build"
+        },
+        {
+          "id": "full-immutable-payload",
+          "outcome": "Schema2 requires complete exact immutable names/hash/size/mode/nlink1 and safe fixed directories; source CLI itself remains sameUID trust",
+          "anchor": "x10/alpha/cli.mjs:630-655",
+          "existingControl": "installed recipe command refuses fullprofile helperHardlink"
+        },
+        {
+          "id": "dependency-drift",
+          "outcome": "New/mutating operations refuse drift; allowDrift subset is inspection/guardedstop/uninstall, never source lifecycle repair",
+          "anchor": "x10/alpha/cli.mjs:988-1014",
+          "existingControl": "immutable-tamper-refused-and-library-drift-does-not-block-exact-stop"
+        },
+        {
+          "id": "backup",
+          "outcome": "Every session prepared/stopped; exact confirmed revision; HTTP-only bounded canonical private0600 backup; no running/faulted export",
+          "anchor": "x10/alpha/cli.mjs:165-300",
+          "existingControl": "x10/alpha/backup.test.mjs"
+        },
+        {
+          "id": "restore",
+          "outcome": "Fresh absentprefix, preserved original ports/input, newIDs/nullbinding/history; overrides refuse; native-t is actual execution not parsing-only",
+          "anchor": "x10/alpha/cli.mjs:558-624",
+          "existingControl": "extracted bundle proxies an independent app and preserves application readiness across config and sessions"
+        },
+        {
+          "id": "staging",
+          "outcome": "Distinct payloads pinned, source snapshot exact before/after, fresh unboundtarget, own temporary cleanup; nativeabsence remains physicalgate",
+          "anchor": "x10/alpha/cli.mjs:356-556",
+          "existingControl": "x10/alpha/stage.test.mjs"
+        },
+        {
+          "id": "prepare-run",
+          "outcome": "Stopped-sourceonly, clean confirmed state, new session, bound256; partial publication failures require inspection",
+          "anchor": "x10/alpha/cli.mjs:703-718",
+          "existingControl": "x10/alpha/prepare-run.test.mjs"
+        },
+        {
+          "id": "stop",
+          "outcome": "Exact master PID/ns/UID/exe/startticks/cmd/pidfile beforeSIGQUIT; bounded drain, no force; verified-to-signal race persists",
+          "anchor": "x10/alpha/cli.mjs:793-810",
+          "existingControl": "x10/test/alpha-runtime.test.mjs"
+        },
+        {
+          "id": "faulted-orphan",
+          "outcome": "No automatic restart/stop/uninstall/clear lifecycle; preserve original prefix INPLACE, UNKNOWN=>STOP_UNRESOLVED",
+          "anchor": "x10/alpha/cli.mjs:688-701,793-810",
+          "existingControl": "actual alpha masterSIGKILL orphan stillserving fixture, source only reviewed"
+        },
+        {
+          "id": "uninstall",
+          "outcome": "Every session absentclean; unknownfiles/revisions/specialfiles/symlinks refuse; ownedquarantineidentity before removal",
+          "anchor": "x10/alpha/cli.mjs:813-855",
+          "existingControl": "uninstall-preserves-extra-and-symlink-data-then-cleans-known-stopped-install"
+        },
+        {
+          "id": "archive",
+          "outcome": "Digest before decompress; bounded exacttarprofile/modes/no links; no extract/execute/authentication; cross-type semantic guards separately under review",
+          "anchor": "x10/release/verify-alpha-archive.mjs",
+          "existingControl": "x10/release/verify-alpha-archive.test.mjs"
+        }
+      ],
+      "localExistingSelectedTAP": {
+        "tests": 394,
+        "pass": 394,
+        "fail": 0,
+        "skip": 0,
+        "todo": 0,
+        "cancelled": 0,
+        "exitCode": 0,
+        "command": "node --test --test-reporter=tap x10/release/verify-alpha-archive.test.mjs x10/alpha/backup.test.mjs x10/alpha/stage.test.mjs x10/alpha/package-info.test.mjs x10/alpha/prepare-run.test.mjs x10/test/alpha-runtime.test.mjs",
+        "includesOnlyPureTempfileSyntheticProcOrchestration": true,
+        "notPhysicalRuntimeAcceptance": true,
+        "scope": "Baseline/existing-suite inspection before archive candidate freeze; includes57 baseline archive controls, NOT final candidate aggregate. Do not add to candidate122 or independent61 due overlap.",
+        "finalCandidateAggregate": false,
+        "archiveBaselineControlsIncluded": 57,
+        "remainingUnchangedOtherControls": 337,
+        "testVersionAmbiguityConservativelyPreserved": true
+      },
+      "findings": [
+        {
+          "id": "session-inventory-capacity-mismatch",
+          "state": "REPRODUCED_PURE_SOURCE_CONTRACT_BUG_OPEN",
+          "severityScope": "Lifecycle availability/recovery boundary, not exploit claim",
+          "facts": "prepareRun permits255-to256sessions but inventory capped4096 cannot traverse minimum4353entries for256 initializedsessions; real stopped sessions retain additional files. Staging/uninstall depend on inventory.",
+          "counterexample": {
+            "kind": "alpha-inventory-session-bound-counterexample",
+            "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+            "controls": 3,
+            "pass": 3,
+            "checks": [
+              {
+                "name": "200-minimal-sessions-within-current-inventory-bound",
+                "sessions": 200,
+                "minimumTreeEntries": 3401,
+                "seen": 3401,
+                "ok": true,
+                "returned": 3401
+              },
+              {
+                "name": "documented256-minimal-sessions-exceed-inventory-bound",
+                "sessions": 256,
+                "minimumTreeEntries": 4353,
+                "seen": 4097,
+                "ok": false,
+                "code": "inventory_limit"
+              },
+              {
+                "name": "prepareRun-accepts255-to256-source-sessions",
+                "sessions": 256,
+                "published": true,
+                "observationsVirtual": true
+              }
+            ],
+            "minimalPerSessionEntries": 17,
+            "virtualOnly": true,
+            "physicalFixturesExecuted": 0,
+            "networkFixturesExecuted": 0,
+            "signalsSent": 0,
+            "limits": [
+              "Preparation controller/native observations are virtual; production helper control flow and inventory walker are source-extracted unchanged.",
+              "This reproduces inconsistent finite supported bounds, not an actual256-native-session installation or exploit."
+            ]
+          },
+          "disposition": "Separate bounded implementation task; do not blindly raise inventory cap since legitimate revision accumulation also consumes it. Preserve existing states and refuse before publishing uninspectable new state or align accounting. Actual supported-host validation remains required."
+        },
+        {
+          "id": "packed-readme-runbook-link",
+          "state": "DOC_FIX_IMPLEMENTED_REVIEWED",
+          "facts": "Fixed bundle includes alpha README but not incident runbook; former relative link unavailable after extraction. Changed to exact canonical34f source URL and explicit not-shipped/not-permanent-release caveat.",
+          "changedFile": "x10/alpha/README.md",
+          "afterSha256": "1dbc81f2bab4096bd266133c41eb9eb7e77c109dffd2c9567e54a8f96e1dde75"
+        },
+        {
+          "id": "unsafe-ancestor-hardening",
+          "state": "OUTSIDE_DECLARED_SAFE_ANCESTOR_PROFILE_NOT_VULNERABILITY_PROVEN",
+          "facts": "General install checks immediate parent; incident profile requires safe canonical ancestors. Do not claim protection against malicious sameUID or untrusted writable ancestor replacement."
+        }
+      ],
+      "knownLimits": [
+        "Unsigned checksums are consistency only.",
+        "Node/CLI itself and PATH/dependency tools require trusted operator environment.",
+        "No OS process fence or PID-to-signal race elimination.",
+        "No faulted prefix disposal procedure.",
+        "No TLS/application database/externalfile backup.",
+        "No rollback of served request side effects.",
+        "No fullG4/G5/V1 or actualorphanincident acceptance from this review."
+      ],
+      "activities": {
+        "productSourceEdits": 0,
+        "assignedDocEdits": 1,
+        "physicalFixturesExecuted": 0,
+        "networkFixturesExecuted": 0,
+        "systemdQueries": 0,
+        "signalsSent": 0,
+        "remoteWrites": 0
+      },
+      "archiveCandidateReview": {
+        "state": "INDEPENDENT_PURE_REVIEW_PASS",
+        "sourceBindings": {
+          "x10/release/verify-alpha-archive.mjs": {
+            "bytes": 9367,
+            "sha256": "60b6d213c4d6b68db4a63d34ebf9a40f713fbd996ce298d4d65c2429541c0e12"
+          },
+          "x10/release/verify-alpha-archive.test.mjs": {
+            "bytes": 15494,
+            "sha256": "cd55e02f5a09e1c4af23d02815ef60bd5f81962dbdde2045b4a8850143b97d98"
+          },
+          "x10/alpha/README.md": {
+            "bytes": 53564,
+            "sha256": "1dbc81f2bab4096bd266133c41eb9eb7e77c109dffd2c9567e54a8f96e1dde75"
+          }
+        },
+        "heldout": {
+          "kind": "independent-archive-type-and-format-heldouts",
+          "cases": 61,
+          "pass": 61,
+          "fail": 0,
+          "coercionsObserved": 0,
+          "schemaVersions": [
+            1,
+            2
+          ],
+          "primitiveFields": 4,
+          "physicalFixturesExecuted": 0,
+          "networkFixturesExecuted": 0,
+          "payloadExecuted": false,
+          "extracted": false,
+          "caseNames": [
+            "schema1-primitive-identities-valid",
+            "schema1-checkout-array",
+            "schema1-checkout-nested-array",
+            "schema1-checkout-object",
+            "schema1-checkout-null",
+            "schema1-checkout-boolean",
+            "schema1-checkout-number",
+            "schema1-checkout-newline",
+            "schema1-upstream-array",
+            "schema1-upstream-nested-array",
+            "schema1-upstream-object",
+            "schema1-upstream-null",
+            "schema1-upstream-boolean",
+            "schema1-upstream-number",
+            "schema1-upstream-newline",
+            "schema1-diff-array",
+            "schema1-diff-nested-array",
+            "schema1-diff-object",
+            "schema1-diff-null",
+            "schema1-diff-boolean",
+            "schema1-diff-number",
+            "schema1-diff-newline",
+            "schema1-native-version-array",
+            "schema1-native-version-nested-array",
+            "schema1-native-version-object",
+            "schema1-native-version-null",
+            "schema1-native-version-boolean",
+            "schema1-native-version-number",
+            "schema1-native-version-newline",
+            "schema2-primitive-identities-valid",
+            "schema2-checkout-array",
+            "schema2-checkout-nested-array",
+            "schema2-checkout-object",
+            "schema2-checkout-null",
+            "schema2-checkout-boolean",
+            "schema2-checkout-number",
+            "schema2-checkout-newline",
+            "schema2-upstream-array",
+            "schema2-upstream-nested-array",
+            "schema2-upstream-object",
+            "schema2-upstream-null",
+            "schema2-upstream-boolean",
+            "schema2-upstream-number",
+            "schema2-upstream-newline",
+            "schema2-diff-array",
+            "schema2-diff-nested-array",
+            "schema2-diff-object",
+            "schema2-diff-null",
+            "schema2-diff-boolean",
+            "schema2-diff-number",
+            "schema2-diff-newline",
+            "schema2-native-version-array",
+            "schema2-native-version-nested-array",
+            "schema2-native-version-object",
+            "schema2-native-version-null",
+            "schema2-native-version-boolean",
+            "schema2-native-version-number",
+            "schema2-native-version-newline",
+            "direct-trusted-hash-object-refused-without-coercion",
+            "file-trusted-hash-object-refused-before-open",
+            "argv-trusted-hash-object-refused-without-coercion"
+          ]
+        },
+        "reviewedGuards": [
+          "trustedSha256 public Buffer/File/argv paths require primitive string beforeRegExp",
+          "outer manifest SHA primitive type plus strict digest equality",
+          "nativeVersionOutputSha256 primitive hex guard",
+          "every payload hash primitive type plus strict digest equality",
+          "provenance checkout/upstream revisions primitive regex guard",
+          "provenance sourceDiffSha256 primitive hex guard"
+        ],
+        "blockingFindings": [],
+        "digestBeforeDecompressionPreserved": true,
+        "archiveModesInventoryAndBoundsUnchanged": true,
+        "noExtractOrPayloadExecution": true,
+        "signatureOrEvidenceAuthenticationGranted": false,
+        "mainCandidate122ControlsObservedByOtherWriterNotCountedHere": true
+      }
+    },
+    "control": {
+      "schemaVersion": 1,
+      "kind": "independent-supported-controller-G4-G5-boundary-review",
+      "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+      "scope": "Controller configuration/lifecycle/recovery and metadata bounds under trusted same-UID operator profile; source and synthetic unbound tempfile review only. No physical native/network/process-group/signal/systemd fixture.",
+      "sourceBindings": {
+        "AGENTS.md": {
+          "bytes": 6188,
+          "sha256": "7a90d27e4f1cd92a3adc4aacc8dd9eeae62f6cf0ca2b21b42cf4fc696a25ddd9"
+        },
+        "x10/control/manager.mjs": {
+          "bytes": 47989,
+          "sha256": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822"
+        },
+        "x10/control/cli.mjs": {
+          "bytes": 4749,
+          "sha256": "72972fd1093068d05b788a326962f641fb2871dd7fa4cabb66957fcb3b22775b"
+        },
+        "x10/control/status-format.mjs": {
+          "bytes": 4312,
+          "sha256": "522d932cbfe9ca8493a5f472207da910eb71476ed47f1148dda589a4171929f8"
+        },
+        "x10/control/listeners.mjs": {
+          "bytes": 18828,
+          "sha256": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2"
+        },
+        "x10/control/generations.mjs": {
+          "bytes": 13323,
+          "sha256": "dba28810084f0cbb84275cc200f5bec93150406306c6bd78b06ac2b585815789"
+        },
+        "x10/control/README.md": {
+          "bytes": 24850,
+          "sha256": "7b2af5a2c779012d2a894ec49a0d3bcf40277694d2f3b5528b49b860e17921bd"
+        },
+        "x10/test/control.test.mjs": {
+          "bytes": 74487,
+          "sha256": "927d1ee25a3ee76d6642ca31f3483113a72167bdb384f0bdeda0bfa84db93d04"
+        },
+        "x10/test/operator-status.test.mjs": {
+          "bytes": 21353,
+          "sha256": "0c24bce2518848d14c317b451c261f437a8209387ea9ae8a1abb3e86c560e03d"
+        },
+        "x10/service/INCIDENT-RUNBOOK.md": {
+          "bytes": 29741,
+          "sha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+        },
+        "x10/release/RELEASE-CONTRACT.md": {
+          "bytes": 15067,
+          "sha256": "fce36f6ff9575e50042d473eea52a361730216a2155da2c687feea7b9d482d6a"
+        }
+      },
+      "existingControlsReviewed": [
+        {
+          "name": "exclusive-lock-is-not-auto-deleted",
+          "source": "x10/test/control.test.mjs:302",
+          "meaning": "Existing controller lock refuses another operation and remains for explicit operator review."
+        },
+        {
+          "name": "unsafe-health-urls-and-fragment-escapes-are-rejected",
+          "source": "x10/test/control.test.mjs:307",
+          "meaning": "Explicit loopback/no credentials/query; balanced self-contained fragment and owned include/listen boundary."
+        },
+        {
+          "name": "managed-fragment-tamper-and-symlink-refuse-signal",
+          "source": "x10/test/control.test.mjs:320",
+          "meaning": "Known config/revision/fragment bytes and owned regular paths precede signals."
+        },
+        {
+          "name": "wrong-pid-file-refuses-runtime-attachment",
+          "source": "x10/test/control.test.mjs:328",
+          "meaning": "PID namespace/executable/UID/start time/argv identity is distinct from pidfile alone."
+        },
+        {
+          "name": "present-falsy-or-array-journals-are-corruption-not-absence",
+          "source": "x10/test/control.test.mjs:738",
+          "meaning": "Present false/null/array pending/intent does not authorize continuing as no transaction."
+        },
+        {
+          "name": "before-append-invalid-record-shape-preserves-all-durable-bytes",
+          "source": "x10/test/control.test.mjs:725",
+          "meaning": "Hash-valid shape alone insufficient for durable event transition authority."
+        },
+        {
+          "name": "recovery-retries-full-history-sync-before-state-or-intent-change",
+          "source": "x10/test/control.test.mjs:992",
+          "meaning": "Visible appended line does not mean fsync succeeded; recovery repeats durability boundary."
+        },
+        {
+          "name": "partial-history-prefix-is-preserved-and-refused",
+          "source": "x10/test/control.test.mjs:1011",
+          "meaning": "Recovery never truncates damaged unknown history to produce success."
+        }
+      ],
+      "actualLocalTempfileChecks": {
+        "kind": "independent-control-tempfile-source-review",
+        "tests": 13,
+        "pass": 13,
+        "fail": 0,
+        "records": [
+          {
+            "name": "valid-unbound-status-no-network",
+            "pass": true
+          },
+          {
+            "name": "valid-empty-history",
+            "pass": true
+          },
+          {
+            "name": "unknown-state-property-refused",
+            "pass": true
+          },
+          {
+            "name": "null-pending-not-absence",
+            "pass": true
+          },
+          {
+            "name": "false-intent-not-absence",
+            "pass": true
+          },
+          {
+            "name": "state-symlink-refused",
+            "pass": true
+          },
+          {
+            "name": "partial-history-refused",
+            "pass": true
+          },
+          {
+            "name": "history-head-mismatch-refused",
+            "pass": true
+          },
+          {
+            "name": "existing-lock-retained",
+            "pass": true
+          },
+          {
+            "name": "recover-nothing-pending-does-not-repair-or-activate",
+            "pass": true
+          },
+          {
+            "name": "damaged-revision-refused",
+            "pass": true
+          },
+          {
+            "name": "oversized-settings-extra-property-accepted-unbounded-disk-json",
+            "pass": true
+          },
+          {
+            "name": "oversize-history-refused",
+            "pass": true
+          }
+        ],
+        "physicalFixturesExecuted": 0,
+        "networkFixturesExecuted": 0,
+        "subprocessesExecuted": 0,
+        "signalsSent": 0,
+        "serviceAccepted": false,
+        "productionAccepted": false
+      },
+      "separatePureLoaderContract": {
+        "kind": "source-extracted-CLI-load-read-order-contract",
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "cases": [
+          {
+            "name": "at2MiB-validJSON",
+            "bytesReturnedByUnboundedReadFile": 2097152,
+            "loaderRefused": false,
+            "readFileCompletedBeforeRejection": false,
+            "pass": true
+          },
+          {
+            "name": "above2MiB-readCompletesBeforeRefusal",
+            "bytesReturnedByUnboundedReadFile": 2097153,
+            "loaderRefused": true,
+            "readFileCompletedBeforeRejection": true,
+            "pass": true
+          },
+          {
+            "name": "at3MiB-readCompletesBeforeRefusal",
+            "bytesReturnedByUnboundedReadFile": 3145728,
+            "loaderRefused": true,
+            "readFileCompletedBeforeRejection": true,
+            "pass": true
+          }
+        ],
+        "sourceExtractionExact": true,
+        "readFileIsMocked": true,
+        "actualUnboundedDeviceReadExecuted": false,
+        "actualOOMExecuted": false,
+        "subprocessesExecuted": 0,
+        "networkFixturesExecuted": 0,
+        "signalsSent": 0
+      },
+      "findings": [
+        {
+          "id": "CONTROL_JSON_RESOURCE_BOUNDS_OPEN",
+          "state": "REPRODUCED_LOCAL_INPUT_BOUND_GAP_NOT_FIXED",
+          "severity": "Not assigned; no remote exploit or production OOM demonstrated",
+          "source": [
+            {
+              "path": "x10/control/manager.mjs",
+              "lines": [
+                62,
+                245,
+                272
+              ]
+            },
+            {
+              "path": "x10/control/cli.mjs",
+              "lines": [
+                30,
+                34
+              ]
+            }
+          ],
+          "observed": "Actual status() accepts complete synthetic unbound controller settings.json containing an ignored extra 3MiB string. manager json() performs owned regular check followed by unbounded readFile and JSON.parse; only history has pre-read16MiB cap. CLI JSON load() invokes unbounded readFile before checking2MiB; source-extracted pure mocked read demonstrates2MiB+1 and3MiB buffers are already returned/allocated before size refusal.",
+          "boundary": "Operator input and state are same-UID owned/trusted. This is a local malformed/oversized-input resource-bound gap, not evidence of privilege crossing, network exposure, signature bypass, actual OOM, or malicious sameUID isolation. Oversized settings extra field is not currently a strict shape refusal. The existing CLI2MiB check constrains accepted bytes but not peak read allocation.",
+          "proposedBoundedNext": "Define reviewed per-record/CLI byte budgets compatible with existing1MiB candidates and history16MiB, use bounded regular nofollow reads plus fstat/recheck before allocation, preserve unknown records/refusal and old schemas; pure tempfile/heldout controls before supported hosted regression. Do not silently lower legitimate state limits or claim all parser/proc surfaces bounded."
+        }
+      ],
+      "acceptedBoundaryMap": [
+        {
+          "area": "status/history",
+          "result": "Inspection takes/removes locks; status may HTTP probe only when bound. ok:true is command completion, not health/TLS/drain acceptance."
+        },
+        {
+          "area": "pending/durable recovery",
+          "result": "Known intent/history/state transitions may reconcile; unknown/malformed/partial journal refuses, no broad repair/truncation."
+        },
+        {
+          "area": "apply/revert/rollback",
+          "result": "Fresh revision IDs, exact source guards, native syntax and sampled readiness; side effects and all-traffic cutover not undone or proven."
+        },
+        {
+          "area": "secrets/output",
+          "result": "Controller history/revisions/errors expose operator configuration, paths and private diagnostics by design to local trusted operator; public report must redact. TLS keys are referenced paths, not copied into revision input."
+        },
+        {
+          "area": "native identity/signals",
+          "result": "Sampled namespace/UID/executable/start time/argv guards; existing residual verification-to-kill race and sameUID concurrency remain explicit limits."
+        },
+        {
+          "area": "faulted/orphan",
+          "result": "Controller recover does not inspect or clear alpha faulted lifecycle. Generic standalone controller stale-lock hint is not faulted alpha runbook authority; preserve prefix/unknown locks in incident context."
+        }
+      ],
+      "privateTestSetupAdverse": {
+        "count": 1,
+        "kind": "independent synthetic fixture attempted to overwrite own0400 revision file and received EACCES before product validator call",
+        "correction": "Unlink/recreate owned synthetic record for tamper test; no production source/modes changed",
+        "finalTempfileChecks": 13,
+        "productFailure": false
+      },
+      "activities": {
+        "productSourceEdits": 0,
+        "remoteWrites": 0,
+        "physicalNativeFixtures": 0,
+        "networkFixtures": 0,
+        "subprocessesExecutedByControls": 0,
+        "signalsSent": 0,
+        "systemdQueries": 0
+      },
+      "fullG4Accepted": false,
+      "fullG5Accepted": false,
+      "productionAccepted": false,
+      "physicalIncidentRecoveryAccepted": false,
+      "runtimeSecurityAccepted": false
+    },
+    "service": {
+      "schemaVersion": 1,
+      "kind": "independent-supported-user-service-security-boundary-review",
+      "sourceCommit": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+      "sourceBindings": {
+        "x10/service/preflight.mjs": {
+          "bytes": 6351,
+          "sha256": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2"
+        },
+        "x10/service/preflight.test.mjs": {
+          "bytes": 9988,
+          "sha256": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3"
+        },
+        "x10/service/user-unit.mjs": {
+          "bytes": 9481,
+          "sha256": "ae8e34acd2d16a0bbe04884b92d692c2e7e3c76c632c6a26eaa1b0cd38d65d9f"
+        },
+        "x10/service/user-unit.test.mjs": {
+          "bytes": 17599,
+          "sha256": "7c3d77eda6f28cd5e547ca6685ececf40c867fe71ee123bb78c882cf618b4f0e"
+        },
+        "x10/service/journal-check.mjs": {
+          "bytes": 8562,
+          "sha256": "8fbab18a15b326a8abe8392dbe61d6d24ff5c7576508c916b16704188254c6a5"
+        },
+        "x10/service/journal-check.test.mjs": {
+          "bytes": 13341,
+          "sha256": "c139480aee181449e18d1e1b614f78b61aa4736c8162454cf5fef9d849cb02a7"
+        },
+        "x10/service/interrupted-operator.mjs": {
+          "bytes": 21896,
+          "sha256": "0b807b49ae6f4ff91a6468ee2823fe8c25c784625cb8f3657785c77cd2b23ab2"
+        },
+        "x10/service/interrupted-operator.test.mjs": {
+          "bytes": 19590,
+          "sha256": "01554a94993bfdb65e50a016dec3dec10bb68cd80bc72d107c4d76775fb92604"
+        },
+        "x10/service/interruption-failure.test.mjs": {
+          "bytes": 46953,
+          "sha256": "f00ead7f332876f3d6214279863aef051dde041bf4de653f39c72eacee8ed3cb"
+        },
+        "x10/service/verified-node.mjs": {
+          "bytes": 32439,
+          "sha256": "bc0eeece79c388ced76a57787f4fbcba7489ce9ca56cb9af03025c09e2f594ff"
+        },
+        "x10/service/verified-node.test.mjs": {
+          "bytes": 78487,
+          "sha256": "7a210550ca332b42d1e60fb73d3a34b8998b870115d35b8b4adbd26e0e75131b"
+        },
+        "x10/service/lifecycle-check.mjs": {
+          "bytes": 147483,
+          "sha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370"
+        },
+        "x10/service/lifecycle-check.test.mjs": {
+          "bytes": 141676,
+          "sha256": "4d3eda4bb396436e12c86dfba859496245e9e83e9b84e0cdc675cee7aa878bfe"
+        },
+        "x10/service/operator-package-return.mjs": {
+          "bytes": 65297,
+          "sha256": "215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83"
+        },
+        "x10/service/operator-package-return-proof.mjs": {
+          "bytes": 12890,
+          "sha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de"
+        },
+        "x10/service/operator-package-return.test.mjs": {
+          "bytes": 18646,
+          "sha256": "1d2c7e7a3acafe2258ba16f320e8c9ddef505e4a1d6d87fb5d36517b9d134f8b"
+        },
+        "x10/service/operator-package-fallback.mjs": {
+          "bytes": 630,
+          "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+        },
+        "x10/service/operator-package-fallback-proof.mjs": {
+          "bytes": 13468,
+          "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+        },
+        "x10/service/operator-package-fallback.test.mjs": {
+          "bytes": 21014,
+          "sha256": "d62a10ca15c34974e0c56539744ba74708339e4a93c5c74605e97a760915fb7c"
+        },
+        "x10/service/INCIDENT-RUNBOOK.md": {
+          "bytes": 29741,
+          "sha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+        }
+      },
+      "scope": "Source and independent pure input review for declared trusted nonroot Ubuntu24.04/Node22 local user-manager operator profile. No deployed-host or fullG5 acceptance.",
+      "boundaryMatrix": [
+        {
+          "id": "fixed-local-manager",
+          "source": "preflight.mjs localPrerequisites/query/assessManagerQuery",
+          "supportedOrRefused": "Canonical root-owned fixed systemctl and safe ancestors; canonical owned0700 /run/user/UID and same-UID bus socket; clean fixed env;2500ms/16384bytes; root/UID mismatch refused.",
+          "unknownOrUnsupported": "Manager available/degraded is not unit health, identity, readiness or service acceptance.",
+          "namedExistingControlsReadOnly": [
+            "preflight: exit0 stub baseline overclaims a manager while strict transcript refuses",
+            "preflight: property order is irrelevant but complete exact keys are required"
+          ]
+        },
+        {
+          "id": "installed-recipe",
+          "source": "user-unit.mjs inspectInstallation/renderUserUnit; lifecycle-check.mjs assessInstalledServiceRecipeCommand",
+          "supportedOrRefused": "Full schema2 immutable inventory/hash/mode/nlink and eight private directories checked; exact recorded Node bytes, explicit paths and bounded AF_UNIX path. Installed JSON.unit is consumed, not substituted source recipe.",
+          "unknownOrUnsupported": "Generator never activates and fixed source checks do not fence same-UID concurrent replacement.",
+          "namedExistingControlsReadOnly": [
+            "user-unit: installed recipe schema2 inspector binds all15 immutable files and8 private directories read-only",
+            "user-unit: path injection, aliases and unknown options refuse without generating a unit"
+          ]
+        },
+        {
+          "id": "local-service-env",
+          "source": "user-unit.mjs renderUserUnit; lifecycle-check.mjs managerEnvironment",
+          "supportedOrRefused": "Control-client environment is fixed; recipe unsets NODE_OPTIONS/NODE_PATH/NGINX_CTRL.",
+          "unknownOrUnsupported": "An env-i systemctl client does not establish the independently running user-manager service environment. Trusted Node/loader/manager environment remains a profile precondition; current recipe does not strip all LD_* variables. No adversarial-isolation or vulnerability claim is made.",
+          "namedExistingControlsReadOnly": []
+        },
+        {
+          "id": "journal-attribution",
+          "source": "journal-check.mjs context/journalQuerySpec/flatRecord/observeOwnedJournal",
+          "supportedOrRefused": "Exact fixture unit/UID/nonzero invocation, three AND matches; fixed journalctl env/tool;129th sentinel with max128,256KiB,2500ms and max3 missing-only retries; duplicate/noncanonical keys and foreign attributes refuse.",
+          "unknownOrUnsupported": "Running marker gives readability counts only; caller must freshly bracket owned unit/invocation/launcher/cancellation.",
+          "namedExistingControlsReadOnly": [
+            "journal: JSON duplicate or escaped key spelling cannot hide overwritten attribution",
+            "journal: asynchronous journal visibility permits bounded missing-only observations"
+          ]
+        },
+        {
+          "id": "operator-handle",
+          "source": "interrupted-operator.mjs parseOperatorProcessProfile/startOwnedOperator/currentCapture/stop",
+          "supportedOrRefused": "Direct PID/group/session view required before spawn; complete wrapper/controller/locks/pending capture, original deadline/cancel/identity checks, bounded owned termination and close+group absence.",
+          "unknownOrUnsupported": "Not a general PID namespace adapter, stale-lock production API or OS-level PID-to-signal fence.",
+          "namedExistingControlsReadOnly": [
+            "interruption-failure: failure retirement refuses unknownProcessAbsence before any unlink and cannot be rearmed"
+          ]
+        },
+        {
+          "id": "lock-retirement",
+          "source": "interrupted-operator.mjs removeCapturedLocks/retireCapturedLocksAfterFailure",
+          "supportedOrRefused": "One-shot original capture and original two locks; exact inode/hash/owner/PID/pending and process absence repeated immediately before unlink; pending bytes retained.",
+          "unknownOrUnsupported": "Fixture-only explicit action. Faulted production runbook never deletes unknown/stale locks.",
+          "namedExistingControlsReadOnly": [
+            "interruption-failure: failure retirement uses exactly the original two locks and preserves pending bytes"
+          ]
+        },
+        {
+          "id": "authenticated-node",
+          "source": "verified-node.mjs signature/parseSignatureStatus/parseChecksumText/parseTar/install",
+          "supportedOrRefused": "Pinned Node archive/key/signature/checksum; selected regular bounded node/LICENSE only, no links materialized; version/bytes verified, owned install inventory recorded.",
+          "unknownOrUnsupported": "Dependency authentication is not service acceptance; unsigned local installation/cleanup records are same-UID consistency data.",
+          "namedExistingControlsReadOnly": []
+        },
+        {
+          "id": "cleanup-admission",
+          "source": "verified-node.mjs cleanupEvidence/main --cleanup",
+          "supportedOrRefused": "Closed normal and fallback report validators plus exact legacy report facts, exited-zero child facts, source literals, current source-byte hashes, runtime installation ID and Node bytes gate exact private Node deletion.",
+          "unknownOrUnsupported": "Stored booleans/reports alone are not live authority or OS process fence; trusted coordinator waits/reobserves actual child ownership. Unknown cleanup retains dependency.",
+          "namedExistingControlsReadOnly": [
+            "verified-node: the accepted two-child envelope cannot authorize an unobserved fallback child",
+            "verified-node: all three exact-source synthetic reports permit removal of an owned inert dependency without execution",
+            "verified-node: actual reread of every changed package source retains inert dependency despite matching envelope pins"
+          ]
+        },
+        {
+          "id": "managed-lifecycle",
+          "source": "lifecycle-check.mjs unitProperties/assertLauncher/verifyKnownUnitFragmentPaths",
+          "supportedOrRefused": "Exact fragment/runtime link, user cgroup, launcher proc/start/namespace/exe/cmd/Node and invocation are checked; installed recipe is complete fixed profile; no enabled persistent unit accepted.",
+          "unknownOrUnsupported": "MainPID0, inactive unit or one closed port alone do not establish all worker retirement. Full failure containment remains open.",
+          "namedExistingControlsReadOnly": []
+        },
+        {
+          "id": "package-return",
+          "source": "operator-package-return.mjs createImmutableUnitContext/readManagedHeldState/assessKeptAReactivationPreparation/forEachUniqueRetiredInstallation",
+          "supportedOrRefused": "Independent immutable per-unit contexts; held capture reads raw records without competing CLI; every context verified retired before any unique installation removal; old A all-file retention only through explicit preparation.",
+          "unknownOrUnsupported": "Historical A is checked reassembly, same native binary. No arbitrary TLS/DB/application-side-effect rollback or live-connection migration.",
+          "namedExistingControlsReadOnly": []
+        },
+        {
+          "id": "incident-stop",
+          "source": "INCIDENT-RUNBOOK.md",
+          "supportedOrRefused": "Original potentially live faulted prefix retained IN PLACE; preexisting confirmed HTTP backup only; exact old resources known safe before fresh restore, same input/ports; UNKNOWN means STOP_UNRESOLVED.",
+          "unknownOrUnsupported": "No CLI clears faulted lifecycle or makes it uninstallable; source prefix remains retained/unresolved even if fresh target later succeeds.",
+          "namedExistingControlsReadOnly": []
+        },
+        {
+          "id": "bounded-diagnostics",
+          "source": "lifecycle-check.mjs diagnostics; proof validators and CLI finite result labels",
+          "supportedOrRefused": "Public results use finite counts/codes and source hashes; no raw stdout/host/PIDs/secrets, report bytes bounded, normal/fallback strict result schemas remain separate.",
+          "unknownOrUnsupported": "Timeouts/output bounds do not guarantee termination through kernel/filesystem stalls. The historical34f alpha timeout and cleanup UNKNOWN are not resolved by source inspection.",
+          "namedExistingControlsReadOnly": []
+        }
+      ],
+      "newReproducibleSourceDefects": [],
+      "blockingFindings": [],
+      "openProfileRequirements": [
+        {
+          "id": "trusted-user-manager-environment",
+          "classification": "UNVERIFIED_PROFILE_PRECONDITION_NOT_NEW_VULNERABILITY",
+          "fact": "Fixed env for control client is not proof of the manager service environment. Current unit removes three Node/control variables, not all dynamic-loader variables. Require trusted reviewed service manager/Node/library environment; unknown remains unsupported."
+        },
+        {
+          "id": "complete-adverse-runtime-matrix",
+          "classification": "OPEN",
+          "fact": "Current accepted successful/controlled-failure fixtures and pure validators do not establish every runtime failure/cleanup/security path."
+        }
+      ],
+      "independentPureReview": {
+        "kind": "independent-service-pure-review",
+        "controls": 10,
+        "pass": 10,
+        "fail": 0,
+        "cases": [
+          "exact-recipe-returned-not-activation",
+          "extra-environment-directive-refused",
+          "claiming-activation-refused",
+          "recipe-success-with-stderr-refused",
+          "manager-client-environment-is-fixed",
+          "zero-invocation-not-authority",
+          "journal-query-is-three-and-matches-not-user-unit-or",
+          "foreign-journal-is-not-readable-owned-evidence",
+          "positive-marker-never-accepts-service",
+          "nested-pid-transcript-refused-before-physical-profile"
+        ],
+        "physicalFixturesExecuted": 0,
+        "managerQueriesExecuted": 0,
+        "networkFixturesExecuted": 0,
+        "signalsSent": 0,
+        "serviceAccepted": false,
+        "productionAccepted": false
+      },
+      "existingTestsRerun": false,
+      "sourceReviewMatrixRows": 12,
+      "newProductTestsAdded": 0,
+      "sourceEdits": 0,
+      "remoteWrites": 0,
+      "physicalFixturesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "managerQueriesExecuted": 0,
+      "signalsSent": 0,
+      "wholeG5Accepted": false,
+      "actualIncidentRecoveryAccepted": false,
+      "productionAccepted": false,
+      "limits": [
+        "The20 source bindings and12 matrix rows record inspection scope, not20 verified deployed components or12 runtime controls.",
+        "The10 independent pure controls are not physical service acceptance and are not added to other TAP totals.",
+        "No current source bug is established by this scoped review; no claim of exhaustive security or OS fencing follows.",
+        "Permanent release/published replay/soak/fullG3/G4/G5/V1 remain open;34f cleanup UNKNOWN and prioradverse remain unchanged."
+      ]
+    },
+    "release": {
+      "schemaVersion": 1,
+      "kind": "independent-release-supply-input-boundary-review",
+      "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+      "scope": "Trusted nonroot single-host release and pre-extraction consistency boundary. Source review plus synthetic buffer/tempfile checks only; no full G4/G5 acceptance.",
+      "sourceBaseBindings": {
+        "AGENTS.md": {
+          "bytes": 6188,
+          "sha256": "7a90d27e4f1cd92a3adc4aacc8dd9eeae62f6cf0ca2b21b42cf4fc696a25ddd9"
+        },
+        "x10/continuation-2026-10-24/CONTINUATION-PROMPT.md": {
+          "bytes": 52891,
+          "sha256": "b0f641ee589b2355a5a0c587183bc468815edb40692f513efd4b0a691c408d02"
+        },
+        "x10/continuum/BACKGROUND.json": {
+          "bytes": 86119,
+          "sha256": "f4fe9433cfdd154a7c06105c9f5bd0e9ca75042fd03ae94c1e54a7b58bcd96de"
+        },
+        "x10/release/RELEASE-CONTRACT.md": {
+          "bytes": 15067,
+          "sha256": "fce36f6ff9575e50042d473eea52a361730216a2155da2c687feea7b9d482d6a"
+        },
+        "x10/release/profile.json": {
+          "bytes": 9495,
+          "sha256": "9604e00e0dfb68e437dbc967049d3b6816580a8a1d75d96387e84169cb4f9457"
+        },
+        "x10/release/README.md": {
+          "bytes": 9934,
+          "sha256": "65f78e9250b357c8671bc23b5aea8ab357217b82ca91e3c182679baf5fa632f9"
+        },
+        "x10/release/release-record.schema.json": {
+          "bytes": 20082,
+          "sha256": "82a916172b95dff5a32ae58d675be0d3eb107de6ddc35f63c0fedcd5583763ce"
+        },
+        "x10/release/check-release-record.mjs": {
+          "bytes": 11557,
+          "sha256": "52a5f6b1ec36e0c6cf77a02a2d4c3e1d8f1e542afcbfdcbf9c3228858a2f7490"
+        },
+        "x10/release/check-release-record.test.mjs": {
+          "bytes": 15670,
+          "sha256": "019f07020ed239342b8146ab40a90b69de8322ce593a639b977f338393550d80"
+        },
+        "x10/release/release-record-heldout.test.mjs": {
+          "bytes": 16747,
+          "sha256": "383498435cfeaf15c00a65749d0c22f90f35146bbbaad9a50a40093a44e6d11f"
+        },
+        "x10/release/verify-alpha-archive.mjs": {
+          "bytes": 9209,
+          "sha256": "df213e76264fd7048abe5fdb790c158f7758cac7806d186db9b0fdf73d68094a"
+        },
+        "x10/release/verify-alpha-archive.test.mjs": {
+          "bytes": 13721,
+          "sha256": "2eaf952425734037546a07562edce7d12e6dbada54d9ffa1914ec34befe88ac1"
+        },
+        "x10/alpha/cli.mjs": {
+          "bytes": 87522,
+          "sha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa"
+        }
+      },
+      "finding": {
+        "id": "ARCHIVE_IDENTITY_TYPE_COERCION",
+        "classification": "Confirmed pre-extraction format/identity false-positive; not a signature bypass or native execution exploit.",
+        "affectedFields": [
+          "provenance.checkoutRevision",
+          "provenance.upstreamRevision",
+          "provenance.sourceDiffSha256",
+          "nativeVersionOutputSha256"
+        ],
+        "baselineObserved": {
+          "kind": "archive-identity-type-heldouts",
+          "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+          "observations": [
+            {
+              "name": "checkout-array",
+              "valid": true,
+              "code": "archive_consistent",
+              "sourceCommitType": "array",
+              "upstreamCommitType": "string",
+              "sourceDiffType": "string"
+            },
+            {
+              "name": "upstream-array",
+              "valid": true,
+              "code": "archive_consistent",
+              "sourceCommitType": "string",
+              "upstreamCommitType": "array",
+              "sourceDiffType": "string"
+            },
+            {
+              "name": "diff-array",
+              "valid": true,
+              "code": "archive_consistent",
+              "sourceCommitType": "string",
+              "upstreamCommitType": "string",
+              "sourceDiffType": "array"
+            },
+            {
+              "name": "native-version-array",
+              "valid": true,
+              "code": "archive_consistent",
+              "sourceCommitType": "string",
+              "upstreamCommitType": "string",
+              "sourceDiffType": "string"
+            }
+          ],
+          "malformedFieldsAccepted": 4,
+          "payloadExecuted": false,
+          "extracted": false
+        },
+        "cause": "RegExp.test coerces one-element/nested arrays to strings, while those manifest identity fields had no primitive-string guard. Self-consistent schema2 archive with array identity fields was accepted; reported source identities could themselves be arrays.",
+        "fix": "Explicit isHex/isRevision primitive-string guards before format matching at every REV/HEX identity/checksum use, including direct API/main argument validation. Existing tar/profile/payload/self-hash/size/non-authentication boundaries preserved.",
+        "nativeOrInstalledOperatorChanged": false,
+        "formatVersionsChanged": false,
+        "archiveExtractionPerformed": false,
+        "payloadExecutionPerformed": false
+      },
+      "candidateVerification": {
+        "command": "node --test --test-reporter=tap x10/release/verify-alpha-archive.test.mjs",
+        "exitCode": 0,
+        "stderrEmpty": true,
+        "counts": {
+          "tests": 122,
+          "pass": 122,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "physicalFixturesExecuted": 0,
+        "sourceBindings": {
+          "x10/release/verify-alpha-archive.mjs": {
+            "bytes": 9367,
+            "sha256": "60b6d213c4d6b68db4a63d34ebf9a40f713fbd996ce298d4d65c2429541c0e12"
+          },
+          "x10/release/verify-alpha-archive.test.mjs": {
+            "bytes": 15494,
+            "sha256": "cd55e02f5a09e1c4af23d02815ef60bd5f81962dbdde2045b4a8850143b97d98"
+          }
+        }
+      },
+      "newControlsIncludedOnce": 65,
+      "priorArchiveControls": 57,
+      "separateBaselineArchiveSuite": {
+        "command": "node --test --test-reporter=tap x10/release/verify-alpha-archive.test.mjs",
+        "exitCode": 0,
+        "stderrEmpty": true,
+        "counts": {
+          "tests": 57,
+          "pass": 57,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "physicalFixturesExecuted": 0
+      },
+      "reviewedBoundaries": [
+        {
+          "id": "bounded-compressed-decompressed-input",
+          "state": "SUPPORTED_CONSISTENCY_CHECK",
+          "source": "x10/release/verify-alpha-archive.mjs",
+          "limits": {
+            "compressedBytes": 33554432,
+            "tarBytes": 67108864,
+            "manifestBytes": 262144
+          },
+          "controls": [
+            "rejects compressed input and gzip expansion bounds",
+            "checksum mismatch refuses corrupt gzip before decompression"
+          ],
+          "meaning": "Untrusted compressed input is digest-checked before bounded gunzip; size and exact format refusals are not program security approval."
+        },
+        {
+          "id": "exact-tar-profiles",
+          "state": "SUPPORTED_CONSISTENCY_CHECK",
+          "source": "x10/release/verify-alpha-archive.mjs",
+          "schema1": {
+            "payloadFiles": 13,
+            "directories": 5
+          },
+          "schema2": {
+            "payloadFiles": 14,
+            "directories": 6
+          },
+          "controls": [
+            "rejects duplicate, unknown, absolute and traversal entries",
+            "rejects symlink hardlink special and extended tar records",
+            "schema1 refuses optional helper or service directory rather than silently upgrading",
+            "schema2 helper rejects link special or extended record type"
+          ],
+          "meaning": "Names, record type, modes, header checksum/magic/padding/terminator and exact manifest profile are checked. No extraction occurs."
+        },
+        {
+          "id": "payload-identity",
+          "state": "SUPPORTED_CONSISTENCY_CHECK_WITH_CONFIRMED_FIX",
+          "source": "x10/release/verify-alpha-archive.mjs",
+          "controls": [
+            "rejects payload digest and mode disagreement",
+            "rejects changed manifest self-hash even when tar/gzip checksums are current",
+            "schema1/schema2 primitive identity field heldouts"
+          ],
+          "meaning": "Fixed primitive-string identities supplement exact payload count/mode/length/digest/self-hash checks; unsigned consistency cannot authenticate publisher."
+        },
+        {
+          "id": "file-and-cli-input",
+          "state": "SUPPORTED_BOUNDED_REFUSAL",
+          "source": "x10/release/verify-alpha-archive.mjs",
+          "controls": [
+            "file reader and CLI reject symlinks directory missing inputs and invocation aliases run",
+            "schema2 verifier and CLI stay pre-extraction consistency checks",
+            "checksum API boundaries refuse coercible objects without invoking conversion"
+          ],
+          "meaning": "O_NOFOLLOW/O_NONBLOCK regular-file reading, before/after identity/size checks and stable finite diagnostics. Tool never extracts or executes payload."
+        },
+        {
+          "id": "declaration-json-and-ci-shape",
+          "state": "SOURCE_REVIEWED_DECLARATION_ONLY",
+          "source": "x10/release/check-release-record.mjs",
+          "controls": [
+            "direct JSON boundary refuses cycles, accessors and exotic values without invoking getters",
+            "executed-step structural rejection does not invoke getters or tolerate holes",
+            "independent complete receipt agrees with every configured native workflow step"
+          ],
+          "limits": {
+            "cliRecordBytes": 262144,
+            "directAPITraversalNodes": 8192,
+            "directAPITraversalDepth": 24,
+            "ciJobs": 4,
+            "executedStepsMin": 36,
+            "executedStepsMax": 64
+          },
+          "meaning": "Closed JSON shape and current mandatory36 ordered steps, source/build/checkout and gate/evidence identity consistency. No remote evidence fetching/authentication; earlier119TAP is checkpoint evidence, not rerun by this helper."
+        },
+        {
+          "id": "archive-versus-install-authority",
+          "state": "SEPARATE_BOUNDARIES",
+          "source": "x10/alpha/cli.mjs",
+          "controls": [
+            "bundleBuild own complete payload/hash/mode/platform checks",
+            "checked extracted installer forbids binary/manifest overrides"
+          ],
+          "meaning": "Pre-extraction valid result is never authority to execute, or proof of ABI/runtime safety. Trusted operator still verifies digest provenance, exact extracted bytes, canonical private tree, Node and actual dynamic libraries."
+        },
+        {
+          "id": "privacy",
+          "state": "NARROW_PUBLIC_OUTPUT",
+          "source": [
+            "x10/release/verify-alpha-archive.mjs",
+            "x10/release/check-release-record.mjs"
+          ],
+          "controls": [
+            "CLI bounds input and emits fixed diagnostics without payload reflection",
+            "schema2 verifier and CLI stay pre-extraction consistency checks"
+          ],
+          "meaning": "Malformed JSON/archive responses use finite codes without source payload reflection. Synthetic fixture data used here contains no real paths/PIDs/keys. Native debug/provenance may contain build paths; package/public build provenance and privacy review remain separate."
+        }
+      ],
+      "knownRefusals": [
+        "Wrong trusted digest returns archive_checksum before decompress.",
+        "Unknown archive schema/kind, inventories, symlinks/hardlinks/special/extended/traversal/duplicate entries refuse.",
+        "New candidate refuses type-confused manifest identities despite matching outer checksums.",
+        "Malformed declaration, mixed source/checkout identities, incomplete/non-success CI steps and premature accepted gates refuse."
+      ],
+      "unknownOrOpen": [
+        "No permanent published archive or authenticated publisher capability accepted by this review.",
+        "Independent published-byte nonroot Node22 replay is not performed.",
+        "No native execution, extraction, dynamic ABI validation, service/TLS activation or complete supported-operator security/recovery replay performed.",
+        "Same-UID malicious actor and OS-level process/path fencing remain outside current threat model.",
+        "Actual faulted/orphan disposal, full G3/G4/G5/G7/V1, soak and semantic Continuum remain OPEN."
+      ],
+      "activities": {
+        "pureBufferControls": 4,
+        "baselineArchiveTAP": 57,
+        "candidateArchiveTAP": 122,
+        "physicalNativeFixtures": 0,
+        "networkFixtures": 0,
+        "systemdQueries": 0,
+        "signalsSent": 0,
+        "archiveExtraction": 0,
+        "payloadExecution": 0,
+        "remoteWrites": 0,
+        "ownedProductFilesEdited": [
+          "x10/release/verify-alpha-archive.mjs",
+          "x10/release/verify-alpha-archive.test.mjs"
+        ]
+      },
+      "productionAccepted": false,
+      "fullG4Accepted": false,
+      "fullG5Accepted": false,
+      "fullG7Accepted": false
+    }
+  },
+  "archiveTypeBaseline": {
+    "kind": "archive-identity-type-heldouts",
+    "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+    "observations": [
+      {
+        "name": "checkout-array",
+        "valid": true,
+        "code": "archive_consistent",
+        "sourceCommitType": "array",
+        "upstreamCommitType": "string",
+        "sourceDiffType": "string"
+      },
+      {
+        "name": "upstream-array",
+        "valid": true,
+        "code": "archive_consistent",
+        "sourceCommitType": "string",
+        "upstreamCommitType": "array",
+        "sourceDiffType": "string"
+      },
+      {
+        "name": "diff-array",
+        "valid": true,
+        "code": "archive_consistent",
+        "sourceCommitType": "string",
+        "upstreamCommitType": "string",
+        "sourceDiffType": "array"
+      },
+      {
+        "name": "native-version-array",
+        "valid": true,
+        "code": "archive_consistent",
+        "sourceCommitType": "string",
+        "upstreamCommitType": "string",
+        "sourceDiffType": "string"
+      }
+    ],
+    "malformedFieldsAccepted": 4,
+    "payloadExecuted": false,
+    "extracted": false
+  },
+  "archiveTypeCandidateReplay": {
+    "kind": "archive-identity-type-heldouts",
+    "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+    "observations": [
+      {
+        "name": "checkout-array",
+        "valid": false,
+        "code": "archive_invalid",
+        "sourceCommitType": "undefined",
+        "upstreamCommitType": "undefined",
+        "sourceDiffType": "undefined"
+      },
+      {
+        "name": "upstream-array",
+        "valid": false,
+        "code": "archive_invalid",
+        "sourceCommitType": "undefined",
+        "upstreamCommitType": "undefined",
+        "sourceDiffType": "undefined"
+      },
+      {
+        "name": "diff-array",
+        "valid": false,
+        "code": "archive_invalid",
+        "sourceCommitType": "undefined",
+        "upstreamCommitType": "undefined",
+        "sourceDiffType": "undefined"
+      },
+      {
+        "name": "native-version-array",
+        "valid": false,
+        "code": "archive_invalid",
+        "sourceCommitType": "undefined",
+        "upstreamCommitType": "undefined",
+        "sourceDiffType": "undefined"
+      }
+    ],
+    "malformedFieldsAccepted": 0,
+    "payloadExecuted": false,
+    "extracted": false
+  },
+  "portableBaselineCounterexamples": {
+    "sessionCapacity": {
+      "kind": "alpha-inventory-session-bound-counterexample",
+      "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+      "controls": 3,
+      "pass": 3,
+      "checks": [
+        {
+          "name": "200-minimal-sessions-within-current-inventory-bound",
+          "sessions": 200,
+          "minimumTreeEntries": 3401,
+          "seen": 3401,
+          "ok": true,
+          "returned": 3401
+        },
+        {
+          "name": "documented256-minimal-sessions-exceed-inventory-bound",
+          "sessions": 256,
+          "minimumTreeEntries": 4353,
+          "seen": 4097,
+          "ok": false,
+          "code": "inventory_limit"
+        },
+        {
+          "name": "prepareRun-accepts255-to256-source-sessions",
+          "sessions": 256,
+          "published": true,
+          "observationsVirtual": true
+        }
+      ],
+      "minimalPerSessionEntries": 17,
+      "virtualOnly": true,
+      "physicalFixturesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "signalsSent": 0,
+      "limits": [
+        "Preparation controller/native observations are virtual; production helper control flow and inventory walker are source-extracted unchanged.",
+        "This reproduces inconsistent finite supported bounds, not an actual256-native-session installation or exploit."
+      ]
+    },
+    "controllerRecordInput": {
+      "kind": "independent-control-tempfile-source-review",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "records": [
+        {
+          "name": "valid-unbound-status-no-network",
+          "pass": true
+        },
+        {
+          "name": "valid-empty-history",
+          "pass": true
+        },
+        {
+          "name": "unknown-state-property-refused",
+          "pass": true
+        },
+        {
+          "name": "null-pending-not-absence",
+          "pass": true
+        },
+        {
+          "name": "false-intent-not-absence",
+          "pass": true
+        },
+        {
+          "name": "state-symlink-refused",
+          "pass": true
+        },
+        {
+          "name": "partial-history-refused",
+          "pass": true
+        },
+        {
+          "name": "history-head-mismatch-refused",
+          "pass": true
+        },
+        {
+          "name": "existing-lock-retained",
+          "pass": true
+        },
+        {
+          "name": "recover-nothing-pending-does-not-repair-or-activate",
+          "pass": true
+        },
+        {
+          "name": "damaged-revision-refused",
+          "pass": true
+        },
+        {
+          "name": "oversized-settings-extra-property-accepted-unbounded-disk-json",
+          "pass": true
+        },
+        {
+          "name": "oversize-history-refused",
+          "pass": true
+        }
+      ],
+      "physicalFixturesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "subprocessesExecuted": 0,
+      "signalsSent": 0,
+      "serviceAccepted": false,
+      "productionAccepted": false
+    },
+    "controllerCLILoadOrder": {
+      "kind": "source-extracted-CLI-load-read-order-contract",
+      "tests": 3,
+      "pass": 3,
+      "fail": 0,
+      "cases": [
+        {
+          "name": "at2MiB-validJSON",
+          "bytesReturnedByUnboundedReadFile": 2097152,
+          "loaderRefused": false,
+          "readFileCompletedBeforeRejection": false,
+          "pass": true
+        },
+        {
+          "name": "above2MiB-readCompletesBeforeRefusal",
+          "bytesReturnedByUnboundedReadFile": 2097153,
+          "loaderRefused": true,
+          "readFileCompletedBeforeRejection": true,
+          "pass": true
+        },
+        {
+          "name": "at3MiB-readCompletesBeforeRefusal",
+          "bytesReturnedByUnboundedReadFile": 3145728,
+          "loaderRefused": true,
+          "readFileCompletedBeforeRejection": true,
+          "pass": true
+        }
+      ],
+      "sourceExtractionExact": true,
+      "readFileIsMocked": true,
+      "actualOOMExecuted": false,
+      "subprocessesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "signalsSent": 0
+    }
+  },
+  "openFindings": [
+    {
+      "id": "CONTROL_JSON_RESOURCE_BOUNDS_OPEN",
+      "state": "SOURCE_REPRODUCED_OPEN",
+      "fact": "Actual unbound controller accepts settings with ignored extra3MiB; CLI2MiB refusal follows full read.",
+      "limits": "Local operator-owned input-bound gap; no OOM, remote exploit or severity demonstrated."
+    },
+    {
+      "id": "ALPHA_SESSION_INVENTORY_CAPACITY_OPEN",
+      "state": "SOURCE_EXTRACTED_VIRTUAL_REPRODUCED_OPEN",
+      "fact": "prepareRun accepts255-to256; minimum4353 treeentries exceeds4096 inventory limit and refuses stage/uninstall inspection.",
+      "limits": "Virtual source-extracted observations, not actual256-native-session fixture."
+    }
+  ],
+  "fixedCandidateFinding": {
+    "id": "ARCHIVE_IDENTITY_REGEX_COERCION",
+    "state": "LOCAL_FIX_HOSTED_PENDING",
+    "baseline": "Four recomputed self-consistent schema2 archives with array identity values were accepted.",
+    "correction": "Primitive string isHex/isRevision checks on all HEX/REV fields preserve schema1/2 formats and finite archive limits.",
+    "notClaimed": "No publisher signature bypass, malformed published archive, payload execution or release security acceptance."
+  },
+  "packagedDocumentationFix": "Alpha README now links exact34f public incident runbook; sibling service document is not in fixed bundle inventory. No new runtime payload or distinct package claim.",
+  "countsAreSeparateAndOverlapping": true,
+  "existing394AlphaInspectionIsNotFinalCandidateAggregate": true,
+  "ancestryAudit": {
+    "state": "PASS",
+    "documents": 31,
+    "mandatoryEdges": 165,
+    "blobPinComparisons": 91,
+    "distinctPinnedTargets": 8,
+    "distinctAncestorCommits": 17,
+    "missingReferences": 0,
+    "mismatches": 0
+  },
+  "declaredCIHostedEvidence": "x10/evidence/g7-ci-step-receipts-hosted.json",
+  "nextConcreteTask": "First inspect exact new implementation CI and actual archive contract step122 controls; no claim based on guessed checkout. Then fix CONTROL_JSON_RESOURCE_BOUNDS_OPEN: bounded nofollow/fstat/identity-rechecked controller record acquisition and installed control CLI input refusal BEFORE full read/allocation/parse; preserve existing modes, identity/durable/recovery semantics and all supported old records. Reproduce unbound3MiB settings and read-first2MiB counterexamples on baseline using checked-in source-pinned pure/tempfile harnesses, then negative bounded-I/O/failure-preservation tests. Do not start physical fixtures locally. After that separately fix session/inventory capacity accounting: source permits255-to256 but minimum4353 entries exceeds4096; refuse before publishing uninspectable state or prove compatible bounded accounting, not blind cap increase. Preserve34f timeout120006ms/cleanupUNKNOWN and c2/6401/localFAIL_UNKNOWN/CLA. User-manager loader environment remains unverified precondition. FullG3/G4/G5/G7/V1, orphan replay/disposal, TLSrestore,nativebinaryupgrade,permanent release/publisher capability,published replay,60minsoak and semanticContinuum stayOPEN; owner40h/history/Windows unchanged."
+}

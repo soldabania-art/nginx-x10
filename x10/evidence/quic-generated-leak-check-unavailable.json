@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "suite": "quic-generated-properties",
+  "startedAt": "2026-10-23T02:55:57.092178+00:00",
+  "source": "src/event/quic/ngx_event_quic_transport.c",
+  "sourceCheckout": "nginx-x10",
+  "sourceSha256": "3a5a4a5279af489c62937f55d175d0ac82c5cf3e2bf1fead9e9ebc8d8c4f0a6a",
+  "harnessSha256": "8f201fcba07a828f009a6aa68b5938a703dcbfee44e13bab241606ac2fcf026d",
+  "generatedConfigSha256": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+  "seed": 9000,
+  "randomCasesRequested": 256,
+  "networkUsed": false,
+  "duplicatePolicy": "excluded_unchanged",
+  "scope": "Production transport-parameter parser with only logging stubbed; no handshake or apply-time semantic checks",
+  "limitations": [
+    "Six properties generate related inputs; case count is not independent protocol coverage",
+    "Numeric-value constraints enforced by ngx_quic_apply_transport_params are outside this parser fixture",
+    "64-bit Linux generated headers; no 32-bit, TLS-library or full QUIC interoperability claim",
+    "Fixed-seed bounded generation is not exhaustive fuzzing or a security proof"
+  ],
+  "nginxVersion": "1.31.9",
+  "checkoutRevision": "c9ed4985f370d0fa444cad974000cadbb9ed7703",
+  "compiler": "cc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+  "compilerExecutable": "cc",
+  "compilerFlags": [
+    "-std=c99",
+    "-O1",
+    "-g",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-Wno-unused-parameter",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-fsanitize=address,undefined",
+    "-fno-sanitize-recover=all",
+    "-fno-omit-frame-pointer"
+  ],
+  "sanitizers": {
+    "requested": "address,undefined",
+    "enabled": [
+      "address",
+      "undefined"
+    ],
+    "runtimeOptions": {
+      "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1",
+      "UBSAN_OPTIONS": "halt_on_error=1:print_stacktrace=1"
+    }
+  },
+  "compileExitCode": 0,
+  "compilerDiagnostics": "",
+  "executionExitCode": 1,
+  "sanitizerDiagnostics": "==21==Can't open /proc/20/task for reading.\n==20==LeakSanitizer has encountered a fatal error.\n==20==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1\n==20==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)\n",
+  "passed": false,
+  "error": "Parser fixture produced no JSON; inspect execution/sanitizer diagnostics",
+  "sourceUnchangedDuringTest": true,
+  "finishedAt": "2026-10-23T02:55:59.008093+00:00",
+  "diagnosticOnly": true,
+  "attemptPhase": "Initial harness attempt with LeakSanitizer enabled; preceding final harness changes",
+  "interpretation": "Environment failure before property JSON; no parser pass/fail conclusion. Final harness explicitly disables leak detection and retains ASan bounds plus UBSan."
+}

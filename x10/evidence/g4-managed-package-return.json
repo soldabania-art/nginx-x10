@@ -1,0 +1,744 @@
+{
+  "schemaVersion": 1,
+  "state": "FROZEN_IMMUTABLE_REVISION_READER_FIX_LOCAL_VERIFIED_EXACT_HOSTED_PENDING",
+  "sourceBase": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+  "publicationParent": "e0ef02aab16ae6c956449ef19e69403000701262",
+  "scope": "Fixture-only immutable revision reader contract correction and finite primary-error preservation for the separate managed HTTP operator-package return; physical acceptance pending.",
+  "sourceBindings": {
+    "x10/service/operator-package-return.mjs": {
+      "beforeSha256": "de0aeeea7562df808fc7c72050743606f31273ca7e881fc909a7d172a824d5f9",
+      "afterSha256": "89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d",
+      "bytes": 46700
+    },
+    "x10/service/operator-package-return-proof.mjs": {
+      "beforeSha256": "e92ea85477297193b1400f0c1d590ee0a94e9cdebf2cd152201cf4a29fe521ad",
+      "afterSha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de",
+      "bytes": 12890
+    },
+    "x10/service/operator-package-return.test.mjs": {
+      "beforeSha256": "32c455b090a171acb2855cbd88d837f04e30322e34a56a5024ea9a561c3eb223",
+      "afterSha256": "1d2c7e7a3acafe2258ba16f320e8c9ddef505e4a1d6d87fb5d36517b9d134f8b",
+      "bytes": 18646
+    },
+    "x10/service/operator-package-return-proof.test.mjs": {
+      "beforeSha256": "efd69c053af02add57b078525fda2b6d62adb931a3eeaa031ff16463cd945af8",
+      "afterSha256": "a371fb330b15c796ef0c5f082d0667ff62527c9803b1886d5de98afeea649b93",
+      "bytes": 22388
+    },
+    "x10/service/verified-node.mjs": {
+      "beforeSha256": "f856f4574c3484792b7960eb3c8ae50c58283ff311d1582a844def464212b615",
+      "afterSha256": "9fbc3fd883f19943644f12602bfcc68e770eb290e8cca81e300d4f290f4232cb",
+      "bytes": 30571
+    },
+    "x10/service/verified-node.test.mjs": {
+      "beforeSha256": "e925a8ae1d89d3d68f2af4312f45e9509f79b685663d1ed539c088a3680c9b25",
+      "afterSha256": "22188a10a6e99e11c35d268720310518377d4dc617422316c834a9a020b076b6",
+      "bytes": 59488
+    },
+    ".github/workflows/x10-native.yml": {
+      "beforeSha256": "ea1c66d6db16b4379263c37ad9761cd9edd1c759e146864cbe7b37f96ac6b87b",
+      "afterSha256": "e2e954642138e9f80ae09eb873c35343f5cf35709928d2286e7043ebccdb6d8f",
+      "bytes": 23053
+    }
+  },
+  "evidence": "x10/evidence/g4-managed-package-return.json",
+  "perFileLedger": "x10/review/g4-managed-package-return-ledger.json",
+  "localSelectedTAP": {
+    "exitCode": 0,
+    "nodeVersion": "v24.22.1",
+    "tests": 662,
+    "pass": 662,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "newFixControlsIncludedOnce": 31,
+    "previousFrozenManagedControls": 631,
+    "separateUnchangedSourceBaselineControls": 3,
+    "workflowYAMLAndInlineSyntaxPassed": true,
+    "physicalNativeExecuted": false,
+    "systemdExecuted": false,
+    "networkFixtureExecuted": false
+  },
+  "newFixControlsIncludedOnce": 31,
+  "separateUnchangedSourceBaselineControls": 3,
+  "expectedHostedCounts": {
+    "reportFields": 13,
+    "proofTopSections": 12,
+    "orderedPhases": 16,
+    "units": 3,
+    "successfulNativeInvocations": 4,
+    "managerRestarts": 1,
+    "boundedJournalChecks": 5,
+    "trafficLegGETChecks": 4,
+    "separateInitialBInputPGETCheck": 1,
+    "uniqueCompletedSyntheticPOSTEffects": 4,
+    "postBytesEach": 65551,
+    "exactStreamChecks": 4,
+    "streamBytesEach": 65537,
+    "stopFieldsBeforeEachNewUnit": 11,
+    "restartProofFields": 12,
+    "ownedUnitsRemoved": 3,
+    "ownedInstallationsRemoved": 3,
+    "reportSchemaVersion": 2,
+    "primaryFailureOnSuccess": null,
+    "proofSchemaVersion": 1
+  },
+  "expectedCountsAreNotLocalRuntimeObservations": true,
+  "strictImmutableRevisionMode": "0400",
+  "revisionMode0600Accepted": false,
+  "historicalPrimaryCIFailureObserved": false,
+  "managedServicePackageTransitionAccepted": false,
+  "packageUpgradeRollbackAccepted": false,
+  "nativeBinaryVersionChangeAccepted": false,
+  "tlsBackupAccepted": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "productionAccepted": false,
+  "implementationCommitLocator": "Containing fix implementation commit; resulting exact native push/PR events must be read back.",
+  "priorCandidateCompleteReference": {
+    "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+    "path": "x10/evidence/g4-managed-package-return.json",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
+  },
+  "sourceBindingsFrozen": true,
+  "baselineCounterexample": {
+    "sourceCommit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+    "sourceProducerSha256": "de0aeeea7562df808fc7c72050743606f31273ca7e881fc909a7d172a824d5f9",
+    "method": "Exact immutable source clone exposes its private revision reader only; main was never called. Actual private tempfile I/O, no historical CLI or native execution.",
+    "independentControls": 3,
+    "allPass": true,
+    "checksumValid0400Outcome": "file_refused",
+    "identicalChecksumValid0600Outcome": "accepted",
+    "sourceAndOwnedInputFilesPreserved": true,
+    "unchangedControllerMakeRevisionMode": "0400",
+    "controllerContractSource": {
+      "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+      "path": "x10/control/manager.mjs",
+      "function": "makeRevision"
+    },
+    "demonstratesReaderContractDefect": true,
+    "demonstratesExclusiveHistoricalPrimaryCause": false,
+    "notAddedToFrozenTAP": true
+  },
+  "historicalExactNativeFailures": [
+    {
+      "event": "push",
+      "eventHead": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+      "eventTree": "0595d0d83cfe9dc1a5d84816e0dd2f6366b12912",
+      "actualCheckoutCommit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+      "actualCheckoutTree": "0595d0d83cfe9dc1a5d84816e0dd2f6366b12912",
+      "runId": 40486053822,
+      "jobId": 122128117810,
+      "attempt": 1,
+      "conclusion": "failure",
+      "failedStep": 30,
+      "actualSuccessfulStepNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        31,
+        64,
+        65
+      ],
+      "actualSuccessfulSteps": 32,
+      "skippedStepNumbers": [
+        32,
+        63
+      ],
+      "artifact": {
+        "id": 12725333174,
+        "bytes": 152515,
+        "zipSha256": "7ef954f0ae50182955b1222600945583286b18c5a5486155bc2886404367b5d9",
+        "apiDigestVerified": true,
+        "downloadedOnceAndReused": true,
+        "permanentRelease": false
+      },
+      "newCollectorActuallyInvoked": true,
+      "newReport": {
+        "schemaVersion": 1,
+        "kind": "nginx-x10-managed-operator-return-report",
+        "ok": false,
+        "code": "cleanup_unconfirmed",
+        "phase": "install_a",
+        "proof": null,
+        "cleanupFailures": [
+          "owned_unit_cleanup_unconfirmed"
+        ],
+        "cleanupFailureCount": 1,
+        "cleanupFailuresTruncated": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "subprocessOutputsPublished": false
+      },
+      "bootstrap": {
+        "ok": false,
+        "stage": "actual_managed_package_return",
+        "code": "bootstrap_stage_failed",
+        "runtimeRemoved": false,
+        "temporaryRootRemoved": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "subprocessOutputsPublished": false,
+        "historicalCliVerified": true,
+        "managedPackageReturnExecuted": false
+      },
+      "completionFlagFalseDoesNotMeanNoInvocation": true,
+      "originalPrimaryRefusalObserved": false,
+      "privateNodeCleanupArtifactAbsent": true,
+      "privateNodeRemovalConfirmed": false,
+      "bootstrapRootRemovalConfirmed": false,
+      "dependencyAndHistoryRetainedByFailurePolicy": true,
+      "packageArchiveUploadSkipped": true,
+      "nativeGroups": 20,
+      "alpha": {
+        "format": "node-test-tap",
+        "pass": 617,
+        "fail": 0,
+        "valid": true,
+        "total": 617,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "alphaTLS": {
+        "tests": 76,
+        "pass": 76,
+        "fail": 0
+      },
+      "newPureContracts": {
+        "tests": 517,
+        "pass": 517,
+        "fail": 0
+      },
+      "legacyService": {
+        "restoredProof": {
+          "stoppedConfirmedSource": true,
+          "privateBackupCreated": true,
+          "sourceUnitRemoved": true,
+          "freshUnit": true,
+          "freshInstallation": true,
+          "freshSession": true,
+          "freshRevision": true,
+          "exactInputRestored": true,
+          "portsPreserved": true,
+          "bindingInitiallyAbsent": true,
+          "freshHistory": true,
+          "restoredHTTPServed": true,
+          "restoredHTTPRestarted": true,
+          "noPostReplay": true,
+          "sourceRecordsPreserved": true,
+          "backupPreserved": true,
+          "archivePreserved": true,
+          "sourceInstallationRemoved": true
+        },
+        "nativeSessionsStarted": 5,
+        "nativeSessionsStopped": 5,
+        "managerRestarts": 2,
+        "journalChecks": 6,
+        "journalChecksAreNotExactQueryCounts": true,
+        "downstreamTLSSessions": 3,
+        "upstreamTLSSessions": 3,
+        "cleanup": {
+          "managerStopped": true,
+          "launcherExited": true,
+          "nativeGroupsAbsent": true,
+          "listeningPortsClosed": true,
+          "controlSocketAbsent": true,
+          "downstreamTLSPortClosed": true,
+          "runtimeLinkAbsent": true,
+          "upstreamTLSPortClosed": true,
+          "readinessRelayPortClosed": true,
+          "upstreamTLSOriginClosed": true,
+          "readinessRelayClosed": true,
+          "appSocketsRemaining": 0,
+          "installationRemoved": true,
+          "temporaryRootRemoved": true
+        },
+        "runtimeUnitRemoved": true,
+        "sourceCommit": "c2adbea6c8d1e8b864291383445d35a0b27e875a"
+      },
+      "managedServicePackageTransitionAccepted": false,
+      "productionAccepted": false
+    },
+    {
+      "event": "pull_request",
+      "eventHead": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+      "eventTree": "0595d0d83cfe9dc1a5d84816e0dd2f6366b12912",
+      "actualCheckoutCommit": "6201e88e33079de2918f5f994405cdbad44f01c7",
+      "actualCheckoutTree": "0595d0d83cfe9dc1a5d84816e0dd2f6366b12912",
+      "runId": 40486064789,
+      "jobId": 122128133176,
+      "attempt": 1,
+      "conclusion": "failure",
+      "failedStep": 30,
+      "actualSuccessfulStepNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        31,
+        64,
+        65
+      ],
+      "actualSuccessfulSteps": 32,
+      "skippedStepNumbers": [
+        32,
+        63
+      ],
+      "artifact": {
+        "id": 12725836031,
+        "bytes": 152508,
+        "zipSha256": "1a177e40918c81d65563ca4634ad6a9d246d346ae551e2fc24352a64a2ae3fe1",
+        "apiDigestVerified": true,
+        "downloadedOnceAndReused": true,
+        "permanentRelease": false
+      },
+      "newCollectorActuallyInvoked": true,
+      "newReport": {
+        "schemaVersion": 1,
+        "kind": "nginx-x10-managed-operator-return-report",
+        "ok": false,
+        "code": "cleanup_unconfirmed",
+        "phase": "install_a",
+        "proof": null,
+        "cleanupFailures": [
+          "owned_unit_cleanup_unconfirmed"
+        ],
+        "cleanupFailureCount": 1,
+        "cleanupFailuresTruncated": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "subprocessOutputsPublished": false
+      },
+      "bootstrap": {
+        "ok": false,
+        "stage": "actual_managed_package_return",
+        "code": "bootstrap_stage_failed",
+        "runtimeRemoved": false,
+        "temporaryRootRemoved": false,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "subprocessOutputsPublished": false,
+        "historicalCliVerified": true,
+        "managedPackageReturnExecuted": false
+      },
+      "completionFlagFalseDoesNotMeanNoInvocation": true,
+      "originalPrimaryRefusalObserved": false,
+      "privateNodeCleanupArtifactAbsent": true,
+      "privateNodeRemovalConfirmed": false,
+      "bootstrapRootRemovalConfirmed": false,
+      "dependencyAndHistoryRetainedByFailurePolicy": true,
+      "packageArchiveUploadSkipped": true,
+      "nativeGroups": 20,
+      "alpha": {
+        "format": "node-test-tap",
+        "pass": 617,
+        "fail": 0,
+        "valid": true,
+        "total": 617,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "alphaTLS": {
+        "tests": 76,
+        "pass": 76,
+        "fail": 0
+      },
+      "newPureContracts": {
+        "tests": 517,
+        "pass": 517,
+        "fail": 0
+      },
+      "legacyService": {
+        "restoredProof": {
+          "stoppedConfirmedSource": true,
+          "privateBackupCreated": true,
+          "sourceUnitRemoved": true,
+          "freshUnit": true,
+          "freshInstallation": true,
+          "freshSession": true,
+          "freshRevision": true,
+          "exactInputRestored": true,
+          "portsPreserved": true,
+          "bindingInitiallyAbsent": true,
+          "freshHistory": true,
+          "restoredHTTPServed": true,
+          "restoredHTTPRestarted": true,
+          "noPostReplay": true,
+          "sourceRecordsPreserved": true,
+          "backupPreserved": true,
+          "archivePreserved": true,
+          "sourceInstallationRemoved": true
+        },
+        "nativeSessionsStarted": 5,
+        "nativeSessionsStopped": 5,
+        "managerRestarts": 2,
+        "journalChecks": 6,
+        "journalChecksAreNotExactQueryCounts": true,
+        "downstreamTLSSessions": 3,
+        "upstreamTLSSessions": 3,
+        "cleanup": {
+          "managerStopped": true,
+          "launcherExited": true,
+          "nativeGroupsAbsent": true,
+          "listeningPortsClosed": true,
+          "controlSocketAbsent": true,
+          "downstreamTLSPortClosed": true,
+          "runtimeLinkAbsent": true,
+          "upstreamTLSPortClosed": true,
+          "readinessRelayPortClosed": true,
+          "upstreamTLSOriginClosed": true,
+          "readinessRelayClosed": true,
+          "appSocketsRemaining": 0,
+          "installationRemoved": true,
+          "temporaryRootRemoved": true
+        },
+        "runtimeUnitRemoved": true,
+        "sourceCommit": "6201e88e33079de2918f5f994405cdbad44f01c7"
+      },
+      "managedServicePackageTransitionAccepted": false,
+      "productionAccepted": false,
+      "orderedMergeParents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "c2adbea6c8d1e8b864291383445d35a0b27e875a"
+      ]
+    }
+  ],
+  "historicalResearch": {
+    "kind": "x10-managed-return-research-ci-review",
+    "schemaVersion": 1,
+    "sourceCommit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+    "sourceTree": "0595d0d83cfe9dc1a5d84816e0dd2f6366b12912",
+    "observedAtUTC": "2026-10-27T10:14:43Z",
+    "state": "EXACT_RESEARCH_PR_RUNTIME_SUCCESS",
+    "researchPR": {
+      "runId": 40486064626,
+      "headSha": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "completedAtUTC": "2026-10-27T10:13:31Z",
+      "jobId": 122128112467,
+      "actualStepCount": 11,
+      "allActualStepsSuccess": true,
+      "actualStepNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        15,
+        16,
+        17
+      ],
+      "nodeVersion": "v22.23.3",
+      "actualCheckoutCommit": "6201e88e33079de2918f5f994405cdbad44f01c7",
+      "actualCheckoutTree": "0595d0d83cfe9dc1a5d84816e0dd2f6366b12912",
+      "orderedCheckoutParents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "c2adbea6c8d1e8b864291383445d35a0b27e875a"
+      ],
+      "checkoutTreeMatchesImplementation": true,
+      "actualCountsObserved": true,
+      "counts": {
+        "core": {
+          "tests": 21,
+          "suites": 0,
+          "pass": 21,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "process": {
+          "tests": 7,
+          "suites": 0,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "handshake": {
+          "tests": 27,
+          "suites": 0,
+          "pass": 27,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "openssl": {
+          "tests": 48,
+          "suites": 0,
+          "pass": 48,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      "runnerReportsAllPassed": true,
+      "runnerExitCodes": [
+        0,
+        0,
+        0
+      ],
+      "runnerTimeouts": 0,
+      "runnerOutputLimitExceeded": 0,
+      "runnerSignals": 0,
+      "runnerErrors": 0,
+      "scopeLimits": [
+        "Synthetic record/state and process handover remain separate from real handshake observation.",
+        "Pinned OpenSSL probe is source-only read-only observation, not semantic TLS/NGINX migration.",
+        "No managed package-return, TLS route, foreground return or service acceptance derives from these research jobs."
+      ]
+    },
+    "researchPush": {
+      "runId": 40486053759,
+      "headSha": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "scopeJobId": 122127993911,
+      "runtimeJobId": 122128090168,
+      "runtimeConclusion": "skipped",
+      "runtimeCountsAccepted": false
+    },
+    "cla": {
+      "runId": 40486060018,
+      "headSha": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+      "jobId": 122128015289,
+      "conclusion": "failure",
+      "failedActualStep": 3,
+      "failedStepName": "Run F5 CLA assistant",
+      "authorizationOrSigningChanged": false
+    },
+    "rerunsRequested": 0,
+    "artifactsDownloaded": 0,
+    "rawLogsPublished": false,
+    "managedReturnAcceptedByResearch": false,
+    "productionAccepted": false,
+    "metadataAndLogsReadFromExactRun": true
+  },
+  "historicalCoordinatorArtifactReadback": {
+    "events": 2,
+    "assertions": 80,
+    "auditPassed": true,
+    "nativeConclusionsRemain": [
+      "FAIL",
+      "FAIL"
+    ],
+    "zipDigestsCheckedAgainstActualAPI": true,
+    "additionalDownloads": 0,
+    "rawArtifactsCopiedToGit": false
+  },
+  "candidateBehavior": [
+    "Read actual immutable controller revision files only at0400, with the same bounded canonical owner/single-link/FD identity/content checks. Do not chmod them or accept0600 as a fallback.",
+    "Expose the actual reader for reproducible tempfile regression; checksum-valid0400 is accepted without changing inode/mode/bytes, while0600 and corrupt/aliased inputs are refused and preserved.",
+    "Use schema2/13-field finite reports. Success requires own enumerable primaryFailure:null; failure retains a closed original primary code even if conservative cleanup changes final code to cleanup_unconfirmed.",
+    "Keep strict proof schema1/12 sections/16 phases, all stop/restart/count units, closed adverse validation, same-UID scope and Node retention policy unchanged.",
+    "Keep both frozen source literals aligned in workflow and cleanup consumer. A c2 schema1/12-field report cannot grant new dependency cleanup."
+  ],
+  "localValidation": {
+    "command": "node --test --test-reporter=tap x10/service/operator-package-return-proof.test.mjs x10/service/operator-package-return.test.mjs x10/service/verified-node.test.mjs",
+    "exitCode": 0,
+    "nodeVersion": "v24.22.1",
+    "tests": 662,
+    "pass": 662,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "newFixControlsIncludedOnce": 31,
+    "previousFrozenManagedControls": 631,
+    "separateUnchangedSourceBaselineControls": 3,
+    "sourcePins": {
+      "x10/service/operator-package-return.mjs": {
+        "bytes": 46700,
+        "sha256": "89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d"
+      },
+      "x10/service/operator-package-return-proof.mjs": {
+        "bytes": 12890,
+        "sha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de"
+      },
+      "x10/service/operator-package-return.test.mjs": {
+        "bytes": 18646,
+        "sha256": "1d2c7e7a3acafe2258ba16f320e8c9ddef505e4a1d6d87fb5d36517b9d134f8b"
+      },
+      "x10/service/operator-package-return-proof.test.mjs": {
+        "bytes": 22388,
+        "sha256": "a371fb330b15c796ef0c5f082d0667ff62527c9803b1886d5de98afeea649b93"
+      },
+      "x10/service/verified-node.mjs": {
+        "bytes": 30571,
+        "sha256": "9fbc3fd883f19943644f12602bfcc68e770eb290e8cca81e300d4f290f4232cb"
+      },
+      "x10/service/verified-node.test.mjs": {
+        "bytes": 59488,
+        "sha256": "22188a10a6e99e11c35d268720310518377d4dc617422316c834a9a020b076b6"
+      },
+      ".github/workflows/x10-native.yml": {
+        "bytes": 23053,
+        "sha256": "e2e954642138e9f80ae09eb873c35343f5cf35709928d2286e7043ebccdb6d8f"
+      }
+    },
+    "workflowYAMLAndInlineSyntaxPassed": true,
+    "physicalNativeExecuted": false,
+    "systemdExecuted": false,
+    "networkFixtureExecuted": false
+  },
+  "earlyDraftAdverse": {
+    "tests": 118,
+    "pass": 107,
+    "fail": 11,
+    "context": "Consumer schema2 fixtures were tested before the parallel proof writer replaced schema1 validation. The final synchronized consumer suite passed118/118 and the frozen aggregate662/662.",
+    "rawPrivateLogRetained": true,
+    "notAddedToFinalTAP": true,
+    "notClaimedAsPhysicalFailureCause": true
+  },
+  "hostedVerification": {
+    "state": "PENDING_EXACT_RESULTING_FIX_IMPLEMENTATION",
+    "requiredArtifact": "service-package-return.json",
+    "expectedReportSchema": 2,
+    "expectedReportFields": 13,
+    "expectedProofSchema": 1,
+    "expectedActualNativeSteps": 35,
+    "workflowExplicitSteps": 31,
+    "producerSha256": "89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d",
+    "proofSha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de",
+    "consumerSha256": "9fbc3fd883f19943644f12602bfcc68e770eb290e8cca81e300d4f290f4232cb",
+    "expectedCounts": {
+      "reportFields": 13,
+      "proofTopSections": 12,
+      "orderedPhases": 16,
+      "units": 3,
+      "successfulNativeInvocations": 4,
+      "managerRestarts": 1,
+      "boundedJournalChecks": 5,
+      "trafficLegGETChecks": 4,
+      "separateInitialBInputPGETCheck": 1,
+      "uniqueCompletedSyntheticPOSTEffects": 4,
+      "postBytesEach": 65551,
+      "exactStreamChecks": 4,
+      "streamBytesEach": 65537,
+      "stopFieldsBeforeEachNewUnit": 11,
+      "restartProofFields": 12,
+      "ownedUnitsRemoved": 3,
+      "ownedInstallationsRemoved": 3,
+      "reportSchemaVersion": 2,
+      "primaryFailureOnSuccess": null,
+      "proofSchemaVersion": 1
+    },
+    "noUnchangedRerunRequested": true
+  },
+  "legacyProfile": {
+    "sourceSha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370",
+    "codeUnchanged": true,
+    "restoredProofFields": 18,
+    "successfulNativeSessions": 5,
+    "managerRestarts": 2,
+    "boundedJournalChecks": 6,
+    "journalChecksAreNotExactQueryCounts": true,
+    "downstreamTLSSessions": 3,
+    "upstreamTLSSessions": 3,
+    "stillSeparatelyRequiredBeforeNodeCleanup": true
+  },
+  "diagnosticCausalityLimit": "Both c2 artifacts reported install_a/cleanup_unconfirmed with no proof. Cleanup overwrote the original primary code. The exact-source mode mismatch is reproduced and corrected, but the original primary error was not recorded and is not retrospectively invented. A false bootstrap completion flag does not mean the failed child was never invoked.",
+  "nextAfterScopedHappyPathAcceptance": "Separate managed candidate-readiness failure after A retirement, verified B failure/retirement without POST effects, then explicit operator reactivation of the kept old A serving P. Existing legacy hold/capture/reset-failed primitives are already covered; the missing outcome is cross-package fallback service.",
+  "separateReleasePreflight": {
+    "observedAtUTC": "2026-10-27T10:12:00Z",
+    "gitHubReleasesObserved": 0,
+    "x10VersionTagsObserved": false,
+    "createReleaseOrUploadAssetToolAvailable": false,
+    "noPermissionOrCredentialWorkaroundAttempted": true,
+    "actionsRetentionDays": 14,
+    "releaseSchemaExecutedStepsLimit": 32,
+    "futureActualNativeSteps": 35,
+    "declarationRepresentationRequiresExplicitReconciliation": true,
+    "notAReasonToStopIndependentRemainingGates": true
+  },
+  "limitations": [
+    "This change adds fixtures and stricter CI dependency-cleanup admission; it does not change installed CLI/native/controller runtime, package inventory or installation/bundle schemas. B remains the actual operator runtime introduced by ad012; tests/docs changes do not create a third runtime version.",
+    "Historical A CLI is bounded public reviewed Git bytes passed as a mode0400 nonexecuted file by checkout-owned system Node. The private Node checker never runs Git, changes safe.directory/security settings or expands permissions. Historical archive is a checked reassembly, not a published historical release.",
+    "Same UID remains the declared trusted operator boundary. Source hashes/cooperative Git lease/finite proof checks are not signatures, a hostile same-UID sandbox or an OS fence.",
+    "New3units/4invocations/1restart/5bounded journal checks are separate from legacy18proofs/5sessions/2restarts/6checks/TLS3. Journal checks may use multiple bounded queries. trafficGets4 counts successful verified leg checks, not raw GET acquisition attempts.",
+    "POST effects are four completed unique in-memory synthetic origin receipts, not durable database/business transactions. They are preserved and not replayed or reversed. Stream/POST sizes are fixture observations, not full release load budgets.",
+    "Only idempotent GET acquisition may retry (at most8attempts per traffic leg). Each POST and stream use that same selected downstream HTTP socket; no POST retry, upstream TLS session preservation, all-worker readiness or zero-downtime claim follows.",
+    "The collector requires explicit prepared-null binding observations for A/B/A2. The B restart intermediate prepared binding is not observed; proof records null rather than claiming absence.",
+    "The report is bounded12KiB and both-report cleanup envelope32KiB. Both completed source-pinned checkers and strict success reports are required before private Node removal. Valid adverse reports remain ok:false and retain Node; arbitrary raw output is not published.",
+    "No physical native/process-group/signal/systemd/network fixture ran locally. Frozen Node24 pure/tempfile/virtual success does not accept the hosted manager scenario.",
+    "All broad gates remain open: managed package acceptance pending exact CI, recovery/security/failure matrix, native binary upgrade, TLS restore, permanent release/independent published replay/60-minute soak, fullG3/G4/G5-G8/V1 and semantic Continuum. Earlier favorable and unfavorable evidence is preserved.",
+    "This fixes a fixture reader, not native/controller/package runtime. B remains the operator code introduced by ad012; unchanged native binary and historical A reassembly boundaries remain explicit.",
+    "Report schema2 preserves a finite primary error without publishing arbitrary exception messages, paths, PIDs or raw logs. Conservative inert/unknown unit cleanup has not been broadened.",
+    "The original c2 failures, retained dependency/history/bootstrap state and absent cleanup artifact remain adverse observations. Only resulting exact hosted success can accept the new scenario."
+  ],
+  "productionRuntimeChanged": false,
+  "runtimePackageChangedByThisFixture": false,
+  "workflowChangesArePinOnlyRelativeToC2": true,
+  "priorScopedAcceptedReceipt": {
+    "commit": "ee2daa0385f654e96fd5b75c09da4e0179bb90a1",
+    "implementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+    "path": "x10/evidence/g4-operator-return-hosted.json",
+    "scope": "Foreground operator return/backward HTTP and verified TLS fixture only"
+  }
+}

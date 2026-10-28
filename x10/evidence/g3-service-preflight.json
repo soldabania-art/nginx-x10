@@ -1,0 +1,943 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-service-preflight-20261024T221655000Z",
+  "sourceBase": "1eba23e2995cfe4ef7c5acff363bf87192c0b224",
+  "publicationParent": "e2ee98f3760d18425e7162d98779d09caf9093a2",
+  "implementationCommit": null,
+  "implementationCommitLocator": "Git commit containing this record; exact SHA reconciled by a subsequent hosted receipt",
+  "recordedAtUTC": "2026-10-24T22:24:48.165068Z",
+  "scope": "Fail-closed read-only nonroot user-manager capability preflight; no service activation or lifecycle acceptance",
+  "sourceFreezeSha256": {
+    "x10/service/preflight.mjs": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+    "x10/service/preflight.test.mjs": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3",
+    ".github/workflows/x10-native.yml": "39e90a1273373ff67222ea35b498156d4d133a1cb25da107f3483753a8288958"
+  },
+  "unrelatedRuntimeFilesUnchanged": 508,
+  "reportSha256": {
+    "author": "489f5b1a66c4dbb69c1ecde8a4fc00e90bc8fac32f499b794884c3bc5478ffef",
+    "independentReview": "d882d58e877585ca01736fcd27feeb01b6a659f796c5bc802738edea2ba89f8c",
+    "native": "a50ff34b88cd39e87a1e7d65a3952e0b0401dde31398c84ce1bcbd8fa1ef0e8c"
+  },
+  "author": {
+    "schemaVersion": 1,
+    "scope": "Read-only nonroot user-manager preflight contract; not live service acceptance",
+    "baseCommit": "1eba23e2995cfe4ef7c5acff363bf87192c0b224",
+    "leaseCommit": "e2ee98f3760d18425e7162d98779d09caf9093a2",
+    "command": "node --test --test-reporter=tap x10/service/preflight.test.mjs",
+    "environment": {
+      "nodeVersion": "v24.22.1",
+      "platform": "linux",
+      "executionUidWasRoot": true,
+      "targetNonrootNode22Accepted": false
+    },
+    "sourceHashes": {
+      "x10/service/preflight.mjs": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+      "x10/service/preflight.test.mjs": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3"
+    },
+    "initialRun": {
+      "tap": {
+        "tests": 42,
+        "pass": 37,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "privateTapSha256": "54ab153104c2ba158627a453de38bae6d8a8b3fd24a09f211673ca152e4daf7a",
+      "durationMs": 519.754175,
+      "exitCode": 1,
+      "accepted": false,
+      "reason": "Five synthetic CLI setup cases failed because the test-only hook imported nonexistent updateBuiltinESMExports instead of syncBuiltinESMExports. This occurred before any manager probe. The test hook name was corrected; no runtime-module change fixed this setup error."
+    },
+    "finalRun": {
+      "tap": {
+        "tests": 42,
+        "pass": 42,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "privateTapSha256": "8c645456756875cebbb96c1d063b092328e3a1770881984f80d3bc10f366b067",
+      "durationMs": 509.968828,
+      "exitCode": 0,
+      "accepted": true,
+      "sourceFrozenByAuthorAfterRun": true,
+      "sourceHashesVerifiedByIndependentReview": true,
+      "unchangedPassedSuiteRerun": false
+    },
+    "actualLiveObservation": {
+      "suite": "service-preflight-live-observation",
+      "nonroot": false,
+      "managerAvailable": false,
+      "probeExecuted": false,
+      "reason": "nonroot_required",
+      "serviceAccepted": false,
+      "productionAccepted": false
+    },
+    "baselineCounterexample": {
+      "scope": "synthetic naive exit-code-only predicate contrasted with strict transcript assessment",
+      "naiveExitCodeOnlyPredicateAcceptsStub": true,
+      "candidateRefusesStubTranscript": true,
+      "managerActuallyQueriedByCounterexample": false,
+      "priorProductPreflightImplementationExisted": false
+    },
+    "coverage": {
+      "tapTests": 42,
+      "pureTranscriptAndUsageControls": 35,
+      "actualLocalCLIObservation": 1,
+      "syntheticCLIChildren": 5,
+      "CLIPathAliasControl": 1,
+      "syntheticPositiveManagerAcceptanceIsNotLiveAcceptance": true,
+      "syntheticCLIEnvAndArgvAssertions": true,
+      "syntheticTimeoutAndOutputLimitClassification": true,
+      "actualSystemctlTimeoutKillTested": false
+    },
+    "cleanup": {
+      "ownedSyntheticChildrenExited": true,
+      "ownedTemporaryFixtureRootsRemoved": true,
+      "serviceUnitsCreated": 0,
+      "serviceUnitsActivated": 0,
+      "busConnectionsFromSyntheticFixtures": 0,
+      "actualRootCLIManagerCommandsExecuted": 0
+    },
+    "queryBounds": {
+      "timeoutMs": 2500,
+      "stdoutOrStderrMaxBytes": 16384,
+      "combinedDecodedReplyMaxBytes": 16384,
+      "commandIsFixedAbsolute": true,
+      "minimalExplicitLocalBusEnvironment": true,
+      "inheritedRemoteBusIgnored": true,
+      "noShellOrPagerOrInteractivePassword": true
+    },
+    "scenarios": [
+      "exit0 stub baseline overclaims a manager while strict transcript refuses",
+      "synthetic running manager accepts only narrowly scoped manager properties",
+      "synthetic degraded manager is available without claiming health",
+      "property order is irrelevant but complete exact keys are required",
+      "synthetic transcript refuses missing",
+      "synthetic transcript refuses duplicate",
+      "synthetic transcript refuses unknown",
+      "synthetic transcript refuses blank-line",
+      "synthetic transcript refuses no-final-newline",
+      "synthetic transcript refuses empty-value",
+      "synthetic transcript refuses carriage-return",
+      "synthetic transcript refuses tab",
+      "synthetic transcript refuses nul",
+      "synthetic transcript refuses unicode",
+      "synthetic transcript refuses system-manager",
+      "synthetic transcript refuses other-uid",
+      "synthetic transcript refuses init-scope-child",
+      "synthetic transcript refuses relative-cgroup",
+      "synthetic transcript refuses starting-state",
+      "synthetic transcript refuses maintenance-state",
+      "synthetic transcript refuses offline-state",
+      "synthetic transcript refuses malformed-version",
+      "synthetic transcript refuses long-version",
+      "query failure nonzero never returns raw diagnostics",
+      "query failure signal never returns raw diagnostics",
+      "query failure timeout never returns raw diagnostics",
+      "query failure output-overflow never returns raw diagnostics",
+      "query failure stderr never returns raw diagnostics",
+      "query failure stdout-overflow never returns raw diagnostics",
+      "query failure combined-overflow never returns raw diagnostics",
+      "query failure string-timeout never returns raw diagnostics",
+      "query failure missing-overflow-flag never returns raw diagnostics",
+      "query failure buffer-stdout never returns raw diagnostics",
+      "root, invalid and unsafe integer UID transcripts refuse",
+      "CLI rejects all options before any probe and returns fixed nonacceptance flags",
+      "actual local CLI reports only a bounded prerequisite observation",
+      "synthetic CLI positive confines read-only query and returns no service acceptance",
+      "synthetic CLI stub confines read-only query and returns no service acceptance",
+      "synthetic CLI timeout confines read-only query and returns no service acceptance",
+      "synthetic CLI overflow confines read-only query and returns no service acceptance",
+      "synthetic CLI uid-mismatch confines read-only query and returns no service acceptance",
+      "CLI alias still performs refusal and cannot silently exit success"
+    ],
+    "limitations": [
+      "Synthetic transcript positives and test-only child hooks do not establish a live nonroot user manager or operated service.",
+      "The actual local CLI ran as root and refused before executing a manager command.",
+      "The preflight is read-only and neither installs nor activates units, enables linger, reloads a manager, changes credentials or configures a bus.",
+      "Metadata and a successful manager property query remain observations under trusted-operator assumptions, not an authenticated service health proof or malicious same-UID isolation.",
+      "Only the conventional fixed local user-bus and canonical manager control-group profile is accepted. Custom paths/slices are unsupported.",
+      "A 2500ms owned systemctl execution timeout and output limits are configured; no hard deadline for kernel/filesystem stalls or process-reaping guarantee is claimed.",
+      "Root/Node24 local checks do not accept target nonroot Node22 service lifecycle, TLS readiness, startup/restart/drain/orphan, permanent release or Production V1."
+    ],
+    "serviceActivated": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "secretBytesPublished": false
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "kind": "Independent service preflight contract/security review",
+    "sourceCommitBase": "e2ee98f3760d18425e7162d98779d09caf9093a2",
+    "sourceFiles": {
+      "x10/service/preflight.mjs": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+      "x10/service/preflight.test.mjs": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3",
+      "x10/service/README.md": "6d4007f9d5d3c5e598a53d96f0238360e9cdb75335ba5b3cbff517526d5a7eb8",
+      ".github/workflows/x10-native.yml": "39e90a1273373ff67222ea35b498156d4d133a1cb25da107f3483753a8288958"
+    },
+    "staticChecks": [
+      {
+        "name": "readonly_fixed_systemctl_command",
+        "passed": true
+      },
+      {
+        "name": "no_shell_or_service_mutation_primitives",
+        "passed": true
+      },
+      {
+        "name": "no_interactive_auth_or_pager",
+        "passed": true
+      },
+      {
+        "name": "strict_bounded_exec_options",
+        "passed": true
+      },
+      {
+        "name": "minimal_environment_does_not_inherit_remote_bus",
+        "passed": true
+      },
+      {
+        "name": "fixed_canonical_owned_runtime_socket_and_tool",
+        "passed": true
+      },
+      {
+        "name": "root_owned_immutable_fixed_ancestors",
+        "passed": true
+      },
+      {
+        "name": "real_euid_must_match",
+        "passed": true
+      },
+      {
+        "name": "root_refusal_before_local_prerequisites",
+        "passed": true
+      },
+      {
+        "name": "record_failure_flags_must_be_boolean",
+        "passed": true
+      },
+      {
+        "name": "combined_output_bound_and_no_stderr",
+        "passed": true
+      },
+      {
+        "name": "exact_unique_property_keys",
+        "passed": true
+      },
+      {
+        "name": "manager_controlgroup_bound_to_actual_uid",
+        "passed": true
+      },
+      {
+        "name": "degraded_available_not_health",
+        "passed": true
+      },
+      {
+        "name": "service_and_V1_flags_always_false",
+        "passed": true
+      },
+      {
+        "name": "CLI_accepts_no_mutation_arguments",
+        "passed": true
+      },
+      {
+        "name": "import_does_not_call_probe",
+        "passed": true
+      },
+      {
+        "name": "production_probe_has_no_dependency_injection_parameters",
+        "passed": true
+      },
+      {
+        "name": "synthetic_child_hooks_labeled_not_actual_manager",
+        "passed": true
+      },
+      {
+        "name": "actual_live_observation_is_allowlisted",
+        "passed": true
+      },
+      {
+        "name": "CI_required_step_runs_contract_tests_only",
+        "passed": true
+      },
+      {
+        "name": "docs_mark_source_tool_not_installed_alpha",
+        "passed": true
+      },
+      {
+        "name": "docs_root_no_sudo_no_fake_acceptance",
+        "passed": true
+      },
+      {
+        "name": "docs_preserve_real_service_lifecycle_open",
+        "passed": true
+      }
+    ],
+    "staticTotals": {
+      "checks": 24,
+      "passed": 24,
+      "blockingFindings": 0
+    },
+    "independentHeldouts": {
+      "schemaVersion": 1,
+      "kind": "Independent readonly user-manager preflight heldouts",
+      "sourceSha256": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+      "sourceUnchanged": true,
+      "checks": [
+        {
+          "name": "reordered_properties_are_parsed_by_name",
+          "passed": true
+        },
+        {
+          "name": "degraded_manager_is_explicitly_not_running",
+          "passed": true
+        },
+        {
+          "name": "foreign_uid_cgroup",
+          "passed": true
+        },
+        {
+          "name": "system_manager_cgroup",
+          "passed": true
+        },
+        {
+          "name": "init_scope_child_is_not_manager_root",
+          "passed": true
+        },
+        {
+          "name": "delegated_descendant_is_not_manager_root",
+          "passed": true
+        },
+        {
+          "name": "relative_cgroup_refused",
+          "passed": true
+        },
+        {
+          "name": "cgroup_dot_segments_refused",
+          "passed": true
+        },
+        {
+          "name": "leading_zero_uid_is_not_bound",
+          "passed": true
+        },
+        {
+          "name": "carriage_return_protocol_refused",
+          "passed": true
+        },
+        {
+          "name": "unicode_version_refused",
+          "passed": true
+        },
+        {
+          "name": "ansi_escape_version_refused",
+          "passed": true
+        },
+        {
+          "name": "nul_version_refused",
+          "passed": true
+        },
+        {
+          "name": "version_shell_suffix_refused",
+          "passed": true
+        },
+        {
+          "name": "extra_auth_property_refused",
+          "passed": true
+        },
+        {
+          "name": "duplicate_group_refused",
+          "passed": true
+        },
+        {
+          "name": "duplicate_state_refused",
+          "passed": true
+        },
+        {
+          "name": "blank_line_refused",
+          "passed": true
+        },
+        {
+          "name": "trailing_notice_refused",
+          "passed": true
+        },
+        {
+          "name": "empty_property_refused",
+          "passed": true
+        },
+        {
+          "name": "stopping_manager_refused",
+          "passed": true
+        },
+        {
+          "name": "startup_manager_refused",
+          "passed": true
+        },
+        {
+          "name": "offline_manager_refused",
+          "passed": true
+        },
+        {
+          "name": "string_uid_not_authority",
+          "passed": true
+        },
+        {
+          "name": "nonzero_exit_with_good_text",
+          "passed": true
+        },
+        {
+          "name": "signal_with_good_text",
+          "passed": true
+        },
+        {
+          "name": "timeout_with_good_text",
+          "passed": true
+        },
+        {
+          "name": "output_limit_with_good_text",
+          "passed": true
+        },
+        {
+          "name": "stderr_with_good_text",
+          "passed": true
+        },
+        {
+          "name": "malformed_timeout_flag",
+          "passed": true
+        },
+        {
+          "name": "malformed_output_flag",
+          "passed": true
+        },
+        {
+          "name": "missing_timeout_flag",
+          "passed": true
+        },
+        {
+          "name": "missing_output_flag",
+          "passed": true
+        },
+        {
+          "name": "string_exit_zero",
+          "passed": true
+        },
+        {
+          "name": "actual_readonly_local_systemctl_output_is_not_manager_acceptance",
+          "passed": true
+        },
+        {
+          "name": "actual_path_lookup_exit_zero_stub_is_refused",
+          "passed": true
+        },
+        {
+          "name": "real_root_preflight_refuses_without_probe",
+          "passed": true
+        },
+        {
+          "name": "actual_cli_exit_one_matches_sanitized_root_refusal",
+          "passed": true
+        },
+        {
+          "name": "activation_argument_has_no_cli_authority",
+          "passed": true
+        }
+      ],
+      "totals": {
+        "checks": 39,
+        "passed": 39,
+        "failed": 0
+      },
+      "actualLocalObservation": {
+        "systemctlExitCode": 1,
+        "naiveExitZeroWouldAccept": false,
+        "strictAssessmentManagerAvailable": false,
+        "pathLookupSystemctlExitCode": 0,
+        "pathLookupNaiveExitZeroWouldAccept": true,
+        "pathLookupStrictAssessmentManagerAvailable": false,
+        "rootCLIExitCode": 1,
+        "rootCLIProbeExecuted": false,
+        "actualNonrootManagerObserved": false
+      },
+      "cleanup": {
+        "noNativeProcessStarted": true,
+        "noServiceActivated": true,
+        "noUidChanged": true,
+        "noTemporaryRootCreated": true
+      },
+      "limits": [
+        "Positive running/degraded cases are synthetic transcript assessment for a chosen fixture UID, not actual user-manager or service acceptance.",
+        "Actual local systemctl command is readonly in the root namespace; its output is treated only as a negative transcript and is never printed or published.",
+        "Actual CLI root refusal and unsupported activation argument are exercised; no UID override, user bus creation or service activation occurs.",
+        "No native/aggregate rerun or target nonroot Node22 service acceptance."
+      ]
+    },
+    "findings": [
+      {
+        "state": "resolved-before-frozen-review",
+        "finding": "Inherited D-Bus endpoint could otherwise point away from the current UID local manager.",
+        "resolution": "The real probe uses only a fixed minimal environment and canonical current-UID local bus; remote inherited endpoints are not used."
+      },
+      {
+        "state": "resolved-before-frozen-review",
+        "finding": "Private runtime or root-owned tool alone would not validate potentially writable fixed ancestors.",
+        "resolution": "Fixed root-owned ancestor directories are inspected and reject unsafe write/special modes."
+      },
+      {
+        "state": "resolved-before-frozen-review",
+        "finding": "Malformed query failure flags could otherwise be ignored by pure assessment.",
+        "resolution": "Failure flags require exact booleans; direct independent negatives passed."
+      },
+      {
+        "state": "explicit-limit",
+        "finding": "Same-UID operator and local D-Bus service responses are trusted; transcript parsing is not cryptographic attestation or service acceptance."
+      },
+      {
+        "state": "resolved-review-question",
+        "finding": "Manager ControlGroup property presence was checked instead of assuming it was Unit-only.",
+        "resolution": "Installed official interface and systemd v255 source explicitly expose Manager.ControlGroup backed by the manager cgroup root."
+      }
+    ],
+    "officialSourceReference": "https://github.com/systemd/systemd/blob/v255/src/core/dbus-manager.c",
+    "cleanup": {
+      "noNativeProcessStarted": true,
+      "noServiceActivated": true,
+      "noUidChanged": true,
+      "noTemporaryRootCreated": true
+    },
+    "claimBoundaries": [
+      "39 independent heldouts combine synthetic transcript controls and actual readonly root-negative observations; they are not39 real managers or service lifecycles.",
+      "Running/degraded positive transcripts use a fixture UID only and confer no actual authority.",
+      "Actual PATH-lookup systemctl returned exit0 placeholder; fixed absolute systemctl returned exit1. These are distinct readonly observations and do not explain historical ENXIO.",
+      "The new real CLI refused root with exit1 and probeExecuted:false. No UID, credentials, environment configuration, service units or host account were changed.",
+      "No nonroot Node22 user service, restart, readiness, drain/orphan cleanup, permanent release or Production V1 acceptance."
+    ],
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "serviceActivated": false,
+    "serviceAccepted": false,
+    "productionAccepted": false
+  },
+  "native": {
+    "schemaVersion": 1,
+    "scope": "Fresh unchanged native compatibility for standalone user-manager preflight development; separate authored preflight tests",
+    "servicePreflightSuiteIncludedInAggregate": false,
+    "servicePreflightCodeIncludedInRuntimeBundle": false,
+    "build": {
+      "builds": 1,
+      "exitCode": 0,
+      "elapsedMs": 25958,
+      "timedOut": false,
+      "checkoutRevision": "e2ee98f3760d18425e7162d98779d09caf9093a2",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+      "manifestSha256": "2c29884c772b9445364a7ef798f831899dbc2ed3ac4de05b991c2d38fb7eacec",
+      "binarySha256": "386910b6c466af0d8dc75116cafe19f64021af556b29898b608f549436093ed7",
+      "binaryMode": "0755",
+      "compiledModuleCount": 105,
+      "nginxVersion": "1.31.9",
+      "dependencyVersionsFromHeaders": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "generatedFiles": {
+        "ngx_auto_config.h": {
+          "sha256": "008d045d993e60d68e7e53502beedaf0680a8ee35a587b0574871240ff4a3327",
+          "bytes": 10168,
+          "mode": "0644"
+        },
+        "ngx_auto_headers.h": {
+          "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+          "bytes": 657,
+          "mode": "0644"
+        },
+        "ngx_modules.c": {
+          "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+          "bytes": 11820,
+          "mode": "0644"
+        }
+      },
+      "licenseSha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c"
+    },
+    "environment": {
+      "nodeVersion": "v24.22.1",
+      "uid": 0,
+      "targetNonrootNode22Accepted": false
+    },
+    "dependencies": {
+      "pinnedWheelHashesVerified": 11,
+      "freshVenvs": 2,
+      "pipCheckPassed": 2,
+      "networkDependencyDownloads": 0,
+      "requireHashes": true,
+      "onlyBinary": true
+    },
+    "aggregate": {
+      "command": "node x10/test/all.mjs --official",
+      "exitCode": 0,
+      "elapsedMs": 224529,
+      "timedOut": false,
+      "stderrBytes": 679,
+      "success": true,
+      "groups": 20,
+      "passed": 20,
+      "failed": 0,
+      "suites": [
+        {
+          "name": "http-tls-http2-reload",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "stream-mail",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "mail-tls-starttls",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "protocol-adapters",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-interop",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-head-independent-client",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-features",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-regression",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-generated-sanitized",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-frame-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-load-client-verification",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "managed-native-control",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "operator-status",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "local-alpha-lifecycle",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "listener-observer-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "reload-listener-observation",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-control-api",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-process-generations",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-generation-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "official-nginx-tests",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        }
+      ]
+    },
+    "controller": {
+      "format": "node-test-tap",
+      "pass": 86,
+      "fail": 0,
+      "valid": true
+    },
+    "alpha": {
+      "format": "node-test-tap",
+      "pass": 45,
+      "fail": 0,
+      "valid": true,
+      "total": 45,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "operatorStatus": {
+      "format": "node-test-tap",
+      "pass": 30,
+      "fail": 0,
+      "valid": true,
+      "total": 30,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "listenerBoundaries": {
+      "format": "node-test-tap",
+      "pass": 42,
+      "fail": 0,
+      "valid": true
+    },
+    "handover": {
+      "success": true,
+      "interrupted": false,
+      "cleanup": {
+        "nativeStopped": true,
+        "nativeExitCode": 0,
+        "nativeSignal": null,
+        "mode": "SIGQUIT",
+        "stoppedWorkerResumeRequested": true,
+        "fixturesStopped": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "errors": []
+      },
+      "sourceUnchangedDuringTest": true,
+      "tests": 7,
+      "passed": 7,
+      "cleanupErrorCount": 0,
+      "fixtureErrorCount": 0
+    },
+    "official": {
+      "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+      "summary": {
+        "files": 35,
+        "filesPassed": 32,
+        "filesSkipped": 3,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1109,
+          "passed": 1083,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "skippedFiles": [
+        "fastcgi.t",
+        "scgi.t",
+        "uwsgi.t"
+      ],
+      "cleanupErrorCount": 0,
+      "sourceUnchangedDuringTest": true
+    },
+    "nativeTrackedInputsCount": 499,
+    "unchangedRuntimeAndNativeInputsCount": 508,
+    "nativeTrackedInputsUnchanged": true,
+    "licenseUnchanged": true,
+    "frozenFilesCount": 37,
+    "frozenFilesUnchanged": true,
+    "sourceFreezeSha256": {
+      "x10/control/manager.mjs": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822",
+      "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+      "x10/control/listeners.mjs": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+      "x10/test/listeners.test.mjs": "a43b12acdfedd6125f5b0bd84010581c8b28141215b804e8895c453928918b3c",
+      "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612"
+    },
+    "supplementalUnixReruns": 0,
+    "featureOffReruns": 0,
+    "historicalLocalFailurePreserved": true,
+    "historicalESRCHCauseProven": false,
+    "nativeProcessGroupSignalEscalationPerformed": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "serviceActivated": false,
+    "frontendTLSAccepted": false,
+    "productionAccepted": false,
+    "limitations": [
+      "Local root/Node24 compatibility does not accept actual nonroot Node22 user-service operation.",
+      "One fresh native build and one frozen native official aggregate; no unchanged native diagnostic rerun.",
+      "Historical19/20 ESRCH failure process/interleaving remains unproven.",
+      "Existing restricted AF_UNIX EPERM supplemental failure was not retried unchanged; hosted required Unix evidence remains separate.",
+      "Feature-off profile not rerun locally; nativeC unchanged.",
+      "Official optional-client skips and expected TODO remain explicit.",
+      "New standalone user-manager preflight suite is separate authored evidence, not part of the twenty existing aggregate groups or installed bundle inventory."
+    ]
+  },
+  "reviewedOutcomeSummary": {
+    "schemaVersion": 1,
+    "baseCommit": "1eba23e2995cfe4ef7c5acff363bf87192c0b224",
+    "leaseCommit": "e2ee98f3760d18425e7162d98779d09caf9093a2",
+    "actualFinalReportsReviewed": true,
+    "blockingFindings": 0,
+    "reportSha256": {
+      "author": "489f5b1a66c4dbb69c1ecde8a4fc00e90bc8fac32f499b794884c3bc5478ffef",
+      "independentReview": "d882d58e877585ca01736fcd27feeb01b6a659f796c5bc802738edea2ba89f8c",
+      "native": "a50ff34b88cd39e87a1e7d65a3952e0b0401dde31398c84ce1bcbd8fa1ef0e8c"
+    },
+    "sourceFreezeSha256": {
+      "x10/service/preflight.mjs": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+      "x10/service/preflight.test.mjs": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3",
+      ".github/workflows/x10-native.yml": "39e90a1273373ff67222ea35b498156d4d133a1cb25da107f3483753a8288958"
+    },
+    "author": {
+      "exitCode": 0,
+      "tap": {
+        "tests": 42,
+        "pass": 42,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "naiveExitZeroBaselineAcceptedMisleadingStub": true,
+      "candidateRefusedMisleadingStub": true,
+      "realRootCLIRefused": true,
+      "realRootCLIManagerCommandsExecuted": 0,
+      "syntheticPositiveIsLiveManagerAcceptance": false
+    },
+    "independentReview": {
+      "cases": 39,
+      "passed": 39,
+      "staticChecks": 24,
+      "blockingFindings": 0
+    },
+    "native": {
+      "builds": 1,
+      "buildExitCode": 0,
+      "aggregateExitCode": 0,
+      "groups": 20,
+      "passed": 20,
+      "official": {
+        "run": 1109,
+        "passed": 1083,
+        "failed": 0,
+        "skipped": 25,
+        "todoFailed": 1,
+        "todoPassed": 0
+      }
+    },
+    "liveManagerAccepted": false,
+    "serviceActivated": false,
+    "serviceAccepted": false,
+    "targetNonrootNode22Accepted": false,
+    "productionAccepted": false,
+    "cleanupConfirmed": true,
+    "rawLogsPublished": false,
+    "noSecretBytesPublished": true
+  },
+  "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+  "nextConcreteTask": "First verify exact resulting service preflight implementation CI and the actual required preflight test step/TAP artifact with exact source/build/job/merge identities. Inspect the sanitized actual CLI host observation separately from synthetic positive fixtures; a structured prerequisite refusal is not live-manager or service acceptance. Synthetic manager-property controls do not establish a live user-manager or service. Then use an authorized compatible nonroot operator environment to pass the real read-only preflight and verify actual user-manager startup/stop/restart, failed-start, drain and orphan boundaries. Do not enable linger, change users/security, install a manager or bypass missing credentials to manufacture acceptance. Controller readiness remains HTTP rather than automatic TLS authentication; operator certificate versions remain external. G2 permanent versioned release/published-file replay, G4-G8/Production V1 and full deferred Continuum remain open.",
+  "retainedHistoricalObservation": "The historical local19/20 ESRCH failure remains retained; the captured-process observation and exact historical cause/interleaving remain unknown. The frontend HTTPS initial push runner shutdown143, skipped frontend step, absent artifact and unconfirmed final cleanup remain retained separately from its successful bounded retry; underlying shutdown cause is unknown.",
+  "historicalFailureCauseKnown": false,
+  "originalFrontendHttpsHostedEvidence": "x10/evidence/g3-frontend-tls-hosted.json",
+  "priorFrontendHttpsHostedEvidenceUnchanged": true,
+  "nativeCChanged": false,
+  "controllerImplementationChanged": false,
+  "alphaRuntimeChanged": false,
+  "observerImplementationChanged": false,
+  "serviceRecipeChanged": false,
+  "servicePreflightImplementationChanged": true,
+  "preflightCodeLocallyVerified": true,
+  "liveManagerAccepted": false,
+  "serviceInstalled": false,
+  "serviceActivated": false,
+  "serviceAccepted": false,
+  "targetUserManagerAccepted": false,
+  "readinessAutomated": false,
+  "permanentAlphaAccepted": false,
+  "productionAccepted": false,
+  "fullNativeScopePreserved": true,
+  "fullContinuumScopePreserved": true,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "privateKeysPublished": false,
+  "newPurchases": false,
+  "limitations": [
+    "Read-only preflight is a prerequisite check only; it does not install, enable, start, stop or accept a service.",
+    "Local environment is root and the real CLI refuses before executing the manager probe. Positive manager-property fixtures are synthetic; no live nonroot user-manager acceptance is claimed.",
+    "A command exit0 does not establish an available systemd manager; strict bounded property parsing and explicit capability refusals remain separate from service lifecycle.",
+    "Existing service recipe, native/controller/alpha runtime and immutable bundle inventory are unchanged.",
+    "Exact hosted CI, authorized real nonroot service startup/restart/failure/drain/orphan checks, permanent distribution, package rollback, final soak and Production V1 remain open.",
+    "Earlier native19/20 ESRCH and frontend push shutdown143 history remain retained; this preflight does not explain or repair them.",
+    "Authored TAP, independent controls, native aggregate groups and official assertions use separate counting units."
+  ]
+}

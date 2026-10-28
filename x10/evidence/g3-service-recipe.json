@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-g3-service-20261024T142800Z",
+  "baseCommit": "b992b367fb53c88059075a6dec8dc5fb0f0cb066",
+  "publicationParent": "96e0c71c652230120321109a255e2dcd2ee18feb",
+  "recordedAtUTC": "2026-10-24T14:35:38.411910Z",
+  "scope": "Guarded systemd-user recipe generation only; no service activation or runtime acceptance",
+  "sourceFilesSha256": {
+    "x10/service/user-unit.mjs": "3fc67266e513a00803bbe450d23052fffd5f3b61bbb0dfaa90969841b1d9852a",
+    "x10/service/user-unit.test.mjs": "bf65c2e0b60a21d09d211c6eb869264674ffab9efdd5d9133143ee8f119a2287",
+    "x10/service/README.md": "e738bbc5a7d666f4195da7c55202f0e438941011e959d5d6c26719f7d46a3087",
+    ".github/workflows/x10-native.yml": "675e9edc4688a86feb0389f386e276073e928c698be02768896734dcb1c38823"
+  },
+  "reports": {
+    "author": {
+      "schemaVersion": 1,
+      "scope": "Authored systemd-user recipe rendering and read-only inspection; no service activation or lifecycle acceptance",
+      "baseCommit": "b992b367fb53c88059075a6dec8dc5fb0f0cb066",
+      "leaseCommit": "96e0c71c652230120321109a255e2dcd2ee18feb",
+      "nodeVersion": "v24.22.1",
+      "sourceSha256": {
+        "x10/service/user-unit.mjs": "3fc67266e513a00803bbe450d23052fffd5f3b61bbb0dfaa90969841b1d9852a",
+        "x10/service/user-unit.test.mjs": "bf65c2e0b60a21d09d211c6eb869264674ffab9efdd5d9133143ee8f119a2287"
+      },
+      "results": {
+        "tests": 15,
+        "pass": 15,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "initialAdverseObservation": {
+        "tests": 15,
+        "pass": 13,
+        "fail": 2,
+        "cause": "Authored positive tests passed the entire fixture object with unsupported keys to the strict API; corrected tests to pass only prefix and nodeExecutable.",
+        "runtimeSourceChangedForCorrection": false,
+        "serviceFailureObserved": false
+      },
+      "commands": [
+        "node --check x10/service/user-unit.mjs",
+        "node --test --test-reporter=tap x10/service/user-unit.test.mjs"
+      ],
+      "reviewDrivenContractChange": {
+        "finding": "A single ExecStartPost bind can race alpha startup lock/native establishment after Type=exec.",
+        "actualRuntimeCounterexampleExecuted": false,
+        "resolution": "No ExecStartPost is emitted; explicit operator bind after native startup remains required.",
+        "readinessAutomated": false
+      },
+      "checks": [
+        "ExecStart and ExecStop explicitly use the recorded Node executable and installed launcher, without shell expansion",
+        "Unsafe paths/arguments and AF_UNIX path overflow rejected before rendering",
+        "CLI checks canonical owned0700prefix, record selfhash/root identity, launcher bytes/mode and recorded Node path/hash",
+        "Template requests no automatic restart and no SIGKILL; alpha performs its ordinary identity-checked stop",
+        "NODE_OPTIONS/NODE_PATH/NGINX_CTRL removed from systemd user environment",
+        "Script aliases execute validation instead of silent success"
+      ],
+      "limits": {
+        "pathCharacters": 1024,
+        "socketPathBytes": 107,
+        "installRecordBytes": 2097152,
+        "launcherBytes": 65536,
+        "nodeBytes": 268435456
+      },
+      "temporaryFixturesRemoved": true,
+      "launcherExecuted": false,
+      "nodeFixtureExecuted": false,
+      "serviceManagerChanged": false,
+      "serviceActivated": false,
+      "signalsSent": false,
+      "fullInstallationAccepted": false,
+      "targetRuntimeAccepted": false,
+      "serviceAccepted": false,
+      "tlsAccepted": false,
+      "productionAccepted": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false
+    },
+    "review": {
+      "schemaVersion": 1,
+      "localNodeVersion": "24.22.1",
+      "scope": "independent unit recipe/pin consistency controls only",
+      "tests": 40,
+      "passed": 40,
+      "failed": 0,
+      "checks": [
+        "synthetic installation pin consistency accepts without execution",
+        "exact unit line ExecStart",
+        "exact unit line ExecStop",
+        "exact unit line Type",
+        "exact unit line Restart",
+        "exact unit line KillMode",
+        "exact unit line KillSignal",
+        "exact unit line SendSIGKILL",
+        "exact unit line TimeoutStartSec",
+        "exact unit line TimeoutStopSec",
+        "exact unit line UMask",
+        "exact unit line UnsetEnvironment",
+        "no racy startup binder or destructive poststop/reload hook",
+        "no shell env interpreter signal wildcard or autostart restart",
+        "pure path injection/noncanonical refuses 14",
+        "pure path injection/noncanonical refuses 15",
+        "pure path injection/noncanonical refuses 16",
+        "pure path injection/noncanonical refuses 17",
+        "pure path injection/noncanonical refuses 18",
+        "pure path injection/noncanonical refuses 19",
+        "pure path injection/noncanonical refuses 20",
+        "pure path injection/noncanonical refuses 21",
+        "pure path injection/noncanonical refuses 22",
+        "pure path injection/noncanonical refuses 23",
+        "pure path injection/noncanonical refuses 24",
+        "Unix socket overlength refused",
+        "CLI argument refusal fixed 26",
+        "CLI argument refusal fixed 27",
+        "CLI argument refusal fixed 28",
+        "CLI argument refusal fixed 29",
+        "CLI argument refusal fixed 30",
+        "nonprivate prefix refused",
+        "changed root identity refused",
+        "launcher byte tamper refused",
+        "launcher mode drift refused",
+        "node pin drift refused",
+        "writable node executable refused",
+        "prefix symlink refused",
+        "recorded Node path mismatch refused",
+        "invocation symlink executes refusal not silent zero"
+      ],
+      "staticSystemdVerification": {
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false,
+        "scope": "static parser validation only; no service activation",
+        "diagnosticBytes": 122,
+        "userModeUnavailable": true,
+        "failureClass": "RuntimeDirectory/manager initialization ENXIO",
+        "systemModeParserOnly": {
+          "exitCode": 0,
+          "signal": null,
+          "diagnosticBytes": 0,
+          "serviceActivationAttempted": false,
+          "doesNotAcceptUserManager": true
+        },
+        "userModeDiagnosticAttempts": 3,
+        "userModeAccepted": false
+      },
+      "userManagerCapability": {
+        "query": "read-only show-environment",
+        "exitCode": 0,
+        "reachable": true,
+        "uidClass": "root",
+        "environmentPublished": false,
+        "activationAttempted": false,
+        "targetServiceAccepted": false
+      },
+      "resolvedReviewFinding": {
+        "finding": "Type=exec plus immediate ExecStartPost bind can race alpha native startup",
+        "resolution": "ExecStartPost omitted; explicit manual bind remains mandatory and startup readiness is not accepted",
+        "runtimeStartupTested": false
+      },
+      "initialHarnessFailure": {
+        "stage": "private fixture tamper setup",
+        "code": "EACCES",
+        "cause": "Reviewer attempted to write an intentionally0500 fixture without first restoring its owned write bit",
+        "runtimeDefectClaimed": false,
+        "correction": "Set owned private fixture0700 before intentional mutation and restore0500 before validation",
+        "temporaryRootRemoved": true,
+        "productFilesChanged": false
+      },
+      "fixtureType": "synthetic manifest/launcher/node bytes; never executed",
+      "payloadExecuted": false,
+      "serviceActivated": false,
+      "sourceRuntimeChanged": false,
+      "temporaryRootRemoved": true,
+      "blockingFindings": [],
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "rawLogsPublished": false,
+      "hostPathsPublished": false,
+      "sourceSha256": {
+        "x10/service/user-unit.mjs": "3fc67266e513a00803bbe450d23052fffd5f3b61bbb0dfaa90969841b1d9852a",
+        "x10/service/user-unit.test.mjs": "bf65c2e0b60a21d09d211c6eb869264674ffab9efdd5d9133143ee8f119a2287"
+      },
+      "runtimeReruns": 0,
+      "limitations": [
+        "Pure unit and synthetic install-pin checks do not start or execute alpha/native runtime.",
+        "systemctl --user show-environment exit0 is a narrow readonly response only; systemd-analyze --user verify failed ENXIO and user manager availability is not accepted.",
+        "Fallback system-mode systemd-analyze parser success is static unit syntax validation only; no manager or service was activated.",
+        "Manually bind after confirmed native startup; Type=exec is not readiness.",
+        "Same-UID processes trusted; pin-at-generation is not continuous pinning or OS-level fencing.",
+        "Actual user-service startup/shutdown/restart, slow drain, disconnect, failed-start cleanup and faulted/orphan behavior require a compatible target-host acceptance run."
+      ]
+    },
+    "root": {
+      "runtimeNode": "24.22.1",
+      "authoredSuiteIndependentCoordinatorRun": {
+        "tests": 15,
+        "pass": 15,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "nativeRuntimeChanged": false,
+      "controllerRuntimeChanged": false,
+      "alphaRuntimeChanged": false,
+      "officialNativeVerification": "pending-exact-new-CI",
+      "serviceActivated": false,
+      "serviceAccepted": false,
+      "tlsAccepted": false,
+      "rawLogsPublished": false,
+      "sourceFilesSha256": {
+        "x10/service/user-unit.mjs": "3fc67266e513a00803bbe450d23052fffd5f3b61bbb0dfaa90969841b1d9852a",
+        "x10/service/user-unit.test.mjs": "bf65c2e0b60a21d09d211c6eb869264674ffab9efdd5d9133143ee8f119a2287",
+        "x10/service/README.md": "e738bbc5a7d666f4195da7c55202f0e438941011e959d5d6c26719f7d46a3087",
+        ".github/workflows/x10-native.yml": "675e9edc4688a86feb0389f386e276073e928c698be02768896734dcb1c38823"
+      }
+    }
+  },
+  "hostedVerification": {
+    "state": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+    "runIds": []
+  },
+  "designFinding": {
+    "kind": "static-lifecycle-order-review",
+    "finding": "Immediate ExecStartPost bind can race alpha startup lock/native identity establishment.",
+    "resolution": "Omitted automatic post-start bind; documented explicit operator bind and future installed bounded wait-helper gate.",
+    "actualRaceReproductionClaimed": false
+  },
+  "serviceInstalled": false,
+  "serviceActivated": false,
+  "serviceAccepted": false,
+  "readinessAutomated": false,
+  "startupHealthAccepted": false,
+  "tlsAccepted": false,
+  "targetUserManagerAccepted": false,
+  "permanentAlphaAccepted": false,
+  "productionAccepted": false,
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "alphaRuntimeChanged": false,
+  "nextConcreteTask": "First verify exact resulting G3 user-unit recipe CI and its actual required test step. This generated systemd-user recipe has not installed or activated a service and Type=exec only confirms process execution, not native identity or application readiness. Manual bind after confirmed native startup remains mandatory; an installed bounded readiness wait helper requires its own implementation and acceptance before automatic health startup. Then continue permitted G3 downstream/upstream TLS CA and hostname controls and real nonroot user-manager service startup/stop/restart, failed-start, slow-drain and faulted/orphan tests. G2 permanent publication/published-file replay remain blocked by available Release/asset publication capability; do not bypass credentials or permissions. G2 remains partial, G3-G8 and Production V1 unaccepted; preserve full native and deferred Continuum scope.",
+  "limitations": [
+    "Generated unit syntax/refusal controls are not a real service deployment or lifecycle acceptance.",
+    "Type=exec is process execution, not startup readiness or native ownership confirmation.",
+    "Manual bind remains mandatory; automatic bounded startup health needs a separately installed and tested helper.",
+    "No forced kill or OS-level process fencing is claimed. Slow drain or faulted/orphan states require explicit operator inspection.",
+    "Root/Node24 and user-manager reachability alone do not accept the declared nonroot Node22 service profile; no service activation occurred.",
+    "G2 permanent publication/replay, G3 TLS/runtime and G4-G8 remain open."
+  ],
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "realSessionKeysPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "newPurchases": false
+}

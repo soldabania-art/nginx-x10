@@ -1,0 +1,3615 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-owned-fragment-fix-20261025T034200Z",
+  "sourceBase": "f434807e757ae4f946f46e21a264529b6b47e37d",
+  "publicationParent": "e8364f0ad3c7cc2fa7e7b1d89f6acfa50eade58a",
+  "implementationCommit": null,
+  "implementationCommitLocator": "Current publication commit containing known-owned fragment equivalence verification; exact resulting CI must be reconciled separately",
+  "scope": "Accept only the loaded exact owned unit spelling or exact known runtime-link spelling with canonical checks of known paths and a fresh post-query execution of all original owned link/file authority checks",
+  "evidence": "x10/evidence/g3-owned-fragment-equivalence.json",
+  "localAcceptance": "KNOWN_OWNED_FRAGMENT_EQUIVALENCE_LOCAL_VERIFIED_EXACT_NEW_CI_PENDING",
+  "exactHostedAcceptance": "PENDING_EXACT_RESULTING_KNOWN_OWNED_FRAGMENT_EQUIVALENCE",
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "alphaRuntimeChanged": false,
+  "serviceRecipeChanged": false,
+  "preflightChanged": false,
+  "serviceFragmentIdentityRuleChanged": true,
+  "postQueryOwnedAuthorityRecheckAdded": true,
+  "arbitraryManagerPathInspectionAdded": false,
+  "sameUIDOSFenceClaimed": false,
+  "verifiedNodeLogicChangedBeyondCheckerPin": false,
+  "workflowLogicChangedBeyondCheckerPin": false,
+  "actualServiceAcceptedLocally": false,
+  "serviceAccepted": false,
+  "productionAccepted": false,
+  "nextConcreteTask": "First verify exact resulting known-owned fragment equivalence implementation CI and actual service/cleanup reports on the supported fresh authorized nonroot host. Require the candidate to retain loaded-state and exact owned-unit or known-runtime-link spelling checks, canonical checks of only the two known paths for a runtime-link spelling, and a fresh post-query execution of all original link/owned-file authority checks before any subsequent action. Do not inspect arbitrary manager-supplied paths or accept unrelated/equivalent-looking names. The earlier diagnostic snapshot remains pre-validation canonicalIdentity:not_measured; it does not describe whether later canonical verification ran. Source ordering and subsequent successful actions may establish that the new guard completed in that exact run, but local contracts alone cannot. Verify actual startup, readiness, proxy/upload/stream, separate stop/start sessions, owned cleanup and private Node removal before scoped service acceptance. Preserve both exactf434 failed workflows and all older adverse evidence. Then complete logging, single manager restart, failed-start/cancel/drain/orphan, combined TLS/service, package update/rollback/recovery, permanent distribution/replay, security/soak and G4-G8 Production V1; full deferred Continuum remains open.",
+  "recordedAtUTC": "2026-10-25T03:48:52.052736Z",
+  "baselineImplementationCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+  "baselineImplementationTree": "8e3f1843924e373458284dce5a169bf75cbef663",
+  "hostedNative": {
+    "schemaVersion": 1,
+    "scope": "exact hosted owned-fragment observation only; no authority change",
+    "sourceCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+    "sourceTree": "8e3f1843924e373458284dce5a169bf75cbef663",
+    "sourceCheckerSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "mergeIdentity": {
+      "sha": "bb5acb3cd4debdcdb560f3fb9ad108595f0cd344",
+      "parents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "f434807e757ae4f946f46e21a264529b6b47e37d"
+      ],
+      "tree": "8e3f1843924e373458284dce5a169bf75cbef663"
+    },
+    "runs": [
+      {
+        "runId": 40158669450,
+        "jobId": 121065411190,
+        "event": "push",
+        "headSha": "f434807e757ae4f946f46e21a264529b6b47e37d",
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "failure",
+        "jobStatus": "completed",
+        "jobConclusion": "failure",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Validate release-record contract and refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Validate alpha archive refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Validate guarded user-service recipe",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Validate fail-closed user-manager preflight",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Validate actual-service harness refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Validate authenticated Node dependency refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Build dependencies and optional test clients",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Install pinned HTTP3 interoperability client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Install independent HTTP3 HEAD client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Compile native profile",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Native regressions and pinned official compatibility sample",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Verify installed HTTPS upstream trust and hostname",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Verify managed frontend HTTPS and certificate lifecycle",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Verify native tenant cache contract experiment",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Verify private Unix control transport",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Build profile without control API",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          },
+          {
+            "name": "Package local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20
+          },
+          {
+            "name": "Checksum local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21
+          },
+          {
+            "name": "Verify packed alpha before extraction",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22
+          },
+          {
+            "name": "Verify temporary user-service with authenticated private Node",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 23
+          },
+          {
+            "name": "Preserve JSON evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24
+          },
+          {
+            "name": "Preserve local Linux alpha",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 25
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 49
+          },
+          {
+            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 50
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 51
+          }
+        ],
+        "artifact": {
+          "id": 12584679029,
+          "bytes": 102429,
+          "sha256": "6d2b654235dafc55ae4343de982ba3bb199ed82e36c4a2a7f7a915b17f3b16d4",
+          "expired": false
+        },
+        "freshFullJobLogRead": true,
+        "checkoutPresentInFullJobLog": true,
+        "hostedNodeVersionPresentInFullJobLog": true,
+        "actualArtifacts": {
+          "service": {
+            "ok": false,
+            "code": "cleanup_unconfirmed",
+            "phase": "first_start",
+            "scope": "ephemeral-user-service-basic-lifecycle",
+            "automaticReadinessAccepted": false,
+            "failedStartAccepted": false,
+            "slowDrainAccepted": false,
+            "orphanRecoveryAccepted": false,
+            "tlsServiceAccepted": false,
+            "permanentDistributionAccepted": false,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "actualNonrootManagerObserved": true,
+            "actualUnitStarted": false,
+            "explicitReadinessPasses": 0,
+            "nativeSessionsStarted": 0,
+            "nativeSessionsStopped": 0,
+            "proxyBodyChecks": 0,
+            "uploadChecks": 0,
+            "streamChecks": 0,
+            "runtimeUnitLinked": true,
+            "runtimeUnitRemoved": false,
+            "unitEnabled": false,
+            "subprocessOutputsPublished": false,
+            "cleanup": {
+              "managerStopped": false,
+              "launcherExited": false,
+              "nativeGroupsAbsent": false,
+              "listeningPortsClosed": false,
+              "controlSocketAbsent": false,
+              "runtimeLinkAbsent": false,
+              "appSocketsRemaining": 0,
+              "installationRemoved": false,
+              "temporaryRootRemoved": false
+            },
+            "archiveSha256": "98951f8dd718545492adacc4b64c8710e107454f3cf7360c49ab98d20c3b7cd8",
+            "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+            "sourceCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+            "nodePrerequisites": {
+              "selectedNodeRegular": true,
+              "selectedNodeCanonical": true,
+              "selectedNodeOwnerExecutable": true,
+              "selectedNodeModeAllowed": true,
+              "selectedNodeOwnerAllowed": true,
+              "recordedNodePathMatches": true,
+              "recordedNodeVersionSupported": true
+            },
+            "unitSha256": "1096edb0a9f5e7377a682c07de55443516b34b84ab17b1495192de5ec70ec222",
+            "primaryFailure": {
+              "phase": "first_start",
+              "subphase": "before_properties",
+              "code": "unit_fragment_identity",
+              "systemErrorClass": "unknown"
+            },
+            "cleanupFailures": [
+              {
+                "stage": "unit_cleanup",
+                "code": "unit_fragment_identity"
+              }
+            ],
+            "cleanupFailureCount": 1,
+            "cleanupFailuresTruncated": false,
+            "startDiagnostics": {
+              "attempts": 1,
+              "completedAttempts": 0,
+              "lastStep": "before_properties",
+              "observationCount": 2,
+              "observationsTruncated": false,
+              "observations": [
+                {
+                  "attempt": 1,
+                  "step": "before_properties",
+                  "kind": "properties_command",
+                  "outcome": "succeeded",
+                  "exitCodeClass": "zero",
+                  "termination": "none",
+                  "stderrPresent": false
+                },
+                {
+                  "attempt": 1,
+                  "step": "before_properties",
+                  "kind": "properties_state",
+                  "loadState": "loaded",
+                  "activeState": "inactive",
+                  "subState": "dead",
+                  "result": "success",
+                  "mainPIDPresent": false,
+                  "controlGroupPresent": false,
+                  "fragmentPathPresent": true
+                }
+              ]
+            },
+            "fragmentIdentityDiagnostics": {
+              "observationCount": 2,
+              "observationsTruncated": false,
+              "observations": [
+                {
+                  "phase": "first_start",
+                  "subphase": "before_properties",
+                  "context": "lifecycle",
+                  "loadState": "loaded",
+                  "fragmentPathMatch": "runtime_link",
+                  "precedingLinkTargetMatchesUnit": "verified",
+                  "precedingUnitOwnedModeHash": "verified",
+                  "canonicalIdentity": "not_measured"
+                },
+                {
+                  "phase": "first_start",
+                  "subphase": "not_applicable",
+                  "context": "cleanup",
+                  "loadState": "loaded",
+                  "fragmentPathMatch": "runtime_link",
+                  "precedingLinkTargetMatchesUnit": "verified",
+                  "precedingUnitOwnedModeHash": "verified",
+                  "canonicalIdentity": "not_measured"
+                }
+              ]
+            }
+          },
+          "dependency": {
+            "ok": true,
+            "code": "verified_node_installed",
+            "version": "v22.23.3",
+            "archiveSha256": "df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de",
+            "nodeSha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+            "signatureVerified": true,
+            "selectedFiles": 2,
+            "runtimeVersionVerified": true,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "subprocessOutputsPublished": false
+          },
+          "bootstrap": {
+            "ok": false,
+            "stage": "actual_service",
+            "code": "bootstrap_stage_failed",
+            "runtimeRemoved": false,
+            "temporaryRootRemoved": false,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "subprocessOutputsPublished": false
+          },
+          "actualBuildCheckout": "f434807e757ae4f946f46e21a264529b6b47e37d",
+          "actualBundleSource": "f434807e757ae4f946f46e21a264529b6b47e37d",
+          "nativeAggregate": {
+            "success": true,
+            "groups": 20,
+            "groupNames": [
+              "http-tls-http2-reload",
+              "stream-mail",
+              "mail-tls-starttls",
+              "protocol-adapters",
+              "http3-interop",
+              "http3-head-independent-client",
+              "native-features",
+              "quic-regression",
+              "quic-generated-sanitized",
+              "quic-frame-boundaries",
+              "native-load-client-verification",
+              "managed-native-control",
+              "operator-status",
+              "local-alpha-lifecycle",
+              "listener-observer-boundaries",
+              "reload-listener-observation",
+              "native-control-api",
+              "native-process-generations",
+              "native-generation-boundaries",
+              "official-nginx-tests"
+            ],
+            "official": {
+              "files": 35,
+              "filesPassed": 34,
+              "filesSkipped": 1,
+              "filesFailed": 0,
+              "assertions": {
+                "run": 1131,
+                "passed": 1105,
+                "failed": 0,
+                "skipped": 25,
+                "todoFailed": 1,
+                "todoPassed": 0
+              }
+            },
+            "controller": {
+              "managed-native-control": {
+                "format": "node-test-tap",
+                "pass": 86,
+                "fail": 0,
+                "valid": true
+              },
+              "operator-status": {
+                "format": "node-test-tap",
+                "pass": 30,
+                "fail": 0,
+                "valid": true,
+                "total": 30,
+                "skipped": 0,
+                "todo": 0,
+                "cancelled": 0
+              },
+              "local-alpha-lifecycle": {
+                "format": "node-test-tap",
+                "pass": 45,
+                "fail": 0,
+                "valid": true,
+                "total": 45,
+                "skipped": 0,
+                "todo": 0,
+                "cancelled": 0
+              },
+              "listener-observer-boundaries": {
+                "format": "node-test-tap",
+                "pass": 42,
+                "fail": 0,
+                "valid": true
+              }
+            }
+          },
+          "tapReports": {
+            "service-lifecycle-contract.tap": {
+              "counts": {
+                "tests": 104,
+                "pass": 103,
+                "fail": 0,
+                "skipped": 1,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "89bf25f37712d13d99e00214d717638767896666a7388df65097a609db0cf856",
+              "bytes": 17714
+            },
+            "verified-node-contract.tap": {
+              "counts": {
+                "tests": 46,
+                "pass": 46,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "4ed4f488f98574b28e471280f5b7f3588973793d592f997431e9f88f26deb7ea",
+              "bytes": 6968
+            },
+            "alpha-tls.tap": {
+              "counts": {
+                "tests": 18,
+                "pass": 18,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "52afd55dc474868a7561470b28103e78d44c3238440c778fa5d2a2882c942d88",
+              "bytes": 4171
+            },
+            "frontend-tls.tap": {
+              "counts": {
+                "tests": 16,
+                "pass": 16,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "29710e0f7be1a00fdee3faaa43a573817d5f03b552850cae0d196f619143cff6",
+              "bytes": 4321
+            },
+            "service-preflight.tap": {
+              "counts": {
+                "tests": 42,
+                "pass": 42,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "713e44f8d68c45d8c6bb5f536df76038fbbde17a133468491dbd55c128f1db5f",
+              "bytes": 7846
+            },
+            "user-unit.tap": {
+              "counts": {
+                "tests": 15,
+                "pass": 15,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "6041c57614e87df859bb4687c50d2a83b926bd99715f8e87368e0e13952306cb",
+              "bytes": 3115
+            },
+            "guard-kernel.tap": {
+              "counts": {
+                "tests": 8,
+                "pass": 8,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "4036db9adf771bc74e3e822faabeb46710573c71053afa1e699f9d0573594c93",
+              "bytes": 2104
+            },
+            "release-record.tap": {
+              "counts": {
+                "tests": 35,
+                "pass": 35,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "36e02aad211e0ef7b261a35be5ab144e97fbbec2c86a02bf9696477dfc739b27",
+              "bytes": 7253
+            },
+            "alpha-archive.tap": {
+              "counts": {
+                "tests": 15,
+                "pass": 15,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "bfb469e75ddf1f5b63ff1989d5cf33e592153a7446ef9b80db164288cc9e9ed4",
+              "bytes": 2934
+            },
+            "operator-status-unix.tap": {
+              "counts": {
+                "tests": 30,
+                "pass": 30,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "cafa5ee5e943f815e41c498d85b9787c247c123e1fc420f6e5db952517b4115c",
+              "bytes": 5898
+            }
+          },
+          "extraNativeReports": {
+            "control-api-unix.json": {
+              "success": true,
+              "tests": 9
+            },
+            "generations-unix.json": {
+              "success": true,
+              "tests": 10
+            },
+            "control-disabled.json": {
+              "success": true,
+              "tests": 4
+            }
+          }
+        }
+      },
+      {
+        "runId": 40158672063,
+        "jobId": 121065429322,
+        "event": "pull_request",
+        "headSha": "f434807e757ae4f946f46e21a264529b6b47e37d",
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "failure",
+        "jobStatus": "completed",
+        "jobConclusion": "failure",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Validate release-record contract and refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Validate alpha archive refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Validate guarded user-service recipe",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Validate fail-closed user-manager preflight",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Validate actual-service harness refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Validate authenticated Node dependency refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Build dependencies and optional test clients",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Install pinned HTTP3 interoperability client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Install independent HTTP3 HEAD client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Compile native profile",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Native regressions and pinned official compatibility sample",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Verify installed HTTPS upstream trust and hostname",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Verify managed frontend HTTPS and certificate lifecycle",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Verify native tenant cache contract experiment",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Verify private Unix control transport",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Build profile without control API",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          },
+          {
+            "name": "Package local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20
+          },
+          {
+            "name": "Checksum local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21
+          },
+          {
+            "name": "Verify packed alpha before extraction",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22
+          },
+          {
+            "name": "Verify temporary user-service with authenticated private Node",
+            "status": "completed",
+            "conclusion": "failure",
+            "number": 23
+          },
+          {
+            "name": "Preserve JSON evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24
+          },
+          {
+            "name": "Preserve local Linux alpha",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 25
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 49
+          },
+          {
+            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 50
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 51
+          }
+        ],
+        "artifact": {
+          "id": 12585219767,
+          "bytes": 102395,
+          "sha256": "99a7b061abaacb4f3668bfc9b1ed9e5490cfd17b56ede8d268121b5ef39be7c2",
+          "expired": false
+        },
+        "freshFullJobLogRead": true,
+        "checkoutPresentInFullJobLog": true,
+        "hostedNodeVersionPresentInFullJobLog": true,
+        "actualArtifacts": {
+          "service": {
+            "ok": false,
+            "code": "cleanup_unconfirmed",
+            "phase": "first_start",
+            "scope": "ephemeral-user-service-basic-lifecycle",
+            "automaticReadinessAccepted": false,
+            "failedStartAccepted": false,
+            "slowDrainAccepted": false,
+            "orphanRecoveryAccepted": false,
+            "tlsServiceAccepted": false,
+            "permanentDistributionAccepted": false,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "actualNonrootManagerObserved": true,
+            "actualUnitStarted": false,
+            "explicitReadinessPasses": 0,
+            "nativeSessionsStarted": 0,
+            "nativeSessionsStopped": 0,
+            "proxyBodyChecks": 0,
+            "uploadChecks": 0,
+            "streamChecks": 0,
+            "runtimeUnitLinked": true,
+            "runtimeUnitRemoved": false,
+            "unitEnabled": false,
+            "subprocessOutputsPublished": false,
+            "cleanup": {
+              "managerStopped": false,
+              "launcherExited": false,
+              "nativeGroupsAbsent": false,
+              "listeningPortsClosed": false,
+              "controlSocketAbsent": false,
+              "runtimeLinkAbsent": false,
+              "appSocketsRemaining": 0,
+              "installationRemoved": false,
+              "temporaryRootRemoved": false
+            },
+            "archiveSha256": "42a471fe3a27a229cb52449c4dfc2b8e56142d857eb76bc1b3c6ea863c987152",
+            "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+            "sourceCommit": "bb5acb3cd4debdcdb560f3fb9ad108595f0cd344",
+            "nodePrerequisites": {
+              "selectedNodeRegular": true,
+              "selectedNodeCanonical": true,
+              "selectedNodeOwnerExecutable": true,
+              "selectedNodeModeAllowed": true,
+              "selectedNodeOwnerAllowed": true,
+              "recordedNodePathMatches": true,
+              "recordedNodeVersionSupported": true
+            },
+            "unitSha256": "3aef239f05629250612ebd7b94a402dcd67dc14ee58150bddc25420ea9ae5df9",
+            "primaryFailure": {
+              "phase": "first_start",
+              "subphase": "before_properties",
+              "code": "unit_fragment_identity",
+              "systemErrorClass": "unknown"
+            },
+            "cleanupFailures": [
+              {
+                "stage": "unit_cleanup",
+                "code": "unit_fragment_identity"
+              }
+            ],
+            "cleanupFailureCount": 1,
+            "cleanupFailuresTruncated": false,
+            "startDiagnostics": {
+              "attempts": 1,
+              "completedAttempts": 0,
+              "lastStep": "before_properties",
+              "observationCount": 2,
+              "observationsTruncated": false,
+              "observations": [
+                {
+                  "attempt": 1,
+                  "step": "before_properties",
+                  "kind": "properties_command",
+                  "outcome": "succeeded",
+                  "exitCodeClass": "zero",
+                  "termination": "none",
+                  "stderrPresent": false
+                },
+                {
+                  "attempt": 1,
+                  "step": "before_properties",
+                  "kind": "properties_state",
+                  "loadState": "loaded",
+                  "activeState": "inactive",
+                  "subState": "dead",
+                  "result": "success",
+                  "mainPIDPresent": false,
+                  "controlGroupPresent": false,
+                  "fragmentPathPresent": true
+                }
+              ]
+            },
+            "fragmentIdentityDiagnostics": {
+              "observationCount": 2,
+              "observationsTruncated": false,
+              "observations": [
+                {
+                  "phase": "first_start",
+                  "subphase": "before_properties",
+                  "context": "lifecycle",
+                  "loadState": "loaded",
+                  "fragmentPathMatch": "runtime_link",
+                  "precedingLinkTargetMatchesUnit": "verified",
+                  "precedingUnitOwnedModeHash": "verified",
+                  "canonicalIdentity": "not_measured"
+                },
+                {
+                  "phase": "first_start",
+                  "subphase": "not_applicable",
+                  "context": "cleanup",
+                  "loadState": "loaded",
+                  "fragmentPathMatch": "runtime_link",
+                  "precedingLinkTargetMatchesUnit": "verified",
+                  "precedingUnitOwnedModeHash": "verified",
+                  "canonicalIdentity": "not_measured"
+                }
+              ]
+            }
+          },
+          "dependency": {
+            "ok": true,
+            "code": "verified_node_installed",
+            "version": "v22.23.3",
+            "archiveSha256": "df450af89261115ef9f9e3830c3eeb2cc9213b63c720b1af623cb5dcbe2e02de",
+            "nodeSha256": "fde6a4bf8d0562f7751d1a2d6cb9b417c4cfe107bbcb0aa3e9a24e125e348f48",
+            "signatureVerified": true,
+            "selectedFiles": 2,
+            "runtimeVersionVerified": true,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "subprocessOutputsPublished": false
+          },
+          "bootstrap": {
+            "ok": false,
+            "stage": "actual_service",
+            "code": "bootstrap_stage_failed",
+            "runtimeRemoved": false,
+            "temporaryRootRemoved": false,
+            "serviceAccepted": false,
+            "productionAccepted": false,
+            "subprocessOutputsPublished": false
+          },
+          "actualBuildCheckout": "bb5acb3cd4debdcdb560f3fb9ad108595f0cd344",
+          "actualBundleSource": "bb5acb3cd4debdcdb560f3fb9ad108595f0cd344",
+          "nativeAggregate": {
+            "success": true,
+            "groups": 20,
+            "groupNames": [
+              "http-tls-http2-reload",
+              "stream-mail",
+              "mail-tls-starttls",
+              "protocol-adapters",
+              "http3-interop",
+              "http3-head-independent-client",
+              "native-features",
+              "quic-regression",
+              "quic-generated-sanitized",
+              "quic-frame-boundaries",
+              "native-load-client-verification",
+              "managed-native-control",
+              "operator-status",
+              "local-alpha-lifecycle",
+              "listener-observer-boundaries",
+              "reload-listener-observation",
+              "native-control-api",
+              "native-process-generations",
+              "native-generation-boundaries",
+              "official-nginx-tests"
+            ],
+            "official": {
+              "files": 35,
+              "filesPassed": 34,
+              "filesSkipped": 1,
+              "filesFailed": 0,
+              "assertions": {
+                "run": 1131,
+                "passed": 1105,
+                "failed": 0,
+                "skipped": 25,
+                "todoFailed": 1,
+                "todoPassed": 0
+              }
+            },
+            "controller": {
+              "managed-native-control": {
+                "format": "node-test-tap",
+                "pass": 86,
+                "fail": 0,
+                "valid": true
+              },
+              "operator-status": {
+                "format": "node-test-tap",
+                "pass": 30,
+                "fail": 0,
+                "valid": true,
+                "total": 30,
+                "skipped": 0,
+                "todo": 0,
+                "cancelled": 0
+              },
+              "local-alpha-lifecycle": {
+                "format": "node-test-tap",
+                "pass": 45,
+                "fail": 0,
+                "valid": true,
+                "total": 45,
+                "skipped": 0,
+                "todo": 0,
+                "cancelled": 0
+              },
+              "listener-observer-boundaries": {
+                "format": "node-test-tap",
+                "pass": 42,
+                "fail": 0,
+                "valid": true
+              }
+            }
+          },
+          "tapReports": {
+            "service-lifecycle-contract.tap": {
+              "counts": {
+                "tests": 104,
+                "pass": 103,
+                "fail": 0,
+                "skipped": 1,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "65f51cffbfc78718c7ab5b6bc5d55bba35843a6444c90c0a1d9a56ebd9fa92fa",
+              "bytes": 17719
+            },
+            "verified-node-contract.tap": {
+              "counts": {
+                "tests": 46,
+                "pass": 46,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "5de7fa33d058dac520fa8fbdc41dbe4115d84527aefe60e326badc5c44eafdf5",
+              "bytes": 6967
+            },
+            "alpha-tls.tap": {
+              "counts": {
+                "tests": 18,
+                "pass": 18,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "607e09ba3153219ba15ed5eb9b204450928f42ebfdebf131b71f6f81ee68f056",
+              "bytes": 4171
+            },
+            "frontend-tls.tap": {
+              "counts": {
+                "tests": 16,
+                "pass": 16,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "0b02b91ff8307075df146f9d752c32d8a34792296b88aeeac8a3a31948cdfdb8",
+              "bytes": 4321
+            },
+            "service-preflight.tap": {
+              "counts": {
+                "tests": 42,
+                "pass": 42,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "b9c54d8722f73b2c8b067805b7ff28924545eb3acf92d8ffec6452331dbbfbc9",
+              "bytes": 7847
+            },
+            "user-unit.tap": {
+              "counts": {
+                "tests": 15,
+                "pass": 15,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "794bf881461874e4a067ecfa5a667372875d301d84027d2971f421e8fc854aa0",
+              "bytes": 3115
+            },
+            "guard-kernel.tap": {
+              "counts": {
+                "tests": 8,
+                "pass": 8,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "1e565862eae99032c4124c51f73565673f779564736907fb1cb8145ac9595c9f",
+              "bytes": 2103
+            },
+            "release-record.tap": {
+              "counts": {
+                "tests": 35,
+                "pass": 35,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "ad625819ddca0881e706f74b3bc8ffcc3a5a0b746bef502278a2e52f10b3d3bc",
+              "bytes": 7253
+            },
+            "alpha-archive.tap": {
+              "counts": {
+                "tests": 15,
+                "pass": 15,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "4ae1c6304ee0f71143bddcde1c9248c4fc1a0d86e6421df2d4b3a4a38a601c68",
+              "bytes": 2932
+            },
+            "operator-status-unix.tap": {
+              "counts": {
+                "tests": 30,
+                "pass": 30,
+                "fail": 0,
+                "skipped": 0,
+                "cancelled": 0,
+                "todo": 0
+              },
+              "sha256": "addccbf9da8fb73e33cc98f6aaee9b8042325537df9f4cddf13c856cc3b9a4b9",
+              "bytes": 5898
+            }
+          },
+          "extraNativeReports": {
+            "control-api-unix.json": {
+              "success": true,
+              "tests": 9
+            },
+            "generations-unix.json": {
+              "success": true,
+              "tests": 10
+            },
+            "control-disabled.json": {
+              "success": true,
+              "tests": 4
+            }
+          }
+        }
+      }
+    ],
+    "workflowRerunsRequested": 0,
+    "localNativeOrServiceExecutionPerformed": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "checksPassed": 96,
+    "checks": [
+      {
+        "name": "actual merge source parents",
+        "passed": true
+      },
+      {
+        "name": "actual merge tree equals implementation tree",
+        "passed": true
+      },
+      {
+        "name": "40158669450: fresh exact source completed failure attempt1",
+        "passed": true
+      },
+      {
+        "name": "40158669450: actual required job completed failure",
+        "passed": true
+      },
+      {
+        "name": "40158669450: full decoded checkout and Node22 logs read",
+        "passed": true
+      },
+      {
+        "name": "40158669450: ZIP matches fresh artifact API digest",
+        "passed": true
+      },
+      {
+        "name": "40158669450: ZIP bytes and not expired",
+        "passed": true
+      },
+      {
+        "name": "40158669450: all preceding steps1through22 completed success",
+        "passed": true
+      },
+      {
+        "name": "40158669450: actual required service23 failed",
+        "passed": true
+      },
+      {
+        "name": "40158669450: JSON preservation24 passed and alpha archive publication25 skipped",
+        "passed": true
+      },
+      {
+        "name": "40158669450: service actual checkout identity",
+        "passed": true
+      },
+      {
+        "name": "40158669450: build actual checkout identity",
+        "passed": true
+      },
+      {
+        "name": "40158669450: verified bundle actual checkout identity",
+        "passed": true
+      },
+      {
+        "name": "40158669450: unchanged native binary identity",
+        "passed": true
+      },
+      {
+        "name": "40158669450: runtime link confirmed and start not confirmed",
+        "passed": true
+      },
+      {
+        "name": "40158669450: current primary before own start request",
+        "passed": true
+      },
+      {
+        "name": "40158669450: cleanup failure retains primary and fixed second code",
+        "passed": true
+      },
+      {
+        "name": "40158669450: both new fragment observations untruncated",
+        "passed": true
+      },
+      {
+        "name": "40158669450: fragment observation1 actual known runtime_link equality",
+        "passed": true
+      },
+      {
+        "name": "40158669450: fragment observation1 preceding link target and owned mode/hash",
+        "passed": true
+      },
+      {
+        "name": "40158669450: fragment observation1 canonical explicitly unmeasured",
+        "passed": true
+      },
+      {
+        "name": "40158669450: fragment observation2 actual known runtime_link equality",
+        "passed": true
+      },
+      {
+        "name": "40158669450: fragment observation2 preceding link target and owned mode/hash",
+        "passed": true
+      },
+      {
+        "name": "40158669450: fragment observation2 canonical explicitly unmeasured",
+        "passed": true
+      },
+      {
+        "name": "40158669450: fragment lifecycle context before_properties",
+        "passed": true
+      },
+      {
+        "name": "40158669450: separate actual cleanup fragment context",
+        "passed": true
+      },
+      {
+        "name": "40158669450: one incomplete attempt with only two state observations",
+        "passed": true
+      },
+      {
+        "name": "40158669450: manager showed loaded inactive dead success noPID noCG fragmentpresent",
+        "passed": true
+      },
+      {
+        "name": "40158669450: all readiness native proxy upload stream counters zero",
+        "passed": true
+      },
+      {
+        "name": "40158669450: service cleanup unconfirmed except app sockets0",
+        "passed": true
+      },
+      {
+        "name": "40158669450: actual Node signature version all prerequisites passed",
+        "passed": true
+      },
+      {
+        "name": "40158669450: official Node fixed archive and payload hashes",
+        "passed": true
+      },
+      {
+        "name": "40158669450: runtime retained and no dependency cleanup receipt",
+        "passed": true
+      },
+      {
+        "name": "40158669450: native aggregate20 success",
+        "passed": true
+      },
+      {
+        "name": "40158669450: official counts1105PASS25SKIP1TODO0FAIL",
+        "passed": true
+      },
+      {
+        "name": "40158669450: service-lifecycle-contract.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158669450: verified-node-contract.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158669450: alpha-tls.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158669450: frontend-tls.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158669450: service-preflight.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158669450: user-unit.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158669450: guard-kernel.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158669450: release-record.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158669450: alpha-archive.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158669450: operator-status-unix.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158669450: controller86 alpha45 operator30 listener42",
+        "passed": true
+      },
+      {
+        "name": "40158669450: control-api-unix.json passed exact test count",
+        "passed": true
+      },
+      {
+        "name": "40158669450: generations-unix.json passed exact test count",
+        "passed": true
+      },
+      {
+        "name": "40158669450: control-disabled.json passed exact test count",
+        "passed": true
+      },
+      {
+        "name": "40158672063: fresh exact source completed failure attempt1",
+        "passed": true
+      },
+      {
+        "name": "40158672063: actual required job completed failure",
+        "passed": true
+      },
+      {
+        "name": "40158672063: full decoded checkout and Node22 logs read",
+        "passed": true
+      },
+      {
+        "name": "40158672063: ZIP matches fresh artifact API digest",
+        "passed": true
+      },
+      {
+        "name": "40158672063: ZIP bytes and not expired",
+        "passed": true
+      },
+      {
+        "name": "40158672063: all preceding steps1through22 completed success",
+        "passed": true
+      },
+      {
+        "name": "40158672063: actual required service23 failed",
+        "passed": true
+      },
+      {
+        "name": "40158672063: JSON preservation24 passed and alpha archive publication25 skipped",
+        "passed": true
+      },
+      {
+        "name": "40158672063: service actual checkout identity",
+        "passed": true
+      },
+      {
+        "name": "40158672063: build actual checkout identity",
+        "passed": true
+      },
+      {
+        "name": "40158672063: verified bundle actual checkout identity",
+        "passed": true
+      },
+      {
+        "name": "40158672063: unchanged native binary identity",
+        "passed": true
+      },
+      {
+        "name": "40158672063: runtime link confirmed and start not confirmed",
+        "passed": true
+      },
+      {
+        "name": "40158672063: current primary before own start request",
+        "passed": true
+      },
+      {
+        "name": "40158672063: cleanup failure retains primary and fixed second code",
+        "passed": true
+      },
+      {
+        "name": "40158672063: both new fragment observations untruncated",
+        "passed": true
+      },
+      {
+        "name": "40158672063: fragment observation1 actual known runtime_link equality",
+        "passed": true
+      },
+      {
+        "name": "40158672063: fragment observation1 preceding link target and owned mode/hash",
+        "passed": true
+      },
+      {
+        "name": "40158672063: fragment observation1 canonical explicitly unmeasured",
+        "passed": true
+      },
+      {
+        "name": "40158672063: fragment observation2 actual known runtime_link equality",
+        "passed": true
+      },
+      {
+        "name": "40158672063: fragment observation2 preceding link target and owned mode/hash",
+        "passed": true
+      },
+      {
+        "name": "40158672063: fragment observation2 canonical explicitly unmeasured",
+        "passed": true
+      },
+      {
+        "name": "40158672063: fragment lifecycle context before_properties",
+        "passed": true
+      },
+      {
+        "name": "40158672063: separate actual cleanup fragment context",
+        "passed": true
+      },
+      {
+        "name": "40158672063: one incomplete attempt with only two state observations",
+        "passed": true
+      },
+      {
+        "name": "40158672063: manager showed loaded inactive dead success noPID noCG fragmentpresent",
+        "passed": true
+      },
+      {
+        "name": "40158672063: all readiness native proxy upload stream counters zero",
+        "passed": true
+      },
+      {
+        "name": "40158672063: service cleanup unconfirmed except app sockets0",
+        "passed": true
+      },
+      {
+        "name": "40158672063: actual Node signature version all prerequisites passed",
+        "passed": true
+      },
+      {
+        "name": "40158672063: official Node fixed archive and payload hashes",
+        "passed": true
+      },
+      {
+        "name": "40158672063: runtime retained and no dependency cleanup receipt",
+        "passed": true
+      },
+      {
+        "name": "40158672063: native aggregate20 success",
+        "passed": true
+      },
+      {
+        "name": "40158672063: official counts1105PASS25SKIP1TODO0FAIL",
+        "passed": true
+      },
+      {
+        "name": "40158672063: service-lifecycle-contract.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158672063: verified-node-contract.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158672063: alpha-tls.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158672063: frontend-tls.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158672063: service-preflight.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158672063: user-unit.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158672063: guard-kernel.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158672063: release-record.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158672063: alpha-archive.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158672063: operator-status-unix.tap actual TAP counts",
+        "passed": true
+      },
+      {
+        "name": "40158672063: controller86 alpha45 operator30 listener42",
+        "passed": true
+      },
+      {
+        "name": "40158672063: control-api-unix.json passed exact test count",
+        "passed": true
+      },
+      {
+        "name": "40158672063: generations-unix.json passed exact test count",
+        "passed": true
+      },
+      {
+        "name": "40158672063: control-disabled.json passed exact test count",
+        "passed": true
+      }
+    ],
+    "currentObservedFragmentIdentity": {
+      "bothCurrentHostedLifecycleAndCleanupFragmentPathMatchesKnownRuntimeLink": true,
+      "precedingKnownRuntimeLinkTargetEqualsUnitFileVerified": true,
+      "precedingOwnedUnitModeAndContentHashVerified": true,
+      "canonicalIdentityMeasured": false,
+      "sameFileInodeMeasured": false,
+      "bindingAllowsServiceAuthority": false,
+      "currentStrictLiteralUnitFileGuardRejected": true,
+      "globalPhysicalNoStartOrAbsenceProven": false,
+      "serviceManagerNativeDependencyOrProviderCleanupVerified": false,
+      "historical7d1SpellingOr700Or0adeRootCauseKnown": false
+    },
+    "limits": [
+      "New current f434 observations establish parsed FragmentPath equals the known runtimeLink string in both lifecycle and cleanup; they do not expose or inspect a manager-supplied foreign path.",
+      "Preceding known-link target equality and owned unit mode/hash passed immediately before properties, but canonical or same-file/inode identity is explicitly not measured; these are procedural same-UID observations, not an OS fence.",
+      "The unchanged strict unitFile-string guard refused; this implementation intentionally does not broaden service admission or cleanup authority.",
+      "actualUnitStarted false and zero service counters are report facts, not proof of physical absence or final manager/native cleanup.",
+      "Authenticated private Node runtime and bootstrap root retained for possible ExecStop; no dependency cleanup or provider final cleanup inferred.",
+      "Preceding native aggregate/TLS/contracts passed separately; both full native workflows and actual service acceptance remain FAILED.",
+      "Prior7d1actualpathspelling, original700primaryerror and old0adeexception remain unknown; do not retroactively attribute current diagnostic to old executions.",
+      "No CI reruns, actual local service/native tests, raw hostpaths/PIDs/runtime logs or Node installation identifiers published."
+    ],
+    "nextBoundedTask": "From a new authorized exact lease, determine a secure admission rule for the proven known runtimeLink alias using fresh original link/owned-file checks, bounded canonical or same-file identity if required, and refusal controls for foreign or changed paths. Never resolve arbitrary manager-supplied paths or remove unknown resources. Require exact new actual lifecycle/start/stop/cleanup CI before service acceptance."
+  },
+  "hostedResearch": {
+    "schemaVersion": 1,
+    "suite": "x10-fragment-identity-exact-hosted-research",
+    "sourceCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+    "sourceTree": "8e3f1843924e373458284dce5a169bf75cbef663",
+    "recordedAtUTC": "2026-10-25T03:40:20Z",
+    "readOnly": true,
+    "runtimeTestsLocallyRerun": false,
+    "workflowRerunsRequested": 0,
+    "state": "EXACT_PR_RESEARCH_VERIFIED_PUSH_SCOPE_ONLY",
+    "identity": {
+      "apiVerifiedMergeCommit": "bb5acb3cd4debdcdb560f3fb9ad108595f0cd344",
+      "apiVerifiedTree": "8e3f1843924e373458284dce5a169bf75cbef663",
+      "apiVerifiedOrderedParents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "f434807e757ae4f946f46e21a264529b6b47e37d"
+      ],
+      "actualResearchCheckoutVerified": true,
+      "actualResearchCheckout": "bb5acb3cd4debdcdb560f3fb9ad108595f0cd344"
+    },
+    "runs": [
+      {
+        "runId": 40158669261,
+        "event": "push",
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "headSha": "f434807e757ae4f946f46e21a264529b6b47e37d",
+        "scope": {
+          "jobId": 121065376979,
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "nodeVersion": "22.23.3",
+          "result": {
+            "schemaVersion": 1,
+            "suite": "x10-ci-source-scope",
+            "native": true,
+            "research": false,
+            "reason": "classified_delta",
+            "changedFiles": 11,
+            "sourceSha": "f434807e757ae4f946f46e21a264529b6b47e37d"
+          },
+          "actualLog": {
+            "decodedCharacters": 74786,
+            "decodedUTF8Bytes": 74788,
+            "sha256": "1bc677b73f99f6c88dc3040370f821e793c41da7db1442b487c4ea667fe0d5f3"
+          }
+        },
+        "runtime": {
+          "jobId": 121065409663,
+          "status": "completed",
+          "conclusion": "skipped",
+          "actualRuntimeVerified": false
+        },
+        "scopeOnly": true
+      },
+      {
+        "runId": 40158671993,
+        "event": "pull_request",
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "headSha": "f434807e757ae4f946f46e21a264529b6b47e37d",
+        "scope": {
+          "jobId": 121065385479,
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "nodeVersion": "22.23.3",
+          "result": {
+            "schemaVersion": 1,
+            "suite": "x10-ci-source-scope",
+            "native": true,
+            "research": true,
+            "reason": "event_or_git_unavailable",
+            "changedFiles": null,
+            "sourceSha": null
+          },
+          "actualLog": {
+            "decodedCharacters": 91191,
+            "decodedUTF8Bytes": 91193,
+            "sha256": "d34834306dbb6ae5b1652a5382efd207bc16ed832bb2b69d4939b42b01671e6c"
+          }
+        },
+        "runtime": {
+          "jobId": 121065427781,
+          "status": "completed",
+          "conclusion": "success",
+          "actualRuntimeVerified": true,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Build dependencies for TLS interoperability and isolated source probe",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Independent record and state counterexamples",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Same TCP connection across research worker versions",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Real TLS handshake and independent record observer",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Pinned OpenSSL read-only state probe",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 16
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 17
+            }
+          ],
+          "suites": [
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-record-and-state-kernel",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "in-memory-record-and-state-only",
+              "liveTlsProcessHandover": false,
+              "counts": {
+                "tests": 21,
+                "suites": 0,
+                "pass": 21,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-real-handshake-and-record-observation",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "real-handshake-and-record-observation-only",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 27,
+                "suites": 0,
+                "pass": 27,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-pinned-openssl-state-probe",
+              "passed": true,
+              "testFiles": 1,
+              "scope": "pinned-openssl-read-only-state-observation",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 48,
+                "suites": 0,
+                "pass": 48,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            }
+          ],
+          "processHandover": {
+            "command": "node --test --test-reporter=tap x10/continuum/process-handover.test.mjs",
+            "tests": 7,
+            "pass": 7,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "actualLog": {
+            "decodedCharacters": 30357,
+            "decodedUTF8Bytes": 30359,
+            "sha256": "4a270b9722b1a54e128febb9cd3e7f9fc9cc21a506bb45dfc244938b8173ed75"
+          }
+        },
+        "scopeOnly": false,
+        "updatedAtUTC": "2026-10-25T03:38:56Z"
+      }
+    ],
+    "limits": {
+      "scopeSuccessNotRuntimeAcceptance": true,
+      "researchNotActualServiceAcceptance": true,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "fullContinuumMigrationAccepted": false,
+      "rawLogsPublished": false
+    },
+    "nodeVersion": "22.23.3",
+    "checksPassed": 13,
+    "checks": [
+      {
+        "name": "PR workflow exact published head, completed success attempt1",
+        "passed": true
+      },
+      {
+        "name": "actual runtime job and every recorded step completed success",
+        "passed": true
+      },
+      {
+        "name": "actual research checkout is API verified merge",
+        "passed": true
+      },
+      {
+        "name": "merge tree equals published implementation tree",
+        "passed": true
+      },
+      {
+        "name": "merge ordered parents equal current PR base and published head",
+        "passed": true
+      },
+      {
+        "name": "actual runtime Node22.23.3",
+        "passed": true
+      },
+      {
+        "name": "exactly three actual JSON suites",
+        "passed": true
+      },
+      {
+        "name": "actual suite continuum-record-and-state-kernel 21/21 with clean runner",
+        "passed": true
+      },
+      {
+        "name": "actual suite continuum-real-handshake-and-record-observation 27/27 with clean runner",
+        "passed": true
+      },
+      {
+        "name": "actual suite continuum-pinned-openssl-state-probe 48/48 with clean runner",
+        "passed": true
+      },
+      {
+        "name": "actual process handover TAP7/7 zero adverse counts",
+        "passed": true
+      },
+      {
+        "name": "actual push scope log checkout matches published implementation",
+        "passed": true
+      },
+      {
+        "name": "push research runtime explicitly skipped, not protocol success",
+        "passed": true
+      }
+    ],
+    "blockingFindings": []
+  },
+  "hostedBoundaryReview": {
+    "schemaVersion": 1,
+    "scope": "independent exact f434 baseline actual ZIP identity finding readback",
+    "sourceCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+    "sourceCheckerSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "mergeIdentity": {
+      "sha": "bb5acb3cd4debdcdb560f3fb9ad108595f0cd344",
+      "parents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "f434807e757ae4f946f46e21a264529b6b47e37d"
+      ],
+      "tree": "8e3f1843924e373458284dce5a169bf75cbef663"
+    },
+    "checksPassed": 32,
+    "checks": [
+      {
+        "name": "native_report_actual_digest",
+        "passed": true
+      },
+      {
+        "name": "native_report_96controls",
+        "passed": true
+      },
+      {
+        "name": "exact_source",
+        "passed": true
+      },
+      {
+        "name": "unchanged_baseline_checker",
+        "passed": true
+      },
+      {
+        "name": "40158669450:actual_zip_digest",
+        "passed": true
+      },
+      {
+        "name": "40158669450:exact_completed_failure",
+        "passed": true
+      },
+      {
+        "name": "40158669450:actual_primary_and_final_failure",
+        "passed": true
+      },
+      {
+        "name": "40158669450:two_untruncated_identity_observations",
+        "passed": true
+      },
+      {
+        "name": "40158669450:lifecycle_and_cleanup_contexts",
+        "passed": true
+      },
+      {
+        "name": "40158669450:loaded_known_runtime_spelling:0",
+        "passed": true
+      },
+      {
+        "name": "40158669450:fresh_preceding_owned_checks:0",
+        "passed": true
+      },
+      {
+        "name": "40158669450:canonical_not_measured:0",
+        "passed": true
+      },
+      {
+        "name": "40158669450:loaded_known_runtime_spelling:1",
+        "passed": true
+      },
+      {
+        "name": "40158669450:fresh_preceding_owned_checks:1",
+        "passed": true
+      },
+      {
+        "name": "40158669450:canonical_not_measured:1",
+        "passed": true
+      },
+      {
+        "name": "40158669450:cleanup_not_accepted",
+        "passed": true
+      },
+      {
+        "name": "40158669450:dependency_valid_but_retained",
+        "passed": true
+      },
+      {
+        "name": "40158669450:no_service_or_production_acceptance",
+        "passed": true
+      },
+      {
+        "name": "40158672063:actual_zip_digest",
+        "passed": true
+      },
+      {
+        "name": "40158672063:exact_completed_failure",
+        "passed": true
+      },
+      {
+        "name": "40158672063:actual_primary_and_final_failure",
+        "passed": true
+      },
+      {
+        "name": "40158672063:two_untruncated_identity_observations",
+        "passed": true
+      },
+      {
+        "name": "40158672063:lifecycle_and_cleanup_contexts",
+        "passed": true
+      },
+      {
+        "name": "40158672063:loaded_known_runtime_spelling:0",
+        "passed": true
+      },
+      {
+        "name": "40158672063:fresh_preceding_owned_checks:0",
+        "passed": true
+      },
+      {
+        "name": "40158672063:canonical_not_measured:0",
+        "passed": true
+      },
+      {
+        "name": "40158672063:loaded_known_runtime_spelling:1",
+        "passed": true
+      },
+      {
+        "name": "40158672063:fresh_preceding_owned_checks:1",
+        "passed": true
+      },
+      {
+        "name": "40158672063:canonical_not_measured:1",
+        "passed": true
+      },
+      {
+        "name": "40158672063:cleanup_not_accepted",
+        "passed": true
+      },
+      {
+        "name": "40158672063:dependency_valid_but_retained",
+        "passed": true
+      },
+      {
+        "name": "40158672063:no_service_or_production_acceptance",
+        "passed": true
+      }
+    ],
+    "actualRuns": [
+      {
+        "runId": 40158669450,
+        "jobId": 121065411190,
+        "artifactSha256": "6d2b654235dafc55ae4343de982ba3bb199ed82e36c4a2a7f7a915b17f3b16d4",
+        "fragmentIdentityDiagnostics": {
+          "observationCount": 2,
+          "observationsTruncated": false,
+          "observations": [
+            {
+              "phase": "first_start",
+              "subphase": "before_properties",
+              "context": "lifecycle",
+              "loadState": "loaded",
+              "fragmentPathMatch": "runtime_link",
+              "precedingLinkTargetMatchesUnit": "verified",
+              "precedingUnitOwnedModeHash": "verified",
+              "canonicalIdentity": "not_measured"
+            },
+            {
+              "phase": "first_start",
+              "subphase": "not_applicable",
+              "context": "cleanup",
+              "loadState": "loaded",
+              "fragmentPathMatch": "runtime_link",
+              "precedingLinkTargetMatchesUnit": "verified",
+              "precedingUnitOwnedModeHash": "verified",
+              "canonicalIdentity": "not_measured"
+            }
+          ]
+        },
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "cleanupConfirmed": false
+      },
+      {
+        "runId": 40158672063,
+        "jobId": 121065429322,
+        "artifactSha256": "99a7b061abaacb4f3668bfc9b1ed9e5490cfd17b56ede8d268121b5ef39be7c2",
+        "fragmentIdentityDiagnostics": {
+          "observationCount": 2,
+          "observationsTruncated": false,
+          "observations": [
+            {
+              "phase": "first_start",
+              "subphase": "before_properties",
+              "context": "lifecycle",
+              "loadState": "loaded",
+              "fragmentPathMatch": "runtime_link",
+              "precedingLinkTargetMatchesUnit": "verified",
+              "precedingUnitOwnedModeHash": "verified",
+              "canonicalIdentity": "not_measured"
+            },
+            {
+              "phase": "first_start",
+              "subphase": "not_applicable",
+              "context": "cleanup",
+              "loadState": "loaded",
+              "fragmentPathMatch": "runtime_link",
+              "precedingLinkTargetMatchesUnit": "verified",
+              "precedingUnitOwnedModeHash": "verified",
+              "canonicalIdentity": "not_measured"
+            }
+          ]
+        },
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "cleanupConfirmed": false
+      }
+    ],
+    "blockingFindings": [],
+    "actualRuntimeLinkSpellingObserved": true,
+    "canonicalEquivalenceMeasured": false,
+    "sameInodeMeasured": false,
+    "physicalUnitOrNativeAbsenceProven": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "actualLocalManagerCommandsExecuted": 0,
+    "newRuntimeTestsExecuted": 0,
+    "workflowRerunsRequested": 0,
+    "limitations": [
+      "Actual runtime_link classification plus preceding checks is a temporal diagnostic observation, not permission for new manager actions.",
+      "Both lifecycle and cleanup show loaded runtime_link; canonical/inode equivalence remains unmeasured until next actual implementation.",
+      "Prior700/0ade primary causes remain unknown; no new cause attribution is made."
+    ]
+  },
+  "author": {
+    "schemaVersion": 1,
+    "kind": "known-owned-unit-runtime-fragment-identity-fix-author-report",
+    "baseCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+    "leasedParent": "e8364f0ad3c7cc2fa7e7b1d89f6acfa50eade58a",
+    "runId": "x10-owned-fragment-fix-20261025T034200Z",
+    "recordedAtUTC": "2026-10-25T03:47:24.976202+00:00",
+    "files": [
+      {
+        "path": "x10/service/lifecycle-check.mjs",
+        "sha256": "a14e856bd0139d2a4d636ca061d1e28cc43646f1feca3ff70513c484391ac4a9",
+        "bytes": 42888,
+        "beforeSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e"
+      },
+      {
+        "path": "x10/service/lifecycle-check.test.mjs",
+        "sha256": "b3b04a62449ab5d5a56f70ecb16d9c726baec127e60e3298ac74cc3477ad6f3e",
+        "bytes": 34903,
+        "beforeSha256": "210887cf38fe1fe545376d5dec1712c551d7ab8069402921655c2e722c30b1e0"
+      }
+    ],
+    "userOutcome": "Permit the actual observed exact known owned runtime-link manager spelling only after canonical known-path checks and fresh existing ownership/mode/hash/link checks; unrelated fragments remain refused.",
+    "behavior": "The one old literal unit fragment guard is replaced by a narrow two-known-spelling verifier plus a fresh post-query linkAuthority. All original pre-query ownership/mode/hash/link/runtime-parent checks, cgroup/launcher/native/action/cleanup/success/retention rules remain. No arbitrary manager fragment is used as a filesystem capability.",
+    "exactBaselineNormalization": {
+      "passed": true,
+      "normalizedSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+      "originalSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+      "allowedDifferences": "Only new canonical-known-path verifier and old literal guard replaced by verifier+fresh existing post-query authority."
+    },
+    "guardContract": {
+      "inputs": "Own-data plain/null-prototype record and knownPaths; wrong types, foreign prototypes, arrays/functions, accessors or throwing prototype/descriptor traps refuse finite unit_fragment_identity without coercion.",
+      "exactSpellingAllowlist": "Require LoadState loaded and FragmentPath exactly known unitFile or known runtimeLink primitive normalized absolute strings, distinct and at most4096 characters. Reject all other manager spellings before new path resolution.",
+      "canonicalAliasCheck": "For exact runtimeLink only, realpath(known unitFile) must equal unitFile, then realpath(known runtimeLink) must equal unitFile. No realpath(manager-returned FragmentPath) call. Missing/broken/cyclic/denied/contradictory resolution refuses unit_fragment_identity.",
+      "freshAuthority": "Original runtimeParents/linkAuthority remains before manager query and is reexecuted after new verifier for both allowed spellings. It requires current-owned symbolic link with exact readlink target, current-owned regular unit0600 with expected bytes hash, plus original runtime directory checks.",
+      "helperBoundary": "Exported verifier checks parsed spelling and known canonical paths only; it does not check owner, mode, bytes, runtime parents or cgroup and cannot replace full ownedProperties authority.",
+      "diagnosticBoundary": "Existing fragmentIdentityDiagnostics remains an unchanged PRE-validation snapshot. canonicalIdentity:not_measured labels that snapshot, not the later known runtime alias canonical checks. No new diagnostic collector or success claim."
+    },
+    "actualValidation": {
+      "syntax": {
+        "commands": [
+          "node --check x10/service/lifecycle-check.mjs",
+          "node --check x10/service/lifecycle-check.test.mjs"
+        ],
+        "exitCodes": [
+          0,
+          0
+        ]
+      },
+      "finalContracts": {
+        "command": "node --test --test-reporter=tap x10/service/lifecycle-check.test.mjs",
+        "exitCode": 0,
+        "path": ".build/owned-fragment-author-contract.tap",
+        "sha256": "cc0d231ee58309f6951ac06eb1b250368ee1f28b06028f8c7686d0b6b21a2edc",
+        "tests": 118,
+        "pass": 118,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0,
+        "units": "118 contract tests: prior104 diagnostic/refusal plus14 new owned-path and actual owned-filesystem/source-extracted authority cases; no actual manager/service"
+      },
+      "counterexample": {
+        "path": ".build/owned-fragment-author-baseline-safe.json",
+        "sha256": "ac8e5457305fbbdbf6c16f28a669d3660e1cd8484974df6d74111a560645ec1b",
+        "bytes": 1497,
+        "report": {
+          "kind": "actual-owned-filesystem-exact-baseline-alias-counterexample",
+          "baselineCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+          "baselineCheckerSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+          "exactBaselineAndCandidateOwnedPropertiesAndLinkAuthorityExecuted": true,
+          "actualOwnedCanonicalPathsMeasured": true,
+          "managerResponseSynthetic": true,
+          "actualManagerOrServiceExecuted": false,
+          "originalGuardRefusedKnownRuntimeAlias": true,
+          "candidateAcceptsOnlyKnownPathsWithFreshChecks": true,
+          "cases": [
+            {
+              "name": "baseline_alias",
+              "result": "unit_fragment_identity"
+            },
+            {
+              "name": "baseline_file",
+              "result": "accepted_owned_properties"
+            },
+            {
+              "name": "candidate_alias",
+              "result": "accepted_owned_properties"
+            },
+            {
+              "name": "candidate_file",
+              "result": "accepted_owned_properties"
+            },
+            {
+              "name": "foreign_same_bytes",
+              "result": "unit_fragment_identity"
+            },
+            {
+              "name": "foreign_hardlink",
+              "result": "unit_fragment_identity"
+            }
+          ],
+          "actualUIDModeHashAndLinkChecksExecuted": true,
+          "rootDeniedAccessControlAvailable": false,
+          "originalBirthInodeOrNlinkPolicyAdded": false,
+          "sameUIDMaliciousRaceFenced": false,
+          "rawPathsOrPIDsPublished": false,
+          "serviceAccepted": false,
+          "productionAccepted": false,
+          "fixtureCleanupVerified": true,
+          "candidateCheckerSha256": "a14e856bd0139d2a4d636ca061d1e28cc43646f1feca3ff70513c484391ac4a9"
+        }
+      },
+      "diffWhitespace": {
+        "command": "git diff --check",
+        "exitCode": 0
+      }
+    },
+    "actualOwnedFilesystemControls": [
+      "Known owned file and real runtime symlink canonical paths; exact baseline f434 ownedProperties rejects alias and candidate accepts alias/exactfile.",
+      "Foreign same-byte duplicate and hardlink manager spellings refused.",
+      "Missing/broken/cyclic/regular/hardlink/retargeted known runtime-link resolutions refused.",
+      "Canonical known unit parent alias refused.",
+      "Actual source-extracted post-query original guards reject changed unit mode/hash, changed runtime parent mode, and runtime-link retarget even on exact unitFile spelling.",
+      "Loaded and cgroup guards remain mandatory.",
+      "All author-created private filesystem fixtures removed in finally/t.after; no processes or sockets created."
+    ],
+    "unchangedProductInputs": [
+      {
+        "path": "x10/service/user-unit.mjs",
+        "sha256": "3fc67266e513a00803bbe450d23052fffd5f3b61bbb0dfaa90969841b1d9852a",
+        "unchanged": true
+      },
+      {
+        "path": "x10/service/preflight.mjs",
+        "sha256": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+        "unchanged": true
+      },
+      {
+        "path": "x10/alpha/cli.mjs",
+        "sha256": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+        "unchanged": true
+      },
+      {
+        "path": "x10/alpha/runtime.mjs",
+        "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51",
+        "unchanged": true
+      },
+      {
+        "path": "x10/control/manager.mjs",
+        "sha256": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822",
+        "unchanged": true
+      },
+      {
+        "path": "LICENSE",
+        "sha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c",
+        "unchanged": true
+      }
+    ],
+    "initialAdverseFindings": [
+      {
+        "kind": "exported new helper interface finding",
+        "observation": "Initial117-pass candidate accepted custom own-field arrays/functions/foreign-prototype containers in its canonical-only helper. Actual main parsed-null-prototype data was unaffected.",
+        "correction": "Added plain/null-prototype record constraints, finite failure for throwing getPrototypeOf and one published regression covering eight malformed container cases; final118/118. Earlier117 is pre-hardening and not final acceptance."
+      }
+    ],
+    "integrationBinding": "Coordinator alone updates exact checker SHA literals in verified-node/workflow; author owns neither file.",
+    "priorFailureScope": "Coordinator independently verified both actual f434 service reports loaded/runtime_link with preceding link target and owned mode/hash verified in lifecycle and cleanup. This implements the conditional known-owned-alias correction; it does not explain historical700/0ade failures or accept physical service cleanup.",
+    "cleanupThisLocalWork": {
+      "managerCommandsExecuted": 0,
+      "unitLinksCreatedBySystemd": 0,
+      "actualOwnedSyntheticSymlinkFixturesCreated": true,
+      "allOwnFixturesRemoved": true,
+      "serviceOrServingNativeStarted": false
+    },
+    "acceptance": {
+      "localOwnedPathAndGuardContractsVerified": true,
+      "actualOwnedFilesystemBaselineAliasCounterexampleReproduced": true,
+      "canonicalIdentityMeasuredForOwnedFixtures": true,
+      "actualNonrootManagerExecuted": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "exactResultingCI": "PENDING"
+    },
+    "limits": [
+      "Canonical resolution and fresh before/after checks are sequential observations, not an OS fence against malicious same-UID retarget/replacement.",
+      "No original birth dev/inode or nlink policy added; identical-byte/mode/owner unitFile replacement is not claimed to be rejected.",
+      "No arbitrary manager-provided path is resolved or read. Only the two already known paths are resolved for exact runtime-link spelling.",
+      "Actual EACCES/EPERM refusal could not be induced as root and is unavailable, not PASS; synthetic/injected errors are not physical permission-denial proof.",
+      "Local owned-filesystem checks use synthetic manager properties and do not prove real systemd startup, proxy traffic, cleanup or Production V1.",
+      "No native build/aggregate or research rerun performed by author; new exact actual CI required."
+    ]
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "role": "independent security review of exact-known-owned runtime alias correction",
+    "sourceCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+    "sourceSha256": "a14e856bd0139d2a4d636ca061d1e28cc43646f1feca3ff70513c484391ac4a9",
+    "testSha256": "b3b04a62449ab5d5a56f70ecb16d9c726baec127e60e3298ac74cc3477ad6f3e",
+    "baselineSourceSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "normalizedBaselineSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "checksPassed": 85,
+    "staticChecksPassed": 31,
+    "heldoutChecksPassed": 54,
+    "checks": [
+      {
+        "name": "final_source_exact_author_freeze",
+        "passed": true
+      },
+      {
+        "name": "final_test_exact_author_freeze",
+        "passed": true
+      },
+      {
+        "name": "heldouts_final_hashes_bound",
+        "passed": true
+      },
+      {
+        "name": "heldouts_all54_pass_and_cleanup",
+        "passed": true
+      },
+      {
+        "name": "single_reviewed_guard_change",
+        "passed": true
+      },
+      {
+        "name": "all_other_source_bytes_equal_exact_f434",
+        "passed": true
+      },
+      {
+        "name": "normalized_f434_baseline_sha256",
+        "passed": true
+      },
+      {
+        "name": "same_imports",
+        "passed": true
+      },
+      {
+        "name": "new_helper_only_two_knownpath_realpath_calls",
+        "passed": true
+      },
+      {
+        "name": "no_manager_path_dereference",
+        "passed": true
+      },
+      {
+        "name": "exact_spelling_refusal_precedes_realpath",
+        "passed": true
+      },
+      {
+        "name": "canonical_resolution_only_runtime_spelling",
+        "passed": true
+      },
+      {
+        "name": "canonical_expected_unit_and_link_not_generic_equality",
+        "passed": true
+      },
+      {
+        "name": "all_resolution_exceptions_fixed_fragment_refusal",
+        "passed": true
+      },
+      {
+        "name": "helper_does_not_grant_full_ownership_or_actions",
+        "passed": true
+      },
+      {
+        "name": "new_helper_rejects_nonplain_metadata",
+        "passed": true
+      },
+      {
+        "name": "own_data_only_metadata_access",
+        "passed": true
+      },
+      {
+        "name": "new_metadata_paths_bounded_normalized_primitive",
+        "passed": true
+      },
+      {
+        "name": "fresh_prequery_linkauthority_retained",
+        "passed": true
+      },
+      {
+        "name": "postquery_verifier_then_fresh_authority_before_cgroup_return",
+        "passed": true
+      },
+      {
+        "name": "all_original_linkauthority_bytes_unchanged",
+        "passed": true
+      },
+      {
+        "name": "systemctl_sites_unchanged",
+        "passed": true
+      },
+      {
+        "name": "signals_unchanged",
+        "passed": true
+      },
+      {
+        "name": "all_diagnostic_collectors_unchanged",
+        "passed": true
+      },
+      {
+        "name": "precanonical_diagnostics_remain_explicit_unmeasured",
+        "passed": true
+      },
+      {
+        "name": "all104_prior_test_source_preserved",
+        "passed": true
+      },
+      {
+        "name": "no_native_controller_alpha_license_change",
+        "passed": true
+      },
+      {
+        "name": "no_nlink_or_birthinode_policy_added",
+        "passed": true
+      },
+      {
+        "name": "no_new_acceptance_true_claims",
+        "passed": true
+      },
+      {
+        "name": "no_paths_or_errors_returned_by_helper",
+        "passed": true
+      },
+      {
+        "name": "permission_and_wrongowner_unavailable_honest",
+        "passed": true
+      },
+      {
+        "name": "actual_owned_filesystem_canonical_unit",
+        "passed": true
+      },
+      {
+        "name": "baseline_literal_guard_rejects_real_owned_alias",
+        "passed": true
+      },
+      {
+        "name": "candidate_accepts_original_unit_with_full_guard",
+        "passed": true
+      },
+      {
+        "name": "candidate_accepts_only_known_canonical_runtime_link_with_full_guard",
+        "passed": true
+      },
+      {
+        "name": "identical_byte_foreign_path_refused",
+        "passed": true
+      },
+      {
+        "name": "same_inode_unlisted_hardlink_path_refused",
+        "passed": true
+      },
+      {
+        "name": "fragment_refusal_empty",
+        "passed": true
+      },
+      {
+        "name": "fragment_refusal_relative",
+        "passed": true
+      },
+      {
+        "name": "fragment_refusal_newline",
+        "passed": true
+      },
+      {
+        "name": "fragment_refusal_dot_alias",
+        "passed": true
+      },
+      {
+        "name": "fragment_refusal_double_slash",
+        "passed": true
+      },
+      {
+        "name": "fragment_refusal_buffer",
+        "passed": true
+      },
+      {
+        "name": "fragment_refusal_number",
+        "passed": true
+      },
+      {
+        "name": "fragment_refusal_object",
+        "passed": true
+      },
+      {
+        "name": "fragment_refusal_null",
+        "passed": true
+      },
+      {
+        "name": "fragment_refusal_missing",
+        "passed": true
+      },
+      {
+        "name": "load_refusal_not-found",
+        "passed": true
+      },
+      {
+        "name": "load_refusal_masked",
+        "passed": true
+      },
+      {
+        "name": "load_refusal_error",
+        "passed": true
+      },
+      {
+        "name": "load_refusal_",
+        "passed": true
+      },
+      {
+        "name": "load_refusal_null",
+        "passed": true
+      },
+      {
+        "name": "known_path_same_string_ambiguous_refused",
+        "passed": true
+      },
+      {
+        "name": "known_path_missing_refused",
+        "passed": true
+      },
+      {
+        "name": "record_shape_refusal_array",
+        "passed": true
+      },
+      {
+        "name": "record_shape_refusal_foreign_proto",
+        "passed": true
+      },
+      {
+        "name": "record_shape_refusal_function",
+        "passed": true
+      },
+      {
+        "name": "record_shape_refusal_boxed",
+        "passed": true
+      },
+      {
+        "name": "paths_shape_refusal_array",
+        "passed": true
+      },
+      {
+        "name": "paths_shape_refusal_foreign_proto",
+        "passed": true
+      },
+      {
+        "name": "paths_shape_refusal_function",
+        "passed": true
+      },
+      {
+        "name": "paths_shape_refusal_boxed",
+        "passed": true
+      },
+      {
+        "name": "null_prototype_record_and_paths_supported",
+        "passed": true
+      },
+      {
+        "name": "getprototype_trap_fixed_refusal",
+        "passed": true
+      },
+      {
+        "name": "getter_records_never_evaluated",
+        "passed": true
+      },
+      {
+        "name": "descriptor_proxy_errors_fixed_refusal",
+        "passed": true
+      },
+      {
+        "name": "foreign_fragment_rejected_before_known_path_IO",
+        "passed": true
+      },
+      {
+        "name": "runtime_link_retarget_identical_byte_duplicate_refused",
+        "passed": true
+      },
+      {
+        "name": "runtime_link_regular_file_refused",
+        "passed": true
+      },
+      {
+        "name": "runtime_link_hardlink_refused",
+        "passed": true
+      },
+      {
+        "name": "relative_target_alias_not_borrowed_as_owned",
+        "passed": true
+      },
+      {
+        "name": "postquery_retarget_caught_original_spelling",
+        "passed": true
+      },
+      {
+        "name": "postquery_retarget_caught_runtime_spelling",
+        "passed": true
+      },
+      {
+        "name": "postquery_changed_mode_caught_even_with_canonical_alias",
+        "passed": true
+      },
+      {
+        "name": "postquery_changed_hash_caught_even_with_canonical_alias",
+        "passed": true
+      },
+      {
+        "name": "unit_symlink_to_equal_content_refused",
+        "passed": true
+      },
+      {
+        "name": "runtime_parent_unsafe_mode_refused",
+        "passed": true
+      },
+      {
+        "name": "runtime_parent_symlink_refused",
+        "passed": true
+      },
+      {
+        "name": "canonical_known_link_broken_refused",
+        "passed": true
+      },
+      {
+        "name": "canonical_known_link_cycle_refused",
+        "passed": true
+      },
+      {
+        "name": "known_unit_missing_alias_refused",
+        "passed": true
+      },
+      {
+        "name": "known_unit_symlink_canonical_alias_refused",
+        "passed": true
+      },
+      {
+        "name": "cgroup_foreign_prefix_still_refused",
+        "passed": true
+      },
+      {
+        "name": "cgroup_wrong_unit_suffix_still_refused",
+        "passed": true
+      },
+      {
+        "name": "original_unit_helper_alone_not_full_authority",
+        "passed": true
+      }
+    ],
+    "blockingFindings": [],
+    "authorityBehaviorUnchanged": false,
+    "explicitReviewedAuthorityChange": "The only authority change replaces exact original unitFile spelling rejection with exact unitFile or exact known runtimeLink, the latter requiring canonical resolution only of the two known paths; both spellings require a fresh post-query linkAuthority pass.",
+    "allOtherAuthorityActionAndCleanupSourceUnchanged": true,
+    "wholeSourceExceptReviewedGuardAndHelperByteIdentical": true,
+    "localOwnedFilesystemHeldouts": {
+      "schemaVersion": 1,
+      "scope": "independent pure path-helper and extracted full-guard actual-owned-filesystem controls with synthetic manager properties",
+      "sourceSha256": "a14e856bd0139d2a4d636ca061d1e28cc43646f1feca3ff70513c484391ac4a9",
+      "testSha256": "b3b04a62449ab5d5a56f70ecb16d9c726baec127e60e3298ac74cc3477ad6f3e",
+      "checksPassed": 54,
+      "checks": [
+        {
+          "name": "actual_owned_filesystem_canonical_unit",
+          "passed": true
+        },
+        {
+          "name": "baseline_literal_guard_rejects_real_owned_alias",
+          "passed": true
+        },
+        {
+          "name": "candidate_accepts_original_unit_with_full_guard",
+          "passed": true
+        },
+        {
+          "name": "candidate_accepts_only_known_canonical_runtime_link_with_full_guard",
+          "passed": true
+        },
+        {
+          "name": "identical_byte_foreign_path_refused",
+          "passed": true
+        },
+        {
+          "name": "same_inode_unlisted_hardlink_path_refused",
+          "passed": true
+        },
+        {
+          "name": "fragment_refusal_empty",
+          "passed": true
+        },
+        {
+          "name": "fragment_refusal_relative",
+          "passed": true
+        },
+        {
+          "name": "fragment_refusal_newline",
+          "passed": true
+        },
+        {
+          "name": "fragment_refusal_dot_alias",
+          "passed": true
+        },
+        {
+          "name": "fragment_refusal_double_slash",
+          "passed": true
+        },
+        {
+          "name": "fragment_refusal_buffer",
+          "passed": true
+        },
+        {
+          "name": "fragment_refusal_number",
+          "passed": true
+        },
+        {
+          "name": "fragment_refusal_object",
+          "passed": true
+        },
+        {
+          "name": "fragment_refusal_null",
+          "passed": true
+        },
+        {
+          "name": "fragment_refusal_missing",
+          "passed": true
+        },
+        {
+          "name": "load_refusal_not-found",
+          "passed": true
+        },
+        {
+          "name": "load_refusal_masked",
+          "passed": true
+        },
+        {
+          "name": "load_refusal_error",
+          "passed": true
+        },
+        {
+          "name": "load_refusal_",
+          "passed": true
+        },
+        {
+          "name": "load_refusal_null",
+          "passed": true
+        },
+        {
+          "name": "known_path_same_string_ambiguous_refused",
+          "passed": true
+        },
+        {
+          "name": "known_path_missing_refused",
+          "passed": true
+        },
+        {
+          "name": "record_shape_refusal_array",
+          "passed": true
+        },
+        {
+          "name": "record_shape_refusal_foreign_proto",
+          "passed": true
+        },
+        {
+          "name": "record_shape_refusal_function",
+          "passed": true
+        },
+        {
+          "name": "record_shape_refusal_boxed",
+          "passed": true
+        },
+        {
+          "name": "paths_shape_refusal_array",
+          "passed": true
+        },
+        {
+          "name": "paths_shape_refusal_foreign_proto",
+          "passed": true
+        },
+        {
+          "name": "paths_shape_refusal_function",
+          "passed": true
+        },
+        {
+          "name": "paths_shape_refusal_boxed",
+          "passed": true
+        },
+        {
+          "name": "null_prototype_record_and_paths_supported",
+          "passed": true
+        },
+        {
+          "name": "getprototype_trap_fixed_refusal",
+          "passed": true
+        },
+        {
+          "name": "getter_records_never_evaluated",
+          "passed": true
+        },
+        {
+          "name": "descriptor_proxy_errors_fixed_refusal",
+          "passed": true
+        },
+        {
+          "name": "foreign_fragment_rejected_before_known_path_IO",
+          "passed": true
+        },
+        {
+          "name": "runtime_link_retarget_identical_byte_duplicate_refused",
+          "passed": true
+        },
+        {
+          "name": "runtime_link_regular_file_refused",
+          "passed": true
+        },
+        {
+          "name": "runtime_link_hardlink_refused",
+          "passed": true
+        },
+        {
+          "name": "relative_target_alias_not_borrowed_as_owned",
+          "passed": true
+        },
+        {
+          "name": "postquery_retarget_caught_original_spelling",
+          "passed": true
+        },
+        {
+          "name": "postquery_retarget_caught_runtime_spelling",
+          "passed": true
+        },
+        {
+          "name": "postquery_changed_mode_caught_even_with_canonical_alias",
+          "passed": true
+        },
+        {
+          "name": "postquery_changed_hash_caught_even_with_canonical_alias",
+          "passed": true
+        },
+        {
+          "name": "unit_symlink_to_equal_content_refused",
+          "passed": true
+        },
+        {
+          "name": "runtime_parent_unsafe_mode_refused",
+          "passed": true
+        },
+        {
+          "name": "runtime_parent_symlink_refused",
+          "passed": true
+        },
+        {
+          "name": "canonical_known_link_broken_refused",
+          "passed": true
+        },
+        {
+          "name": "canonical_known_link_cycle_refused",
+          "passed": true
+        },
+        {
+          "name": "known_unit_missing_alias_refused",
+          "passed": true
+        },
+        {
+          "name": "known_unit_symlink_canonical_alias_refused",
+          "passed": true
+        },
+        {
+          "name": "cgroup_foreign_prefix_still_refused",
+          "passed": true
+        },
+        {
+          "name": "cgroup_wrong_unit_suffix_still_refused",
+          "passed": true
+        },
+        {
+          "name": "original_unit_helper_alone_not_full_authority",
+          "passed": true
+        }
+      ],
+      "blockingFindings": [],
+      "actualOwnedFilesystemFixtureUsed": true,
+      "syntheticManagerProperties": true,
+      "actualManagerCommandsExecuted": 0,
+      "actualServiceExecuted": false,
+      "nativeBuildOrAggregateRerun": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "ownedFixtureCleanupVerified": true,
+      "ownerRefusalControl": "actual_owned_fixture_chown_unavailable_EINVAL",
+      "permissionDeniedControl": {
+        "actual": "unavailable_in_root_owned_fixture_context",
+        "acceptedAsPass": false
+      },
+      "limitations": [
+        "Extracted existing authority guard functions run with actual owned fixture files and synthetic property records, not a real manager.",
+        "Helper alone is not ownership, mode, digest, cgroup or action authority; integration postquery linkAuthority remains required.",
+        "No birth dev/inode or nlink policy was added or claimed; same-UID malicious mutation is not OS fenced.",
+        "Actual owned-fixture chown returned EINVAL in this namespace and was marked unavailable, not counted as a wrong-owner PASS."
+      ]
+    },
+    "actualManagerCommandsExecuted": 0,
+    "actualServiceExecuted": false,
+    "nativeBuildOrAggregateRerun": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "newExactCIPending": true,
+    "actualNonrootCanonicalServiceAcceptance": false,
+    "actualWrongOwnerControl": "UNAVAILABLE_EINVAL_NOT_PASS",
+    "actualPermissionDeniedControl": "UNAVAILABLE_ROOT_CONTEXT_NOT_PASS",
+    "priorActualCIEntryEvidence": "owned-fragment-baseline-review-safe.json",
+    "reviewerHarnessAdverse": [
+      {
+        "kind": "review_harness_dependency_correction",
+        "detail": "Initial extracted-guard harness omitted lexical absent/unitName dependencies and one edit introduced a syntax typo. Restored exact baseline absent code and the fixture unitName; final54 controls passed on exact final candidate. These were reviewer harness failures, not product failures.",
+        "productFailure": false
+      },
+      {
+        "kind": "fixture_owner_control_unavailable",
+        "detail": "Attempted chown of the owned synthetic unit fixture to an unmapped UID returned EINVAL before changing ownership. Confirmed current UID retained, removed fixture, and marked actual wrong-owner execution unavailable rather than PASS.",
+        "productFailure": false
+      }
+    ],
+    "limitations": [
+      "The full extracted authority guard uses actual newly created owned files with synthetic manager records, never a live manager/service.",
+      "Known runtimeLink canonical resolution and original owned-target/mode/hash checks are enforced, but no birth dev/inode/nlink policy was added; same-UID malicious replacement and PID/action races are not OS fenced.",
+      "The helper alone permits exact unitFile spelling without filesystem I/O and is not a stand-alone ownership or cleanup verifier. Main integration must always retain both linkAuthority passes.",
+      "Existing fragment diagnostics are recorded before the new canonical helper and therefore remain canonicalIdentity:not_measured; their preceding facts cannot stand in for later successful authority.",
+      "Current new service success/cleanup requires exact actual nonroot CI. Priorf434 loaded/runtime_link diagnostic finding is the entry condition, not acceptance of these changed guard bytes.",
+      "Historical700/0ade errors remain unknown and are not explained by this current known-link correction."
+    ]
+  },
+  "independentQA": {
+    "schemaVersion": 1,
+    "kind": "independent-owned-fragment-filesystem-and-source-coupling-qa",
+    "sourceCommit": "f434807e757ae4f946f46e21a264529b6b47e37d",
+    "sourceSha256": "a14e856bd0139d2a4d636ca061d1e28cc43646f1feca3ff70513c484391ac4a9",
+    "testSha256": "b3b04a62449ab5d5a56f70ecb16d9c726baec127e60e3298ac74cc3477ad6f3e",
+    "baselineSourceSha256": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "harnessSha256": "6942d3dc352ebac500fa5ee133d809599816b7fb2b7749831fb00873a01f27be",
+    "checksPassed": 51,
+    "checks": [
+      {
+        "name": "candidate still requires original linkAuthority before query and new postquery linkAuthority after known-path verification",
+        "passed": true
+      },
+      {
+        "name": "existing linkAuthority entire source bytes unchanged",
+        "passed": true
+      },
+      {
+        "name": "existing properties parser/query authority entire source bytes unchanged",
+        "passed": true
+      },
+      {
+        "name": "existing runtimeParents entire source bytes unchanged",
+        "passed": true
+      },
+      {
+        "name": "both original cgroup admission guards retain exact source",
+        "passed": true
+      },
+      {
+        "name": "new helper only resolves fixed known paths and has no process or mutation operation",
+        "passed": true
+      },
+      {
+        "name": "lifecycle: exact owned unit spelling passes with postquery authority",
+        "passed": true
+      },
+      {
+        "name": "lifecycle: exact owned runtime symlink passes only after actual canonical and ownership checks",
+        "passed": true
+      },
+      {
+        "name": "lifecycle: foreign same-byte regular fragment is rejected",
+        "passed": true
+      },
+      {
+        "name": "lifecycle: not-found LoadState admission remains rejected",
+        "passed": true
+      },
+      {
+        "name": "lifecycle: foreign cgroup prefix rejected after alias proof",
+        "passed": true
+      },
+      {
+        "name": "lifecycle: wrong cgroup suffix rejected after alias proof",
+        "passed": true
+      },
+      {
+        "name": "cleanup: exact owned unit spelling passes with postquery authority",
+        "passed": true
+      },
+      {
+        "name": "cleanup: exact owned runtime symlink passes only after actual canonical and ownership checks",
+        "passed": true
+      },
+      {
+        "name": "cleanup: foreign same-byte regular fragment is rejected",
+        "passed": true
+      },
+      {
+        "name": "cleanup: not-found LoadState admission remains rejected",
+        "passed": true
+      },
+      {
+        "name": "cleanup: foreign cgroup prefix rejected after alias proof",
+        "passed": true
+      },
+      {
+        "name": "cleanup: wrong cgroup suffix rejected after alias proof",
+        "passed": true
+      },
+      {
+        "name": "before query mode refuses before manager read",
+        "passed": true
+      },
+      {
+        "name": "before query hash refuses before manager read",
+        "passed": true
+      },
+      {
+        "name": "before query retarget refuses before manager read",
+        "passed": true
+      },
+      {
+        "name": "before query broken refuses before manager read",
+        "passed": true
+      },
+      {
+        "name": "before query regular refuses before manager read",
+        "passed": true
+      },
+      {
+        "name": "before query hardlink refuses before manager read",
+        "passed": true
+      },
+      {
+        "name": "before query removed_link refuses before manager read",
+        "passed": true
+      },
+      {
+        "name": "before query removed_unit refuses before manager read",
+        "passed": true
+      },
+      {
+        "name": "before query symlink_unit refuses before manager read",
+        "passed": true
+      },
+      {
+        "name": "before query runtime_parent_mode refuses before manager read",
+        "passed": true
+      },
+      {
+        "name": "after query mode refuses stale known alias",
+        "passed": true
+      },
+      {
+        "name": "after query hash refuses stale known alias",
+        "passed": true
+      },
+      {
+        "name": "after query retarget refuses stale known alias",
+        "passed": true
+      },
+      {
+        "name": "after query broken refuses stale known alias",
+        "passed": true
+      },
+      {
+        "name": "after query regular refuses stale known alias",
+        "passed": true
+      },
+      {
+        "name": "after query hardlink refuses stale known alias",
+        "passed": true
+      },
+      {
+        "name": "after query removed_link refuses stale known alias",
+        "passed": true
+      },
+      {
+        "name": "after query removed_unit refuses stale known alias",
+        "passed": true
+      },
+      {
+        "name": "after query symlink_unit refuses stale known alias",
+        "passed": true
+      },
+      {
+        "name": "after query runtime_parent_mode refuses stale known alias",
+        "passed": true
+      },
+      {
+        "name": "after canonical verification mode caught by mandatory fresh postquery linkAuthority",
+        "passed": true
+      },
+      {
+        "name": "after canonical verification hash caught by mandatory fresh postquery linkAuthority",
+        "passed": true
+      },
+      {
+        "name": "after canonical verification retarget caught by mandatory fresh postquery linkAuthority",
+        "passed": true
+      },
+      {
+        "name": "after canonical verification regular caught by mandatory fresh postquery linkAuthority",
+        "passed": true
+      },
+      {
+        "name": "after canonical verification hardlink caught by mandatory fresh postquery linkAuthority",
+        "passed": true
+      },
+      {
+        "name": "after canonical verification runtime_parent_mode caught by mandatory fresh postquery linkAuthority",
+        "passed": true
+      },
+      {
+        "name": "actual owned-filesystem baseline counterexample: f434 rejects correct known runtime alias while candidate accepts with fresh checks",
+        "passed": true
+      },
+      {
+        "name": "foreign hardlink same bytes and inode remains outside two-spelling allowlist",
+        "passed": true
+      },
+      {
+        "name": "existing EACCES object propagates before query unchanged",
+        "passed": true
+      },
+      {
+        "name": "existing EPERM object propagates before query unchanged",
+        "passed": true
+      },
+      {
+        "name": "existing EIO object propagates before query unchanged",
+        "passed": true
+      },
+      {
+        "name": "loaded manager query failure remains unit_query_failed before new alias verification",
+        "passed": true
+      },
+      {
+        "name": "all individually created filesystem fixtures removed",
+        "passed": true
+      }
+    ],
+    "blockingFindings": [],
+    "checkUnits": {
+      "sourceStatic": 6,
+      "actualOwnedFilesystemPolicyCases": 40,
+      "injectedFilesystemErrorIdentityCases": 3,
+      "injectedManagerFailureResponseCases": 1,
+      "fixtureCleanupControl": 1
+    },
+    "matrix": [
+      {
+        "name": "lifecycle: exact owned unit spelling passes with postquery authority",
+        "context": "lifecycle",
+        "decision": "returned",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "lifecycle: exact owned runtime symlink passes only after actual canonical and ownership checks",
+        "context": "lifecycle",
+        "decision": "returned",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "lifecycle: foreign same-byte regular fragment is rejected",
+        "context": "lifecycle",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "lifecycle: not-found LoadState admission remains rejected",
+        "context": "lifecycle",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "lifecycle: foreign cgroup prefix rejected after alias proof",
+        "context": "lifecycle",
+        "decision": "unit_cgroup_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "lifecycle: wrong cgroup suffix rejected after alias proof",
+        "context": "lifecycle",
+        "decision": "unit_cgroup_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "cleanup: exact owned unit spelling passes with postquery authority",
+        "context": "cleanup",
+        "decision": "returned",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "cleanup: exact owned runtime symlink passes only after actual canonical and ownership checks",
+        "context": "cleanup",
+        "decision": "returned",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "cleanup: foreign same-byte regular fragment is rejected",
+        "context": "cleanup",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "cleanup: not-found LoadState admission remains rejected",
+        "context": "cleanup",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "cleanup: foreign cgroup prefix rejected after alias proof",
+        "context": "cleanup",
+        "decision": "unit_cgroup_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "cleanup: wrong cgroup suffix rejected after alias proof",
+        "context": "cleanup",
+        "decision": "unit_cgroup_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "before query mode refuses before manager read",
+        "context": "lifecycle",
+        "decision": "unit_file_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": false,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "before query hash refuses before manager read",
+        "context": "lifecycle",
+        "decision": "unit_file_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": false,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "before query retarget refuses before manager read",
+        "context": "lifecycle",
+        "decision": "unit_link_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": false,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "before query broken refuses before manager read",
+        "context": "lifecycle",
+        "decision": "unit_link_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": false,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "before query regular refuses before manager read",
+        "context": "lifecycle",
+        "decision": "unit_link_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": false,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "before query hardlink refuses before manager read",
+        "context": "lifecycle",
+        "decision": "unit_link_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": false,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "before query removed_link refuses before manager read",
+        "context": "lifecycle",
+        "decision": "ENOENT",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": false,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "before query removed_unit refuses before manager read",
+        "context": "lifecycle",
+        "decision": "ENOENT",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": false,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "before query symlink_unit refuses before manager read",
+        "context": "lifecycle",
+        "decision": "unit_file_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": false,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "before query runtime_parent_mode refuses before manager read",
+        "context": "lifecycle",
+        "decision": "unit_directory_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": false,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after query mode refuses stale known alias",
+        "context": "lifecycle",
+        "decision": "unit_file_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after query hash refuses stale known alias",
+        "context": "lifecycle",
+        "decision": "unit_file_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after query retarget refuses stale known alias",
+        "context": "lifecycle",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after query broken refuses stale known alias",
+        "context": "lifecycle",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after query regular refuses stale known alias",
+        "context": "lifecycle",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after query hardlink refuses stale known alias",
+        "context": "lifecycle",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after query removed_link refuses stale known alias",
+        "context": "lifecycle",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after query removed_unit refuses stale known alias",
+        "context": "lifecycle",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after query symlink_unit refuses stale known alias",
+        "context": "lifecycle",
+        "decision": "unit_fragment_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after query runtime_parent_mode refuses stale known alias",
+        "context": "lifecycle",
+        "decision": "unit_directory_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after canonical verification mode caught by mandatory fresh postquery linkAuthority",
+        "context": "lifecycle",
+        "decision": "unit_file_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after canonical verification hash caught by mandatory fresh postquery linkAuthority",
+        "context": "lifecycle",
+        "decision": "unit_file_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after canonical verification retarget caught by mandatory fresh postquery linkAuthority",
+        "context": "lifecycle",
+        "decision": "unit_link_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after canonical verification regular caught by mandatory fresh postquery linkAuthority",
+        "context": "lifecycle",
+        "decision": "unit_link_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after canonical verification hardlink caught by mandatory fresh postquery linkAuthority",
+        "context": "lifecycle",
+        "decision": "unit_link_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "after canonical verification runtime_parent_mode caught by mandatory fresh postquery linkAuthority",
+        "context": "lifecycle",
+        "decision": "unit_directory_identity",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "knownPathHelperActual": true,
+        "sourceClosureExtraReadTargets": false
+      },
+      {
+        "name": "baseline correct-runtime-alias counterexample",
+        "baselineDecision": "unit_fragment_identity",
+        "candidateDecision": "returned",
+        "actualOwnedFilesystem": true,
+        "queryStubbed": true,
+        "canonicalHelperActual": true
+      }
+    ],
+    "fixtures": {
+      "created": 44,
+      "removed": 44,
+      "cleanupConfirmed": true
+    },
+    "actualManagerCommandsExecuted": 0,
+    "actualServiceExecuted": false,
+    "nativeBuildOrAggregateRerun": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "boundaries": {
+      "actualOwnedFilesystem": true,
+      "exactSourceExtractedRuntimeParentsAndLinkAuthorityAndPropertiesAndOwnedProperties": true,
+      "actualExportedCanonicalHelperInvoked": true,
+      "managerQueryResponseStubbed": true,
+      "injectedPostqueryAndPostcanonicalMutations": true,
+      "injectedFilesystemErrorObjects": true,
+      "actualFilesystemPermissionFailureObserved": false,
+      "actualNonrootManagerAvailable": false,
+      "noSameUidRaceFenceClaim": true,
+      "noPhysicalServiceCleanupClaim": true,
+      "noRawPathsOrPidsPublished": true
+    }
+  },
+  "pinPropagation": {
+    "lifecycleSourceSha256": "a14e856bd0139d2a4d636ca061d1e28cc43646f1feca3ff70513c484391ac4a9",
+    "changes": [
+      {
+        "file": "x10/service/verified-node.mjs",
+        "beforeSha256": "154d6da14907e2e5ab2e71592820356a8c08d7c711cbdfe5007d717f5bc0a880",
+        "afterSha256": "8a460a4a3b78fc2d7aefe1deea8a4b225f2527b09816a91fc58e1cb12764b03a",
+        "exactSingleCheckerDigestSubstitution": true
+      },
+      {
+        "file": ".github/workflows/x10-native.yml",
+        "beforeSha256": "47c87093ac610e91cf78385e4816e4aef5b0a851e3496327a6c7d2a3fd8db006",
+        "afterSha256": "c14224b4a73dbea572b713e6d9ccbbb591624380870cba0c6cf0525f35879efb",
+        "exactSingleCheckerDigestSubstitution": true
+      }
+    ],
+    "yamlParsed": true,
+    "workflowNodeSyntaxExit": 0,
+    "syntaxDiagnosticsEmpty": true,
+    "workflowOrDependencyBehaviorChangedBeyondCheckerPin": false,
+    "runtimeDownloadedOrServiceStartedLocally": false,
+    "exactNewCIPending": true,
+    "preHardening117LocalTestsSuperseded": true,
+    "finalLocalContractsRequired": 118
+  },
+  "reportSha256": {
+    "hostedNative": "8c75e953405fc1faadecac5011f947ebc0d0c39665fbbeab029a0bc57ed212b9",
+    "hostedResearch": "bd857ab028c4cace3f11c2171a0e8a4db33fc23b39392bae614d068d263531dc",
+    "hostedBoundaryReview": "2847085b869a691da31c6a9108cd4f0b39bebf90a0f9c0b55ad1964c69ecb9b4",
+    "author": "e144ec238c10c73a1e2274a3b7d6e3fee3e8a338f669c35eb1850209aeef4a91",
+    "independentReview": "a0c6ce249089e71224255b20e82de1318fcd69182da9ce761c7ace45c366d924",
+    "independentQA": "7ec06f6e666cf12943a9305e36759eba25671ac30b08c1452ec63d352d7418c3",
+    "pinPropagation": "8a804cdc5588be31a0b0a93ac18e1a115418cdacef12194faa77189e3464f01d"
+  },
+  "failedImplementationSourceSha256": {
+    "x10/service/lifecycle-check.mjs": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+    "x10/service/lifecycle-check.test.mjs": "210887cf38fe1fe545376d5dec1712c551d7ab8069402921655c2e722c30b1e0",
+    "x10/service/verified-node.mjs": "154d6da14907e2e5ab2e71592820356a8c08d7c711cbdfe5007d717f5bc0a880",
+    ".github/workflows/x10-native.yml": "47c87093ac610e91cf78385e4816e4aef5b0a851e3496327a6c7d2a3fd8db006"
+  },
+  "candidateSourceSha256": {
+    "x10/service/lifecycle-check.mjs": "a14e856bd0139d2a4d636ca061d1e28cc43646f1feca3ff70513c484391ac4a9",
+    "x10/service/lifecycle-check.test.mjs": "b3b04a62449ab5d5a56f70ecb16d9c726baec127e60e3298ac74cc3477ad6f3e",
+    "x10/service/verified-node.mjs": "8a460a4a3b78fc2d7aefe1deea8a4b225f2527b09816a91fc58e1cb12764b03a",
+    ".github/workflows/x10-native.yml": "c14224b4a73dbea572b713e6d9ccbbb591624380870cba0c6cf0525f35879efb"
+  },
+  "unchangedAuthoritySourceSha256": {
+    "x10/service/user-unit.mjs": "3fc67266e513a00803bbe450d23052fffd5f3b61bbb0dfaa90969841b1d9852a",
+    "x10/service/user-unit.test.mjs": "bf65c2e0b60a21d09d211c6eb869264674ffab9efdd5d9133143ee8f119a2287",
+    "x10/service/preflight.mjs": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+    "x10/service/preflight.test.mjs": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3",
+    "x10/service/verified-node.test.mjs": "5278923411404ab60806be890c81ae640b0f71139ee31bef9a9405ee5a2b2e07",
+    "x10/service/node-runtime-pin.json": "a6005d105d8b327f6d57118b1f674d1516a6bcfce0a162725b72250bec5fcbad",
+    "x10/service/keys/node-v22-release.asc": "5115095e2f8010c75da052ecb1cfb3af630e084f0f8daa93a863557b01b0f90a",
+    "x10/service/keys/node-v22.23.3-SHASUMS256.asc": "e82087fe2cf383fce187b0789eb5ea50fd92f9b68afb4f4e174d65ec59acba4a",
+    "x10/test/alpha-tls.test.mjs": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+    "x10/test/frontend-tls.test.mjs": "9d3168f14b8d7b8f6deeba1cc53bafe60a655786f00bd341a7354376a773cac9",
+    "x10/evidence/g3-service-primary-failure.json": "a79881f473b47234ae7226c22507993e3703a4b2307522fa27a6e2afe61e2fe1",
+    "x10/review/g3-service-primary-failure-ledger.json": "8541052c316cc72279dea68da4b6ccb3311125fceb9480e35e24b5021a7b1773",
+    "x10/evidence/g3-service-fragment-identity.json": "99b305bbcaaa162a4ea931b3b643757b20ec1eb544550a4f3bcb7f7f19b2c950",
+    "x10/review/g3-service-fragment-identity-ledger.json": "997e71606cbd4ed12bfd182affdab1453a2384c972748d37f11c68f866ebd481"
+  },
+  "checkerPinBefore": "7b94db03507da8be82940a890980eddfe3c701aafad4c1a581731f83e7a0b97e",
+  "checkerPinAfter": "a14e856bd0139d2a4d636ca061d1e28cc43646f1feca3ff70513c484391ac4a9",
+  "runtimeFilesUnchanged": 508,
+  "historicalObservationRetained": "Both exactf434 actual service steps failed cleanup_unconfirmed/first_start with primary unit_fragment_identity at before_properties. New bounded observations in both lifecycle and cleanup showed loaded state and FragmentPath exactly equal to the already known runtimeLink, with preceding link-target equality and owned unit mode/hash checks verified. canonicalIdentity was explicitly not_measured, not a same-file/inode or race-free proof. No physical service absence or manager/native/dependency final cleanup was established; the private verified Node and bootstrap root were retained. This current spelling observation does not establish historical7d1 spelling, original700 primary error or0ade exception.",
+  "prior7d1And700EvidenceReferencedNotRecursivelyEmbedded": "x10/evidence/g3-service-fragment-identity.json",
+  "newNativeBuildsOrAggregateRuns": 0,
+  "newWorkflowReruns": 0,
+  "actualServiceStartedLocally": false,
+  "actualServiceCleanupVerifiedLocally": false,
+  "newPurchases": false,
+  "productionDeployChanged": false,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "privateKeysPublished": false,
+  "limitations": [
+    "Both exactf434 actual service steps failed cleanup_unconfirmed/first_start with primary unit_fragment_identity at before_properties. New bounded observations in both lifecycle and cleanup showed loaded state and FragmentPath exactly equal to the already known runtimeLink, with preceding link-target equality and owned unit mode/hash checks verified. canonicalIdentity was explicitly not_measured, not a same-file/inode or race-free proof. No physical service absence or manager/native/dependency final cleanup was established; the private verified Node and bootstrap root were retained. This current spelling observation does not establish historical7d1 spelling, original700 primary error or0ade exception.",
+    "This changes the service checker fragment admission rule deliberately and narrowly; it is not diagnostic-only. LoadState must still be loaded and spelling exactly the owned unit or already known runtime link. Unrelated names are refused before new I/O.",
+    "Only the known runtime-link spelling causes canonical realpath checks of the already known owned unitFile and runtimeLink. The manager-returned FragmentPath is never passed to I/O. The link must resolve to the exact canonical owned unit; a fresh post-query execution of every original link/file owner/mode/hash/target check remains required for both spellings.",
+    "The existing fragmentIdentityDiagnostics snapshot is taken before new canonical verification. Its canonicalIdentity:not_measured describes that pre-validation snapshot, not the entire new execution. No canonical check result is added to the old diagnostic fields.",
+    "Canonical and repeated checks are procedural same-UID observations, not atomic kernel fencing, prevention of malicious same-UID changes, or inode/simultaneous authority proof. No new device/inode/link-count policy is claimed.",
+    "Local synthetic manager callbacks, owned filesystem fixtures and refusal contracts prove only their tested guard behavior. They do not execute or accept an actual nonroot systemd service or prove hosted cleanup.",
+    "Both fullf434 native workflows FAILED although preceding compatibility checks passed separately. The actualf434 runtime_link observations do not retroactively reconstruct7d1 spelling or700/0ade causes, and do not accept the changed guard.",
+    "Only fixed checker-source digest literals are propagated in verified-node and workflow. Signature/dependency/timeout/permissions/runtime-retention logic remains unchanged.",
+    "Actual service startup, readiness, both stop/start sessions, proxy/upload/stream and owned cleanup require exact new CI. Logging, single manager restart, adverse cleanup, combined TLS/service, package update/rollback/recovery, permanent distribution, security/soak and Production V1 remain open."
+  ]
+}

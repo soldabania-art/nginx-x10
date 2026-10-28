@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "date": "2026-10-23",
+  "publication": {
+    "rawRecordSha256": "abdbd64d29d0a26bb19a2d41447ce7269454fb3d5e156c7fed3c311a7c90e2a8",
+    "rawRecordRetainedLocally": true,
+    "omitted": [
+      "absolute filesystem paths",
+      "live process and namespace identities",
+      "ephemeral network endpoints",
+      "raw configuration and certificate metadata",
+      "native and child logs",
+      "embedded raw reports and command output"
+    ],
+    "note": "This is a publication summary, not a raw runner record or input to the aggregate validator."
+  },
+  "suite": "native-generation-boundaries",
+  "passed": true,
+  "networkUsed": false,
+  "sourceUnchangedDuringTest": true,
+  "harnessUnchangedDuringTest": true,
+  "temporaryRootRemoved": true,
+  "activeChildren": 0,
+  "compileExitCode": 0,
+  "executionExitCode": 0,
+  "tests": [
+    {
+      "name": "initial-generation-and-distinct-births",
+      "passed": true
+    },
+    {
+      "name": "successful-cycle-commits-advance-before-spawn",
+      "passed": true
+    },
+    {
+      "name": "respawn-overwrites-slot-with-current-generation-and-new-birth",
+      "passed": true
+    },
+    {
+      "name": "same-pid-callback-gets-new-birth",
+      "passed": true
+    },
+    {
+      "name": "stale-slot-pid-is-unclassified",
+      "passed": true
+    },
+    {
+      "name": "unknown-cycle-keeps-known-current-but-nulls-process-generation",
+      "passed": true
+    },
+    {
+      "name": "detached-process-excluded-without-consuming-birth",
+      "passed": true
+    },
+    {
+      "name": "invalid-slot-allocation-is-noop",
+      "passed": true
+    },
+    {
+      "name": "wide-identities-are-exact-decimal-strings",
+      "passed": true
+    },
+    {
+      "name": "last-generation-uint64-value-is-exact",
+      "passed": true
+    },
+    {
+      "name": "generation-exhaustion-nulls-all-identities",
+      "passed": true
+    },
+    {
+      "name": "generation-exhaustion-remains-latched",
+      "passed": true
+    },
+    {
+      "name": "last-birth-uint64-value-is-exact",
+      "passed": true
+    },
+    {
+      "name": "birth-exhaustion-nulls-all-identities",
+      "passed": true
+    },
+    {
+      "name": "birth-exhaustion-remains-latched",
+      "passed": true
+    },
+    {
+      "name": "uninitialized-diagnostics-explicitly-unavailable",
+      "passed": true
+    },
+    {
+      "name": "inactive-hooks-do-not-change-state",
+      "passed": true
+    },
+    {
+      "name": "new-master-start-resets-scoped-counters",
+      "passed": true
+    },
+    {
+      "name": "all-responses-have-master-scope-and-pid",
+      "passed": true
+    },
+    {
+      "name": "json-flags-retain-boolean-types",
+      "passed": true
+    }
+  ],
+  "interrupted": null,
+  "provenance": {
+    "binarySha256": "b490f9f1df264e117f52c6e7a63f20c88ee55fb03f65143288f8c99cb41faf63",
+    "sourceSha256": "7cfcf5ad2cdf9eb7546281c3ce2dc0254a257b7d009a6c494e913cee4a36f2e0",
+    "sourceFilesSha256": {
+      "src/os/unix/ngx_control.c": "7cfcf5ad2cdf9eb7546281c3ce2dc0254a257b7d009a6c494e913cee4a36f2e0",
+      "src/os/unix/ngx_control.h": "6273ebce9a188abe9319758cd745c0c1688d24a11db151f9654b675e2dae4541",
+      "src/os/unix/ngx_process.c": "a354c634854617bed643d8db8b6218aa84cb603a7de1b15d9402427b4a471677",
+      "src/os/unix/ngx_process_cycle.c": "dd2f45a62724d9a297005f080efa0dcdd34ce7760d7591ec829ff6d3407ce819",
+      "src/core/ngx_data.c": "f17cc16776d3eef02ae2a7bf3d796a0c7ef742b014efaa5188e7094481dd5443",
+      "src/core/ngx_string.c": "23554f737f5dd4c4b7a586dbe7b681adaa513423a7eb51cb78f3b996f8f8387c",
+      "src/core/ngx_json.c": "d26b5e939a4d248edb7e1cc455048b6ee6eb885807272d7dc4329d48c584a21d",
+      "src/core/ngx_palloc.c": "90b5102326963fc75a9d9a204ee5852115934f2cddbeedc44b64eb3ec78f422b",
+      "src/core/ngx_buf.c": "5c6c87caf8a7155ab39d08fba21f1a47578e570d7951c78dec9bfba0bb7438e5",
+      "src/os/unix/ngx_alloc.c": "2e3a89e84045d241241b7333e481bf471c3741ac955283c01953ad4103844779"
+    },
+    "harnessSha256": "b1fc24570be6225147f7b9f190384ed53b6886f31dc42a2b61ed943e0b44a666",
+    "runnerSha256": "4817699f2a0547862ef9f5d62c6b6fd7e03e9f6a047cef7fa6b0bda6cb2527c0",
+    "generatedFilesSha256": {
+      "ngx_auto_config.h": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+      "ngx_auto_headers.h": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+      "ngx_modules.c": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f"
+    },
+    "generatedConfigSha256": "208f166607f3896bde4c50f03a84aa28e4cc984fd444b3573aba5f234a6e3b76",
+    "sourceUnchangedDuringTest": true,
+    "harnessUnchangedDuringTest": true,
+    "runnerUnchangedDuringTest": true,
+    "generatedFilesUnchangedDuringTest": true
+  },
+  "sanitizers": {
+    "enabled": [
+      "address",
+      "undefined"
+    ],
+    "leakDetection": false
+  },
+  "sanitizerDiagnosticCount": 0
+}

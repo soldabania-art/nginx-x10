@@ -1,0 +1,913 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-observer-esrch-20261024T172807Z",
+  "sourceBase": "92954a84c49bee5343836f0c0fb231fc29134404",
+  "publicationParent": "d376140ce62fb8f90379abcf511c83d70f3cd411",
+  "scope": "Stale-proc ESRCH handling only after independent double-ENOENT process-directory proof",
+  "recordedAtUTC": "2026-10-24T17:37:13.233159Z",
+  "implementationSourceFilesSha256": {
+    "x10/control/listeners.mjs": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+    "x10/test/listeners.test.mjs": "a43b12acdfedd6125f5b0bd84010581c8b28141215b804e8895c453928918b3c"
+  },
+  "implementationSourceFilesBeforeSha256": {
+    "x10/control/listeners.mjs": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+    "x10/test/listeners.test.mjs": "5beedeeda6879a77ba1804f6a05d19f1e9d6bd009b4063bf87d712fd8a1b8dc0"
+  },
+  "reportsSha256": {
+    "author": "d3b67fc4d30197b92f2186e2db5aefe806f423bd77258d2469cd034ea257961a",
+    "independentReview": "4d35fa8233e4ebe4bf12cb7e7ebc521bba02e332c54888640ae4c688f1068e77",
+    "native": "20d9bdd6d1c435621cd52e2e3500d0dcfa4ecc86df6c9e468ed1784bf7a2e9c9"
+  },
+  "author": {
+    "schemaVersion": 1,
+    "scope": "Captured-process observer accepts a post-open ESRCH only after the existing independent double-ENOENT directory proof; not historical cause proof",
+    "baseCommit": "92954a84c49bee5343836f0c0fb231fc29134404",
+    "leaseCommit": "d376140ce62fb8f90379abcf511c83d70f3cd411",
+    "changedFiles": [
+      "x10/control/listeners.mjs",
+      "x10/test/listeners.test.mjs"
+    ],
+    "sourceFilesSha256": {
+      "x10/control/listeners.mjs": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+      "x10/test/listeners.test.mjs": "a43b12acdfedd6125f5b0bd84010581c8b28141215b804e8895c453928918b3c"
+    },
+    "unchangedObserverSha256": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+    "productChange": {
+      "identityAllowGoneOnly": true,
+      "capturedDescriptorExitCatchOnly": true,
+      "captureStillStrict": true,
+      "masterStillStrict": true,
+      "descriptorInventoryRetriesRemainENOENTOnly": true,
+      "goneRequiresTwoENOENTLookupsUnchanged": true,
+      "nativeSourcesChanged": false,
+      "handoverFixtureChanged": false,
+      "noSignalOrConfigurationInObserver": true
+    },
+    "counterexample": {
+      "scope": "Four deterministic injected read/descriptor ESRCH functional cases on unchanged baseline module, after separate independently missing directory observations",
+      "cases": 4,
+      "passed": 0,
+      "failed": 4,
+      "exitCode": 1,
+      "tapCountsIncludingWrapper": {
+        "tests": 5,
+        "pass": 0,
+        "fail": 5,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "casesNamed": [
+        "post-open status ESRCH plus two absent directories",
+        "post-open stat ESRCH plus two absent directories",
+        "descriptor ESRCH plus two absent directories",
+        "one confirmed exited process plus another captured listener owner"
+      ],
+      "actualKernelEvidence": "Independent reviewer separately verified real stale proc handles; author fault injection alone is not a kernel proof"
+    },
+    "finalCandidate": {
+      "command": "node --test --test-reporter=tap x10/test/listeners.test.mjs",
+      "exitCode": 0,
+      "nestedCases": 41,
+      "existingNestedCasesPreserved": 28,
+      "newNestedCases": 13,
+      "tapCountsIncludingOneWrapper": {
+        "tests": 42,
+        "pass": 42,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "nodeVersion": "v24.22.1"
+    },
+    "newControlBoundaries": [
+      "post-open status and stat ESRCH with double-ENOENT independently confirmed absence",
+      "status and stat ESRCH while process directory present stays unavailable",
+      "process directory reappearing on second lookup stays unavailable",
+      "EACCES at absence lookup stays unavailable",
+      "ESRCH at second lookup cannot substitute for ENOENT",
+      "descriptor ESRCH with absent process exits only after double proof",
+      "descriptor ESRCH with present process neither retried nor called absent",
+      "descriptor process reappearing on second lookup stays unavailable",
+      "capture child ESRCH remains unavailable",
+      "master ESRCH remains unavailable",
+      "confirmed exit of one captured process does not hide another captured listener owner"
+    ],
+    "diagnosticHistory": {
+      "initialFullBaselineTap": {
+        "tests": 42,
+        "pass": 30,
+        "fail": 12,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "initialFullBaselineFunctionalFailures": 4,
+      "initialFullBaselineAdditionalProofLookupAssertionFailures": 7,
+      "initialFullBaselineWrapperFailure": 1,
+      "initialFullCandidateTap": {
+        "tests": 42,
+        "pass": 42,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "initialWrappedShellExitWasParserExitNotNodeExit": true,
+      "finalFocusedBaselineAndFullCandidateRecordedActualSubprocessExit": true,
+      "finalCandidateRepeatsSameCasesForCorrectExitCaptureNotAdditionalCoverage": true,
+      "authorKernelSetupAttempt": {
+        "result": "ENOENT opening local child PID under host-view proc mount",
+        "cause": "Fixture initially lacked host-view NSpid resolution",
+        "productFailure": false,
+        "followup": "Independent reviewer used unique NSpid plus namespace and executable mapping"
+      }
+    },
+    "cleanup": {
+      "allAcquiredCandidateFileHandlesClosed": true,
+      "allAcquiredCandidateDirectoryHandlesClosed": true,
+      "hooksRestoredInFinally": true,
+      "temporaryFakeProcRootRemovedInFinally": true,
+      "observerSourceUnchangedDuringFinalControls": true,
+      "authorOwnedChildSetupReaped": true
+    },
+    "limitations": [
+      "Synthetic observer controls prove JavaScript classification and independent lookup boundary. Independent actual-kernel evidence is separately reported.",
+      "Which captured-process observation produced the retained local native19of20 ESRCH remains unknown.",
+      "The held old worker had been observed stopped before the historical call; this does not identify the failing process or prove its exact state during the failing read.",
+      "ESRCH alone is never accepted as exit or listener closure.",
+      "Two sampled absence lookups retain existing check-to-use and later PID-reuse limitations.",
+      "Scope remains captured processes only, not native all-worker drain, accepted-connection completion or service health.",
+      "No Production V1, service/TLS or semantic TLS migration acceptance."
+    ],
+    "historicalCauseProven": false,
+    "exactHistoricalInterleavingReproduced": false,
+    "historicalFailureErased": false,
+    "nativeAggregateEvidenceRecordedSeparately": true,
+    "rawRuntimeLogsPublished": false,
+    "hostPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "newPurchases": false
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "scope": "Independent review of captured-process ESRCH exit corroboration; actual Linux mechanism and synthetic refusal boundaries, not full native NGINX or historical-interleaving reproduction",
+    "baseCommit": "92954a84c49bee5343836f0c0fb231fc29134404",
+    "leaseCommit": "d376140ce62fb8f90379abcf511c83d70f3cd411",
+    "sourceFreezeSha256": {
+      "x10/control/listeners.mjs": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+      "x10/test/listeners.test.mjs": "a43b12acdfedd6125f5b0bd84010581c8b28141215b804e8895c453928918b3c",
+      "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612"
+    },
+    "baselineListenerSourceSha256": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+    "candidateListenerSourceSha256": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+    "kernelMechanismExperiment": {
+      "scope": "Actual owned child proc-file handles held across child exit/reap; no NGINX or historical failure reproduction",
+      "files": [
+        {
+          "name": "status",
+          "readAfterExit": "error",
+          "code": "ESRCH"
+        },
+        {
+          "name": "stat",
+          "readAfterExit": "error",
+          "code": "ESRCH"
+        },
+        {
+          "name": "cmdline",
+          "readAfterExit": "error",
+          "code": "ESRCH"
+        },
+        {
+          "name": "maps",
+          "readAfterExit": "error",
+          "code": "ESRCH"
+        },
+        {
+          "name": "net/tcp",
+          "readAfterExit": "success",
+          "bytes": 450
+        }
+      ],
+      "childExit": {
+        "code": 0,
+        "signal": null
+      },
+      "cleanup": {
+        "opened": 5,
+        "closed": 5,
+        "childReaped": true
+      },
+      "procMapping": "unique namespace/executable match",
+      "directoryLookup1": "ENOENT",
+      "directoryLookup2": "ENOENT"
+    },
+    "earlierHarnessSetupOutcome": {
+      "scope": "Initial direct local child PID lookup did not resolve mounted procfs identity",
+      "outcome": {
+        "scope": "Actual owned child proc-file handles held across child exit/reap; no NGINX or historical failure reproduction",
+        "files": [
+          {
+            "name": "status",
+            "openError": "ENOENT"
+          },
+          {
+            "name": "stat",
+            "openError": "ENOENT"
+          },
+          {
+            "name": "cmdline",
+            "openError": "ENOENT"
+          },
+          {
+            "name": "maps",
+            "openError": "ENOENT"
+          },
+          {
+            "name": "net/tcp",
+            "openError": "ENOENT"
+          }
+        ],
+        "childExit": {
+          "code": 0,
+          "signal": null
+        },
+        "cleanup": {
+          "opened": 0,
+          "closed": 0,
+          "childReaped": true
+        },
+        "directoryLookup1": "ENOENT",
+        "directoryLookup2": "ENOENT"
+      },
+      "correctiveHarnessChange": "Resolve unique NSpid last component, exact PID namespace and canonical executable before opening child files",
+      "productSourcesChangedForSetup": false,
+      "initialAttemptWasNotESRCHReproduction": true
+    },
+    "independentSyntheticBoundaryControls": {
+      "distinctScenarios": 14,
+      "baselineAssertionsPassed": 14,
+      "candidateAssertionsPassed": 14,
+      "baselineExpectedUnavailableCounterexamples": 3,
+      "candidateConfirmedExits": 3,
+      "negativeRefusalScenarios": 11,
+      "baseline": {
+        "readBoundaries": {
+          "scope": "Independent synthetic stale-read and corroboration boundary controls, separate actual kernel mechanism report",
+          "candidate": false,
+          "sourceSha256": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+          "tests": 10,
+          "passed": 10,
+          "failed": 0,
+          "cases": [
+            {
+              "name": "status read ESRCH after acquired handle and removed directory",
+              "outcome": "baseline-unavailable-counterexample"
+            },
+            {
+              "name": "stat read ESRCH after prior status and acquired handle",
+              "outcome": "baseline-unavailable-counterexample"
+            },
+            {
+              "name": "status read ESRCH with present unchanged process",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "status read ESRCH with replacement process",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "status read ESRCH with second directory access denied",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "status read ESRCH with directory appearing on second lookup",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "status read ESRCH with directory lookup ESRCH itself",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "status read EACCES even with removed process directory",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "master status read ESRCH never receives captured-child exit authority",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "capture read ESRCH",
+              "outcome": "unavailable-no-capture"
+            }
+          ],
+          "cleanup": {
+            "acquired": 201,
+            "closed": 201,
+            "directories": 27,
+            "directoryCloses": 27,
+            "resourcesBalanced": true
+          }
+        },
+        "descriptorBoundaries": {
+          "scope": "Independent descriptor-boundary and exit corroboration controls",
+          "candidate": false,
+          "sourceSha256": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+          "tests": 4,
+          "passed": 4,
+          "failed": 0,
+          "cases": [
+            {
+              "name": "captured fd ESRCH after identity then actual fake-directory removal",
+              "outcome": "baseline-unavailable-counterexample"
+            },
+            {
+              "name": "captured fd ESRCH with present process",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "captured fd ESRCH with removed directory but second lookup present",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "captured fd EACCES after directory removal cannot enter exit path",
+              "outcome": "unavailable-no-closure-authority"
+            }
+          ],
+          "cleanup": {
+            "acquired": 92,
+            "closed": 92,
+            "directories": 16,
+            "directoryCloses": 16,
+            "resourcesBalanced": true
+          }
+        }
+      },
+      "candidate": {
+        "readBoundaries": {
+          "scope": "Independent synthetic stale-read and corroboration boundary controls, separate actual kernel mechanism report",
+          "candidate": true,
+          "sourceSha256": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+          "tests": 10,
+          "passed": 10,
+          "failed": 0,
+          "cases": [
+            {
+              "name": "status read ESRCH after acquired handle and removed directory",
+              "outcome": "exited-with-corroborated-directory-absence"
+            },
+            {
+              "name": "stat read ESRCH after prior status and acquired handle",
+              "outcome": "exited-with-corroborated-directory-absence"
+            },
+            {
+              "name": "status read ESRCH with present unchanged process",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "status read ESRCH with replacement process",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "status read ESRCH with second directory access denied",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "status read ESRCH with directory appearing on second lookup",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "status read ESRCH with directory lookup ESRCH itself",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "status read EACCES even with removed process directory",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "master status read ESRCH never receives captured-child exit authority",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "capture read ESRCH",
+              "outcome": "unavailable-no-capture"
+            }
+          ],
+          "cleanup": {
+            "acquired": 211,
+            "closed": 211,
+            "directories": 27,
+            "directoryCloses": 27,
+            "resourcesBalanced": true
+          }
+        },
+        "descriptorBoundaries": {
+          "scope": "Independent descriptor-boundary and exit corroboration controls",
+          "candidate": true,
+          "sourceSha256": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+          "tests": 4,
+          "passed": 4,
+          "failed": 0,
+          "cases": [
+            {
+              "name": "captured fd ESRCH after identity then actual fake-directory removal",
+              "outcome": "exited-only-with-corroborated-absence"
+            },
+            {
+              "name": "captured fd ESRCH with present process",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "captured fd ESRCH with removed directory but second lookup present",
+              "outcome": "unavailable-no-closure-authority"
+            },
+            {
+              "name": "captured fd EACCES after directory removal cannot enter exit path",
+              "outcome": "unavailable-no-closure-authority"
+            }
+          ],
+          "cleanup": {
+            "acquired": 97,
+            "closed": 97,
+            "directories": 16,
+            "directoryCloses": 16,
+            "resourcesBalanced": true
+          }
+        }
+      },
+      "TAPCountsEachVersion": {
+        "readSuite": {
+          "tests": 11,
+          "pass": 11,
+          "fail": 0,
+          "wrapperIncluded": true
+        },
+        "descriptorSuite": {
+          "tests": 5,
+          "pass": 5,
+          "fail": 0,
+          "wrapperIncluded": true
+        }
+      },
+      "repeatedVersionsAreNotAdditionalDistinctCases": true
+    },
+    "actualKernelObserverIntegration": {
+      "scope": "Actual owned Node master/worker share a loopback TCP server through IPC, use a synthetic nginx-compatible master title and real executable/UID/namespace/captured identities. The worker exits after its proc-status handle is acquired; the observer reads the real stale kernel handle. This is not native NGINX.",
+      "distinctScenario": 1,
+      "baseline": {
+        "scope": "Actual owned Node master/worker shared TCP listener with synthetic nginx-compatible title; real kernel stale proc-status handle, not NGINX/historical-interleaving reproduction",
+        "sourceHash": "12bed6ad9137bb4d1209c737731f907403bfa1631d7738a521b6cf2b0efce2bb",
+        "candidate": false,
+        "outcome": "baseline-unavailable",
+        "capturedWorkers": 1,
+        "staleReadESRCH": 1,
+        "independentProcessDirectoryLookups": 0,
+        "independentProcessDirectoryENOENT": 0,
+        "workerExit": {
+          "code": 0,
+          "signal": null,
+          "reaped": true
+        },
+        "cleanup": {
+          "acquired": 6,
+          "closed": 6,
+          "unclosed": 0,
+          "masterExited": true,
+          "hooksRestored": true,
+          "ownedFixturesStopped": true
+        }
+      },
+      "candidate": {
+        "scope": "Actual owned Node master/worker shared TCP listener with synthetic nginx-compatible title; real kernel stale proc-status handle, not NGINX/historical-interleaving reproduction",
+        "sourceHash": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+        "candidate": true,
+        "outcome": "closed-after-confirmed-exit",
+        "capturedWorkers": 1,
+        "staleReadESRCH": 1,
+        "independentProcessDirectoryLookups": 2,
+        "independentProcessDirectoryENOENT": 2,
+        "workerExit": {
+          "code": 0,
+          "signal": null,
+          "reaped": true
+        },
+        "cleanup": {
+          "acquired": 11,
+          "closed": 11,
+          "unclosed": 0,
+          "masterExited": true,
+          "hooksRestored": true,
+          "ownedFixturesStopped": true
+        }
+      },
+      "baselineTAP": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0
+      },
+      "candidateTAP": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0
+      },
+      "actualKernelStatusReadESRCHEachVersion": 1,
+      "candidateRequiresTwoActualENOENTDirectoryLookups": true,
+      "faultBoundary": "Isolated filesystem-open hook waits for only the owned worker to exit and be reaped after acquisition; file read and absence lookups are actual kernel operations. Production has no alternate proc root or fault-injection option."
+    },
+    "scriptSha256": {
+      "observer-review-kernel.mjs": "2376becfd260d431d58ddb5218929aecbefb3ff8a899e145a726a84666096f68",
+      "observer-review-boundary.test.mjs": "bc7e4b9273458b3d8c16cd6121bcae37848333543a9e2b79b7d161524ea6fc6b",
+      "observer-review-descriptor.test.mjs": "4f5028336dd424cc668861ac3dbb5de9ff356b0839fe2d8873d59a7a7bca7f8a",
+      "observer-review-real.test.mjs": "fd3243097c1a40a3f776334d15ba77e4eac392766142413172f478731865c420",
+      "observer-review-real-fixture.mjs": "e70c16e6628a167602a1a7f77e15fb385f3950477c2471ac883b976dd7506bbc"
+    },
+    "reviewFindings": {
+      "blocking": 0,
+      "productionDelta": "Only captured identity allowGone and captured descriptor catch admit ESRCH as a reason to perform the existing two-ENOENT process-directory check. Capture/master strictness, descriptor ENOENT-only bounded retry, budgets, snapshot integrity, identity guards and no-signal behavior remain unchanged.",
+      "knownResidual": "Two directory samples retain existing check-to-use races and do not fence future PID reuse."
+    },
+    "historicalFailureLimits": {
+      "retainedLocalNativeGroupsPassed": 19,
+      "retainedLocalNativeGroupsTotal": 20,
+      "historicalFailingCapturedProcessIdentified": false,
+      "exactHistoricalInterleavingReproduced": false,
+      "historicalRootCauseProven": false,
+      "heldWorkerExitInferred": false,
+      "laterCIErasesHistoricalFailure": false,
+      "actualLinuxMechanismProvenIsNotHistoricalCausality": true
+    },
+    "cleanup": {
+      "allOwnedChildrenReaped": true,
+      "allAcquiredResourcesClosed": true,
+      "allFilesystemHooksRestored": true,
+      "allTemporaryFakeProcRootsRemoved": true,
+      "productSourceFreezeUnchangedDuringCandidateRuns": true,
+      "independentSyntheticCandidateAcquiredFileHandles": 308,
+      "independentSyntheticCandidateClosedFileHandles": 308,
+      "independentSyntheticCandidateAcquiredDirectories": 43,
+      "independentSyntheticCandidateClosedDirectories": 43
+    },
+    "newNativeAggregateRunByReviewer": false,
+    "newPurchases": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "processIdentifiersPublished": false,
+    "serviceAccepted": false,
+    "tlsAccepted": false,
+    "productionAccepted": false,
+    "nodeVersion": "v24.22.1",
+    "limits": [
+      "Independent synthetic controls do not establish OS-level PID fencing.",
+      "Actual kernel observer integration uses Node processes and a synthetic nginx-compatible title; it is not native NGINX compatibility acceptance.",
+      "The first setup attempt used a local PID against a host-view proc mount and opened no handles; it is retained as setup failure, not hidden.",
+      "The private kernel script cleanup finally was hardened after its successful mechanism run and syntax-checked; the mechanism was not rerun unchanged.",
+      "Only coordinator can integrate/publish; full native aggregate and exact implementation CI are separate evidence."
+    ]
+  },
+  "native": {
+    "schemaVersion": 1,
+    "build": {
+      "builds": 1,
+      "exitCode": 0,
+      "elapsedMs": 28919,
+      "timedOut": false,
+      "checkoutRevision": "d376140ce62fb8f90379abcf511c83d70f3cd411",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+      "manifestSha256": "1eb0afe7fd281935f7ef705eb685a08d7530bbf4dbc4acf7bd25b351a90b0395",
+      "binarySha256": "4f88e5fc88903c676be1650783a9a5d624a9eb38491da0596ed077b13be1de58",
+      "binaryMode": "0755",
+      "compiledModuleCount": 105,
+      "nginxVersion": "1.31.9",
+      "dependencyVersionsFromHeaders": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "generatedFiles": {
+        "ngx_auto_config.h": {
+          "sha256": "eb89c1b4e1309c830bb1d73a37e06fe95b9acf8adc3a6b022e83f9e8e8643d5b",
+          "bytes": 10153,
+          "mode": "0644"
+        },
+        "ngx_auto_headers.h": {
+          "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+          "bytes": 657,
+          "mode": "0644"
+        },
+        "ngx_modules.c": {
+          "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+          "bytes": 11820,
+          "mode": "0644"
+        }
+      },
+      "licenseSha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c"
+    },
+    "environment": {
+      "nodeVersion": "v24.22.1",
+      "uid": 0,
+      "targetNonrootNode22Accepted": false
+    },
+    "dependencies": {
+      "pinnedWheelHashesVerified": 11,
+      "freshVenvs": 2,
+      "pipCheckPassed": 2,
+      "networkDependencyDownloads": 0,
+      "requireHashes": true,
+      "onlyBinary": true
+    },
+    "aggregate": {
+      "command": "node x10/test/all.mjs --official",
+      "exitCode": 0,
+      "elapsedMs": 230017,
+      "timedOut": false,
+      "stderrBytes": 679,
+      "success": true,
+      "groups": 20,
+      "passed": 20,
+      "failed": 0,
+      "suites": [
+        {
+          "name": "http-tls-http2-reload",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "stream-mail",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "mail-tls-starttls",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "protocol-adapters",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-interop",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-head-independent-client",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-features",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-regression",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-generated-sanitized",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-frame-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-load-client-verification",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "managed-native-control",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "operator-status",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "local-alpha-lifecycle",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "listener-observer-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "reload-listener-observation",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-control-api",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-process-generations",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-generation-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "official-nginx-tests",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        }
+      ]
+    },
+    "controller": {
+      "format": "node-test-tap",
+      "pass": 86,
+      "fail": 0,
+      "valid": true
+    },
+    "alpha": {
+      "format": "node-test-tap",
+      "pass": 45,
+      "fail": 0,
+      "valid": true,
+      "total": 45,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "operatorStatus": {
+      "format": "node-test-tap",
+      "pass": 30,
+      "fail": 0,
+      "valid": true,
+      "total": 30,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "listenerBoundaries": {
+      "format": "node-test-tap",
+      "pass": 42,
+      "fail": 0,
+      "valid": true
+    },
+    "handover": {
+      "success": true,
+      "tests": 7,
+      "passed": 7,
+      "interrupted": false,
+      "cleanup": {
+        "nativeStopped": true,
+        "nativeExitCode": 0,
+        "fixturesStopped": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true
+      },
+      "cleanupErrorCount": 0,
+      "fixtureErrorCount": 0,
+      "sourceUnchangedDuringTest": true,
+      "binaryUnchangedDuringTest": true,
+      "harnessUnchangedDuringTest": true,
+      "observerUnchangedDuringTest": true
+    },
+    "official": {
+      "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+      "summary": {
+        "files": 35,
+        "filesPassed": 32,
+        "filesSkipped": 3,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1109,
+          "passed": 1083,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "skippedFiles": [
+        "fastcgi.t",
+        "scgi.t",
+        "uwsgi.t"
+      ],
+      "cleanupErrorCount": 0,
+      "sourceUnchangedDuringTest": true
+    },
+    "nativeTrackedInputsCount": 499,
+    "nativeTrackedInputsUnchanged": true,
+    "frozenFilesCount": 54,
+    "frozenFilesUnchanged": true,
+    "sourceFreezeSha256": {
+      "x10/control/listeners.mjs": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+      "x10/test/listeners.test.mjs": "a43b12acdfedd6125f5b0bd84010581c8b28141215b804e8895c453928918b3c",
+      "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612"
+    },
+    "supplementalUnixReruns": 0,
+    "featureOffReruns": 0,
+    "historicalLocalFailurePreserved": true,
+    "historicalESRCHCauseProven": false,
+    "nativeProcessGroupSignalEscalationPerformed": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "serviceActivated": false,
+    "tlsAccepted": false,
+    "productionAccepted": false,
+    "limitations": [
+      "Local root/Node24 compatibility does not accept nonroot Node22 service/TLS.",
+      "One fresh native build and one changed-candidate official aggregate; no unchanged native diagnostic rerun.",
+      "The historical19/20 ESRCH failure and exact process/interleaving remain unproven.",
+      "Existing restricted AF_UNIX EPERM supplemental failure was not retried unchanged; hosted required Unix evidence remains separate.",
+      "Control-disabled profile was not rerun for this JS-only observer correction; previous exact evidence is not a new runtime PASS.",
+      "Official optional-client skips and expected TODO remain explicit."
+    ]
+  },
+  "retainedHistoricalObservation": "The first final wait-bind native aggregate failed19/20 with ESRCH in reload-listener-observation/inspectTcpListeners at handover-baseline.mjs314. Which captured-process observation failed and its exact cause remain unknown. The held old worker had previously been observed stopped; the fixture had not issued its own SIGCONT. ESRCH alone is not disappearance proof. Later exact hosted success, source stability and this new bounded mechanism do not prove the historical cause, a historical fix or no causal relationship to wait-bind.",
+  "historicalEvidence": "x10/evidence/g3-wait-bind.json",
+  "priorHostedReceipt": "x10/evidence/g3-wait-bind-hosted.json",
+  "historicalFailureCauseKnown": false,
+  "historicalCapturedProcessIdentified": false,
+  "historicalObserverFixClaimed": false,
+  "historicalInterleavingReproduced": false,
+  "noCausalRelationshipProven": false,
+  "nativeCChanged": false,
+  "alphaRuntimeChanged": false,
+  "handoverFixtureChanged": false,
+  "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+  "nextConcreteTask": "First inspect exact resulting observer implementation CI, including actual required native jobs/artifacts and changed observer controls; do not transfer earlier wait-bind CI acceptance to new observer bytes. Preserve the historical local19/20 failure and unknown failing captured process/cause. The new bounded stale-proc counterexample is a separate established mechanism, not a recreation of that historical interleaving. Then continue G3 verified TLS CA/hostname and actual nonroot user-manager startup/stop/restart, failed-start/drain/orphan gates. Automatic unit readiness, G2 permanent release/published-file replay, G4-G8 and Production V1 remain open; full native and deferred Continuum scope is preserved.",
+  "serviceAccepted": false,
+  "tlsAccepted": false,
+  "targetUserManagerAccepted": false,
+  "readinessAutomated": false,
+  "permanentAlphaAccepted": false,
+  "productionAccepted": false,
+  "fullNativeScopePreserved": true,
+  "fullContinuumScopePreserved": true,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "realSessionKeysPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "newPurchases": false,
+  "limitations": [
+    "A new bounded counterexample is not a reconstruction of the historical failing process/interleaving.",
+    "ESRCH alone is insufficient: both independent process-directory observations must specifically report ENOENT.",
+    "Present/reused/inaccessible processes and unknown observations remain unresolved; sampled check-to-use races remain.",
+    "Authored tests, independent controls, native aggregate groups and official assertions use separate counting units.",
+    "Later candidate PASS does not convert earlier local19/20 failure or required Unix EPERM into PASS.",
+    "No actual nonroot service, TLS, permanent distribution, production security, full TLS migration or Production V1 acceptance."
+  ]
+}

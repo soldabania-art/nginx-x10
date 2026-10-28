@@ -1,0 +1,941 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-hosted-controller-record-bounds-failure-receipt",
+  "state": "HOSTED_COMPATIBILITY_FAILED_HISTORICAL_FIXTURE_PRECONDITION",
+  "implementationCommit": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+  "implementationTree": "1eba4e2ac220233ed8b223741dde09754457e8ae",
+  "implementationSoleParent": "bb45d9bb18c556267818c22e1d75ad51d96a2bda",
+  "scope": "Exact98b reader implementation: new76 controls and existing managed controller passed, but alpha historical-operator preconditions failed in both events. This adverse receipt does not accept installed/service reader compatibility, G5 or V1.",
+  "sourceBindings": [
+    {
+      "path": "x10/control/manager.mjs",
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289",
+      "blobSha": "544f318607696879fb23e695097f853e5f8064b0"
+    },
+    {
+      "path": "x10/control/cli.mjs",
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac",
+      "blobSha": "fca0a871aa86e96366aae289714498ff52bd28bf"
+    },
+    {
+      "path": "x10/control/record-input.test.mjs",
+      "bytes": 22249,
+      "sha256": "eedae58efe27152f95cb2bb3d0526c7bdb24b5778ba1ba19807adf5ddc2dbbf8",
+      "blobSha": "7a7348e456c353222fddc38e939189dd40c30b4a"
+    },
+    {
+      "path": "x10/test/all.mjs",
+      "bytes": 32070,
+      "sha256": "c023f5f7ed52d34e7a4c69b976b5133a230fde60e0a92fbdc7525f24ff4b61c2",
+      "blobSha": "f579061c4e347362e19e63236fd2236ab50c0bfb"
+    },
+    {
+      "path": "x10/test/alpha.test.mjs",
+      "bytes": 114990,
+      "sha256": "1314f97f176a1fccf75a79d664aed7f777ce401873f795b0a801cc9c9844cedf",
+      "blobSha": "b335d4334dce107b86044485475674da6334be9a"
+    },
+    {
+      "path": "x10/service/operator-package-return.mjs",
+      "bytes": 65297,
+      "sha256": "215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83",
+      "blobSha": "cf3cce969eb7b472b13d561e6c487c134dba0e70"
+    }
+  ],
+  "nativeEvents": [
+    {
+      "event": "push",
+      "eventHead": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+      "eventSourceTree": "1eba4e2ac220233ed8b223741dde09754457e8ae",
+      "runId": 40533686304,
+      "jobId": 122293218632,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "actualStepCount": 36,
+      "actualOrderedSteps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Validate release-record contract and refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Validate alpha archive refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Validate guarded user-service recipe",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Validate fail-closed user-manager preflight",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Validate actual-service harness refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Validate bounded owned-service journal observations",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Validate bounded downstream HTTPS fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Validate bounded verified HTTPS origin fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Validate bounded paused TLS client controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Validate owned operator interruption controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Validate failed interruption containment controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Validate authenticated Node dependency refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Validate managed operator-package return refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Validate managed unhealthy-package fallback refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Build dependencies and optional test clients",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Install pinned HTTP3 interoperability client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19
+        },
+        {
+          "name": "Install independent HTTP3 HEAD client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20
+        },
+        {
+          "name": "Compile native profile",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "Native regressions and pinned official compatibility sample",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 22
+        },
+        {
+          "name": "Verify installed HTTPS upstream trust and hostname",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 23
+        },
+        {
+          "name": "Verify managed frontend HTTPS and certificate lifecycle",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 24
+        },
+        {
+          "name": "Verify native tenant cache contract experiment",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 25
+        },
+        {
+          "name": "Verify private Unix control transport",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 26
+        },
+        {
+          "name": "Build profile without control API",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 27
+        },
+        {
+          "name": "Package local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 28
+        },
+        {
+          "name": "Checksum local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 29
+        },
+        {
+          "name": "Verify packed alpha before extraction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 30
+        },
+        {
+          "name": "Verify temporary user-service with authenticated private Node",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 31
+        },
+        {
+          "name": "Preserve JSON evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32
+        },
+        {
+          "name": "Preserve local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 33
+        },
+        {
+          "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 65
+        },
+        {
+          "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 66
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 67
+        }
+      ],
+      "failedStepNumber": 22,
+      "failedStepName": "Native regressions and pinned official compatibility sample",
+      "actualBuildCheckout": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+      "actualBuildTree": "1eba4e2ac220233ed8b223741dde09754457e8ae",
+      "checkoutTreeParentsReadViaAPI": true,
+      "orderedBuildParents": [
+        "bb45d9bb18c556267818c22e1d75ad51d96a2bda"
+      ],
+      "artifact": {
+        "id": 12748340739,
+        "bytes": 124949,
+        "sha256": "0c1da2f847aaa4b38fb15263bb2129de215b4221fcfc4a16cd336dbc3b385f36",
+        "downloadedOnce": true
+      },
+      "artifactZipApiDigestVerified": true,
+      "artifactEntryCount": 16,
+      "buildBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+      "nativeAggregate": {
+        "totalGroups": 20,
+        "passedGroups": 19,
+        "failedGroups": [
+          "local-alpha-lifecycle"
+        ]
+      },
+      "controller": {
+        "suite": "managed-native-control",
+        "testFiles": [
+          "x10/test/control.test.mjs",
+          "x10/control/record-input.test.mjs"
+        ],
+        "exitCode": 0,
+        "elapsedMs": 59685,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "TAP": {
+          "format": "node-test-tap",
+          "pass": 162,
+          "fail": 0,
+          "valid": true
+        },
+        "newRecordInputControlsIncluded": 76,
+        "priorControllerControls": 86,
+        "countNotice": "162 actual hosted TAP includes new76 and prior86; not162 additional controls and not full installed/service acceptance."
+      },
+      "alpha": {
+        "suite": "local-alpha-lifecycle",
+        "exitCode": 1,
+        "elapsedMs": 71083,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "TAP": {
+          "format": "node-test-tap",
+          "pass": 614,
+          "fail": 3,
+          "valid": false,
+          "total": 617,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "retainedFailures": [
+          "not ok 8 - checked-bundle-extracts-and-installs-without-original-build-paths",
+          "not ok 557 - isolated Linux alpha installs, controls native sessions, restarts and removes only owned data",
+          "not ok 559 - extracted bundle proxies an independent app and preserves application readiness across config and sessions"
+        ],
+        "countNotice": "Three TAP failures consist of a failed nested body, its parent, and another failed top-level body. They are not three independent root causes."
+      },
+      "standaloneContractTAP": {
+        "release-record.tap": {
+          "tests": 119,
+          "pass": 119,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "alpha-archive.tap": {
+          "tests": 122,
+          "pass": 122,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      "officialCompatibility": {
+        "summary": {
+          "files": 35,
+          "filesPassed": 34,
+          "filesSkipped": 1,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1131,
+            "passed": 1105,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        },
+        "cleanupErrors": [],
+        "elapsedMs": 107973
+      },
+      "laterAcceptanceSteps": "SKIPPED: installed origin TLS, managed frontend TLS, cache/control transport, feature-off build, alpha package/checksum/archive extraction, actual user-service and private-Node acceptance."
+    },
+    {
+      "event": "pull_request",
+      "eventHead": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+      "eventSourceTree": "1eba4e2ac220233ed8b223741dde09754457e8ae",
+      "runId": 40533697675,
+      "jobId": 122293256424,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "actualStepCount": 36,
+      "actualOrderedSteps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Validate release-record contract and refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Validate alpha archive refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Validate guarded user-service recipe",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Validate fail-closed user-manager preflight",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Validate actual-service harness refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Validate bounded owned-service journal observations",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Validate bounded downstream HTTPS fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Validate bounded verified HTTPS origin fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Validate bounded paused TLS client controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Validate owned operator interruption controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Validate failed interruption containment controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Validate authenticated Node dependency refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Validate managed operator-package return refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Validate managed unhealthy-package fallback refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Build dependencies and optional test clients",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Install pinned HTTP3 interoperability client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19
+        },
+        {
+          "name": "Install independent HTTP3 HEAD client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20
+        },
+        {
+          "name": "Compile native profile",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "Native regressions and pinned official compatibility sample",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 22
+        },
+        {
+          "name": "Verify installed HTTPS upstream trust and hostname",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 23
+        },
+        {
+          "name": "Verify managed frontend HTTPS and certificate lifecycle",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 24
+        },
+        {
+          "name": "Verify native tenant cache contract experiment",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 25
+        },
+        {
+          "name": "Verify private Unix control transport",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 26
+        },
+        {
+          "name": "Build profile without control API",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 27
+        },
+        {
+          "name": "Package local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 28
+        },
+        {
+          "name": "Checksum local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 29
+        },
+        {
+          "name": "Verify packed alpha before extraction",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 30
+        },
+        {
+          "name": "Verify temporary user-service with authenticated private Node",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 31
+        },
+        {
+          "name": "Preserve JSON evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32
+        },
+        {
+          "name": "Preserve local Linux alpha",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 33
+        },
+        {
+          "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 65
+        },
+        {
+          "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 66
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 67
+        }
+      ],
+      "failedStepNumber": 22,
+      "failedStepName": "Native regressions and pinned official compatibility sample",
+      "actualBuildCheckout": "4fc8f0eaf33cda9e9c9ab38c615339c50e62094a",
+      "actualBuildTree": "1eba4e2ac220233ed8b223741dde09754457e8ae",
+      "checkoutTreeParentsReadViaAPI": true,
+      "orderedBuildParents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7"
+      ],
+      "artifact": {
+        "id": 12749015218,
+        "bytes": 124862,
+        "sha256": "7019b152eecec5fafc2d4c28d15ee265c12f61c8af33367541ff5a198a065ec2",
+        "downloadedOnce": true
+      },
+      "artifactZipApiDigestVerified": true,
+      "artifactEntryCount": 16,
+      "buildBinarySha256": "3516786bc341f0f2f4f4db64eea44907666b5f403972af423fafc04ddc018664",
+      "nativeAggregate": {
+        "totalGroups": 20,
+        "passedGroups": 19,
+        "failedGroups": [
+          "local-alpha-lifecycle"
+        ]
+      },
+      "controller": {
+        "suite": "managed-native-control",
+        "testFiles": [
+          "x10/test/control.test.mjs",
+          "x10/control/record-input.test.mjs"
+        ],
+        "exitCode": 0,
+        "elapsedMs": 59426,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "TAP": {
+          "format": "node-test-tap",
+          "pass": 162,
+          "fail": 0,
+          "valid": true
+        },
+        "newRecordInputControlsIncluded": 76,
+        "priorControllerControls": 86,
+        "countNotice": "162 actual hosted TAP includes new76 and prior86; not162 additional controls and not full installed/service acceptance."
+      },
+      "alpha": {
+        "suite": "local-alpha-lifecycle",
+        "exitCode": 1,
+        "elapsedMs": 90278,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "TAP": {
+          "format": "node-test-tap",
+          "pass": 614,
+          "fail": 3,
+          "valid": false,
+          "total": 617,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "retainedFailures": [
+          "not ok 8 - checked-bundle-extracts-and-installs-without-original-build-paths",
+          "not ok 557 - isolated Linux alpha installs, controls native sessions, restarts and removes only owned data",
+          "not ok 559 - extracted bundle proxies an independent app and preserves application readiness across config and sessions"
+        ],
+        "countNotice": "Three TAP failures consist of a failed nested body, its parent, and another failed top-level body. They are not three independent root causes."
+      },
+      "standaloneContractTAP": {
+        "release-record.tap": {
+          "tests": 119,
+          "pass": 119,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "alpha-archive.tap": {
+          "tests": 122,
+          "pass": 122,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        }
+      },
+      "officialCompatibility": {
+        "summary": {
+          "files": 35,
+          "filesPassed": 34,
+          "filesSkipped": 1,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1131,
+            "passed": 1105,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        },
+        "cleanupErrors": [],
+        "elapsedMs": 107925
+      },
+      "laterAcceptanceSteps": "SKIPPED: installed origin TLS, managed frontend TLS, cache/control transport, feature-off build, alpha package/checksum/archive extraction, actual user-service and private-Node acceptance."
+    }
+  ],
+  "diagnosis": {
+    "historicalCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "historicalCliBlob": "f036791f3e843c3628964f5c61b0bc0ab903d6f9",
+    "historicalCliSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+    "guard": "git diff --exit-code historicalCommit -- five controller peers, alpha runtime/upstream example and service user-unit",
+    "changedHistoricalPeerPaths": [
+      "x10/control/cli.mjs",
+      "x10/control/manager.mjs"
+    ],
+    "actualRefusal": "Both alpha historical staging and foreground operator-return helpers require the eight peers unchanged while replacing only historical alpha CLI. Candidate98b intentionally changed two controller peers, so the preflight command exits1 before the historical package comparison can complete.",
+    "readerRuntimeAssertionFailureFound": false,
+    "readerRuntimeAssertionFailureNotice": "No failing reader assertion was found in the retained managed controller/alpha output. This is bounded observation, not proof every reader path is compatible.",
+    "notTimeout": true,
+    "budgetIncreaseJustified": false,
+    "safeNextStep": "Review the explicit fixed-acb-CLI/shared98b-peer fixture and exact successor compatibility before any dependent capacity writer; preserve refusal for missing or mismatched source and actual bundle identities. This is not a complete historical acb runtime reconstruction. Never remove identity checks to imply oldA compatibility."
+  },
+  "cleanup": {
+    "fullFailedAlphaOwnedCleanup": "UNKNOWN",
+    "finallyCleanupSourceIsNotCompletionEvidence": true,
+    "specificForegroundRestoreDiagnostic": {
+      "foregroundHTTPAccepted": true,
+      "managedServiceAccepted": false,
+      "ownedProcessGroupAbsent": true,
+      "listeningPortsClosed": true,
+      "restoredInstallationRemoved": true,
+      "sourceInstallationRemoved": true
+    },
+    "specificForegroundRestoreDiagnosticScope": "Actual restored-application foreground HTTP diagnostic only; does not cover the failed historical staging/operator-return, full alpha, managed service or private Node.",
+    "officialSampleCleanupErrors": [],
+    "actualManagedServicePrivateNodeCleanupAcceptance": "SKIPPED",
+    "fixtureArtifactsRetainedPrivately": true
+  },
+  "researchPullRequest": {
+    "runId": 40533697590,
+    "jobId": 122293298873,
+    "conclusion": "success",
+    "actualStepCount": 11,
+    "actualSteps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1
+      },
+      {
+        "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2
+      },
+      {
+        "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 3
+      },
+      {
+        "name": "Build dependencies for TLS interoperability and isolated source probe",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 4
+      },
+      {
+        "name": "Independent record and state counterexamples",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5
+      },
+      {
+        "name": "Same TCP connection across research worker versions",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 6
+      },
+      {
+        "name": "Real TLS handshake and independent record observer",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 7
+      },
+      {
+        "name": "Pinned OpenSSL read-only state probe",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 8
+      },
+      {
+        "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 15
+      },
+      {
+        "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 16
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 17
+      }
+    ],
+    "actualBuildCheckout": "4fc8f0eaf33cda9e9c9ab38c615339c50e62094a",
+    "buildTree": "1eba4e2ac220233ed8b223741dde09754457e8ae",
+    "orderedBuildParents": [
+      "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+      "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7"
+    ],
+    "checkoutReadFromJobLog": true,
+    "treeParentsReadViaAPI": true,
+    "scenarios": [
+      {
+        "name": "continuum-record-and-state-kernel",
+        "tests": 21,
+        "pass": 21,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "name": "same TCP connection across research worker versions",
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "name": "continuum-real-handshake-and-record-observation",
+        "tests": 27,
+        "pass": 27,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "name": "continuum-pinned-openssl-state-probe",
+        "tests": 48,
+        "pass": 48,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      }
+    ],
+    "scope": "Separate research receipts, not native service/reader/Production V1 acceptance."
+  },
+  "researchPush": {
+    "runId": 40533686296,
+    "scopeJobId": 122293057341,
+    "scopeConclusion": "success",
+    "scopeActualStepCount": 8,
+    "runtimeJobId": 122293251221,
+    "runtimeConclusion": "skipped",
+    "runtimeSteps": null
+  },
+  "cla": {
+    "runId": 40533696001,
+    "jobId": 122293095073,
+    "conclusion": "failure",
+    "actualSteps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 1
+      },
+      {
+        "name": "Check if F5 CLA should be skipped",
+        "status": "completed",
+        "conclusion": "skipped",
+        "number": 2
+      },
+      {
+        "name": "Run F5 CLA assistant",
+        "status": "completed",
+        "conclusion": "failure",
+        "number": 3
+      },
+      {
+        "name": "Leave a note in the PR if the F5 CLA is not required",
+        "status": "completed",
+        "conclusion": "skipped",
+        "number": 4
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 5
+      }
+    ],
+    "failedStepNumber": 3,
+    "failedStepName": "Run F5 CLA assistant",
+    "scope": "Inherited agreement/publisher-policy failure remains; no agreement signed or policy bypass."
+  },
+  "historicalAdverseEvidencePreserved": [
+    "c2 primary failure UNRECORDED/UNKNOWN and cleanup unconfirmed",
+    "6401 TLS refusal root cause/cleanup unknown",
+    "historical local physical cleanup FAIL_UNKNOWN",
+    "34f alpha timeout120006ms root cause/cleanup UNKNOWN",
+    "CLA failure remains separate"
+  ],
+  "boundaries": {
+    "localPhysicalFixturesExecuted": 0,
+    "localNetworkFixturesExecuted": 0,
+    "signalsSentLocally": 0,
+    "manualReruns": 0,
+    "newArtifactDownloads": 2,
+    "artifactDownloadNotice": "One download for each new native evidence ZIP, then API size/digest verified. Existing artifacts were not redownloaded; no alpha archive downloaded.",
+    "scopeCountsNotAddedTogether": true,
+    "readerCompatibilityAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "serviceAccepted": false,
+    "fullG5Accepted": false,
+    "productionAccepted": false,
+    "windows": "DEFERRED_UNVERIFIED"
+  },
+  "nextTask": "Inspect exact successor hosted compatibility for the explicit fixed-acb-CLI/shared98b-peer profile. This is not a full historical acb package; session/inventory capacity remains dependent and OPEN."
+}

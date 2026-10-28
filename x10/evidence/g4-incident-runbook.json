@@ -1,0 +1,1472 @@
+{
+  "schemaVersion": 1,
+  "kind": "x10-faulted-orphan-incident-runbook-review",
+  "state": "SOURCE_REVIEWED_INCIDENT_RUNBOOK_ONLY",
+  "sourceBase": "fbbcdff430a26542bdf650896cb19abe7fa97d36",
+  "publicationParent": "54eec94ecca9ab2ebe5cd54eb251297de3af7f52",
+  "path": "x10/service/INCIDENT-RUNBOOK.md",
+  "documentBinding": {
+    "bytes": 29741,
+    "sha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+  },
+  "documentBoundaryReviewAccepted": true,
+  "runtimeBytesChanged": false,
+  "workflowChanged": false,
+  "runbookCommandsExecuted": 0,
+  "physicalNativeFixturesExecuted": 0,
+  "networkFixturesExecuted": 0,
+  "managerQueriesExecuted": 0,
+  "signalsSent": 0,
+  "cliCommandSpecificationsReviewed": 14,
+  "bashBlocksSyntaxOnly": 9,
+  "relativeLinksChecked": 15,
+  "independentSecurityStaticChecks": 26,
+  "independentOperationalDeskCases": 13,
+  "blockingFindingsAfterCorrections": 0,
+  "deskCasesAndStaticChecksAreNotTAPOrPhysicalIncidents": true,
+  "originalFaultedPrefixRetainedInPlace": true,
+  "noFaultedLifecycleClearOrForceUninstallCommand": true,
+  "unknownFactsRequire": "STOP_UNRESOLVED",
+  "evidence": "x10/evidence/g4-incident-runbook.json",
+  "perFileLedger": "x10/review/g4-incident-runbook-ledger.json",
+  "physicalRecoveryAccepted": false,
+  "originalFaultedPrefixDisposalAccepted": false,
+  "newServiceAccepted": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "fullG5Accepted": false,
+  "productionAccepted": false,
+  "tlsBackupAccepted": false,
+  "nativeBinaryVersionChangeAccepted": false,
+  "permanentDistributionAccepted": false,
+  "independentPublishedReplayAccepted": false,
+  "soakAccepted": false,
+  "semanticContinuumAccepted": false,
+  "scope": "Concrete trusted nonroot supported-profile instructions and independent source/desk review only; no physical incident or fresh restore executed in this pass.",
+  "sourceBindingsUnchanged": {
+    "x10/alpha/cli.mjs": {
+      "bytes": 87522,
+      "sha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa"
+    },
+    "x10/alpha/runtime.mjs": {
+      "bytes": 7540,
+      "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51"
+    },
+    "x10/control/manager.mjs": {
+      "bytes": 47989,
+      "sha256": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822"
+    },
+    "x10/service/user-unit.mjs": {
+      "bytes": 9481,
+      "sha256": "ae8e34acd2d16a0bbe04884b92d692c2e7e3c76c632c6a26eaa1b0cd38d65d9f"
+    },
+    "x10/service/preflight.mjs": {
+      "bytes": 6351,
+      "sha256": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2"
+    },
+    "x10/service/journal-check.mjs": {
+      "bytes": 8562,
+      "sha256": "8fbab18a15b326a8abe8392dbe61d6d24ff5c7576508c916b16704188254c6a5"
+    },
+    "x10/release/verify-alpha-archive.mjs": {
+      "bytes": 9209,
+      "sha256": "df213e76264fd7048abe5fdb790c158f7758cac7806d186db9b0fdf73d68094a"
+    },
+    "x10/test/alpha.test.mjs": {
+      "bytes": 114990,
+      "sha256": "1314f97f176a1fccf75a79d664aed7f777ce401873f795b0a801cc9c9844cedf"
+    },
+    "x10/service/lifecycle-check.mjs": {
+      "bytes": 147483,
+      "sha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370"
+    },
+    "x10/service/operator-package-return.mjs": {
+      "bytes": 65297,
+      "sha256": "215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83"
+    },
+    "x10/service/operator-package-fallback.mjs": {
+      "bytes": 630,
+      "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+    },
+    "x10/service/operator-package-fallback-proof.mjs": {
+      "bytes": 13468,
+      "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+    },
+    "x10/service/verified-node.mjs": {
+      "bytes": 32439,
+      "sha256": "bc0eeece79c388ced76a57787f4fbcba7489ce9ca56cb9af03025c09e2f594ff"
+    },
+    ".github/workflows/x10-native.yml": {
+      "bytes": 25506,
+      "sha256": "e829ed8e073bd2132006ce834bf95ec264b980bc124718142b64ff0694e1ed67"
+    }
+  },
+  "mandatoryAncestryRead": {
+    "baseCommit": "fbbcdff430a26542bdf650896cb19abe7fa97d36",
+    "state": "PASS",
+    "seedPaths": [
+      "x10/continuum/BACKGROUND.json",
+      "x10/continuation-2026-10-24/GATES.json",
+      "x10/evidence/g4-kept-a-fallback-hosted.json",
+      "x10/review/g4-kept-a-fallback-hosted-ledger.json"
+    ],
+    "documents": 27,
+    "mandatoryEdges": 165,
+    "blobPinComparisons": 91,
+    "distinctPinnedTargets": 8,
+    "distinctAncestorCommits": 17,
+    "allTargetsAncestral": true,
+    "missingReferences": 0,
+    "mismatches": 0
+  },
+  "independentCLIReview": {
+    "candidateBytes": 29741,
+    "candidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e",
+    "commandSpecificationsReviewed": 14,
+    "relativeLinkChecks": [
+      {
+        "target": "../release/RELEASE-CONTRACT.md",
+        "exists": true
+      },
+      {
+        "target": "../continuum/BACKGROUND.json",
+        "exists": true
+      },
+      {
+        "target": "../continuation-2026-10-24/GATES.json",
+        "exists": true
+      },
+      {
+        "target": "preflight.mjs",
+        "exists": true
+      },
+      {
+        "target": "../alpha/runtime.mjs",
+        "exists": true
+      },
+      {
+        "target": "journal-check.mjs",
+        "exists": true
+      },
+      {
+        "target": "README.md",
+        "exists": true
+      },
+      {
+        "target": "user-unit.mjs",
+        "exists": true
+      },
+      {
+        "target": "../alpha/cli.mjs",
+        "exists": true
+      },
+      {
+        "target": "../alpha/runtime.mjs",
+        "exists": true
+      },
+      {
+        "target": "../alpha/cli.mjs",
+        "exists": true
+      },
+      {
+        "target": "../control/manager.mjs",
+        "exists": true
+      },
+      {
+        "target": "../test/alpha.test.mjs",
+        "exists": true
+      },
+      {
+        "target": "../evidence/g4-restored-service-hosted.json",
+        "exists": true
+      },
+      {
+        "target": "../evidence/g4-kept-a-fallback-hosted.json",
+        "exists": true
+      }
+    ],
+    "findings": [
+      {
+        "id": "restore-result-installation-id",
+        "severity": "required-doc-correction",
+        "location": "Section4 successful restore result sentence",
+        "detail": "Actual install return at cli.mjs:623 returns prefix, launcher, session, sessionPrefix, revision, port/healthPort,flags. It does not return installationId. Describe prefix/session/revision in command result and separately obtain new installationId from fresh .alpha-install.json and compare old retained identity.",
+        "status": "RESOLVED_IN_FINAL_CANDIDATE"
+      },
+      {
+        "id": "exact-archive-result",
+        "severity": "clarification",
+        "location": "Section4 before extraction",
+        "detail": "Require verifier exit0 plus valid:true/code:archive_consistent/schemaVersion:2, intended digest/source/payload identities. Generic valid/consistency wording is presently true but less concrete.",
+        "status": "RESOLVED_IN_FINAL_CANDIDATE"
+      }
+    ],
+    "diagnosticCaptureReview": {
+      "privateDisjointDirectoryRequired": true,
+      "noOldPrefixWritesOrRename": true,
+      "noclobber": true,
+      "stdoutAndStderrSeparate256KiBPerFile": true,
+      "boundarySaturationTreatedUnknown": true,
+      "timeoutStatusOrMissingStatusUnknown": true,
+      "partialOutputNotAccepted": true,
+      "stderrNonemptyUnknown": true,
+      "captureFunctionIsNotIdentityValidator": true,
+      "timeoutOnlyOwnDiagnosticCommands": true,
+      "kernelStallsNotHardDeadlineClaimed": true,
+      "boundIsNotProofOfExhaustiveInventory": true,
+      "cleanEnvironmentAllDiagnosticTools": true,
+      "allOutputPathsAbsentIncludingSymlinkRequired": true,
+      "postCaptureNofollowPrivateRegularFileChecksRequired": true,
+      "systemctlPreflightPrerequisitesRequired": true,
+      "sameUIDRaceExplicitlyUnresolved": true,
+      "journalSentinelOversizeRefused": true
+    },
+    "criticalRetentions": {
+      "originalFaultedPrefixRetainedInPlace": true,
+      "noFaultedLifecycleClearingClaim": true,
+      "noManualLifecycleOrLockEditing": true,
+      "noBroadSignalsOrAutomaticReaper": true,
+      "statusAndLocksNotPassive": true,
+      "controllerRecoverNotFaultedRepair": true,
+      "preexistingBackupOnly": true,
+      "restorePortsNotRemapped": true,
+      "separateActivationNotExecuted": true,
+      "fullG4G5V1Open": true
+    },
+    "blockingFindings": [],
+    "reviewAcceptedAfterCorrection": true,
+    "bashSyntaxOnly": [
+      {
+        "block": 1,
+        "syntaxOnlyExitCode": 0,
+        "diagnosticsEmpty": true,
+        "commandsExecuted": false
+      },
+      {
+        "block": 2,
+        "syntaxOnlyExitCode": 0,
+        "diagnosticsEmpty": true,
+        "commandsExecuted": false
+      },
+      {
+        "block": 3,
+        "syntaxOnlyExitCode": 0,
+        "diagnosticsEmpty": true,
+        "commandsExecuted": false
+      },
+      {
+        "block": 4,
+        "syntaxOnlyExitCode": 0,
+        "diagnosticsEmpty": true,
+        "commandsExecuted": false
+      },
+      {
+        "block": 5,
+        "syntaxOnlyExitCode": 0,
+        "diagnosticsEmpty": true,
+        "commandsExecuted": false
+      },
+      {
+        "block": 6,
+        "syntaxOnlyExitCode": 0,
+        "diagnosticsEmpty": true,
+        "commandsExecuted": false
+      },
+      {
+        "block": 7,
+        "syntaxOnlyExitCode": 0,
+        "diagnosticsEmpty": true,
+        "commandsExecuted": false
+      },
+      {
+        "block": 8,
+        "syntaxOnlyExitCode": 0,
+        "diagnosticsEmpty": true,
+        "commandsExecuted": false
+      },
+      {
+        "block": 9,
+        "syntaxOnlyExitCode": 0,
+        "diagnosticsEmpty": true,
+        "commandsExecuted": false
+      }
+    ],
+    "externalSystemd255Claim": "Coordinator/security review owns external source verification; this CLI audit checked its separation from X10 CLI and conservative unfamiliar-version refusal, not external runtime"
+  },
+  "independentSecurityReview": {
+    "candidateBytes": 29741,
+    "candidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e",
+    "reviewDisposition": "ACCEPT_DOCUMENT_BOUNDARIES_ONLY",
+    "blockingFindings": 0,
+    "resolvedFindings": [
+      {
+        "id": "capture-status-write",
+        "resolution": "Status file printf/redirection now propagates failure; caller must still require saved exit/file completeness."
+      },
+      {
+        "id": "capture-noclobber-scope",
+        "resolution": "Fresh exclusive canonical private directory, each output absent including dangling links, no-follow limitations, all outputs no-dereference checked regular/nlink1/owned0600 stable identity. SameUID race requires STOP."
+      },
+      {
+        "id": "local-bus-endpoint",
+        "resolution": "Explicit preflight-equivalent root-owned safe tool/ancestor and canonical owned0700 runtime dir/sameUID socket checks; clean trusted shell and clean per-tool environment required."
+      },
+      {
+        "id": "queued-job-observation",
+        "resolution": "Finite query adds Job and --all; reviewed upstream v255 exact Job= empty no-job serialization, missing/nonempty/unfamiliar versions STOP; repeat before restore/activation."
+      }
+    ],
+    "finalStaticBoundaryChecks": {
+      "queryStatusWriteFailurePropagated": true,
+      "noclobberNoFollowLimitExplicit": true,
+      "allOutputPathsRequireAbsence": true,
+      "privateRegularOutputIdentityPostchecks": true,
+      "cleanTrustedShellBeforeLoaderExecution": true,
+      "allDiagnosticToolsCleanEnvironment": true,
+      "fixedLocalBusCanonicalOwnershipPrerequisites": true,
+      "jobPropertyPresent": true,
+      "emptyPropertyPreservation": true,
+      "v255NoJobEncodingExact": true,
+      "unfamiliarVersionSerializationStops": true,
+      "originalInPlacePreservation": true,
+      "noOldLifecycleRepairOrForcedUninstall": true,
+      "noOriginalProcessSignalAuthorityFromDiagnostics": true,
+      "allSessionsRequireInspection": true,
+      "currentMissingMasterNotAbsence": true,
+      "originalResourcesKnownSafeGate": true,
+      "externalUpstreamMayRemainLive": true,
+      "preexistingBackupOnly": true,
+      "noPortOverrides": true,
+      "noBundleBinaryManifestOverride": true,
+      "freshRestoreDoesNotStartDaemon": true,
+      "oldPrefixRetainedNotCleanupPass": true,
+      "documentNotPhysicalAcceptance": true,
+      "fullG4G5Open": true,
+      "priorAdverseHistoryRetained": true
+    },
+    "staticBoundaryCheckCount": 26,
+    "primarySourceReads": [
+      {
+        "url": "https://github.com/systemd/systemd/blob/v255/src/systemctl/systemctl-show.c",
+        "scope": "Job (uo) positive value decimal, zero delegated as empty to property printer; no host queried."
+      },
+      {
+        "url": "https://github.com/systemd/systemd/blob/v255/src/shared/bus-print-properties.c",
+        "scope": "Empty property printed as Name= when SHOW_EMPTY selected; no host queried."
+      }
+    ],
+    "positiveBoundaryReview": [
+      "No initial faulted-prefix installed info/status/history/recover; raw capture retains lock identities",
+      "No PID/name/group-derived signal authority; every registered session and strict namespace/start-time/exe/argv is required",
+      "No source rename/chmod/manualclear/forcedquarantine/uninstall or lock deletion",
+      "Original faulted prefix retained after fresh target success; not all-owned-cleanup-confirmed",
+      "Only preexisting trusted HTTP backup; exact original listener ports/resources safe, separately owned external upstream may remain running",
+      "Checked extracted installer and no port/binary/manifest overrides; native-t external-file side effects acknowledged",
+      "Prepared restore not service acceptance, activation is separate supported-host action and not exercised here",
+      "Source-scoped claims and existing adverse histories retained; full G4/G5/V1 remains open"
+    ],
+    "remainingLimits": [
+      "This is a reviewed procedural runbook, not a physical incident/restore test or exhaustive recovery guarantee.",
+      "Shell capture uses trusted-operator exclusivity, explicit absent paths and manual no-dereference postchecks; it is not an OS fence or O_NOFOLLOW implementation.",
+      "Timeout/output caps do not guarantee termination during kernel/filesystem stalls; unknown/incomplete observations STOP.",
+      "Source master/group helper sampling is not exhaustive hidden-process discovery; inaccessible or ambiguous ownership STOP.",
+      "Original lifecycle faulted has no supported clear/uninstall command; original prefix retention remains unresolved.",
+      "Current systemd255 property source review establishes formatting expectation, not actual deployed manager or host identity.",
+      "Full faulted/orphan recovery and security matrix, TLS restore, native binary changes, permanent publication, replay, soak and V1 remain open."
+    ],
+    "documentBoundaryAccepted": true,
+    "physicalRecoveryAccepted": false
+  },
+  "independentOperationalReview": {
+    "candidate": {
+      "path": "x10/service/INCIDENT-RUNBOOK.md",
+      "bytes": 29741,
+      "sha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+    },
+    "cases": [
+      {
+        "case": "known faulted with still serving orphan",
+        "expected": "STOP_UNRESOLVED; preserve prefix/unit/records/locks; no direct signal, backup, restart or uninstall",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "1. Stop changes",
+          "3. Choose an honest outcome"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "no original complete process/launcher identity captured",
+        "expected": "STOP_UNRESOLVED; current guess from PID/name is not original ownership",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "preincident",
+          "Do not reconstruct ownership"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "recorded PID reused, inaccessible proc entry or wrong namespace",
+        "expected": "STOP_UNRESOLVED; no signal or deletion",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "changed, unreadable, ambiguous or reused identities remain UNKNOWN"
+        ],
+        "matchedAnchors": 1,
+        "requiredAnchors": 1,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "manager MainPID zero but group/socket/listener evidence incomplete",
+        "expected": "STOP_UNRESOLVED",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "not** proof of worker absence",
+          "A master PID"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "same prefix moved to quarantine to make room",
+        "expected": "REFUSED; old path-based identity broken; keep prefix in place",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "Do not rename, move, replace",
+          "not an incident command"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "alpha/controller lock exists or changed identity",
+        "expected": "STOP_UNRESOLVED; installed status/recover cannot be used as lock-free evidence; no stale-lock reaping",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "Do not\nremove a lock",
+          "not passive capture commands"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "old lifecycle faulted but all old resources now absent",
+        "expected": "Old prefix still preserved and NOT uninstallable; independently consider preexisting backup restore to distinct new prefix only",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "old installation remains retained and faulted",
+          "remains faulted and retained"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "no preexisting confirmed backup or backup includes https",
+        "expected": "STOP_UNRESOLVED; no faulted-source backup or ad hoc JSON construction",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "No preincident confirmed compatible HTTP backup",
+          "TLS backup/key/PKI restore is unsupported"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "restore attempts --port/health/upstream remap or binary/manifest override",
+        "expected": "REFUSED; exact declared input/ports retained; no target activation",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "Do not add `--port`",
+          "also refuses `--binary` and `--manifest`"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "native listen port occupied by unrelated owner",
+        "expected": "STOP_UNRESOLVED; no probing writes, deletion or signal to owner",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "Both original **X10-owned listeners**\n   are free",
+          "Any unknown/conflicting/reused identity"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "known correct application owns expected upstream port",
+        "expected": "Not inherently a conflict; separately verify app ownership/readiness, while old native listeners/groups must be absent",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "it may need to remain running",
+          "Do not stop or\n   remap an upstream"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "restore returns success prepared/null binding",
+        "expected": "Not service accepted; fresh target records/input/identity and exact generated recipe separately checked before explicit activation",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "fresh prepared lifecycle",
+          "These commands do not turn configuration restore into accepted service"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      },
+      {
+        "case": "target activation or cleanup result unknown",
+        "expected": "STOP_UNRESOLVED; preserve both prefixes and own target resources; no broad retry/forced cleanup",
+        "candidateOutcome": "PASS_FINAL_SOURCE_BACKED_DESK_REVIEW",
+        "candidateAnchors": [
+          "If it\nfails or its result is uncertain",
+          "otherwise STOP_UNRESOLVED and retain both"
+        ],
+        "matchedAnchors": 2,
+        "requiredAnchors": 2,
+        "finalCandidateSha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+      }
+    ],
+    "resolvedPrecisionFindings": [
+      {
+        "id": "install-json-identity",
+        "resolved": "Final candidate explicitly distinguishes returned prefix/session/sessionPrefix/revision from separately checked new manifest installationId."
+      },
+      {
+        "id": "empty-manager-properties",
+        "resolved": "Final query uses show --all and exact finite property set; intentional empty values require present key."
+      }
+    ],
+    "finalAdditionalChecks": {
+      "JobEmptyNotZeroSource255": true,
+      "nonemptyOrMissingJobStopUnresolved": true,
+      "JobRecheckedBeforeRestoreAndActivation": true,
+      "diagnosticEnvironmentEmptyAndLoaderNamesExcluded": true,
+      "nofollowLimitsOfShellNoclobberExplicit": true,
+      "allDiagnosticOutputPathsInitiallyAbsent": true,
+      "postCaptureStableOwned0600SingleLinkRegularFilesRequired": true,
+      "managerEndpointCanonicalOwnedAndLocal": true,
+      "journal129thSentinelRefusesMoreThan128": true,
+      "restoreVerifierExactSchema2": true,
+      "oldPrefixStillRetainedUnresolvedAfterFreshSuccess": true,
+      "noSourceRuntimeBytesChangedByReview": true
+    },
+    "source255Evidence": {
+      "urls": [
+        "https://raw.githubusercontent.com/systemd/systemd/v255/src/systemctl/systemctl-show.c",
+        "https://raw.githubusercontent.com/systemd/systemd/v255/src/shared/bus-print-properties.c"
+      ],
+      "independentFreshPrimarySourceRead": true,
+      "JobPositive": "systemctl-show.c print_property SD_BUS_TYPE_STRUCT Job reads (uo), u>0 formats decimal, zero passes NULL.",
+      "emptyProperty": "bus-print-properties.c bus_print_property_value suppresses empty without SHOW_EMPTY; with flag prints name= plus strempty(value).",
+      "notLiveManagerAcceptance": true
+    },
+    "remainingFindings": [],
+    "reviewedDeskCases": 13,
+    "finalReviewBoundary": "The 13 cases are desk/source walkthroughs, NOT TAP and NOT physical recovery acceptance. No commands from the runbook executed. Old faulted retention and STOP_UNRESOLVED are valid bounded outcomes. Full incident recovery/G4/G5/V1 remain OPEN."
+  },
+  "sourceOnlyPreparation": {
+    "usefulHelpers": 6,
+    "roles": [
+      "ancestral-reference audit",
+      "CLI/source contract review",
+      "security and ownership review",
+      "accepted-evidence boundary review",
+      "runbook author",
+      "operator walkthrough review"
+    ],
+    "sourceReviewsAreNotActualIncidents": true,
+    "incompleteCandidateReviewTurnsNotCountedAsCompletedFinalReviews": true
+  },
+  "precedingMetadataSuccessorCI": {
+    "sourceCommit": "fbbcdff430a26542bdf650896cb19abe7fa97d36",
+    "runs": [
+      {
+        "runId": 40501089044,
+        "event": "push",
+        "eventHead": "fbbcdff430a26542bdf650896cb19abe7fa97d36",
+        "status": "completed",
+        "conclusion": "success",
+        "attempt": 1,
+        "jobs": [
+          {
+            "id": 122178648252,
+            "name": "scope",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Check scope fail-closed controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Classify exact event delta",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 9
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 10
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 11
+              }
+            ]
+          },
+          {
+            "id": 122178775321,
+            "name": "linux",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Validate release-record contract and refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Validate alpha archive refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Validate guarded user-service recipe",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 6
+              },
+              {
+                "name": "Validate fail-closed user-manager preflight",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 7
+              },
+              {
+                "name": "Validate actual-service harness refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 8
+              },
+              {
+                "name": "Validate bounded owned-service journal observations",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 9
+              },
+              {
+                "name": "Validate bounded downstream HTTPS fixture controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 10
+              },
+              {
+                "name": "Validate bounded verified HTTPS origin fixture controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 11
+              },
+              {
+                "name": "Validate bounded paused TLS client controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 12
+              },
+              {
+                "name": "Validate owned operator interruption controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 13
+              },
+              {
+                "name": "Validate failed interruption containment controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 14
+              },
+              {
+                "name": "Validate authenticated Node dependency refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 15
+              },
+              {
+                "name": "Validate managed operator-package return refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 16
+              },
+              {
+                "name": "Validate managed unhealthy-package fallback refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 17
+              },
+              {
+                "name": "Build dependencies and optional test clients",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 18
+              },
+              {
+                "name": "Install pinned HTTP3 interoperability client",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 19
+              },
+              {
+                "name": "Install independent HTTP3 HEAD client",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 20
+              },
+              {
+                "name": "Compile native profile",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 21
+              },
+              {
+                "name": "Native regressions and pinned official compatibility sample",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 22
+              },
+              {
+                "name": "Verify installed HTTPS upstream trust and hostname",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 23
+              },
+              {
+                "name": "Verify managed frontend HTTPS and certificate lifecycle",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 24
+              },
+              {
+                "name": "Verify native tenant cache contract experiment",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 25
+              },
+              {
+                "name": "Verify private Unix control transport",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 26
+              },
+              {
+                "name": "Build profile without control API",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 27
+              },
+              {
+                "name": "Package local Linux alpha",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 28
+              },
+              {
+                "name": "Checksum local Linux alpha",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 29
+              },
+              {
+                "name": "Verify packed alpha before extraction",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 30
+              },
+              {
+                "name": "Verify temporary user-service with authenticated private Node",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 31
+              },
+              {
+                "name": "Preserve JSON evidence",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 32
+              },
+              {
+                "name": "Preserve local Linux alpha",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 33
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 65
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 66
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 67
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "runId": 40501096395,
+        "event": "pull_request",
+        "eventHead": "fbbcdff430a26542bdf650896cb19abe7fa97d36",
+        "status": "completed",
+        "conclusion": "success",
+        "attempt": 1,
+        "jobs": [
+          {
+            "id": 122178673586,
+            "name": "scope",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Check scope fail-closed controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Classify exact event delta",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 9
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 10
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 11
+              }
+            ]
+          },
+          {
+            "id": 122178756176,
+            "name": "linux",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Validate release-record contract and refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Validate alpha archive refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Validate guarded user-service recipe",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 6
+              },
+              {
+                "name": "Validate fail-closed user-manager preflight",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 7
+              },
+              {
+                "name": "Validate actual-service harness refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 8
+              },
+              {
+                "name": "Validate bounded owned-service journal observations",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 9
+              },
+              {
+                "name": "Validate bounded downstream HTTPS fixture controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 10
+              },
+              {
+                "name": "Validate bounded verified HTTPS origin fixture controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 11
+              },
+              {
+                "name": "Validate bounded paused TLS client controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 12
+              },
+              {
+                "name": "Validate owned operator interruption controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 13
+              },
+              {
+                "name": "Validate failed interruption containment controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 14
+              },
+              {
+                "name": "Validate authenticated Node dependency refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 15
+              },
+              {
+                "name": "Validate managed operator-package return refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 16
+              },
+              {
+                "name": "Validate managed unhealthy-package fallback refusal controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 17
+              },
+              {
+                "name": "Build dependencies and optional test clients",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 18
+              },
+              {
+                "name": "Install pinned HTTP3 interoperability client",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 19
+              },
+              {
+                "name": "Install independent HTTP3 HEAD client",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 20
+              },
+              {
+                "name": "Compile native profile",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 21
+              },
+              {
+                "name": "Native regressions and pinned official compatibility sample",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 22
+              },
+              {
+                "name": "Verify installed HTTPS upstream trust and hostname",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 23
+              },
+              {
+                "name": "Verify managed frontend HTTPS and certificate lifecycle",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 24
+              },
+              {
+                "name": "Verify native tenant cache contract experiment",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 25
+              },
+              {
+                "name": "Verify private Unix control transport",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 26
+              },
+              {
+                "name": "Build profile without control API",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 27
+              },
+              {
+                "name": "Package local Linux alpha",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 28
+              },
+              {
+                "name": "Checksum local Linux alpha",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 29
+              },
+              {
+                "name": "Verify packed alpha before extraction",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 30
+              },
+              {
+                "name": "Verify temporary user-service with authenticated private Node",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 31
+              },
+              {
+                "name": "Preserve JSON evidence",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 32
+              },
+              {
+                "name": "Preserve local Linux alpha",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 33
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 65
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 66
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 67
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "runId": 40501089230,
+        "event": "push",
+        "eventHead": "fbbcdff430a26542bdf650896cb19abe7fa97d36",
+        "status": "completed",
+        "conclusion": "success",
+        "attempt": 1,
+        "jobs": [
+          {
+            "id": 122178649454,
+            "name": "scope",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Check scope fail-closed controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Classify exact event delta",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 9
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 10
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 11
+              }
+            ]
+          },
+          {
+            "id": 122178738118,
+            "name": "research",
+            "status": "completed",
+            "conclusion": "skipped",
+            "steps": null
+          }
+        ]
+      },
+      {
+        "runId": 40501096469,
+        "event": "pull_request",
+        "eventHead": "fbbcdff430a26542bdf650896cb19abe7fa97d36",
+        "status": "completed",
+        "conclusion": "success",
+        "attempt": 1,
+        "jobs": [
+          {
+            "id": 122178673103,
+            "name": "scope",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Check scope fail-closed controls",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Classify exact event delta",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 9
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 10
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 11
+              }
+            ]
+          },
+          {
+            "id": 122178757773,
+            "name": "research",
+            "status": "completed",
+            "conclusion": "success",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 2
+              },
+              {
+                "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 3
+              },
+              {
+                "name": "Build dependencies for TLS interoperability and isolated source probe",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 4
+              },
+              {
+                "name": "Independent record and state counterexamples",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              },
+              {
+                "name": "Same TCP connection across research worker versions",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 6
+              },
+              {
+                "name": "Real TLS handshake and independent record observer",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 7
+              },
+              {
+                "name": "Pinned OpenSSL read-only state probe",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 8
+              },
+              {
+                "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 15
+              },
+              {
+                "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 16
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 17
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "runId": 40501093063,
+        "event": "pull_request_target",
+        "eventHead": "fbbcdff430a26542bdf650896cb19abe7fa97d36",
+        "status": "completed",
+        "conclusion": "failure",
+        "attempt": 1,
+        "jobs": [
+          {
+            "id": 122178662944,
+            "name": "F5 Contributor License Agreement (CLA)",
+            "status": "completed",
+            "conclusion": "failure",
+            "steps": [
+              {
+                "name": "Set up job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 1
+              },
+              {
+                "name": "Check if F5 CLA should be skipped",
+                "status": "completed",
+                "conclusion": "skipped",
+                "number": 2
+              },
+              {
+                "name": "Run F5 CLA assistant",
+                "status": "completed",
+                "conclusion": "failure",
+                "number": 3
+              },
+              {
+                "name": "Leave a note in the PR if the F5 CLA is not required",
+                "status": "completed",
+                "conclusion": "skipped",
+                "number": 4
+              },
+              {
+                "name": "Complete job",
+                "status": "completed",
+                "conclusion": "success",
+                "number": 5
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "independentAPIStepAssertions": 32,
+    "checkoutOrBuildIdentityEstablishedByThisRead": false,
+    "artifactsDownloadedThisPass": 0,
+    "manualRerunsThisPass": 0,
+    "newRuntimeArtifactAccepted": false,
+    "researchCountsNotInferredFromJobSuccess": true,
+    "acceptedFallbackRuntimeRemains": "7b32841d28a8b155b5783cef1a0c56337bb45a06"
+  },
+  "resolvedDraftFindings": [
+    "Restore result exposes prefix/session/revision; fresh installationId is checked separately in manifest/registry.",
+    "Diagnostic status-file write failure now propagates nonzero.",
+    "Noclobber is not O_NOFOLLOW: absent output paths, trusted exclusivity and stable owned0600 regular single-link postchecks are required.",
+    "All diagnostic tools use trusted clean environment; local canonical user bus and systemctl prerequisites are explicit.",
+    "Fixed manager queries use --all and Job; systemd255 empty Job is distinguished from missing property or positive queued id.",
+    "Archive verifier expected valid/code/schema fields are explicit."
+  ],
+  "retainedBoundaries": [
+    "No original-prefix move/edit/chmod/manual stage clearing, stale-lock deletion, broad signal or automatic reaper.",
+    "Faulted backup is refused: restore requires preexisting confirmed compatible HTTP backup.",
+    "Restore uses checked extracted install.mjs install --prefix NEW --restore BACKUP with no port/binary/manifest overrides.",
+    "Original X10 listener ports/resources must be known safe; independently owned upstream can remain running.",
+    "Native -t may open referenced files; configuration review precedes restore.",
+    "Original faulted prefix remains retained/unresolved even after a separately accepted fresh service succeeds.",
+    "SameUID trust, sampled process checks and shell capture do not establish an OS fence.",
+    "Controlled unhealthy-B fallback and clean-source restore evidence do not compose into actual orphan incident recovery."
+  ],
+  "preservedAdverseHistory": [
+    "c2 original primary UNKNOWN and cleanup unconfirmed",
+    "6401 POST503/origin0 and cause UNKNOWN",
+    "historical local physical cleanup FAIL_UNKNOWN",
+    "inherited CLA failures"
+  ],
+  "nextConcreteTask": "Fix the release-record declaration schema/checker and independent refusal tests for the current native workflow: replace the32 executedSteps cap with a finite64 bound, preserve complete ordered actual36-step receipts, and require all current configured contract/service/TLS/archive steps. A selected/truncated subset must not pass. Keep push event head, PR merge checkout, build checkout and artifact identity separate; never mix different checkout receipts under one build or claim JSON validation authenticates runtime. Reproduce full36 refusal and truncated-subset acceptance on unchanged baseline, then verify complete candidate and negative/oversize/duplicate/failed/skipped/omitted-current-step cases with pure/local data only. Do not rerun unchanged physical runtime without a new cause. The reviewed incident runbook is document-only: actual faulted/orphan replay, original faulted-prefix disposal, full recovery/security, native binary upgrade, TLS restore, permanent publisher capability/release, independent published replay,60-minute soak, fullG3/G4/G5/V1 and semantic Continuum stay OPEN. Preserve c2/6401/localFAIL_UNKNOWN/CLA,40h window and deferred Windows."
+}

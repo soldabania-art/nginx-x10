@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-executable-mode-observation",
+  "observedAt": "2026-10-23T09:00:18.144281+00:00",
+  "manifestGeneratedAt": "2026-10-23T08:57:50.160952+00:00",
+  "recordedBinary": {
+    "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+    "sha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+    "bytes": 8547024,
+    "mode": "0755",
+    "executable": true
+  },
+  "before": {
+    "mode": "0644",
+    "bytes": 8547024,
+    "inode": 2000922,
+    "device": 27,
+    "mtimeNs": 1792745870092081914,
+    "ctimeNs": 1792745872568039746,
+    "sha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+    "executable": false
+  },
+  "repair": "chmod 0755 on the exact regular candidate binary; no bytes changed",
+  "after": {
+    "mode": "0755",
+    "bytes": 8547024,
+    "inode": 2000922,
+    "device": 27,
+    "mtimeNs": 1792745870092081914,
+    "ctimeNs": 1792746018130099771,
+    "sha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+    "executable": true
+  },
+  "versionOutputMatchesManifest": true,
+  "preflightExpectedRejection": "EACCES: permission denied, access '/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx'",
+  "cause": "Not established. Binary ctime changed after the successful build manifest; no attribution to NGINX code or the environment is proven.",
+  "limitations": [
+    "This is a point-in-time repair and observation, not a guarantee that an external action cannot change permissions again."
+  ],
+  "passed": true
+}

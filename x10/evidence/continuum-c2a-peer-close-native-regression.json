@@ -1,0 +1,841 @@
+{
+  "schemaVersion": 1,
+  "suite": "peerclose-native-verification",
+  "generatedAtUTC": "2026-10-24T01:23:19.792841+00:00",
+  "sourceBaselineCommit": "dabe7b812ac24c95f752efec7508be9785b6b2c2",
+  "leaseCommit": "be477b6a665f382394625b3a48a601618f2ac886",
+  "freshBuild": true,
+  "buildCommand": [
+    "bash",
+    "x10/build.sh",
+    "--jobs",
+    "2"
+  ],
+  "buildExitCode": 0,
+  "aggregateCommand": [
+    "node",
+    "x10/test/all.mjs",
+    "--official"
+  ],
+  "aggregateExitCode": 0,
+  "buildStatus": "built",
+  "installed": false,
+  "aggregateSuccess": true,
+  "aggregateGroups": {
+    "expected": 20,
+    "executed": 20,
+    "passed": 20,
+    "failed": 0
+  },
+  "nativeSourceUnchangedVsBaseline": true,
+  "nativeSourceUnchangedVsBaselineAndDuringAggregate": true,
+  "untrackedNativeInputsPresent": false,
+  "nativeSnapshotBefore": {
+    "nativeTrackedFileCount": 499,
+    "nativeTreeSha256": "a135cdc166ef32cf23b8b4526de84a0265eefa09b7e1853fca3c6041a4952131",
+    "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1"
+  },
+  "identitiesBeforeAggregate": {
+    "manifestSha256": "8a89d849750a22a4f369d0584beab5ceafcc9f0e0d1fd579e6dc38ecf08dc2d1",
+    "binarySha256": "8fb676678efa606dafa2f3d3c5d1f30c2a1bfd1b2f313681d1883334f4591d49",
+    "generatedFiles": {
+      "ngx_auto_config.h": {
+        "sha256": "e7334d50508818d2e9901ce6bdd067e2ff9b0ea015f85bdb7761d8c923806efd",
+        "bytes": 10156,
+        "mode": "0644"
+      },
+      "ngx_auto_headers.h": {
+        "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+        "bytes": 657,
+        "mode": "0644"
+      },
+      "ngx_modules.c": {
+        "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+        "bytes": 11820,
+        "mode": "0644"
+      }
+    },
+    "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+    "compiledModuleCount": 105,
+    "dependencyVersionsFromHeaders": {
+      "pcre2": "10.42",
+      "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+      "zlib": "1.3"
+    },
+    "status": "built"
+  },
+  "identitiesAfterAggregate": {
+    "nativeTrackedFileCount": 499,
+    "nativeTreeSha256": "a135cdc166ef32cf23b8b4526de84a0265eefa09b7e1853fca3c6041a4952131",
+    "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+    "manifestSha256": "8a89d849750a22a4f369d0584beab5ceafcc9f0e0d1fd579e6dc38ecf08dc2d1",
+    "binarySha256": "8fb676678efa606dafa2f3d3c5d1f30c2a1bfd1b2f313681d1883334f4591d49",
+    "generatedFiles": {
+      "ngx_auto_config.h": {
+        "sha256": "e7334d50508818d2e9901ce6bdd067e2ff9b0ea015f85bdb7761d8c923806efd",
+        "bytes": 10156,
+        "mode": "0644"
+      },
+      "ngx_auto_headers.h": {
+        "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+        "bytes": 657,
+        "mode": "0644"
+      },
+      "ngx_modules.c": {
+        "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+        "bytes": 11820,
+        "mode": "0644"
+      }
+    },
+    "trackedChanges": [
+      "x10/continuum/openssl-probe-fixture.c",
+      "x10/continuum/openssl-probe-run.mjs",
+      "x10/continuum/openssl-probe.test.mjs"
+    ]
+  },
+  "earlierCheckoutBinaryIdentityClaimed": false,
+  "compiler": {
+    "command": "cc",
+    "version": "cc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0",
+    "flags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g"
+  },
+  "configureOptions": [
+    "--with-http_ssl_module",
+    "--with-http_v2_module",
+    "--with-http_v3_module",
+    "--with-stream",
+    "--with-stream_ssl_module",
+    "--with-stream_ssl_preread_module",
+    "--with-mail",
+    "--with-mail_ssl_module",
+    "--with-threads",
+    "--with-file-aio",
+    "--with-http_realip_module",
+    "--with-http_stub_status_module",
+    "--with-http_auth_request_module",
+    "--with-http_addition_module",
+    "--with-http_sub_module",
+    "--with-http_dav_module",
+    "--with-http_slice_module",
+    "--with-http_gunzip_module",
+    "--with-http_gzip_static_module",
+    "--with-compat",
+    "--with-control-api"
+  ],
+  "compiledModuleCount": 105,
+  "compiledModules": [
+    "ngx_core_module",
+    "ngx_errlog_module",
+    "ngx_conf_module",
+    "ngx_openssl_module",
+    "ngx_openssl_cache_module",
+    "ngx_quic_module",
+    "ngx_quic_bpf_module",
+    "ngx_regex_module",
+    "ngx_events_module",
+    "ngx_event_core_module",
+    "ngx_epoll_module",
+    "ngx_thread_pool_module",
+    "ngx_http_module",
+    "ngx_http_core_module",
+    "ngx_http_log_module",
+    "ngx_http_upstream_module",
+    "ngx_http_v2_module",
+    "ngx_http_v3_module",
+    "ngx_http_static_module",
+    "ngx_http_gzip_static_module",
+    "ngx_http_dav_module",
+    "ngx_http_autoindex_module",
+    "ngx_http_index_module",
+    "ngx_http_mirror_module",
+    "ngx_http_try_files_module",
+    "ngx_http_auth_request_module",
+    "ngx_http_auth_basic_module",
+    "ngx_http_access_module",
+    "ngx_http_limit_conn_module",
+    "ngx_http_limit_req_module",
+    "ngx_http_realip_module",
+    "ngx_http_geo_module",
+    "ngx_http_map_module",
+    "ngx_http_split_clients_module",
+    "ngx_http_referer_module",
+    "ngx_http_rewrite_module",
+    "ngx_http_ssl_module",
+    "ngx_http_proxy_module",
+    "ngx_http_fastcgi_module",
+    "ngx_http_uwsgi_module",
+    "ngx_http_scgi_module",
+    "ngx_http_grpc_module",
+    "ngx_http_proxy_v2_module",
+    "ngx_http_tunnel_module",
+    "ngx_http_memcached_module",
+    "ngx_http_empty_gif_module",
+    "ngx_http_browser_module",
+    "ngx_http_upstream_hash_module",
+    "ngx_http_upstream_ip_hash_module",
+    "ngx_http_upstream_least_conn_module",
+    "ngx_http_upstream_least_time_module",
+    "ngx_http_upstream_random_module",
+    "ngx_http_upstream_keepalive_module",
+    "ngx_http_upstream_zone_module",
+    "ngx_http_upstream_sticky_module",
+    "ngx_http_stub_status_module",
+    "ngx_http_write_filter_module",
+    "ngx_http_header_filter_module",
+    "ngx_http_chunked_filter_module",
+    "ngx_http_v2_filter_module",
+    "ngx_http_v3_filter_module",
+    "ngx_http_range_header_filter_module",
+    "ngx_http_gzip_filter_module",
+    "ngx_http_postpone_filter_module",
+    "ngx_http_ssi_filter_module",
+    "ngx_http_charset_filter_module",
+    "ngx_http_sub_filter_module",
+    "ngx_http_addition_filter_module",
+    "ngx_http_gunzip_filter_module",
+    "ngx_http_userid_filter_module",
+    "ngx_http_headers_filter_module",
+    "ngx_http_copy_filter_module",
+    "ngx_http_range_body_filter_module",
+    "ngx_http_not_modified_filter_module",
+    "ngx_http_slice_filter_module",
+    "ngx_mail_module",
+    "ngx_mail_core_module",
+    "ngx_mail_ssl_module",
+    "ngx_mail_pop3_module",
+    "ngx_mail_imap_module",
+    "ngx_mail_smtp_module",
+    "ngx_mail_auth_http_module",
+    "ngx_mail_proxy_module",
+    "ngx_mail_realip_module",
+    "ngx_stream_module",
+    "ngx_stream_core_module",
+    "ngx_stream_log_module",
+    "ngx_stream_proxy_module",
+    "ngx_stream_upstream_module",
+    "ngx_stream_write_filter_module",
+    "ngx_stream_ssl_module",
+    "ngx_stream_limit_conn_module",
+    "ngx_stream_access_module",
+    "ngx_stream_geo_module",
+    "ngx_stream_map_module",
+    "ngx_stream_split_clients_module",
+    "ngx_stream_return_module",
+    "ngx_stream_pass_module",
+    "ngx_stream_set_module",
+    "ngx_stream_upstream_hash_module",
+    "ngx_stream_upstream_least_conn_module",
+    "ngx_stream_upstream_least_time_module",
+    "ngx_stream_upstream_random_module",
+    "ngx_stream_upstream_zone_module",
+    "ngx_stream_ssl_preread_module"
+  ],
+  "dependencyVersionsFromHeaders": {
+    "pcre2": "10.42",
+    "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+    "zlib": "1.3"
+  },
+  "dependencyVersionsFromPkgConfig": {},
+  "offlineDependencyVerification": {
+    "offlineWheelsValidatedByLockHashes": true,
+    "packages": [
+      {
+        "package": "aioquic",
+        "version": "1.3.0",
+        "sha256": "396e5f53f6ddb27713d9b5bb11d8f0f842e42857b7e671c5ae203bf618528550"
+      },
+      {
+        "package": "attrs",
+        "version": "26.1.0",
+        "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309"
+      },
+      {
+        "package": "certifi",
+        "version": "2026.10.19",
+        "sha256": "42d35340cc5b9ba78e818ddbff0c5b1c2b779de448a340fd1b989f5fa8670e1b"
+      },
+      {
+        "package": "cffi",
+        "version": "2.1.1",
+        "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf"
+      },
+      {
+        "package": "cryptography",
+        "version": "50.0.2",
+        "sha256": "9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079"
+      },
+      {
+        "package": "pycparser",
+        "version": "3.12",
+        "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
+      },
+      {
+        "package": "pylsqpack",
+        "version": "0.3.24",
+        "sha256": "6024854eb16d32803d4890fb90a73b9348c74b61c0770680aefaaa75f8456e8c"
+      },
+      {
+        "package": "pyOpenSSL",
+        "version": "26.4.0",
+        "sha256": "f0eb0cb2d581d3ad2b9c489468485e7f2ab6727d08401bcf9d824c3caddf3c1c"
+      },
+      {
+        "package": "service-identity",
+        "version": "26.1.0",
+        "sha256": "68c32dadbb69135fb951077677e07cd7f6031020f3a8c8f47a28cda8a0742118"
+      },
+      {
+        "package": "typing_extensions",
+        "version": "4.16.0",
+        "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
+      },
+      {
+        "package": "curl_cffi",
+        "version": "0.16.3",
+        "sha256": "a875a661e2f9a949be29454880bbb9553307a487c4c08819738298cf5c1622e2"
+      }
+    ],
+    "freshLocalVirtualEnvironments": true,
+    "offlineNoIndexInstall": true,
+    "pipChecksPassed": 2,
+    "officialCheckoutPin": "47e78403ba756629adc3a8421bab700f344b7e3b",
+    "officialCheckoutClean": true,
+    "officialLicenseHashValid": true
+  },
+  "suites": [
+    {
+      "name": "http-tls-http2-reload",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 1060,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 11,
+        "passed": 11,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {}
+    },
+    {
+      "name": "stream-mail",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 382,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 12,
+        "passed": 12,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {}
+    },
+    {
+      "name": "mail-tls-starttls",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 1049,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 15,
+        "passed": 15,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {
+        "nativeStopped": true,
+        "fixturesStopped": true,
+        "temporaryRootRemoved": true,
+        "openSockets": 0
+      },
+      "sourceUnchangedDuringTest": true,
+      "cleanupErrorCount": 0,
+      "explicitSkips": 0
+    },
+    {
+      "name": "protocol-adapters",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 1391,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 21,
+        "passed": 21,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {
+        "nativeStopped": true,
+        "fixturesStopped": true,
+        "temporaryRootRemoved": true,
+        "openSockets": 0
+      },
+      "sourceUnchangedDuringTest": true,
+      "cleanupErrorCount": 0,
+      "explicitSkips": 0
+    },
+    {
+      "name": "http3-interop",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 1026,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 7,
+        "passed": 7,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {
+        "nativeStopped": true,
+        "fixturesStopped": true,
+        "temporaryRootRemoved": true,
+        "udpTransportsStopped": true,
+        "openSockets": 0,
+        "udpClientsCreated": 7,
+        "udpClientsClosed": 7
+      },
+      "sourceUnchangedDuringTest": true,
+      "cleanupErrorCount": 0,
+      "explicitSkips": 0
+    },
+    {
+      "name": "http3-head-independent-client",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 843,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 4,
+        "passed": 4,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {
+        "nativeStopped": true,
+        "fixturesStopped": true,
+        "temporaryRootRemoved": true,
+        "clientSocketsClosed": true,
+        "openSockets": 0,
+        "clientProcessesCompleted": 4
+      },
+      "sourceUnchangedDuringTest": true,
+      "cleanupErrorCount": 0,
+      "explicitSkips": 0
+    },
+    {
+      "name": "native-features",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 744,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 19,
+        "passed": 19,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {}
+    },
+    {
+      "name": "quic-regression",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 492,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "strictCounts": {
+        "caseCount": 13
+      },
+      "cleanupFlags": {},
+      "sourceUnchangedDuringTest": true
+    },
+    {
+      "name": "quic-generated-sanitized",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 1156,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "cleanupFlags": {},
+      "sourceUnchangedDuringTest": true
+    },
+    {
+      "name": "quic-frame-boundaries",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 1116,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "cleanupFlags": {},
+      "temporaryRootRemoved": true,
+      "sourceUnchangedDuringTest": true,
+      "generatedFilesUnchangedDuringTest": true
+    },
+    {
+      "name": "native-load-client-verification",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 1587,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 41,
+        "passed": 41,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {
+        "nativeStopped": true,
+        "fixtureServersClosed": true,
+        "temporaryRootRemoved": true,
+        "openSockets": 0,
+        "activeChildren": 0
+      },
+      "sourceUnchangedDuringTest": true,
+      "cleanupErrorCount": 0
+    },
+    {
+      "name": "managed-native-control",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 44198,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "tapCounts": {
+        "total": 68,
+        "passed": 68,
+        "failed": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "cleanupFlags": {}
+    },
+    {
+      "name": "operator-status",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 3760,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "tapCounts": {
+        "total": 30,
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "cleanupFlags": {}
+    },
+    {
+      "name": "local-alpha-lifecycle",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 13904,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "tapCounts": {
+        "total": 37,
+        "passed": 37,
+        "failed": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "cleanupFlags": {}
+    },
+    {
+      "name": "listener-observer-boundaries",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 6648,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "tapCounts": {
+        "total": 29,
+        "passed": 29,
+        "failed": 0,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "cleanupFlags": {}
+    },
+    {
+      "name": "reload-listener-observation",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 755,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 7,
+        "passed": 7,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {
+        "nativeStopped": true,
+        "fixturesStopped": true,
+        "temporaryRootRemoved": true,
+        "stoppedWorkerResumeRequested": true,
+        "openSockets": 0
+      },
+      "sourceUnchangedDuringTest": true,
+      "cleanupErrorCount": 0,
+      "explicitSkips": 0
+    },
+    {
+      "name": "native-control-api",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 523,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 9,
+        "passed": 9,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {
+        "nativeStopped": true,
+        "fixturesStopped": true,
+        "temporaryRootRemoved": true,
+        "openSockets": 0
+      },
+      "sourceUnchangedDuringTest": true,
+      "cleanupErrorCount": 0,
+      "explicitSkips": 0
+    },
+    {
+      "name": "native-process-generations",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 729,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 10,
+        "passed": 10,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {
+        "nativeStopped": true,
+        "fixturesStopped": true,
+        "temporaryRootRemoved": true,
+        "openSockets": 0
+      },
+      "sourceUnchangedDuringTest": true,
+      "cleanupErrorCount": 0,
+      "explicitSkips": 0
+    },
+    {
+      "name": "native-generation-boundaries",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 2324,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 20,
+        "passed": 20,
+        "skipped": 0,
+        "failed": 0
+      },
+      "cleanupFlags": {},
+      "temporaryRootRemoved": true,
+      "activeChildren": 0,
+      "sourceUnchangedDuringTest": true,
+      "generatedFilesUnchangedDuringTest": true
+    },
+    {
+      "name": "official-nginx-tests",
+      "passed": true,
+      "exitCode": 0,
+      "signal": null,
+      "elapsedMs": 105642,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "caseCounts": {
+        "total": 35,
+        "passed": 32,
+        "skipped": 3,
+        "failed": 0
+      },
+      "cleanupFlags": {},
+      "sourceUnchangedDuringTest": true
+    }
+  ],
+  "official": {
+    "success": true,
+    "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+    "summary": {
+      "files": 35,
+      "filesPassed": 32,
+      "filesSkipped": 3,
+      "filesFailed": 0,
+      "assertions": {
+        "run": 1109,
+        "passed": 1083,
+        "failed": 0,
+        "skipped": 25,
+        "todoFailed": 1,
+        "todoPassed": 0
+      }
+    },
+    "sourceUnchangedDuringTest": true,
+    "cleanupErrorCount": 0,
+    "skippedFiles": [
+      "fastcgi.t",
+      "scgi.t",
+      "uwsgi.t"
+    ],
+    "perFileExceptions": [
+      {
+        "file": "proxy_cache_vary.t",
+        "skipped": 12,
+        "todoFailed": 1,
+        "todoPassed": 0
+      },
+      {
+        "file": "grpc.t",
+        "skipped": 1,
+        "todoFailed": 0,
+        "todoPassed": 0
+      },
+      {
+        "file": "h2.t",
+        "skipped": 4,
+        "todoFailed": 0,
+        "todoPassed": 0
+      },
+      {
+        "file": "upstream.t",
+        "skipped": 1,
+        "todoFailed": 0,
+        "todoPassed": 0
+      },
+      {
+        "file": "upstream_least_time.t",
+        "skipped": 7,
+        "todoFailed": 0,
+        "todoPassed": 0
+      }
+    ],
+    "parseErrorCount": 0,
+    "bailoutCount": 0
+  },
+  "cleanup": {
+    "ownedNativeProcessesRemaining": 0,
+    "observedNativeProcessesRemaining": 0
+  },
+  "privateBuildAndRuntimePrefixesOmitted": true,
+  "rawLogsIncluded": false,
+  "nativeSnapshotTiming": "Before fresh native build; immutable base Git blob hashes and permission modes matched all 499 entries.",
+  "setupCorrections": [],
+  "spendingUSD": 0,
+  "limitations": [
+    "Local Linux fixtures, not a complete platform or interoperability matrix.",
+    "Generated inputs, TAP assertions and protocol cases are reported separately, not added as interchangeable tests.",
+    "Performance measurements require the separate benchmark runner and a quiet measurement window."
+  ],
+  "nativeTreeHashAlgorithm": "SHA-256 of UTF-8 json.dumps(entries, sort_keys=True, separators=(comma,colon)); entries follow git ls-files -z -- src auto conf order, each object has file repo-relative path, sha256 of file bytes, and mode oct(stat_mode & 0o7777), with no trailing newline in hashed serialization.",
+  "nativeInputCountExpected": 499,
+  "immutableBaselineNativeTreeSha256": "a135cdc166ef32cf23b8b4526de84a0265eefa09b7e1853fca3c6041a4952131",
+  "immutableBaselineHashSource": "git ls-tree -rz base -- src auto conf; SHA-256 of each git cat-file blob with recorded octal permission bits, serialized by the same ordered-entry algorithm.",
+  "configurePathArgumentsOmitted": [
+    "--builddir",
+    "--prefix"
+  ],
+  "officialExpectedTodo": {
+    "file": "proxy_cache_vary.t",
+    "assertion": "normalize order",
+    "upstreamTodoReason": "not yet",
+    "acceptedAsStrictPass": false
+  },
+  "officialExpectedCounts": {
+    "strictPassed": 1083,
+    "skipped": 25,
+    "expectedTodoFailed": 1,
+    "unexpectedFailed": 0
+  },
+  "license": {
+    "sha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c",
+    "unchangedVsBaseline": true
+  },
+  "aggregateStderrVerification": {
+    "expectedProgressLines": 20,
+    "observedProgressLines": 20,
+    "bytes": 679,
+    "unexpectedLines": 0
+  },
+  "receiptValidationNotes": [],
+  "nativeVerificationHarnessTrees": {
+    "sourceAreas": [
+      "x10/alpha",
+      "x10/test",
+      "x10/bench"
+    ],
+    "unchangedVsBaseline": true,
+    "before": {
+      "trackedFileCount": 50,
+      "sha256": "b93301b264d198610ab211bd65caba2bd3de3bc254ef8421e433241e5f031889"
+    },
+    "after": {
+      "trackedFileCount": 50,
+      "sha256": "b93301b264d198610ab211bd65caba2bd3de3bc254ef8421e433241e5f031889"
+    }
+  },
+  "alphaAndRunnerFrozenSourceSha256": {
+    "x10/alpha/runtime.mjs": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51",
+    "x10/alpha/cli.mjs": "5792054b28d36a1301392dd68c7ea360545de606d58b78df9abbeacf97e256b4",
+    "x10/test/alpha.test.mjs": "0eccb4738616f81b32661051c2a1fd93217d9d3853974c021ae427397a1b9cce",
+    "x10/test/all.mjs": "5a85ed0655933dc353ae5c60a748c83029840d391abbb30ab2bed677713d554e",
+    "x10/test/alpha-runtime.test.mjs": "e3c483bd042b47e604663eb27a3c81aa663a7b4c0cf4cfeeefd1bf426b635328"
+  },
+  "frozenAlphaAndRunnerUnchangedDuringAggregate": true,
+  "executionCounts": {
+    "freshNativeBuilds": 1,
+    "officialAggregates": 1,
+    "aggregateReruns": 0
+  },
+  "aggregateOuterElapsedMilliseconds": 189520,
+  "alphaLifecycleCountInterpretation": {
+    "combinedTapTotal": 37,
+    "importedSyntheticTapTotal": 28,
+    "originalLifecycleTapTotal": 9,
+    "countsIncludeParentTests": true,
+    "scope": "37 TAP counts do not mean 37 real lifecycle cases."
+  }
+}

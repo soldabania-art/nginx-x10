@@ -1,0 +1,995 @@
+{
+  "schemaVersion": 1,
+  "kind": "exact-both-event-reader-shared-peer-and-alpha-binding-hosted-receipt",
+  "state": "SCOPED_BOTH_EVENT_READER_SHARED_PEER_COMPATIBILITY",
+  "implementationCommit": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+  "implementationTree": "224e7f61f6c2fdb9f8550c2454f86aedafb40ac9",
+  "scope": "Exact f0 reader/shared-peer fixture compatibility and repaired alpha decomposition/bindings on supported hosted Linux. It accepts only this fixed legacy acb CLI/shared98b-peer pair and current f0 fixtures, not a full historical acb runtime or fullG5/V1.",
+  "bothEventScopedCompatibilityAccepted": true,
+  "sourceBindings": {
+    "x10/control/manager.mjs": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "x10/control/cli.mjs": {
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+    },
+    "x10/control/record-input.test.mjs": {
+      "bytes": 22249,
+      "sha256": "eedae58efe27152f95cb2bb3d0526c7bdb24b5778ba1ba19807adf5ddc2dbbf8"
+    },
+    "x10/alpha/cli.mjs": {
+      "bytes": 87522,
+      "sha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa"
+    },
+    "x10/test/all.mjs": {
+      "bytes": 32171,
+      "sha256": "ca43fcbc8388d76673c6d8bde061a94d1689b109af346b6d6efb9947f29deb82"
+    },
+    "x10/test/alpha.test.mjs": {
+      "bytes": 91776,
+      "sha256": "241d1822d2d5f64e2e652e45d1d6f0d86b0eb3100a18b79dbe441de0e15a8760"
+    },
+    "x10/test/alpha-recipe.test.mjs": {
+      "bytes": 10577,
+      "sha256": "99530dcb2135b99c91eee30e87dfe21a7cd6cfd67aefaf1cef0ba58d6bebe5f4"
+    },
+    "x10/test/alpha-recipe-helpers.mjs": {
+      "bytes": 14556,
+      "sha256": "0fb4ab5a6e08d6867a37d54538b57e3659aeeb917d2304fec7e026a3d25d9d2e"
+    },
+    "x10/test/alpha-decomposition.test.mjs": {
+      "bytes": 13853,
+      "sha256": "b046ee374c535a45842ae17e3ae89adeffbfc22b5dc0295eb921b5f2e8f249d3"
+    },
+    "x10/service/operator-package-return.mjs": {
+      "bytes": 68575,
+      "sha256": "612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7"
+    },
+    "x10/service/operator-package-return-proof.mjs": {
+      "bytes": 12890,
+      "sha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de"
+    },
+    "x10/service/operator-package-fallback.mjs": {
+      "bytes": 630,
+      "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+    },
+    "x10/service/operator-package-fallback-proof.mjs": {
+      "bytes": 13468,
+      "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+    },
+    "x10/service/lifecycle-check.mjs": {
+      "bytes": 147483,
+      "sha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370"
+    },
+    "x10/service/verified-node.mjs": {
+      "bytes": 32439,
+      "sha256": "2febc8bdb6d890e738a426e4a80121ea840d143d9a718768ef10b5b09e839090"
+    },
+    ".github/workflows/x10-native.yml": {
+      "bytes": 26465,
+      "sha256": "d3f92329a396b02d045b45736733cdb711bf55af10b30504bc24f1a0efc8eb73"
+    }
+  },
+  "nativeEvents": [
+    {
+      "event": "push",
+      "runId": 40560031478,
+      "jobId": 122386444347,
+      "status": "completed",
+      "conclusion": "success",
+      "eventHead": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+      "checkoutRevision": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+      "buildRevision": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+      "sourceTree": "224e7f61f6c2fdb9f8550c2454f86aedafb40ac9",
+      "artifact": {
+        "id": 12761461024,
+        "name": "x10-native-evidence",
+        "bytes": 177971,
+        "sha256": "98b30bda61676291e2d1db276e556464e38ec9b8e31539f2596f81221911b9fa",
+        "downloadCount": 1,
+        "apiDigestVerified": true
+      },
+      "actualOrderedSteps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Validate release-record contract and refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Validate alpha archive refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Validate guarded user-service recipe",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Validate fail-closed user-manager preflight",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Validate actual-service harness refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Validate bounded owned-service journal observations",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Validate bounded downstream HTTPS fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Validate bounded verified HTTPS origin fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Validate bounded paused TLS client controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Validate owned operator interruption controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Validate failed interruption containment controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Validate authenticated Node dependency refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Validate managed operator-package return refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Validate managed unhealthy-package fallback refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Build dependencies and optional test clients",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Install pinned HTTP3 interoperability client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19
+        },
+        {
+          "name": "Install independent HTTP3 HEAD client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20
+        },
+        {
+          "name": "Compile native profile",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "Native regressions and pinned official compatibility sample",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22
+        },
+        {
+          "name": "Verify installed HTTPS upstream trust and hostname",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23
+        },
+        {
+          "name": "Verify managed frontend HTTPS and certificate lifecycle",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24
+        },
+        {
+          "name": "Verify native tenant cache contract experiment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25
+        },
+        {
+          "name": "Verify private Unix control transport",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26
+        },
+        {
+          "name": "Build profile without control API",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27
+        },
+        {
+          "name": "Package local Linux alpha",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 28
+        },
+        {
+          "name": "Checksum local Linux alpha",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29
+        },
+        {
+          "name": "Verify packed alpha before extraction",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30
+        },
+        {
+          "name": "Verify temporary user-service with authenticated private Node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31
+        },
+        {
+          "name": "Preserve JSON evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32
+        },
+        {
+          "name": "Preserve local Linux alpha",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33
+        },
+        {
+          "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 65
+        },
+        {
+          "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 66
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 67
+        }
+      ],
+      "nativeGroups": {
+        "passed": 20,
+        "total": 20
+      },
+      "managedTAP": {
+        "format": "node-test-tap",
+        "pass": 224,
+        "fail": 0,
+        "valid": true,
+        "total": 224,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "managedElapsedMs": 61171,
+      "managedCommandRelativeArguments": [
+        "--test",
+        "--test-reporter=tap",
+        "x10/test/control.test.mjs",
+        "x10/control/record-input.test.mjs",
+        "x10/test/alpha-recipe.test.mjs",
+        "x10/test/alpha-decomposition.test.mjs"
+      ],
+      "alphaTAP": {
+        "format": "node-test-tap",
+        "pass": 600,
+        "fail": 0,
+        "valid": true,
+        "total": 600,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "alphaElapsedMs": 100212,
+      "alphaBudgetMs": 120000,
+      "contractTAPs": {
+        "release-record.tap": {
+          "tests": 119,
+          "pass": 119,
+          "fail": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "alpha-archive.tap": {
+          "tests": 122,
+          "pass": 122,
+          "fail": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "service-package-return-contract.tap": {
+          "tests": 623,
+          "pass": 623,
+          "fail": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "service-package-fallback-contract.tap": {
+          "tests": 545,
+          "pass": 545,
+          "fail": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "verified-node-contract.tap": {
+          "tests": 138,
+          "pass": 138,
+          "fail": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "alpha-tls.tap": {
+          "tests": 76,
+          "pass": 76,
+          "fail": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        },
+        "frontend-tls.tap": {
+          "tests": 16,
+          "pass": 16,
+          "fail": 0,
+          "skipped": 0,
+          "todo": 0,
+          "cancelled": 0
+        }
+      },
+      "official": {
+        "run": 1131,
+        "passed": 1105,
+        "failed": 0,
+        "skipped": 25,
+        "todoFailed": 1,
+        "todoPassed": 0
+      },
+      "officialCleanupErrors": [],
+      "normalReport": {
+        "ok": true,
+        "counts": {
+          "units": 3,
+          "invocations": 4,
+          "restarts": 1,
+          "journalChecks": 5,
+          "trafficGets": 4,
+          "posts": 4,
+          "streams": 4,
+          "bInitialPGetChecks": 1
+        },
+        "cleanup": {
+          "known": true,
+          "ownedProcessesAbsent": true,
+          "ownedLaunchersAbsent": true,
+          "ownedListenersClosed": true,
+          "ownedUnitsRemoved": 3,
+          "ownedInstallationsRemoved": 3,
+          "historicalBundleRemoved": true,
+          "backupFilesRemoved": true
+        },
+        "rawBytes": 4839
+      },
+      "fallbackReport": {
+        "ok": true,
+        "counts": {
+          "units": 3,
+          "installations": 2,
+          "successfulInvocations": 2,
+          "failedAttempts": 1,
+          "restarts": 0,
+          "journalChecks": 2,
+          "trafficGets": 2,
+          "posts": 2,
+          "streams": 2
+        },
+        "cleanup": {
+          "known": true,
+          "ownedProcessesAbsent": true,
+          "ownedLaunchersAbsent": true,
+          "ownedListenersClosed": true,
+          "ownedUnitsRemoved": 3,
+          "ownedInstallationsRemoved": 2,
+          "historicalBundleRemoved": true,
+          "backupFilesRemoved": true
+        },
+        "rawBytes": 4653
+      },
+      "legacy": {
+        "ok": true,
+        "restoredHTTPProofs": 18,
+        "nativeSessionsStarted": 5,
+        "nativeSessionsStopped": 5,
+        "managerRestarts": 2,
+        "journalChecks": 6,
+        "downstreamTLSSessions": 3,
+        "upstreamTLSSessions": 3,
+        "cleanup": {
+          "managerStopped": true,
+          "launcherExited": true,
+          "nativeGroupsAbsent": true,
+          "listeningPortsClosed": true,
+          "controlSocketAbsent": true,
+          "downstreamTLSPortClosed": true,
+          "runtimeLinkAbsent": true,
+          "upstreamTLSPortClosed": true,
+          "readinessRelayPortClosed": true,
+          "upstreamTLSOriginClosed": true,
+          "readinessRelayClosed": true,
+          "appSocketsRemaining": 0,
+          "installationRemoved": true,
+          "temporaryRootRemoved": true
+        }
+      },
+      "bootstrap": {
+        "ok": true,
+        "stage": "complete",
+        "code": "authenticated_dependency_lifecycle_complete",
+        "runtimeRemoved": true,
+        "temporaryRootRemoved": true,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "subprocessOutputsPublished": false,
+        "historicalCliVerified": true,
+        "managedPackageReturnExecuted": true,
+        "managedPackageFallbackAttempted": true,
+        "managedPackageFallbackExecuted": true
+      },
+      "privateNodeCleanup": {
+        "ok": true,
+        "code": "verified_node_removed",
+        "runtimeRemoved": true,
+        "serviceAccepted": false,
+        "productionAccepted": false,
+        "subprocessOutputsPublished": false
+      },
+      "strictPureRevalidation": {
+        "normalReport": true,
+        "fallbackReport": true,
+        "combinedThreeReportCleanupEvidence": true,
+        "allFiveProducerProofSourcePinsMatch": true,
+        "exitEnvelopeReconstructedFromObservedCompleteWorkflow": "Not independent runtime attestation; actual runtime authority is exact completed36-stepworkflow and cleanup/bootstrap artifacts"
+      }
+    },
+    {
+      "event": "pull_request",
+      "runId": 40560042605,
+      "jobId": 122386474502,
+      "status": "completed",
+      "conclusion": "success",
+      "eventHead": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+      "checkoutRevision": "30f09161b147f3e682b1f056e1b713cd53f9bf84",
+      "buildRevision": "30f09161b147f3e682b1f056e1b713cd53f9bf84",
+      "sourceTree": "224e7f61f6c2fdb9f8550c2454f86aedafb40ac9",
+      "mergeTree": "224e7f61f6c2fdb9f8550c2454f86aedafb40ac9",
+      "mergeOrderedParents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8"
+      ],
+      "artifact": {
+        "id": 12760392570,
+        "bytes": 177404,
+        "sha256": "d5964aedfa6229bea2491b44f87b4eae4e430a352d2ec8e0ca09b1e758be4b08",
+        "downloadedOnce": true,
+        "apiDigestVerified": true
+      },
+      "actualOrderedSteps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Validate release-record contract and refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Validate alpha archive refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Validate guarded user-service recipe",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Validate fail-closed user-manager preflight",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Validate actual-service harness refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "Validate bounded owned-service journal observations",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "Validate bounded downstream HTTPS fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Validate bounded verified HTTPS origin fixture controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Validate bounded paused TLS client controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Validate owned operator interruption controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Validate failed interruption containment controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Validate authenticated Node dependency refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Validate managed operator-package return refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "Validate managed unhealthy-package fallback refusal controls",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Build dependencies and optional test clients",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Install pinned HTTP3 interoperability client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19
+        },
+        {
+          "name": "Install independent HTTP3 HEAD client",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20
+        },
+        {
+          "name": "Compile native profile",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "Native regressions and pinned official compatibility sample",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22
+        },
+        {
+          "name": "Verify installed HTTPS upstream trust and hostname",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23
+        },
+        {
+          "name": "Verify managed frontend HTTPS and certificate lifecycle",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24
+        },
+        {
+          "name": "Verify native tenant cache contract experiment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25
+        },
+        {
+          "name": "Verify private Unix control transport",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26
+        },
+        {
+          "name": "Build profile without control API",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27
+        },
+        {
+          "name": "Package local Linux alpha",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 28
+        },
+        {
+          "name": "Checksum local Linux alpha",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29
+        },
+        {
+          "name": "Verify packed alpha before extraction",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30
+        },
+        {
+          "name": "Verify temporary user-service with authenticated private Node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31
+        },
+        {
+          "name": "Preserve JSON evidence",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32
+        },
+        {
+          "name": "Preserve local Linux alpha",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33
+        },
+        {
+          "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 65
+        },
+        {
+          "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 66
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 67
+        }
+      ],
+      "nativeGroups": {
+        "pass": 20,
+        "total": 20
+      },
+      "managedTAP": {
+        "format": "node-test-tap",
+        "pass": 224,
+        "fail": 0,
+        "valid": true,
+        "total": 224,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "managedElapsedMs": 50961,
+      "managedCommandRelativeFiles": [
+        "x10/test/control.test.mjs",
+        "x10/control/record-input.test.mjs",
+        "x10/test/alpha-recipe.test.mjs",
+        "x10/test/alpha-decomposition.test.mjs"
+      ],
+      "alphaTAP": {
+        "format": "node-test-tap",
+        "pass": 600,
+        "fail": 0,
+        "valid": true,
+        "total": 600,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      },
+      "alphaElapsedMs": 69553,
+      "alphaBudgetMs": 120000,
+      "contractTAP": {
+        "returnShared": 623,
+        "fallback": 545,
+        "verifiedNode": 138,
+        "archive": 122,
+        "declaration": 119,
+        "installedUpstreamTLS": 76,
+        "frontendTLS": 16
+      },
+      "official": {
+        "pass": 1105,
+        "skip": 25,
+        "expectedTodoFail": 1,
+        "unexpectedFail": 0,
+        "cleanupErrors": []
+      },
+      "normalCounts": {
+        "units": 3,
+        "invocations": 4,
+        "restarts": 1,
+        "journalChecks": 5,
+        "trafficGets": 4,
+        "posts": 4,
+        "streams": 4,
+        "bInitialPGetChecks": 1
+      },
+      "fallbackCounts": {
+        "units": 3,
+        "installations": 2,
+        "successfulInvocations": 2,
+        "failedAttempts": 1,
+        "restarts": 0,
+        "journalChecks": 2,
+        "trafficGets": 2,
+        "posts": 2,
+        "streams": 2
+      },
+      "legacyCounters": {
+        "restoredHTTPProofs": 18,
+        "successfulSessions": 5,
+        "managerRestarts": 2,
+        "journalChecks": 6,
+        "downstreamTLSSessions": 3,
+        "upstreamTLSSessions": 3
+      },
+      "allOwnedCleanupConfirmed": true,
+      "privateNodeHistoryBootstrapCleanupConfirmed": true,
+      "reportBindings": {
+        "build.json": {
+          "bytes": 7437,
+          "sha256": "c8c0e493d1961fd14562ad616be875131d03e109eb365ca57da9c72cc7d5db09"
+        },
+        "checks.json": {
+          "bytes": 519025,
+          "sha256": "dc4835d9bfb85033550c6a3b1b87cb194c0d8c93d9601662d70e5c73c3b2b233"
+        },
+        "service-lifecycle.json": {
+          "bytes": 10403,
+          "sha256": "a9cfadd573c382e32a95f0726c970a43bb6ac483ca35f386408df074b3ac16a8"
+        },
+        "service-package-return.json": {
+          "bytes": 4839,
+          "sha256": "422ded46097b304703be0fb81eb5db4268b5e37dc541c65c38048a4bc995dddf"
+        },
+        "service-package-fallback.json": {
+          "bytes": 4653,
+          "sha256": "c173676bad753b13dcfbe0dd88f2ea28effc03e4dcf6046697fa9d25156d01ee"
+        },
+        "verified-node-bootstrap.json": {
+          "bytes": 362,
+          "sha256": "2d4f7e7dd90056b924b5055dbfc730f8ab56d8fbb8f3a822d8c79daa2a7335fc"
+        },
+        "verified-node-cleanup.json": {
+          "bytes": 151,
+          "sha256": "5efe144d8489a346681aa77deab10fc1fd02a543ed9812281ff73645b8023134"
+        }
+      },
+      "strictPureRevalidation": {
+        "normalReport": true,
+        "fallbackReport": true,
+        "combinedCleanupEnvelope": true,
+        "envelopeBytes": 20767,
+        "scope": "Pure checker rerun on already collectedreports. Reconstructed envelope is validation-only; completed hostedworkflow/privateNode cleanup receipt supply runtime exit/removal authority."
+      }
+    }
+  ],
+  "actualNativeStepCounts": [
+    36,
+    36
+  ],
+  "actualNativeGroupCounts": [
+    20,
+    20
+  ],
+  "managedSourceControlInclusion": {
+    "priorControllerControls": 86,
+    "readerControls": 76,
+    "retainedRecipeControls": 17,
+    "bindingDecompositionGuards": 45,
+    "completeManagedTAP": 224,
+    "commandFilesExactlyOnce": true,
+    "basis": "Each actual managed command includes all four pinned test files exactly once and returned complete224PASS/0skip/0todo/0cancel. Retained output tails are bounded and may omit earlier individual labels; no total PASS count is inferred from a final ordinal. These source control units are not added to native groups or contract TAP.",
+    "sharedPeerGuards": 79,
+    "sharedPeerInclusionBasis": "Actual return contract623PASS includes unchanged544 normal proof/parser controls plus source-pinned79 legacy-peer controls; this is distinct from managed224TAP."
+  },
+  "strictThreeReportCleanup": {
+    "normalAndFallbackStrictCheckersPassedInBothEvents": true,
+    "legacyAndBothManagedReportsRequiredBeforePrivateNodeRemoval": true,
+    "sourcePinsConsistentWithExactWorkflowAndVerifiedNode": true,
+    "allOwnedProcessesUnitsInstallationsListenersSocketsLocksCleanupConfirmed": true,
+    "privateNodeHistoryHistoricalCLIBootstrapCleanupConfirmed": true,
+    "pureReplayBoundary": "Pure strict-report checks and a reconstructed cleanup envelope revalidate already collected JSON only. Actual runtime exit/removal authority is the exact completed hosted workflow and its actual cleanup/bootstrap receipts, not the reconstruction."
+  },
+  "serviceCounterScopes": {
+    "normal": {
+      "units": 3,
+      "successfulInvocations": 4,
+      "managerRestarts": 1,
+      "boundedJournalChecks": 5,
+      "restartPreparedBindingObserved": false
+    },
+    "fallback": {
+      "units": 3,
+      "installations": 2,
+      "successfulInvocations": 2,
+      "expectedFailedAttempts": 1,
+      "managerRestarts": 0,
+      "boundedJournalChecks": 2
+    },
+    "legacy": {
+      "restoredHTTPProofs": 18,
+      "successfulNativeSessions": 5,
+      "managerRestarts": 2,
+      "boundedJournalChecks": 6,
+      "downstreamTLSSessions": 3,
+      "upstreamTLSSessions": 3
+    },
+    "journalChecksAreNotExactRawJournalctlQueryCounts": true
+  },
+  "researchPR": {
+    "checkout": "30f09161b147f3e682b1f056e1b713cd53f9bf84",
+    "core": 21,
+    "process": 7,
+    "handshake": 27,
+    "pinnedProbe": 48,
+    "actualLogsRead": true,
+    "runId": 40560042646,
+    "jobId": 122386469655,
+    "actualSteps": 11,
+    "allStepsSuccess": true
+  },
+  "researchPush": {
+    "runId": 40560031439,
+    "runtimeJobId": 122386432711,
+    "runtimeConclusion": "skipped",
+    "runtimeAccepted": false
+  },
+  "cla": {
+    "runId": 40560038423,
+    "jobId": 122386261006,
+    "conclusion": "failure",
+    "failedStepNumber": 3
+  },
+  "artifactAcquisition": {
+    "nativeEvidenceZIPsDownloaded": 2,
+    "downloadCountPerZIP": 1,
+    "apiDigestsVerified": true,
+    "alphaArchiveDownloads": 0,
+    "manualReruns": 0,
+    "localPhysicalFixturesExecuted": 0
+  },
+  "verificationUnits": {
+    "prArtifactAuditChecks": 66,
+    "prArtifactAuditScope": "Artifact/source consistency checks only; not runtimeTAP.",
+    "pushArtifactReview": "Separate sanitized push receipt; no invented numeric audit count.",
+    "strictPureReplaysNotAdditionalRuntimeTAP": true
+  },
+  "priorAdverseEvidenceExplainedOrCleared": false,
+  "historyPreserved": [
+    "844 both non-timeout ReferenceError failures and wholefailedalpha cleanupUNKNOWN",
+    "98b historical-peer precondition failures and wholefailedalpha cleanupUNCONFIRMED",
+    "9b/34f alpha timeout/rootcause/wholealpha cleanupUNKNOWN",
+    "c2 originalprimaryUNKNOWN and privateNode/history/bootstrap cleanupUNCONFIRMED",
+    "6401 causeUNKNOWN; known failed-fixture cleanup confirmation separate from skipped downstream servicecleanup",
+    "historical localphysical FAIL_UNKNOWN",
+    "inherited CLA failures"
+  ],
+  "timingLimits": [
+    "Observed f0alpha100212ms(push)/69553ms(PR) under unchanged120000ms budget. These are separate hosted observations, not a controlled performance comparison.",
+    "No exclusive cause explanation or historical cleanup confirmation follows from the new successes."
+  ],
+  "currentCapacityChangeAcceptance": {
+    "accepted": false,
+    "scope": "The forthcoming capacity source change is a separate implementation and requires its own local and exact hosted acceptance. Do not transfer f0 results to changed alphaCLI bytes."
+  },
+  "boundaries": [
+    "Source hashes are consistency pins, not signatures or publisher authentication.",
+    "Legacy acbCLI/shared98b-peers is not the complete historical acb package, old-controller downgrade or permanently published historical archive.",
+    "Nativebinary upgrade, TLSrestore, full security/recovery matrix, orphanincident replay/disposal, permanentrelease/publisher capability, independentpublished replay,60-minute soak, fullG3/G4/G5/G7/V1 and semanticContinuum remainOPEN.",
+    "Same-UID trustedoperator/privateprefix/managerenvironment assumptions and WindowsDEFERRED_UNVERIFIED remain."
+  ],
+  "fullG5Accepted": false,
+  "productionAccepted": false
+}

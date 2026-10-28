@@ -1,0 +1,390 @@
+{
+  "schemaVersion": 1,
+  "sourceBase": "74aeb0bd373194a397bc9c18007671e914fad38f",
+  "publicationParent": "23da45f7c0d4675ae4a335c3907679d46a60335e",
+  "scope": "Explicit owned managed HTTP fallback from failed distinct operator B to KEPT old A; unchanged native binary; no automatic product recovery.",
+  "files": [
+    {
+      "path": ".github/workflows/x10-native.yml",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/PLAN.md",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/STATUS.md",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/continuation-2026-10-24/GATES.json",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/continuum/BACKGROUND.json",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/evidence/g4-kept-a-fallback.json",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/review/g4-kept-a-fallback-ledger.json",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/service/README.md",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/service/operator-package-fallback-proof.mjs",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/service/operator-package-fallback-proof.test.mjs",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/service/operator-package-fallback.mjs",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/service/operator-package-fallback.test.mjs",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/service/operator-package-return.mjs",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/service/verified-node.mjs",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    },
+    {
+      "path": "x10/service/verified-node.test.mjs",
+      "review": "Source consistency and scoped contracts; exact physical hosted verification pending."
+    }
+  ],
+  "sourceBindings": {
+    "x10/service/operator-package-return.mjs": {
+      "beforeSha256": "89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d",
+      "afterSha256": "215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83",
+      "bytes": 65297
+    },
+    "x10/service/operator-package-fallback.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3",
+      "bytes": 630
+    },
+    "x10/service/operator-package-fallback-proof.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb",
+      "bytes": 13468
+    },
+    "x10/service/operator-package-fallback-proof.test.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "017e1658984b18549f32a6f430ab08b7fe8943c8dc915696e2dcd4b7b90d5508",
+      "bytes": 22838
+    },
+    "x10/service/operator-package-fallback.test.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "d62a10ca15c34974e0c56539744ba74708339e4a93c5c74605e97a760915fb7c",
+      "bytes": 21014
+    },
+    "x10/service/verified-node.mjs": {
+      "beforeSha256": "9fbc3fd883f19943644f12602bfcc68e770eb290e8cca81e300d4f290f4232cb",
+      "afterSha256": "bc0eeece79c388ced76a57787f4fbcba7489ce9ca56cb9af03025c09e2f594ff",
+      "bytes": 32439
+    },
+    "x10/service/verified-node.test.mjs": {
+      "beforeSha256": "22188a10a6e99e11c35d268720310518377d4dc617422316c834a9a020b076b6",
+      "afterSha256": "7a210550ca332b42d1e60fb73d3a34b8998b870115d35b8b4adbd26e0e75131b",
+      "bytes": 78487
+    },
+    ".github/workflows/x10-native.yml": {
+      "beforeSha256": "e2e954642138e9f80ae09eb873c35343f5cf35709928d2286e7043ebccdb6d8f",
+      "afterSha256": "e829ed8e073bd2132006ce834bf95ec264b980bc124718142b64ff0694e1ed67",
+      "bytes": 25506
+    }
+  },
+  "localSelectedTAP": {
+    "tests": 1227,
+    "pass": 1227,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "exitCode": 0,
+    "nodeVersion": "v24.22.1",
+    "physicalNativeExecuted": false,
+    "systemdExecuted": false,
+    "networkFixtureExecuted": false,
+    "newControlsIncludedOnce": 565,
+    "priorFrozenControls": 662
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "state": "SCOPED_INDEPENDENT_REVIEW_PASS_FROZEN_SOURCES",
+    "sourceBase": "74aeb0bd373194a397bc9c18007671e914fad38f",
+    "kind": "x10-managed-kept-a-fallback-independent-review",
+    "independentPureControls": {
+      "kind": "independent-fallback-pure-heldouts",
+      "controls": 25,
+      "pass": 25,
+      "fail": 0,
+      "physicalFixturesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "managerQueriesExecuted": 0,
+      "signalsSent": 0,
+      "productAcceptance": false
+    },
+    "commands": [
+      "node .build/independent-heldout.mjs",
+      "read-only recursive Git JSON reference and blob-pin audit",
+      "node .build/independent-held-reader.mjs"
+    ],
+    "ancestryAudit": {
+      "jsonDocumentsParsedCompletely": 22,
+      "mandatoryReferenceEdgesTraversed": 129,
+      "blobPinnedEdgesChecked": 74,
+      "distinctBlobPinTargets": 3,
+      "missingReferences": 0,
+      "blobPinMismatches": 0,
+      "seedPaths": [
+        "x10/continuum/BACKGROUND.json",
+        "x10/continuation-2026-10-24/GATES.json",
+        "x10/evidence/g4-managed-package-return-hosted.json",
+        "x10/review/g4-managed-package-return-hosted-ledger.json"
+      ],
+      "documents": [
+        {
+          "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 53568,
+          "sha256": "10c92091da23c2dbc49b0490db9fc770f7e978d646c25ac0a1922ea893b48191"
+        },
+        {
+          "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+          "path": "x10/continuation-2026-10-24/GATES.json",
+          "bytes": 40963,
+          "sha256": "2c9923802950d36c6b34291e747a7f13951493295bbb0cf73292f2cdc0a21a8f"
+        },
+        {
+          "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+          "path": "x10/evidence/g4-managed-package-return-hosted.json",
+          "bytes": 45532,
+          "sha256": "747b0a974beb72d24dabc1634f48579f0543b0099887badf8f1835d18e17bace"
+        },
+        {
+          "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+          "path": "x10/review/g4-managed-package-return-hosted-ledger.json",
+          "bytes": 3622,
+          "sha256": "c965a18f2e65e08e3ce2e85da1dec6e611b4ed3c438b4b62523de1a81c3c8dca"
+        },
+        {
+          "commit": "a276533d8472bfdd8cc74322864a350d6f15e107",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 463627,
+          "sha256": "41ac751f4efbaccd35eeda5d949d1ffbd2d8be9607feeaed2de95b63bb04101b"
+        },
+        {
+          "commit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 25445,
+          "sha256": "713d3f9b06c1dd2aac825ac67c56a3cfa43120344af347fd9683146708a6ba9d"
+        },
+        {
+          "commit": "face7a77d6f9f93fc0c5657dc3bd6b44fa962cff",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 20711,
+          "sha256": "10b286e0b6ec8f58cc04d71bdc3f86529e7ab8bd8176c7cee73f3bfbf0d98e19"
+        },
+        {
+          "commit": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 23801,
+          "sha256": "b83b0b9f23553fcdf13182d73d9afbae5bac1bcc382375f59b03160034c2df41"
+        },
+        {
+          "commit": "bdcc39c85399a2252daa6e1928f6a99f82d31eaf",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 30122,
+          "sha256": "1362800aeb8a08311167cff03061ef0275a7fba47a169efd86ed8afc0d42e08f"
+        },
+        {
+          "commit": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 31224,
+          "sha256": "a809a2483e25769abff862a8814ed996f31a9387c605c3009c1a391e85ffb7cd"
+        },
+        {
+          "commit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 34076,
+          "sha256": "26537e98631d7a39bee413b083e0ff662a0d45762b44ce79799407145893f23e"
+        },
+        {
+          "commit": "ee2daa0385f654e96fd5b75c09da4e0179bb90a1",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 41437,
+          "sha256": "82e0ac0ce84591defc342ec8f0c5260c340aada7715c304c7c823397ac6a7722"
+        },
+        {
+          "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 45958,
+          "sha256": "1e8f5b42a009fb22df6de5749aa2effc46402b93bbffd93cb13527f435643a1d"
+        },
+        {
+          "commit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 46061,
+          "sha256": "a75563d60a73088f2151d43a6b580e8fe9165757977e1a7c1efbbd8697042156"
+        },
+        {
+          "commit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+          "path": "x10/continuation-2026-10-24/GATES.json",
+          "bytes": 336392,
+          "sha256": "a1f2cde447b5b5a64bf6bc41b849b9734473f4c2dfe83bb33ea7082af3663a42"
+        },
+        {
+          "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+          "path": "x10/continuation-2026-10-24/GATES.json",
+          "bytes": 35738,
+          "sha256": "8d30178e531fdc5fe7d33b5f32d6a71cc3f62dcf936f7b9b26825782f8192e6f"
+        },
+        {
+          "commit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+          "path": "x10/evidence/g4-managed-package-return.json",
+          "bytes": 28616,
+          "sha256": "f118429294faca4809a148809fcc90d87fdb4541fd7d2ad6e49da4157c08da8d"
+        },
+        {
+          "commit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 21898,
+          "sha256": "59934c75cf757be16962806a6f52b369e179044dec3ef4ac4be5cf3a8558d26f"
+        },
+        {
+          "commit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 18176,
+          "sha256": "ae3d7198b653f5af86d6054e3a43887c432e2d0e0fd3dbcb9b03d4d0a11b290e"
+        },
+        {
+          "commit": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 13864,
+          "sha256": "a3469ed9a034bf505a4b88bca174340fbd70cec67970727ad5a5f2f36aa04a76"
+        },
+        {
+          "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+          "path": "x10/evidence/g4-managed-package-return.json",
+          "bytes": 13078,
+          "sha256": "f275ffb3111e3c58bf1b7e2c8da0d372758a0fcf0361571db07052b8aa3eae1f"
+        },
+        {
+          "commit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+          "path": "x10/continuum/BACKGROUND.json",
+          "bytes": 12380,
+          "sha256": "accb7f583f70b3882e3f84060e1697deb557e3b9f5dd9b6f761856fb69a11b6c"
+        }
+      ],
+      "semanticReviewScope": "Applicable coordination, release gates, preserved acceptance/adverse history and the next explicit fallback contract; parsing and edge counts are not runtime controls."
+    },
+    "staticOperationalReview": {
+      "blockingFindings": 0,
+      "heldBInventoryCapturedBeforeRelease": true,
+      "actualResponseIsStatus200WrongBody": true,
+      "strictKnownHookNonTimeoutFailureRequired": true,
+      "nullBBindingAndNoPOSTEffectsRequired": true,
+      "capturedBResourcesAbsentBeforeOwnedResetAndRetirement": true,
+      "retainedASnapshotCheckedBeforeExplicitPreparation": true,
+      "sameAPrefixAndInstallationWithFreshSessionUnitRevisionAndBinding": true,
+      "allUnitContextsCheckedBeforeUniquePrefixRemoval": true,
+      "normalAndLegacyProofsNotRelaxed": true,
+      "thirdClosedFallbackReportRequiredBeforePrivateNodeCleanup": true,
+      "combinedEnvelope32768ByteBoundPreserved": true,
+      "sameUIDAndConservativeUnknownCleanupScopePreserved": true,
+      "heldCaptureDoesNotInvokeInstalledCLI": true,
+      "postHookCLIOnlyAfterCapturedProcessesAndLocksAbsent": true,
+      "rawControllerStateIsNotMisrepresentedAsChecksummed": true
+    },
+    "reviewFindingsResolved": [
+      "Finite failed_start_unconfirmed from imported strict helper is now preserved by the producer allowlist.",
+      "Fallback failure phase/code allowlists exclude unreachable normal-only labels.",
+      "Coordinator caught unpublished draft held-capture installed status competing with wait-bind alpha lock. Replaced by strict raw-record capture, repeated around launcher/invocation observation. Raw stopped lifecycle and captured process/lock absence are required before any post-hook CLI status. Independently reviewed and tested on temporary records with alpha/controller lock sentinels preserved."
+    ],
+    "pendingChecks": [
+      "Coordinator final frozen aggregate and exact hosted jobs/artifacts remain required; this review does not grant physical acceptance."
+    ],
+    "limits": [
+      "The25 heldouts use synthetic finite facts and invalid argument entry only; they are not physical service acceptance.",
+      "The ancestry audit parses every full required JSON document and recursively follows mandatory reference flags; semantic review is scoped to applicable contracts, accepted/adverse histories and this next task.",
+      "No native process, signal, process-group, systemd or network fixture was executed locally.",
+      "This case deliberately makes B application readiness unhealthy under distinct reviewed operator bytes; it does not establish a defect in B binary or automatic production fallback.",
+      "Full G3/G4/V1, native binary upgrade, TLS restore, permanent release, independent published replay,60-minute soak and semantic Continuum remain open.",
+      "The10 independent reader checks use only temporary synthetic records; existing alpha/controller lock sentinels remain unchanged. Controller state.json has no checksum in the current schema and is compared to exact prior prepared state."
+    ],
+    "physicalFixturesExecuted": 0,
+    "networkFixturesExecuted": 0,
+    "signalsSent": 0,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "rawHostPathsPIDsOrSecretsPublished": false,
+    "independentHeldReaderTempfileControls": {
+      "kind": "independent-held-reader-tempfile-controls",
+      "controls": 10,
+      "pass": 10,
+      "fail": 0,
+      "lockSentinelsPreserved": true,
+      "physicalFixturesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "managerQueriesExecuted": 0,
+      "subprocessesExecuted": 0,
+      "productAcceptance": false
+    },
+    "privateTestSetupAdverse": {
+      "count": 1,
+      "kind": "independent_synthetic_fixture_setup_refusal",
+      "cause": "First private held-reader fixture omitted required schemaVersion/kind fields; actual reader correctly refused. Synthetic fixture corrected, then10/10 PASS.",
+      "notPhysicalFailure": true,
+      "notHistoricalCause": true,
+      "productSourceChangedForThisTestSetup": false
+    },
+    "frozenSourceBindings": {
+      "x10/service/operator-package-return.mjs": {
+        "bytes": 65297,
+        "sha256": "215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83"
+      },
+      "x10/service/operator-package-fallback.mjs": {
+        "bytes": 630,
+        "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+      },
+      "x10/service/operator-package-fallback-proof.mjs": {
+        "bytes": 13468,
+        "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+      },
+      "x10/service/verified-node.mjs": {
+        "bytes": 32439,
+        "sha256": "bc0eeece79c388ced76a57787f4fbcba7489ce9ca56cb9af03025c09e2f594ff"
+      },
+      ".github/workflows/x10-native.yml": {
+        "bytes": 25506,
+        "sha256": "e829ed8e073bd2132006ce834bf95ec264b980bc124718142b64ff0694e1ed67"
+      }
+    },
+    "sourcePinVerification": {
+      "producerFiles": 4,
+      "literalLocationsEach": 2,
+      "all8LiteralBindingsMatchActualBytes": true,
+      "provisionalPinsRemain": false,
+      "normalProofSha256Unchanged": true,
+      "legacyLifecycleSha256Unchanged": true,
+      "consumerRequiresAllThreeReports": true,
+      "envelopeByteLimit": 32768
+    }
+  },
+  "physicalFixturesExecutedLocally": false,
+  "productionAccepted": false
+}

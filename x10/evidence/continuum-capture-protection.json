@@ -1,0 +1,1004 @@
+{
+  "schemaVersion": 1,
+  "task": "protected-source-copy-failure-cleanup",
+  "runId": "continuum-protection-20261024T090855094Z",
+  "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
+  "publicationParent": "3bb3bd63b36febb5aa693a227a980d6773fa1865",
+  "scope": "Restricted retained source-copy cleanup only. Not full semantic TLS capsule, import, ownership transfer, code migration or native NGINX integration.",
+  "frozenSourceSha256": {
+    "x10/continuum/openssl-capture.c": "f1d91edae25df96a8ee115ae710fdb8b7324d94332e4e58607376d79f45840e6",
+    "x10/continuum/openssl-capture.h": "c0a5e8538471d3bb715414eb6239cdeb5163af37365e546c8c2ea969f614e8a4",
+    "x10/continuum/capture-protection-test.c": "ed4c6b6986e39998c4a1cf6838f2a52a1106fa13e1eb241607d2dfa0bd3f3f0d",
+    "x10/continuum/capture-protection.test.mjs": "ecc1d7a3e6fc05a8ba0f206d0c920b80de5566c05b933c0e7e9d92c7a9ba4ffd",
+    "x10/continuum/openssl-probe.test.mjs": "458aaee4fcd4c2be4b9cbfffc67f5c7244866291cb4c92b602e398d7e3d658da"
+  },
+  "counterexamples": {
+    "author": {
+      "schemaVersion": 1,
+      "kind": "synthetic-production-TU-cleanup-retry-counterexample",
+      "actualTLS": false,
+      "captureAdmissionTested": false,
+      "fixtureMaterial": "public sentinel 0xa5 in an actual guarded, locked, read-only anonymous mapping",
+      "probeStub": "always refuses; no probe call expected",
+      "source": {
+        "baseCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
+        "baselineSha256": "dbcbc2633434d94da3afbe5958dbc07b55db357437dc509090e64e799d170f40",
+        "candidateSha256": "f1d91edae25df96a8ee115ae710fdb8b7324d94332e4e58607376d79f45840e6",
+        "candidateHeaderSha256": "c0a5e8538471d3bb715414eb6239cdeb5163af37365e546c8c2ea969f614e8a4",
+        "harnessSha256": "c16f502998905b053a55b9598778d745647b23ce202a54f465b334a1467afabd"
+      },
+      "controls": [
+        {
+          "name": "one-shot unmap failure followed by explicit cleanup retry",
+          "baseline": {
+            "mappingRemains": true,
+            "secondUnmapped": false,
+            "unmapCalls": 1,
+            "generationRevoked": true
+          },
+          "candidate": {
+            "mappingRemains": false,
+            "secondUnmapped": true,
+            "unmapCalls": 2,
+            "generationRevoked": true
+          }
+        },
+        {
+          "name": "one-shot restore-RW and unmap failures followed by cleanup retry",
+          "baseline": {
+            "lockedBeforeRetry": false,
+            "mappingRemains": true,
+            "secondCleansed": false,
+            "secondUnmapped": false,
+            "unmapCalls": 1,
+            "generationRevoked": true
+          },
+          "candidate": {
+            "lockedBeforeRetry": true,
+            "mappingRemains": false,
+            "secondCleansed": true,
+            "secondUnmapped": true,
+            "unmapCalls": 2,
+            "generationRevoked": true
+          }
+        }
+      ],
+      "baseline": {
+        "cases": 2,
+        "failed": 2,
+        "exitCode": 1,
+        "binarySha256": "d4245a2c88e861dfaca543710294125ac31acf581abca4b4c1e0016231f4269a"
+      },
+      "candidate": {
+        "cases": 2,
+        "failed": 0,
+        "exitCode": 0,
+        "binarySha256": "2b6cb6993aab99d086185990b9b0b16f0f58f37e697308c05e074acd028bca15"
+      },
+      "candidateAsanUbsan": {
+        "cases": 2,
+        "failed": 0,
+        "exitCode": 0,
+        "binarySha256": "c1f46ba4d31ac345ad93e51f413a55de94eae3eac3cbe74549bd27b11eb7e3fa",
+        "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+        "UBSAN_OPTIONS": "halt_on_error=1",
+        "dependencyLibrariesInstrumented": false,
+        "leakDetection": false
+      },
+      "compiler": {
+        "command": "cc",
+        "version": "13.3.0",
+        "target": "x86_64-linux-gnu"
+      },
+      "plainFlags": [
+        "-std=c11",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter"
+      ],
+      "sanitizerFlags": [
+        "-std=c11",
+        "-O1",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Wno-unused-parameter",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer"
+      ],
+      "dependencyScope": "Reused private pinned-header/static-library dependencies from preceding accepted research control; verified hashes match that receipt, not a newly built library identity",
+      "dependencies": {
+        "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+        "libcryptoSha256": "11ee32ed9f30a71dcc5f562fc37ef6ab08e56c26bcca7a342595f9b5b3b47293",
+        "sslLocalHeaderSha256": "d4fbb0116ec3ff67c56344ccd491e355338c2ebef26d5d7a0446eb0d4037d744",
+        "configurationHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81"
+      },
+      "cleanup": {
+        "allMappingsAbsentAfterControls": true,
+        "baselineExplicitHarnessTeardown": true,
+        "allControlProcessesExited": true
+      },
+      "limitations": [
+        "Synthetic cleanup path only; no handshake, capture admission, transport ownership or semantic migration validation.",
+        "A recovered destruction attempt still returns failure; no capture, cleanup success or resume grant is recovered.",
+        "No unbounded retry or persistent-failure recovery guarantee. If best-effort free still cannot destroy mapping, mandatory source exit remains the terminal boundary and explicit wipe may be unknown.",
+        "No sanitizer coverage of linked OpenSSL dependencies or leak-detection claim."
+      ]
+    },
+    "independent": {
+      "schemaVersion": 1,
+      "kind": "independent-synthetic-production-TU-protection-heldouts",
+      "productionSources": {
+        "openssl-capture.c": "f1d91edae25df96a8ee115ae710fdb8b7324d94332e4e58607376d79f45840e6",
+        "openssl-capture.h": "c0a5e8538471d3bb715414eb6239cdeb5163af37365e546c8c2ea969f614e8a4"
+      },
+      "method": "Independent private harness includes the actual capture production translation unit and manually seeds guarded, read-only mappings with fixed public nonzero page patterns. It calls libc mlock; plain controls exercise that call, but ASan may intercept it and these private controls do not inspect kernel VmFlags. Probe stub always refuses; observed probeCalls=0. This is not source capture admission or actual TLS.",
+      "actualTLS": false,
+      "captureAdmissionTested": false,
+      "harnessSha256": "b89de28bfec152c757cd95435ac067d866e694b7a4587d8554b7f0a72ce8906e",
+      "scenarios": [
+        "normal full-page wipe and one unlock followed by kernel mincore ENOMEM",
+        "two combined restore-RW/unmap failures preserve lock and revoked generation; third cleanup erases/unmaps but returns failure permanently",
+        "one munlock failure and two munmap failures recover without repeating a successful unlock; operation stays FAILED",
+        "destructor retries a mapping after one failed munmap; no second unlock",
+        "partial-cleanser sensitivity control leaves last nonzero byte; volatile verification refuses cleanse claim and avoids munlock before unmap"
+      ],
+      "baseline": {
+        "sourceCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
+        "sourceSha256": "dbcbc2633434d94da3afbe5958dbc07b55db357437dc509090e64e799d170f40",
+        "binarySha256": "713c81ca04acaaac85a69b2440d82135a2c869408ae51fd063d180720e70626b",
+        "sameFinalHarness": true,
+        "exitCode": 134,
+        "signal": "SIGABRT",
+        "observation": "After its normal first case, unchanged baseline reached munlock wrapper while copied page still nonzero under combined restore-RW/unmap faults; independent zero-before-unlock assertion stopped it. The wrapper blocked the unsafe unlock before the real syscall.",
+        "coreDumpDisabled": true,
+        "processExited": true,
+        "explicitWipeClaimed": false
+      },
+      "plain": {
+        "scenarios": 5,
+        "passed": 5,
+        "failed": 0,
+        "exitCode": 0,
+        "binarySha256": "17e3e74013b6569803a77271541c444520f76045b89bb1fa37b5756f68e0fc6e",
+        "flags": [
+          "-std=c11",
+          "-O2",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Wno-unused-parameter"
+        ],
+        "timeoutSeconds": 15
+      },
+      "asanUbsan": {
+        "scenarios": 5,
+        "passed": 5,
+        "failed": 0,
+        "exitCode": 0,
+        "binarySha256": "b82c31688b8d23c1b9fc831aae1b2b919964302736df893ae304a86feee8d2aa",
+        "flags": [
+          "-std=c11",
+          "-O1",
+          "-g",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-Wno-unused-parameter",
+          "-fsanitize=address,undefined",
+          "-fno-omit-frame-pointer"
+        ],
+        "environment": {
+          "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+          "UBSAN_OPTIONS": "halt_on_error=1"
+        },
+        "timeoutSeconds": 15,
+        "dependencyLibrariesInstrumented": false,
+        "leakDetection": false,
+        "kernelLockingIndependentlyProven": false,
+        "kernelLockingQualification": "Private harness calls libc mlock and does not inspect VmFlags; ASan may intercept the call. These sanitizer runs prove only instrumented lifecycle/zeroing behavior. The final public protection matrix separately uses actual SYS_mlock/SYS_munlock and checks kernel flags in both builds.",
+        "sameScenariosAsPlain": true
+      },
+      "dependencies": {
+        "reuse": "Previously pinned dependency copy, exact current hashes checked; no independent source tree re-fetch/build in these private controls.",
+        "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+        "libcryptoSha256": "11ee32ed9f30a71dcc5f562fc37ef6ab08e56c26bcca7a342595f9b5b3b47293",
+        "sslLocalHeaderSha256": "d4fbb0116ec3ff67c56344ccd491e355338c2ebef26d5d7a0446eb0d4037d744",
+        "configurationHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81"
+      },
+      "cleanup": {
+        "candidateMappingsUnmapped": true,
+        "proof": "All five candidate scenarios check mincore ENOMEM for all three pages after cleanup.",
+        "allProcessesExited": true,
+        "probeCalls": 0,
+        "readinessRevokedBeforeInstrumentedCleanupCalls": true
+      },
+      "setupCorrections": [
+        "Corrected private OpenSSL include order without changing production source; bio_local.h cannot be preincluded twice.",
+        "Added private compile-time source selector to run identical final harness against unchanged baseline, then reran both candidate builds from final harness bytes."
+      ],
+      "staticReview": {
+        "productionChangeMinimal": true,
+        "refusalPermanent": true,
+        "noNewResumeGrant": true,
+        "noImportOrOwnershipChange": true,
+        "publicHarnessInstrumentationOnly": true,
+        "boundedChildProcessGroups": true,
+        "sourceCaptureContractClaims": "Accurate bounded retry; persistent syscall failure, crash/SIGKILL and free remain explicitly best-effort/no-erasure guarantee."
+      },
+      "limitations": [
+        "Synthetic mappings only; no actual TLS handshake or admission proof.",
+        "Private ASan controls do not independently prove kernel memory locking because their libc mlock call may be intercepted; no VmFlags assertion is made here.",
+        "Sanitizers cover included capture TU/private harness, not reused OpenSSL static dependencies.",
+        "No LeakSanitizer claim and no full OS failure/interruption matrix.",
+        "Persistent munmap failure through final free can leave mapping until mandatory source process exit; no general recoverable allocator or explicit erasure guarantee.",
+        "No full-process wipe, semantic capsule, importer, ownership fence or migration."
+      ]
+    },
+    "privateReportsSha256": {
+      "author": "d09cf91dba159b81cc002f22a5ac60d98545e670289a7affb9fa1bd5fa0bf60a",
+      "independent": "cd22e7005c804148f2c8187bdae37fd524782dda1c2ee263a9092ed81e65e3d3"
+    }
+  },
+  "implementation": {
+    "failedUnmapRetainsOwnerForBoundedRetry": true,
+    "failurePermanentlyLatched": true,
+    "retryNeverRestoresReadyOrResume": true,
+    "uncleansedCopiedPageNotExplicitlyUnlocked": true,
+    "successfulUnlockUpdatesOwnership": true,
+    "noRetryLoop": true,
+    "persistentFinalFailureRequiresSourceExit": true,
+    "explicitWipeAfterPersistentFailureClaimed": false
+  },
+  "authoredProductionTU": {
+    "actualTLS": false,
+    "captureAdmissionTested": false,
+    "probe": "Synthetic allowed observation; manually initialized SSL/session/cipher objects and fixed public bytes. Not authenticated TLS.",
+    "scenarios": 18,
+    "scenarioNames": [
+      "protected-ready whole-page cleanse and four guard/fork controls",
+      "mmap failure",
+      "initial RW mprotect failure",
+      "mlock failure",
+      "MADV_DONTDUMP failure",
+      "MADV_DONTFORK failure",
+      "read-only mprotect failure after copy",
+      "restore-RW failure",
+      "munlock failure",
+      "munmap failure",
+      "combined restore-RW and munmap failure with recovery",
+      "persistent combined faults then recovery",
+      "repeated munmap-only failure then recovery",
+      "terminal free retries failed mapping",
+      "monotonic-clock failure",
+      "page size below profile",
+      "page size above profile",
+      "generation exhaustion without wrap"
+    ],
+    "nestedGuardAndForkControls": 4,
+    "plain": {
+      "passed": 18,
+      "failed": 0,
+      "exitCode": 0,
+      "binarySha256": "00ad7f0c3a03d2fcea6e1383beffec01a32187379de9635af3a3c7c57dc5b132"
+    },
+    "asanUbsan": {
+      "same18Scenarios": true,
+      "passed": 18,
+      "failed": 0,
+      "exitCode": 0,
+      "binarySha256": "1e88783a8ebebfd48e420a22600badad4d8b2ff525051cba039b0774ff52fd92",
+      "leakDetection": false,
+      "dependencyLibrariesInstrumented": false
+    },
+    "rawStandaloneOutputRetained": false,
+    "standaloneObservationAuthority": "Observed tool execution; binary hashes retained. Author did not save raw standalone stdout. Fresh canonical aggregate below is final wrapper acceptance, not these diagnostics.",
+    "kernelProtection": "Fault wrappers call real Linux SYS_mlock/SYS_munlock in both builds, preserving lo/dd/dc VmFlags assertions despite ASan libc interception; actual mprotect/madvise/mmap, whole-page zero verification, mincore and four bounded fork/access probes. Production C is not compiled with these wrappers outside test TU.",
+    "baseline": {
+      "sameFinalAuthoredC": true,
+      "sourceCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
+      "sourceSha256": "dbcbc2633434d94da3afbe5958dbc07b55db357437dc509090e64e799d170f40",
+      "headerSha256": "7c95196dce028356890b3bfca31ec97bbd22f1d9d93d3c9e947fa6e8642d3870",
+      "binarySha256": "8a4121ad131867e8c85fc30a56e28fd4f806af4be719096bf58c35276646d642",
+      "exitCode": 1,
+      "stoppedAt": "restore-rw: !unlock_nonzero check342; not all18 cases executed"
+    },
+    "standaloneDependencies": {
+      "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+      "libcryptoSha256": "11ee32ed9f30a71dcc5f562fc37ef6ab08e56c26bcca7a342595f9b5b3b47293",
+      "sslLocalHeaderSha256": "d4fbb0116ec3ff67c56344ccd491e355338c2ebef26d5d7a0446eb0d4037d744",
+      "configurationHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81"
+    },
+    "diagnosticHistory": [
+      {
+        "observation": "Initial ASan trial failed actual VmFlags lo assertion because libc mlock interceptor did not make the real kernel lock.",
+        "accepted": false,
+        "resolution": "Test-only wrappers use explicit SYS_mlock/SYS_munlock; required VmFlags assertions were not weakened.",
+        "rawRecordRetained": false,
+        "failedBinaryRetained": false
+      },
+      {
+        "observation": "Earlier17-case standalone wrapper PASS loaded test bytes before later18-case edits.",
+        "accepted": false,
+        "rawRecordRetained": false
+      },
+      {
+        "observation": "A later standalone wrapper had loaded17-case assertion but compiled18-case C; refused18!=17 and ran finally cleanup.",
+        "accepted": false,
+        "classification": "Mixed test-source diagnostic, not candidate runtime failure.",
+        "rawRecordRetained": false
+      }
+    ],
+    "privateSanitizerQualification": "Both author/private and independent private sanitizer runs verify instrumented lifecycle and zeroing; libc mlock may be intercepted and those private harnesses did not establish kernel VmFlags. Only the public raw-SYS matrix explicitly verifies kernel locking under sanitizer."
+  },
+  "research": {
+    "commands": [
+      "node x10/continuum/check.mjs",
+      "node --test --test-reporter=tap x10/continuum/process-handover.test.mjs",
+      "node x10/continuum/handshake-check.mjs",
+      "node x10/continuum/openssl-probe-check.mjs"
+    ],
+    "core": {
+      "schemaVersion": 1,
+      "suite": "continuum-record-and-state-kernel",
+      "passed": true,
+      "testFiles": 2,
+      "scope": "in-memory-record-and-state-only",
+      "liveTlsProcessHandover": false,
+      "counts": {
+        "tests": 21,
+        "suites": 0,
+        "pass": 21,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "interrupted": false,
+      "runnerError": null
+    },
+    "process": {
+      "counts": {
+        "tests": 7,
+        "pass": 7,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0
+    },
+    "c1": {
+      "schemaVersion": 1,
+      "suite": "continuum-real-handshake-and-record-observation",
+      "passed": true,
+      "testFiles": 2,
+      "scope": "real-handshake-and-record-observation-only",
+      "nativeNginxMigration": false,
+      "realSessionMigration": false,
+      "counts": {
+        "tests": 27,
+        "suites": 0,
+        "pass": 27,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "interrupted": false,
+      "runnerError": null
+    },
+    "c2a": {
+      "schemaVersion": 1,
+      "suite": "continuum-pinned-openssl-state-probe",
+      "passed": true,
+      "testFiles": 1,
+      "scope": "pinned-openssl-read-only-state-observation",
+      "nativeNginxMigration": false,
+      "realSessionMigration": false,
+      "counts": {
+        "tests": 44,
+        "suites": 0,
+        "pass": 44,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "interrupted": false,
+      "runnerError": null
+    },
+    "rawReportSha256": {
+      "core.json": "49283fd5cf983b6fdbbf512a01f91c1fe86e6019a044e4fdc8d148fb55e281cc",
+      "handshake.json": "5a6767b807f593cb284db0d65f168597f0a199c1ce9a1dc270ff7c36355bfea1",
+      "c2a-final.json": "91ee784e2fb8f2bd21faebf314e46d6f8fe159f42dab2ca240152d743adce197",
+      "c2a-diagnostic.json": "d5fa446805ab20fb49f46126f1b9eaa212ff3e941c99502ed81cfeb0dc05487a",
+      "process.tap": "f284abc2f7ee95524d14a9282e61a52c57197ceb834be8e55dc7ae9dbc204ef5"
+    },
+    "c2aFamilies": {
+      "flatChecks": 44,
+      "ordinaryActualTLSScenarios": 34,
+      "handledOSSignalControls": 3,
+      "programmaticCancellationControl": 1,
+      "noTLSCachedSourceControl": 1,
+      "syntheticGroups": 5
+    },
+    "existing43CasePrefix": {
+      "passed": 43,
+      "acceptedAsFinal44": false,
+      "reason": "Loaded previous test registration before new synthetic group; final fresh44-case aggregate was then run against frozen sources."
+    },
+    "freshCanonicalBuildIdentity": "Internal build.verifyIdentity checks ran, but aggregate reports only counts; no equality with separately observed heldout binary is claimed."
+  },
+  "independentActualTLS": {
+    "schemaVersion": 1,
+    "kind": "independent-actual-TLS-retained-source-heldouts",
+    "passed": true,
+    "scenarios": [
+      {
+        "kind": "discard",
+        "payloadBytes": 28439,
+        "liveDelayMilliseconds": 97,
+        "capsuleDelayMilliseconds": 193,
+        "passed": true,
+        "actualTLS": true,
+        "authenticatedClient": true,
+        "clientConnections": 1,
+        "capsuleReadyObserved": true,
+        "capsuleClearedObserved": true,
+        "receiptBindingMatches": true,
+        "sourceReleased": true,
+        "wireChecked": true,
+        "nativeCloseCode": 0,
+        "nativeCloseSignal": null,
+        "gracefulShutdown": true,
+        "cleanupAcknowledged": true
+      },
+      {
+        "kind": "abort",
+        "payloadBytes": 46037,
+        "liveDelayMilliseconds": 149,
+        "capsuleDelayMilliseconds": 277,
+        "passed": true,
+        "actualTLS": true,
+        "authenticatedClient": true,
+        "clientConnections": 1,
+        "capsuleReadyObserved": true,
+        "capsuleClearedObserved": true,
+        "receiptBindingMatches": true,
+        "sourceReleased": false,
+        "wireChecked": false,
+        "nativeCloseCode": 1,
+        "nativeCloseSignal": null,
+        "gracefulShutdown": false,
+        "cleanupAcknowledged": true,
+        "noPostRefusalTLSEvents": true,
+        "refusalCode": "hold_aborted"
+      }
+    ],
+    "identity": {
+      "schemaVersion": 1,
+      "pinnedBuild": {
+        "source": {
+          "repository": "https://github.com/openssl/openssl.git",
+          "commit": "85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c",
+          "tree": "4e48caeae2374ee4982c8e44b6a15cf4753229cb",
+          "patchedTree": "f6301918a737267208ade21de6ab162d5e82f9cb",
+          "licenseSha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+        },
+        "patch": {
+          "sha256": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+        },
+        "compiler": {
+          "command": "cc",
+          "version": "13.3.0",
+          "target": "x86_64-linux-gnu",
+          "binarySha256": "6117c52522997d2aaccb2b52b3c6bf42c0a6c5edb1d718431fed6b2fc5fec234"
+        },
+        "tools": {
+          "gitSha256": "2dae8066ef4d6a926561b4b0eaca7b458d4f5b56bb83760656e6baa7fc3e974f",
+          "perlSha256": "38d70f54fd18d614e9e6cc35c960b45f54e7b991894b8308e704ae9953c86ce4",
+          "makeSha256": "d78b8f1d099fbcfb6f2f49ab87223b9b68fb3956642f92d6ec6de812e8afa965"
+        },
+        "configuration": {
+          "target": "linux-x86_64",
+          "flags": [
+            "no-shared",
+            "no-module",
+            "no-engine",
+            "no-async",
+            "no-ktls",
+            "no-tests",
+            "no-legacy",
+            "no-asm",
+            "no-comp",
+            "no-zlib",
+            "no-dso",
+            "no-autoload-config",
+            "no-fips",
+            "--prefix=/continuum-research",
+            "--openssldir=/continuum-research/config",
+            "CC={compiler}",
+            "-O2",
+            "-fno-omit-frame-pointer",
+            "-fno-ident",
+            "-ffile-prefix-map={privateRoot}=/continuum-build"
+          ],
+          "sourceDateEpoch": "1706621296",
+          "configDataSha256": "3cc6c24bd51ecab484336c7a30c96547d88b5338ec3dfa8c9ab64aabe9a55bf9",
+          "makefileSha256": "6dc8e5db7e4df96a469725aacfefd20b59260dc1b9d991e8f37377ef1a3acd51",
+          "configurationHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81"
+        },
+        "provider": {
+          "active": [
+            "default"
+          ],
+          "externalModules": false,
+          "autoloadConfiguration": false
+        },
+        "artifacts": {
+          "linkage": "static-libssl-and-libcrypto",
+          "systemRuntimeStatic": false,
+          "version": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)",
+          "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+          "libcryptoSha256": "d0575e28c22646f99c45cc5ac97ed6ad90b6d57f0ce6fae6c69f9038c40faf13",
+          "opensslSha256": "c4f7e684b2f10eaf9931040c6e60575a06c6e6656e25e9d8ecdead52cea1b088"
+        }
+      },
+      "sourceSha256": {
+        "fixture": "8a4bf0c202ea9a4e5887c1b789057dcc81f1fd087688e744166e5ac84b642638",
+        "peerClient": "087cf9a3110c4a714d5a32d27dd6c96cf9a1d679676e8b0d791d164a4e22fbd0",
+        "probe": "a948a48ca195558660cf8a4b5e6c741ab0c9483105ffb2abcaec1550c905610d",
+        "capture": "f1d91edae25df96a8ee115ae710fdb8b7324d94332e4e58607376d79f45840e6",
+        "captureHeader": "c0a5e8538471d3bb715414eb6239cdeb5163af37365e546c8c2ea969f614e8a4",
+        "header": "488e683b6bc9eda54f21ed20cf325b7db161cc2b7f37004e17230f6a950a4d9a",
+        "usage": "134ae53333bcf485cbe11ca64244772d64b0cefb08fe7fad8019acbe751ce74d",
+        "patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd"
+      },
+      "fixtureBinarySha256": "ca2ec0a04def7bdbafa00c4747e050aeec395f21ae1bb41d1605ae8351feeae0",
+      "peerClientBinarySha256": "36f5def6c4e2e3fbbf09ec8e2e5d86d218e04a23de39d8c8902530c0c1cfb66e",
+      "nodeBinarySha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12",
+      "nodeVersion": "v24.19.0",
+      "nodeOpenSSLVersion": "3.5.7"
+    },
+    "sourceHashes": {
+      "openssl-capture.c": "f1d91edae25df96a8ee115ae710fdb8b7324d94332e4e58607376d79f45840e6",
+      "openssl-capture.h": "c0a5e8538471d3bb715414eb6239cdeb5163af37365e546c8c2ea969f614e8a4",
+      "capture-protection-test.c": "ed4c6b6986e39998c4a1cf6838f2a52a1106fa13e1eb241607d2dfa0bd3f3f0d",
+      "capture-protection.test.mjs": "ecc1d7a3e6fc05a8ba0f206d0c920b80de5566c05b933c0e7e9d92c7a9ba4ffd",
+      "openssl-probe.test.mjs": "458aaee4fcd4c2be4b9cbfffc67f5c7244866291cb4c92b602e398d7e3d658da"
+    },
+    "topology": "two-leg-recording-relay-not-migration",
+    "builds": 1,
+    "scenariosWithSameFreshBuild": 2,
+    "identityMethod": "Allowlisted values from fresh prepareProbeHarness public identity, verified again after both cases; no equality with canonical aggregate binary is claimed.",
+    "cleanup": {
+      "observedChildren": 59,
+      "allObservedChildrenClosed": true,
+      "privateRootsObserved": 4,
+      "privateRootsAbsent": 4,
+      "allObservedPrivateRootsAbsent": true,
+      "sourceHashesUnchanged": true,
+      "ownedHarnessCleanupCompleted": true
+    },
+    "rawSessionMaterialPublished": false,
+    "sameBinaryAsCanonicalAggregateClaimed": false,
+    "semanticExportImport": false,
+    "migration": false,
+    "nativeNginxIntegration": false,
+    "limitations": [
+      "Protected additional source record-material copy only, not all SSL/EVP/Node allocations.",
+      "Abort case proves checked ordered public cleanup/refusal and source close; absence of post-refusal TLS I/O additionally relies on frozen native code review, not arbitrary syscall tracing.",
+      "One fresh pinned build and two chosen heldouts are not production security or migration acceptance.",
+      "This fixture binary identity is distinct evidence and is not attributed to the separate canonical44 aggregate."
+    ],
+    "command": "timeout --signal=TERM --kill-after=10s 590s node {private-heldout-script}",
+    "exitCode": 0,
+    "privateReportSha256": "6fb999509332f5b5baa80e201056cf3776dd1044dd49d63f95cfb7fa58e6e527",
+    "observerScriptSha256": "e8f62b23ca2e6b183f07575ebeaa6c1ad534b38ebad0519a52d41da72c74468c"
+  },
+  "nativeRegression": {
+    "schemaVersion": 1,
+    "suite": "continuum-capture-protection-native-regression",
+    "success": true,
+    "baseSourceCommit": "f0cd3798c3b19622e1a52e9b5d909fa599a06176",
+    "scope": "Unchanged native Linux NGINX regression; protected-copy Continuum changes are isolated research, not native migration.",
+    "commands": [
+      "bash x10/build.sh --jobs 4",
+      "node x10/test/all.mjs --official --output x10/.build/protection-native.json"
+    ],
+    "startedAtUTC": "2026-10-24T09:22:24.358Z",
+    "finishedAtUTC": "2026-10-24T09:25:41.158Z",
+    "exitCode": 0,
+    "freshPrivateCheckout": true,
+    "copiedBinariesOrManifestsUsedAsProof": false,
+    "systemInstalled": false,
+    "source": {
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "nativeInputs": 499,
+      "totalNativeAndHarnessInputs": 559,
+      "beforeAfterInputsEqual": true,
+      "canonicalBaseInputsEqual": true,
+      "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+      "licenseSha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c",
+      "nativeSourceChanged": false,
+      "nativeVerificationHarnessChanged": false
+    },
+    "build": {
+      "status": "built",
+      "version": "1.31.9",
+      "compiledModules": 105,
+      "configureFeatureFlags": [
+        "--with-http_ssl_module",
+        "--with-http_v2_module",
+        "--with-http_v3_module",
+        "--with-stream",
+        "--with-stream_ssl_module",
+        "--with-stream_ssl_preread_module",
+        "--with-mail",
+        "--with-mail_ssl_module",
+        "--with-threads",
+        "--with-file-aio",
+        "--with-http_realip_module",
+        "--with-http_stub_status_module",
+        "--with-http_auth_request_module",
+        "--with-http_addition_module",
+        "--with-http_sub_module",
+        "--with-http_dav_module",
+        "--with-http_slice_module",
+        "--with-http_gunzip_module",
+        "--with-http_gzip_static_module",
+        "--with-compat",
+        "--with-control-api"
+      ],
+      "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+      "dependenciesFromHeaders": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "generatedFiles": {
+        "ngx_auto_config.h": {
+          "sha256": "a64a56c487ffd194f9b07c95e54c371e19705463fa29bc698955030e25a06b06",
+          "bytes": 10096,
+          "mode": "0644"
+        },
+        "ngx_auto_headers.h": {
+          "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+          "bytes": 657,
+          "mode": "0644"
+        },
+        "ngx_modules.c": {
+          "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+          "bytes": 11820,
+          "mode": "0644"
+        }
+      },
+      "binarySha256": "7a39fccaf0693cc81a8b272eb93d673d464a640f8424f662f7c1ea618d4e40ac",
+      "binaryBytes": 8553024,
+      "binaryModeAfter": "755",
+      "manifestSha256": "43c06fa70df459168a8911e164dd9b340ab55d8a8d01fcd9e578e0174fab2d8c",
+      "equalityWithEarlierCheckoutBinaryClaimed": false
+    },
+    "checks": {
+      "groups": 20,
+      "groupsPassed": 20,
+      "finalProvenancePassed": true,
+      "groupsDetail": [
+        {
+          "name": "http-tls-http2-reload",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 11
+        },
+        {
+          "name": "stream-mail",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 12
+        },
+        {
+          "name": "mail-tls-starttls",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 15
+        },
+        {
+          "name": "protocol-adapters",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 21
+        },
+        {
+          "name": "http3-interop",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 7
+        },
+        {
+          "name": "http3-head-independent-client",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 4
+        },
+        {
+          "name": "native-features",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 19
+        },
+        {
+          "name": "quic-regression",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false
+        },
+        {
+          "name": "quic-generated-sanitized",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false
+        },
+        {
+          "name": "quic-frame-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false
+        },
+        {
+          "name": "native-load-client-verification",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 41
+        },
+        {
+          "name": "managed-native-control",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "tap": {
+            "format": "node-test-tap",
+            "pass": 77,
+            "fail": 0,
+            "valid": true
+          }
+        },
+        {
+          "name": "operator-status",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "tap": {
+            "format": "node-test-tap",
+            "pass": 30,
+            "fail": 0,
+            "valid": true,
+            "total": 30,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          }
+        },
+        {
+          "name": "local-alpha-lifecycle",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "tap": {
+            "format": "node-test-tap",
+            "pass": 37,
+            "fail": 0,
+            "valid": true,
+            "total": 37,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          }
+        },
+        {
+          "name": "listener-observer-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "tap": {
+            "format": "node-test-tap",
+            "pass": 29,
+            "fail": 0,
+            "valid": true
+          }
+        },
+        {
+          "name": "reload-listener-observation",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 7
+        },
+        {
+          "name": "native-control-api",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 9
+        },
+        {
+          "name": "native-process-generations",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 10
+        },
+        {
+          "name": "native-generation-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 20
+        },
+        {
+          "name": "official-nginx-tests",
+          "passed": true,
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "cases": 35
+        }
+      ],
+      "official": {
+        "files": 35,
+        "filesPassed": 32,
+        "filesSkipped": 3,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1109,
+          "passed": 1083,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        },
+        "skippedFiles": [
+          "fastcgi.t",
+          "scgi.t",
+          "uwsgi.t"
+        ],
+        "pin": "47e78403ba756629adc3a8421bab700f344b7e3b"
+      }
+    },
+    "evidence": {
+      "rawReportSha256": "cb815839f76c4d3d65059052ec80ab2da5529c1f45588ffdd9bbdcfaee1ad9a2",
+      "beforeSnapshotSha256": "c73df3a69e0939bb13108d5ccf706524e308868643ff532805441a2aa0ad82b2",
+      "afterSnapshotSha256": "0eb2c83ee71811b15ded18a08bee567f7967155f684c286039e5fa78858fbab8",
+      "manifestSha256": "43c06fa70df459168a8911e164dd9b340ab55d8a8d01fcd9e578e0174fab2d8c"
+    },
+    "adverseWorkspaceAttempts": [
+      {
+        "attempt": 1,
+        "accepted": false,
+        "exitCode": 1,
+        "rawReportSha256": "f4dd39ca29771a3a426780d8becb2e84593cacde7111af87c76dd227839558b9",
+        "groupsPassed": 12,
+        "groupsTotal": 20,
+        "finalProvenancePassed": false,
+        "reason": "Executable mode drift0755-to0644; unchanged generated binary bytes; later EACCES and final provenance refusal.",
+        "failedGroups": [
+          "native-load-client-verification",
+          "managed-native-control",
+          "operator-status",
+          "local-alpha-lifecycle",
+          "reload-listener-observation",
+          "native-control-api",
+          "native-process-generations",
+          "official-nginx-tests"
+        ]
+      },
+      {
+        "attempt": 2,
+        "accepted": false,
+        "exitCode": 1,
+        "rawReportSha256": "1fe94ee5c9d3d6d045c1cd2de61c706cb5c839b7de1c6b7eea63490b09ecf881",
+        "groupsPassed": 12,
+        "groupsTotal": 20,
+        "finalProvenancePassed": false,
+        "reason": "Executable mode drift0755-to0644; unchanged generated binary bytes; later EACCES and final provenance refusal.",
+        "failedGroups": [
+          "native-load-client-verification",
+          "managed-native-control",
+          "operator-status",
+          "local-alpha-lifecycle",
+          "reload-listener-observation",
+          "native-control-api",
+          "native-process-generations",
+          "official-nginx-tests"
+        ]
+      },
+      {
+        "attempt": 3,
+        "accepted": false,
+        "exitCode": 1,
+        "rawReportSha256": "9de3efbfdd9a1e15f144d4fabf9db74f89bfe8fe989fdb622f6cd7fc487978b7",
+        "groupsPassed": 13,
+        "groupsTotal": 20,
+        "finalProvenancePassed": false,
+        "reason": "Executable mode drift0755-to0644; unchanged generated binary bytes; later EACCES and final provenance refusal.",
+        "failedGroups": [
+          "managed-native-control",
+          "operator-status",
+          "local-alpha-lifecycle",
+          "reload-listener-observation",
+          "native-control-api",
+          "native-process-generations",
+          "official-nginx-tests"
+        ]
+      }
+    ],
+    "limits": [
+      "Three earlier mode-drift failures are preserved; later PASS does not explain their cause or constitute a native-runtime fix.",
+      "Final fresh private checkout kept binary0755 without mid-test repairs. The different storage location is an observation, not proof of mode-drift cause.",
+      "Syscall tracing was unavailable: ptrace Operation not permitted; no escalation or bypass attempted.",
+      "Ordinary native parser sanitizer checks disable leak detection; this is not an LSan or full-platform PASS.",
+      "No native NGINX TLS continuation, importer, transport ownership transfer or old-code retirement is implemented."
+    ]
+  },
+  "acceptance": {
+    "local": "source-only cleanup fix and selected fault controls verified",
+    "hosted": "pending exact resulting implementation commit; accepted preceding f2f9684 CI does not accept changed C",
+    "fullProtectionFailureMatrix": false,
+    "fullSemanticInventory": false,
+    "semanticImport": false,
+    "ownershipTransfer": false,
+    "migration": false
+  },
+  "limitations": [
+    "Selected18 protection cases and independent5 cleanup controls are not every allocation/syscall/interruption combination or whole-platform security proof.",
+    "ASan/UBSan do not instrument linked OpenSSL dependency libraries; LeakSanitizer disabled. Independent private ASan harness does not independently establish kernel locking.",
+    "Additional protected mapping only; original SSL/EVP heap, compiler copies, Node/V8 internals and process-wide erasure remain outside claim.",
+    "Persistent unmap failure through terminal free, SIGKILL and crash cannot promise explicit cleansing. Cleanup recovery never authorizes resume.",
+    "No preservation of complete ALPN/authentication/session/Finished/exporter/resumption APIs or future KeyUpdate/runtime record budget, no target reconstruction, native integration, performance or production claim."
+  ],
+  "newPurchasesUSD": 0,
+  "otherProjectsChanged": false,
+  "productionChanged": false
+}

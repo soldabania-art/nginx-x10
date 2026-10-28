@@ -1,0 +1,2628 @@
+{
+  "schema_version": 2,
+  "product": "X10",
+  "source_repository": "soldabania-art/nginx-x10",
+  "contract_status": "G1 contract/declaration validator local and exact hosted checks verified. Supported target runtime and Production V1 release remain NOT_ACCEPTED; proceed through G2-G8.",
+  "readiness": {
+    "native_engineering": "Verified within named profile; not a production acceptance.",
+    "local_alpha": "Runtime and hosted lifecycle verified; no permanent release observed.",
+    "production_v1": "NOT_ACCEPTED",
+    "continuum": "C2a source-copy/cleanup research; semantic import, transport ownership and native migration not implemented.",
+    "full_platform_scope": "PRESERVED_NOT_COMPLETED"
+  },
+  "preserved_scope": {
+    "native_matrix_source": "x10/PLAN.md",
+    "areas": [
+      "process/reload",
+      "events/platforms",
+      "memory/buffers",
+      "HTTP1/2/3",
+      "QUIC/TLS",
+      "upstream/DNS",
+      "proxy/adapters",
+      "cache",
+      "static/media/filters",
+      "rewrite/routing",
+      "access/limits",
+      "TCP/UDP",
+      "mail",
+      "files",
+      "management/observability",
+      "build/module ABI"
+    ],
+    "continuum_stages": [
+      "C0 record/state model",
+      "C1 real handshake/observer",
+      "C2a semantic inventory and protection failures",
+      "C2b semantic export/import",
+      "exclusive I/O ownership",
+      "distinct TLS code and source retirement",
+      "HTTP/WebSocket/native adapters",
+      "third-version heldouts and comparative costs"
+    ],
+    "not_required_for_bounded_v1_acceptance": [
+      "full Continuum migration",
+      "fleet/cloud console",
+      "universal 10x claim",
+      "complete all-platform/all-module certification"
+    ],
+    "not_marked_completed_by_v1": true
+  },
+  "attribution": {
+    "site_path": "/cases/",
+    "section_title": "Наши проекты",
+    "developer_label": "Разработчик — АВЕРКРОН",
+    "preserve_upstream_license_authorship_history": true,
+    "card_status_requires_confirmed_release": true
+  },
+  "historyReference": {
+    "commit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+    "path": "x10/continuation-2026-10-24/GATES.json",
+    "blobSha": "497c1b348b2158d5b8c6390dcc94fa8bb751fff0",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true,
+    "allDeepGateMetadataRequired": true
+  },
+  "gates": [
+    {
+      "id": "G0",
+      "name": "Fresh authority, ownership and checkpoint handoff",
+      "status": "ROUTING_RECONCILED",
+      "depends_on": [],
+      "outputs": [
+        "Fresh central manifest SHA and source HEAD",
+        "Current research checkpoint and exact CI reconciled",
+        "One coordinator and V1 release routing recorded"
+      ],
+      "acceptance": [
+        "No live foreign lease bypassed",
+        "Own lease/CAS/reread verified before shared writes",
+        "Research results preserved; finite V1 route replaces stale automatic R&D priority"
+      ],
+      "required_evidence": [
+        "central_ref",
+        "source_ref",
+        "lease_commit",
+        "checkpoint_ref"
+      ],
+      "blocking_unknowns": []
+    },
+    {
+      "id": "G1",
+      "name": "Record bounded Production V1 contract",
+      "status": "CONTRACT_AND_VALIDATOR_EXACT_HOSTED_VERIFIED",
+      "depends_on": [
+        "G0"
+      ],
+      "outputs": [
+        "Supported Linux/arch/Node/dependency ABI profile",
+        "Threat model and support matrix",
+        "Predeclared runtime/failure/load acceptance",
+        "Preserved broad platform and Continuum roadmap"
+      ],
+      "acceptance": [
+        "V1 is a usable operated service, not alpha demo",
+        "No silent removal of existing NGINX modules or future scope",
+        "Exact unsupported states and recover boundaries stated"
+      ],
+      "required_evidence": [
+        "release_contract_ref",
+        "support_matrix_ref",
+        "acceptance_thresholds_ref"
+      ]
+    },
+    {
+      "id": "G2",
+      "name": "Complete and publish Local Alpha",
+      "status": "APPLICATION_UPSTREAM_EXACT_HOSTED_VERIFIED_PERMANENT_RELEASE_PENDING",
+      "depends_on": [
+        "G1"
+      ],
+      "outputs": [
+        "Correct pinned Quickstart",
+        "Actual upstream/health example",
+        "Independent extracted-bundle lifecycle",
+        "Permanent alpha archive/checksum/provenance"
+      ],
+      "acceptance": [
+        "Install/run/bind/apply/revert/recover/stop/uninstall from published files",
+        "No source checkout dependency",
+        "Foreign PID/symlink/unknown-file refusals preserved",
+        "Alpha not recorded as completed V1"
+      ],
+      "required_evidence": [
+        "alpha_version",
+        "alpha_source_sha",
+        "alpha_artifact_sha256",
+        "clean_install_report",
+        "operator_flow_report"
+      ]
+    },
+    {
+      "id": "G3",
+      "name": "Real gateway and operated service",
+      "status": "SCOPED_INSTALLED_RECIPE_SERVICE_VERIFIED_OPERATIONAL_GATES_OPEN",
+      "depends_on": [
+        "G2"
+      ],
+      "outputs": [
+        "Real app reverse proxy and verified HTTP/TLS path",
+        "Supported supervisor/service recipe",
+        "Status/health/logging/restart runbook"
+      ],
+      "acceptance": [
+        "Native request path works outside development checkout",
+        "No admin exposure by default",
+        "Restart and operator disconnect behavior verified",
+        "Demo self-check distinguished from application health"
+      ],
+      "required_evidence": [
+        "gateway_e2e_report",
+        "tls_trust_report",
+        "service_lifecycle_report",
+        "test_deployment_identity"
+      ]
+    },
+    {
+      "id": "G4",
+      "name": "Config and package update/rollback/recovery",
+      "status": "PARTIAL_EXISTING_CONTROLLER_EVIDENCE",
+      "depends_on": [
+        "G3"
+      ],
+      "outputs": [
+        "Config release/revert/recover acceptance",
+        "Package upgrade/downgrade procedure",
+        "State compatibility and backup/restore contract",
+        "Faulted/orphan-process runbook"
+      ],
+      "acceptance": [
+        "Invalid config and unhealthy candidate safely refused/reverted",
+        "Interrupted durable state handled or explicitly refused",
+        "Stale identities/revisions and library drift guarded",
+        "Old known-good package retained until acceptance",
+        "No side-effect/database rollback or atomic-all-traffic claim"
+      ],
+      "required_evidence": [
+        "config_failure_matrix",
+        "package_upgrade_report",
+        "package_rollback_report",
+        "recovery_report"
+      ]
+    },
+    {
+      "id": "G5",
+      "name": "Security and supported compatibility review",
+      "status": "NOT_ACCEPTED",
+      "depends_on": [
+        "G3",
+        "G4"
+      ],
+      "outputs": [
+        "Independent review",
+        "Negative/held-out cases",
+        "Residual issue register and supported boundaries"
+      ],
+      "acceptance": [
+        "No unresolved critical issue in supported V1 path",
+        "Private ownership/permissions/socket/secret checks pass",
+        "New native patches have baseline counterexamples and neighboring regressions",
+        "Same-UID and unsupported-profile limits documented"
+      ],
+      "required_evidence": [
+        "security_review",
+        "heldout_report",
+        "residual_risks",
+        "native_patch_evidence_if_changed"
+      ]
+    },
+    {
+      "id": "G6",
+      "name": "Frozen candidate runtime and load acceptance",
+      "status": "NOT_ACCEPTED",
+      "depends_on": [
+        "G4",
+        "G5"
+      ],
+      "outputs": [
+        "Final native/Unix/feature-off gates",
+        "Predeclared representative load/slow-client run",
+        "Cleanup and recovery acceptance",
+        "Retained adverse/A-A evidence"
+      ],
+      "acceptance": [
+        "Exact frozen source and test identities",
+        "Required tests actually ran; no fake passing skips",
+        "Planned initial V1 soak at least 60 minutes on an authorized compatible host",
+        "Metrics/thresholds declared before run",
+        "No unexplained supported-path regression or data loss"
+      ],
+      "required_evidence": [
+        "final_ci_runs",
+        "test_units_and_limits",
+        "load_contract",
+        "soak_report",
+        "cleanup_report"
+      ]
+    },
+    {
+      "id": "G7",
+      "name": "Versioned distribution and supply chain",
+      "status": "NOT_ACCEPTED",
+      "depends_on": [
+        "G6"
+      ],
+      "outputs": [
+        "Clean final binary and allowlisted CLI package",
+        "Version/source/provenance/checksums",
+        "LICENSE/NOTICE/dependency inventory",
+        "Update/security-maintenance policy"
+      ],
+      "acceptance": [
+        "Event head and actual build checkout distinguished",
+        "ZIP/tar/payload identities verified",
+        "ABI support explicit",
+        "Checksum not mislabeled as signature",
+        "Persistent artifacts independent of CI expiration"
+      ],
+      "required_evidence": [
+        "version",
+        "source_sha",
+        "build_manifest",
+        "binary_sha256",
+        "archive_sha256",
+        "license_files",
+        "dependency_inventory"
+      ]
+    },
+    {
+      "id": "G8",
+      "name": "Publish and accept Production V1",
+      "status": "NOT_ACCEPTED",
+      "depends_on": [
+        "G7"
+      ],
+      "outputs": [
+        "Permanent V1 release",
+        "Independent download-to-operation replay",
+        "Verified package upgrade and rollback from published files",
+        "Accurate AVERKRON project card"
+      ],
+      "acceptance": [
+        "Independent reviewer reproduces entire supported operator path",
+        "Authorized test deployment serves real app using published candidate",
+        "No experimental Continuum in production hot path",
+        "Release notes list actual features and unknowns",
+        "No 10x/customer/SLA claims without proof"
+      ],
+      "required_evidence": [
+        "release_url",
+        "release_sha",
+        "published_artifacts",
+        "independent_release_path_report",
+        "deployment_identity",
+        "rollback_plan",
+        "project_card_status"
+      ]
+    },
+    {
+      "id": "G9",
+      "name": "Portfolio transition to new AVERKRON",
+      "status": "BLOCKED_BY_V1",
+      "depends_on": [
+        "G8"
+      ],
+      "outputs": [
+        "Central state records accepted X10 V1",
+        "AVERKRON becomes next active product",
+        "X10 maintenance lane and preserved R&D next gate"
+      ],
+      "acceptance": [
+        "All G0-G8 accepted with evidence",
+        "Local Alpha alone did not trigger transition",
+        "Unfinished broad platform/Continuum not marked completed",
+        "Final queue remains X10→AVERKRON→TEXTORA/AI Index→TROVENDI→Replyscope"
+      ],
+      "required_evidence": [
+        "central_transition_commit",
+        "v1_acceptance_record",
+        "maintenance_handoff",
+        "rnd_remaining_scope"
+      ]
+    }
+  ],
+  "restoredForegroundHTTPHostedSubcheckpoint": {
+    "state": "EXACT_SCOPED_RESTORED_FOREGROUND_HTTP_SUCCESS",
+    "implementationCommit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+    "implementationTree": "04729ebf53161427a751f94d219d03f2be3a3503",
+    "evidence": "x10/evidence/g4-restored-http-hosted.json",
+    "scope": "Extracted-bundle restored foreground HTTP application only",
+    "nativeRunIds": [
+      40441860772,
+      40441866135
+    ],
+    "nativeJobIds": [
+      121983898949,
+      121983950332
+    ],
+    "all34ActualStepsEach": true,
+    "nativeGroupsEach": 20,
+    "fullAlphaEach": 197,
+    "foregroundHTTPAccepted": true,
+    "managedServiceRestoreAccepted": false,
+    "tlsBackupAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false
+  },
+  "gatePlanCompaction": {
+    "completeImmutableHistoryReferenceRequired": true,
+    "noGateStatusPromoted": true,
+    "noAcceptanceRequirementRemoved": true,
+    "fullVisionPreserved": true
+  },
+  "restoredHTTPManagedServiceCandidate": {
+    "state": "CODE_PRESENT_EXACT_HOSTED_PENDING",
+    "sourceBase": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
+    "evidence": "x10/evidence/g4-restored-service.json",
+    "perFileLedger": "x10/review/g4-restored-service-ledger.json",
+    "localSelectedTAP": {
+      "total": 802,
+      "pass": 802,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "physicalNativeExecuted": false,
+      "systemdExecuted": false
+    },
+    "newPureControlsIncludedInTAP": 84,
+    "separateIndependentVirtualReviewControls": 14,
+    "expectedHostedCounts": {
+      "successfulNativeSessions": 5,
+      "managerRestarts": 2,
+      "boundedJournalChecks": 6,
+      "tlsSessions": 3,
+      "restoredProofFields": 18
+    },
+    "expectedCountsAreNotLocalRuntimeObservations": true,
+    "restoredManagedServiceAccepted": false,
+    "tlsBackupAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false
+  },
+  "restoredHTTPManagedServiceHosted": {
+    "state": "EXACT_SCOPED_RESTORED_HTTP_MANAGED_SERVICE_SUCCESS",
+    "implementationCommit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+    "implementationTree": "2008abfd22dd799ec68e7006f11bd07a52124682",
+    "evidence": "x10/evidence/g4-restored-service-hosted.json",
+    "scope": "Same checked runtime package; stopped confirmed HTTP source restored into a fresh temporary nonroot systemd-user installation/unit, operated and restarted.",
+    "nativeRunIds": [
+      40447807340,
+      40447810051
+    ],
+    "nativeJobIds": [
+      122003205464,
+      122003208919
+    ],
+    "all34ActualStepsEach": true,
+    "nativeGroupsEach": 20,
+    "fullAlphaEach": 197,
+    "restoredProofFieldsEach": 18,
+    "nativeSessionsEach": 5,
+    "managerRestartsEach": 2,
+    "journalChecksEach": 6,
+    "journalChecksAreNotExactQueryCounts": true,
+    "tlsSessionsEach": 3,
+    "all13CleanupFactsEach": true,
+    "privateNodeAndBootstrapRemovedEach": true,
+    "serviceContractEach": {
+      "tests": 618,
+      "pass": 617,
+      "skipped": 1,
+      "fail": 0,
+      "skipReason": "Root-only refusal control not executed by nonroot runner; actual nonroot service separately executed."
+    },
+    "restoredManagedServiceAccepted": true,
+    "samePackageOnly": true,
+    "tlsBackupAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false,
+    "actualFailureContainmentExercised": false
+  },
+  "installedPackageIdentityCandidate": {
+    "state": "CODE_PRESENT_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+    "sourceBase": "face7a77d6f9f93fc0c5657dc3bd6b44fa962cff",
+    "scope": "Read-only installed package-info runtime/operator/native payload identity foundation; no package transition or rollback.",
+    "sourceBindings": {
+      "x10/alpha/cli.mjs": {
+        "beforeSha256": "38d92317731c155adb183eb918b86517a3474f625f2d53e4f39d608da5af68e0",
+        "afterSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+        "bytes": 68551
+      },
+      "x10/alpha/package-info.test.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "54359382b4cfc192d42c547e4f4b4f49825e2e1dfd68d94acc09d4b49e650c83",
+        "bytes": 14701
+      },
+      "x10/test/alpha.test.mjs": {
+        "beforeSha256": "eb7bfc20173e002086c727b9838ab20a475ca46474d21f592a838783354ee5e0",
+        "afterSha256": "602312b3ee869a1a85b53466bd68b096184d7eaed48b0ca9e162e405bf96db48",
+        "bytes": 96332
+      }
+    },
+    "evidence": "x10/evidence/g4-package-identity.json",
+    "perFileLedger": "x10/review/g4-package-identity-ledger.json",
+    "localSelectedTAP": {
+      "total": 248,
+      "pass": 248,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "physicalNativeExecuted": false,
+      "systemdExecuted": false
+    },
+    "newPureControlsIncludedInTAP": 86,
+    "separateIndependentPureReviewControls": 10,
+    "initialDraftAdverse": "Four existing source-extracted install checks failed because an exported helper was inserted inside their extraction boundary. Relocation fixed the integration without changing the old tests.",
+    "packageIdentityHostedAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "compatibilityAccepted": false,
+    "productionAccepted": false,
+    "separateActualNodeSyntheticInstallation": {
+      "total": 1,
+      "pass": 1,
+      "exitCode": 0,
+      "scope": "Actual installed Node CLI with private synthetic files and nonexecuted native placeholder; not actual bundle/native acceptance.",
+      "notAddedToSelectedTAP": true
+    }
+  },
+  "installedPackageIdentityHosted": {
+    "state": "EXACT_SCOPED_INSTALLED_PACKAGE_IDENTITY_SUCCESS",
+    "implementationCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "implementationTree": "9dd8486ea965c984c4325966674d3595f662b61f",
+    "evidence": "x10/evidence/g4-package-identity-hosted.json",
+    "scope": "Read-only installed/extracted/restored package identity and existing service regressions; no package transition.",
+    "nativeRunIds": [
+      40455973705,
+      40455978706
+    ],
+    "nativeJobIds": [
+      122029316296,
+      122029337388
+    ],
+    "all34ActualStepsEach": true,
+    "nativeGroupsEach": 20,
+    "fullAlphaEach": 284,
+    "packageDiagnosticFieldsEach": 15,
+    "runtimePayloadFilesEach": 11,
+    "sameRuntimeAndOperatorFingerprintsAcrossContexts": true,
+    "packageIdentityHostedAccepted": true,
+    "restoredServiceRegressionsAcceptedOnThisImplementation": true,
+    "restoredProofFieldsEach": 18,
+    "nativeSessionsEach": 5,
+    "managerRestartsEach": 2,
+    "journalChecksEach": 6,
+    "journalChecksAreNotExactQueryCounts": true,
+    "tlsSessionsEach": 3,
+    "all13CleanupFactsEach": true,
+    "privateNodeAndBootstrapRemovedEach": true,
+    "serviceContractEach": {
+      "tests": 618,
+      "pass": 617,
+      "skipped": 1,
+      "fail": 0,
+      "skipReason": "Root-only refusal control not executed by nonroot runner; actual nonroot service separately exercised."
+    },
+    "compatibilityAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "tlsBackupAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false,
+    "actualFailureContainmentExercised": false
+  },
+  "sideBySidePackageStageCandidate": {
+    "state": "CODE_PRESENT_FROZEN_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+    "sourceBase": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
+    "publicationParent": "a22e382fca8f34faad7f57ebe2ceee52868a2d7b",
+    "scope": "Explicit trusted extracted-candidate side-by-side schema2 HTTP package staging without activation or cutover",
+    "sourceBindings": {
+      "x10/alpha/cli.mjs": {
+        "beforeSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+        "afterSha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa",
+        "bytes": 87522
+      },
+      "x10/alpha/stage.test.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "483344ba19167e38a2eee25896c355348d8fa632467338125dcc7806c69b9d97",
+        "bytes": 42023
+      },
+      "x10/test/alpha.test.mjs": {
+        "beforeSha256": "602312b3ee869a1a85b53466bd68b096184d7eaed48b0ca9e162e405bf96db48",
+        "afterSha256": "12868a338f450466c8201e8ca110dda65c473db90ad043414d0a3e7e5936a1e9",
+        "bytes": 111756
+      }
+    },
+    "evidence": "x10/evidence/g4-package-stage.json",
+    "perFileLedger": "x10/review/g4-package-stage-ledger.json",
+    "localSelectedTAP": {
+      "tests": 374,
+      "pass": 374,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "physicalNativeExecuted": false,
+      "systemdExecuted": false
+    },
+    "newPureControlsIncludedInTAP": 126,
+    "separateIndependentTempfileControls": 13,
+    "separateActualNodeNonexecutedInstallation": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "sourceAndTargetSchemasUnchanged": true,
+    "nativeAndControllerRuntimeUnchanged": true,
+    "historicalOperatorSource": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "historicalOperatorArchiveReassembledNotPublished": true,
+    "sameCompiledNativeBinaryInAuthoredHostedFixture": true,
+    "physicalVersionAndSyntaxFixturesExecutedLocally": false,
+    "hostedPhysicalAcceptancePending": true,
+    "activationPerformed": false,
+    "compatibilityAccepted": false,
+    "packageStageHostedAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "productionAccepted": false
+  },
+  "sideBySidePackageStageHosted": {
+    "schemaVersion": 1,
+    "state": "EXACT_SCOPED_PACKAGE_STAGING_SUCCESS",
+    "implementationCommit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
+    "implementationTree": "7f904df2725d3e8170e89b9c0d54bd91c276004b",
+    "evidence": "x10/evidence/g4-package-stage-hosted.json",
+    "scope": "Explicit trusted historical-operator-to-current schema2 HTTP package staging into a fresh unbound prefix; no activation or traffic transition.",
+    "nativeRunIds": [
+      40468943667,
+      40468947907
+    ],
+    "nativeJobIds": [
+      122071147148,
+      122071164947
+    ],
+    "all34ActualStepsEach": true,
+    "nativeGroupsEach": 20,
+    "fullAlphaEach": 410,
+    "stageDiagnosticFieldsEach": 36,
+    "stageResultFieldsAssertedEach": 25,
+    "refusalsWithoutOverwriteEach": 4,
+    "runtimePayloadFilesEach": 11,
+    "sourceRuntimePayloadSha256": "9ab5c96813ca535d4724f5b690ca38650a5f01e808754e98fc239776b5c8e59f",
+    "targetRuntimePayloadSha256": "f81149bd4f7666fa20bd1d3d71ba425bdf9158612b11a5a91796d51d1be16b9d",
+    "sourceOperatorPayloadSha256": "9fbb29cf3245178393b5440587f807fa82accb4ffa1a57059f2141dcc4f0ad1a",
+    "targetOperatorPayloadSha256": "be4c71ca7036a428287ed7f4f8a4e3279f52de1cc95dce5554fac68a56b329cb",
+    "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+    "operatorPayloadChanged": true,
+    "nativeBinaryChanged": false,
+    "stageHostedAccepted": true,
+    "sourceFilesAndBackupPreserved": true,
+    "freshPreparedUnboundTargetVerified": true,
+    "ownedStageInstallationsRemoved": true,
+    "existingRestoredServiceRegressionAcceptedOnThisImplementation": true,
+    "restoredProofFieldsEach": 18,
+    "nativeSessionsEach": 5,
+    "managerRestartsEach": 2,
+    "journalChecksEach": 6,
+    "journalChecksAreNotExactQueryCounts": true,
+    "downstreamTLSSessionsEach": 3,
+    "upstreamTLSSessionsEach": 3,
+    "all13BooleanCleanupFactsEach": true,
+    "privateNodeAndBootstrapRemovedEach": true,
+    "serviceContractEach": {
+      "tests": 618,
+      "pass": 617,
+      "skipped": 1,
+      "fail": 0,
+      "skipReason": "Root-only refusal control is not executed by the nonroot runner; actual nonroot service is separately exercised."
+    },
+    "actualFailureContainmentExercised": false,
+    "activationPerformed": false,
+    "compatibilityAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "nativeBinaryVersionChangeAccepted": false,
+    "tlsBackupAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false
+  },
+  "foregroundOperatorReturnCandidate": {
+    "state": "EXACT_SCOPED_FOREGROUND_OPERATOR_RETURN_AND_TLS_FIXTURE_SUCCESS",
+    "sourceBase": "bdcc39c85399a2252daa6e1928f6a99f82d31eaf",
+    "publicationParent": "78ab11d84b99cabe223984159d35b52a2c0bca75",
+    "scope": "Actual foreground HTTP operator-package A(P)-to-B(Q)-to-old-A2(Q) fixture and bounded declarative backward compatibility, using one unchanged compiled native binary",
+    "sourceBindings": {
+      "x10/test/package-return.mjs": {
+        "bytes": 29574,
+        "afterSha256": "ceff1dcb3debb31f98ca75582ed43ca2c60de494a0d58cb3b27c2d8a2cc1bd86",
+        "beforeSha256": null
+      },
+      "x10/test/package-return-proof.mjs": {
+        "bytes": 7719,
+        "afterSha256": "65540f4a5db5deb1ddaa2950e70f81e67d7304ba8cc4616d43a67facbbc4fd6d",
+        "beforeSha256": null
+      },
+      "x10/test/package-return-proof.test.mjs": {
+        "bytes": 14089,
+        "afterSha256": "9e39dc372b499c582bc7c230c7470d986bc2bd242c1380a7e11158ab7f7cc668",
+        "beforeSha256": null
+      },
+      "x10/test/alpha.test.mjs": {
+        "bytes": 114990,
+        "afterSha256": "1314f97f176a1fccf75a79d664aed7f777ce401873f795b0a801cc9c9844cedf",
+        "beforeSha256": "12868a338f450466c8201e8ca110dda65c473db90ad043414d0a3e7e5936a1e9"
+      }
+    },
+    "evidence": "x10/evidence/g4-operator-return.json",
+    "perFileLedger": "x10/review/g4-operator-return-ledger.json",
+    "fixtureOnlyChange": true,
+    "alphaRuntimeChanged": false,
+    "nativeRuntimeChanged": false,
+    "controllerRuntimeChanged": false,
+    "serviceRecipeChanged": false,
+    "localSelectedTAP": {
+      "tests": 581,
+      "pass": 581,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "nodeVersion": "v24.22.1",
+      "exitCode": 0,
+      "physicalNativeExecuted": false,
+      "systemdExecuted": false
+    },
+    "newPureControlsIncludedOnce": 207,
+    "independentPureHeldoutsSeparate": 12,
+    "independentVirtualStreamControlsSeparate": 4,
+    "foregroundOperatorReturnAccepted": true,
+    "backwardDeclarativeCompatibilityAccepted": true,
+    "managedServicePackageTransitionAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "productionAccepted": false,
+    "verifiedOnImplementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+    "hostedEvidence": "x10/evidence/g4-operator-return-hosted.json",
+    "backwardDeclarativeHTTPCompatibilityAccepted": true
+  },
+  "tlsVerifiedRouteFixtureCandidate": {
+    "state": "EXACT_SCOPED_FOREGROUND_OPERATOR_RETURN_AND_TLS_FIXTURE_SUCCESS",
+    "sourceBase": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+    "publicationParent": "d80ab8694c807b85be13b0ab839d74957f01d713",
+    "scope": "Fixture-only verified downstream HTTP route connection selection before a unique application POST and stream through the native HTTPS upstream proxy",
+    "sourceBindings": {
+      "x10/test/tls-verified-route.mjs": {
+        "bytes": 12047,
+        "afterSha256": "2b62f31e33a4b3e419f014254b8cc891068783d376f4fe8b931c853240cb3478",
+        "beforeSha256": null
+      },
+      "x10/test/tls-verified-route.test.mjs": {
+        "bytes": 22241,
+        "afterSha256": "3729934702abbcb49d0e0e23092846b272142663487d13d7a3ae2f380e6418e0",
+        "beforeSha256": null
+      },
+      "x10/test/alpha-tls.test.mjs": {
+        "bytes": 20270,
+        "afterSha256": "f54a3b54705b2524bbfd49545ed181dcd10d28058f51dbd725ec692904c45ac6",
+        "beforeSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e"
+      }
+    },
+    "evidence": "x10/evidence/g3-tls-verified-route.json",
+    "perFileLedger": "x10/review/g3-tls-verified-route-ledger.json",
+    "fixtureOnlyChange": true,
+    "alphaRuntimeChanged": false,
+    "nativeRuntimeChanged": false,
+    "controllerRuntimeChanged": false,
+    "serviceRecipeChanged": false,
+    "localSelectedTAP": {
+      "tests": 639,
+      "pass": 639,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "physicalNativeExecuted": false,
+      "networkFixtureExecuted": false,
+      "systemdExecuted": false
+    },
+    "newTLSVirtualControlsIncludedOnce": 58,
+    "separateSyntheticReadinessTAP": {
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "independentVirtualControlsSeparate": 9,
+    "rootCauseEstablished": false,
+    "nativeRuntimeFixClaimed": false,
+    "tlsFixtureCorrectionHostedAccepted": true,
+    "foregroundOperatorReturnAccepted": true,
+    "managedServicePackageTransitionAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "productionAccepted": false,
+    "verifiedOnImplementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+    "hostedEvidence": "x10/evidence/g4-operator-return-hosted.json",
+    "backwardDeclarativeHTTPCompatibilityAccepted": true
+  },
+  "foregroundOperatorReturnAndTLSFixtureHosted": {
+    "schemaVersion": 1,
+    "state": "EXACT_SCOPED_FOREGROUND_OPERATOR_RETURN_AND_TLS_FIXTURE_SUCCESS",
+    "implementationCommit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+    "implementationTree": "8ce1cfa36cea6f4b2c0e55fd72305104f60eb67f",
+    "evidence": "x10/evidence/g4-operator-return-hosted.json",
+    "scope": "Foreground HTTP operator-package A(P) to B(Q) to old A2(Q), bounded backward declarative HTTP compatibility and the verified downstream HTTP connection TLS-upstream fixture; one unchanged compiled native binary.",
+    "nativeRunIds": [
+      40480203383,
+      40480208863
+    ],
+    "nativeJobIds": [
+      122108410221,
+      122108417175
+    ],
+    "all34ActualStepsEach": true,
+    "nativeGroupsEach": 20,
+    "fullAlphaEach": 617,
+    "foregroundReturnDiagnosticFieldsEach": 19,
+    "strictReturnProofFieldsEach": 10,
+    "foregroundReturnOrderedPhasesEach": 13,
+    "foregroundReturnTrafficLegsEach": 3,
+    "completedSyntheticPOSTEffectsEach": 3,
+    "completed256KiBStreamsEach": 3,
+    "compareInputHashesWithinEachEventOnly": true,
+    "payloadAEqualsA2AndDiffersFromBEach": true,
+    "nativeBinaryUnchangedEach": true,
+    "historicalBundleReassembledNotPublished": true,
+    "knownGoodSourceFilesPreservedEach": true,
+    "ownedForegroundInstallationsRemovedEach": 3,
+    "tlsTAPEach": {
+      "tests": 76,
+      "pass": 76,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "tlsVirtualControlsIncludedOnceEach": 58,
+    "tlsRouteDiagnosticFieldsEach": 14,
+    "tlsRouteAssertedResultFieldsEach": 11,
+    "tlsVerifiedGETAttemptsEach": 1,
+    "tlsPOSTAttemptsEach": 1,
+    "tlsPOSTBytesEach": 65551,
+    "tlsStreamBytesEach": 65537,
+    "tlsOriginPOSTRequestsEach": 1,
+    "tlsSamePrivatelyCheckedDownstreamSocketEach": true,
+    "tlsPOSTRetriedEach": false,
+    "tlsAgentDestroyedEach": true,
+    "tlsOriginalNegativeControlsPreservedEach": true,
+    "restoredHTTPProofFieldsEach": 18,
+    "serviceNativeSessionsEach": 5,
+    "serviceManagerRestartsEach": 2,
+    "serviceJournalChecksEach": 6,
+    "journalChecksAreNotExactQueryCounts": true,
+    "downstreamTLSSessionsEach": 3,
+    "upstreamTLSSessionsEach": 3,
+    "all13BooleanServiceCleanupFactsEach": true,
+    "privateNodeAndBootstrapRemovedEach": true,
+    "serviceContractEach": {
+      "tests": 618,
+      "pass": 617,
+      "fail": 0,
+      "skipped": 1,
+      "skipReason": "Root-only refusal control skipped by nonroot runner; actual nonroot service exercised separately."
+    },
+    "actualFailureContainmentExercised": false,
+    "foregroundOperatorReturnAccepted": true,
+    "backwardDeclarativeHTTPCompatibilityAccepted": true,
+    "tlsFixtureCorrectionHostedAccepted": true,
+    "managedServicePackageTransitionAccepted": false,
+    "packageUpgradeRollbackAccepted": false,
+    "nativeBinaryVersionChangeAccepted": false,
+    "tlsBackupAccepted": false,
+    "allWorkerFenceAccepted": false,
+    "zeroDowntimeAccepted": false,
+    "liveConnectionMigrationAccepted": false,
+    "permanentDistributionAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false
+  },
+  "managedOperatorPackageReturnCandidate": {
+    "state": "EXACT_SCOPED_MANAGED_HTTP_OPERATOR_PACKAGE_RETURN_SUCCESS",
+    "sourceBase": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+    "publicationParent": "e0ef02aab16ae6c956449ef19e69403000701262",
+    "scope": "Fixture-only immutable revision reader contract correction and finite primary-error preservation for the separate managed HTTP operator-package return; physical acceptance pending.",
+    "sourceBindings": {
+      "x10/service/operator-package-return.mjs": {
+        "beforeSha256": "de0aeeea7562df808fc7c72050743606f31273ca7e881fc909a7d172a824d5f9",
+        "afterSha256": "89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d",
+        "bytes": 46700
+      },
+      "x10/service/operator-package-return-proof.mjs": {
+        "beforeSha256": "e92ea85477297193b1400f0c1d590ee0a94e9cdebf2cd152201cf4a29fe521ad",
+        "afterSha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de",
+        "bytes": 12890
+      },
+      "x10/service/operator-package-return.test.mjs": {
+        "beforeSha256": "32c455b090a171acb2855cbd88d837f04e30322e34a56a5024ea9a561c3eb223",
+        "afterSha256": "1d2c7e7a3acafe2258ba16f320e8c9ddef505e4a1d6d87fb5d36517b9d134f8b",
+        "bytes": 18646
+      },
+      "x10/service/operator-package-return-proof.test.mjs": {
+        "beforeSha256": "efd69c053af02add57b078525fda2b6d62adb931a3eeaa031ff16463cd945af8",
+        "afterSha256": "a371fb330b15c796ef0c5f082d0667ff62527c9803b1886d5de98afeea649b93",
+        "bytes": 22388
+      },
+      "x10/service/verified-node.mjs": {
+        "beforeSha256": "f856f4574c3484792b7960eb3c8ae50c58283ff311d1582a844def464212b615",
+        "afterSha256": "9fbc3fd883f19943644f12602bfcc68e770eb290e8cca81e300d4f290f4232cb",
+        "bytes": 30571
+      },
+      "x10/service/verified-node.test.mjs": {
+        "beforeSha256": "e925a8ae1d89d3d68f2af4312f45e9509f79b685663d1ed539c088a3680c9b25",
+        "afterSha256": "22188a10a6e99e11c35d268720310518377d4dc617422316c834a9a020b076b6",
+        "bytes": 59488
+      },
+      ".github/workflows/x10-native.yml": {
+        "beforeSha256": "ea1c66d6db16b4379263c37ad9761cd9edd1c759e146864cbe7b37f96ac6b87b",
+        "afterSha256": "e2e954642138e9f80ae09eb873c35343f5cf35709928d2286e7043ebccdb6d8f",
+        "bytes": 23053
+      }
+    },
+    "evidence": "x10/evidence/g4-managed-package-return.json",
+    "perFileLedger": "x10/review/g4-managed-package-return-ledger.json",
+    "localSelectedTAP": {
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "tests": 662,
+      "pass": 662,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "newFixControlsIncludedOnce": 31,
+      "previousFrozenManagedControls": 631,
+      "separateUnchangedSourceBaselineControls": 3,
+      "workflowYAMLAndInlineSyntaxPassed": true,
+      "physicalNativeExecuted": false,
+      "systemdExecuted": false,
+      "networkFixtureExecuted": false
+    },
+    "newFixControlsIncludedOnce": 31,
+    "separateUnchangedSourceBaselineControls": 3,
+    "expectedHostedCounts": {
+      "reportFields": 13,
+      "proofTopSections": 12,
+      "orderedPhases": 16,
+      "units": 3,
+      "successfulNativeInvocations": 4,
+      "managerRestarts": 1,
+      "boundedJournalChecks": 5,
+      "trafficLegGETChecks": 4,
+      "separateInitialBInputPGETCheck": 1,
+      "uniqueCompletedSyntheticPOSTEffects": 4,
+      "postBytesEach": 65551,
+      "exactStreamChecks": 4,
+      "streamBytesEach": 65537,
+      "stopFieldsBeforeEachNewUnit": 11,
+      "restartProofFields": 12,
+      "ownedUnitsRemoved": 3,
+      "ownedInstallationsRemoved": 3,
+      "reportSchemaVersion": 2,
+      "primaryFailureOnSuccess": null,
+      "proofSchemaVersion": 1
+    },
+    "expectedCountsAreNotLocalRuntimeObservations": true,
+    "strictImmutableRevisionMode": "0400",
+    "revisionMode0600Accepted": false,
+    "historicalPrimaryCIFailureObserved": false,
+    "managedServicePackageTransitionAccepted": true,
+    "packageUpgradeRollbackAccepted": false,
+    "nativeBinaryVersionChangeAccepted": false,
+    "tlsBackupAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false,
+    "verifiedOnImplementationCommit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+    "hostedEvidence": "x10/evidence/g4-managed-package-return-hosted.json",
+    "backwardDeclarativeHTTPCompatibilityAccepted": true
+  },
+  "managedOperatorPackageReturnPreviousCandidateReference": {
+    "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+    "path": "x10/continuation-2026-10-24/GATES.json",
+    "requiredReadBeforeNextTask": true,
+    "readCompleteHistoricalDocument": true,
+    "allPriorAcceptanceFailuresAndUnknownsRetained": true
+  },
+  "managedOperatorPackageReturnC2Failure": {
+    "implementationCommit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+    "nativeRunIds": [
+      40486053822,
+      40486064789
+    ],
+    "nativeJobIds": [
+      122128117810,
+      122128133176
+    ],
+    "conclusions": [
+      "failure",
+      "failure"
+    ],
+    "failedStepEach": 30,
+    "phaseEach": "install_a",
+    "codeEach": "cleanup_unconfirmed",
+    "proofEach": null,
+    "originalPrimaryRefusalObserved": false,
+    "privateNodeCleanupArtifactAbsentEach": true,
+    "privateNodeAndBootstrapRemovalConfirmedEach": false,
+    "evidence": "x10/evidence/g4-managed-package-return.json",
+    "modeContractCounterexampleReproducedSeparately": true
+  },
+  "managedHTTPPackageReturnHosted": {
+    "schemaVersion": 1,
+    "state": "EXACT_SCOPED_MANAGED_HTTP_OPERATOR_PACKAGE_RETURN_SUCCESS",
+    "implementationCommit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+    "implementationTree": "1e15d2bc12f6aeab6d1c53cc1510288df588f3fc",
+    "evidence": "x10/evidence/g4-managed-package-return-hosted.json",
+    "scope": "Ephemeral nonroot systemd-user HTTP operator-package A(P)-B(Q)-actual B manager restart-old A2(Q), with unchanged compiled NGINX binary and backward compatibility of the supported declarative HTTP input.",
+    "nativeRunIds": [
+      40490525329,
+      40490532178
+    ],
+    "nativeJobIds": [
+      122143117385,
+      122143157669
+    ],
+    "all35ActualStepsEach": true,
+    "nativeGroupsEach": 20,
+    "fullAlphaEach": 617,
+    "upstreamTLSFixtureTAPEach": {
+      "tests": 76,
+      "pass": 76,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "managedReportSchemaEach": 2,
+    "managedReportFieldsEach": 13,
+    "primaryFailureEach": null,
+    "managedProofSchemaEach": 1,
+    "managedProofTopSectionsEach": 12,
+    "orderedManagedPhasesEach": 16,
+    "managedTrafficLegsEach": 4,
+    "newOwnedUnitsEach": 3,
+    "newSuccessfulNativeInvocationsEach": 4,
+    "newManagerRestartsEach": 1,
+    "newBoundedJournalChecksEach": 5,
+    "journalChecksAreNotExactQueryCounts": true,
+    "successfulTrafficLegGETChecksEach": 4,
+    "separateInitialBInputPGETCheckEach": 1,
+    "trafficGETChecksAreNotExactRawRequestCounts": true,
+    "maximumIdempotentGETAcquisitionAttemptsPerLeg": 8,
+    "uniqueCompletedSyntheticPOSTEffectsEach": 4,
+    "bytesPerPOSTFromPinnedExecutedAssertions": 65551,
+    "exactStreamChecksEach": 4,
+    "bytesPerStreamFromPinnedExecutedAssertions": 65537,
+    "noPOSTRetryEach": true,
+    "operatorPayloadAEqualsA2AndDiffersFromBEach": true,
+    "nativeBinaryUnchangedWithinEachEvent": true,
+    "comparePNotEqualQEqualA2WithinEachEventOnly": true,
+    "stopTransitionProofFieldsEach": 11,
+    "restartProofFieldsEach": 12,
+    "restartIntermediatePreparedBindingObserved": false,
+    "restartLegInitialBindingAbsent": null,
+    "knownGoodAFilesAndBackupsPreservedEach": true,
+    "newOwnedUnitsRemovedEach": 3,
+    "newOwnedInstallationsRemovedEach": 3,
+    "legacyRestoredProofFieldsEach": 18,
+    "legacySuccessfulNativeSessionsEach": 5,
+    "legacyManagerRestartsEach": 2,
+    "legacyBoundedJournalChecksEach": 6,
+    "legacyDownstreamTLSSessionsEach": 3,
+    "legacyUpstreamTLSSessionsEach": 3,
+    "all13LegacyBooleanCleanupFactsEach": true,
+    "privateNodeHistoricalCLIHistoryAndBootstrapRootRemovedEach": true,
+    "managedPureContractsEach": {
+      "tests": 544,
+      "pass": 544,
+      "fail": 0,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "verifiedNodeContractsEach": {
+      "tests": 118,
+      "pass": 118,
+      "fail": 0,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "legacyServiceContractEach": {
+      "tests": 618,
+      "pass": 617,
+      "fail": 0,
+      "skipped": 1,
+      "skipReason": "Root-only refusal control skipped by nonroot runner; real nonroot lifecycle separately exercised."
+    },
+    "managedServicePackageTransitionAccepted": true,
+    "backwardDeclarativeHTTPCompatibilityAccepted": true,
+    "sameUIDTrustedOperatorScope": true,
+    "historicalOperatorArchiveReassembledNotPublished": true,
+    "unhealthyPackageFallbackAccepted": false,
+    "actualCompleteFailureContainmentExercised": false,
+    "packageUpgradeRollbackAccepted": false,
+    "nativeBinaryVersionChangeAccepted": false,
+    "tlsBackupAccepted": false,
+    "allTrafficFenceAccepted": false,
+    "zeroDowntimeAccepted": false,
+    "liveConnectionMigrationAccepted": false,
+    "permanentDistributionAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false
+  },
+  "keptAFallbackCandidate": {
+    "state": "EXACT_SCOPED_UNHEALTHY_OPERATOR_KEPT_A_FALLBACK_SUCCESS",
+    "sourceBase": "74aeb0bd373194a397bc9c18007671e914fad38f",
+    "publicationParent": "23da45f7c0d4675ae4a335c3907679d46a60335e",
+    "scope": "Explicit owned managed HTTP fallback from failed distinct operator B to KEPT old A; unchanged native binary; no automatic product recovery.",
+    "sourceBindings": {
+      "x10/service/operator-package-return.mjs": {
+        "beforeSha256": "89854abb3cf033dbaea22e5f7085d445856658f6459859fdf6f5e038619e455d",
+        "afterSha256": "215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83",
+        "bytes": 65297
+      },
+      "x10/service/operator-package-fallback.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3",
+        "bytes": 630
+      },
+      "x10/service/operator-package-fallback-proof.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb",
+        "bytes": 13468
+      },
+      "x10/service/operator-package-fallback-proof.test.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "017e1658984b18549f32a6f430ab08b7fe8943c8dc915696e2dcd4b7b90d5508",
+        "bytes": 22838
+      },
+      "x10/service/operator-package-fallback.test.mjs": {
+        "beforeSha256": null,
+        "afterSha256": "d62a10ca15c34974e0c56539744ba74708339e4a93c5c74605e97a760915fb7c",
+        "bytes": 21014
+      },
+      "x10/service/verified-node.mjs": {
+        "beforeSha256": "9fbc3fd883f19943644f12602bfcc68e770eb290e8cca81e300d4f290f4232cb",
+        "afterSha256": "bc0eeece79c388ced76a57787f4fbcba7489ce9ca56cb9af03025c09e2f594ff",
+        "bytes": 32439
+      },
+      "x10/service/verified-node.test.mjs": {
+        "beforeSha256": "22188a10a6e99e11c35d268720310518377d4dc617422316c834a9a020b076b6",
+        "afterSha256": "7a210550ca332b42d1e60fb73d3a34b8998b870115d35b8b4adbd26e0e75131b",
+        "bytes": 78487
+      },
+      ".github/workflows/x10-native.yml": {
+        "beforeSha256": "e2e954642138e9f80ae09eb873c35343f5cf35709928d2286e7043ebccdb6d8f",
+        "afterSha256": "e829ed8e073bd2132006ce834bf95ec264b980bc124718142b64ff0694e1ed67",
+        "bytes": 25506
+      }
+    },
+    "evidence": "x10/evidence/g4-kept-a-fallback.json",
+    "perFileLedger": "x10/review/g4-kept-a-fallback-ledger.json",
+    "localSelectedTAP": {
+      "tests": 1227,
+      "pass": 1227,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "physicalNativeExecuted": false,
+      "systemdExecuted": false,
+      "networkFixtureExecuted": false,
+      "newControlsIncludedOnce": 565,
+      "priorFrozenControls": 662
+    },
+    "independentReview": {
+      "schemaVersion": 1,
+      "state": "SCOPED_INDEPENDENT_REVIEW_PASS_FROZEN_SOURCES",
+      "sourceBase": "74aeb0bd373194a397bc9c18007671e914fad38f",
+      "kind": "x10-managed-kept-a-fallback-independent-review",
+      "independentPureControls": {
+        "kind": "independent-fallback-pure-heldouts",
+        "controls": 25,
+        "pass": 25,
+        "fail": 0,
+        "physicalFixturesExecuted": 0,
+        "networkFixturesExecuted": 0,
+        "managerQueriesExecuted": 0,
+        "signalsSent": 0,
+        "productAcceptance": false
+      },
+      "commands": [
+        "node .build/independent-heldout.mjs",
+        "read-only recursive Git JSON reference and blob-pin audit",
+        "node .build/independent-held-reader.mjs"
+      ],
+      "ancestryAudit": {
+        "jsonDocumentsParsedCompletely": 22,
+        "mandatoryReferenceEdgesTraversed": 129,
+        "blobPinnedEdgesChecked": 74,
+        "distinctBlobPinTargets": 3,
+        "missingReferences": 0,
+        "blobPinMismatches": 0,
+        "seedPaths": [
+          "x10/continuum/BACKGROUND.json",
+          "x10/continuation-2026-10-24/GATES.json",
+          "x10/evidence/g4-managed-package-return-hosted.json",
+          "x10/review/g4-managed-package-return-hosted-ledger.json"
+        ],
+        "documents": [
+          {
+            "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 53568,
+            "sha256": "10c92091da23c2dbc49b0490db9fc770f7e978d646c25ac0a1922ea893b48191"
+          },
+          {
+            "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+            "path": "x10/continuation-2026-10-24/GATES.json",
+            "bytes": 40963,
+            "sha256": "2c9923802950d36c6b34291e747a7f13951493295bbb0cf73292f2cdc0a21a8f"
+          },
+          {
+            "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+            "path": "x10/evidence/g4-managed-package-return-hosted.json",
+            "bytes": 45532,
+            "sha256": "747b0a974beb72d24dabc1634f48579f0543b0099887badf8f1835d18e17bace"
+          },
+          {
+            "commit": "74aeb0bd373194a397bc9c18007671e914fad38f",
+            "path": "x10/review/g4-managed-package-return-hosted-ledger.json",
+            "bytes": 3622,
+            "sha256": "c965a18f2e65e08e3ce2e85da1dec6e611b4ed3c438b4b62523de1a81c3c8dca"
+          },
+          {
+            "commit": "a276533d8472bfdd8cc74322864a350d6f15e107",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 463627,
+            "sha256": "41ac751f4efbaccd35eeda5d949d1ffbd2d8be9607feeaed2de95b63bb04101b"
+          },
+          {
+            "commit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 25445,
+            "sha256": "713d3f9b06c1dd2aac825ac67c56a3cfa43120344af347fd9683146708a6ba9d"
+          },
+          {
+            "commit": "face7a77d6f9f93fc0c5657dc3bd6b44fa962cff",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 20711,
+            "sha256": "10b286e0b6ec8f58cc04d71bdc3f86529e7ab8bd8176c7cee73f3bfbf0d98e19"
+          },
+          {
+            "commit": "34eec25a3e4b9bc9da2ac19a9fff2963f1ef75d1",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 23801,
+            "sha256": "b83b0b9f23553fcdf13182d73d9afbae5bac1bcc382375f59b03160034c2df41"
+          },
+          {
+            "commit": "bdcc39c85399a2252daa6e1928f6a99f82d31eaf",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 30122,
+            "sha256": "1362800aeb8a08311167cff03061ef0275a7fba47a169efd86ed8afc0d42e08f"
+          },
+          {
+            "commit": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 31224,
+            "sha256": "a809a2483e25769abff862a8814ed996f31a9387c605c3009c1a391e85ffb7cd"
+          },
+          {
+            "commit": "ac2ae992d47907d82817cbd2dfb23480972c056a",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 34076,
+            "sha256": "26537e98631d7a39bee413b083e0ff662a0d45762b44ce79799407145893f23e"
+          },
+          {
+            "commit": "ee2daa0385f654e96fd5b75c09da4e0179bb90a1",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 41437,
+            "sha256": "82e0ac0ce84591defc342ec8f0c5260c340aada7715c304c7c823397ac6a7722"
+          },
+          {
+            "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 45958,
+            "sha256": "1e8f5b42a009fb22df6de5749aa2effc46402b93bbffd93cb13527f435643a1d"
+          },
+          {
+            "commit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 46061,
+            "sha256": "a75563d60a73088f2151d43a6b580e8fe9165757977e1a7c1efbbd8697042156"
+          },
+          {
+            "commit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+            "path": "x10/continuation-2026-10-24/GATES.json",
+            "bytes": 336392,
+            "sha256": "a1f2cde447b5b5a64bf6bc41b849b9734473f4c2dfe83bb33ea7082af3663a42"
+          },
+          {
+            "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+            "path": "x10/continuation-2026-10-24/GATES.json",
+            "bytes": 35738,
+            "sha256": "8d30178e531fdc5fe7d33b5f32d6a71cc3f62dcf936f7b9b26825782f8192e6f"
+          },
+          {
+            "commit": "0ebded94ea331c1b28c52e71fa725dc35bb2f08a",
+            "path": "x10/evidence/g4-managed-package-return.json",
+            "bytes": 28616,
+            "sha256": "f118429294faca4809a148809fcc90d87fdb4541fd7d2ad6e49da4157c08da8d"
+          },
+          {
+            "commit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 21898,
+            "sha256": "59934c75cf757be16962806a6f52b369e179044dec3ef4ac4be5cf3a8558d26f"
+          },
+          {
+            "commit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 18176,
+            "sha256": "ae3d7198b653f5af86d6054e3a43887c432e2d0e0fd3dbcb9b03d4d0a11b290e"
+          },
+          {
+            "commit": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 13864,
+            "sha256": "a3469ed9a034bf505a4b88bca174340fbd70cec67970727ad5a5f2f36aa04a76"
+          },
+          {
+            "commit": "c2adbea6c8d1e8b864291383445d35a0b27e875a",
+            "path": "x10/evidence/g4-managed-package-return.json",
+            "bytes": 13078,
+            "sha256": "f275ffb3111e3c58bf1b7e2c8da0d372758a0fcf0361571db07052b8aa3eae1f"
+          },
+          {
+            "commit": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+            "path": "x10/continuum/BACKGROUND.json",
+            "bytes": 12380,
+            "sha256": "accb7f583f70b3882e3f84060e1697deb557e3b9f5dd9b6f761856fb69a11b6c"
+          }
+        ],
+        "semanticReviewScope": "Applicable coordination, release gates, preserved acceptance/adverse history and the next explicit fallback contract; parsing and edge counts are not runtime controls."
+      },
+      "staticOperationalReview": {
+        "blockingFindings": 0,
+        "heldBInventoryCapturedBeforeRelease": true,
+        "actualResponseIsStatus200WrongBody": true,
+        "strictKnownHookNonTimeoutFailureRequired": true,
+        "nullBBindingAndNoPOSTEffectsRequired": true,
+        "capturedBResourcesAbsentBeforeOwnedResetAndRetirement": true,
+        "retainedASnapshotCheckedBeforeExplicitPreparation": true,
+        "sameAPrefixAndInstallationWithFreshSessionUnitRevisionAndBinding": true,
+        "allUnitContextsCheckedBeforeUniquePrefixRemoval": true,
+        "normalAndLegacyProofsNotRelaxed": true,
+        "thirdClosedFallbackReportRequiredBeforePrivateNodeCleanup": true,
+        "combinedEnvelope32768ByteBoundPreserved": true,
+        "sameUIDAndConservativeUnknownCleanupScopePreserved": true,
+        "heldCaptureDoesNotInvokeInstalledCLI": true,
+        "postHookCLIOnlyAfterCapturedProcessesAndLocksAbsent": true,
+        "rawControllerStateIsNotMisrepresentedAsChecksummed": true
+      },
+      "reviewFindingsResolved": [
+        "Finite failed_start_unconfirmed from imported strict helper is now preserved by the producer allowlist.",
+        "Fallback failure phase/code allowlists exclude unreachable normal-only labels.",
+        "Coordinator caught unpublished draft held-capture installed status competing with wait-bind alpha lock. Replaced by strict raw-record capture, repeated around launcher/invocation observation. Raw stopped lifecycle and captured process/lock absence are required before any post-hook CLI status. Independently reviewed and tested on temporary records with alpha/controller lock sentinels preserved."
+      ],
+      "pendingChecks": [
+        "Coordinator final frozen aggregate and exact hosted jobs/artifacts remain required; this review does not grant physical acceptance."
+      ],
+      "limits": [
+        "The25 heldouts use synthetic finite facts and invalid argument entry only; they are not physical service acceptance.",
+        "The ancestry audit parses every full required JSON document and recursively follows mandatory reference flags; semantic review is scoped to applicable contracts, accepted/adverse histories and this next task.",
+        "No native process, signal, process-group, systemd or network fixture was executed locally.",
+        "This case deliberately makes B application readiness unhealthy under distinct reviewed operator bytes; it does not establish a defect in B binary or automatic production fallback.",
+        "Full G3/G4/V1, native binary upgrade, TLS restore, permanent release, independent published replay,60-minute soak and semantic Continuum remain open.",
+        "The10 independent reader checks use only temporary synthetic records; existing alpha/controller lock sentinels remain unchanged. Controller state.json has no checksum in the current schema and is compared to exact prior prepared state."
+      ],
+      "physicalFixturesExecuted": 0,
+      "networkFixturesExecuted": 0,
+      "signalsSent": 0,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "rawHostPathsPIDsOrSecretsPublished": false,
+      "independentHeldReaderTempfileControls": {
+        "kind": "independent-held-reader-tempfile-controls",
+        "controls": 10,
+        "pass": 10,
+        "fail": 0,
+        "lockSentinelsPreserved": true,
+        "physicalFixturesExecuted": 0,
+        "networkFixturesExecuted": 0,
+        "managerQueriesExecuted": 0,
+        "subprocessesExecuted": 0,
+        "productAcceptance": false
+      },
+      "privateTestSetupAdverse": {
+        "count": 1,
+        "kind": "independent_synthetic_fixture_setup_refusal",
+        "cause": "First private held-reader fixture omitted required schemaVersion/kind fields; actual reader correctly refused. Synthetic fixture corrected, then10/10 PASS.",
+        "notPhysicalFailure": true,
+        "notHistoricalCause": true,
+        "productSourceChangedForThisTestSetup": false
+      },
+      "frozenSourceBindings": {
+        "x10/service/operator-package-return.mjs": {
+          "bytes": 65297,
+          "sha256": "215d03aaf6e427331458a7c244de055c8aa10b5b99a2497570323123a4867e83"
+        },
+        "x10/service/operator-package-fallback.mjs": {
+          "bytes": 630,
+          "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+        },
+        "x10/service/operator-package-fallback-proof.mjs": {
+          "bytes": 13468,
+          "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+        },
+        "x10/service/verified-node.mjs": {
+          "bytes": 32439,
+          "sha256": "bc0eeece79c388ced76a57787f4fbcba7489ce9ca56cb9af03025c09e2f594ff"
+        },
+        ".github/workflows/x10-native.yml": {
+          "bytes": 25506,
+          "sha256": "e829ed8e073bd2132006ce834bf95ec264b980bc124718142b64ff0694e1ed67"
+        }
+      },
+      "sourcePinVerification": {
+        "producerFiles": 4,
+        "literalLocationsEach": 2,
+        "all8LiteralBindingsMatchActualBytes": true,
+        "provisionalPinsRemain": false,
+        "normalProofSha256Unchanged": true,
+        "legacyLifecycleSha256Unchanged": true,
+        "consumerRequiresAllThreeReports": true,
+        "envelopeByteLimit": 32768
+      }
+    },
+    "expectedHostedCounts": {
+      "units": 3,
+      "installations": 2,
+      "successfulNativeInvocations": 2,
+      "failedNativeAttempts": 1,
+      "managerRestarts": 0,
+      "boundedSuccessfulJournalChecks": 2,
+      "trafficLegGETChecks": 2,
+      "uniquePOSTEffects": 2,
+      "streamChecks": 2,
+      "postBytesEach": 65551,
+      "streamBytesEach": 65537,
+      "reportSchemaVersion": 1,
+      "reportFields": 13,
+      "proofSchemaVersion": 1,
+      "proofTopSections": 13,
+      "orderedPhases": 13,
+      "failedBBooleanFacts": 19,
+      "failedBIdentityOrdinals": 5,
+      "preparationFacts": 7,
+      "retentionFacts": 6
+    },
+    "expectedCountsAreNotLocalRuntimeObservations": true,
+    "unhealthyPackageFallbackAccepted": true,
+    "packageUpgradeRollbackAccepted": false,
+    "nativeBinaryVersionChangeAccepted": false,
+    "tlsBackupAccepted": false,
+    "permanentDistributionAccepted": false,
+    "independentPublishedReplayAccepted": false,
+    "soakAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false,
+    "separateWorkflowVirtualControls": {
+      "tests": 20,
+      "pass": 20,
+      "fail": 0,
+      "notAddedToSelectedTAP": true,
+      "physicalRuntimeExercised": false
+    },
+    "workflowYAMLAndInlineNodeSyntaxPassed": true,
+    "expectedActualNativeSteps": 36,
+    "expectedStepsAreNotHostedObservations": true,
+    "verifiedOnImplementationCommit": "7b32841d28a8b155b5783cef1a0c56337bb45a06",
+    "hostedEvidence": "x10/evidence/g4-kept-a-fallback-hosted.json",
+    "sameInstallationKeptAReturnAccepted": true
+  },
+  "managedKeptAFallbackHosted": {
+    "schemaVersion": 1,
+    "state": "EXACT_SCOPED_UNHEALTHY_OPERATOR_KEPT_A_FALLBACK_SUCCESS",
+    "implementationCommit": "7b32841d28a8b155b5783cef1a0c56337bb45a06",
+    "implementationTree": "df96e8d0c47f862e638fa0526e20b7131d951bbb",
+    "implementationParent": "23da45f7c0d4675ae4a335c3907679d46a60335e",
+    "evidence": "x10/evidence/g4-kept-a-fallback-hosted.json",
+    "scope": "Ephemeral nonroot managed HTTP distinct operator B fails readiness after A retirement; explicit fresh-unit/session reactivation of the KEPT A installation serves P without replay. Same compiled native binary.",
+    "nativeRunIds": [
+      40497965654,
+      40497972686
+    ],
+    "nativeJobIds": [
+      122168221801,
+      122168235728
+    ],
+    "all36ActualStepsEach": true,
+    "nativeGroupsEach": 20,
+    "fullAlphaEach": 617,
+    "fallbackReportSchemaEach": 1,
+    "fallbackReportFieldsEach": 13,
+    "fallbackReportArtifactBytesEach": 4653,
+    "fallbackPrimaryFailureEach": null,
+    "fallbackProofSchemaEach": 1,
+    "fallbackProofSectionsEach": 13,
+    "orderedFallbackPhasesEach": 13,
+    "failedBBooleanFactsEach": 19,
+    "failedBIdentityOrdinalsEach": 5,
+    "fallbackPreparationFactsEach": 7,
+    "fallbackRetentionFactsEach": 6,
+    "fallbackOwnedUnitsEach": 3,
+    "fallbackOwnedInstallationsEach": 2,
+    "fallbackSuccessfulInvocationsEach": 2,
+    "fallbackExpectedFailedAttemptsEach": 1,
+    "fallbackManagerRestartsEach": 0,
+    "fallbackBoundedSuccessfulJournalChecksEach": 2,
+    "fallbackSuccessfulTrafficLegGETChecksEach": 2,
+    "fallbackUniqueUnretriedPOSTEffectsEach": 2,
+    "fallbackExactStreamChecksEach": 2,
+    "bytesPerPOSTFromPinnedExecutedAssertions": 65551,
+    "bytesPerStreamFromPinnedExecutedAssertions": 65537,
+    "journalAndGETChecksAreNotExactRawQueryCounts": true,
+    "maximumIdempotentGETAcquisitionAttemptsPerLeg": 8,
+    "knownHookExit1NotTimeoutEach": true,
+    "failedBBindingAbsentEach": true,
+    "failedBPOSTEffectsEach": 0,
+    "capturedBResourcesAbsentBeforeOwnResetAndRetirementEach": true,
+    "keptAInstallationOrdinalEach": 1,
+    "freshFallbackUnitSessionRevisionInvocationOrdinalEach": 3,
+    "freshFallbackBindingOrdinalEach": 2,
+    "inputPUnchangedWithinEachEvent": true,
+    "AAllFilesPreservedUntilExplicitPreparationEach": true,
+    "ARegistryAndLifecycleLegitimatelyChangedByReactivation": true,
+    "knownGoodCodeAndBackupPreservedEach": true,
+    "fallbackAllOwnedCleanupFactsEach": true,
+    "normalReportSchemaEach": 2,
+    "normalReportFieldsEach": 13,
+    "normalReportArtifactBytesEach": 4839,
+    "normalProofSectionsEach": 12,
+    "normalOrderedPhasesEach": 16,
+    "normalUnitsEach": 3,
+    "normalSuccessfulInvocationsEach": 4,
+    "normalManagerRestartsEach": 1,
+    "normalBoundedJournalChecksEach": 5,
+    "normalRestartIntermediateBindingUnobserved": true,
+    "legacyRestoredHTTPProofFactsEach": 18,
+    "legacySuccessfulSessionsEach": 5,
+    "legacyManagerRestartsEach": 2,
+    "legacyBoundedJournalChecksEach": 6,
+    "legacyDownstreamTLSSessionsEach": 3,
+    "legacyUpstreamTLSSessionsEach": 3,
+    "all13LegacyBooleanCleanupFactsEach": true,
+    "legacyAppSocketsRemainingEach": 0,
+    "allThreeSuccessfulSourcePinnedReportsRequiredEach": true,
+    "combinedCleanupEnvelopeLimitBytes": 32768,
+    "privateNodeHistoricalCLIHistoryAndBootstrapRemovedEach": true,
+    "actualContractTAPEach": {
+      "normal": {
+        "tests": 544,
+        "pass": 544,
+        "fail": 0,
+        "skip": 0,
+        "todo": 0
+      },
+      "fallback": {
+        "tests": 545,
+        "pass": 545,
+        "fail": 0,
+        "skip": 0,
+        "todo": 0
+      },
+      "privateNode": {
+        "tests": 138,
+        "pass": 138,
+        "fail": 0,
+        "skip": 0,
+        "todo": 0
+      },
+      "upstreamTLS": {
+        "tests": 76,
+        "pass": 76,
+        "fail": 0,
+        "skip": 0,
+        "todo": 0
+      },
+      "legacyService": {
+        "tests": 618,
+        "pass": 617,
+        "fail": 0,
+        "skip": 1,
+        "skipReason": "Root-only refusal control skipped by nonroot runner; actual nonroot service separately exercised."
+      }
+    },
+    "officialEach": {
+      "strictPass": 1105,
+      "skip": 25,
+      "expectedTODOFail": 1,
+      "unexpectedFail": 0
+    },
+    "unhealthyPackageFallbackAccepted": true,
+    "sameInstallationKeptAReturnAccepted": true,
+    "caseSpecificFailureContainmentObserved": true,
+    "actualCompleteFailureContainmentExercised": false,
+    "normalManagedReturnRegressionPassed": true,
+    "legacyRestoredServiceRegressionPassed": true,
+    "sameUIDTrustedOperatorScope": true,
+    "historicalOperatorReassembledNotPublished": true,
+    "packageUpgradeRollbackAccepted": false,
+    "nativeBinaryVersionChangeAccepted": false,
+    "tlsBackupAccepted": false,
+    "allTrafficFenceAccepted": false,
+    "automaticFallbackAccepted": false,
+    "liveConnectionMigrationAccepted": false,
+    "permanentDistributionAccepted": false,
+    "independentPublishedReplayAccepted": false,
+    "soakAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "productionAccepted": false
+  },
+  "faultedOrphanIncidentRunbook": {
+    "state": "SOURCE_REVIEWED_INCIDENT_RUNBOOK_ONLY",
+    "sourceBase": "fbbcdff430a26542bdf650896cb19abe7fa97d36",
+    "publicationParent": "54eec94ecca9ab2ebe5cd54eb251297de3af7f52",
+    "path": "x10/service/INCIDENT-RUNBOOK.md",
+    "documentBinding": {
+      "bytes": 29741,
+      "sha256": "c2f243bc7f47ce6e6806ccdd1bdabf181b0186d3d0609ef40788f7e931d3065e"
+    },
+    "documentBoundaryReviewAccepted": true,
+    "runtimeBytesChanged": false,
+    "workflowChanged": false,
+    "runbookCommandsExecuted": 0,
+    "physicalNativeFixturesExecuted": 0,
+    "networkFixturesExecuted": 0,
+    "managerQueriesExecuted": 0,
+    "signalsSent": 0,
+    "cliCommandSpecificationsReviewed": 14,
+    "bashBlocksSyntaxOnly": 9,
+    "relativeLinksChecked": 15,
+    "independentSecurityStaticChecks": 26,
+    "independentOperationalDeskCases": 13,
+    "blockingFindingsAfterCorrections": 0,
+    "deskCasesAndStaticChecksAreNotTAPOrPhysicalIncidents": true,
+    "originalFaultedPrefixRetainedInPlace": true,
+    "noFaultedLifecycleClearOrForceUninstallCommand": true,
+    "unknownFactsRequire": "STOP_UNRESOLVED",
+    "evidence": "x10/evidence/g4-incident-runbook.json",
+    "perFileLedger": "x10/review/g4-incident-runbook-ledger.json",
+    "physicalRecoveryAccepted": false,
+    "originalFaultedPrefixDisposalAccepted": false,
+    "newServiceAccepted": false,
+    "fullG3Accepted": false,
+    "fullG4Accepted": false,
+    "fullG5Accepted": false,
+    "productionAccepted": false,
+    "tlsBackupAccepted": false,
+    "nativeBinaryVersionChangeAccepted": false,
+    "permanentDistributionAccepted": false,
+    "independentPublishedReplayAccepted": false,
+    "soakAccepted": false,
+    "semanticContinuumAccepted": false
+  },
+  "completeCIStepDeclarationCandidate": {
+    "state": "EXACT_HOSTED_DECLARATION_CONTRACT_SUCCESS",
+    "sourceBase": "34f713c411b73fdf1e10337c4539f35b64a31235",
+    "publicationParent": "042b8e1e352cc514bdf85368c640809fd41cbe4a",
+    "evidence": "x10/evidence/g7-ci-step-receipts.json",
+    "perFileLedger": "x10/review/g7-ci-step-receipts-ledger.json",
+    "minimumSteps": 36,
+    "maximumSteps": 64,
+    "orderedRequiredNames": 36,
+    "setupCompletionBoundariesRequired": true,
+    "uniqueSuccessfulExtraStepsAllowedInsideEndpoints": true,
+    "selectedTruncatedReceiptsRefused": true,
+    "sourceBindings": {
+      "x10/release/check-release-record.mjs": {
+        "bytes": 11557,
+        "sha256": "52a5f6b1ec36e0c6cf77a02a2d4c3e1d8f1e542afcbfdcbf9c3228858a2f7490"
+      },
+      "x10/release/release-record.schema.json": {
+        "bytes": 20082,
+        "sha256": "82a916172b95dff5a32ae58d675be0d3eb107de6ddc35f63c0fedcd5583763ce"
+      },
+      "x10/release/check-release-record.test.mjs": {
+        "bytes": 15670,
+        "sha256": "019f07020ed239342b8146ab40a90b69de8322ce593a639b977f338393550d80"
+      },
+      "x10/release/release-record-heldout.test.mjs": {
+        "bytes": 16747,
+        "sha256": "383498435cfeaf15c00a65749d0c22f90f35146bbbaad9a50a40093a44e6d11f"
+      },
+      "x10/release/README.md": {
+        "bytes": 9934,
+        "sha256": "65f78e9250b357c8671bc23b5aea8ab357217b82ca91e3c182679baf5fa632f9"
+      }
+    },
+    "localSelectedTAP": {
+      "tests": 119,
+      "pass": 119,
+      "fail": 0,
+      "skip": 0,
+      "todo": 0,
+      "cancelled": 0,
+      "exitCode": 0,
+      "nodeVersion": "v24.22.1",
+      "newControlsIncludedOnce": 84,
+      "priorControls": 35
+    },
+    "baselineCounterexampleControls": {
+      "controls": 12,
+      "pass": 12,
+      "notAddedToTAP": true
+    },
+    "scope": "Declared record shape and consistency only; array order/name/conclusion projection, not authenticated external job evidence.",
+    "evidenceAuthenticated": false,
+    "runtimeChanged": false,
+    "workflowChanged": false,
+    "physicalFixturesExecuted": 0,
+    "fullG7Accepted": false,
+    "productionAccepted": false,
+    "verifiedOnImplementationCommit": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+    "hostedEvidence": "x10/evidence/g7-ci-step-receipts-hosted.json"
+  },
+  "completeCIStepDeclarationHosted": {
+    "state": "EXACT_HOSTED_DECLARATION_CONTRACT_SUCCESS",
+    "implementationCommit": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+    "implementationTree": "df86d8577d3d27ff008a40df03c753ad4c44042d",
+    "actualDeclarationTAPEach": 119,
+    "actualNativeStepsEach": 36,
+    "fullG7Accepted": false,
+    "productionAccepted": false,
+    "evidence": "x10/evidence/g7-ci-step-receipts-hosted.json"
+  },
+  "supportedPathBoundaryReview": {
+    "state": "EXACT_HOSTED_ARCHIVE_IDENTITY_SUCCESS_REVIEW_FINDINGS_OPEN",
+    "sourceBase": "60a470a57ec9381b149b8dced0ad7131d9fbec7a",
+    "publicationParent": "25d9b99b190b9dbfeb3d2e44b63e8a1846335277",
+    "evidence": "x10/evidence/g5-supported-path-review.json",
+    "reviewDocument": "x10/release/SUPPORTED-PATH-REVIEW.md",
+    "perFileLedger": "x10/review/g5-supported-path-review-ledger.json",
+    "sourceBindings": {
+      "x10/release/verify-alpha-archive.mjs": {
+        "bytes": 9367,
+        "sha256": "60b6d213c4d6b68db4a63d34ebf9a40f713fbd996ce298d4d65c2429541c0e12"
+      },
+      "x10/release/verify-alpha-archive.test.mjs": {
+        "bytes": 15494,
+        "sha256": "cd55e02f5a09e1c4af23d02815ef60bd5f81962dbdde2045b4a8850143b97d98"
+      },
+      "x10/alpha/README.md": {
+        "bytes": 53564,
+        "sha256": "1dbc81f2bab4096bd266133c41eb9eb7e77c109dffd2c9567e54a8f96e1dde75"
+      },
+      "x10/release/README.md": {
+        "bytes": 10626,
+        "sha256": "b451fbab47066912cc2d2fb1ca8e89e4ba2707bb007410eb85c1c3e1fbcb6513"
+      },
+      "x10/release/SUPPORTED-PATH-REVIEW.md": {
+        "bytes": 6163,
+        "sha256": "bd3deab1cd5a8224ebaafadf0360b9574d0a80924cf787689982ab9a49353d75"
+      },
+      "x10/review/controller-input-counterexample.mjs": {
+        "bytes": 5973,
+        "sha256": "f7b4527bc08bfc8dd3751fe5b9b034db0bd5dbc7c9d30b330637d3acbb086be2"
+      },
+      "x10/review/controller-loader-counterexample.mjs": {
+        "bytes": 1876,
+        "sha256": "f545c20a3f24f2f914252a405d6d3e411837717f86d6c34efe0c4158b8fe5d8a"
+      },
+      "x10/review/alpha-session-capacity-counterexample.mjs": {
+        "bytes": 4982,
+        "sha256": "ce2dfb9292d5321f9c205589e65035ecb8d9aa1086b7b748dae3bab3b1ee7abb"
+      }
+    },
+    "candidateArchiveTAP": {
+      "tests": 122,
+      "pass": 122,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "newArchiveControlsIncludedOnce": 65,
+    "priorArchiveControls": 57,
+    "baselineMalformedArchiveCases": 4,
+    "independentArchivePureHeldouts": 61,
+    "physicalFixturesExecuted": 0,
+    "runtimeOperatorNativeBytesChanged": false,
+    "workflowChanged": false,
+    "fullG4Accepted": false,
+    "fullG5Accepted": false,
+    "fullG7Accepted": false,
+    "productionAccepted": false,
+    "verifiedOnImplementationCommit": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+    "hostedEvidence": "x10/evidence/g5-archive-identity-hosted.json"
+  },
+  "supportedPathOpenFindings": [
+    {
+      "id": "CONTROL_JSON_RESOURCE_BOUNDS_OPEN",
+      "state": "SCOPED_CONTROLLER_ACQUISITION_FIX_EXACT_HOSTED_VERIFIED",
+      "fact": "Actual unbound controller accepts settings with ignored extra3MiB; CLI2MiB refusal follows full read.",
+      "limits": "Local operator-owned input-bound gap; no OOM, remote exploit or severity demonstrated.",
+      "candidateEvidence": "x10/evidence/g5-controller-record-bounds.json",
+      "scope": "ControllerJSON/history/controlCLI acquisition only; other reads and fullsecurity remain open.",
+      "hostedFailureEvidence": "x10/evidence/g5-controller-record-bounds-hosted-failure.json",
+      "hostedEvidence": "x10/evidence/g5-alpha-inventory-bindings-hosted.json",
+      "fullG5Accepted": false
+    },
+    {
+      "id": "ALPHA_SESSION_INVENTORY_CAPACITY_OPEN",
+      "state": "NARROW_STOPPED_PUBLICATION_CANDIDATE_OTHER_WRITERS_OPEN",
+      "fact": "prepareRun accepts255-to256; minimum4353 treeentries exceeds4096 inventory limit and refuses stage/uninstall inspection.",
+      "limits": "Virtual source-extracted observations, not actual256-native-session fixture.",
+      "candidateEvidence": "x10/evidence/g5-stopped-session-capacity.json",
+      "fullFindingClosed": false
+    }
+  ],
+  "archiveIdentityHosted": {
+    "state": "EXACT_HOSTED_ARCHIVE_IDENTITY_CONTRACT_SUCCESS",
+    "implementationCommit": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+    "implementationTree": "bf3e56e8690eb9f1211f3ea143ae04e3ff5a105b",
+    "actualArchiveTAPEach": 122,
+    "actualNativeStepsEach": 36,
+    "fullG5Accepted": false,
+    "productionAccepted": false,
+    "evidence": "x10/evidence/g5-archive-identity-hosted.json"
+  },
+  "controllerRecordBoundsCandidate": {
+    "state": "LOCAL_BOUNDED_RECORD_ACQUISITION_VERIFIED_HOSTED_PENDING",
+    "sourceBase": "26d74c91ca4a3e95a5c3a93eeeae16bc278e2819",
+    "publicationParent": "bb45d9bb18c556267818c22e1d75ad51d96a2bda",
+    "evidence": "x10/evidence/g5-controller-record-bounds.json",
+    "perFileLedger": "x10/review/g5-controller-record-bounds-ledger.json",
+    "sourceBindings": {
+      "x10/control/manager.mjs": {
+        "bytes": 51246,
+        "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+      },
+      "x10/control/cli.mjs": {
+        "bytes": 4766,
+        "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+      },
+      "x10/control/record-input.test.mjs": {
+        "bytes": 22249,
+        "sha256": "eedae58efe27152f95cb2bb3d0526c7bdb24b5778ba1ba19807adf5ddc2dbbf8"
+      },
+      "x10/control/README.md": {
+        "bytes": 29076,
+        "sha256": "986bca81e2cee3d911ff63ff92eb9e94779f46671e99af05d4062dc3554aa392"
+      },
+      "x10/test/all.mjs": {
+        "bytes": 32070,
+        "sha256": "c023f5f7ed52d34e7a4c69b976b5133a230fde60e0a92fbdc7525f24ff4b61c2"
+      },
+      "x10/release/SUPPORTED-PATH-REVIEW.md": {
+        "bytes": 6624,
+        "sha256": "1531c3d75658a59bcff182da5ae5bbbdec7d58e5aabf60d5a112045bdeae8095"
+      }
+    },
+    "metadataAndCLIBytes": 2097152,
+    "revisionBytes": 8388608,
+    "historyBytes": 16777216,
+    "localPureTempfileTAP": {
+      "tests": 76,
+      "pass": 76,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "localExitCode": 0,
+    "independentPureHeldouts": 29,
+    "independentStaticBoundaryChecks": 21,
+    "installedControllerBytesChanged": true,
+    "nativeCChanged": false,
+    "workflowChanged": false,
+    "fixedBundleFileInventoryChanged": false,
+    "physicalFixturesExecuted": 0,
+    "fullG4Accepted": false,
+    "fullG5Accepted": false,
+    "productionAccepted": false
+  },
+  "controllerRecordBoundsHostedFailure": {
+    "state": "HOSTED_COMPATIBILITY_FAILED_HISTORICAL_FIXTURE_PRECONDITION",
+    "implementationCommit": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+    "evidence": "x10/evidence/g5-controller-record-bounds-hosted-failure.json",
+    "nativeRuns": [
+      40533686304,
+      40533697675
+    ],
+    "nativeJobs": [
+      122293218632,
+      122293256424
+    ],
+    "managedControllerTAP": {
+      "pass": 162,
+      "fail": 0,
+      "newReaderControlsIncluded": 76
+    },
+    "nativeGroups": {
+      "pass": 19,
+      "total": 20
+    },
+    "alpha": {
+      "pass": 614,
+      "fail": 3,
+      "tests": 617,
+      "timedOut": false
+    },
+    "fullFailedAlphaOwnedCleanupConfirmed": false,
+    "laterServiceAndPackageGates": "SKIPPED",
+    "productionAccepted": false
+  },
+  "reviewedHistoricalCliSharedPeerCandidate": {
+    "state": "LOCAL_VERIFIED_SHARED_PEER_FIXTURE_HOSTED_PENDING",
+    "sourceBase": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+    "publicationParent": "42e458c97594d57fe061204f3b53eec0970d6be7",
+    "evidence": "x10/evidence/g5-legacy-cli-shared-peers.json",
+    "perFileLedger": "x10/review/g5-legacy-cli-shared-peers-ledger.json",
+    "profile": "LEGACY_CLI_WITH_REVIEWED_CURRENT_PEERS",
+    "sharedPeerCommit": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+    "sharedPeerCount": 8,
+    "legacyCliCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "legacyCliBlob": "f036791f3e843c3628964f5c61b0bc0ab903d6f9",
+    "legacyCliBytes": 68551,
+    "legacyCliSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+    "sourceBindings": {
+      "x10/service/operator-package-return.mjs": {
+        "bytes": 68575,
+        "sha256": "612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7"
+      },
+      "x10/service/verified-node.mjs": {
+        "bytes": 32439,
+        "sha256": "2febc8bdb6d890e738a426e4a80121ea840d143d9a718768ef10b5b09e839090"
+      },
+      "x10/service/legacy-cli-peers.test.mjs": {
+        "bytes": 15203,
+        "sha256": "807848cd6b9fc9dba52febeabc6831467c2e1d42010c06276149a71f90a5c7f8"
+      },
+      "x10/test/alpha.test.mjs": {
+        "bytes": 115239,
+        "sha256": "5d4b32db5d2045bee88b56c318ca463e57f1f6cea023598c324a96e1e23f7abb"
+      },
+      "x10/test/package-return.mjs": {
+        "bytes": 29856,
+        "sha256": "9c22b71a99f8952318aaccc9b5119b7b5edf6873ff84d1ee1577c17ad12d1629"
+      },
+      ".github/workflows/x10-native.yml": {
+        "bytes": 26465,
+        "sha256": "d3f92329a396b02d045b45736733cdb711bf55af10b30504bc24f1a0efc8eb73"
+      },
+      "x10/service/README.md": {
+        "bytes": 88285,
+        "sha256": "27cbc1b90b751445964716ad3c8fada5d3d319da09889776147062da99e49db9"
+      },
+      "x10/release/SUPPORTED-PATH-REVIEW.md": {
+        "bytes": 9064,
+        "sha256": "a3fa47d5336516ca400a16ddd15a7c2edc7b646d2605fb04bdcf6143e347c962"
+      }
+    },
+    "localNewPureTempfileTAP": {
+      "tests": 79,
+      "pass": 79,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0
+    },
+    "independentPureTempfileHeldouts": 74,
+    "independentStaticChecks": 21,
+    "controllerBytesChangedFrom98b": false,
+    "nativeCChanged": false,
+    "workflowStepNamesChanged": false,
+    "workflowBudgetChanged": false,
+    "fixedBundleFileInventoryChanged": false,
+    "physicalFixturesExecuted": 0,
+    "fullG4Accepted": false,
+    "fullG5Accepted": false,
+    "productionAccepted": false
+  },
+  "controllerRecordBoundsPriorCandidateReferences": [
+    {
+      "commit": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+      "path": "x10/evidence/g5-controller-record-bounds.json",
+      "blobSha": "77e20310391216e5a3645e7a052d7c7320ad4799",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+      "path": "x10/review/g5-controller-record-bounds-ledger.json",
+      "blobSha": "d81cdd54ae80ae8070718c752c437b7ff85d531f",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ],
+  "readerSharedPeersMixedHosted": {
+    "state": "PR_SCOPED_COMPATIBILITY_SUCCESS_PUSH_TIMEOUT",
+    "implementationCommit": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+    "evidence": "x10/evidence/g5-reader-shared-peers-hosted.json",
+    "nativePRRun": 40541973327,
+    "nativePRJob": 122322645757,
+    "nativePushRun": 40541963582,
+    "nativePushJob": 122322581694,
+    "prOnlyScopedCompatibilityAccepted": true,
+    "bothEventCompatibilityAccepted": false,
+    "pushAlphaElapsedMs": 120008,
+    "pushAlphaBudgetMs": 120000,
+    "pushCompleteTAPSummary": false,
+    "pushFullAlphaOwnedCleanupConfirmed": false,
+    "prAlphaElapsedMs": 116866,
+    "prAlphaTAP": 617,
+    "controllerTAP": 162,
+    "actualReturnContractTAP": 623,
+    "newSharedPeerControlsIncluded": 79,
+    "newReaderControlsIncluded": 76,
+    "fullG5Accepted": false,
+    "productionAccepted": false
+  },
+  "alphaBoundedDecompositionCandidate": {
+    "state": "BOUNDED_DECOMPOSITION_LOCAL_VERIFICATION_HOSTED_PENDING",
+    "sourceBase": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+    "publicationParent": "e2fa32cf282e8e312877dae40751ff5a4b646892",
+    "evidence": "x10/evidence/g5-alpha-bounded-decomposition.json",
+    "perFileLedger": "x10/review/g5-alpha-bounded-decomposition-ledger.json",
+    "scope": "Move17installed-recipe NONEXECUTED-native controls into existing managed-native-control group with shared test helpers and a static decomposition guard. Preserve physical test bodies, finite budgets,20groups/workflowsteps and tighten managed requireCompleteTAP. No claimed measured speedup or physical successor acceptance.",
+    "capacityRemainsDependent": true,
+    "physicalFixturesExecuted": 0,
+    "fullG5Accepted": false,
+    "productionAccepted": false
+  },
+  "legacyCliSharedPeersPriorReferences": [
+    {
+      "commit": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+      "path": "x10/evidence/g5-legacy-cli-shared-peers.json",
+      "blobSha": "bf3145330bbe24a2c64aa42390176ebc0f09b8e1",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+      "path": "x10/review/g5-legacy-cli-shared-peers-ledger.json",
+      "blobSha": "7b08a6f8f18a2fc84f70006344c89be1afb6b3db",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ],
+  "alphaBoundedDecompositionHostedFailure": {
+    "state": "BOTH_NATIVE_HOSTED_FAILED_INVENTORY_BINDINGS",
+    "implementationCommit": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+    "evidence": "x10/evidence/g5-alpha-inventory-bindings-hosted-failure.json",
+    "nativeRuns": [
+      40551918135,
+      40551926948
+    ],
+    "nativeJobs": [
+      122358084257,
+      122358886554
+    ],
+    "nativeGroupsPassed": 19,
+    "nativeGroupsTotal": 20,
+    "managedTAP": 201,
+    "relocatedRecipeControlsIncluded": 17,
+    "priorGuardControlsIncluded": 22,
+    "readerControlsIncluded": 76,
+    "alphaTAP": {
+      "tests": 600,
+      "pass": 598,
+      "fail": 2
+    },
+    "alphaElapsedMs": [
+      83235,
+      83115
+    ],
+    "timedOut": false,
+    "observedFailure": "recipeV2Names is not defined",
+    "sourceConfirmedLatentOmission": "recipeV2Dirs",
+    "fullFailedAlphaOwnedCleanupConfirmed": false,
+    "laterServicePackagePrivateNodeGates": "SKIPPED",
+    "productionAccepted": false
+  },
+  "alphaInventoryBindingsCandidate": {
+    "state": "LOCAL_BINDING_REPAIR_HOSTED_PENDING",
+    "sourceBase": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+    "publicationParent": "51178f96d8eb3e63fd909a614e5509e93b03f8d0",
+    "evidence": "x10/evidence/g5-alpha-inventory-bindings.json",
+    "perFileLedger": "x10/review/g5-alpha-inventory-bindings-ledger.json",
+    "scope": "Export recipeV2Names/recipeV2Dirs from shared test helper and import both into physical alpha test; add pure actual-consumer ESM-link and VM inventory assertion regression guards. No runtime payload, physical assertion, workflow, group or timeout change.",
+    "capacityRemainsDependent": true,
+    "physicalFixturesExecuted": 0,
+    "productionAccepted": false
+  },
+  "alphaDecompositionPriorReferences": [
+    {
+      "commit": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+      "path": "x10/evidence/g5-alpha-bounded-decomposition.json",
+      "blobSha": "67d6e0a6d78576490f554de6b313d5f7bac023d5",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "8447c8f7894ef951e717a15ec5f4b48a6dc251e1",
+      "path": "x10/review/g5-alpha-bounded-decomposition-ledger.json",
+      "blobSha": "cbf02219a24ec6a40bf20d76637219e8d735ec5c",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ],
+  "alphaInventoryBindingsHosted": {
+    "state": "EXACT_BOTH_EVENT_SCOPED_READER_SHARED_PEER_COMPATIBILITY_ACCEPTED",
+    "implementationCommit": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+    "evidence": "x10/evidence/g5-alpha-inventory-bindings-hosted.json",
+    "nativePushRun": 40560031478,
+    "nativePushJob": 122386444347,
+    "nativePRRun": 40560042605,
+    "nativePRJob": 122386474502,
+    "actualNativeStepsEach": 36,
+    "nativeGroupsEach": 20,
+    "managedTAPEach": 224,
+    "alphaTAPEach": 600,
+    "managedElapsedMs": [
+      61171,
+      50961
+    ],
+    "alphaElapsedMs": [
+      100212,
+      69553
+    ],
+    "retainedRecipeControls": 17,
+    "bindingGuards": 45,
+    "readerControls": 76,
+    "sharedPeerContractControls": 79,
+    "strictThreeServiceReportsAndOwnedCleanupConfirmed": true,
+    "bothEventScopedCompatibilityAccepted": true,
+    "currentCapacityCandidateAccepted": false,
+    "fullG5Accepted": false,
+    "productionAccepted": false
+  },
+  "stoppedSessionCapacityCandidate": {
+    "state": "LOCAL_STOPPED_SESSION_PUBLICATION_CAPACITY_VERIFIED_HOSTED_PENDING",
+    "sourceBase": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+    "publicationParent": "c36456f0d71b52df30c01a7726e4c9f5d52812d9",
+    "evidence": "x10/evidence/g5-stopped-session-capacity.json",
+    "perFileLedger": "x10/review/g5-stopped-session-capacity-ledger.json",
+    "entryLimit": 4096,
+    "minimumNewSessionEntries": 17,
+    "registryPublicationTemporaryReserve": 1,
+    "preCreationReserve": 18,
+    "postCreationReserve": 1,
+    "guardedPath": "Stopped session to new prepared session via explicit prepare-run or run preparation, before registry mutation/publication",
+    "fullCapacityFindingClosed": false,
+    "postRefusalCanRetainUnregisteredTree": true,
+    "otherGrowthWritersRemainOpen": true,
+    "installedAlphaCLIChanged": true,
+    "nativeCChanged": false,
+    "workflowChanged": false,
+    "physicalFixturesExecuted": 0,
+    "productionAccepted": false
+  },
+  "alphaInventoryBindingsPriorReferences": [
+    {
+      "commit": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+      "path": "x10/evidence/g5-alpha-inventory-bindings.json",
+      "blobSha": "2929a1e23011b33efb6b3e56eca33024f12a3834",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "f0a0bd8fddb4b17943f0131100107d2d9eb4b9a8",
+      "path": "x10/review/g5-alpha-inventory-bindings-ledger.json",
+      "blobSha": "b3780b47b66f826c71f4c9c99eee322de2664698",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ],
+  "stoppedSessionCapacityHosted": {
+    "state": "SCOPED_BOTH_EVENT_INSTALLED_STOPPED_PUBLICATION_COMPATIBILITY_ACCEPTED",
+    "implementationCommit": "447565d452755f508652141a0e15eba166cd547a",
+    "implementationTree": "743f2f542581344bbd749fceff8c55173311aa78",
+    "evidence": "x10/evidence/g5-stopped-session-capacity-hosted.json",
+    "perFileLedger": "x10/review/g5-stopped-session-capacity-hosted-ledger.json",
+    "nativeRuns": [
+      40571347227,
+      40571355168
+    ],
+    "nativeJobs": [
+      122426177419,
+      122426248703
+    ],
+    "actualSteps": [
+      36,
+      36
+    ],
+    "nativeGroups": [
+      20,
+      20
+    ],
+    "managedTAP": [
+      288,
+      288
+    ],
+    "alphaTAP": [
+      603,
+      603
+    ],
+    "managedElapsedMs": [
+      61474,
+      57251
+    ],
+    "alphaElapsedMs": [
+      100203,
+      90147
+    ],
+    "capacityPureControls": 46,
+    "preparationPureControls": 18,
+    "preparationRunsOncePerSuiteNotGlobally": true,
+    "preparationAlsoImportedByAlpha": true,
+    "strictThreeReportsSourcePinsAndOwnedPrivateNodeHistoryBootstrapCleanupConfirmed": true,
+    "physicalCapacityBoundaryExhaustionAccepted": false,
+    "fullCapacityFindingClosed": false,
+    "productionAccepted": false,
+    "nextConcreteTask": "First inspect actual successor metadata CI without transferring exact447 acceptance to a guessed checkout. Exact447 stopped-publication installed compatibility is accepted for BOTH events only; capacity boundary46 and preparation18 are pure controls in managed288, preparation18 also imported once in alpha603, so overlapping suites are not summed. Next bounded runtime task: reproduce exact447 installed alpha apply/revert forwarding and controller activate/rollback revision growth with pure source-pinned baseline controls; determine all simultaneous control entries before choosing a finite reservation, then refuse under existing alpha lock BEFORE controller spawn without changing durable controller writers or blocking stop/recover. Preliminary control-only six-entry headroom is NOT yet a proven reservation: independently test candidate+rollback revisions, pending/event/fragment/lock/atomic temporaries and failure phases first. Initialinstall/restore/stage, directcontroller, native/transient/concurrent growth, preparedreuse and post-create orphan STOP remainOPEN; no blindlimitraise/deletion/compaction. Preserve immutable earlierbaselineproducer and allrecords/adverseUNKNOWN/CLA/fullG3/G4/G5/G7/V1/release/orphanreplay/TLSrestore/nativebinaryupgrade/publishedreplay/soak/semanticContinuum/Windows/40h boundaries. Localphysical/native/processgroup/network/signals/systemdFORBIDDEN; pure/tempfile/virtual local, existinghostedCIphysical only."
+  },
+  "stoppedSessionCapacityPriorReferences": [
+    {
+      "commit": "447565d452755f508652141a0e15eba166cd547a",
+      "path": "x10/evidence/g5-stopped-session-capacity.json",
+      "blobSha": "4a4ef1b54c3246334aff8a6b70f15d39bbf054f6",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "447565d452755f508652141a0e15eba166cd547a",
+      "path": "x10/review/g5-stopped-session-capacity-ledger.json",
+      "blobSha": "e61914f9a5ae6856b34bc257a2b34fe6531ab3a2",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ],
+  "alphaRevisionCapacityCandidate": {
+    "state": "LOCAL_ALPHA_APPLY_REVERT_CONTROL_ENTRY_ADMISSION_HOSTED_PENDING",
+    "sourceBase": "6518fbf9d938845917644b46a0cd4a875ec34df4",
+    "publicationParent": "a9138b752782488dc6480ced7b1cfc9bb26fc5e9",
+    "evidence": "x10/evidence/g5-alpha-revision-capacity.json",
+    "perFileLedger": "x10/review/g5-alpha-revision-capacity-ledger.json",
+    "inventoryLimit": 4096,
+    "controllerMutationEntryReserve": 7,
+    "guardedPath": "Installed alpha proxy apply/revert under existing alpha lock, before controller spawn",
+    "atomicCleanupFailuresCanRetainMultipleTemporaries": true,
+    "preliminarySixEntryReserveRefuted": true,
+    "controllerDurableWriterChanged": false,
+    "recordSchemaChanged": false,
+    "stopRecoverNewlyGated": false,
+    "installedAlphaCLIChanged": true,
+    "nativeCChanged": false,
+    "workflowChanged": false,
+    "fullCapacityFindingClosed": false,
+    "physicalCapacityBoundaryExhaustionAccepted": false,
+    "productionAccepted": false,
+    "nextConcreteTask": "First verify exact NEW implementation native push/PR jobs and artifacts for the changed installed alphaCLI. Require the new revision-capacity suite actually wired once within existing managed-native-control, complete zero-skip managed/alpha TAP and retained capacity46/preparation18/recipe17/guard45/reader76/shared79 controls with their per-suite overlap; read actual totals rather than infer. Verify unchanged20groups/36steps/budgets and full installed/service compatibility, three strict reports/source pins, owned/privateNode/history/bootstrap cleanup. Reserve7 is a source-bound finite CONTROL-entry model for alpha apply/revert before controller spawn: candidate+rollback revisions, pending/eventintent/lock/retained atomic temporaries, including representative error classes; not all OS/native/transient/concurrent failures. Baseline new revision-capacity producer is immutable and run on exact447/unchanged6518 bytes; candidateCLI pin refusal intentional. Older producers remain immutable. Keep direct controller/recover-created revisions, native/concurrent/temp growth and initialinstall/restore/stage outside this narrow admission; stop/recover have no new capacity gate. Existing stopped postfailure may preserve unregistered/uninspectable tree and demands STOP, not cleanrollback. After exact candidate compatibility, separately choose next supported writer contract, preserving durablewriters/oldrecords/revisions/unsupported outcomes. No blindcapraise, compaction, deletion or automatic orphan repair. Fullcapacityfinding/G3/G4/G5/G7/V1/orphanreplay/TLSrestore/nativebinaryupgrade/permanent release/publisher capability/independentpublished replay/60minsoak/semanticContinuum and Windows/40h/adverseUNKNOWN/CLA remainOPEN. Localphysical/native/processgroup/network/signals/systemdFORBIDDEN; pure/tempfile/virtual local, existinghostedCIphysical only."
+  },
+  "stoppedSessionCapacityHostedPriorReferences": [
+    {
+      "commit": "6518fbf9d938845917644b46a0cd4a875ec34df4",
+      "path": "x10/evidence/g5-stopped-session-capacity-hosted.json",
+      "blobSha": "4b1eb40970669d4d0b2d495030c99444cb79780d",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "6518fbf9d938845917644b46a0cd4a875ec34df4",
+      "path": "x10/review/g5-stopped-session-capacity-hosted-ledger.json",
+      "blobSha": "d62f5dd30f6fe2778fb79e31895036e3fb54f7d4",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ],
+  "receipt6518CIStepReadback": {
+    "sourceCommit": "6518fbf9d938845917644b46a0cd4a875ec34df4",
+    "scope": "Actual job/step metadata only; no new artifact downloads or transfer of exact447 runtime counters to a guessed metadata checkout",
+    "nativePush": {
+      "runId": 40578695433,
+      "jobId": 122452097306,
+      "conclusion": "success",
+      "actualSuccessfulSteps": 36
+    },
+    "nativePR": {
+      "runId": 40578705576,
+      "jobId": 122452179946,
+      "conclusion": "success",
+      "actualSuccessfulSteps": 36
+    },
+    "researchPR": {
+      "runId": 40578705590,
+      "jobId": 122452149840,
+      "conclusion": "success",
+      "actualSuccessfulSteps": 11
+    },
+    "cla": {
+      "runId": 40578701799,
+      "jobId": 122451981361,
+      "conclusion": "failure",
+      "failedStep": 3
+    },
+    "artifactDownloads": 0,
+    "manualReruns": 0,
+    "newRuntimeAcceptance": false
+  },
+  "alphaRevisionCapacityHosted": {
+    "state": "SCOPED_BOTH_EVENT_ALPHA_APPLY_REVERT_INSTALLED_COMPATIBILITY_ACCEPTED",
+    "implementationCommit": "cd811d9d9d29899859bc3969b496a76481b02dfd",
+    "implementationTree": "c57aa1e11a1596d851a63f9dea5bf2e82a60cfea",
+    "evidence": "x10/evidence/g5-alpha-revision-capacity-hosted.json",
+    "perFileLedger": "x10/review/g5-alpha-revision-capacity-hosted-ledger.json",
+    "nativeRuns": [
+      40587313424,
+      40587322289
+    ],
+    "nativeJobs": [
+      122482213383,
+      122482266086
+    ],
+    "actualSteps": [
+      36,
+      36
+    ],
+    "nativeGroups": [
+      20,
+      20
+    ],
+    "managedTAP": [
+      325,
+      325
+    ],
+    "alphaTAP": [
+      603,
+      603
+    ],
+    "managedElapsedMs": [
+      64621,
+      65532
+    ],
+    "alphaElapsedMs": [
+      98151,
+      102133
+    ],
+    "newPureRevisionControls": 37,
+    "strictThreeReportsSourcePinsOwnedPrivateNodeHistoryBootstrapCleanupConfirmed": true,
+    "preparation18AlsoRunsInAlpha": true,
+    "physicalCapacityExhaustionAccepted": false,
+    "allOSFailureProofAccepted": false,
+    "fullCapacityFindingClosed": false,
+    "productionAccepted": false,
+    "nextConcreteTask": "First inspect actual successor metadata CI without guessing merge/build/runtime counts or transferring exactcd8 acceptance to changed sources. Exactcd8 BOTH-event normal installed compatibility is scoped accepted only; pure revision37/source model7 and existing46/preparation18/recipe17/guard45/reader76/shared79 controls overlap and are not unique totals. Next bounded writer: reproduce and source-pin baseline for alpha bind, including BOTH proxy bind and waitBind direct control.bind startup path. Independently derive control-entry high-water across bound event/controller lock/atomic intent/state writes and failure preservation before selecting a reserve; preliminary3 is NOT yet accepted. Place any new cooperative admission under existing alpha lock before controller mutation, preserving waitBind cancellation/deadline/bindingMayHaveCommitted and readiness semantics; test all paths without new stop/recover gates or durablewriter changes. Initial install/restore/stage registry publication is a separate open boundary: registry plus future alpha lock and controller read lock means naive+1/+2 are insufficient for a read-safe claim; bind can add more. Determine a precise initial-publication/first-command contract independently rather than blindly adopting3/5. Directcontroller, recovery-created revisions, native/transient/concurrent growth and stopped postpartial orphan STOP remain open. No compaction/deletion/capraise/allOS fence. Fullcapacity/G3/G4/G5/G7/V1,orphanreplay/disposal,TLSrestore,nativebinaryupgrade,permanentrelease/publisher capability,publishedreplay,60minsoak,semanticContinuum,Windows/40h and adverseUNKNOWN/CLA remain preserved. Localphysical/native/processgroup/network/signals/systemdFORBIDDEN; pure/tempfile/virtual locally, existinghostedCIphysical only."
+  },
+  "alphaRevisionCapacityPriorReferences": [
+    {
+      "commit": "cd811d9d9d29899859bc3969b496a76481b02dfd",
+      "path": "x10/evidence/g5-alpha-revision-capacity.json",
+      "blobSha": "6af85a7483f044b21ed92fe1b163694b5a9f77a5",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "cd811d9d9d29899859bc3969b496a76481b02dfd",
+      "path": "x10/review/g5-alpha-revision-capacity-ledger.json",
+      "blobSha": "8e53c7f1596069cdceffe27fe034d064a19c5569",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ],
+  "alphaBindCapacityCandidate": {
+    "state": "LOCAL_BOTH_ALPHA_BIND_PATHS_CONTROL_ENTRY_ADMISSION_VERIFIED_HOSTED_PENDING",
+    "sourceBase": "2331e8cf3e5c44053972e502f8afd96fff3953a7",
+    "publicationParent": "0d26cbafb5b86118edf08b09730b24d7b66385c0",
+    "evidence": "x10/evidence/g5-alpha-bind-capacity.json",
+    "perFileLedger": "x10/review/g5-alpha-bind-capacity-ledger.json",
+    "inventoryLimit": 4096,
+    "controllerBindEntryReserve": 3,
+    "guardedPaths": [
+      "proxy bind before controller execute",
+      "waitBind running locked path before sessionStatus and direct control.bind"
+    ],
+    "existingAlphaLockAlreadyCounted": true,
+    "preparedWaitControllerFree": true,
+    "controllerDurableWriterChanged": false,
+    "recordSchemaChanged": false,
+    "stopRecoverNewlyGated": false,
+    "installedAlphaCLIChanged": true,
+    "nativeCChanged": false,
+    "workflowChanged": false,
+    "fullCapacityFindingClosed": false,
+    "physicalCapacityExhaustionAccepted": false,
+    "productionAccepted": false,
+    "nextConcreteTask": "First verify exact NEW implementation native push/PR jobs and actual artifacts for changed installed alphaCLI bind admission. Require NEWbind51 and retainedtranslatedrevision37 actually present once in existing managed commands, complete zero-skip managed/alpha TAP and retained46/preparation18/recipe17/guard45/reader76/shared79 with known per-suite overlap; read actual totals, not arithmetic. Verify unchanged20groups/36steps/budgets, full installed/service/startup compatibility, all3strictreports/sourcepins and owned/privateNode/history/bootstrapcleanup. Preserve strict manager source pin before actual syscall-model evaluation; bind model1715terminalpaths/3165executions is finite virtual control-file accounting, not exhaustiveOS/physicalcapacity proof. Both proxy bind and waitBind must refuse BEFORE controller execution/status with reserve3 while alphaLock is already counted. Preserve readiness/identity/cancel/deadline/bindingMayHaveCommitted; no newstop/recover gate or durablewriter/schema edits. New pinned bind baseline is immutable and replays on exactcd8/identical2331 CLI+manager bytes; candidate drift refusal intentional, allolder4producers unchanged. After scoped bind compatibility, separately reproduce and bound INITIALregistry publication aftercreateSession in install/restore/stage, including registry atomic temporary plus futurealpha/controllerread locks. Prove a precise initial-publication/first-inspection contract independently; naive1/2 is insufficient and3/5 is not accepted by assertion. A near-full installation may legitimately refuse bind/apply; do not confuse inspectability with ability to activate. Existing incomplete-prefix catch and stopped postfailure partial/unregistered/uninspectable STOP remain; no automatic deletion/compaction/reaper. Directcontroller, recovery-created revisions, native/transient/concurrent/initialcreation growth remain outside these cooperative guards. Fullcapacity/G3/G4/G5/G7/V1,orphanreplay/disposal,TLSrestore,nativebinaryupgrade,permanentrelease/publisher capability,publishedreplay,60minsoak,semanticContinuum,Windows/40h/adverseUNKNOWN/CLA remainOPEN. Localphysical/native/processgroup/network/signals/systemdFORBIDDEN; pure/tempfile/virtual local, existinghostedCIphysical only."
+  },
+  "alphaRevisionCapacityHostedPriorReferences": [
+    {
+      "commit": "2331e8cf3e5c44053972e502f8afd96fff3953a7",
+      "path": "x10/evidence/g5-alpha-revision-capacity-hosted.json",
+      "blobSha": "1e04ec26a9587971c4255506917dd8d00d5d24de",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "2331e8cf3e5c44053972e502f8afd96fff3953a7",
+      "path": "x10/review/g5-alpha-revision-capacity-hosted-ledger.json",
+      "blobSha": "95ad133102a8089623c18b5be33befe8ec1e39ff",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ],
+  "receipt2331CIStepReadback": {
+    "sourceCommit": "2331e8cf3e5c44053972e502f8afd96fff3953a7",
+    "scope": "Actual job/step metadata only; no artifact downloads or guessed merge/build/runtime counts; exactcd8 runtime receipt remains separate",
+    "nativePush": {
+      "runId": 40595688056,
+      "jobId": 122510976877,
+      "conclusion": "success",
+      "successfulSteps": 36
+    },
+    "nativePR": {
+      "runId": 40595696258,
+      "jobId": 122511004079,
+      "conclusion": "success",
+      "successfulSteps": 36
+    },
+    "researchPR": {
+      "runId": 40595696123,
+      "jobId": 122511023231,
+      "conclusion": "success",
+      "successfulSteps": 11
+    },
+    "cla": {
+      "runId": 40595692599,
+      "jobId": 122510911097,
+      "conclusion": "failure",
+      "failedStep": 3
+    },
+    "artifactDownloads": 0,
+    "manualReruns": 0,
+    "newBindCandidateAccepted": false
+  },
+  "alphaBindCapacityHosted": {
+    "state": "SCOPED_BOTH_EVENT_BOTH_ALPHA_BIND_PATHS_INSTALLED_COMPATIBILITY_ACCEPTED",
+    "implementationCommit": "b1d4333923f4c633d841316eae0e864cb6fe94ac",
+    "implementationTree": "198727bf141061cf7d2583838ccf32ec4d0f1fb3",
+    "evidence": "x10/evidence/g5-alpha-bind-capacity-hosted.json",
+    "perFileLedger": "x10/review/g5-alpha-bind-capacity-hosted-ledger.json",
+    "nativeRuns": [
+      40603217925,
+      40603226496
+    ],
+    "nativeJobs": [
+      122536307484,
+      122536335129
+    ],
+    "actualSteps": [
+      36,
+      36
+    ],
+    "nativeGroups": [
+      20,
+      20
+    ],
+    "managedTAP": [
+      376,
+      376
+    ],
+    "alphaTAP": [
+      603,
+      603
+    ],
+    "managedElapsedMs": [
+      67320,
+      66058
+    ],
+    "alphaElapsedMs": [
+      101973,
+      99750
+    ],
+    "newPureBindControls": 51,
+    "retainedTranslatedRevisionControls": 37,
+    "strictThreeReportsSourcePinsOwnedPrivateNodeHistoryBootstrapCleanupConfirmed": true,
+    "preparation18AlsoRunsInAlpha": true,
+    "physicalCapacityExhaustionAccepted": false,
+    "allOSFailureProofAccepted": false,
+    "fullCapacityFindingClosed": false,
+    "productionAccepted": false,
+    "nextConcreteTask": "First inspect actual successor metadata CI without guessing merge/build/runtime counts or transferring exactb1d acceptance to changed sources. Exactb1d BOTH-event normal installed/startup/service compatibility is scoped accepted only; actual376managed/603alpha include newbind51 and translatedretainedrevision37 with known preparation18 overlap. Next bounded writer: reproduce and check in a NEW immutable portable baseline pinned exactb1d CLI90119B/82d7537dbcc3be45b8590c84d414cb7215093e4aed1cc02e0debaf8d54ce32f2 and manager51246B/d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289 BEFORE any edit; allolder5producers remain immutable. Independently define and derive a finite INITIALregistry-publication plus first ordinary info/status/history inspection contract after createSession for install/restore/stage. Count registry atomic temporary/final entry plus future alpha and controller read locks including close/unlink/rename/directory-sync refusal preservation. Preliminary private source-model3 is a proposal, not an accepted reserve or exhaustiveOS proof; naive1/2 are insufficient, and3/5 must not be adopted blindly. Inspectability is distinct from activation: nearfull may legitimately refuse bind3/apply7. Keep existing incompleteprivateprefix catch and oldrecords/revisions; createSession native output may already exceed4096 before postcheck. No automatic cleanup/deletion/compaction/reaper, capraise, durablewriter/schema rewrite or new stop/recover gate. Existing stoppedpre18/post1 and apply7/bind3 stay narrow; postpartial unregistered/uninspectable STOP/manualinspection/noautoretry remains. Directcontroller, recovery-created revisions, native/transient/concurrent/initialcreation growth and preparedreuse remain outside cooperative guards. Fullcapacity/G3/G4/G5/G7/V1,orphanreplay/disposal,TLSrestore,nativebinaryupgrade,permanentrelease/publisher capability,publishedreplay,60minsoak,semanticContinuum,Windows/40h/adverseUNKNOWN/CLA remainOPEN. Localphysical/native/processgroup/network/signals/systemdFORBIDDEN; pure/tempfile/virtual local, existinghostedCIphysical only."
+  },
+  "alphaBindCapacityPriorReferences": [
+    {
+      "commit": "b1d4333923f4c633d841316eae0e864cb6fe94ac",
+      "path": "x10/evidence/g5-alpha-bind-capacity.json",
+      "blobSha": "216a1a644ae55691229de4f8fe9395fd7397dd7e",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "b1d4333923f4c633d841316eae0e864cb6fe94ac",
+      "path": "x10/review/g5-alpha-bind-capacity-ledger.json",
+      "blobSha": "bd502e44a1a72656b83c18c23ce78fd9c8fe869d",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ],
+  "alphaInitialCapacityCandidate": {
+    "state": "LOCAL_INITIAL_PUBLICATION_INSPECTION_ADMISSION_VERIFIED_HOSTED_PENDING",
+    "sourceBase": "16b91eae25ce5349c0cfeff2eaf3dfe5031cca3b",
+    "publicationParent": "805a58ca4213c61b9eaaeee35638573d10193a2c",
+    "evidence": "x10/evidence/g5-alpha-initial-capacity.json",
+    "perFileLedger": "x10/review/g5-alpha-initial-capacity-ledger.json",
+    "inventoryLimit": 4096,
+    "initialPublicationInspectionReserve": 3,
+    "contract": "Initial registry publication plus one ordinary unbound info/status/history inspection only; not activation or native growth.",
+    "installedAlphaCLIChanged": true,
+    "controllerDurableWriterChanged": false,
+    "recordSchemaChanged": false,
+    "stopRecoverNewlyGated": false,
+    "nativeCChanged": false,
+    "workflowChanged": false,
+    "fullCapacityFindingClosed": false,
+    "physicalCapacityExhaustionAccepted": false,
+    "productionAccepted": false,
+    "nextConcreteTask": "Verify exact NEW implementation native push and PR jobs/artifacts before accepting changed installed alphaCLI initial publication admission. Require new initial-capacity suite and translated retained backup suite in actual existing commands, complete zero-skip managed/alpha TAP with actual totals, old46/preparation18/recipe17/guard45/revision37/bind51/reader76/shared79 inclusion and known overlaps; unchanged20groups/36steps/budgets; all3strictreports/sourcepins and owned/privateNode/history/bootstrapcleanup. Do not transfer priorb1d acceptance or guess merge/build identities/counts. New immutable initial baseline is pinned exactb1d/identical16b CLI and manager, invoked by absolute path from matching clean baseline cwd; candidate pin refusal intentional, allolder5producers immutable. Initial reserve3 is a finite CONTROL-entry contract for registry publication plus one ordinary unbound info/status/history inspection; modeled occupancy crossing is not actual status refusal. Native creation can already leave overbound incompleteprefix before postcheck; refusal preserves prefix and does not retry/clean/rollback. Nearfull bind3/apply7 may legitimately refuse; inspectability does not imply activation. Oldstopped18/1 unchanged and partialunregistered/uninspectable STOP remains. After exact compatibility separately review next supported G4/G5 boundary without blindcapraise, compaction/deletion/reaper or stop/recover gate; directcontroller/recovery/native/transient/concurrent/preparedreuse and initialnativegrowth remainopen. Fullcapacity/G3/G4/G5/G7/V1,orphanreplay/disposal,TLSrestore,nativebinaryupgrade,permanentrelease/publishercapability,publishedreplay,60minsoak,semanticContinuum,WindowsDEFERRED_UNVERIFIED/40h/alladverseUNKNOWN/CLA remainOPEN. Localphysical/native/processgroup/network/signals/systemdFORBIDDEN; pure/tempfile/virtual locally, hostedexistingCIphysical only."
+  },
+  "alphaInitialCapacityPriorReferences": [
+    {
+      "commit": "16b91eae25ce5349c0cfeff2eaf3dfe5031cca3b",
+      "path": "x10/evidence/g5-alpha-bind-capacity-hosted.json",
+      "blobSha": "a398248ee0ea4d28a4f3b4f43d7a6f16ba6abc8d",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "16b91eae25ce5349c0cfeff2eaf3dfe5031cca3b",
+      "path": "x10/review/g5-alpha-bind-capacity-hosted-ledger.json",
+      "blobSha": "394076d4c763ac8f923d0d18701838045a4e14d9",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ],
+  "receipt16bCIStepReadback": {
+    "sourceCommit": "16b91eae25ce5349c0cfeff2eaf3dfe5031cca3b",
+    "nativeRuns": [
+      40609053653,
+      40609060012
+    ],
+    "nativeJobs": [
+      122555875484,
+      122555886530
+    ],
+    "actualSuccessfulSteps": [
+      36,
+      36
+    ],
+    "researchPR": {
+      "runId": 40609060100,
+      "jobId": 122555909571,
+      "actualSuccessfulSteps": 11
+    },
+    "cla": {
+      "runId": 40609057502,
+      "jobId": 122555817901,
+      "conclusion": "failure",
+      "failedStep": 3
+    },
+    "artifactDownloads": 0,
+    "manualReruns": 0,
+    "runtimeCountsInferred": false,
+    "buildIdentityGuessed": false
+  },
+  "alphaInitialCapacityHosted": {
+    "state": "SCOPED_BOTH_EVENT_INITIAL_PUBLICATION_INSTALLED_COMPATIBILITY_ACCEPTED",
+    "implementationCommit": "7599736285196255233bf5f26908caf5ce207740",
+    "implementationTree": "f248ec6e73e0cdd9fa77210706edb3e3276d50e0",
+    "evidence": "x10/evidence/g5-alpha-initial-capacity-hosted.json",
+    "perFileLedger": "x10/review/g5-alpha-initial-capacity-hosted-ledger.json",
+    "nativeRuns": [
+      40614974129,
+      40614980193
+    ],
+    "nativeJobs": [
+      122575285448,
+      122575308500
+    ],
+    "actualSteps": [
+      36,
+      36
+    ],
+    "nativeGroups": [
+      20,
+      20
+    ],
+    "managedTAP": [
+      405,
+      405
+    ],
+    "alphaTAP": [
+      603,
+      603
+    ],
+    "managedElapsedMs": [
+      65889,
+      73517
+    ],
+    "alphaElapsedMs": [
+      96078,
+      96113
+    ],
+    "newPureInitialControls": 29,
+    "retainedTranslatedBackupControls": 82,
+    "strictThreeReportsSourcePinsOwnedPrivateNodeHistoryBootstrapCleanupConfirmed": true,
+    "preparation18AlsoRunsInAlpha": true,
+    "separate25425ModelEmbeddedInInitial29": false,
+    "physicalCapacityExhaustionAccepted": false,
+    "allOSFailureProofAccepted": false,
+    "fullCapacityFindingClosed": false,
+    "productionAccepted": false,
+    "nextConcreteTask": "First inspect exact successor metadata CI actual jobs/steps without guessed merge/build/runtime counts or transferring exact759 acceptance to changed sources; no automaticnewZIP or unchanged rerun absentfailure/diagnosticreason. Next product-facing G4 task is actual faulted-prefix incident-runbook replay, NOT another duplicate master-kill fixture: existing alpha.test already physically exercises masterSIGKILL/faulted/orphanresponse/run-stop-uninstallrefusals. Create a separate bounded hosted-only faulted-prefix incident fixture and strict proof/report: preincident confirmed HTTP backup; capture exact owned master/worker identities and fixture cleanup authority BEFORE incident; abnormal master exit leaves old lifecycle faulted; preserve original prefix/files/registry IN PLACE and never clear lifecycle or forceuninstall. Do NOT execute recover as a hosted incident diagnostic: the runbook prohibits it. Source/pure tests must show controller pending recovery does not clear alpha faulted lifecycle; no assumed abnormal_exit from recover. Snapshot old records AFTER the legitimate faulted lifecycle write, then compare across refusals, cleanup and freshrestore. Recheck exact fixture-owned identities before each cleanup signal; ambiguity/reuse/unknown processes/ports/locks means STOP_UNRESOLVED, no signal or new activation, preserve evidence. Existing sampledPID-to-signal race remains, noOSfence. After exact owned resources/listeners/locks known absent, use PREEXISTING confirmed HTTP backup and checked install.mjs install --prefix NEW --restore BACKUP, only supported input and noport/binary/manifestoverride; demonstrate fresh restore independently while original prefix remains faulted and unchanged. New report must separately prove oldprefix preservation, known resource cleanup, freshrestore identities and newtarget owned teardown, not universal orphan repair/disposal or fullG4. Require explicit retainedFaulted disposition for original prefix IN PLACE with no oldInstallationRemoved requirement, even after resources are absent. Keep that retained tree outside the removable privateNode/bootstrap root; privateNode cleanup can pass only after strict fourth report admission, without falsely removing the old prefix. Keep all old normal/fallback/legacy report/proof counts and checker bytes unchanged. Integrate new fourth source-pinned strict report into verified-node cleanupEvidence and actual workflow before privateNode removal; independently prove finite envelope bound (currently32768), do not blindly raise it. New pure proof/refusal controls can be arguments in an existing validation step; no new nativegroup/workflowstep/order/budget or alpha120000 raise. All physical/native/processgroup/network/signals/systemd fixtures ONLY existinghostedCI; localpure/tempfile/virtual only. Optional alpha load()/record() descriptor acquisition hardening has a poststat pathname replacement/symlink reproduction, but concurrent sameUID changes are outside exclusive trusted operator profile; do not call it exploit/severity/criticalV1blocker or automatically prioritize it over actual G4. Any future reader fix needs NEWimmutable exact759 baseline; older6producers immutable. Direct/native/recovery/transient/concurrent/initialnativegrowth/preparedreuse/fullcapacity remainOPEN; existing initial3/stopped18/1/apply7/bind3 guards stay narrow and nativepostpartialunregistered/uninspectableSTOP persists. FullG3/G4/G5/G7/V1,orphanincidentdisposal,TLSrestore,nativebinaryupgrade,permanentrelease/publishercapability,publishedreplay,60minsoak,semanticContinuum,Windows/40h/alladverseUNKNOWN/CLA remainOPEN."
+  },
+  "alphaInitialCapacityHostedPriorReferences": [
+    {
+      "commit": "7599736285196255233bf5f26908caf5ce207740",
+      "path": "x10/evidence/g5-alpha-initial-capacity.json",
+      "blobSha": "f18d52258e7d1de494bfb1c4eb255b57638f5453",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    },
+    {
+      "commit": "7599736285196255233bf5f26908caf5ce207740",
+      "path": "x10/review/g5-alpha-initial-capacity-ledger.json",
+      "blobSha": "bcc91d8bfed6935386a263fa1acb54b638330037",
+      "requiredReadBeforeNextTask": true,
+      "fullPriorRecordRequired": true
+    }
+  ]
+}

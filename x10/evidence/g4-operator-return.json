@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "sourceBase": "bdcc39c85399a2252daa6e1928f6a99f82d31eaf",
+  "publicationParent": "78ab11d84b99cabe223984159d35b52a2c0bca75",
+  "implementationCommitLocator": "Containing implementation commit; exact resulting hosted native run required",
+  "state": "FROZEN_FIXTURE_PURE_CONTROLS_VERIFIED_EXACT_HOSTED_PENDING",
+  "scope": "Actual foreground HTTP operator-package A(P)-to-B(Q)-to-old-A2(Q) fixture and bounded declarative backward compatibility, using one unchanged compiled native binary",
+  "evidence": "x10/evidence/g4-operator-return.json",
+  "perFileLedger": "x10/review/g4-operator-return-ledger.json",
+  "sourceBindingsFrozen": true,
+  "sourceBindings": {
+    "x10/test/package-return.mjs": {
+      "bytes": 29574,
+      "afterSha256": "ceff1dcb3debb31f98ca75582ed43ca2c60de494a0d58cb3b27c2d8a2cc1bd86",
+      "beforeSha256": null
+    },
+    "x10/test/package-return-proof.mjs": {
+      "bytes": 7719,
+      "afterSha256": "65540f4a5db5deb1ddaa2950e70f81e67d7304ba8cc4616d43a67facbbc4fd6d",
+      "beforeSha256": null
+    },
+    "x10/test/package-return-proof.test.mjs": {
+      "bytes": 14089,
+      "afterSha256": "9e39dc372b499c582bc7c230c7470d986bc2bd242c1380a7e11158ab7f7cc668",
+      "beforeSha256": null
+    },
+    "x10/test/alpha.test.mjs": {
+      "bytes": 114990,
+      "afterSha256": "1314f97f176a1fccf75a79d664aed7f777ce401873f795b0a801cc9c9844cedf",
+      "beforeSha256": "12868a338f450466c8201e8ca110dda65c473db90ad043414d0a3e7e5936a1e9"
+    }
+  },
+  "authoredScenario": [
+    "Use exact checked historical acb operator A and current operator B bytes; record independently verified runtime/operator/native identities. Historical reassembly is not a published historical archive.",
+    "Start A, verify supported HTTP input P and actual readiness/GET/POST/stream observations, then stop and confirm owned absence before staging.",
+    "Stage B side-by-side from clean A without altering the known-good installation; verify fresh unbound target identities and actual different operator/runtime payloads.",
+    "Start B explicitly, refuse wrong readiness before fresh binding, then verify actual HTTP traffic and confirm a new supported HTTP input Q.",
+    "Stop B cleanly and export only its checked declarative HTTP input; invoke the exact trusted old A installer to restore B-produced Q into a fresh A2 prefix.",
+    "Verify A2 payload identity equals A and differs from B while native binary identity remains identical; check fresh installation/session/revision and initially null binding and one fresh initialized-unbound history.",
+    "Explicitly start/bind A2 and observe actual Q readiness and traffic; keep original known-good A files and package intact while B/A2 operate.",
+    "Observe three unique application POST effects across A/B/A2 without replay or reset; package return does not roll back application effects.",
+    "Stop each owned serving process and verify absence before the next phase; remove only owned installations and fixture resources after supported cleanup checks."
+  ],
+  "fixtureOnlyChange": true,
+  "alphaRuntimeChanged": false,
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "serviceRecipeChanged": false,
+  "workflowChanged": false,
+  "packageInventoryChanged": false,
+  "bundleAndInstallationSchemaChanged": false,
+  "localValidation": {
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "x10/test/package-return-proof.test.mjs",
+      "x10/alpha/stage.test.mjs",
+      "x10/alpha/package-info.test.mjs",
+      "x10/alpha/backup.test.mjs",
+      "x10/alpha/prepare-run.test.mjs",
+      "x10/test/alpha-runtime.test.mjs",
+      "x10/test/alpha-pid.test.mjs"
+    ],
+    "counts": {
+      "tests": 581,
+      "pass": 581,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "exitCode": 0,
+    "frozen": true,
+    "sourceBindings": {
+      "x10/test/package-return.mjs": {
+        "bytes": 29574,
+        "sha256": "ceff1dcb3debb31f98ca75582ed43ca2c60de494a0d58cb3b27c2d8a2cc1bd86"
+      },
+      "x10/test/package-return-proof.mjs": {
+        "bytes": 7719,
+        "sha256": "65540f4a5db5deb1ddaa2950e70f81e67d7304ba8cc4616d43a67facbbc4fd6d"
+      },
+      "x10/test/package-return-proof.test.mjs": {
+        "bytes": 14089,
+        "sha256": "9e39dc372b499c582bc7c230c7470d986bc2bd242c1380a7e11158ab7f7cc668"
+      },
+      "x10/test/alpha.test.mjs": {
+        "bytes": 114990,
+        "sha256": "1314f97f176a1fccf75a79d664aed7f777ce401873f795b0a801cc9c9844cedf"
+      }
+    },
+    "nodeVersion": "v24.22.1",
+    "physicalNativeExecuted": false,
+    "systemdExecuted": false,
+    "state": "FROZEN_PURE_TEMPFILE_VIRTUAL_PASS",
+    "newReturnProofControlsIncludedOnce": 207,
+    "separateSelectedNodeNonexecutedInstallation": {
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-name-pattern=^installed package-info identifies checked nonexecuted payload without state or lock writes$",
+        "x10/test/alpha.test.mjs"
+      ],
+      "counts": {
+        "tests": 1,
+        "pass": 1,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "scope": "Actual Node/private synthetic installation with NONEXECUTED native payload; not physical operator return."
+    },
+    "independentHeldoutProofControlsSeparate": 12,
+    "independentVirtualStreamControlsSeparate": 4,
+    "processGroupOrSignalFixtureExecuted": false
+  },
+  "hostedVerification": {
+    "state": "PENDING_EXACT_RESULTING_NATIVE_CI",
+    "historicalOperatorSource": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "historicalOperatorSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+    "nativeBinaryChanged": false,
+    "historicalPackageIsPermanentRelease": false,
+    "expectedEvidence": "Actual A/P traffic, B/Q traffic, old-A2/Q traffic, distinct operator payloads with identical native binary, verified clean stops, source preservation, three retained unique POST effects without replay, owned target cleanup and unchanged service regressions.",
+    "expectedDiagnosticTopLevelFields": 19,
+    "expectedPhaseCount": 13,
+    "expectedTrafficLegs": 3,
+    "expectedUniqueCompletedPosts": 3,
+    "expectedStreams": 3,
+    "postPayloadBytes": 65551,
+    "streamPayloadBytes": 262144
+  },
+  "acceptedPriorStaging": {
+    "implementationCommit": "ad012446592488fe4bc33ff28a2f4189bb8c865a",
+    "receiptCommit": "bdcc39c85399a2252daa6e1928f6a99f82d31eaf",
+    "path": "x10/evidence/g4-package-stage-hosted.json",
+    "scope": "Prepared/unbound staging only; no A-to-B-to-A traffic accepted by that prior receipt."
+  },
+  "consistencyOnly": true,
+  "signatureProvided": false,
+  "foregroundOperatorReturnAccepted": false,
+  "backwardDeclarativeCompatibilityAccepted": false,
+  "managedServicePackageTransitionAccepted": false,
+  "nativeBinaryVersionChangeAccepted": false,
+  "arbitraryStateMigrationAccepted": false,
+  "journalMigrationAccepted": false,
+  "tlsBackupAccepted": false,
+  "packageUpgradeRollbackAccepted": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "productionAccepted": false,
+  "limitations": [
+    "Completed POST effects are bounded synthetic in-memory origin receipts, not database or disk durability. The256KiB stream and65551-byte POST are scoped controls, not release load budgets.",
+    "This authored acceptance scenario requires exact resulting hosted execution and artifact review; local pure controls do not establish physical return or live traffic.",
+    "The operator CLI, native C runtime, controller, service recipe, module inventory and package schema are unchanged; only fixtures/tests/docs/evidence are assigned here.",
+    "Different operator packages with one unchanged native NGINX binary do not demonstrate native binary upgrade/downgrade or distinct native/TLS code migration.",
+    "A2 is a fresh installation of old A package bytes using B-produced supported declarative HTTP input, not in-place mutation of A or transfer of B session/journal/runtime state.",
+    "Historical checked operator reassembly is not a permanent published historical archive or independently downloaded old release.",
+    "Hashes are unsigned consistency checks; the operator and selected packages/configuration remain trusted under the existing same-UID profile.",
+    "No database/business-effect rollback, request replay, all-traffic atomic cutover, seamless connection preservation or general arbitrary state migration is claimed.",
+    "Foreground traffic return does not accept a managed-service package transition; actual systemd package-switch/restart/return remains a separate gate.",
+    "TLS restore, full failure-containment/recovery matrix, permanent release, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open.",
+    "Prior local cleanup FAIL_UNKNOWN, inherited CLA failure, unexercised failure containment and unresolved historical causes remain preserved in checkpoint history.",
+    "Windows remains deferred/unverified and the G9 central portfolio transition protocol is unchanged.",
+    "Input P/Q/A2 digests include run-specific loopback ports: require P!=Q=A2 within each run, not equality of complete proofs across push/PR. Preserve both observed proofs."
+  ],
+  "preFreezeReviewCorrections": [
+    "Listener absence now requires explicit bounded TCP ECONNREFUSED; arbitrary HTTP failure is not absence.",
+    "Runtime/binding ownership is reobserved before each traffic leg, including B after applying Q.",
+    "Bounded output capture and unchanged owned historical bundle are checked before cleanup; unknown cleanup preserves the private fixture."
+  ]
+}

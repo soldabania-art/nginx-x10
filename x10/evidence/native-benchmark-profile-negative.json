@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-nginx-c-client-comparison",
+  "startedAt": "2026-10-23T09:37:10.953Z",
+  "success": false,
+  "options": {
+    "baseline": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+    "candidate": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+    "baselineManifest": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-reference.json",
+    "candidateManifest": "/tmp/x10-native-driver-controls-KlcVqF/mismatch.json",
+    "client": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+    "clientManifest": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/build.json",
+    "durationMs": 100,
+    "warmupMs": 50,
+    "repetitions": 2,
+    "concurrency": [
+      1
+    ]
+  },
+  "environment": {
+    "platform": "linux",
+    "release": "6.18.55",
+    "architecture": "x64",
+    "node": "v24.19.0",
+    "logicalCpus": 9,
+    "availableParallelism": 8,
+    "totalMemoryBytes": 10451439616
+  },
+  "methodology": {
+    "nativeConfiguration": "One native front at a time plus a fixed pristine native origin; daemon off and master_process off for both",
+    "transport": "Loopback HTTP/1.1, keepalive, closed loop, one outstanding request per client lane, no pipelining",
+    "workload": "Static file sendfile on and native reverse proxy, exact 1024-byte response verified for every completed request",
+    "order": "For every workload/concurrency pair: even repetition baseline then candidate; odd repetition candidate then baseline",
+    "timing": "A separate C-client warmup primes native caches/pools; measured client uses fresh connections and drains admitted requests; throughput denominator includes connection setup and drain",
+    "latency": "C-client full-response durations; log2-microsecond histogram quantile upper bounds, no cross-sample pooled quantiles",
+    "resources": "Linux /proc front/origin CPU ticks; RSS sampled every25ms, not true peak; C client self CPU/maxRSS; separate Node orchestration CPU"
+  },
+  "limitations": [
+    "Synthetic short local smoke comparison; no confidence interval, regression threshold or global speedup claim.",
+    "C client, native front and native origin still share a host and can limit each other; no open-loop or remote generator.",
+    "Host scheduling and other workloads are uncontrolled; balanced order reduces but does not remove noise.",
+    "Single-process master-off execution does not measure production multiworker scaling, reloads, TLS, HTTP2/3, QUIC, mail or disk-cold workloads.",
+    "Native CPU uses discrete scheduler ticks; its snapshot window includes client process creation/exit around traffic. RSS sampling can miss peaks; C maxRSS is process-lifetime high water.",
+    "The candidate QUIC parser fix is not exercised by these HTTP1 workloads. Ratios are observations, not evidence that the fix speeds these workloads up."
+  ],
+  "runs": [],
+  "cleanupErrors": [],
+  "error": "Build profiles differ: compiler",
+  "finishedAt": "2026-10-23T09:37:10.988Z"
+}

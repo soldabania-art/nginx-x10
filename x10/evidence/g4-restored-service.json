@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "sourceBase": "370cd08f00c5a0d9a9644262584d1d5c12202aec",
+  "publicationParent": "0bca7078522bef5576561632eb09b6d9bca99de4",
+  "implementationCommitLocator": "Containing implementation commit; exact resulting hosted run required",
+  "state": "CODE_PRESENT_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+  "scope": "Restored HTTP configuration operated as a fresh temporary nonroot systemd user service within the same checked schema2 package",
+  "evidence": "x10/evidence/g4-restored-service.json",
+  "perFileLedger": "x10/review/g4-restored-service-ledger.json",
+  "sourceBindingsFrozen": true,
+  "sourceBindings": {
+    "x10/service/lifecycle-check.mjs": {
+      "beforeSha256": "1364daf1c1399b39706dae34fedee7134a5bc4857080012ab51a8a952d37f7fe",
+      "afterSha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370",
+      "bytes": 147483
+    },
+    "x10/service/verified-node.mjs": {
+      "beforeSha256": "f3c6432ebe4918a08638cf0f5f50572449fec666dbdc1edfa4c830f5e751e187",
+      "afterSha256": "54c3a1891e036295673b57ccffbee33bf4c5ac9e5ac11c70c1b9003a00298573",
+      "bytes": 28343
+    },
+    "x10/service/lifecycle-check.test.mjs": {
+      "beforeSha256": "c57523c51e4b9597384589d2d813f96137d5654e19bf6ac2b2f57d0b1a33bab1",
+      "afterSha256": "4d3eda4bb396436e12c86dfba859496245e9e83e9b84e0cdc675cee7aa878bfe",
+      "bytes": 141676
+    },
+    "x10/service/verified-node.test.mjs": {
+      "beforeSha256": "63651af37c04d94284783c2931169d38bbec97100c5ffa93da189fd741b189a7",
+      "afterSha256": "5d3524fd7d56bc631cf9bd8e43e9b3471e415245aad3084527c053b2a0263099",
+      "bytes": 43947
+    },
+    "x10/test/managed-restore-controls.test.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "2cab30eed86adb6e6510390e634b74ecc0ddc2d776f6110526920cd6ba1df985",
+      "bytes": 22506
+    },
+    ".github/workflows/x10-native.yml": {
+      "beforeSha256": "c86a0e5ed609f415e2831a055657af7313bcda944923d88b9777e55d2ec2a173",
+      "afterSha256": "e2db4ddf78e2ff7321c29d798f70d071dce2db835fa13f61c345a3d9fc4f2726",
+      "bytes": 13975
+    }
+  },
+  "protectedRuntimeBindings": {
+    "x10/alpha/cli.mjs": {
+      "bytes": 64755,
+      "sha256": "38d92317731c155adb183eb918b86517a3474f625f2d53e4f39d608da5af68e0"
+    },
+    "x10/alpha/runtime.mjs": {
+      "bytes": 7540,
+      "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51"
+    },
+    "x10/service/user-unit.mjs": {
+      "bytes": 9481,
+      "sha256": "ae8e34acd2d16a0bbe04884b92d692c2e7e3c76c632c6a26eaa1b0cd38d65d9f"
+    },
+    "x10/release/verify-alpha-archive.mjs": {
+      "bytes": 9209,
+      "sha256": "df213e76264fd7048abe5fdb790c158f7758cac7806d186db9b0fdf73d68094a"
+    },
+    "x10/release/RELEASE-CONTRACT.md": {
+      "bytes": 15067,
+      "sha256": "fce36f6ff9575e50042d473eea52a361730216a2155da2c687feea7b9d482d6a"
+    },
+    "x10/release/profile.json": {
+      "bytes": 9495,
+      "sha256": "9604e00e0dfb68e437dbc967049d3b6816580a8a1d75d96387e84169cb4f9457"
+    },
+    ".github/workflows/x10-continuum.yml": {
+      "bytes": 2258,
+      "sha256": "73615307894060c0838606adb6f0661470d2109ba2860ae35e9e881a5cf6e387"
+    },
+    "LICENSE": {
+      "bytes": 1319,
+      "sha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c"
+    }
+  },
+  "candidateBehavior": [
+    "Run and confirm the original HTTP service, guard its stop, create an installed private declarative backup, then retire its exact owned unit before any restored service activation.",
+    "Restore using the extracted bundle into fresh installation, session, controller revision and unit identities with exact input/ports, initially null binding and one initialized history record.",
+    "Require installed-payload automatic readiness and exact HTTP GET/upload/stream, then a manager restart with new session/invocation and preceding owned process retirement.",
+    "Keep the existing combined TLS, startup refusal, challenge/operator recovery, controlled drain, restart/journal and cleanup obligations on the restored target.",
+    "Measure original HTTP echo count before source stop; require exactly the two new restored HTTP uploads and no management replay through subsequent TLS phases and both uninstalls. The TLS-origin POST counter is separate.",
+    "Compare six selected current original records plus exact private backup and supplied archive bytes before original uninstall. Unconfirmed restore or preservation before source uninstall retains the original source; unconfirmed final cleanup retains the diagnostic root and private runtime."
+  ],
+  "requiredObservationUnits": {
+    "restoredHTTPChecks": 1,
+    "restoredHTTPProofCount": 18,
+    "preparationProofKeys": [
+      "freshInstallation",
+      "freshSession",
+      "freshRevision",
+      "exactInputRestored",
+      "portsPreserved",
+      "bindingInitiallyAbsent",
+      "freshHistory"
+    ],
+    "operatedServiceProofKeys": [
+      "stoppedConfirmedSource",
+      "privateBackupCreated",
+      "sourceUnitRemoved",
+      "freshUnit",
+      "restoredHTTPServed",
+      "restoredHTTPRestarted",
+      "noPostReplay",
+      "sourceRecordsPreserved",
+      "backupPreserved",
+      "archivePreserved",
+      "sourceInstallationRemoved"
+    ],
+    "nativeSessionsStarted": 5,
+    "nativeSessionsStopped": 5,
+    "explicitReadinessPasses": 5,
+    "proxyBodyChecks": 5,
+    "uploadChecks": 5,
+    "streamChecks": 5,
+    "managerRestartCommands": 2,
+    "completedManagerRestarts": 2,
+    "journalChecks": 6,
+    "downstreamTLSSessionChecks": 3,
+    "upstreamTLSSessionChecks": 3,
+    "countersAreRequiredNotObservedResults": true,
+    "allPriorChallengeOperatorDrainStartupAndCleanupProofsRequired": true,
+    "journalCountUnit": "Completed attributable bounded journal checks; each read may issue one to three journalctl queries. Six checks do not mean exactly six queries."
+  },
+  "sourcePreservationScope": {
+    "selectedCurrentRecords": [
+      "installation manifest",
+      "session registry",
+      "current lifecycle",
+      "controller state",
+      "current history",
+      "current confirmed revision"
+    ],
+    "selectedCurrentRecordCount": 6,
+    "allHistoricalSourceFilesInspected": false,
+    "fieldDescribesRequiredChecksNotAnObservedRuntimeResult": true,
+    "backupAndSuppliedArchivePreservationRequired": true
+  },
+  "localValidation": {
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "x10/service/lifecycle-check.test.mjs",
+      "x10/service/verified-node.test.mjs",
+      "x10/alpha/backup.test.mjs"
+    ],
+    "exitCode": 0,
+    "counts": {
+      "tests": 802,
+      "pass": 802,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "nodeVersion": "v24.22.1",
+    "scope": "Selected pure records, owned temporary filesystem, refusal and virtual source-extracted contracts only",
+    "includedNewControls": {
+      "tests": 84,
+      "pass": 84,
+      "pureRelatedRecordControls": 64,
+      "virtualIOActualFunctionControls": 20,
+      "includedOnceIn802": true
+    },
+    "actualNativeAggregateExecuted": false,
+    "actualRestoredManagedServiceExecuted": false,
+    "actualPhysicalSignalsOrSystemdFixtureExecuted": false,
+    "priorLocalFixtureCleanup": "FAIL_UNKNOWN"
+  },
+  "priorVerification": {
+    "foregroundHTTPImplementation": "245d25ca4878b2dcb08fd34c0353b2f9a1ff6c02",
+    "evidence": "x10/evidence/g4-restored-http-hosted.json",
+    "scope": "Previously accepted restored foreground HTTP plus separate existing normal managed service; no restored managed-service acceptance"
+  },
+  "reportReferences": {
+    "current-head-ci-safe.json": {
+      "bytes": 7385,
+      "sha256": "927e2c1db256c2fb735e4d5ef5decf226f65e811dae4ebe85c5d22b8f19f913e"
+    },
+    "verified-node-restored-baseline.json": {
+      "bytes": 724,
+      "sha256": "5a2e67f2cc36059c9fe62443bf98ca4cd65c67628ce931676131e38e51ce5d5e"
+    },
+    "finalRootSelected": {
+      "bytes": 1388,
+      "sha256": "5915ead8d1886fb061b3ffa8509b3fab39bbed0e2b4a0e87bbc36f0f676eac97"
+    }
+  },
+  "exactNewImplementationCI": "PENDING",
+  "restoredManagedServiceAccepted": false,
+  "tlsBackupAccepted": false,
+  "packageUpgradeRollbackAccepted": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "productionAccepted": false,
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "alphaRuntimeChanged": false,
+  "acceptanceHarnessChanged": true,
+  "strictDependencyCleanupProfileChanged": true,
+  "releaseContractOrProfileChanged": false,
+  "priorEvidencePreserved": {
+    "earlierLocalFixtureCleanup": "FAIL_UNKNOWN",
+    "inheritedCLAFailure": true,
+    "mixedHistoricalServiceOutcomes": true,
+    "unknownHistoricalCausesNotEstablishedByLaterSuccess": true,
+    "actualFailureContainmentBranchNotAcceptedByNormalSuccess": true
+  },
+  "limitations": [
+    "Local pure/source controls do not execute an actual native restored service, process-group lifecycle or systemd in the nested local PID environment; supported-host exact CI remains mandatory.",
+    "The old cleanup receipt was valid for its previous smaller profile. Refusing it under new restored-service obligations is a profile expansion control, not a product vulnerability claim.",
+    "Same-package declarative HTTP restore is not meaningful distinct-runtime-package A-to-B-to-A upgrade/rollback, TLS-key/PKI migration, application-data/database recovery or arbitrary external-file portability.",
+    "Trusted same-UID operator, bounded userspace waits and PID-to-signal race limits remain; identity observations are not an OS process fence.",
+    "FullG3/G4-G8/V1, permanent versioned distribution, independent published-file replay, security acceptance,60-minute soak and semantic Continuum remain open."
+  ],
+  "independentReview": {
+    "blockingFindings": 0,
+    "scope": "Security/ownership/lifetime review plus14 separate source-extracted controls",
+    "additionalControlCount": 14,
+    "additionalControlsPassed": 14,
+    "notAddedTo802": true,
+    "actualManagedServiceExecuted": false
+  },
+  "sourceCounterexampleBoundary": {
+    "oldReceiptRemainsValidForItsOldProfile": true,
+    "oldReceiptInsufficientForExpandedRestoredServiceProfile": true,
+    "candidateExpandedProfileRefusalVerified": true,
+    "productVulnerabilityClaim": false,
+    "actualSignalsOrNativeFixtureUsedByControl": false
+  },
+  "unchangedRuntimeAndBudgets": {
+    "nativeControllerAlphaAndRecipeBytesUnchanged": true,
+    "exactCleanupCheckerPinSynchronized": true,
+    "workflowCheckerPinSynchronized": true,
+    "workflowPinOnlyChanged": true,
+    "jobTimeoutsPermissionsAndResourcesUnchanged": true
+  }
+}

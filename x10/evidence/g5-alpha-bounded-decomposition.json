@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "kind": "alpha-installed-recipe-bounded-decomposition",
+  "state": "LOCAL_EXTRACTION_VERIFIED_HOSTED_BUDGET_AND_COMPATIBILITY_PENDING",
+  "sourceBase": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+  "publicationParent": "e2fa32cf282e8e312877dae40751ff5a4b646892",
+  "evidence": "x10/evidence/g5-alpha-bounded-decomposition.json",
+  "perFileLedger": "x10/review/g5-alpha-bounded-decomposition-ledger.json",
+  "sourceBindings": {
+    "x10/test/all.mjs": {
+      "bytes": 32171,
+      "sha256": "ca43fcbc8388d76673c6d8bde061a94d1689b109af346b6d6efb9947f29deb82"
+    },
+    "x10/test/alpha.test.mjs": {
+      "bytes": 91747,
+      "sha256": "2704fd2cf484382569a20bfa0465f78f6ced962eda0ab19490ffae6062ae25e8"
+    },
+    "x10/test/alpha-recipe-helpers.mjs": {
+      "bytes": 14542,
+      "sha256": "38b1c7a903a1b3b46385047f85c8afde51baf0ebd7e2478025c87274fc7a2940"
+    },
+    "x10/test/alpha-recipe.test.mjs": {
+      "bytes": 10577,
+      "sha256": "99530dcb2135b99c91eee30e87dfe21a7cd6cfd67aefaf1cef0ba58d6bebe5f4"
+    },
+    "x10/test/alpha-decomposition.test.mjs": {
+      "bytes": 8487,
+      "sha256": "29fc199a9b8831decad5b786337fdea1eb96470b4739083f93500a94a394cdad"
+    }
+  },
+  "problem": {
+    "evidence": "x10/evidence/g5-reader-shared-peers-hosted.json",
+    "pushRun": 40541963582,
+    "pushJob": 122322581694,
+    "alphaElapsedMs": 120008,
+    "alphaBudgetMs": 120000,
+    "alphaTimedOut": true,
+    "completeTAPSummaryPresent": false,
+    "lastRetainedCompletedTopLevelOrdinal": 568,
+    "lastOrdinalIsNotTotalPass": true,
+    "fullTimedOutAlphaCleanupState": "UNKNOWN",
+    "exclusiveSlownessRootCause": "UNKNOWN",
+    "successfulPRRun": 40541973327,
+    "successfulPRJob": 122322645757,
+    "successfulPRAlphaElapsedMs": 116866,
+    "successfulPRAlphaTAP": 617,
+    "priorPRSuccessIsNotCandidateBudgetAcceptance": true
+  },
+  "change": {
+    "movedControls": 17,
+    "movedControlsAreNewTests": false,
+    "movedOriginalBodyBytes": 9867,
+    "movedBodiesByteExact": true,
+    "movedNames": [
+      "installed package-info identifies checked nonexecuted payload without state or lock writes",
+      "installed recipe command emits manual and automatic units from installed files without activation or alpha lock",
+      "installed recipe command exactflags refuse unknown values duplicates and lifecycle options",
+      "installed recipe command preserves strict legacyv1 profile and refuses recipe without sniffing optional helper",
+      "installed recipe command validates helper bytes before dynamic import",
+      "installed recipe command validates actual recordedNode version before dynamic import",
+      "installed recipe command validates actual recordedNode executable before dynamic import",
+      "installed recipe command validates actual recordedNode sha256 before dynamic import",
+      "installed recipe command refuses fullprofile missingHelper",
+      "installed recipe command refuses fullprofile unknownVersion",
+      "installed recipe command refuses fullprofile missingOtherFile",
+      "installed recipe command refuses fullprofile wrongHelperMode",
+      "installed recipe command refuses fullprofile wrongDirectoryMode",
+      "installed recipe command refuses fullprofile helperHardlink",
+      "installed recipe baseline exact command gate rejects service-unit before any runtime action",
+      "installed recipe controlled unsafe Node mode refuses unchanged product guard",
+      "installed recipe Node preflight refuses changed executable bytes before any identity child runs"
+    ],
+    "newReadOnlyTestFile": "x10/test/alpha-recipe.test.mjs",
+    "sharedHelperModule": "x10/test/alpha-recipe-helpers.mjs",
+    "sharedHelperImportsRegisterNoTestsOrFixtures": true,
+    "helperChange": "Explicit invocation callback replaces one alpha-local default; assertions retained.",
+    "physicalTestBodiesAndCleanupPreserved": true,
+    "pureImportRegistrationsUnchanged": true,
+    "targetExistingGroup": "managed-native-control",
+    "targetTestFiles": [
+      "x10/test/control.test.mjs",
+      "x10/control/record-input.test.mjs",
+      "x10/test/alpha-recipe.test.mjs",
+      "x10/test/alpha-decomposition.test.mjs"
+    ],
+    "aggregateGroupCountUnchanged": true,
+    "workflowStepNamesOrderCountUnchanged": true,
+    "workflowFileBytesUnchanged": true,
+    "perGroupBudgetMsUnchanged": 120000,
+    "aggregateJobBudgetUnchanged": true,
+    "skipPatternOrFilteredSelectionAdded": false,
+    "testDuplicationIntroduced": false,
+    "strictManagedTAPAdded": true,
+    "strictManagedTAPMeaning": "Require complete parseable summary with total===pass and zero skipped/todo/cancelled, preserving existing complete alpha TAP admission.",
+    "guardWiredIntoExistingManagedGroup": true
+  },
+  "verification": {
+    "relocatedRecipeTAP": {
+      "command": "node --test --test-reporter=tap x10/test/alpha-recipe.test.mjs",
+      "nodeVersion": "v24.22.1",
+      "tests": 17,
+      "pass": 17,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "durationMs": 22705.627812,
+      "scope": "Actual installed read-only commands through private Node copies with synthetic native bytes never executed; no native session, service, network, process-group or signal fixture. This17 is retained coverage, not17new controls.",
+      "sourceFilesExecuted": [
+        "x10/test/alpha-recipe.test.mjs",
+        "x10/test/alpha-recipe-helpers.mjs"
+      ],
+      "combinedGroupExecutionNotAttested": "The isolated17TAP report does not attest combined physical managed-group execution; final22pure guards separately cover current wiring."
+    },
+    "newPureDecompositionGuardTAP": {
+      "command": "node --test --test-reporter=tap x10/test/alpha-decomposition.test.mjs",
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "exitCode": 0,
+      "scope": "Pure source-body/hash/registration/wiring guards only. No physical fixture import or execution.",
+      "harnessHistory": "Two initial private guard failures came from one-line function extraction including the following function; checker corrected without product-body changes. Intermediate18PASS preceded four added inventory-constant guards and is not the final22TAP result."
+    },
+    "independentReview": {
+      "checks": 28,
+      "passed": 28,
+      "failed": 0,
+      "scope": "Independent static extraction/registration/dependency review, not runtime or hosted compatibility acceptance",
+      "reportBinding": {
+        "bytes": 4438,
+        "sha256": "4ad4f2091568bf7816e5ef23509e4dc5a341acac032b56a59c237f690bd2510a"
+      },
+      "missingImportResolvedBeforeAuthorRuntime": true,
+      "resolvedFinding": "Missing recipeNodeCommand import caught and fixed before first author runtime; source test body preserved.",
+      "combinedGroupExecutionNotAttested": "The static review does not attest combined physical managed-group execution; final22pure guards separately cover current wiring."
+    },
+    "bootstrapRead": {
+      "sourceBase": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+      "documents": 42,
+      "mandatoryEdges": 169,
+      "blobPinComparisons": 95,
+      "distinctPinnedTargets": 10,
+      "ancestorCommits": 18,
+      "semanticChecks": 102,
+      "scope": "Document/source checks, not runtime TAP. All earlier mandatory references retained."
+    },
+    "countsNotSummed": true,
+    "candidatePhysicalAlphaOrControllerAggregateExecuted": false,
+    "candidateHostedAcceptance": false
+  },
+  "unchangedInstalledRuntimeAndWorkflowBindings": {
+    "x10/control/manager.mjs": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "x10/control/cli.mjs": {
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+    },
+    "x10/control/record-input.test.mjs": {
+      "bytes": 22249,
+      "sha256": "eedae58efe27152f95cb2bb3d0526c7bdb24b5778ba1ba19807adf5ddc2dbbf8"
+    },
+    "x10/alpha/cli.mjs": {
+      "bytes": 87522,
+      "sha256": "2e8a04f64d04601f205ab05b724a93f60866ef37ad83b682f6f8df0f54f808fa"
+    },
+    "x10/service/operator-package-return.mjs": {
+      "bytes": 68575,
+      "sha256": "612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7"
+    },
+    "x10/service/verified-node.mjs": {
+      "bytes": 32439,
+      "sha256": "2febc8bdb6d890e738a426e4a80121ea840d143d9a718768ef10b5b09e839090"
+    },
+    ".github/workflows/x10-native.yml": {
+      "bytes": 26465,
+      "sha256": "d3f92329a396b02d045b45736733cdb711bf55af10b30504bc24f1a0efc8eb73"
+    }
+  },
+  "performanceScope": {
+    "proposal": "Separate17independent installed recipe/inspection controls from the physical alpha lane into the existing managed-control group. Preserve finite group/job budgets and exact-once complete coverage.",
+    "observedOldPRRecipeTail": "Top-level ordinals568..584 contained the17 relocated controls; measured old full alpha116866ms.",
+    "candidateAlphaSpeedupMeasured": false,
+    "candidateAlphaSpeedupGuaranteed": false,
+    "hostSlownessExclusiveCauseEstablished": false,
+    "budgetRaised": false,
+    "unchangedManualRerunPerformed": false,
+    "newCombinedManagedTimingMeasured": false,
+    "risk": "Node test-file execution and host scheduling may shift contention. Exact successor hosted20group/completeTAP/cleanup outcomes must be inspected before budget or compatibility acceptance."
+  },
+  "limits": [
+    "No test-name selector, ignored skips or speculative replacement counts are used as acceptance.",
+    "The17 relocated controls and22new pure guards have different roles and are not summed into a count of new runtime controls.",
+    "Local isolated recipe elapsed is not a measurement of candidate alpha or managed aggregate time.",
+    "Actual9b PR-only complete service compatibility is a historical receipt; it is not acceptance of this changed test runner/extraction.",
+    "Push9b timeout and fullalpha cleanupUNKNOWN remain adverse; successful PR or successor never explains or clears prior failed runs.",
+    "FullG3/G4/G5/G7/V1, orphan incident replay/disposal, TLSrestore, nativebinaryupgrade, permanent release/publisher capability, independent published replay,60minsoak and semanticContinuum remainOPEN.",
+    "Session/inventory capacity remains dependent; alpha/control product bytes and trustedmanagerenvironment precondition are not changed by this fixture decomposition."
+  ],
+  "physicalFixturesExecuted": 0,
+  "networkFixturesExecuted": 0,
+  "signalsSent": 0,
+  "nativeBinaryExecuted": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "fullG5Accepted": false,
+  "fullG7Accepted": false,
+  "productionAccepted": false,
+  "owner40hWindowChanged": false,
+  "deferredWindowsPlanChanged": false,
+  "nextTask": "Read exact successor jobs/steps and actual artifact: all20groups and complete per-lane TAP with every moved case once, new22guards included, unchanged120000 pergroup/job limits, actual installed/native/alpha/service compatibility and strict three-report/owned/privateNode/history/bootstrap cleanup. Diagnose any renewed failure before bounded changes; no blind timeout raise or unchanged rerun. Capacity accounting waits required compatibility acceptance."
+}

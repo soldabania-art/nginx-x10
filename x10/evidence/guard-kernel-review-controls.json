@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "date": "2026-10-23",
+  "suite": "guard-kernel-independent-review",
+  "passed": true,
+  "publication": {
+    "rawRecordSha256": "7d42c3b32e5598b1c6db6e581fd609766523639f59fd6aa28a490d24b04688e5",
+    "rawRecordRetainedLocally": true,
+    "note": "Publication summary only; not raw runner output or aggregate-validator input.",
+    "omitted": [
+      "host paths and runtime process/namespace/socket metadata",
+      "raw command output and logs",
+      "embedded raw reports and configuration payloads"
+    ]
+  },
+  "independentExecution": {
+    "suite": "guard-kernel-independent-controls",
+    "passed": true,
+    "tests": [
+      {
+        "name": "real-correct-key-keeps-tenant-markers-and-positive-cache-controls",
+        "passed": true
+      },
+      {
+        "name": "real-bad-key-produces-cross-tenant-marker-witness-in-both-fresh-orders",
+        "passed": true
+      },
+      {
+        "name": "correct-candidate-passes-the-same-finite-contract",
+        "passed": true
+      },
+      {
+        "name": "cache-off-does-not-count-as-effective-repair-or-tenant-leak",
+        "passed": true
+      },
+      {
+        "name": "unchanged-bad-pair-is-refused-and-baseline-is-not-assumed-correct",
+        "passed": true
+      },
+      {
+        "name": "controlled-binary-marker-positive-control-proves-preflight-would-execute",
+        "passed": true
+      },
+      {
+        "name": "six-invalid-or-unsupported-inputs-have-no-binary-or-fixture-side-effects",
+        "passed": true
+      }
+    ],
+    "cleanup": {
+      "allCliChildrenReaped": true,
+      "nativeFixtureProcessesBeforeEmergencyCleanup": 0,
+      "nativeFixtureProcessesRemaining": 0,
+      "fixtureDirectoriesRemaining": 0,
+      "temporaryRootRemoved": true
+    },
+    "sourceFilesSha256": {
+      "x10/proof/cli.mjs": "a204ef1958dbb8a538fd20680340402609eb9e16499b598bded4d57d4aaf560e",
+      "x10/proof/runner.mjs": "23ce6ec1e7f0429e08ad0c71fe836d75bd5934ff6c748c6d189b4748f0e8f33d",
+      "x10/proof/README.md": "b19461b918ee40d08b240dadaef1f4cfec57610b36b9a6969bb692bcc737740e",
+      "x10/proof/examples/isolated.json": "16f8df788af82424593d8bc10da9a299376b4fb60e67b9cda1363d4e57ac7213",
+      "x10/proof/examples/leaking.json": "c34a659e88f042df7a544c85e7aa37a2babd75ff67eed2a03294e360d7c91524",
+      "x10/proof/examples/cache-disabled.json": "c6017e8e62bca5ee1b43111aa83456999509198d215917aae2336b33824120ef",
+      "x10/test/proof.test.mjs": "c0964090631e7fd7776a97772fe7de91784b0a8c4920426ca266e4922597b050",
+      "x10/review/guard-research.md": "f1ad90445a02462f0613586dd3a377700b46450adb522a0c95c32d7ec812f7e0"
+    },
+    "harnessSha256": "69e34b074979e225dc416a4fe02c25953ae04182e06abed31773a937874531ef",
+    "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+    "sourceUnchangedDuringTest": true,
+    "binaryUnchangedDuringTest": true,
+    "invalidInputCases": [
+      {
+        "name": "unknown-field",
+        "outcome": "invalid_input",
+        "code": "invalid_contract"
+      },
+      {
+        "name": "unsupported-kind",
+        "outcome": "unsupported",
+        "code": "unsupported_contract"
+      },
+      {
+        "name": "repeated-slash-resource",
+        "outcome": "invalid_input",
+        "code": "invalid_contract"
+      },
+      {
+        "name": "cache-type",
+        "outcome": "invalid_input",
+        "code": "invalid_contract"
+      },
+      {
+        "name": "nginx-injection-resource",
+        "outcome": "invalid_input",
+        "code": "invalid_contract"
+      },
+      {
+        "name": "incomparable-pair",
+        "outcome": "invalid_input",
+        "code": "incomparable_contracts"
+      }
+    ]
+  },
+  "executionCounts": {
+    "checkGroups": 7,
+    "nativeScenarioGroups": 5,
+    "preflightPositiveControlGroups": 1,
+    "inputRejectionGroups": 1,
+    "rejectedInputCases": 6
+  },
+  "sourceReview": [
+    {
+      "path": "x10/proof/runner.mjs",
+      "sha256": "23ce6ec1e7f0429e08ad0c71fe836d75bd5934ff6c748c6d189b4748f0e8f33d",
+      "contracts": [
+        "Detached bounded contract schema; validate pair before build probing; local manifest/source/generated-input/binary checks; generated synthetic loopback profile; finite sequence and independent-origin oracle; foreign marker witness vs fixture error; bounded owned cleanup."
+      ]
+    },
+    {
+      "path": "x10/proof/cli.mjs",
+      "sha256": "a204ef1958dbb8a538fd20680340402609eb9e16499b598bded4d57d4aaf560e",
+      "contracts": [
+        "Strict explicit check/compare arguments; validate all JSON before probing binary; deterministic exit outcomes; generic public infrastructure errors; signal cancellation and no model calls."
+      ]
+    },
+    {
+      "path": "x10/test/proof.test.mjs",
+      "sha256": "c0964090631e7fd7776a97772fe7de91784b0a8c4920426ca266e4922597b050",
+      "contracts": [
+        "Paired real native key/cache controls; strict input/provenance negatives; test-only preload SIGTERM after unique readiness; tracked native child reaped; fixture removal and immutable native/manifest identities."
+      ]
+    },
+    {
+      "path": "x10/proof/README.md",
+      "sha256": "b19461b918ee40d08b240dadaef1f4cfec57610b36b9a6969bb692bcc737740e",
+      "contracts": [
+        "Deterministic finite generated-profile scope, no AI/customer config adapter/production proof; exact sequence, controls and exit semantics."
+      ]
+    },
+    {
+      "path": "x10/review/guard-research.md",
+      "sha256": "f1ad90445a02462f0613586dd3a377700b46450adb522a0c95c32d7ec812f7e0",
+      "contracts": [
+        "Future AI proposal/repair hypothesis separated from actual kernel; primary prior art, falsifiable comparisons, owner policy/oracle separation and unsupported safety limits."
+      ]
+    }
+  ],
+  "ownerEvidence": {
+    "sha256": "02cdd6541ea95685690704856bdc30887e52b1d5fd0930f9f9e8d1bdfe6de864",
+    "tapTests": 8,
+    "passed": 8,
+    "skipped": 0,
+    "executionAttribution": "owner-executed; output/source inspected, not independently replayed"
+  },
+  "findings": [
+    {
+      "item": "Repeated slash resource and fixture response misclassification",
+      "origin": "independent source counterexample",
+      "resolved": true,
+      "resolution": "Repeated slashes rejected before effects; non200/unrecognized bodies and invalid cold priming states are infrastructure errors; only known foreign-tenant responses create mismatch witness. Candidate repeated-slash rejection independently executed; HTTP shape branch source-reviewed."
+    },
+    {
+      "item": "RFC request-order drift",
+      "origin": "independent source/document review",
+      "resolved": true,
+      "resolution": "RFC now states actual alternating sequences and reverse order."
+    }
+  ],
+  "reviewHarnessDiagnostic": {
+    "classification": "review_harness_error",
+    "phase": "cleanup procfs inventory",
+    "resolved": true,
+    "detail": "Initial inventory hit permission denial on an unrelated protected proc entry. Scanner restricted to accessible private fixture executables; final controls reran. No first-attempt PASS is claimed."
+  },
+  "limitations": [
+    "No LLM, generated repair, arbitrary customer configuration import or general customer binary adapter was tested or implemented by this kernel.",
+    "This is one trusted generated Linux HTTP proxy/cache profile, two synthetic labels, one resource and two fresh-cache request orders, not authentication or exhaustive isolation proof.",
+    "The deliberately incomplete key is a generated misconfiguration counterexample, not a new NGINX vulnerability or native code fix.",
+    "Cache disabling can be a separate mitigation policy; it fails this experiment because the declared contract also requires cache effectiveness.",
+    "Prior-art sources support the RFC comparisons, not an exhaustive literature search, novelty proof or absence of other stateful/cache tools.",
+    "Build consistency hashes are unsigned and do not establish supply-chain attestation, stable dynamic libraries or malicious same-UID isolation. Selected executables remain trusted local code.",
+    "Independent interruption fault injection was not repeated; the owner targeted TAP and preload control were inspected separately.",
+    "Procfs/file observations are sampled. The final accessible private-executable inventory was empty; inaccessible unrelated proc entries are excluded.",
+    "No native rebuild, full official aggregate, publication, production traffic or production configuration action was performed by this review."
+  ],
+  "fixturesStopped": true
+}

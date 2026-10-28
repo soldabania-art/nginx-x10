@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "date": "2026-10-23",
+  "publication": {
+    "rawRecordSha256": "bcaf48120ece30871a05d74930d102db00d0fa8193e78bcfea8c0ac5c0d6e2ed",
+    "rawRecordRetainedLocally": true,
+    "omitted": [
+      "absolute filesystem paths",
+      "live process and namespace identities",
+      "ephemeral network endpoints",
+      "raw configuration and certificate metadata",
+      "native and child logs",
+      "embedded raw reports and command output"
+    ],
+    "note": "This is a publication summary, not a raw runner record or input to the aggregate validator."
+  },
+  "suite": "native-operator-status",
+  "passed": true,
+  "transport": {
+    "kind": "tcp",
+    "automaticFallback": false
+  },
+  "caseCount": 29,
+  "passedCaseCount": 29,
+  "tests": [
+    {
+      "name": "uint64-identities-retain-values-beyond-javascript-number-precision",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-numeric-counter",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-leading-zero",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-uint64-overflow",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-wrong-master-PID",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-child-is-master",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-duplicate-birth",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-duplicate-slot",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-future-child-generation",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-false-available-null-identity",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-unavailable-contradicts-reason",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-exhausted-still-exposes-IDs",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-classified-generation-without-birth",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-nonboolean-flags",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-excess-processes",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-unknown-envelope-field",
+      "passed": true
+    },
+    {
+      "name": "schema-refuses-control-characters-in-name",
+      "passed": true
+    },
+    {
+      "name": "endpoint-options-refuse-remote-ambiguous-and-noncanonical-targets",
+      "passed": true
+    },
+    {
+      "name": "human-status-marks-mismatch-pending-and-errors-without-health-claim",
+      "passed": true
+    },
+    {
+      "name": "status-json-compatible-and-human-unbound-is-actionable",
+      "passed": true
+    },
+    {
+      "name": "actual-native-generation-query-is-bound-to-endpoint-inode-and-local-master-pid",
+      "passed": true
+    },
+    {
+      "name": "actual-cli-json-generation-inspection-and-human-bound-status",
+      "passed": true
+    },
+    {
+      "name": "generation-inspection-does-not-mutate-controller-journal-or-config",
+      "passed": true
+    },
+    {
+      "name": "apply-retains-existing-behavior-and-native-generation-advances",
+      "passed": true
+    },
+    {
+      "name": "foreign-local-endpoint-is-refused-before-any-http-request",
+      "passed": true
+    },
+    {
+      "name": "wrong-native-listener-and-unresolved-transaction-do-not-pass",
+      "passed": true
+    },
+    {
+      "name": "human-option-cannot-turn-apply-into-an-unintended-write",
+      "passed": true
+    },
+    {
+      "name": "bounded-http-schema-and-deadline-controls-use-synthetic-owned-replies",
+      "passed": true
+    },
+    {
+      "name": "stopped-master-is-shown-stale-and-generation-query-fails-closed",
+      "passed": true
+    }
+  ],
+  "nodeTestReportedCounts": {
+    "format": "node-test-tap",
+    "pass": 30,
+    "fail": 0,
+    "valid": true,
+    "total": 30,
+    "skipped": 0,
+    "todo": 0,
+    "cancelled": 0
+  },
+  "provenance": {
+    "binarySha256": "e150b0a6e15c3799384e141ea548c658f1ce126ad2eb996a3965ab6791e0a139",
+    "sourceUnchangedDuringTest": true,
+    "binaryUnchangedDuringTest": true,
+    "sourceFilesSha256": {
+      "x10/control/cli.mjs": "72972fd1093068d05b788a326962f641fb2871dd7fa4cabb66957fcb3b22775b",
+      "x10/control/manager.mjs": "f033c4ec66973211bad096cccdbbce63d724c02458711e3ff3a04f5227d9dc53",
+      "x10/control/generations.mjs": "dba28810084f0cbb84275cc200f5bec93150406306c6bd78b06ac2b585815789",
+      "x10/control/status-format.mjs": "522d932cbfe9ca8493a5f472207da910eb71476ed47f1148dda589a4171929f8",
+      "x10/test/operator-status.test.mjs": "0c24bce2518848d14c317b451c261f437a8209387ea9ae8a1abb3e86c560e03d"
+    }
+  },
+  "cleanup": {
+    "nativeStopped": true,
+    "fixturesStopped": true,
+    "temporaryRootRemoved": true,
+    "openSockets": 0
+  },
+  "limitations": [
+    "The 29 named cases and 30 Node-reported TAP tests include the suite wrapper and are not added together.",
+    "Human status presents revision-header observations, not application health or listener drain.",
+    "Native generation inspection is explicit read-only local diagnostics, not worker readiness or all-generation closure.",
+    "Synthetic reply/schema/deadline controls are distinct from actual native endpoint tests."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-c-comparison-verification",
+  "tests": [
+    {
+      "name": "short-functional-smoke",
+      "passed": true,
+      "runs": 8,
+      "performanceAcceptance": false
+    },
+    {
+      "name": "incompatible-profile-rejected-before-traffic",
+      "passed": true,
+      "exitCode": 1,
+      "error": "Build profiles differ: compiler",
+      "runs": 0
+    },
+    {
+      "name": "manifest-change-invalidates-comparison",
+      "passed": true,
+      "exitCode": 1,
+      "identityErrors": [
+        "candidate manifest changed"
+      ]
+    },
+    {
+      "name": "SIGTERM-with-live-client-front-origin-cleans-all",
+      "passed": true,
+      "exitCode": 143,
+      "observedAlive": [
+        true,
+        true,
+        true
+      ],
+      "leaked": []
+    }
+  ],
+  "passed": true,
+  "cleanup": {
+    "temporaryRootRemoved": true
+  },
+  "finishedAt": "2026-10-23T09:37:13.856Z"
+}

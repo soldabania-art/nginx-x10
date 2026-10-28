@@ -1,0 +1,146 @@
+#!/usr/bin/env node
+// A bounded recipe generator. It never activates, installs or supervises a service.
+import { constants } from 'node:fs';
+import { open, realpath } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
+export const RECIPE_LIMITATIONS = Object.freeze({
+  scope: 'systemd-user-recipe-only', readinessAutomated: false,
+  startupHealthAccepted: false, serviceAccepted: false, productionAccepted: false,
+});
+const HEX = /^[a-f0-9]{64}$/;
+const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+function refuse() { throw new Error('service_recipe_invalid'); }
+function safePath(value) {
+  if (typeof value !== 'string' || value.length > 1024 || !/^\/[A-Za-z0-9_./+-]+$/.test(value)
+      || path.posix.normalize(value) !== value || value === '/' || value.endsWith('/')) refuse();
+  return value;
+}
+function inputs(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)
+      || Object.keys(value).some(k => !['prefix', 'nodeExecutable', 'autoReadiness'].includes(k))) refuse();
+  const prefix = safePath(value.prefix), nodeExecutable = safePath(value.nodeExecutable);
+  if (path.posix.dirname(prefix) === '/' || prefix.length + 13 > 107) refuse();
+  const option = Object.getOwnPropertyDescriptor(value, 'autoReadiness');
+  if (option && (!Object.hasOwn(option, 'value') || typeof option.value !== 'boolean')) refuse();
+  return { prefix, nodeExecutable, autoReadiness: option ? option.value : false };
+}
+
+export function renderUserUnit(value) {
+  const { prefix, nodeExecutable, autoReadiness } = inputs(value);
+  const command = `${nodeExecutable} ${prefix}/bin/x10`;
+  return `# X10 systemd --user recipe only; no activation performed.\n`
+    + (autoReadiness ? `# ExecStartPre prepares the guarded session before run and wait-bind can race.\n`
+      + `# ExecStartPost waits for installed guarded bind; full startup health is not accepted.\n`
+      + `# readinessAutomated:true startupHealthAccepted:false serviceAccepted:false\n`
+      + `# The explicit pinned-node installed launcher waits within the start timeout.\n`
+      : `# Type=exec confirms process exec, not native startup or application readiness.\n`
+      + `# readinessAutomated:false startupHealthAccepted:false serviceAccepted:false\n`
+      + `# Run the explicit pinned-node launcher bind after native startup, before use.\n`)
+    + `[Unit]\nDescription=NGINX X10 private operator service\n\n`
+    + `[Service]\nType=exec\nWorkingDirectory=${prefix}\n`
+    + (autoReadiness ? `ExecStartPre=${command} prepare-run\n` : '')
+    + `ExecStart=${command} run --control-socket ${prefix}/control.sock\n`
+    + (autoReadiness ? `ExecStartPost=${command} wait-bind --timeout-ms 10000\n` : '')
+    + `ExecStop=${command} stop\n`
+    + `Restart=no\nKillMode=process\nKillSignal=SIGTERM\nSendSIGKILL=no\n`
+    + `TimeoutStartSec=30s\nTimeoutStopSec=30s\nUMask=0077\n`
+    + `UnsetEnvironment=NODE_OPTIONS NODE_PATH NGINX_CTRL\n`
+    + `StandardOutput=journal\nStandardError=journal\n\n`
+    + `[Install]\nWantedBy=default.target\n`;
+}
+
+async function readRegular(file, maxBytes, { uid, privateFile = false, executable = false } = {}) {
+  if (await realpath(file) !== file) refuse();
+  const handle = await open(file, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
+  try {
+    const stat = await handle.stat(), mode = stat.mode & 0o7777;
+    if (!stat.isFile() || stat.size < 1 || stat.size > maxBytes
+        || (uid !== undefined && stat.uid !== uid)
+        || (mode & (privateFile ? 0o077 : 0o022)) !== 0
+        || (mode & 0o7000) !== 0 || (executable && (mode & 0o100) === 0)) refuse();
+    const bytes = Buffer.alloc(stat.size + 1); let used = 0;
+    while (used < bytes.length) {
+      const { bytesRead } = await handle.read(bytes, used, bytes.length - used, null);
+      if (!bytesRead) break;
+      used += bytesRead;
+    }
+    const after = await handle.stat();
+    if (used !== stat.size || after.size !== stat.size || after.mtimeMs !== stat.mtimeMs || after.ctimeMs !== stat.ctimeMs) refuse();
+    return { bytes: bytes.subarray(0, used), stat, mode };
+  } finally { await handle.close(); }
+}
+
+// Read-only checks bind a recipe to an existing local installation and recorded Node.
+// Runtime lifecycle, dependency integrity and health are checked by the installed CLI,
+// not accepted by this generator. Trust is limited to the existing same-UID operator.
+export async function inspectInstallation(value) {
+  const { prefix, nodeExecutable, autoReadiness } = inputs(value);
+  if (process.platform !== 'linux' || typeof process.getuid !== 'function' || await realpath(prefix) !== prefix) refuse();
+  const directory = await open(prefix, constants.O_RDONLY | constants.O_DIRECTORY | constants.O_NOFOLLOW);
+  let stat;
+  try { stat = await directory.stat(); } finally { await directory.close(); }
+  if (!stat.isDirectory() || stat.uid !== process.getuid() || (stat.mode & 0o7777) !== 0o700) refuse();
+  const record = await readRegular(`${prefix}/.alpha-install.json`, 2 * 1024 * 1024, { uid: stat.uid, privateFile: true });
+  const parsed = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(record.bytes));
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) refuse();
+  const { sha256, ...manifest } = parsed;
+  if (!HEX.test(sha256 || '') || digest(JSON.stringify(manifest)) !== sha256
+      || ![1, 2].includes(manifest.schemaVersion) || manifest.kind !== 'nginx-x10-local-alpha' || manifest.prefix !== prefix
+      || !/^[a-f0-9]{32}$/.test(manifest.installationId || '')
+      || manifest.rootIdentity?.uid !== stat.uid || manifest.rootIdentity?.dev !== stat.dev || manifest.rootIdentity?.ino !== stat.ino) refuse();
+  if (manifest.schemaVersion === 2) {
+    const names = ['bin/nginx', 'bin/x10', 'build.json', 'licenses/NGINX-LICENSE', 'licenses/UPSTREAM.txt', 'examples/candidate-b.json',
+      ...['cli.mjs', 'manager.mjs', 'listeners.mjs', 'generations.mjs', 'status-format.mjs'].map(name => `lib/control/${name}`),
+      ...['cli.mjs', 'runtime.mjs', 'upstream-example.mjs'].map(name => `lib/alpha/${name}`), 'lib/service/user-unit.mjs'].sort();
+    if (JSON.stringify(Object.keys(manifest.immutable || {}).sort()) !== JSON.stringify(names)) refuse();
+    for (const relative of ['bin', 'lib', 'lib/control', 'lib/alpha', 'lib/service', 'licenses', 'examples', 'runs']) {
+      const file = `${prefix}/${relative}`;
+      if (await realpath(file) !== file) refuse();
+      const handle = await open(file, constants.O_RDONLY | constants.O_DIRECTORY | constants.O_NOFOLLOW);
+      try { const info = await handle.stat();
+        if (!info.isDirectory() || info.uid !== stat.uid || (info.mode & 0o7777) !== 0o700) refuse();
+      } finally { await handle.close(); }
+    }
+    for (const relative of names) {
+      const expected = manifest.immutable[relative], mode = ['bin/nginx', 'bin/x10'].includes(relative) ? '0500' : '0400';
+      const actual = await readRegular(`${prefix}/${relative}`, 256 * 1024 * 1024,
+        { uid: stat.uid, privateFile: true, executable: mode === '0500' });
+      if (!expected || expected.mode !== mode || actual.mode.toString(8).padStart(4, '0') !== mode
+          || actual.stat.nlink !== 1 || expected.bytes !== actual.bytes.length
+          || !HEX.test(expected.sha256 || '') || expected.sha256 !== digest(actual.bytes)) refuse();
+    }
+  }
+  const launcher = await readRegular(`${prefix}/bin/x10`, 64 * 1024, { uid: stat.uid, privateFile: true, executable: true });
+  const expected = manifest.immutable?.['bin/x10'];
+  if (!expected || !HEX.test(expected.sha256 || '') || expected.sha256 !== digest(launcher.bytes)
+      || expected.bytes !== launcher.bytes.length || expected.mode !== launcher.mode.toString(8).padStart(4, '0')
+      || launcher.mode !== 0o500) refuse();
+  const node = manifest.nodeRuntime;
+  if (!node || node.executable !== nodeExecutable || !HEX.test(node.sha256 || '')
+      || !/^v(?:2[2-9]|[3-9][0-9])\.[0-9]+\.[0-9]+$/.test(node.version || '')) refuse();
+  const actual = await readRegular(nodeExecutable, 256 * 1024 * 1024, { executable: true });
+  if (![0, stat.uid].includes(actual.stat.uid) || digest(actual.bytes) !== node.sha256) refuse();
+  return { installationChecked: true, launcherChecked: true, recordedNodeChecked: true,
+    fullInstallationAccepted: false, targetRuntimeAccepted: false, ...RECIPE_LIMITATIONS, readinessAutomated: autoReadiness };
+}
+
+export async function main(argv = process.argv.slice(2)) {
+  try {
+    if (!Array.isArray(argv) || ![4, 5].includes(argv.length) || argv[0] !== '--prefix' || argv[2] !== '--node'
+        || (argv.length === 5 && argv[4] !== '--auto-readiness')) refuse();
+    const value = { prefix: argv[1], nodeExecutable: argv[3] };
+    if (argv.length === 5) value.autoReadiness = true;
+    await inspectInstallation(value);
+    return { ok: true, unit: renderUserUnit(value), ...RECIPE_LIMITATIONS, readinessAutomated: value.autoReadiness === true };
+  } catch { return { ok: false, code: 'service_recipe_invalid', ...RECIPE_LIMITATIONS }; }
+}
+let cli = false;
+try { cli = Boolean(process.argv[1]) && await realpath(process.argv[1]) === await realpath(fileURLToPath(import.meta.url)); } catch { /* Imports have no CLI authority. */ }
+if (cli) {
+  const result = await main();
+  process.stdout.write(result.ok ? result.unit : JSON.stringify(result) + '\n');
+  process.exitCode = result.ok ? 0 : 1;
+}

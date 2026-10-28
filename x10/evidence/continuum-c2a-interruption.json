@@ -1,0 +1,395 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "suite": "continuum-c2a-handled-runtime-interruption",
+  "date": "2026-10-23",
+  "baselineCommit": "2e6fb8af405bd02177459ee4d0c57bdb123e9de9",
+  "publicationParent": "eadd6801d0a02cb6a59f8a263f7b6eb892b7e342",
+  "implementationCommitRule": "The first commit introducing this evidence identifies the frozen implementation; hosted CI is accepted separately for that exact SHA.",
+  "scope": {
+    "ordinaryActualTLSScenarios": 10,
+    "handledSignalRuntimeControls": 2,
+    "nonTLSCachedSourceControl": 1,
+    "flatAggregateTests": 13,
+    "checkpoint": "Actual successful first application READ after authenticated TLS, before echo; not full-payload or graceful-close acceptance.",
+    "driver": "Private launcher invokes unchanged exported C2a APIs and reproduces CLI try/finally/error contract; standalone CLI branch is not directly executed.",
+    "signalTarget": "Node launcher; child termination/reaping is observed, not direct C SIGINT semantics.",
+    "productionCleanupDefectEstablished": false,
+    "nativeSourceChanged": false,
+    "semanticExportImport": false,
+    "migration": false
+  },
+  "sourceSha256": {
+    "openssl-interruption.mjs": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+    "openssl-probe.test.mjs": "a829c3be54c8a044d336d46e9bbf4a291c702d7bef1780aa3cc8d1b4ddc20b0e",
+    "openssl-probe-run.mjs": "c43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3",
+    "openssl-probe-fixture.c": "7754dc56122bf46f4d80d7c6d5fa9d5b472f0c7a2d45eb88757e599fe0d369cf",
+    "openssl-probe.c": "453091bbfb54439bf1304ea15ad3de9bbe9b9bf1ce465da5c7723fef9f11e9ca",
+    "openssl-probe.h": "ca4c0d5e86a4e008a59c7788057fa03dc8c6fb64237beb06b0edfbee473fb0d8",
+    "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+    "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611",
+    "openssl-probe-check.mjs": "45da87fdb75ee404b8403c3c80afa51c55a4b6d8713e5040ee88354c8b9d313a",
+    "handshake-oracle.mjs": "b551e55d6d20ebb687f6d49c38a0cd6b144acd5981047fc24c502b2fccd4c835",
+    "record.mjs": "124baea5d841b3036041ee46aa8992a8c348cc9ffe13e3661b391bed0927e272"
+  },
+  "authorAggregate": {
+    "command": "node --import <private-tap-capture-preload> x10/continuum/openssl-probe-check.mjs",
+    "privateTapCapture": "Only the outer aggregate collector adds read-only stdout/stderr listeners to its test child. No additional flags or byte changes are introduced in the owned test/TLS children beyond the checked-in interruption helper instrumentation.",
+    "exitCode": 0,
+    "elapsedMilliseconds": 258529,
+    "report": {
+      "schemaVersion": 1,
+      "suite": "continuum-pinned-openssl-state-probe",
+      "passed": true,
+      "testFiles": 1,
+      "scope": "pinned-openssl-read-only-state-observation",
+      "nativeNginxMigration": false,
+      "realSessionMigration": false,
+      "counts": {
+        "tests": 13,
+        "suites": 0,
+        "pass": 13,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "interrupted": false,
+      "runnerError": null
+    },
+    "sourceHashesBefore": {
+      "x10/continuum/openssl-interruption.mjs": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+      "x10/continuum/openssl-probe.test.mjs": "a829c3be54c8a044d336d46e9bbf4a291c702d7bef1780aa3cc8d1b4ddc20b0e",
+      "x10/continuum/openssl-probe-run.mjs": "c43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3",
+      "x10/continuum/openssl-probe-fixture.c": "7754dc56122bf46f4d80d7c6d5fa9d5b472f0c7a2d45eb88757e599fe0d369cf",
+      "x10/continuum/openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611"
+    },
+    "sourceHashesAfter": {
+      "x10/continuum/openssl-interruption.mjs": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+      "x10/continuum/openssl-probe.test.mjs": "a829c3be54c8a044d336d46e9bbf4a291c702d7bef1780aa3cc8d1b4ddc20b0e",
+      "x10/continuum/openssl-probe-run.mjs": "c43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3",
+      "x10/continuum/openssl-probe-fixture.c": "7754dc56122bf46f4d80d7c6d5fa9d5b472f0c7a2d45eb88757e599fe0d369cf",
+      "x10/continuum/openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611"
+    },
+    "sourceUnchangedDuringRun": true,
+    "rawTapSha256": "91d213f02e2f35fc5f37eac10b0d3660803ee94939618745fb2763a892f2257c",
+    "aggregateSha256": "145c4d4a1bb180bf6667b79c855eab4022bb2319d5cbc0b97dcd83d10db43b65",
+    "stderrBytes": 0,
+    "canonicalEntryPoint": "node x10/continuum/openssl-probe-check.mjs",
+    "testFamilies": {
+      "existingActualTLSScenarios": 10,
+      "handledActualTLSRuntimeSignals": 2,
+      "nonTLSCachedSourceIdentityControl": 1
+    },
+    "rawTapCounts": {
+      "tests": 13,
+      "suites": 0,
+      "pass": 13,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "recordKind": "independent-c2a-interruption-review",
+    "sourceSha256": {
+      "openssl-interruption.mjs": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+      "openssl-probe-run.mjs": "c43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3",
+      "openssl-probe-fixture.c": "7754dc56122bf46f4d80d7c6d5fa9d5b472f0c7a2d45eb88757e599fe0d369cf",
+      "openssl-probe.c": "453091bbfb54439bf1304ea15ad3de9bbe9b9bf1ce465da5c7723fef9f11e9ca",
+      "openssl-probe.h": "ca4c0d5e86a4e008a59c7788057fa03dc8c6fb64237beb06b0edfbee473fb0d8",
+      "openssl-probe.patch": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+      "openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611"
+    },
+    "scope": "actual-authenticated-TLS-read-then-handled-signal-not-migration",
+    "cases": [
+      {
+        "kind": "no-TLS-invalid-options-control",
+        "reason": "interruption_options",
+        "passed": true
+      },
+      {
+        "kind": "no-TLS-invalid-options-control",
+        "reason": "interruption_options",
+        "passed": true
+      },
+      {
+        "kind": "no-TLS-invalid-options-control",
+        "reason": "interruption_options",
+        "passed": true
+      },
+      {
+        "kind": "actual-TLS-heldout",
+        "payloadBytes": 49319,
+        "outcome": "pass",
+        "interruption": "SIGINT",
+        "checkpoint": "retry-completed",
+        "exitCode": 130,
+        "signal": null,
+        "identity": {
+          "sourceCommit": "85cf92f55d9e2ac5aacf92bedd33fb890b9f8b4c",
+          "sourceTree": "4e48caeae2374ee4982c8e44b6a15cf4753229cb",
+          "patchedTree": "f6301918a737267208ade21de6ab162d5e82f9cb",
+          "patchSha256": "2b61a530504b71c5249ce79e33a58ca51251cf5f245472620da7692a6bfb8dcd",
+          "fixtureBinarySha256": "b65fa380510e9e55bbf876b44ebd69f072871b6e40f149516b089a24f8cdb300",
+          "nodeBinarySha256": "bc17c508ffeed0ec622934f9b7fa72f8e78da65350e63c3eceb56fa688aa5e12",
+          "compilerSha256": "6117c52522997d2aaccb2b52b3c6bf42c0a6c5edb1d718431fed6b2fc5fec234",
+          "libsslSha256": "f2eed07409202ab9036387b99e79e0bc5cfd57163b9e3253b4a3b88db722e6b6",
+          "libcryptoSha256": "9a7a1d9c56b481c456c1ac9c124ced11aba9dcdbbc98b2e45572c358ee236252",
+          "opensslSha256": "415cd21e4dc5bacd3b3029c09ad16bcfeba55388c8fa4e408f032996a3ea17cf",
+          "configHeaderSha256": "0eef7ea3754e6a6d867adf8ff56937159aaee5bb3502e7a6072139526c170e81",
+          "configDataSha256": "2c4f82bbda316143a30a37a26af58b7c9509047dab80c0801592c19b8ad200fa",
+          "makefileSha256": "40e63c13b959bcc1504a118cf7329ba2eea7f9ad180fb1eba54eceac8c9098cf",
+          "fixtureSourceSha256": "7754dc56122bf46f4d80d7c6d5fa9d5b472f0c7a2d45eb88757e599fe0d369cf",
+          "probeSourceSha256": "453091bbfb54439bf1304ea15ad3de9bbe9b9bf1ce465da5c7723fef9f11e9ca",
+          "headerSourceSha256": "ca4c0d5e86a4e008a59c7788057fa03dc8c6fb64237beb06b0edfbee473fb0d8",
+          "helperSha256": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+          "runnerSha256": "c43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3",
+          "preloadSha256": "e507a2085a657d1a9926dfa6f5355d1eca2bd4859db2214a1240c336a2501ada",
+          "launcherSha256": "97745fb358c7769878dc7f98a6659873642fa8956dbc36714f7cb2a15b2fd8bc"
+        },
+        "authenticatedTLS": true,
+        "nativeHandshake": true,
+        "realReadCompleted": true,
+        "applicationBytesRead": 16384,
+        "originalReadArguments": true,
+        "priorReadRetry": true,
+        "retryCleared": true,
+        "clientApplicationWrites": 1,
+        "echoBytesBeforeSignal": 0,
+        "nativeChildReaped": true,
+        "privatePKIRemoved": true,
+        "fixtureBuildRemoved": true,
+        "pinnedBuildRemoved": true,
+        "privateRunDirectoryEmpty": true,
+        "listenerPortsRebound": 1,
+        "nativeListenerRefused": true,
+        "fixedInterruptionFailure": true,
+        "gracefulTLSClosureClaimed": false,
+        "migration": false
+      },
+      {
+        "kind": "actual-TLS-private-cleanup-sensitivity",
+        "payloadBytes": 23017,
+        "interruption": "SIGTERM",
+        "mutantHelperSha256": "c297a9bf26a8f6a12b66322949ee6b8f4b8031898d0f24d2efb995a32386c74e",
+        "reason": "private_resources_survived",
+        "passed": true,
+        "productionSourceMutation": false,
+        "claim": "deliberately skipped child PKI removal rejected; not an original runtime defect"
+      },
+      {
+        "kind": "actual-TLS-private-listener-sensitivity",
+        "payloadBytes": 37553,
+        "interruption": "SIGTERM",
+        "mutantHelperSha256": "fde2e219baef93b8104402c5c6b3b2a9b1d7d3bc329453fdef87a2ebad5fa9a1",
+        "reason": "port_rebind_failed",
+        "passed": true,
+        "productionSourceMutation": false,
+        "claim": "actual parent-owned listener on released relay port rejected; not an original runtime leak"
+      }
+    ],
+    "productionDefectEstablished": false,
+    "sourceUnchangedDuringReview": true,
+    "privateSensitivityCopyRemoved": true,
+    "reviewPrivateCopiesAbsentVerifiedAfterDriverExit": true,
+    "reviewDriverCleanupObservation": {
+      "temporaryCodeCopiesPresentAfterDriverExit": 1,
+      "temporaryCodeCopySha256": [
+        "c297a9bf26a8f6a12b66322949ee6b8f4b8031898d0f24d2efb995a32386c74e"
+      ],
+      "removedByReviewerFinalCleanup": true,
+      "containsRuntimePKIOrSessionMaterial": false,
+      "causeOfDelayedCodeCopyRemovalEstablished": false,
+      "scope": "Reviewer instrumentation code copies only; actual child PKI/build/process/port checks are separate."
+    }
+  },
+  "independentCachedModuleControls": {
+    "schemaVersion": 1,
+    "recordKind": "independent-c2a-cached-module-control",
+    "productionHelperSha256": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+    "cases": [
+      {
+        "kind": "private-late-hash-counterexample",
+        "passed": true,
+        "privateSourceSha256": "59f7927e683be6caa67d5f0b2195bfa8402fd0202c4f5ea4b9e33d9690e958ad",
+        "rejectionCode": "review_spawn_reached",
+        "spawnAttempts": 1,
+        "actualTLS": false,
+        "realBuild": false
+      },
+      {
+        "kind": "final-import-hash-control",
+        "passed": true,
+        "privateSourceSha256": "e3ec8ccb14f1cb5fd6926980e90b80fababe32d9030dd1077dfefb2dbe0b3bf2",
+        "rejectionCode": "interruption_helper_changed",
+        "spawnAttempts": 0,
+        "actualTLS": false,
+        "realBuild": false
+      }
+    ],
+    "privateCopiesRemoved": true,
+    "claim": "cooperative cached-module source-change gate only; not cryptographic execution attestation"
+  },
+  "preservedAdverse": {
+    "initialInvalidNativePortGate": {
+      "requestedSignal": "SIGTERM",
+      "payloadBytes": 4097,
+      "reason": "port_rebind_failed",
+      "executedHelperSha256": null,
+      "sourceFrozen": false,
+      "safeDiagnosticSha256": "2abec5751d6c60ca9d0033031e51b76459129fb188a15a677be1c10b6a239996",
+      "interpretation": "Native listener closes at accept; rebinding its accepted TCP tuple is not a valid mandatory cleanup gate. Specific bind cause unknown; TIME_WAIT is not claimed as measured. No production cleanup defect established."
+    },
+    "provisionalAggregate": {
+      "command": "node x10/continuum/openssl-probe-check.mjs",
+      "privateTapCapture": "private preload observes aggregate child output only; runtime children unmodified",
+      "exitCode": 1,
+      "elapsedMilliseconds": 251254,
+      "report": {
+        "schemaVersion": 1,
+        "suite": "continuum-pinned-openssl-state-probe",
+        "passed": false,
+        "testFiles": 1,
+        "scope": "pinned-openssl-read-only-state-observation",
+        "nativeNginxMigration": false,
+        "realSessionMigration": false,
+        "counts": null,
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false,
+        "outputLimitExceeded": false,
+        "interrupted": false,
+        "runnerError": "tap_summary_missing_or_ambiguous"
+      },
+      "sourceHashes": {
+        "x10/continuum/openssl-interruption.mjs": "794c3093c3bc518f2b5d60c35fe3a98a9fb207d5a7c6241fe1579f47363f4891",
+        "x10/continuum/openssl-probe.test.mjs": "a6686fbf88f207c18545a842886a55aea2eee1ebe8b4f4cbdede338fbe3b1b40",
+        "x10/continuum/openssl-probe-run.mjs": "c43828e0c90a7b98ad86364b506ad82c3aefc3ee99cb113731f5bfb2161701b3",
+        "x10/continuum/openssl-probe-fixture.c": "7754dc56122bf46f4d80d7c6d5fa9d5b472f0c7a2d45eb88757e599fe0d369cf",
+        "x10/continuum/openssl-build.mjs": "6d697eef17fc0d59564a13c5838ac48f552a096cacc5986d820905ef73d1e611"
+      },
+      "sourceUnchangedDuringRun": false,
+      "rawTapSha256": "8beb0b55c51a53275c1ade2ca8f3401e50c1d50d9a29bd98890a1e68258e9e9c",
+      "aggregateSha256": "25a45c80febdc7b597e8a1526b888fe31f3c3519dba0455fc55f0fe78f627a22",
+      "stderrBytes": 0,
+      "acceptance": "provisional-source-changed-run-not-final-acceptance",
+      "sourceHashesAtStart": {
+        "helperSha256": "613c260561fed91b63fd7d1306a12ff8be6f514aa31726a807a2189c2b9a7682",
+        "testsSha256": "a6686fbf88f207c18545a842886a55aea2eee1ebe8b4f4cbdede338fbe3b1b40"
+      },
+      "rawTapCounts": {
+        "tests": 12,
+        "suites": 0,
+        "pass": 10,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "constantFailures": [
+        "native_process_checkpoint_invalid",
+        "native_process_checkpoint_invalid"
+      ],
+      "limitation": "Helper disk bytes changed during this run; its provisional call-time source hash cannot resolve cached module execution identity. Both signal controls failed closed at a namespace-invalid process checkpoint. Existing10 TLS cases passed. No production cleanup failure established."
+    },
+    "provisionalIndependentAttempts": {
+      "schemaVersion": 1,
+      "recordKind": "independent-c2a-interruption-preserved-provisional-refusals",
+      "attempts": [
+        {
+          "kind": "provisional-actual-TLS-checkpoint-control-refusal",
+          "requestedSignal": "SIGINT",
+          "payloadBytes": 49319,
+          "outcome": "failed-control-validation",
+          "reason": "native_process_checkpoint_invalid",
+          "nominalProvisionalHelperSha256": "613c260561fed91b63fd7d1306a12ff8be6f514aa31726a807a2189c2b9a7682",
+          "exactExecutedHelperBytesIndependentlyFrozen": false,
+          "privateDiagnosticSha256": "d7bba755e1a94f4c134ee202d54465d44e78155031a6818959b922bc7b103a2d",
+          "underlyingIssue": "test helper assumed local child PID was an index in an ancestor-mounted proc filesystem; final helper uses bounded NSpid, namespace and UID resolution",
+          "productionCleanupDefectEstablished": false
+        },
+        {
+          "kind": "provisional-actual-TLS-checkpoint-control-refusal",
+          "requestedSignal": "SIGINT",
+          "payloadBytes": 49319,
+          "outcome": "failed-control-validation",
+          "reason": "native_process_checkpoint_invalid",
+          "nominalProvisionalHelperSha256": "794c3093c3bc518f2b5d60c35fe3a98a9fb207d5a7c6241fe1579f47363f4891",
+          "exactExecutedHelperBytesIndependentlyFrozen": false,
+          "privateDiagnosticSha256": "9d5e9697c3e3e7e6a2c457bd5f6d0c5e00e8852940403de73c1d16a0bd2bf36e",
+          "underlyingIssue": "test helper assumed local child PID was an index in an ancestor-mounted proc filesystem; final helper uses bounded NSpid, namespace and UID resolution",
+          "productionCleanupDefectEstablished": false
+        }
+      ],
+      "note": "No provisional attempt accepted. Final-source verification is recorded separately."
+    }
+  },
+  "regressions": {
+    "c0Core": {
+      "suite": "continuum-record-and-state-kernel",
+      "passed": true,
+      "counts": {
+        "tests": 21,
+        "suites": 0,
+        "pass": 21,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0
+    },
+    "c0Process": {
+      "command": "node --test --test-reporter=tap x10/continuum/process-handover.test.mjs",
+      "tests": 7,
+      "pass": 7,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "exitCode": 0
+    },
+    "c1": {
+      "suite": "continuum-real-handshake-and-record-observation",
+      "passed": true,
+      "counts": {
+        "tests": 22,
+        "suites": 0,
+        "pass": 22,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0
+    },
+    "nativeEvidence": "x10/evidence/continuum-c2a-interruption-native-regression.json",
+    "nativeGroups": 20,
+    "nativeFreshBinarySha256": "bef184f3cd60573fd9ed563ff9c62cf7800d37927716e9fd2674090a60c28cc0",
+    "earlierCheckoutBinaryIdentityClaimed": false
+  },
+  "hostedCI": {
+    "state": "pending-exact-implementation-publication",
+    "acceptedPreviousRuntimeCommit": "356f993ead12a1b827a0351f38143b7b14c8d18f"
+  },
+  "sourceGuard": "Cooperative live-edit detection bound to module evaluation and checked before resources/after runtime; not execution attestation.",
+  "processGuard": "Local PID mapped by NSpid plus same PID namespace/UID; bounded10000-entry/2second scans, not pidfd or an atomic PID-reuse fence. Kernel syscalls are not forcibly interruptible.",
+  "limitations": [
+    "One stable application-read boundary and two handled Node signals only; SIGKILL/crash/power-loss and other interruption points remain unaccepted.",
+    "No graceful TLS close_notify or complete memory zeroization proof for interrupted cases.",
+    "Port refusal/rebind is endpoint observation, not proof of all kernel TCP states. Child/launcher exit and owned-root removal are checked separately before helper fallback cleanup.",
+    "Only successful held-out runtime identity is retained individually; aggregate signal cases verify the same pinned build contract but do not retain separate per-case artifact identities.",
+    "Private negative sensitivity controls deliberately alter test instrumentation; they are not original production defects.",
+    "Peer/read KeyUpdate, WRITE retry completion, overlapping obligations, control/alert/shutdown and sequence/key usage admission remain pending.",
+    "No complete TLS-state inventory, semantic exporter/importer, distinct TLS-code version change, native NGINX integration, performance/security/novelty/10x acceptance."
+  ],
+  "nextTask": "Bounded actual peer-requested KeyUpdate/read-generation and response-obligation observation before remaining inventory and C2b.",
+  "publication": "Allowlisted counts, fixed labels and hashes only; no raw TAP/logs, host paths, process IDs, payload, PKI or real session secrets."
+}

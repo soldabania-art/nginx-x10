@@ -1,0 +1,937 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-preflight-ci-20261024T231800000Z",
+  "sourceBase": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+  "publicationParent": "b81d01a1721580827faf2655422d9da521a9521f",
+  "implementationCommit": null,
+  "implementationCommitLocator": "Git commit containing this fixture change; exact SHA recorded by subsequent hosted receipt",
+  "scope": "Fixture-only per-input TLS relay route binding; no controller or native runtime change",
+  "localEvidence": "x10/evidence/g3-tls-relay-binding.json",
+  "localAcceptance": "CANDIDATE_BOUND_TLS_RELAY_LOCAL_VERIFIED_EXACT_CI_PENDING",
+  "exactHostedAcceptance": "PENDING_EXACT_RESULTING_FIXTURE_IMPLEMENTATION",
+  "fixtureSourceSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+  "localFixtureBindingVerified": true,
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "historicalCICauseKnown": false,
+  "historicalCIInterleavingReproduced": false,
+  "serviceAccepted": false,
+  "productionAccepted": false,
+  "recordedAtUTC": "2026-10-24T23:32:24.066489Z",
+  "priorImplementationCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+  "originalFailedCIReceipt": "x10/evidence/g3-service-preflight-hosted.json",
+  "originalFailedNativePRRunId": 40138541844,
+  "originalFailedNativePRJobId": 121005216512,
+  "originalWrongCAExpectedApplyExitCode": 1,
+  "originalWrongCAActualApplyExitCode": 0,
+  "originalFailureErased": false,
+  "author": {
+    "schemaVersion": 1,
+    "scope": "Fixture-only upstream TLS readiness input binding; no controller/native runtime repair or service acceptance",
+    "baseCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+    "publicationParent": "b81d01a1721580827faf2655422d9da521a9521f",
+    "changedTrackedFile": "x10/test/alpha-tls.test.mjs",
+    "sourceSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+    "baselineSourceSha256": "15d0b113d982aa4064135f0c315f043061962b7140fc304d090ecb3277de9ea5",
+    "sourceFrozenDuringFinalRun": true,
+    "environment": {
+      "nodeVersion": "v24.22.1",
+      "platform": "linux",
+      "executionUidWasRoot": true,
+      "targetNonrootNode22ServiceAccepted": false
+    },
+    "command": "node --test --test-reporter=tap x10/test/alpha-tls.test.mjs",
+    "finalRun": {
+      "exitCode": 0,
+      "elapsedMs": 14907,
+      "tap": {
+        "tests": 18,
+        "pass": 18,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "syntheticNestedControls": 7,
+      "installedNativeNestedScenarios": 9,
+      "wrapperTests": 2,
+      "privateTapSha256": "a728c61b7802df1fdf85b26ab6bcb4a5b33a2ee08854970d2f13c988c70addb2",
+      "stderrBytes": 0
+    },
+    "cleanup": {
+      "suite": "alpha-tls-owned-cleanup",
+      "nativeStopped": true,
+      "launcherExited": true,
+      "openSockets": 0,
+      "temporaryRootRemoved": true,
+      "relay502Observations": 207,
+      "candidateTagsWithMatched502": 3,
+      "applicationPostRequests": 1
+    },
+    "localRuntimeRuns": 1,
+    "localAuthoredFailures": 0,
+    "baselineCounterexample": {
+      "scope": "Seven explicitly synthetic route-binding controls; independent exact unchanged-controller HTTP counterexample recorded separately",
+      "unboundOldRoute200Accepted": true,
+      "candidateOldRoute200Refused": true,
+      "matchingCandidate200Accepted": true,
+      "matchingCandidateScripted502Preserved": true,
+      "missingDuplicateMalformedMarkerRefused": true,
+      "restoredOldInputTagAccepted": true,
+      "nativeBaselineReproductionPerformed": false,
+      "historicalCIInterleavingReproduced": false,
+      "historicalCICauseProven": false
+    },
+    "installedNativeChecks": {
+      "correctCAHostnameProxy": true,
+      "originMarkerHiddenAndNativeMarkerObserved": true,
+      "postBytes": 65551,
+      "streamBytes": 65537,
+      "applicationPostRequests": 1,
+      "wrongCAWrongHostnamePlaintextEachRefused": true,
+      "refusedCandidateCount": 3,
+      "eachRefusalHasOwnMatchedNative502": true,
+      "eachRefusalRolledBackToKnownGood": true,
+      "lastHealthDiagnosticMayBe502Or503": true,
+      "restoredInputRetainsItsOwnHealthURLTag": true,
+      "recoverStopUninstallPassed": true
+    },
+    "implementationBounds": {
+      "tagBytes": 16,
+      "tagEncoding": "32 lowercase hex characters",
+      "tagMaterialIsSecret": false,
+      "perInputImmutableHealthURL": true,
+      "globalMutableExpectedTag": false,
+      "upstreamMarkerHiddenBeforeNativeMarker": true,
+      "regularRouteOnlyNoRecursiveHealthProbe": true,
+      "requestAbsoluteTimerMs": 2500,
+      "requestIdleTimeoutMs": 2500,
+      "commandTimeoutMs": 15000,
+      "suiteTimeoutMs": 100000
+    },
+    "nativeBuild": {
+      "binarySha256": "75b08012b3dc073e6f74763cbfb47d3e4bf2be88ac1857827e7357c02002743e",
+      "binaryMode": "0755",
+      "manifestSha256": "43da09ed8118c0a074a16d8eed0dbfde97439e5313e4285750d7b3ea434d6b1c",
+      "checkoutRevision": "b81d01a1721580827faf2655422d9da521a9521f",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1"
+    },
+    "oldActualCIFailureRetained": {
+      "runId": 40138541844,
+      "jobId": 121005216512,
+      "wrongCAExpectedApplyExit": 1,
+      "wrongCAActualApplyExit": 0,
+      "artifactTAP": {
+        "tests": 6,
+        "pass": 4,
+        "fail": 2
+      },
+      "underlyingExactInterleavingKnown": false,
+      "runnerShutdownFailure": false
+    },
+    "controllerRuntimeChanged": false,
+    "nativeSourceChanged": false,
+    "alphaRuntimeChanged": false,
+    "serviceActivated": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "secretBytesPublished": false,
+    "limitations": [
+      "This patch changes an acceptance fixture only; it does not change controller acknowledgement, native TLS code or installed application runtime.",
+      "Seven synthetic controls and nine installed native scenarios plus two wrappers use separate units; synthetic status502 is not a TLS handshake.",
+      "The previously failed CI wrong-CA actual0 outcome remains recorded. A permitted old-route readiness pattern is reproducible independently, but the exact failed CI scheduling and cause remain unproven.",
+      "A unique per-input public marker binds the fixture relay to its route; it is not authentication, cryptographic attestation or an all-traffic generation fence.",
+      "New wrong-CA/hostname/plaintext cases still require apply exit1, rolled_back, the known-good restored input and an actual correctly marked native502 for each intended candidate.",
+      "The last health diagnostic may instead be stale-route503; merely seeing503 cannot satisfy the explicit matched502 assertion.",
+      "Local root/Node24 compatibility does not accept the nonroot service profile, actual systemd lifecycle, automatic TLS health, permanent distribution or Production V1.",
+      "Exact resulting implementation CI remains pending; no old push or PR result accepts the changed fixture bytes."
+    ]
+  },
+  "native": {
+    "schemaVersion": 1,
+    "scope": "Fresh native compatibility for fixture-only TLS readiness input binding; authored installed TLS suite separate",
+    "upstreamTLSSuiteIncludedInAggregate": false,
+    "fixtureTestIncludedInAggregateFreeze": true,
+    "controllerRuntimeChanged": false,
+    "build": {
+      "builds": 1,
+      "exitCode": 0,
+      "elapsedMs": 25077,
+      "timedOut": false,
+      "checkoutRevision": "b81d01a1721580827faf2655422d9da521a9521f",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+      "manifestSha256": "43da09ed8118c0a074a16d8eed0dbfde97439e5313e4285750d7b3ea434d6b1c",
+      "binarySha256": "75b08012b3dc073e6f74763cbfb47d3e4bf2be88ac1857827e7357c02002743e",
+      "binaryMode": "0755",
+      "compiledModuleCount": 105,
+      "nginxVersion": "1.31.9",
+      "dependencyVersionsFromHeaders": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "generatedFiles": {
+        "ngx_auto_config.h": {
+          "sha256": "6d0a440cef0778636ed19242242497fae3eb0a32ff1bd620c8651a65a30dac09",
+          "bytes": 10153,
+          "mode": "0644"
+        },
+        "ngx_auto_headers.h": {
+          "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+          "bytes": 657,
+          "mode": "0644"
+        },
+        "ngx_modules.c": {
+          "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+          "bytes": 11820,
+          "mode": "0644"
+        }
+      },
+      "licenseSha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c"
+    },
+    "environment": {
+      "nodeVersion": "v24.22.1",
+      "uid": 0,
+      "targetNonrootNode22Accepted": false
+    },
+    "dependencies": {
+      "pinnedWheelHashesVerified": 11,
+      "freshVenvs": 2,
+      "pipCheckPassed": 2,
+      "networkDependencyDownloads": 0,
+      "requireHashes": true,
+      "onlyBinary": true
+    },
+    "aggregate": {
+      "command": "node x10/test/all.mjs --official",
+      "exitCode": 0,
+      "elapsedMs": 223622,
+      "timedOut": false,
+      "stderrBytes": 679,
+      "success": true,
+      "groups": 20,
+      "passed": 20,
+      "failed": 0,
+      "suites": [
+        {
+          "name": "http-tls-http2-reload",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "stream-mail",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "mail-tls-starttls",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "protocol-adapters",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-interop",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-head-independent-client",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-features",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-regression",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-generated-sanitized",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-frame-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-load-client-verification",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "managed-native-control",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "operator-status",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "local-alpha-lifecycle",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "listener-observer-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "reload-listener-observation",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-control-api",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-process-generations",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-generation-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "official-nginx-tests",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        }
+      ]
+    },
+    "controller": {
+      "format": "node-test-tap",
+      "pass": 86,
+      "fail": 0,
+      "valid": true
+    },
+    "alpha": {
+      "format": "node-test-tap",
+      "pass": 45,
+      "fail": 0,
+      "valid": true,
+      "total": 45,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "operatorStatus": {
+      "format": "node-test-tap",
+      "pass": 30,
+      "fail": 0,
+      "valid": true,
+      "total": 30,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "listenerBoundaries": {
+      "format": "node-test-tap",
+      "pass": 42,
+      "fail": 0,
+      "valid": true
+    },
+    "handover": {
+      "success": true,
+      "interrupted": false,
+      "cleanup": {
+        "nativeStopped": true,
+        "nativeExitCode": 0,
+        "nativeSignal": null,
+        "mode": "SIGQUIT",
+        "stoppedWorkerResumeRequested": true,
+        "fixturesStopped": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "errors": []
+      },
+      "sourceUnchangedDuringTest": true,
+      "tests": 7,
+      "passed": 7,
+      "cleanupErrorCount": 0,
+      "fixtureErrorCount": 0
+    },
+    "official": {
+      "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+      "summary": {
+        "files": 35,
+        "filesPassed": 32,
+        "filesSkipped": 3,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1109,
+          "passed": 1083,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "skippedFiles": [
+        "fastcgi.t",
+        "scgi.t",
+        "uwsgi.t"
+      ],
+      "cleanupErrorCount": 0,
+      "sourceUnchangedDuringTest": true
+    },
+    "nativeTrackedInputsCount": 499,
+    "unchangedRuntimeAndNativeInputsCount": 508,
+    "nativeTrackedInputsUnchanged": true,
+    "licenseUnchanged": true,
+    "frozenFilesCount": 37,
+    "frozenFilesUnchanged": true,
+    "sourceFreezeSha256": {
+      "x10/control/manager.mjs": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822",
+      "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+      "x10/control/listeners.mjs": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+      "x10/test/listeners.test.mjs": "a43b12acdfedd6125f5b0bd84010581c8b28141215b804e8895c453928918b3c",
+      "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612"
+    },
+    "supplementalUnixReruns": 0,
+    "featureOffReruns": 0,
+    "historicalLocalFailurePreserved": true,
+    "historicalESRCHCauseProven": false,
+    "nativeProcessGroupSignalEscalationPerformed": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "serviceActivated": false,
+    "frontendTLSAccepted": false,
+    "productionAccepted": false,
+    "limitations": [
+      "Local root/Node24 compatibility does not accept actual nonroot Node22 user-service operation.",
+      "One fresh native build and one frozen native official aggregate; no unchanged native diagnostic rerun.",
+      "Historical19/20 ESRCH failure process/interleaving remains unproven.",
+      "Existing restricted AF_UNIX EPERM supplemental failure was not retried unchanged; hosted required Unix evidence remains separate.",
+      "Feature-off profile not rerun locally; nativeC unchanged.",
+      "Official optional-client skips and expected TODO remain explicit.",
+      "Changed upstream TLS acceptance fixture is separately executed authored evidence, not a twenty-first aggregate group or installed runtime module."
+    ]
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "scope": "Independent fixture-only readiness-route binding review; no native reruns",
+    "sourceFile": "x10/test/alpha-tls.test.mjs",
+    "sourceSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+    "heldouts": {
+      "checks": [
+        {
+          "name": "matched_route_preserves_status_201",
+          "passed": true
+        },
+        {
+          "name": "matched_route_preserves_status_204",
+          "passed": true
+        },
+        {
+          "name": "matched_route_preserves_status_301",
+          "passed": true
+        },
+        {
+          "name": "matched_route_preserves_status_403",
+          "passed": true
+        },
+        {
+          "name": "matched_route_preserves_status_404",
+          "passed": true
+        },
+        {
+          "name": "matched_route_preserves_status_500",
+          "passed": true
+        },
+        {
+          "name": "matched_route_preserves_status_502",
+          "passed": true
+        },
+        {
+          "name": "matched_route_preserves_status_503",
+          "passed": true
+        },
+        {
+          "name": "matched_route_preserves_body_buffer_identity",
+          "passed": true
+        },
+        {
+          "name": "matching_wrong_body_is_not_replaced_with_ready",
+          "passed": true
+        },
+        {
+          "name": "foreign_route502_cannot_count_as_current502",
+          "passed": true
+        },
+        {
+          "name": "array_duplicate_marker_is_refused",
+          "passed": true
+        },
+        {
+          "name": "comma_joined_duplicate_marker_is_refused",
+          "passed": true
+        },
+        {
+          "name": "header_prefix_collision_is_refused",
+          "passed": true
+        },
+        {
+          "name": "header_suffix_collision_is_refused",
+          "passed": true
+        },
+        {
+          "name": "newline_expected_tag_is_refused",
+          "passed": true
+        },
+        {
+          "name": "uppercase_expected_tag_is_refused",
+          "passed": true
+        },
+        {
+          "name": "numeric_marker_not_coerced_to_text",
+          "passed": true
+        },
+        {
+          "name": "missing_headers_throws_into_caller_refusal",
+          "passed": true
+        },
+        {
+          "name": "stale_success_sequence_refused_before_current502",
+          "passed": true
+        },
+        {
+          "name": "rollback_path_uses_old_input_without_global_expected_tag",
+          "passed": true
+        },
+        {
+          "name": "empty_response_marker_refuses_even_when200",
+          "passed": true
+        },
+        {
+          "name": "postive_response_header_name_case_is_not_coerced",
+          "passed": true
+        }
+      ],
+      "totals": {
+        "checks": 23,
+        "passed": 23,
+        "failed": 0
+      },
+      "sourceUnchangedDuringHeldouts": true
+    },
+    "staticChecks": [
+      {
+        "name": "healthURL_contains_input_tag",
+        "passed": true
+      },
+      {
+        "name": "relay_path_tag_stricthex",
+        "passed": true
+      },
+      {
+        "name": "native_hides_origin_marker",
+        "passed": true
+      },
+      {
+        "name": "native_marker_on_error_status",
+        "passed": true
+      },
+      {
+        "name": "origin_deliberately_has_foreign_marker",
+        "passed": true
+      },
+      {
+        "name": "positive_checks_native_header_replaces_origin",
+        "passed": true
+      },
+      {
+        "name": "TLS_verification_not_disabled",
+        "passed": true
+      },
+      {
+        "name": "client_verification_not_disabled",
+        "passed": true
+      },
+      {
+        "name": "wrong_ca_name_plaintext_still_tested",
+        "passed": true
+      },
+      {
+        "name": "negative_cli_failure_still_required",
+        "passed": true
+      },
+      {
+        "name": "actual502_count_is_candidate_tag_bound",
+        "passed": true
+      },
+      {
+        "name": "last_refusal_can_be503_without_removing_actual502",
+        "passed": true
+      },
+      {
+        "name": "rollback_content_and_status_still_checked",
+        "passed": true
+      },
+      {
+        "name": "POST_not_replayed",
+        "passed": true
+      },
+      {
+        "name": "probe_nonrecursive",
+        "passed": true
+      },
+      {
+        "name": "absolute_request_timeout_bounded",
+        "passed": true
+      },
+      {
+        "name": "absolute_timer_cleared",
+        "passed": true
+      },
+      {
+        "name": "owned_native_identity_and_group_cleanup_retained",
+        "passed": true
+      },
+      {
+        "name": "secret_material_not_serialized_as_marker",
+        "passed": true
+      },
+      {
+        "name": "claim_limit_explicit",
+        "passed": true
+      }
+    ],
+    "staticTotals": {
+      "checks": 20,
+      "passed": 20,
+      "blockingFindings": 0
+    },
+    "cleanup": {
+      "noServiceActivated": true,
+      "noNativeProcessStarted": true,
+      "noTemporaryRootCreated": true
+    },
+    "claimBoundaries": [
+      "Private in-memory exact-source helper heldouts and static review, not independent native TLS sessions.",
+      "Route markers bind this fixture input health URL and response only; they are nonsecret and not an authentication, transport ownership, all-worker generation fence or TLS migration proof.",
+      "The historic PR expected1/actual0 failure remains recorded; this source review does not reproduce its exact historical scheduling or prove no other cause.",
+      "Negative code1/rolled_back/own-candidate native502 obligations remain; final503may be last stale-route refusal and is not converted into healthy200.",
+      "Unchanged controller/native runtime; no product-runtime or universal health-gate repair claimed.",
+      "Actual author/native execution and future exact CI remain separate obligations."
+    ],
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "secretBytesPublished": false,
+    "serviceAccepted": false,
+    "productionAccepted": false
+  },
+  "reportSha256": {
+    "author": "19c83b95d571416c75d8ffccd5bc1b99555bea41dc478a4f41732520fe4f28b8",
+    "native": "1ceeed8bc89458ff43c306303161a3e97f5fb83e652fa51f74dea359a58384a6",
+    "independentReview": "d78d0066c4f1901f773fbc82b49a13c59126c535449b65fbd94228378774103b"
+  },
+  "reviewedOutcomeSummary": {
+    "schemaVersion": 1,
+    "actualFinalReportsReviewed": true,
+    "blockingFindings": 0,
+    "reportSha256": {
+      "author": "19c83b95d571416c75d8ffccd5bc1b99555bea41dc478a4f41732520fe4f28b8",
+      "native": "1ceeed8bc89458ff43c306303161a3e97f5fb83e652fa51f74dea359a58384a6",
+      "independentReview": "d78d0066c4f1901f773fbc82b49a13c59126c535449b65fbd94228378774103b"
+    },
+    "fixtureSourceSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+    "author": {
+      "exitCode": 0,
+      "tap": {
+        "tests": 18,
+        "pass": 18,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "syntheticNestedControls": 7,
+      "installedNativeNestedScenarios": 9,
+      "wrapperTests": 2
+    },
+    "native": {
+      "builds": 1,
+      "buildExitCode": 0,
+      "aggregateExitCode": 0,
+      "groups": 20,
+      "passed": 20,
+      "fixtureIncludedInFrozenInputs": true,
+      "official": {
+        "run": 1109,
+        "passed": 1083,
+        "failed": 0,
+        "skipped": 25,
+        "todoFailed": 1,
+        "todoPassed": 0
+      }
+    },
+    "independentReview": {
+      "cases": 23,
+      "passed": 23,
+      "staticChecks": 20,
+      "blockingFindings": 0
+    },
+    "deterministicOldRouteCounterexamplePreserved": true,
+    "candidateBoundRouteControlsPassed": true,
+    "nativeAndControllerRuntimeChanged": false,
+    "historicalCIInterleavingReproduced": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "cleanupConfirmed": true,
+    "rawLogsPublished": false
+  },
+  "unchangedRuntimeFiles": 508,
+  "oldPreflightSourceFilesSha256": {
+    "x10/service/preflight.mjs": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+    "x10/service/preflight.test.mjs": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3",
+    ".github/workflows/x10-native.yml": "39e90a1273373ff67222ea35b498156d4d133a1cb25da107f3483753a8288958"
+  },
+  "diagnosis": {
+    "schemaVersion": 1,
+    "scope": "Read-only diagnosis of the upstream TLS fixture failure; no repository implementation change",
+    "sourceCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+    "leaseCommit": "ea94c8dc9bd0b313d2ce3d0f1ce9d120be8d7fe4",
+    "sourceSha256": {
+      "x10/test/alpha-tls.test.mjs": "15d0b113d982aa4064135f0c315f043061962b7140fc304d090ecb3277de9ea5",
+      "x10/control/manager.mjs": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822"
+    },
+    "sourceUnchangedDuringCounterexample": true,
+    "staticEvidence": [
+      {
+        "finding": "Shared relay healthURL has no per-input or per-route identity",
+        "source": "x10/test/alpha-tls.test.mjs",
+        "facts": [
+          "All candidate inputs use the same /tls-probe URL.",
+          "The relay requests regular /ready through the managed listener.",
+          "The relay forwards status/body and discards route/generation identity.",
+          "The candidate regular location has no explicit candidate-specific marker."
+        ]
+      },
+      {
+        "finding": "The HTTP health wrapper supplies the current serving revision around externally returned readiness",
+        "source": "x10/control/manager.mjs",
+        "facts": [
+          "Reserved /__x10_health hides upstream X-X10-Revision and adds the serving managed revision.",
+          "acknowledged requires two fresh matching revision/header samples plus configured HTTP health status/body.",
+          "That gate checks the declared HTTP health contract, not automatic upstream TLS affinity."
+        ]
+      }
+    ],
+    "counterexample": {
+      "schemaVersion": 1,
+      "kind": "deterministic private HTTP relay/generation counterexample",
+      "sourceCommit": "9e63d3c1a28fd42cfbb25d952fea599bc5e69eab",
+      "sourceSha256": {
+        "x10/test/alpha-tls.test.mjs": "15d0b113d982aa4064135f0c315f043061962b7140fc304d090ecb3277de9ea5",
+        "x10/control/manager.mjs": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822"
+      },
+      "sourceUnchanged": true,
+      "extractedRequestSha256": "ce4d324bf8d61ce912d29a073e862ad5276fdb90c6167540ac3d092c4fdf7189",
+      "extractedAcknowledgedSha256": "454c942887f9825e1416d46b47c81f11a4a1ebf9539221adf4a775914961a304",
+      "extractedTransferSha256": "eaf892d3b5ec560e1d904cf45592be6466b5234eaa13e8ffced423af6cc58596",
+      "checks": [
+        {
+          "name": "unchanged_acknowledgement_accepts_current_revision_wrapping_old_route_ready",
+          "passed": true,
+          "oldRouteReads": 2,
+          "consecutiveCandidateHealthSamples": 2,
+          "actualTLS": false
+        },
+        {
+          "name": "same_unchanged_acknowledgement_refuses_scripted_current_route502",
+          "passed": true,
+          "actualTLS": false
+        },
+        {
+          "name": "proposed_per_input_tag_refuses_old_known_good_route200",
+          "passed": true,
+          "actualTLS": false
+        },
+        {
+          "name": "proposed_per_input_tag_retains_current_route502_refusal",
+          "passed": true,
+          "actualTLS": false
+        },
+        {
+          "name": "proposed_per_input_tag_accepts_restored_input_with_fresh_revision",
+          "passed": true,
+          "actualTLS": false
+        }
+      ],
+      "totals": {
+        "checks": 5,
+        "passed": 5,
+        "failed": 0
+      },
+      "cleanup": {
+        "ownedServersClosed": true,
+        "openSockets": 0,
+        "extractedPrivateModuleRemoved": true,
+        "noNativeProcessStarted": true,
+        "noKeyMaterialCreated": true
+      },
+      "actualTLSExecuted": false,
+      "actualNativeExecuted": false,
+      "controllerReimplemented": false,
+      "sourceFunctionsUsed": "Exact unchanged request/acknowledged and transfer code with no-https asset branch reduced to an equivalent no-op",
+      "historicalCIInterleavingReproduced": false,
+      "historicalCICauseProven": false,
+      "limits": [
+        "Scripted loopback HTTP origin selections reproduce a permitted observation pattern, not the exact failed CI scheduling.",
+        "No native TLS, wrong-CA handshake or controller apply transaction was executed here.",
+        "Controller correctly evaluates the declared HTTP health contract; this counterexample establishes insufficient fixture route binding rather than a proven controller vulnerability.",
+        "Proposed bound-tag cases test a private design sketch, not an implemented or accepted repository fix."
+      ]
+    },
+    "counterexampleReportSha256": "767f09792068a27d9dc264af5dd813fc1856335932ca0e6b067145eabe049914",
+    "diagnosticCommand": "node .build/preflight-ci-tls-counterexample.mjs",
+    "diagnosticExitCode": 0,
+    "nativeEvidenceReportSha256": "eef3a4863a9417e907db341e71dbda692e1dab4075ef8626cf3dcb62e2a3d2ee",
+    "observedPRFailure": {
+      "runId": 40138541844,
+      "jobId": 121005216512,
+      "suite": "old alpha-tls.test.mjs",
+      "case": "wrong-ca refuses native TLS readiness and rolls back to known good",
+      "expectedApplyExitCode": 1,
+      "actualApplyExitCode": 0,
+      "counts": {
+        "tests": 6,
+        "pass": 4,
+        "fail": 2
+      },
+      "evidenceOrigin": "Actual CI artifact inspected by coordinator native/review agents; this helper independently read source and executed the separate deterministic HTTP counterexample.",
+      "cleanupConfirmedByCIArtifact": true,
+      "relay502ObservedCount": 1,
+      "historicalExactInterleavingReproduced": false,
+      "historicalExactCauseProven": false
+    },
+    "conclusion": {
+      "fixtureBindingInsufficientForAssertedTLSNegativeGate": true,
+      "controllerRuntimeDefectProven": false,
+      "nativeTLSVerificationBypassProven": false,
+      "productVulnerabilityClaimed": false,
+      "likelyMechanism": "The shared relay can return known-good old-route readiness while the candidate worker supplies its current revision wrapper. A deterministic allowed observation sequence was reproduced; actual failed CI scheduling remains unknown.",
+      "noCausalRelationshipToPreflightClaimed": false
+    },
+    "proposedNextImplementation": {
+      "scope": "Fixture-only per-input route binding plus reproducible old-route negative controls; preserve controller/native runtime contracts.",
+      "steps": [
+        "Give each candidate a fresh non-secret bounded ASCII marker and persist it in that input-specific healthURL, such as /tls-probe/<marker>.",
+        "Render an explicit marker header on the managed regular proxy location with always; hide same-named upstream header before adding it.",
+        "The relay should accept healthy status/body only when the observed managed route marker exactly equals the requested marker; mismatched old-route200 must refuse.",
+        "Keep the old input marker and old healthURL together so native rollback/revert can validate the restored input under its new revision ID. A single mutable global expected marker would incorrectly block rollback.",
+        "Retain actual native wrong-CA/hostname/plaintext502 refusal checks and count them per intended candidate marker. Do not weaken certificate verification or accept merely any failure.",
+        "The final diagnostic sample may be marker-mismatch503 rather than current-route502; require actual correctly marked502 evidence separately instead of assuming the last sampled reason is always502.",
+        "Use deterministic synthetic counterexamples and final frozen real installed TLS checks, native compatibility and exact new CI. Do not blindly retry the known failing source to obtain a green result."
+      ],
+      "implementedInTrackedFiles": false
+    },
+    "cleanup": {
+      "ownedServersClosed": true,
+      "openSockets": 0,
+      "extractedPrivateModuleRemoved": true,
+      "noNativeProcessStarted": true,
+      "noKeyMaterialCreated": true
+    },
+    "serviceActivated": false,
+    "nativeBuildExecuted": false,
+    "CIJobsRerun": false,
+    "trackedFilesChanged": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "secretBytesPublished": false,
+    "productionAccepted": false,
+    "limitations": [
+      "Scripted loopback HTTP origin selections reproduce a permitted observation pattern, not the exact failed CI scheduling.",
+      "No native TLS, wrong-CA handshake or controller apply transaction was executed here.",
+      "Controller correctly evaluates the declared HTTP health contract; this counterexample establishes insufficient fixture route binding rather than a proven controller vulnerability.",
+      "Proposed bound-tag cases test a private design sketch, not an implemented or accepted repository fix."
+    ]
+  },
+  "controllerRuntimeDefectProven": false,
+  "nativeTLSVerificationBypassProven": false,
+  "productVulnerabilityClaimed": false,
+  "localNativeTestsExecutedForFixtureVerification": true,
+  "exactNewCIPending": true,
+  "serviceActivated": false,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "privateKeysPublished": false,
+  "newPurchases": false,
+  "nextConcreteTask": "First verify exact resulting candidate-bound TLS relay fixture implementation CI, including actual upstream TLS, frontend TLS, service-preflight, native/Unix/feature-off and package steps, TAP artifacts, checkout/job/merge identities and cleanup. Local candidate verification does not accept the new source in hosted CI. Retain the original9e63 native PR wrong-CA apply-exit0 failure and deterministic borrowed-old-route counterexample; the exact historical CI interleaving/cause remains unproven and no controller/native product fix is claimed. Do not rerun blindly or borrow earlier green results. After exact candidate CI is accepted, verify actual nonroot user-manager service startup/stop/restart, failed-start, drain and orphan behavior on a fresh authorized test host after a fresh readonly preflight. Old completed CI jobs observed actual nonroot manager prerequisites on Node22.23.3; their ephemeral sessions are not guaranteed to persist. G2 permanent versioned distribution/published-file replay, G4-G8/Production V1 and full deferred Continuum remain open.",
+  "limitations": [
+    "Candidate input marker and input-specific healthURL bind the relay observation; old route status200 must not satisfy another input. Restored old inputs retain their own marker/healthURL for rollback.",
+    "Deterministic synthetic relay controls and final real installed TLS verification have separate units. The exact historical failing CI scheduling is not reproduced or proven.",
+    "Controller and native runtime semantics remain unchanged; this is a fixture binding correction, not a TLS verification bypass fix or all-traffic atomic cutover.",
+    "The original source native PR failure remains retained. Exact resulting fixture implementation CI is pending.",
+    "Readonly user-manager prerequisites were observed in old exact source jobs; no unit was activated and a fresh host must recheck its own prerequisites before service work.",
+    "Permanent distribution, package rollback, actual service lifecycle, soak, Production V1 and full semantic Continuum remain open."
+  ]
+}

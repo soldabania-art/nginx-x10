@@ -1,0 +1,1041 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-frontend-tls-20261024T202351Z",
+  "sourceBase": "eaf3a9376f80d25d9dcaed1bbeea643151b841e9",
+  "publicationParent": "ea849f2ad3aed5953ca63847f05512d4d579c355",
+  "implementationCommit": null,
+  "implementationCommitLocator": "Git commit containing this record; exact SHA reconciled by subsequent hosted receipt",
+  "recordedAtUTC": "2026-10-24T20:34:14.051015Z",
+  "scope": "Optional fixed loopback frontend HTTPS with external operator certificate files and installed trust/lifecycle/refusal checks",
+  "sourceFreezeSha256": {
+    "x10/control/manager.mjs": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822",
+    "x10/test/frontend-tls.test.mjs": "9d3168f14b8d7b8f6deeba1cc53bafe60a655786f00bd341a7354376a773cac9",
+    ".github/workflows/x10-native.yml": "04783cf96943898e214f626ce9750c3605a4e2100be89a2dd52b9606a1de4bcc"
+  },
+  "unrelatedRuntimeFilesUnchanged": 507,
+  "reportSha256": {
+    "author": "b0af390520dd0d6b4166673e84badb18230b5cc9983522158015cf65d5eca554",
+    "independentReview": "41733e1032f608b6eca58f67753d5fcdc3036a6cb9698c2bcc726b730c24ec9b",
+    "native": "d5ec72c0ea21994d9a98c43f2dbd16f65d023f2aa77d99c189b4fc6600114121"
+  },
+  "author": {
+    "schemaVersion": 1,
+    "scope": "G3 installed explicit loopback frontend HTTPS acceptance; not Production V1 or operated service",
+    "baseCommit": "eaf3a9376f80d25d9dcaed1bbeea643151b841e9",
+    "leaseCommit": "ea849f2ad3aed5953ca63847f05512d4d579c355",
+    "environment": {
+      "node": "v24.22.1",
+      "platform": "linux",
+      "arch": "x86_64",
+      "executionUidWasRoot": true,
+      "targetNonrootNode22Accepted": false
+    },
+    "command": "node --test --test-reporter=tap x10/test/frontend-tls.test.mjs",
+    "sourceHashes": {
+      "x10/test/frontend-tls.test.mjs": "9d3168f14b8d7b8f6deeba1cc53bafe60a655786f00bd341a7354376a773cac9",
+      "x10/control/manager.mjs": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822"
+    },
+    "nativeBinarySha256": "41d31ca8b47fdd46f46b9a5d7eede0edb96d59129074c9453eaf77e6b0f3cf20",
+    "baseline": {
+      "sourceCommit": "ea849f2ad3aed5953ca63847f05512d4d579c355",
+      "sourceMaterial": "git show exact lease controller modules",
+      "case": "same valid certificate pair and typed HTTPS input",
+      "pairedCases": 1,
+      "baselineOutcome": "invalid_candidate: Candidate contains unsupported fields",
+      "candidateOutcome": "initialized_unbound",
+      "nativeValidationPassed": true,
+      "nativeDaemonStarted": false,
+      "cleanupRemovedOwnPrefix": true,
+      "diagnosticExitCode": 0
+    },
+    "initialRun": {
+      "exitCode": 1,
+      "tap": {
+        "tests": 16,
+        "suites": 0,
+        "pass": 15,
+        "fail": 1,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "durationMs": 8076.860312,
+      "cleanup": {
+        "suite": "frontend-tls-owned-cleanup",
+        "nativeStopped": true,
+        "nativeSessionsStopped": 2,
+        "launcherExited": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "applicationPostRequests": 1
+      },
+      "privateTapSha256": "a41c9619c790d8edecd7e9b551105fc0cd44550ae9f5033f529967f074b65282",
+      "acceptance": false,
+      "reason": "All 15 nested functional scenarios passed; final source-stability assertion failed because manager source changed during the run. Expected initial manager98e7d4be8e885e4f1261ec95d07f803defdb3317898483035600209105a963e8 differed from final5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822. This is not evidence of a product runtime failure."
+    },
+    "intermediateRun": {
+      "exitCode": 0,
+      "tap": {
+        "tests": 16,
+        "suites": 0,
+        "pass": 16,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "durationMs": 8900.169241,
+      "cleanup": {
+        "suite": "frontend-tls-owned-cleanup",
+        "nativeStopped": true,
+        "nativeSessionsStopped": 2,
+        "launcherExited": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "applicationPostRequests": 1
+      },
+      "privateTapSha256": "60625bca7397e7326dd34a13a0dda13be78f2c621d833108ddc5f9d010e07ec9",
+      "acceptance": false,
+      "reason": "Passed before adding an absolute request deadline; frozen final run below is acceptance for final test bytes. Repeated cases are not extra coverage."
+    },
+    "finalRun": {
+      "exitCode": 0,
+      "tap": {
+        "tests": 16,
+        "suites": 0,
+        "pass": 16,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "durationMs": 8451.643301,
+      "cleanup": {
+        "suite": "frontend-tls-owned-cleanup",
+        "nativeStopped": true,
+        "nativeSessionsStopped": 2,
+        "launcherExited": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "applicationPostRequests": 1
+      },
+      "privateTapSha256": "afd0ba5b7d59b2561fec1521edbe88fc5240c9618195a54d9db6601d915042ab",
+      "nestedScenarios": 15,
+      "wrapperTests": 1,
+      "acceptance": true
+    },
+    "scenarios": [
+      "pack, extract and install the exact candidate with legacy HTTP defaults",
+      "installed startup binds the original HTTP listener before explicit TLS",
+      "explicit loopback HTTPS serves an authenticated certificate while HTTP stays available",
+      "both declared TLS 1.2 and TLS 1.3 negotiate with strict CA and hostname verification",
+      "TLS clients reject a wrong CA and hostname rather than disabling verification",
+      "frontend HTTPS preserves POST and streamed application bytes without replay",
+      "native certificate and private-key mismatch is rejected before reload",
+      "missing-key is refused without replacing the known-good TLS revision",
+      "world-readable-key is refused without replacing the known-good TLS revision",
+      "symlink-certificate is refused without replacing the known-good TLS revision",
+      "symlink-parent is refused without replacing the known-good TLS revision",
+      "certificate rotation uses a new versioned pair and explicit revert retains the previous pair",
+      "verified stop and new installed session preserve the last-confirmed TLS input",
+      "removing the explicit TLS field closes its listener after normal worker drain",
+      "stop and uninstall remove only the owned installation and no native listener remains"
+    ],
+    "applicationBytes": {
+      "postBytes": 65551,
+      "streamBytes": 65537,
+      "observedPostRequests": 1
+    },
+    "timeouts": {
+      "suiteMs": 150000,
+      "commandMs": 15000,
+      "requestAbsoluteMs": 2500,
+      "requestIdleMs": 2500,
+      "pollDefaultMs": 8000,
+      "originCloseMs": 3000
+    },
+    "bounds": {
+      "frontendAddress": "127.0.0.1",
+      "candidateHttpsExplicit": true,
+      "httpControlListenerPreserved": true,
+      "tlsProtocolsObserved": [
+        "TLSv1.2",
+        "TLSv1.3"
+      ],
+      "clientRejectUnauthorized": true,
+      "sourceCheckoutPhysicallyPresent": true,
+      "runtimeExecutesExtractedInstalledHelpers": true,
+      "externalOperatorCertificateVersionsRetainedThroughUninstall": true
+    },
+    "limitations": [
+      "The controller HTTP readiness probe is unchanged and does not validate the frontend TLS handshake automatically.",
+      "This local test ran as root on Node24; target nonroot Node22 acceptance and exact hosted CI remain pending.",
+      "Source checkout remains physically present while the runtime uses an extracted installed package; this is not independent published-file replay.",
+      "Certificate paths are versioned operator references, not pinned content. No renewal automation, expiry acceptance, production CA integration or race isolation is claimed.",
+      "Sampled config acknowledgement and explicit client requests do not prove all-traffic atomic cutover, full drain or continuity of existing TLS sessions.",
+      "Functional payloads are bounded examples, not full release load or 60-minute soak.",
+      "No actual systemd user service was activated; no Production V1 or permanent release is accepted."
+    ]
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "kind": "independent G3 frontend HTTPS security and contract review",
+    "reviewer": "frontend_review",
+    "sourceCommitBase": "ea849f2ad3aed5953ca63847f05512d4d579c355",
+    "sourceFiles": {
+      "x10/control/manager.mjs": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822",
+      "x10/test/frontend-tls.test.mjs": "9d3168f14b8d7b8f6deeba1cc53bafe60a655786f00bd341a7354376a773cac9",
+      "x10/control/README.md": "7b2af5a2c779012d2a894ec49a0d3bcf40277694d2f3b5528b49b860e17921bd",
+      "x10/alpha/README.md": "9dfcd6a88491b520bca2773b809441a782a77c92f4df41147c3d95b1628aa1c2",
+      ".github/workflows/x10-native.yml": "04783cf96943898e214f626ce9750c3605a4e2100be89a2dd52b9606a1de4bcc"
+    },
+    "sourceFrozenDuringFunctionHeldouts": true,
+    "staticChecks": [
+      {
+        "name": "legacy_metadata_schema_version_remains_1",
+        "passed": true
+      },
+      {
+        "name": "optional_https_appended_only_when_present",
+        "passed": true
+      },
+      {
+        "name": "tls_listener_fixed_ipv4_loopback",
+        "passed": true
+      },
+      {
+        "name": "tls12_and_tls13_explicit_render",
+        "passed": true
+      },
+      {
+        "name": "listen_include_guard_preserved",
+        "passed": true
+      },
+      {
+        "name": "strict_plain_data_nested_object",
+        "passed": true
+      },
+      {
+        "name": "canonical_ascii_path_bound",
+        "passed": true
+      },
+      {
+        "name": "certificate_parent_exact0700",
+        "passed": true
+      },
+      {
+        "name": "ancestor_ownership_write_and_depth_guard",
+        "passed": true
+      },
+      {
+        "name": "owned_regular_bounded_files_and_no_js_secret_read",
+        "passed": true
+      },
+      {
+        "name": "asset_checks_before_and_after_native_t",
+        "passed": true
+      },
+      {
+        "name": "native_test_failures_rejected_before_hup_branch",
+        "passed": true
+      },
+      {
+        "name": "filesystem_preflight_before_revision_record_write",
+        "passed": true
+      },
+      {
+        "name": "acknowledgement_rechecks_assets_and_remains_http",
+        "passed": true
+      },
+      {
+        "name": "documented_external_versioned_reference_not_content_pin",
+        "passed": true
+      },
+      {
+        "name": "documented_all_other_listener_collisions_operator_responsibility",
+        "passed": true
+      },
+      {
+        "name": "documented_http_gate_is_not_tls_client_acceptance",
+        "passed": true
+      },
+      {
+        "name": "installed_test_authenticates_ca_and_hostname",
+        "passed": true
+      },
+      {
+        "name": "installed_source_and_native_identity_frozen",
+        "passed": true
+      },
+      {
+        "name": "installed_lifecycle_checks_rotation_revert_restart_disable",
+        "passed": true
+      },
+      {
+        "name": "installed_post_and_stream_bytes_bounded_nonreplay",
+        "passed": true
+      },
+      {
+        "name": "test_cleanup_owned_group_socket_temp_bounded",
+        "passed": true
+      },
+      {
+        "name": "new_required_ci_step_with_artifact_tap",
+        "passed": true
+      },
+      {
+        "name": "production_service_permanent_distribution_still_open",
+        "passed": true
+      }
+    ],
+    "staticTotals": {
+      "checks": 24,
+      "passed": 24,
+      "blockingFindings": 0
+    },
+    "independentHeldouts": {
+      "kind": "independent private function-level heldouts",
+      "sourceSha256": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822",
+      "sourceUnchanged": true,
+      "baselineCommit": "ea849f2ad3aed5953ca63847f05512d4d579c355",
+      "baselineManagerSha256": "2cfcb7d92131671939aa0e7d57403af42448b73878256a68b24c0af69b2d1ecb",
+      "checks": [
+        {
+          "name": "baseline_optional_https_is_unsupported_counterexample",
+          "passed": true
+        },
+        {
+          "name": "legacy_input_canonical_bytes_unchanged",
+          "passed": true
+        },
+        {
+          "name": "explicit_readiness_canonical_bytes_unchanged",
+          "passed": true
+        },
+        {
+          "name": "legacy_fragment_exact_bytes_unchanged",
+          "passed": true
+        },
+        {
+          "name": "readiness_fragment_exact_bytes_unchanged",
+          "passed": true
+        },
+        {
+          "name": "https_nested_key_order_canonical",
+          "passed": true
+        },
+        {
+          "name": "null_prototype_plain_data_supported",
+          "passed": true
+        },
+        {
+          "name": "shape_refuses_null",
+          "passed": true
+        },
+        {
+          "name": "shape_refuses_array",
+          "passed": true
+        },
+        {
+          "name": "shape_refuses_empty",
+          "passed": true
+        },
+        {
+          "name": "shape_refuses_missing_key",
+          "passed": true
+        },
+        {
+          "name": "shape_refuses_extra_field",
+          "passed": true
+        },
+        {
+          "name": "shape_refuses_inherited_fields",
+          "passed": true
+        },
+        {
+          "name": "shape_refuses_custom_prototype",
+          "passed": true
+        },
+        {
+          "name": "port_refuses_privileged",
+          "passed": true
+        },
+        {
+          "name": "port_refuses_high",
+          "passed": true
+        },
+        {
+          "name": "port_refuses_zero",
+          "passed": true
+        },
+        {
+          "name": "port_refuses_string",
+          "passed": true
+        },
+        {
+          "name": "port_refuses_fraction",
+          "passed": true
+        },
+        {
+          "name": "port_refuses_nan",
+          "passed": true
+        },
+        {
+          "name": "port_refuses_infinity",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_relative",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_double_slash",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_dot",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_dotdot",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_trailing_slash",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_newline",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_space",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_quote",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_backslash",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_nul",
+          "passed": true
+        },
+        {
+          "name": "path_refuses_long",
+          "passed": true
+        },
+        {
+          "name": "same_cert_key_path_refused",
+          "passed": true
+        },
+        {
+          "name": "containment_refuses_listen",
+          "passed": true
+        },
+        {
+          "name": "containment_refuses_include",
+          "passed": true
+        },
+        {
+          "name": "containment_refuses_quoted_listen",
+          "passed": true
+        },
+        {
+          "name": "containment_refuses_escaped_listen",
+          "passed": true
+        },
+        {
+          "name": "containment_refuses_escaped_server",
+          "passed": true
+        },
+        {
+          "name": "valid_private_owned_paths_accept_metadata_only",
+          "passed": true
+        },
+        {
+          "name": "http_port_collision_refused",
+          "passed": true
+        },
+        {
+          "name": "health_port_collision_refused",
+          "passed": true
+        },
+        {
+          "name": "key_0400_supported",
+          "passed": true
+        },
+        {
+          "name": "key_group_read_0640_refused",
+          "passed": true
+        },
+        {
+          "name": "certificate_world_readonly_0444_refused",
+          "passed": true
+        },
+        {
+          "name": "certificate_setuid_04644_refused",
+          "passed": true
+        },
+        {
+          "name": "private_directory_group_search_refused",
+          "passed": true
+        },
+        {
+          "name": "zero_certificate_refused",
+          "passed": true
+        },
+        {
+          "name": "oversize_certificate_refused",
+          "passed": true
+        },
+        {
+          "name": "maximum_certificate_size_metadata_supported",
+          "passed": true
+        },
+        {
+          "name": "zero_key_refused",
+          "passed": true
+        },
+        {
+          "name": "oversize_key_refused",
+          "passed": true
+        },
+        {
+          "name": "key_directory_refused",
+          "passed": true
+        },
+        {
+          "name": "key_fifo_refused_without_reading",
+          "passed": true
+        },
+        {
+          "name": "key_symlink_refused",
+          "passed": true
+        },
+        {
+          "name": "untrusted_writable_ancestor_refused",
+          "passed": true
+        },
+        {
+          "name": "tls_render_fixed_loopback_and_versions",
+          "passed": true
+        }
+      ],
+      "totals": {
+        "checks": 56,
+        "passed": 56,
+        "failed": 0
+      },
+      "cleanup": {
+        "ownTemporaryRootRemoved": true,
+        "noNativeProcessStarted": true,
+        "noSecretMaterialCreated": true
+      },
+      "limits": [
+        "Uses private in-memory exports of exact source functions; not public CLI, installed lifecycle or TLS certificate syntax verification.",
+        "Filesystem fixtures contain non-secret dummy bytes; native -t validates actual certificate/key syntax separately.",
+        "No hosted Node22/nonroot service, permanent release or V1 acceptance."
+      ],
+      "reportSha256": "e2344f7b8197967045c71235fe77a4973c74c02aa3c8b0ed5a62ed0aea6b0b61"
+    },
+    "findings": [
+      {
+        "state": "resolved-before-frozen-review",
+        "finding": "Private immediate certificate directory alone did not exclude replacement through an untrusted writable ancestor.",
+        "resolution": "Bounded ancestor ownership/write/sticky validation was added; final function-level adversarial fixture refused an owned private leaf beneath a writable non-sticky ancestor."
+      },
+      {
+        "state": "explicit-limit",
+        "finding": "External versioned certificate/key files are references, not byte-pinned content; trusted same-UID races and in-place replacement are outside the supported operating procedure."
+      },
+      {
+        "state": "explicit-limit",
+        "finding": "HTTP readiness does not authenticate HTTPS endpoint trust/name/expiry and cannot itself accept frontend TLS."
+      },
+      {
+        "state": "explicit-limit",
+        "finding": "Controller does not inventory arbitrary operator server listeners; TLS port must be operator-selected distinct from them."
+      }
+    ],
+    "cleanup": {
+      "ownTemporaryRootRemoved": true,
+      "noNativeProcessStarted": true,
+      "noSecretMaterialCreated": true
+    },
+    "commands": [
+      {
+        "command": "node .build/frontend-review-heldouts.mjs",
+        "exitCode": 0
+      },
+      {
+        "command": "git diff --check",
+        "exitCode": 0
+      },
+      {
+        "command": "node --check x10/control/manager.mjs",
+        "exitCode": 0
+      },
+      {
+        "command": "node --check x10/test/frontend-tls.test.mjs",
+        "exitCode": 0
+      }
+    ],
+    "claimBoundaries": [
+      "56 function-level checks use private in-memory exports of exact manager bytes; they are not 56 native or installed TLS scenarios.",
+      "One of 56 checks preserves the expected unchanged-baseline unsupported-HTTPS counterexample; legacy canonical input/render bytes are checked exactly.",
+      "Static review independently reads installed lifecycle tests but does not rerun their native TLS scenarios or the full aggregate.",
+      "Actual authored installed TLS, native official aggregate and exact hosted CI must be recorded separately from this review.",
+      "No permanent published-file replay, target nonroot Node22 service activation, production deployment or V1 acceptance is claimed."
+    ],
+    "independentlyReadAuthoredFinalTap": {
+      "tapSha256": "afd0ba5b7d59b2561fec1521edbe88fc5240c9618195a54d9db6601d915042ab",
+      "tests": 16,
+      "pass": 16,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "cleanup": {
+        "suite": "frontend-tls-owned-cleanup",
+        "nativeStopped": true,
+        "nativeSessionsStopped": 2,
+        "launcherExited": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "applicationPostRequests": 1
+      },
+      "sourceFilesMatchFinalAuthorReport": true,
+      "rerun": false,
+      "claim": "Independent artifact inspection only; authored cases remain15nested+onewrapper, not new independentnativecases."
+    }
+  },
+  "native": {
+    "schemaVersion": 1,
+    "scope": "Fresh native compatibility for explicit installed frontend HTTPS development; separate authored frontend TLS evidence",
+    "frontendTLSSuiteIncludedInAggregate": false,
+    "frontendTLSTestIncludedInAggregateFreeze": false,
+    "build": {
+      "builds": 1,
+      "exitCode": 0,
+      "elapsedMs": 24838,
+      "timedOut": false,
+      "checkoutRevision": "ea849f2ad3aed5953ca63847f05512d4d579c355",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+      "manifestSha256": "15b3282fdbf16093bf7f1aae376d13d6d34abb0dc4335330de887880a3e26bf3",
+      "binarySha256": "41d31ca8b47fdd46f46b9a5d7eede0edb96d59129074c9453eaf77e6b0f3cf20",
+      "binaryMode": "0755",
+      "compiledModuleCount": 105,
+      "nginxVersion": "1.31.9",
+      "dependencyVersionsFromHeaders": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "generatedFiles": {
+        "ngx_auto_config.h": {
+          "sha256": "3a476565518aae0585dadbd8e2e9db83ab295bcfccd391302567fa0de1c7d68d",
+          "bytes": 10153,
+          "mode": "0644"
+        },
+        "ngx_auto_headers.h": {
+          "sha256": "268bec1c0f60e89f0a39eada525ca92cb87fe883c9b70921a061f07e06c1a479",
+          "bytes": 657,
+          "mode": "0644"
+        },
+        "ngx_modules.c": {
+          "sha256": "012fff7643e8898b85b064d9dca876af0e366d3ba1221b29b1cf1dbbd59c9e8f",
+          "bytes": 11820,
+          "mode": "0644"
+        }
+      },
+      "licenseSha256": "08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c"
+    },
+    "environment": {
+      "nodeVersion": "v24.22.1",
+      "uid": 0,
+      "targetNonrootNode22Accepted": false
+    },
+    "dependencies": {
+      "pinnedWheelHashesVerified": 11,
+      "freshVenvs": 2,
+      "pipCheckPassed": 2,
+      "networkDependencyDownloads": 0,
+      "requireHashes": true,
+      "onlyBinary": true
+    },
+    "aggregate": {
+      "command": "node x10/test/all.mjs --official",
+      "exitCode": 0,
+      "elapsedMs": 226602,
+      "timedOut": false,
+      "stderrBytes": 679,
+      "success": true,
+      "groups": 20,
+      "passed": 20,
+      "failed": 0,
+      "suites": [
+        {
+          "name": "http-tls-http2-reload",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "stream-mail",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "mail-tls-starttls",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "protocol-adapters",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-interop",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "http3-head-independent-client",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-features",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-regression",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-generated-sanitized",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "quic-frame-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-load-client-verification",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "managed-native-control",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "operator-status",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "local-alpha-lifecycle",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "listener-observer-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "reload-listener-observation",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-control-api",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-process-generations",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "native-generation-boundaries",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        },
+        {
+          "name": "official-nginx-tests",
+          "passed": true,
+          "exitCode": 0,
+          "timedOut": false,
+          "outputLimitExceeded": false
+        }
+      ]
+    },
+    "controller": {
+      "format": "node-test-tap",
+      "pass": 86,
+      "fail": 0,
+      "valid": true
+    },
+    "alpha": {
+      "format": "node-test-tap",
+      "pass": 45,
+      "fail": 0,
+      "valid": true,
+      "total": 45,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "operatorStatus": {
+      "format": "node-test-tap",
+      "pass": 30,
+      "fail": 0,
+      "valid": true,
+      "total": 30,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "listenerBoundaries": {
+      "format": "node-test-tap",
+      "pass": 42,
+      "fail": 0,
+      "valid": true
+    },
+    "handover": {
+      "success": true,
+      "interrupted": false,
+      "cleanup": {
+        "nativeStopped": true,
+        "nativeExitCode": 0,
+        "nativeSignal": null,
+        "mode": "SIGQUIT",
+        "stoppedWorkerResumeRequested": true,
+        "fixturesStopped": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "errors": []
+      },
+      "sourceUnchangedDuringTest": true,
+      "tests": 7,
+      "passed": 7,
+      "cleanupErrorCount": 0,
+      "fixtureErrorCount": 0
+    },
+    "official": {
+      "revision": "47e78403ba756629adc3a8421bab700f344b7e3b",
+      "summary": {
+        "files": 35,
+        "filesPassed": 32,
+        "filesSkipped": 3,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1109,
+          "passed": 1083,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "skippedFiles": [
+        "fastcgi.t",
+        "scgi.t",
+        "uwsgi.t"
+      ],
+      "cleanupErrorCount": 0,
+      "sourceUnchangedDuringTest": true
+    },
+    "nativeTrackedInputsCount": 499,
+    "nativeTrackedInputsUnchanged": true,
+    "licenseUnchanged": true,
+    "frozenFilesCount": 36,
+    "frozenFilesUnchanged": true,
+    "sourceFreezeSha256": {
+      "x10/control/manager.mjs": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822",
+      "x10/alpha/cli.mjs": "5bb9879adbf38418252fc83eba844b7abac2ca21988d73ff2761b6a2541c94a9",
+      "x10/control/listeners.mjs": "d2ad8e7ee0df940941bfa9997a022b47903a7fd68c6b44631bb2aaf4b5befcc2",
+      "x10/test/listeners.test.mjs": "a43b12acdfedd6125f5b0bd84010581c8b28141215b804e8895c453928918b3c",
+      "x10/test/handover-baseline.mjs": "65b08954966cf53b23c3e1ee160030f38534a93342786ae2b5a12174d0f84612"
+    },
+    "supplementalUnixReruns": 0,
+    "featureOffReruns": 0,
+    "historicalLocalFailurePreserved": true,
+    "historicalESRCHCauseProven": false,
+    "nativeProcessGroupSignalEscalationPerformed": false,
+    "rawLogsPublished": false,
+    "hostPathsPublished": false,
+    "realProcessIdentifiersPublished": false,
+    "serviceActivated": false,
+    "frontendTLSAccepted": false,
+    "productionAccepted": false,
+    "limitations": [
+      "Local root/Node24 compatibility does not accept nonroot Node22 service/TLS.",
+      "One fresh native build and one frozen native official aggregate; no unchanged native diagnostic rerun.",
+      "Historical19/20 ESRCH failure process/interleaving remains unproven.",
+      "Existing restricted AF_UNIX EPERM supplemental failure was not retried unchanged; hosted required Unix evidence remains separate.",
+      "Feature-off profile not rerun locally; nativeC unchanged.",
+      "Official optional-client skips and expected TODO remain explicit.",
+      "New installed frontend TLS suite is separate authored run, not part of twentyexistingaggregate groups."
+    ],
+    "summaryCorrection": {
+      "privateInitialHandoverPassCount": 0,
+      "correctedHandoverPassCount": 7,
+      "cause": "Summary parser initially looked for passed instead of actual status=passed; original runtime results unchanged.",
+      "runtimeRerun": false
+    }
+  },
+  "reviewedOutcomeSummary": {
+    "schemaVersion": 1,
+    "baseCommit": "eaf3a9376f80d25d9dcaed1bbeea643151b841e9",
+    "leaseCommit": "ea849f2ad3aed5953ca63847f05512d4d579c355",
+    "actualFinalReportsReviewed": true,
+    "blockingFindings": 0,
+    "reportSha256": {
+      "author": "b0af390520dd0d6b4166673e84badb18230b5cc9983522158015cf65d5eca554",
+      "independentReview": "41733e1032f608b6eca58f67753d5fcdc3036a6cb9698c2bcc726b730c24ec9b",
+      "native": "d5ec72c0ea21994d9a98c43f2dbd16f65d023f2aa77d99c189b4fc6600114121"
+    },
+    "sourceFreezeSha256": {
+      "x10/control/manager.mjs": "5073eb2dc194bba659e664c58b259469372625505b7c46798ec9b397095d7822",
+      "x10/test/frontend-tls.test.mjs": "9d3168f14b8d7b8f6deeba1cc53bafe60a655786f00bd341a7354376a773cac9",
+      ".github/workflows/x10-native.yml": "04783cf96943898e214f626ce9750c3605a4e2100be89a2dd52b9606a1de4bcc"
+    },
+    "author": {
+      "exitCode": 0,
+      "tap": {
+        "tests": 16,
+        "pass": 16,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "nestedScenarios": 15,
+      "wrapperTests": 1
+    },
+    "independentReview": {
+      "cases": 56,
+      "passed": 56,
+      "staticChecks": 24,
+      "blockingFindings": 0,
+      "scope": "Function-level controls including one expected baseline unsupported-HTTPS counterexample; separate from actual installed TLS scenarios"
+    },
+    "native": {
+      "builds": 1,
+      "buildExitCode": 0,
+      "aggregateExitCode": 0,
+      "groups": 20,
+      "passed": 20,
+      "official": {
+        "run": 1109,
+        "passed": 1083,
+        "failed": 0,
+        "skipped": 25,
+        "todoFailed": 1,
+        "todoPassed": 0
+      }
+    },
+    "cleanupConfirmed": true,
+    "legacyCanonicalInputsPreserved": true,
+    "frontendTLSAccepted": false,
+    "serviceAccepted": false,
+    "targetNonrootNode22Accepted": false,
+    "productionAccepted": false,
+    "noSecretBytesPublished": true,
+    "rawLogsPublished": false
+  },
+  "exactHostedAcceptance": "PENDING_EXACT_RESULTING_IMPLEMENTATION",
+  "nextConcreteTask": "First verify exact resulting frontend HTTPS implementation CI, including the actual required frontend-tls.test.mjs step and its TAP artifact, source/build/job/merge identities and cleanup. Do not borrow the previous HTTPS-upstream receipt for new controller/test/workflow bytes. Then continue actual nonroot user-manager startup/stop/restart, failed-start, drain and orphan acceptance in an authorized test environment. The HTTPS listener is opt-in IPv4 loopback only, certificate files remain externally operator-managed, and the existing controller readiness probe remains HTTP; automatic certificate renewal and TLS health are not implemented. G2 permanent versioned release and published-file nonroot Node22 replay remain blocked by available Release/asset writer capabilities; do not bypass credentials or permissions. G4-G8/Production V1 and the full deferred Continuum remain open.",
+  "retainedHistoricalObservation": "The retained wait-bind local aggregate failed19/20 with ESRCH. The failing captured-process observation and exact historical cause remain unknown. The held old worker had previously been observed stopped; the fixture had not issued its own SIGCONT. Later local or hosted compatibility does not identify that historical interleaving, repair or establish no causality.",
+  "historicalEvidence": "x10/evidence/g3-wait-bind.json",
+  "upstreamTlsHostedEvidence": "x10/evidence/g3-tls-trust-hosted.json",
+  "historicalFailureCauseKnown": false,
+  "historicalCapturedProcessIdentified": false,
+  "historicalInterleavingReproduced": false,
+  "nativeCChanged": false,
+  "controllerImplementationChanged": true,
+  "alphaRuntimeChanged": false,
+  "observerImplementationChanged": false,
+  "localFrontendTLSVerified": true,
+  "frontendTLSAccepted": false,
+  "serviceInstalled": false,
+  "serviceActivated": false,
+  "serviceAccepted": false,
+  "targetUserManagerAccepted": false,
+  "tlsProfileAccepted": false,
+  "readinessAutomated": false,
+  "certificateRenewalAutomated": false,
+  "permanentAlphaAccepted": false,
+  "productionAccepted": false,
+  "fullNativeScopePreserved": true,
+  "fullContinuumScopePreserved": true,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "privateKeysPublished": false,
+  "realSessionKeysPublished": false,
+  "newPurchases": false,
+  "limitations": [
+    "The opt-in frontend HTTPS listener binds only IPv4 loopback alongside the existing HTTP listener; no public listener, remote management or operated service is accepted.",
+    "Existing controller revision/readiness observations remain HTTP. Native configuration testing and explicit TLS clients cover different obligations; no automatic TLS health or certificate renewal is implemented.",
+    "Certificate files remain operator-managed outside the immutable installation inventory. Retain prior versioned certificate files for revert and restart; config rollback cannot restore removed or modified external files.",
+    "Trusted same-UID operator assumptions, mutable-file races, sampled generation behavior and PID-to-signal residual races remain explicit; no malicious same-UID isolation or all-traffic atomic cutover is claimed.",
+    "Ephemeral fixture CA/keys stay outside Git/system trust and are removed only after owned fixture cleanup is confirmed.",
+    "Authored nested scenarios, independent controls, native aggregate groups and official assertions are separate counting units.",
+    "Exact final CI, supported nonroot Node22 service, permanent published-file replay, frozen final soak, Production V1 and semantic TLS migration remain unaccepted.",
+    "Historical local19/20 ESRCH cause remains unknown and is not explained by this frontend HTTPS feature."
+  ]
+}

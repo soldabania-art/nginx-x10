@@ -1,0 +1,523 @@
+{
+  "schemaVersion": 1,
+  "kind": "alpha-bind-both-paths-controller-entry-admission",
+  "state": "LOCAL_NARROW_COMPONENT_VERIFIED_HOSTED_PENDING_FULL_CAPACITY_OPEN",
+  "sourceBase": "2331e8cf3e5c44053972e502f8afd96fff3953a7",
+  "publicationParent": "0d26cbafb5b86118edf08b09730b24d7b66385c0",
+  "sourceBindings": {
+    "x10/alpha/cli.mjs": {
+      "bytes": 90119,
+      "sha256": "82d7537dbcc3be45b8590c84d414cb7215093e4aed1cc02e0debaf8d54ce32f2"
+    },
+    "x10/alpha/bind-capacity.test.mjs": {
+      "bytes": 27364,
+      "sha256": "ea416d2330c39b48c2ef140d2787076389370ad170ff8d348bf10ecc8b0153b3"
+    },
+    "x10/alpha/revision-capacity.test.mjs": {
+      "bytes": 18785,
+      "sha256": "3e45291ce53654b7c2a12ceb563fa758c0e8c6f6b8e9d58748edeeddf3a613b2"
+    },
+    "x10/review/alpha-bind-capacity-counterexample.mjs": {
+      "bytes": 9588,
+      "sha256": "dc492bdfb6457535e4c92764b0923d39388536ca7b93fef4a39c1ac671430aea"
+    },
+    "x10/test/all.mjs": {
+      "bytes": 32320,
+      "sha256": "fa9ee30b941767b73d5a116777a2787ce75fc558a75cafb223d443bc0cbb9526"
+    },
+    "x10/alpha/README.md": {
+      "bytes": 61730,
+      "sha256": "712e9c1662d41da478caca5030cd9b36c7508869caf47729b526deac6472c227"
+    },
+    "x10/release/SUPPORTED-PATH-REVIEW.md": {
+      "bytes": 18139,
+      "sha256": "2103bf9a3ef4b2cf6ab60de664531694a7de577dc3dd50b892eeafd38c65e9ed"
+    }
+  },
+  "scope": "Installed alpha bind admission in both CLI proxy and locked running waitBind path before controller operations. Declared cooperative control-file entry effects only; not physical capacity exhaustion, a filesystem quota, arbitrary native/concurrent growth or fullcapacity closure.",
+  "evidence": "x10/evidence/g5-alpha-bind-capacity.json",
+  "perFileLedger": "x10/review/g5-alpha-bind-capacity-ledger.json",
+  "entryLimit": 4096,
+  "controllerBindEntryReserve": 3,
+  "thresholds": {
+    "existingEntries4093": "may pass admission",
+    "existingEntries4094": "refused before proxy controller execution or waitBind sessionStatus/bind"
+  },
+  "guardedPaths": [
+    "proxy bind before controller execute",
+    "waitBind running locked path after exact runtime identity validation and before sessionStatus"
+  ],
+  "baseline": {
+    "producer": "x10/review/alpha-bind-capacity-counterexample.mjs",
+    "bytes": 9588,
+    "sha256": "dc492bdfb6457535e4c92764b0923d39388536ca7b93fef4a39c1ac671430aea",
+    "sourceCommit": "cd811d9d9d29899859bc3969b496a76481b02dfd",
+    "sourceBindings": {
+      "x10/alpha/cli.mjs": {
+        "bytes": 89800,
+        "sha256": "4fd2726810b9ff4b8a00c7598c4a97c673cfedf077bde1302e7ad683445336df"
+      },
+      "x10/control/manager.mjs": {
+        "bytes": 51246,
+        "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+      }
+    },
+    "controls": 6,
+    "pass": 6,
+    "exitCode": 0,
+    "stderrBytes": 0,
+    "frozenBeforeCandidateCLIEdit": true,
+    "earlierPrivateReplayOverlapsNotExtraCoverage": true,
+    "physicalFixturesExecuted": 0,
+    "networkFixturesExecuted": 0,
+    "signalsSent": 0,
+    "results": [
+      {
+        "name": "alpha-proxy-bind-forwards-at-declared-full-inventory",
+        "declaredCumulativeEntries": 4096,
+        "inventoryAcquisitions": 0,
+        "mockedControllerExecutions": 1,
+        "actualSourceFlowExtracted": true
+      },
+      {
+        "name": "alpha-waitBind-bound",
+        "declaredCumulativeEntries": 4096,
+        "inventoryAcquisitions": 0,
+        "mockedControllerStatusReads": 1,
+        "mockedBindAttempts": 1,
+        "mockedAlphaLocks": 1,
+        "outcome": "wait_bound",
+        "refusalCode": null,
+        "bindingMayHaveCommitted": true,
+        "callbacksReleased": true,
+        "actualSourceFlowExtracted": true
+      },
+      {
+        "name": "controller-bind-normal-overbound-transient-control-entries",
+        "declaredInitialCumulativeEntriesIncludingAlphaLock": 4096,
+        "modeledHighWaterCumulativeEntries": 4099,
+        "modeledFinalCumulativeEntries": 4096,
+        "mockedAtomicCalls": 2,
+        "outcome": "bound",
+        "retainedNewControllerEntries": 0,
+        "actualBindAndEventFlowSourceExtracted": true,
+        "filesystemAndDurabilityEffectsMocked": true
+      },
+      {
+        "name": "controller-bind-retained-temporary-overbound-final-state",
+        "declaredInitialCumulativeEntriesIncludingAlphaLock": 4096,
+        "modeledHighWaterCumulativeEntries": 4099,
+        "modeledFinalCumulativeEntries": 4098,
+        "mockedAtomicCalls": 2,
+        "outcome": "event_commit_incomplete",
+        "retainedNewControllerEntries": 2,
+        "actualBindAndEventFlowSourceExtracted": true,
+        "filesystemAndDurabilityEffectsMocked": true
+      },
+      {
+        "name": "alpha-waitBind-cancel",
+        "declaredCumulativeEntries": 4096,
+        "inventoryAcquisitions": 0,
+        "mockedControllerStatusReads": 0,
+        "mockedBindAttempts": 0,
+        "mockedAlphaLocks": 0,
+        "outcome": "wait_bind_refused",
+        "refusalCode": "wait_bind_cancelled",
+        "bindingMayHaveCommitted": false,
+        "callbacksReleased": true,
+        "actualSourceFlowExtracted": true
+      },
+      {
+        "name": "alpha-waitBind-timeout",
+        "declaredCumulativeEntries": 4096,
+        "inventoryAcquisitions": 0,
+        "mockedControllerStatusReads": 0,
+        "mockedBindAttempts": 0,
+        "mockedAlphaLocks": 0,
+        "outcome": "wait_bind_refused",
+        "refusalCode": "wait_bind_timeout",
+        "bindingMayHaveCommitted": false,
+        "callbacksReleased": true,
+        "actualSourceFlowExtracted": true
+      }
+    ],
+    "limitations": [
+      "Cumulative starting occupancy is declared virtual data; all filesystem, child execution, native runtime, controller identity, signal and clock effects are mocked.",
+      "Source-extracted bind/event flow uses abstract atomic primitive accounting; this is not physical high-water measurement or a complete finite-fault proof.",
+      "Cancellation uses direct invocation of a mocked callback, not an OS signal. No actual native or controller child executes.",
+      "Strict baseline pins intentionally refuse candidate drift; do not refresh these pins after implementation."
+    ],
+    "sourcePinRefusalAfterCandidateChangeIntentional": true,
+    "olderFourProducersImmutable": true
+  },
+  "candidatePureTempfileSuite": {
+    "suite": "x10/alpha/bind-capacity.test.mjs",
+    "exitCode": 0,
+    "stderrBytes": 0,
+    "TAP": {
+      "tests": 51,
+      "pass": 51,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "bytes": 27364,
+    "sha256": "ea416d2330c39b48c2ef140d2787076389370ad170ff8d348bf10ecc8b0153b3",
+    "durationMs": 3213.878511,
+    "runCountOnFrozenTestSource": 1,
+    "newSuiteControls": 51,
+    "fourTAPControlsShareOneModelEnumeration": true,
+    "modelTerminalPathsNotAdditionalTAP": 1715,
+    "modelExecutionsNotAdditionalTAP": 3165
+  },
+  "translatedExistingRevisionSuite": {
+    "suite": "x10/alpha/revision-capacity.test.mjs",
+    "exitCode": 0,
+    "stderrBytes": 0,
+    "TAP": {
+      "tests": 37,
+      "pass": 37,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "bytes": 18785,
+    "sha256": "3e45291ce53654b7c2a12ceb563fa758c0e8c6f6b8e9d58748edeeddf3a613b2",
+    "durationMs": 6977.143563,
+    "runCountOnFrozenTestSource": 1,
+    "retainedControlsNotNew37": true,
+    "translatedCase": "Previous bind-ungated case now verifies reserve3; VM receives new binder constant; other cases and count retained"
+  },
+  "existingRegressionSuites": [
+    {
+      "suite": "x10/alpha/session-capacity.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 46,
+        "pass": 46,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "runsThisPass": 1
+    },
+    {
+      "suite": "x10/alpha/prepare-run.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 18,
+        "pass": 18,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "runsThisPass": 1
+    },
+    {
+      "suite": "x10/test/alpha-recipe.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 17,
+        "pass": 17,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "runsThisPass": 1
+    },
+    {
+      "suite": "x10/test/alpha-decomposition.test.mjs",
+      "exitCode": 0,
+      "stderrBytes": 0,
+      "TAP": {
+        "tests": 45,
+        "pass": 45,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      "runsThisPass": 1
+    }
+  ],
+  "regressionMetadataClarification": {
+    "copiedPriorCollectorNoteRemoved": true,
+    "scope": "The private runner copied an old diagnostic string into metadata; current tests ran once without collector failure. Only metadata corrected; no test rerun or product change."
+  },
+  "independentReservationReview": {
+    "sourceCommit": "2331e8cf3e5c44053972e502f8afd96fff3953a7",
+    "sourceBinding": {
+      "path": "x10/control/manager.mjs",
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "sourceExtractedFunctions": [
+      "bind",
+      "lock",
+      "atomic",
+      "syncDirectory",
+      "appendEvent",
+      "clearCommit",
+      "event",
+      "save",
+      "durableEvent",
+      "status"
+    ],
+    "staticChecks": [
+      {
+        "name": "bind-one-event",
+        "pass": true
+      },
+      {
+        "name": "bind-no-revision",
+        "pass": true
+      },
+      {
+        "name": "bind-no-retry",
+        "pass": true
+      },
+      {
+        "name": "atomic-single-temp",
+        "pass": true
+      },
+      {
+        "name": "append-no-create",
+        "pass": true
+      },
+      {
+        "name": "sequential-atomic",
+        "pass": true
+      },
+      {
+        "name": "clear-is-remove-and-sync",
+        "pass": true
+      }
+    ],
+    "totalExecutions": 3165,
+    "totalTerminalPaths": 1715,
+    "maxAdditionalEntries": 3,
+    "guardThresholds": {
+      "limit": 4096,
+      "reserve": 3,
+      "admitAtExisting4093": true,
+      "refuseAtExisting4094": true
+    },
+    "modelPrimitiveOutcomes": {
+      "creatingOpen": [
+        "success",
+        "failure-before-create",
+        "failure-after-create"
+      ],
+      "existingOpen": [
+        "success",
+        "failure"
+      ],
+      "writeSyncClose": [
+        "success",
+        "failure"
+      ],
+      "rename": [
+        "success",
+        "failure-before-rename",
+        "failure-after-rename"
+      ],
+      "rm": [
+        "success",
+        "failure-before-removal",
+        "failure-after-removal"
+      ]
+    },
+    "preconditionsAndLimits": [
+      "Existing alpha lock is already part of the sampled whole-prefix inventory",
+      "Required state/history files and private control directories already exist; source load and event checks refuse unsupported states",
+      "Status observation takes and releases its controller lock before binding; failure of its cleanup propagates and prevents bind from starting",
+      "Bind creates no revision and has no rollback/retry path",
+      "Only declared controller-file effects are modeled; native/runtime helpers and concurrent/direct writers are outside this cooperative reserve",
+      "Representative filesystem failure classes and ambiguous post-effect failures are modeled, not every possible OS behavior or physical high-water"
+    ],
+    "normalBind": {
+      "executions": 1367,
+      "terminalPaths": 741,
+      "maxAdditionalEntries": 3
+    },
+    "statusThenBind": {
+      "executions": 1479,
+      "terminalPaths": 801,
+      "maxAdditionalEntries": 3
+    },
+    "unsupportedPreconditions": [
+      {
+        "precondition": "already-bound",
+        "executions": 68,
+        "terminalPaths": 37,
+        "maxAdditionalEntries": 1
+      },
+      {
+        "precondition": "pending",
+        "executions": 68,
+        "terminalPaths": 37,
+        "maxAdditionalEntries": 1
+      },
+      {
+        "precondition": "existing-commit",
+        "executions": 173,
+        "terminalPaths": 93,
+        "maxAdditionalEntries": 1
+      },
+      {
+        "precondition": "existing-lock",
+        "executions": 10,
+        "terminalPaths": 6,
+        "maxAdditionalEntries": 0
+      }
+    ],
+    "reportBinding": {
+      "bytes": 9564,
+      "sha256": "6dabeabd138e3039ba3d5c5e3e6c81ef27858b4e9676997149599e3146f73e16"
+    },
+    "allOSFailuresEnumerated": false
+  },
+  "admissionOrdering": [
+    "Existing alpha lock surrounds each admission and is counted in whole-prefix inventory",
+    "CLI proxy resolves lifecycle/controller state, then checks reserve3 for bind before process execution",
+    "waitBind retains prepared waiting and validates the locked running identity before reserve3; admission precedes sessionStatus and direct bind",
+    "A failed status/controller-lock cleanup propagates and prevents bind from starting; successful status releases its controller lock before bind",
+    "No bindingAttempted marker is set by a pre-attempt capacity refusal"
+  ],
+  "preservation": {
+    "oldRecordsRevisionsAndHistoryPreserved": true,
+    "noControllerWriteOrSignalOnAdmissionRefusal": true,
+    "preparedWaitBranchPreserved": true,
+    "identityAndReadinessPreserved": true,
+    "cancellationDeadlineAndBindingMayHaveCommittedPreserved": true,
+    "controllerDurableWritersAndRecordSchemasChanged": false,
+    "stopRecoverReceiveNewCapacityGate": false,
+    "stoppedPre18Post1AndApplyRevert7Changed": false,
+    "postCreatePartialSessionSTOPStillRequired": true
+  },
+  "unchangedBindings": {
+    "x10/control/manager.mjs": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "x10/control/cli.mjs": {
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+    },
+    "x10/alpha/runtime.mjs": {
+      "bytes": 7540,
+      "sha256": "bb9c8974be8a56a73aab3cbccb0948d1234e1d461c16a6d3ad680beb786ebf51"
+    },
+    ".github/workflows/x10-native.yml": {
+      "bytes": 26465,
+      "sha256": "d3f92329a396b02d045b45736733cdb711bf55af10b30504bc24f1a0efc8eb73"
+    },
+    "x10/service/operator-package-return.mjs": {
+      "bytes": 68575,
+      "sha256": "612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7"
+    },
+    "x10/service/operator-package-return-proof.mjs": {
+      "bytes": 12890,
+      "sha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de"
+    },
+    "x10/service/operator-package-fallback.mjs": {
+      "bytes": 630,
+      "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+    },
+    "x10/service/operator-package-fallback-proof.mjs": {
+      "bytes": 13468,
+      "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+    },
+    "x10/service/lifecycle-check.mjs": {
+      "bytes": 147483,
+      "sha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370"
+    },
+    "x10/service/verified-node.mjs": {
+      "bytes": 32439,
+      "sha256": "2febc8bdb6d890e738a426e4a80121ea840d143d9a718768ef10b5b09e839090"
+    },
+    "x10/review/controller-input-counterexample.mjs": {
+      "bytes": 5973,
+      "sha256": "f7b4527bc08bfc8dd3751fe5b9b034db0bd5dbc7c9d30b330637d3acbb086be2"
+    },
+    "x10/review/controller-loader-counterexample.mjs": {
+      "bytes": 1876,
+      "sha256": "f545c20a3f24f2f914252a405d6d3e411837717f86d6c34efe0c4158b8fe5d8a"
+    },
+    "x10/review/alpha-session-capacity-counterexample.mjs": {
+      "bytes": 4982,
+      "sha256": "ce2dfb9292d5321f9c205589e65035ecb8d9aa1086b7b748dae3bab3b1ee7abb"
+    },
+    "x10/review/alpha-revision-capacity-counterexample.mjs": {
+      "bytes": 6803,
+      "sha256": "80b10fb9a7bc8fef217e6f2257148bddbbdf3b5e9a158fb7657316b3cf75b512"
+    }
+  },
+  "testWiring": "New bind-capacity.test.mjs is added once only to existing managed-native-control arguments. The existing revision37 suite translates its previous ungated-bind case to the new bind reserve and supplies its VM constant; the other coverage and count are retained. Complete zero-skip TAP remains required. No new group, step, name/order/budget or fixedbundle entry. Actual successor totals must be read, not inferred.",
+  "metadataPredecessorReadback": {
+    "sourceCommit": "2331e8cf3e5c44053972e502f8afd96fff3953a7",
+    "nativePush": {
+      "runId": 40595688056,
+      "jobId": 122510976877,
+      "actualSuccessfulSteps": 36
+    },
+    "nativePR": {
+      "runId": 40595696258,
+      "jobId": 122511004079,
+      "actualSuccessfulSteps": 36
+    },
+    "researchPR": {
+      "runId": 40595696123,
+      "jobId": 122511023231,
+      "actualSuccessfulSteps": 11
+    },
+    "cla": {
+      "runId": 40595692599,
+      "jobId": 122510911097,
+      "failedStep": 3
+    },
+    "newArtifactDownloads": 0,
+    "scope": "Actual job/step metadata only for unchanged predecessor runtime. No guessed checkout/build/test counts or transfer of exactcd8 normal compatibility to new bind CLI bytes."
+  },
+  "mandatoryAncestryRead": {
+    "documents": 69,
+    "mandatoryEdges": 193,
+    "blobPinComparisons": 119,
+    "distinctPinnedTargets": 22,
+    "distinctAncestorCommits": 24,
+    "missingReferences": 0,
+    "mismatches": 0
+  },
+  "remainingOpenBoundaries": [
+    "Direct controller CLI/API bypasses alpha admission; recovery and stop remain ungated.",
+    "Native/configuration-test/application files, arbitrary same-UID concurrent writers and prepared reuse are outside the declared controller reserve.",
+    "Initial install/restore/stage registry publication plus later alpha/controller lock headroom is a separate open contract; naive one/two-slot reservations do not prove first-command inspectability.",
+    "Stopped preparation postcheck failure may preserve an unregistered/uninspectable tree with session_capacity_unresolved STOP; no automatic orphan repair, deletion or retry is added.",
+    "Inventory is a sampled cooperative consistency check, not a total memory/bytes bound, kernel deadline or OS fence. The finite fault model uses declared syscall outcomes and representative helper failures, not every possible OS behavior.",
+    "FullG3/G4/G5/G7/V1, orphanincident replay/disposal, TLSrestore, nativebinaryupgrade, permanent release/publisher capability, independent published replay,60-minute soak, semanticContinuum and WindowsDEFERRED_UNVERIFIED remain open."
+  ],
+  "installedAlphaCLIChanged": true,
+  "controllerBytesChanged": false,
+  "nativeCChanged": false,
+  "workflowChanged": false,
+  "fixedBundleInventoryChanged": false,
+  "localPhysicalFixturesExecuted": 0,
+  "networkFixturesExecuted": 0,
+  "signalsSent": 0,
+  "physicalCapacityExhaustionAccepted": false,
+  "candidateHostedCompatibilityAccepted": false,
+  "fullCapacityFindingClosed": false,
+  "fullG5Accepted": false,
+  "productionAccepted": false,
+  "priorAdverseUNKNOWNOrCLAExplainedOrCleared": false,
+  "countsNotSummed": true,
+  "nextConcreteTask": "Inspect exact successor both native events and actual artifacts for changed alphaCLI. Require the new bind-capacity suite and retained translated revision37 in existing managed suite, complete zero-skip managed/alpha TAP, unchanged20groups/36steps/budgets, all3 strictreports/sourcepins and owned/privateNode/history/bootstrap cleanup. Verify actual waitBind installed/service compatibility, not merely proxy mock controls. Do not infer totals or transfer exactcd8 acceptance. After scoped compatibility choose the separate initial-publication/first-inspection contract without blindly adopting a reserve; keep all broader capacity and fullG5/V1 gates open."
+}

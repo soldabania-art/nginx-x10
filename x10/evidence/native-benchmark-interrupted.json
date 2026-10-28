@@ -1,0 +1,723 @@
+{
+  "schemaVersion": 1,
+  "suite": "native-nginx-c-client-comparison",
+  "startedAt": "2026-10-23T09:37:13.382Z",
+  "success": false,
+  "options": {
+    "baseline": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+    "candidate": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+    "baselineManifest": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-reference.json",
+    "candidateManifest": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/manifest.json",
+    "client": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+    "clientManifest": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/build.json",
+    "durationMs": 1000,
+    "warmupMs": 500,
+    "repetitions": 2,
+    "concurrency": [
+      1
+    ]
+  },
+  "environment": {
+    "platform": "linux",
+    "release": "6.18.55",
+    "architecture": "x64",
+    "node": "v24.19.0",
+    "logicalCpus": 9,
+    "availableParallelism": 8,
+    "totalMemoryBytes": 10451439616,
+    "nativeCpuTicksPerSecond": 100,
+    "pageBytes": 4096,
+    "allowedCpuList": "0-8"
+  },
+  "methodology": {
+    "nativeConfiguration": "One native front at a time plus a fixed pristine native origin; daemon off and master_process off for both",
+    "transport": "Loopback HTTP/1.1, keepalive, closed loop, one outstanding request per client lane, no pipelining",
+    "workload": "Static file sendfile on and native reverse proxy, exact 1024-byte response verified for every completed request",
+    "order": "For every workload/concurrency pair: even repetition baseline then candidate; odd repetition candidate then baseline",
+    "timing": "A separate C-client warmup primes native caches/pools; measured client uses fresh connections and drains admitted requests; throughput denominator includes connection setup and drain",
+    "latency": "C-client full-response durations; log2-microsecond histogram quantile upper bounds, no cross-sample pooled quantiles",
+    "resources": "Linux /proc front/origin CPU ticks; RSS sampled every25ms, not true peak; C client self CPU/maxRSS; separate Node orchestration CPU"
+  },
+  "limitations": [
+    "Synthetic short local smoke comparison; no confidence interval, regression threshold or global speedup claim.",
+    "C client, native front and native origin still share a host and can limit each other; no open-loop or remote generator.",
+    "Host scheduling and other workloads are uncontrolled; balanced order reduces but does not remove noise.",
+    "Single-process master-off execution does not measure production multiworker scaling, reloads, TLS, HTTP2/3, QUIC, mail or disk-cold workloads.",
+    "Native CPU uses discrete scheduler ticks; its snapshot window includes client process creation/exit around traffic. RSS sampling can miss peaks; C maxRSS is process-lifetime high water.",
+    "The candidate QUIC parser fix is not exercised by these HTTP1 workloads. Ratios are observations, not evidence that the fix speeds these workloads up."
+  ],
+  "runs": [
+    {
+      "index": 0,
+      "binary": "baseline",
+      "workload": "static",
+      "concurrency": 1,
+      "repetition": 0,
+      "success": false,
+      "error": "Native client sample failed: interrupted",
+      "failedClient": {
+        "schemaVersion": 1,
+        "suite": "native-http1-load",
+        "success": false,
+        "interrupted": 15,
+        "endpoint": {
+          "host": "127.0.0.1",
+          "port": 38277,
+          "path": "/static"
+        },
+        "options": {
+          "durationMs": 500,
+          "concurrency": 1,
+          "timeoutMs": 2000,
+          "maxRequests": 1000000
+        },
+        "counters": {
+          "admitted": 16,
+          "completed": 15,
+          "failed": 0,
+          "aborted": 1,
+          "connectionsOpened": 1,
+          "reusedRequests": 15
+        },
+        "timing": {
+          "elapsedMs": 0.999468,
+          "admissionMs": 0.999468,
+          "drainMs": 0
+        },
+        "throughputRps": 15007.984248,
+        "latency": {
+          "count": 15,
+          "meanUs": 63.505867,
+          "maxUs": 199.573,
+          "p50UpperUs": 64,
+          "p95UpperUs": 256,
+          "p99UpperUs": 256,
+          "quantileMethod": "nearest-rank logarithmic histogram upper bound",
+          "histogram": [
+            {
+              "upperUs": 1,
+              "count": 0
+            },
+            {
+              "upperUs": 2,
+              "count": 0
+            },
+            {
+              "upperUs": 4,
+              "count": 0
+            },
+            {
+              "upperUs": 8,
+              "count": 0
+            },
+            {
+              "upperUs": 16,
+              "count": 0
+            },
+            {
+              "upperUs": 32,
+              "count": 7
+            },
+            {
+              "upperUs": 64,
+              "count": 3
+            },
+            {
+              "upperUs": 128,
+              "count": 3
+            },
+            {
+              "upperUs": 256,
+              "count": 2
+            },
+            {
+              "upperUs": 512,
+              "count": 0
+            },
+            {
+              "upperUs": 1024,
+              "count": 0
+            },
+            {
+              "upperUs": 2048,
+              "count": 0
+            },
+            {
+              "upperUs": 4096,
+              "count": 0
+            },
+            {
+              "upperUs": 8192,
+              "count": 0
+            },
+            {
+              "upperUs": 16384,
+              "count": 0
+            },
+            {
+              "upperUs": 32768,
+              "count": 0
+            },
+            {
+              "upperUs": 65536,
+              "count": 0
+            },
+            {
+              "upperUs": 131072,
+              "count": 0
+            },
+            {
+              "upperUs": 262144,
+              "count": 0
+            },
+            {
+              "upperUs": 524288,
+              "count": 0
+            },
+            {
+              "upperUs": 1048576,
+              "count": 0
+            },
+            {
+              "upperUs": 2097152,
+              "count": 0
+            },
+            {
+              "upperUs": 4194304,
+              "count": 0
+            },
+            {
+              "upperUs": 8388608,
+              "count": 0
+            },
+            {
+              "upperUs": 16777216,
+              "count": 0
+            },
+            {
+              "upperUs": 33554432,
+              "count": 0
+            },
+            {
+              "upperUs": 67108864,
+              "count": 0
+            },
+            {
+              "upperUs": 134217728,
+              "count": 0
+            },
+            {
+              "upperUs": 268435456,
+              "count": 0
+            },
+            {
+              "upperUs": 536870912,
+              "count": 0
+            },
+            {
+              "upperUs": 1073741824,
+              "count": 0
+            },
+            {
+              "upperUs": 2147483648,
+              "count": 0
+            }
+          ]
+        },
+        "resources": {
+          "userCpuMs": 0.292,
+          "systemCpuMs": 0,
+          "maxRssKiB": 22644
+        },
+        "cleanup": {
+          "openSockets": 0,
+          "errors": 0
+        },
+        "counterInvariant": true,
+        "requestCapReached": false,
+        "error": {
+          "reason": "interrupted",
+          "errno": 0
+        },
+        "exit": {
+          "code": 1,
+          "signal": null
+        },
+        "command": [
+          "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+          "--port",
+          "38277",
+          "--path",
+          "/static",
+          "--duration-ms",
+          "500",
+          "--concurrency",
+          "1",
+          "--timeout-ms",
+          "2000"
+        ],
+        "deadlineExpired": false,
+        "outputLimitExceeded": false
+      },
+      "cleanup": {
+        "signal": "SIGQUIT",
+        "result": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    }
+  ],
+  "cleanupErrors": [],
+  "identities": {
+    "baseline": {
+      "label": "baseline",
+      "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+      "sha256": "adf05f3088bf8ee1ed7c886e424a2d92258323dd78e036276b41e009fbaf634e",
+      "bytes": 8547008,
+      "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "normalizedVersion": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)\nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=<path> --prefix=<path> --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "manifest": {
+        "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-reference.json",
+        "sha256": "6e6b94fe9541d65eaa6ae61e7a1784d277d24a23bf7049cebb55abcc04fdca44",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "checkoutRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "trackedChanges": [],
+        "sourceChangesFromUpstream": [],
+        "sourceDiffSha256": null,
+        "compiler": "cc",
+        "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+        "dependencies": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        },
+        "compiledModules": [
+          "ngx_core_module",
+          "ngx_errlog_module",
+          "ngx_conf_module",
+          "ngx_openssl_module",
+          "ngx_openssl_cache_module",
+          "ngx_quic_module",
+          "ngx_quic_bpf_module",
+          "ngx_regex_module",
+          "ngx_events_module",
+          "ngx_event_core_module",
+          "ngx_epoll_module",
+          "ngx_thread_pool_module",
+          "ngx_http_module",
+          "ngx_http_core_module",
+          "ngx_http_log_module",
+          "ngx_http_upstream_module",
+          "ngx_http_v2_module",
+          "ngx_http_v3_module",
+          "ngx_http_static_module",
+          "ngx_http_gzip_static_module",
+          "ngx_http_dav_module",
+          "ngx_http_autoindex_module",
+          "ngx_http_index_module",
+          "ngx_http_mirror_module",
+          "ngx_http_try_files_module",
+          "ngx_http_auth_request_module",
+          "ngx_http_auth_basic_module",
+          "ngx_http_access_module",
+          "ngx_http_limit_conn_module",
+          "ngx_http_limit_req_module",
+          "ngx_http_realip_module",
+          "ngx_http_geo_module",
+          "ngx_http_map_module",
+          "ngx_http_split_clients_module",
+          "ngx_http_referer_module",
+          "ngx_http_rewrite_module",
+          "ngx_http_ssl_module",
+          "ngx_http_proxy_module",
+          "ngx_http_fastcgi_module",
+          "ngx_http_uwsgi_module",
+          "ngx_http_scgi_module",
+          "ngx_http_grpc_module",
+          "ngx_http_proxy_v2_module",
+          "ngx_http_tunnel_module",
+          "ngx_http_memcached_module",
+          "ngx_http_empty_gif_module",
+          "ngx_http_browser_module",
+          "ngx_http_upstream_hash_module",
+          "ngx_http_upstream_ip_hash_module",
+          "ngx_http_upstream_least_conn_module",
+          "ngx_http_upstream_least_time_module",
+          "ngx_http_upstream_random_module",
+          "ngx_http_upstream_keepalive_module",
+          "ngx_http_upstream_zone_module",
+          "ngx_http_upstream_sticky_module",
+          "ngx_http_stub_status_module",
+          "ngx_http_write_filter_module",
+          "ngx_http_header_filter_module",
+          "ngx_http_chunked_filter_module",
+          "ngx_http_v2_filter_module",
+          "ngx_http_v3_filter_module",
+          "ngx_http_range_header_filter_module",
+          "ngx_http_gzip_filter_module",
+          "ngx_http_postpone_filter_module",
+          "ngx_http_ssi_filter_module",
+          "ngx_http_charset_filter_module",
+          "ngx_http_sub_filter_module",
+          "ngx_http_addition_filter_module",
+          "ngx_http_gunzip_filter_module",
+          "ngx_http_userid_filter_module",
+          "ngx_http_headers_filter_module",
+          "ngx_http_copy_filter_module",
+          "ngx_http_range_body_filter_module",
+          "ngx_http_not_modified_filter_module",
+          "ngx_http_slice_filter_module",
+          "ngx_mail_module",
+          "ngx_mail_core_module",
+          "ngx_mail_ssl_module",
+          "ngx_mail_pop3_module",
+          "ngx_mail_imap_module",
+          "ngx_mail_smtp_module",
+          "ngx_mail_auth_http_module",
+          "ngx_mail_proxy_module",
+          "ngx_mail_realip_module",
+          "ngx_stream_module",
+          "ngx_stream_core_module",
+          "ngx_stream_log_module",
+          "ngx_stream_proxy_module",
+          "ngx_stream_upstream_module",
+          "ngx_stream_write_filter_module",
+          "ngx_stream_ssl_module",
+          "ngx_stream_limit_conn_module",
+          "ngx_stream_access_module",
+          "ngx_stream_geo_module",
+          "ngx_stream_map_module",
+          "ngx_stream_split_clients_module",
+          "ngx_stream_return_module",
+          "ngx_stream_pass_module",
+          "ngx_stream_set_module",
+          "ngx_stream_upstream_hash_module",
+          "ngx_stream_upstream_least_conn_module",
+          "ngx_stream_upstream_least_time_module",
+          "ngx_stream_upstream_random_module",
+          "ngx_stream_upstream_zone_module",
+          "ngx_stream_ssl_preread_module"
+        ]
+      }
+    },
+    "candidate": {
+      "label": "candidate",
+      "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs/nginx",
+      "sha256": "66ba1756a76b91929b0205071c7504a1f7086348af8a61593ef5141e044b9bcf",
+      "bytes": 8547024,
+      "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "normalizedVersion": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)\nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=<path> --prefix=<path> --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+      "manifest": {
+        "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/manifest.json",
+        "sha256": "7e066e3271cc60d274709f91731d209b065aa5dd229a19953e4fee83d8f04f9f",
+        "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+        "checkoutRevision": "29746068bfca299b85062e981df250aa3e12abb8",
+        "trackedChanges": [
+          "x10/BUILD.md",
+          "x10/CI.md",
+          "x10/PLAN.md",
+          "x10/README.md",
+          "x10/build.sh",
+          "x10/control/README.md",
+          "x10/control/manager.mjs",
+          "x10/test/all.mjs",
+          "x10/test/control.test.mjs"
+        ],
+        "sourceChangesFromUpstream": [
+          "src/event/quic/ngx_event_quic_transport.c"
+        ],
+        "sourceDiffSha256": "e39c9727a66feae3390301c0718438dc00182a28b607e6156a2b6d059f65ba64",
+        "compiler": "cc",
+        "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+        "dependencies": {
+          "pcre2": "10.42",
+          "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+          "zlib": "1.3"
+        },
+        "compiledModules": [
+          "ngx_core_module",
+          "ngx_errlog_module",
+          "ngx_conf_module",
+          "ngx_openssl_module",
+          "ngx_openssl_cache_module",
+          "ngx_quic_module",
+          "ngx_quic_bpf_module",
+          "ngx_regex_module",
+          "ngx_events_module",
+          "ngx_event_core_module",
+          "ngx_epoll_module",
+          "ngx_thread_pool_module",
+          "ngx_http_module",
+          "ngx_http_core_module",
+          "ngx_http_log_module",
+          "ngx_http_upstream_module",
+          "ngx_http_v2_module",
+          "ngx_http_v3_module",
+          "ngx_http_static_module",
+          "ngx_http_gzip_static_module",
+          "ngx_http_dav_module",
+          "ngx_http_autoindex_module",
+          "ngx_http_index_module",
+          "ngx_http_mirror_module",
+          "ngx_http_try_files_module",
+          "ngx_http_auth_request_module",
+          "ngx_http_auth_basic_module",
+          "ngx_http_access_module",
+          "ngx_http_limit_conn_module",
+          "ngx_http_limit_req_module",
+          "ngx_http_realip_module",
+          "ngx_http_geo_module",
+          "ngx_http_map_module",
+          "ngx_http_split_clients_module",
+          "ngx_http_referer_module",
+          "ngx_http_rewrite_module",
+          "ngx_http_ssl_module",
+          "ngx_http_proxy_module",
+          "ngx_http_fastcgi_module",
+          "ngx_http_uwsgi_module",
+          "ngx_http_scgi_module",
+          "ngx_http_grpc_module",
+          "ngx_http_proxy_v2_module",
+          "ngx_http_tunnel_module",
+          "ngx_http_memcached_module",
+          "ngx_http_empty_gif_module",
+          "ngx_http_browser_module",
+          "ngx_http_upstream_hash_module",
+          "ngx_http_upstream_ip_hash_module",
+          "ngx_http_upstream_least_conn_module",
+          "ngx_http_upstream_least_time_module",
+          "ngx_http_upstream_random_module",
+          "ngx_http_upstream_keepalive_module",
+          "ngx_http_upstream_zone_module",
+          "ngx_http_upstream_sticky_module",
+          "ngx_http_stub_status_module",
+          "ngx_http_write_filter_module",
+          "ngx_http_header_filter_module",
+          "ngx_http_chunked_filter_module",
+          "ngx_http_v2_filter_module",
+          "ngx_http_v3_filter_module",
+          "ngx_http_range_header_filter_module",
+          "ngx_http_gzip_filter_module",
+          "ngx_http_postpone_filter_module",
+          "ngx_http_ssi_filter_module",
+          "ngx_http_charset_filter_module",
+          "ngx_http_sub_filter_module",
+          "ngx_http_addition_filter_module",
+          "ngx_http_gunzip_filter_module",
+          "ngx_http_userid_filter_module",
+          "ngx_http_headers_filter_module",
+          "ngx_http_copy_filter_module",
+          "ngx_http_range_body_filter_module",
+          "ngx_http_not_modified_filter_module",
+          "ngx_http_slice_filter_module",
+          "ngx_mail_module",
+          "ngx_mail_core_module",
+          "ngx_mail_ssl_module",
+          "ngx_mail_pop3_module",
+          "ngx_mail_imap_module",
+          "ngx_mail_smtp_module",
+          "ngx_mail_auth_http_module",
+          "ngx_mail_proxy_module",
+          "ngx_mail_realip_module",
+          "ngx_stream_module",
+          "ngx_stream_core_module",
+          "ngx_stream_log_module",
+          "ngx_stream_proxy_module",
+          "ngx_stream_upstream_module",
+          "ngx_stream_write_filter_module",
+          "ngx_stream_ssl_module",
+          "ngx_stream_limit_conn_module",
+          "ngx_stream_access_module",
+          "ngx_stream_geo_module",
+          "ngx_stream_map_module",
+          "ngx_stream_split_clients_module",
+          "ngx_stream_return_module",
+          "ngx_stream_pass_module",
+          "ngx_stream_set_module",
+          "ngx_stream_upstream_hash_module",
+          "ngx_stream_upstream_least_conn_module",
+          "ngx_stream_upstream_least_time_module",
+          "ngx_stream_upstream_random_module",
+          "ngx_stream_upstream_zone_module",
+          "ngx_stream_ssl_preread_module"
+        ]
+      }
+    }
+  },
+  "clientIdentity": {
+    "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load",
+    "sha256": "97482bfa8ca73c8992bbef6efc549c8d6370dd2841ff58164d39fedd82ac06bb",
+    "sourceSha256": "ea0c28a2a4ec24d67978b442993ca86c86f14a823a6a24e1b7116807f0795828",
+    "manifestPath": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/build.json",
+    "manifestSha256": "e92ddc42074672de256e73976ea1bdb140e26183390bd6630ec5868404756224",
+    "compiler": {
+      "command": "cc",
+      "versionOutput": "cc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+    },
+    "compilerArguments": [
+      "-O2",
+      "-std=c11",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/bench/native-load.c",
+      "-o",
+      "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/native-load/native-load.tmp-14"
+    ]
+  },
+  "originIdentity": {
+    "label": "baseline",
+    "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/baseline/nginx",
+    "sha256": "adf05f3088bf8ee1ed7c886e424a2d92258323dd78e036276b41e009fbaf634e",
+    "bytes": 8547008,
+    "versionOutput": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04) \nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/objs --prefix=/workspace/scratch/d8c3d94bb512/nginx-x10/x10/.build/runtime --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+    "normalizedVersion": "nginx version: nginx/1.31.9\nbuilt by gcc 13.3.0 (Ubuntu 13.3.0-6ubuntu2~24.04)\nbuilt with OpenSSL 3.0.13 30 Jan 2024\nTLS SNI support enabled\nconfigure arguments: --builddir=<path> --prefix=<path> --with-http_ssl_module --with-http_v2_module --with-http_v3_module --with-stream --with-stream_ssl_module --with-stream_ssl_preread_module --with-mail --with-mail_ssl_module --with-threads --with-file-aio --with-http_realip_module --with-http_stub_status_module --with-http_auth_request_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_slice_module --with-http_gunzip_module --with-http_gzip_static_module --with-compat --with-control-api",
+    "manifest": {
+      "path": "/workspace/scratch/d8c3d94bb512/nginx-x10/x10/evidence/build-reference.json",
+      "sha256": "6e6b94fe9541d65eaa6ae61e7a1784d277d24a23bf7049cebb55abcc04fdca44",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "checkoutRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "trackedChanges": [],
+      "sourceChangesFromUpstream": [],
+      "sourceDiffSha256": null,
+      "compiler": "cc",
+      "compilerFlags": "-pipe  -O -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g",
+      "dependencies": {
+        "pcre2": "10.42",
+        "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+        "zlib": "1.3"
+      },
+      "compiledModules": [
+        "ngx_core_module",
+        "ngx_errlog_module",
+        "ngx_conf_module",
+        "ngx_openssl_module",
+        "ngx_openssl_cache_module",
+        "ngx_quic_module",
+        "ngx_quic_bpf_module",
+        "ngx_regex_module",
+        "ngx_events_module",
+        "ngx_event_core_module",
+        "ngx_epoll_module",
+        "ngx_thread_pool_module",
+        "ngx_http_module",
+        "ngx_http_core_module",
+        "ngx_http_log_module",
+        "ngx_http_upstream_module",
+        "ngx_http_v2_module",
+        "ngx_http_v3_module",
+        "ngx_http_static_module",
+        "ngx_http_gzip_static_module",
+        "ngx_http_dav_module",
+        "ngx_http_autoindex_module",
+        "ngx_http_index_module",
+        "ngx_http_mirror_module",
+        "ngx_http_try_files_module",
+        "ngx_http_auth_request_module",
+        "ngx_http_auth_basic_module",
+        "ngx_http_access_module",
+        "ngx_http_limit_conn_module",
+        "ngx_http_limit_req_module",
+        "ngx_http_realip_module",
+        "ngx_http_geo_module",
+        "ngx_http_map_module",
+        "ngx_http_split_clients_module",
+        "ngx_http_referer_module",
+        "ngx_http_rewrite_module",
+        "ngx_http_ssl_module",
+        "ngx_http_proxy_module",
+        "ngx_http_fastcgi_module",
+        "ngx_http_uwsgi_module",
+        "ngx_http_scgi_module",
+        "ngx_http_grpc_module",
+        "ngx_http_proxy_v2_module",
+        "ngx_http_tunnel_module",
+        "ngx_http_memcached_module",
+        "ngx_http_empty_gif_module",
+        "ngx_http_browser_module",
+        "ngx_http_upstream_hash_module",
+        "ngx_http_upstream_ip_hash_module",
+        "ngx_http_upstream_least_conn_module",
+        "ngx_http_upstream_least_time_module",
+        "ngx_http_upstream_random_module",
+        "ngx_http_upstream_keepalive_module",
+        "ngx_http_upstream_zone_module",
+        "ngx_http_upstream_sticky_module",
+        "ngx_http_stub_status_module",
+        "ngx_http_write_filter_module",
+        "ngx_http_header_filter_module",
+        "ngx_http_chunked_filter_module",
+        "ngx_http_v2_filter_module",
+        "ngx_http_v3_filter_module",
+        "ngx_http_range_header_filter_module",
+        "ngx_http_gzip_filter_module",
+        "ngx_http_postpone_filter_module",
+        "ngx_http_ssi_filter_module",
+        "ngx_http_charset_filter_module",
+        "ngx_http_sub_filter_module",
+        "ngx_http_addition_filter_module",
+        "ngx_http_gunzip_filter_module",
+        "ngx_http_userid_filter_module",
+        "ngx_http_headers_filter_module",
+        "ngx_http_copy_filter_module",
+        "ngx_http_range_body_filter_module",
+        "ngx_http_not_modified_filter_module",
+        "ngx_http_slice_filter_module",
+        "ngx_mail_module",
+        "ngx_mail_core_module",
+        "ngx_mail_ssl_module",
+        "ngx_mail_pop3_module",
+        "ngx_mail_imap_module",
+        "ngx_mail_smtp_module",
+        "ngx_mail_auth_http_module",
+        "ngx_mail_proxy_module",
+        "ngx_mail_realip_module",
+        "ngx_stream_module",
+        "ngx_stream_core_module",
+        "ngx_stream_log_module",
+        "ngx_stream_proxy_module",
+        "ngx_stream_upstream_module",
+        "ngx_stream_write_filter_module",
+        "ngx_stream_ssl_module",
+        "ngx_stream_limit_conn_module",
+        "ngx_stream_access_module",
+        "ngx_stream_geo_module",
+        "ngx_stream_map_module",
+        "ngx_stream_split_clients_module",
+        "ngx_stream_return_module",
+        "ngx_stream_pass_module",
+        "ngx_stream_set_module",
+        "ngx_stream_upstream_hash_module",
+        "ngx_stream_upstream_least_conn_module",
+        "ngx_stream_upstream_least_time_module",
+        "ngx_stream_upstream_random_module",
+        "ngx_stream_upstream_zone_module",
+        "ngx_stream_ssl_preread_module"
+      ]
+    }
+  },
+  "profileComparison": {
+    "comparable": true,
+    "ignoredVersionFields": [
+      "configure --builddir path",
+      "configure --prefix path"
+    ],
+    "identitiesStableAtFinish": true
+  },
+  "payload": {
+    "bytes": 1024,
+    "sha256": "98dbc1cdac192018c78932d9523bc53ef4a1ce69d516240b3772ffa5a59e85c4"
+  },
+  "nativeConfigTemplate": "user \"root\";\ndaemon off;\nmaster_process off;\npid \"<private-prefix>/nginx.pid\";\nerror_log \"<private-prefix>/error.log\" warn;\nevents { worker_connections 1024; }\nhttp {\n  access_log off;\n  default_type application/octet-stream;\n  sendfile on;\n  tcp_nopush on;\n  keepalive_timeout 30s;\n  keepalive_requests 1000000;\n  client_body_temp_path \"<private-prefix>/body-temp\";\n  proxy_temp_path \"<private-prefix>/proxy-temp\";\n  upstream fixture { server 127.0.0.1:<origin-port>; keepalive 128; }\n  server {\n    listen 127.0.0.1:<front-port>;\n    server_name localhost;\n    location = /static { alias \"<private-prefix>/payload.bin\"; }\n    location = /proxy {\n      proxy_http_version 1.1;\n      proxy_set_header Connection \"\";\n      proxy_connect_timeout 1s;\n      proxy_read_timeout 2s;\n      proxy_pass http://fixture/static;\n    }\n  }\n}\n",
+  "interrupted": "SIGTERM",
+  "error": "Native client sample failed: interrupted",
+  "originCleanup": {
+    "signal": "SIGQUIT",
+    "result": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "finishedAt": "2026-10-23T09:37:13.838Z"
+}

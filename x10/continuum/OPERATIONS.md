@@ -1,0 +1,197 @@
+# CONTINUUM: работа команды и возобновление
+
+Это регламент ограниченных рабочих сессий с сохранением состояния в Git.
+Роли и checkpoints сохраняются между сессиями; сами AI-процессы не объявляются
+постоянно работающими. Доступность помощников и успешный следующий запуск
+зависят от среды, квот и механизма автоматизации.
+
+## Шесть ролей
+
+| Роль | Ответственность | Граница владения |
+| --- | --- | --- |
+| Координатор | Приоритеты, task/lease, интеграция, проверки и публикация. | Один владелец общего состояния, commit и push. |
+| Модель и checker | TLS continuation obligations, поддержанный state IR, trust boundary и независимые правила проверки. | Назначенные model/checker файлы; допущения явно записываются. |
+| Adapters/runtime | Вывод и проверка version adapters, преобразование state IR и ограниченный handover. | Назначенные adapter/runtime файлы; AI не определяет PASS. |
+| Native integration | Связь с реальным NGINX, совместимость, bounded lifecycle и identity. | Назначенные native/adapter файлы; семантика upstream сохраняется. |
+| Независимый reviewer | TLS sequence/key epoch, partial I/O, single writer, ownership, контрпримеры и scope review. | Отдельный review результата другого владельца; собственная реализация не считается независимым review. |
+| Evidence и economics | Воспроизводимые измерения, источники, расходы, документация и handoff. | Назначенные evidence/docs; raw host records и секреты не публикуются. |
+
+Это набор ответственностей, а не обещание шести одновременно доступных
+процессов. Координатор назначает конкретных исполнителей на каждую сессию;
+один человек/агент может последовательно закрывать несколько ролей, сохраняя
+отдельного reviewer для существенного результата.
+
+## Task, checkpoint и lease
+
+Общее состояние ведёт координатор в `BACKGROUND.json` рядом с этим документом.
+Запись автоматизации становится фактом только после указания настоящего ID,
+расписания и подтверждённого состояния. Пока запись отсутствует или pending,
+нельзя говорить, что периодическое возобновление уже включено.
+
+Перед выдачей работы фиксируются task ID, версия плана/checkpoint, полный base
+commit HEAD, owner, разрешённые файлы, следующий проверяемый результат и срок
+lease в UTC. Изменение task/lease проходит через координатора с проверкой
+ожидаемой версии состояния (CAS); истёкший lease не даёт права перезаписывать
+активные изменения другого исполнителя.
+
+Исполнитель сначала читает AGENTS, актуальный checkpoint и состояние дерева.
+При смене HEAD, плана или ownership он возвращает coordinator конфликт и свои
+результаты; чужие изменения не откатывает. Самостоятельные commits/push,
+переназначение задач и изменение общего расписания исполнителем не выполняются.
+
+На границе каждого среза сохраняются:
+
+- base HEAD, задача, owner/lease и фактически изменённые файлы;
+- что реализовано, что остаётся гипотезой, следующий конкретный шаг;
+- точные команды и результаты проверок, skips/unsupported/errors отдельно;
+- применимые source/binary/config/seed hashes и границы воспроизводимости;
+- результат независимого review, текущие риски и фактические расходы.
+
+Неподтверждённый результат не получает статус completed из-за одного build,
+прошедшего fixture или уверенного ответа модели. Координатор проверяет diff,
+интегрирует, запускает относящиеся к изменению проверки и публикует checkpoint.
+
+## Кооперативный Git-протокол владения
+
+Это процедурная координация авторизованных разработчиков, а не CLI lock,
+секретный доступ или защита от злонамеренного writer. Публичный `runId` не даёт
+прав GitHub; credentials и bearer tokens в файле состояния отсутствуют.
+
+1. Прочитать remote HEAD `R` ветки `x10-continuum-development` и `BACKGROUND.json` именно
+   из `R`. Проверить схему и отсутствие действующего чужого lease. Получить
+   отдельное чистое дерево этого запуска, не использовать чужой рабочий каталог.
+2. Создать lease-only commit `L` с единственным parent `R`. Lease содержит
+   публичные runId/owner, baseCommit, acquiredAtUTC/expiresAtUTC, максимум 45 минут.
+   Обновить ref без force, с `expected_sha=R` при доступности этого параметра.
+   При конфликте перечитать состояние и закончить попытку; не rebase/retry вслепую.
+3. Повторно прочитать remote HEAD и состояние: требуется HEAD `L`, собственный
+   runId и действующий срок. Только затем назначать writers.
+4. Проверять локальный deadline перед изменениями и интеграцией; до renewal или
+   публикации снова читать remote exact HEAD и собственный runId. Чужой lease,
+   истечение срока или конфликт прекращают публикацию. Незавершённый результат
+   сохраняется локально; это не право перезаписывать новое состояние.
+5. Renewal — lease-only commit поверх точного текущего leased HEAD с тем же runId,
+   ограниченным сроком и non-force обновлением с повторным чтением.
+6. Результат `F` имеет единственный parent — текущий подтверждённый leased HEAD,
+   содержит код, checkpoint, pendingVerification и `executionLease: null`.
+   Результат и освобождение публикуются одним non-force ref update.
+7. После успешной публикации перечитать ref и проверить SHA `F`. При неизвестном
+   исходе сначала выяснить состояние; не повторять запись и не освобождать lease
+   отдельным коммитом из устаревшего checkout. Старый patch не переносится на
+   новый HEAD без нового владения и повторного review.
+
+Перед публикацией оставлять запас не менее пяти минут до expiry и ограничивать
+сетевой вызов. Сбой/таймаут требует сверки remote результата. Git ancestry
+не позволяет двум расходящимся кандидатам одновременно продвинуть одну ветку
+non-force; срок в JSON сам по себе не является серверным fence и не останавливает
+произвольный процесс. При takeover это ограничение остаётся явным.
+
+## Ограничения параллельной работы
+
+Независимые чтения и задачи выполняются параллельно в пределах доступных slots.
+На один файл назначается один writer. Нельзя параллельно запускать configure/
+build, использующие общий root Makefile или общие generated inputs. Требуются
+раздельные профили либо последовательность, согласованная координатором.
+
+Каждый процесс имеет timeout, ограниченный output и cleanup дочерних процессов.
+Локальные fixtures слушают loopback; задача не оставляет работающий NGINX service.
+После успешных требуемых проверок команда движется к следующему результату;
+повтор тестов оправдан изменением, сбоем или неразрешённым вопросом.
+
+## Периодическое возобновление и CI
+
+| Механизм | Текущее/планируемое состояние | Что он делает |
+| --- | --- | --- |
+| Cloud assistant automation | Часовое расписание включено; точные ID/VEVENT и наблюдения запуска находятся в `BACKGROUND.json`. | Возобновляет ограниченную сессию по свежему Git checkpoint и подключает доступную команду. |
+| Source scope | В обоих workflows: отдельный job с timeout 5 минут, Node 22 и семью тестами classifier. | Выбирает нужный дорогостоящий профиль по точному изменению исходников; сам протоколы не проверяет. |
+| Native CI | `.github/workflows/x10-native.yml`: push/PR/manual, standard Ubuntu 24.04, основной job 20 минут. | Собирает и проверяет соответствующий native commit, когда профиль выбран. |
+| Continuum CI | `.github/workflows/x10-continuum.yml`: push/PR/manual, Node 22, standard Ubuntu 24.04, основной job 20 минут. | Проверяет C0, handshake/record-observer C1 и pinned-source read-only C2a; новый hosted результат относится к точному implementation SHA. |
+| GitHub cron | Не включён. | Постоянное выполнение тестов не предполагается. |
+
+Branch filters сохранены, workflow path filters удалены. Поэтому событие в
+выбранной ветке сначала получает дешёвый scope job, а не зависит от diff всего
+PR или ограниченного списка путей GitHub. Для push сравниваются точные before/
+after. Для PR synchronize сравнивается дельта head, after сверяется с PR head,
+а текущий base должен быть предком before. Неясные refs, новая ветка, изменённый/
+разошедшийся base, ошибка Git/входа или превышенный лимит означают запуск обоих
+профилей. Открытый/повторно открытый PR проверяет полный base/head diff.
+
+Только явный `false` от успешно завершённого scope job позволяет пропустить
+дорогостоящий job. При отказе classifier тот job всё равно допускается к запуску,
+но общий workflow остаётся failed. Пропуск не считается успешной protocol/native
+проверкой. Scope — оптимизация CI, а не security boundary или доказательство
+приёмки прежнего кода. Отчётный `sourceSha` — сравниваемый head, а не идентичность
+PR merge checkout; реальную сборку идентифицирует build manifest.
+
+Native scope сохраняет `src/auto/conf` и `x10` вне исследовательского каталога.
+Research scope включает код/данные `x10/continuum`, кроме точного
+`BACKGROUND.json` и Markdown непосредственно в корне research каталога.
+Изменение classifier или его тестов запускает оба профиля; изменение workflow
+запускает его собственный профиль. Rename detection отключён при получении
+списка изменений, поэтому удаление native source не скрывается новым именем.
+
+Concurrency group содержит ref и SHA: новый metadata checkpoint не отменяет
+работающий workflow другого implementation SHA. Идентичности, пропуски и
+результаты всё равно фиксируются отдельно. Изменение только lease теперь
+требует лишь коротких scope jobs, если сравнение однозначно; оно не является
+новым подтверждением native или TLS поведения.
+
+Для проектного CI установлен верхний предел 30 минут на job; текущие jobs имеют
+меньшие timeout. GPU и larger runners не используются. Actions имеют минимальные
+permissions, версии/hashes зафиксированы. C1 явно устанавливает C compiler,
+OpenSSL CLI и development headers. Стоимость хранения/retention рассматривается
+отдельно от бесплатного standard compute публичного репозитория.
+
+Часовой assistant resume и CI по изменениям — разные механизмы: тесты не
+разрабатывают продукт. Расписание не гарантирует непрерывную работу, точное
+время старта или завершение следующего этапа. При недоступной среде/квоте нужен
+честный checkpoint, а не бесконечные циклы помощников или скрытые расходы.
+
+## Публичные результаты
+
+Концепция и экономическая модель публикуются по разрешению владельца проекта.
+В Git идут исходники, design assumptions, очищенные fixtures и воспроизводимые
+отчёты. Не публикуются credentials, private keys, raw host environment dumps,
+неочищенные клиентские запросы, пользовательские данные и transient prefixes.
+Public CI evidence создаётся на public runner; локальные исходные записи
+проверяются и очищаются перед публикацией. Storage/retention учитываются
+отдельно от бесплатного public standard compute.
+
+Первичные правила платформы, прочитанные 2026-10-23:
+
+- [GitHub-hosted runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners).
+- [Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
+- [Workflow events and schedule](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows).
+- [Scheduled workflow limitations](https://docs.github.com/en/actions/how-tos/troubleshoot-workflows).
+
+Принятый C0 implementation: `a1ef4af6bebfbac52447e971ead0b16e183f2c1f`.
+Native push run `39979729141` и research push/PR runs `39979729081` /
+`39979846870` завершились success. C0 остаётся synthetic record/process
+экспериментом, не переносом OpenSSL/NGINX. Первый будущий scheduled run
+на момент настройки ещё не наблюдался.
+
+## Подготовительный C1 и следующая приёмка
+
+Команда C1: `node x10/continuum/handshake-check.mjs`. Локальный результат —
+13 observer и 9 runner tests, всего 22/22 без skips. Это отдельный набор от
+C0 (21 core и 7 process) и от семи classifier tests.
+
+C/OpenSSL server и независимый Node TLS client выполняют настоящий TLS 1.3
+handshake с CA/hostname проверкой, выбранными cipher/ALPN и точным двунаправленным
+payload. Observer использует handshake/application secrets только в памяти,
+проверяет последовательность records, выбранный server KeyUpdate и TLS
+close_notify. Две TCP legs recording relay не объявляются одним перенесённым
+соединением. C1 не реализует state export/import, обновление TLS library или
+native NGINX migration и не доказывает полноту backend state.
+
+Runner собирает C server в private temporary root и удаляет certificates/keys/
+binary. `handshake-check.mjs` удерживает raw TAP внутри процесса и выдаёт только
+очищенные counts/exit facts. Реальные secrets, captures и содержимое failed
+assertions не включаются в публичные отчёты или Git.
+
+Hosted C1 принят на implementation `193afe99`: оба research и оба native
+push/PR workflows завершились success. Exact SHA/run IDs записаны в
+`BACKGROUND.json` и [CHECKPOINT](CHECKPOINT.md). C0 acceptance сохранён отдельно.
+Metadata push действительно пропустил дорогие jobs. В текущем PR integration
+base не является предком прежнего head, поэтому conservative guard запускает
+оба профиля и при metadata synchronize; пропуск PR здесь не заявляется.

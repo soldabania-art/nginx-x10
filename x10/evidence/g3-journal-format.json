@@ -1,0 +1,516 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-journal-format-20261025T085400Z",
+  "sourceBase": "a03aa72f19cac3f5cc36503d730ba9552a0b263a",
+  "publicationParent": "1e16c575153a7758d66c4096dd2430b1b2b718ea",
+  "implementationCommit": null,
+  "implementationCommitLocator": "Current publication commit; exact resulting CI required",
+  "scope": "Recognize two optional standard systemd255 JSON formatter sequence metadata names without changing journal attribution/query/authority or runtime paths",
+  "result": "Added only __SEQNUM and __SEQNUM_ID to the existing ignored metadata-name list, with canonical formatter and refusal controls; exact new runtime CI pending.",
+  "evidence": "x10/evidence/g3-journal-format.json",
+  "perFileLedger": "x10/review/g3-journal-format-ledger.json",
+  "localAcceptance": "LOCAL_JOURNAL_FORMAT_CONTRACTS_VERIFIED_EXACT_NEW_RUNTIME_CI_PENDING",
+  "exactHostedAcceptance": "PENDING_EXACT_RESULTING_JOURNAL_FORMAT",
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "alphaRuntimeChanged": false,
+  "serviceRecipeChanged": false,
+  "preflightChanged": false,
+  "journalParserMetadataChanged": true,
+  "journalQueryChanged": false,
+  "authorityChecksChanged": false,
+  "checkerOrPinsChanged": false,
+  "workflowChanged": false,
+  "knownGuardsPreserved": true,
+  "actualHistoricalCauseProven": false,
+  "serviceAccepted": false,
+  "productionAccepted": false,
+  "nextConcreteTask": "First reconcile exact resulting journal-format CI and actual runtime journal/restart/cleanup evidence. The fixed public-formatter synthetic counterexample does not establish which raw field or condition caused the historical a03 refusal. Preserve strict field attribution, shape/size/row/query bounds, existing live authority/cancellation checks, old-process retirement and fail-closed runtime retention. Require actual journal checks, one manager restart and complete owned service/private Node cleanup before scoped acceptance. Adverse paths, combined service/TLS, package upgrade/rollback/recovery, permanent release, security and 60-minute soak remain open; Production V1 and deferred Continuum remain unaccepted.",
+  "hostedVerification": {
+    "state": "PENDING_EXACT_RESULTING_JOURNAL_FORMAT"
+  },
+  "newPurchases": false,
+  "productionDeployChanged": false,
+  "recordedAtUTC": "2026-10-25T09:01:10.334201Z",
+  "baselineImplementationCommit": "a03aa72f19cac3f5cc36503d730ba9552a0b263a",
+  "baselineImplementationTree": "c6aa5268772097dc9d499fd3c8ddb5c62ece9a75",
+  "currentHostedVerificationReconciliation": {
+    "state": "EXACT_RESTART_JOURNAL_IMPLEMENTATION_FAILED_FIRST_JOURNAL_READ",
+    "implementationCommit": "a03aa72f19cac3f5cc36503d730ba9552a0b263a",
+    "implementationTree": "c6aa5268772097dc9d499fd3c8ddb5c62ece9a75",
+    "evidence": "x10/evidence/g3-journal-format.json",
+    "nativeRunIds": [
+      40177245641,
+      40177249736
+    ],
+    "nativeJobIds": [
+      121120541806,
+      121120556104
+    ],
+    "actualPRMergeCheckout": "180a2d82f7eb19f144c46ffa8ccb4e863cb3bd10",
+    "bothExactNativeWorkflowsSuccessful": false,
+    "actualServiceStepFailed": true,
+    "phase": "first_start",
+    "primaryFailureSubphase": "journal_read",
+    "primaryFailureCode": "journal_response_invalid",
+    "firstAutomaticNativeReadinessAndIOObservedPerRun": 1,
+    "managerRestartCommands": 0,
+    "completedManagerRestarts": 0,
+    "journalChecks": 0,
+    "sixProcessSocketLinkCleanupConfirmed": true,
+    "appSocketsRemaining": 0,
+    "runtimeUnitRemoved": true,
+    "unitEnabled": false,
+    "installationRemoved": false,
+    "temporaryRootRemoved": false,
+    "privateDependencyRuntimeRetained": true,
+    "dependencyCleanupReceiptPresent": false,
+    "bootstrapRuntimeRemoved": false,
+    "bootstrapTemporaryRootRemoved": false,
+    "cleanupFailures": [],
+    "actualRejectedRawJournalFieldKnown": false,
+    "actualJournalFailureCauseKnown": false,
+    "nativeGroupsPassed": 20,
+    "alphaTestsPassed": 62,
+    "recipeTestsPassed": 28,
+    "lifecycleContractPassed": 245,
+    "lifecycleContractRootSkipped": 1,
+    "journalContractPassed": 36,
+    "dependencyContractPassed": 51,
+    "researchPRActualSuites": [
+      21,
+      7,
+      27,
+      48
+    ],
+    "researchPushRuntimeSkipped": true,
+    "oneManagerRestartAccepted": false,
+    "journalObservationsAccepted": false,
+    "serviceAccepted": false,
+    "productionAccepted": false,
+    "workflowRerunsRequested": 0
+  },
+  "freshPriorCI": {
+    "sha256": "5e4e7be756e4fdd13596abe810a5741a8e2914c3975ebe979073c764b428a0b2",
+    "bytes": 9381,
+    "report": {
+      "schemaVersion": 1,
+      "kind": "exact_a03_journal_refusal_prior_reconciliation",
+      "observedAtUTC": "2026-10-25T08:57:39.722267+00:00",
+      "sourceCommit": "a03aa72f19cac3f5cc36503d730ba9552a0b263a",
+      "sourceTree": "c6aa5268772097dc9d499fd3c8ddb5c62ece9a75",
+      "prMerge": {
+        "sha": "180a2d82f7eb19f144c46ffa8ccb4e863cb3bd10",
+        "tree": "c6aa5268772097dc9d499fd3c8ddb5c62ece9a75",
+        "parents": [
+          "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+          "a03aa72f19cac3f5cc36503d730ba9552a0b263a"
+        ]
+      },
+      "native": [
+        {
+          "runId": 40177245641,
+          "jobId": 121120541806,
+          "workflowConclusion": "failure",
+          "artifactId": 12593227137,
+          "artifactBytes": 109347,
+          "artifactSha256": "f1ef2321e65f118dc6f0617c5b9a58f1c6363c22926d6626e9e5a736fe491162",
+          "actualBuildCheckout": "a03aa72f19cac3f5cc36503d730ba9552a0b263a",
+          "code": "journal_response_invalid",
+          "phase": "first_start",
+          "primaryFailure": {
+            "phase": "first_start",
+            "subphase": "journal_read",
+            "code": "journal_response_invalid",
+            "systemErrorClass": "unknown"
+          },
+          "cleanupFailures": [],
+          "nativeSessionsStarted": 1,
+          "nativeSessionsStopped": 0,
+          "explicitReadinessPasses": 1,
+          "proxyBodyChecks": 1,
+          "uploadChecks": 1,
+          "streamChecks": 1,
+          "managerRestartCommands": 0,
+          "completedManagerRestarts": 0,
+          "restartProof": {
+            "oldLauncherExited": false,
+            "oldNativeGroupsAbsent": false,
+            "freshSession": false,
+            "freshInvocation": false
+          },
+          "journalChecks": 0,
+          "journalRecordsObserved": 0,
+          "journalRunningMarkers": 0,
+          "cleanup": {
+            "managerStopped": true,
+            "launcherExited": true,
+            "nativeGroupsAbsent": true,
+            "listeningPortsClosed": true,
+            "controlSocketAbsent": true,
+            "runtimeLinkAbsent": true,
+            "appSocketsRemaining": 0,
+            "installationRemoved": false,
+            "temporaryRootRemoved": false
+          },
+          "runtimeUnitRemoved": true,
+          "bootstrapRuntimeRemoved": false,
+          "bootstrapTemporaryRootRemoved": false,
+          "dependencyCleanupReceiptPresent": false,
+          "nativeGroups": {
+            "pass": 20,
+            "total": 20
+          },
+          "serviceAccepted": false,
+          "productionAccepted": false
+        },
+        {
+          "runId": 40177249736,
+          "jobId": 121120556104,
+          "workflowConclusion": "failure",
+          "artifactId": 12592773129,
+          "artifactBytes": 109322,
+          "artifactSha256": "07350ecf889a165923ea7a0ca19b8f152ab04ca3616191f04fa67fc0fca000b9",
+          "actualBuildCheckout": "180a2d82f7eb19f144c46ffa8ccb4e863cb3bd10",
+          "code": "journal_response_invalid",
+          "phase": "first_start",
+          "primaryFailure": {
+            "phase": "first_start",
+            "subphase": "journal_read",
+            "code": "journal_response_invalid",
+            "systemErrorClass": "unknown"
+          },
+          "cleanupFailures": [],
+          "nativeSessionsStarted": 1,
+          "nativeSessionsStopped": 0,
+          "explicitReadinessPasses": 1,
+          "proxyBodyChecks": 1,
+          "uploadChecks": 1,
+          "streamChecks": 1,
+          "managerRestartCommands": 0,
+          "completedManagerRestarts": 0,
+          "restartProof": {
+            "oldLauncherExited": false,
+            "oldNativeGroupsAbsent": false,
+            "freshSession": false,
+            "freshInvocation": false
+          },
+          "journalChecks": 0,
+          "journalRecordsObserved": 0,
+          "journalRunningMarkers": 0,
+          "cleanup": {
+            "managerStopped": true,
+            "launcherExited": true,
+            "nativeGroupsAbsent": true,
+            "listeningPortsClosed": true,
+            "controlSocketAbsent": true,
+            "runtimeLinkAbsent": true,
+            "appSocketsRemaining": 0,
+            "installationRemoved": false,
+            "temporaryRootRemoved": false
+          },
+          "runtimeUnitRemoved": true,
+          "bootstrapRuntimeRemoved": false,
+          "bootstrapTemporaryRootRemoved": false,
+          "dependencyCleanupReceiptPresent": false,
+          "nativeGroups": {
+            "pass": 20,
+            "total": 20
+          },
+          "serviceAccepted": false,
+          "productionAccepted": false
+        }
+      ],
+      "compatibility": {
+        "nativeGroups": 20,
+        "alphaPass": 62,
+        "lifecycleTotal": 246,
+        "lifecyclePass": 245,
+        "lifecycleRootSkip": 1,
+        "journalContractPass": 36,
+        "dependencyContractPass": 51,
+        "recipePass": 28,
+        "officialPass": 1105,
+        "officialSkip": 25,
+        "officialExpectedTODO": 1,
+        "officialDependencyFileSkip": 1
+      },
+      "research": {
+        "prRunId": 40177249720,
+        "prJobId": 121120555314,
+        "conclusion": "success",
+        "nodeVersion": "22.23.3",
+        "suitePasses": [
+          21,
+          7,
+          27,
+          48
+        ],
+        "pushRunId": 40177245620,
+        "pushRuntimeJobId": 121120535739,
+        "pushRuntimeConclusion": "skipped"
+      },
+      "priorActualAuditReferences": {
+        "native": {
+          "bytes": 22803,
+          "sha256": "b19e3cdb52b98d60f76b4a12bcfe8bb98bddadacf3320b6d3d09677ae1e89c7d",
+          "proofs": 49
+        },
+        "security": {
+          "bytes": 19691,
+          "sha256": "847bad2821abe9afe38183d39bc34e8cd0249ec33ba4c13f1f7a93955e77d479",
+          "proofs": 88
+        },
+        "research": {
+          "bytes": 8163,
+          "sha256": "d4da24bfc91a3e6e72c56edbb747fb65a1c35dd88cc33a4985ec98b9fe63f3a7",
+          "proofs": 14
+        }
+      },
+      "proofCount": 33,
+      "proofs": [
+        {
+          "name": "fresh exact merge tree",
+          "passed": true
+        },
+        {
+          "name": "fresh ordered merge parents",
+          "passed": true
+        },
+        {
+          "name": "40177245641 exact workflow failed completed attempt1",
+          "passed": true
+        },
+        {
+          "name": "40177245641 actual service step failed",
+          "passed": true
+        },
+        {
+          "name": "40177245641 approved ZIP matches fresh size digest head",
+          "passed": true
+        },
+        {
+          "name": "40177245641 actual source checkout",
+          "passed": true
+        },
+        {
+          "name": "40177245641 finite journal failure exact phase",
+          "passed": true
+        },
+        {
+          "name": "40177245641 first native readiness and I/O1 only",
+          "passed": true
+        },
+        {
+          "name": "40177245641 restart and journal unexecuted",
+          "passed": true
+        },
+        {
+          "name": "40177245641 six stop and unit cleanup confirmations",
+          "passed": true
+        },
+        {
+          "name": "40177245641 retained installation and private Node",
+          "passed": true
+        },
+        {
+          "name": "40177245641 actual separate native20 compatibility",
+          "passed": true
+        },
+        {
+          "name": "40177245641 broader service V1 acceptance false",
+          "passed": true
+        },
+        {
+          "name": "40177249736 exact workflow failed completed attempt1",
+          "passed": true
+        },
+        {
+          "name": "40177249736 actual service step failed",
+          "passed": true
+        },
+        {
+          "name": "40177249736 approved ZIP matches fresh size digest head",
+          "passed": true
+        },
+        {
+          "name": "40177249736 actual source checkout",
+          "passed": true
+        },
+        {
+          "name": "40177249736 finite journal failure exact phase",
+          "passed": true
+        },
+        {
+          "name": "40177249736 first native readiness and I/O1 only",
+          "passed": true
+        },
+        {
+          "name": "40177249736 restart and journal unexecuted",
+          "passed": true
+        },
+        {
+          "name": "40177249736 six stop and unit cleanup confirmations",
+          "passed": true
+        },
+        {
+          "name": "40177249736 retained installation and private Node",
+          "passed": true
+        },
+        {
+          "name": "40177249736 actual separate native20 compatibility",
+          "passed": true
+        },
+        {
+          "name": "40177249736 broader service V1 acceptance false",
+          "passed": true
+        },
+        {
+          "name": "fresh actual research suites21/27/48",
+          "passed": true
+        },
+        {
+          "name": "fresh full log process7 Node22 actual checkout",
+          "passed": true
+        },
+        {
+          "name": "fresh research PR runtime success and push skipped",
+          "passed": true
+        },
+        {
+          "name": "native prior audit bytes and proofs still match",
+          "passed": true
+        },
+        {
+          "name": "security prior audit bytes and proofs still match",
+          "passed": true
+        },
+        {
+          "name": "research prior audit bytes and proofs still match",
+          "passed": true
+        },
+        {
+          "name": "native audit exact frozen SHA256 preserved",
+          "passed": true
+        },
+        {
+          "name": "security audit exact frozen SHA256 preserved",
+          "passed": true
+        },
+        {
+          "name": "research audit exact frozen SHA256 preserved",
+          "passed": true
+        }
+      ],
+      "actualRejectedJournalConditionKnown": false,
+      "historicalFailureCauseProven": false,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "limits": [
+        "Both actual native workflow FAILs remain preserved despite separate contract/native/research passes.",
+        "One observed native/readiness/I/O phase preceded refusal; no manager restart or journal evidence accepted.",
+        "Six stop/link cleanup confirmations and runtime unit removal do not mean installation/temp roots/private Node were removed.",
+        "The optional standard formatter metadata change is a new candidate hypothesis, not proof of the original rejected raw condition. No raw journal/log records, identities, host paths or secret fingerprints included.",
+        "No downloads repeated, workflows rerun, tracked files edited, manager actions or refs changed by reconciliation."
+      ]
+    }
+  },
+  "immutablePriorEvidence": {
+    "commit": "a03aa72f19cac3f5cc36503d730ba9552a0b263a",
+    "path": "x10/evidence/g3-restart-journal.json",
+    "sha256": "c1c1cccea931ac6b9e4747e2938d66f212d2ba484400bf68bec6183fe4375454"
+  },
+  "sourceBindings": {
+    "x10/service/journal-check.mjs": {
+      "beforeSha256": "7eb0ac0b6c25a22e74791baeb5210d16a7ad02e0bd73173bcd781299f2c51135",
+      "afterSha256": "8fbab18a15b326a8abe8392dbe61d6d24ff5c7576508c916b16704188254c6a5",
+      "bytes": 8562
+    },
+    "x10/service/journal-check.test.mjs": {
+      "beforeSha256": "8e8ba1798e75acedb918ea6063fe080d2423ecd80c7749cbd451de41797c2cbc",
+      "afterSha256": "c139480aee181449e18d1e1b614f78b61aa4736c8162454cf5fef9d849cb02a7",
+      "bytes": 13341
+    }
+  },
+  "localValidation": {
+    "node": "v24.22.1",
+    "uid": 0,
+    "combinedPostIntegrationTAP": {
+      "tests": 342,
+      "pass": 342,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "todo": 0,
+      "stderrEmpty": true
+    },
+    "separateSuiteCounts": {
+      "lifecycleContracts": 246,
+      "journalContracts": 45,
+      "dependencyContracts": 51
+    },
+    "journalComposition": {
+      "existingControls": 36,
+      "newFormatAndRefusalControls": 9
+    },
+    "independentSourceProofs": 45,
+    "rootStructuralProofs": 15,
+    "frozenFileComparisons": 523,
+    "realManagerOrJournalExecuted": false,
+    "nativeAlphaResearchRuntimeRerun": false,
+    "historicalRawCauseKnown": false,
+    "exactNewRuntimeCI": "PENDING"
+  },
+  "reportReferences": {
+    "author": {
+      "sha256": "fd89aa69f75e809b604c7b0ccf597df4c6117494e248973d12dde1f8b5cb13f9",
+      "bytes": 3948,
+      "summary": "45/45 parser/query controls:36 existing+9 formatter/refusal cases; exact baseline synthetic refusal and whole-module two-name-only restoration proof; no actual raw CI cause established."
+    },
+    "security": {
+      "sha256": "88f8045715c6c7c997104c2af8ccbf31741b9a5a8d28decc46fb4c02409eca48",
+      "bytes": 6522,
+      "summary": "45 independent formatter shape/type/duplicate/unknown/privacy/attribution/bounds proofs; blockers empty; not actual manager/journal acceptance."
+    },
+    "scope": {
+      "sha256": "f3c361582b55f37947ab6abf37d4ba63c106d3fc177ecdfc06b6e8efac737ae2",
+      "bytes": 100645,
+      "summary": "523 unchanged files with5 scope/pin/query/authority proofs; native/alpha/control/harness/dependency/workflow unchanged. Byte comparisons are not runtime scenarios."
+    },
+    "integration": {
+      "sha256": "6edf4587b6b222b2d1b42b0d203ef455ec04d23536ebbd0467f3ba38174a010e",
+      "bytes": 1772,
+      "summary": "Actual root combined342/342 contracts:246 lifecycle+45journal+51dependency, noFAIL/SKIP/cancel/TODO and stderr empty;15 structural/syntax/minimality checks on UID0Node24.22.1."
+    }
+  },
+  "temporaryTeam": {
+    "coordinators": 1,
+    "helpers": 5,
+    "maximumConfiguredHelpersUnchanged": 6,
+    "helperScopes": [
+      "journal formatter implementation and controls",
+      "independent parser/security review",
+      "exact prior/resulting CI audit",
+      "checkpoint/evidence preparation",
+      "frozen scope and staged review"
+    ],
+    "integrationAndPublication": "Coordinator only",
+    "permanentProcessesPromised": false
+  },
+  "baselineCounterexampleBoundary": "Before edit, the exact baseline parser refused a fixed synthetic attributed running transcript with six automatic metadata fields emitted by public systemd255 output_json. The actual old CI raw transcript and rejected field/condition are unavailable, so the real historical cause is not established.",
+  "candidateBehavior": "Only optional __SEQNUM and __SEQNUM_ID metadata names join the existing ignored private metadata list under unchanged scalar shape/bounds rules. Required attribution, duplicate/unknown/type/bounds refusals, query arguments/timeouts/retries, live authority, harness, receipt pins, workflow and runtime are unchanged.",
+  "historicalObservationRetained": "Both exacta03 native workflows FAILED actual service first_start/journal_read with primary journal_response_invalid after one observed native/readiness/proxy/upload/stream pass. No manager restart or journal check completed. Six process/socket/link cleanup flags were true, zero app sockets and the runtime unit was removed; installation and temporary-root removal remained false. Private Node/bootstrap were retained with no dependency-cleanup receipt. No cleanup failure was recorded. The actual rejected journal field/condition and raw historical cause remain unknown. Separate native20/alpha62/recipe28/lifecycle245PASS1rootSKIP/journal36/dependency51 passed; research PR actually ran21/7/27/48 while push runtime was skipped. Prior401209 two-automatic-cycle success remains scoped history, not acceptance of a03 restart/journal or new formatter handling.",
+  "newWorkflowReruns": 0,
+  "actualServiceStartedLocally": false,
+  "privateCoordinatorRevisionPublished": false,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "privateKeysPublished": false,
+  "limitations": [
+    "First reconcile exact resulting journal-format CI and actual runtime journal/restart/cleanup evidence. The fixed public-formatter synthetic counterexample does not establish which raw field or condition caused the historical a03 refusal. Preserve strict field attribution, shape/size/row/query bounds, existing live authority/cancellation checks, old-process retirement and fail-closed runtime retention. Require actual journal checks, one manager restart and complete owned service/private Node cleanup before scoped acceptance. Adverse paths, combined service/TLS, package upgrade/rollback/recovery, permanent release, security and 60-minute soak remain open; Production V1 and deferred Continuum remain unaccepted.",
+    "The public systemd255 formatter synthetic counterexample is not the captured historical raw CI record or proof of which condition caused its refusal.",
+    "Sequence metadata remains private ignored formatting data after validation, not invocation freshness or signal/readiness/ownership authority.",
+    "The current failed a03 service observation and older scoped401209 success stay separate; no complete restart/journal/service/V1 acceptance follows from local controls."
+  ]
+}

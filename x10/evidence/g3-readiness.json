@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 1,
+  "runId": "x10-g3-readiness-20261024T134116049Z",
+  "sourceBase": "783de7994f0af0ea9d4d1129be28c31c57227f8d",
+  "publicationParent": "5faf99283f6eac55790a03b67c2482a378ae931c",
+  "scope": "G3 preparation: explicit bounded readiness status/body contract",
+  "nativeSourceChanged": false,
+  "continuumRuntimeChanged": false,
+  "newApplicationModeContract": {
+    "healthExpectedStatus": 200,
+    "healthExpectedBody": "ready\n",
+    "pairedFieldsRequired": true,
+    "bodyMatch": "raw UTF-8 bytes",
+    "maximumBodyBytes": 4096
+  },
+  "legacyCompatibility": {
+    "canonicalInputKeysUnchanged": [
+      "serverBody",
+      "healthURL"
+    ],
+    "inputHashAndRenderPreserved": true,
+    "status": 200,
+    "bodyEqualityRequired": false,
+    "bodyLimitBytes": 65536
+  },
+  "baselineCounterexample": {
+    "scenario": "Extracted application bundle receives HTTP200 with wrong readiness body; bind previously succeeds",
+    "baselineCommit": "783de7994f0af0ea9d4d1129be28c31c57227f8d",
+    "command": "node --test --test-reporter=tap --test-name-pattern=\"extracted bundle proxies\" x10/test/alpha.test.mjs",
+    "testExitCode": 1,
+    "observedBindExitCode": 0,
+    "expectedNewContractBindExitCode": 1,
+    "runtimeSource": "Original alpha application seed; new response assertion only",
+    "securityAnnouncement": false,
+    "tapSha256": "fe2b4600c35c7a72f450166127ad0f8b1301fe5a9c0f954c7315300afec83d5c"
+  },
+  "candidateExtractedReplay": {
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0,
+    "command": "node --test --test-reporter=tap --test-name-pattern=\"extracted bundle proxies\" x10/test/alpha.test.mjs",
+    "tapSha256": "030612f5566b34266719c90620bab7e09b3874aee224993645c4af404948506e",
+    "sourceCheckoutNeededAtRuntime": false,
+    "permanentPublishedArchive": false
+  },
+  "localEnvironment": {
+    "node": "v24.22.1",
+    "uid": 0,
+    "targetNonrootNode22Accepted": false,
+    "systemdUserManagerAvailable": false,
+    "userNamespaceMapping": "Only UID0 mapped; no nonroot acceptance attempted"
+  },
+  "initialAggregate": {
+    "command": "node x10/test/all.mjs --official --output ../run-evidence/native-readiness.json",
+    "exitCode": 1,
+    "passedGroups": 19,
+    "totalGroups": 20,
+    "failedGroup": "managed-native-control",
+    "failedCases": 2,
+    "cause": "Historical counterexample Git trees absent from initial shallow checkout; not a runtime assertion failure",
+    "missingHistoricalCommits": [
+      "29746068bfca299b85062e981df250aa3e12abb8",
+      "43618ecca59fe802620f810a13f083554952bd7d"
+    ],
+    "preparationRepair": "Fetch exact historical commits; rerun controller suite without source/test changes",
+    "rawResultSha256": "d5cae8277fb1d83b6cc95c3fb4c04a65d1bdab8be45e802568045cb719f8bfcb",
+    "nativeAggregateReportedAsPassing": false,
+    "otherGroupNames": [
+      "http-tls-http2-reload",
+      "stream-mail",
+      "mail-tls-starttls",
+      "protocol-adapters",
+      "http3-interop",
+      "http3-head-independent-client",
+      "native-features",
+      "quic-regression",
+      "quic-generated-sanitized",
+      "quic-frame-boundaries",
+      "native-load-client-verification",
+      "operator-status",
+      "local-alpha-lifecycle",
+      "listener-observer-boundaries",
+      "reload-listener-observation",
+      "native-control-api",
+      "native-process-generations",
+      "native-generation-boundaries",
+      "official-nginx-tests"
+    ]
+  },
+  "official": {
+    "files": 35,
+    "filesPassed": 32,
+    "filesSkipped": 3,
+    "filesFailed": 0,
+    "assertions": {
+      "run": 1109,
+      "passed": 1083,
+      "failed": 0,
+      "skipped": 25,
+      "todoFailed": 1,
+      "todoPassed": 0
+    }
+  },
+  "alphaLifecycle": {
+    "format": "node-test-tap",
+    "pass": 40,
+    "fail": 0,
+    "valid": true,
+    "total": 40,
+    "skipped": 0,
+    "todo": 0,
+    "cancelled": 0
+  },
+  "operatorStatus": {
+    "format": "node-test-tap",
+    "pass": 30,
+    "fail": 0,
+    "valid": true,
+    "total": 30,
+    "skipped": 0,
+    "todo": 0,
+    "cancelled": 0
+  },
+  "releaseRegressions": {
+    "command": "node --test --test-reporter=tap x10/release/check-release-record.test.mjs x10/release/release-record-heldout.test.mjs x10/release/verify-alpha-archive.test.mjs",
+    "passed": 50,
+    "failed": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "actualLocalPackageVerification": {
+    "valid": true,
+    "code": "archive_consistent",
+    "archiveSha256": "0986a4974c6a70f2965eb4730944000169c0fe82e15757add090dd84b3e82fef",
+    "archiveBytes": 3968706,
+    "tarBytes": 8734720,
+    "payloadFiles": 13,
+    "directories": 5,
+    "bundleManifestSha256": "92e796abda9a32b546b6cddb675690b67b5fa642c06e2ec69df68a0bc220595e",
+    "binarySha256": "38b8ad1671932fb4d13c6ca09237bfef6d78d42d602c173651f3da44ae603ddb",
+    "sourceCommit": "5faf99283f6eac55790a03b67c2482a378ae931c",
+    "upstreamCommit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+    "sourceDiffSha256": "b511aad052c1abb29a514660ae01473e1bfaadb941026d70e9019c2245ddeea5",
+    "machine": "x86_64",
+    "scope": "pre-extraction-consistency-only",
+    "evidenceAuthenticated": false,
+    "payloadExecuted": false,
+    "extracted": false,
+    "productionAccepted": false
+  },
+  "perFileAndReviewLedger": "../review/g3-readiness-ledger.json",
+  "exactResultingImplementationCI": "PENDING",
+  "requiredLimits": [
+    "Local fixture execution is not nonroot Node22 target acceptance.",
+    "Initial aggregate remains failed19/20 and first supplemental controller85/86 remain failed; a separate frozen final aggregate passed20/20 after exact Git-tree preparation and expected fixture-count correction.",
+    "Native no-control and required Unix exact checks remain for resulting hosted CI; local AF_UNIX restriction is not bypassed.",
+    "G2 permanent versioned release and independent published-file replay remain open.",
+    "Service/TLS, G4-G8, full native platform and deferred Continuum remain unaccepted."
+  ],
+  "permanentAlphaAccepted": false,
+  "serviceAccepted": false,
+  "tlsAccepted": false,
+  "productionAccepted": false,
+  "runtimeSourceFiles": [
+    {
+      "path": "x10/control/manager.mjs",
+      "sha256": "2cfcb7d92131671939aa0e7d57403af42448b73878256a68b24c0af69b2d1ecb"
+    },
+    {
+      "path": "x10/alpha/cli.mjs",
+      "sha256": "515c4ce5eab37d69acff36caccc62b28a9b6ba27cb791eab3f5840b4083e755a"
+    },
+    {
+      "path": "x10/test/control.test.mjs",
+      "sha256": "927d1ee25a3ee76d6642ca31f3483113a72167bdb384f0bdeda0bfa84db93d04"
+    },
+    {
+      "path": "x10/test/alpha.test.mjs",
+      "sha256": "b2c89526e3cfdd1b2b3317ff7f087e9d45ccb8a57437b0b7dabe77c537830e5c"
+    }
+  ],
+  "firstSupplementalController": {
+    "command": "node --test --test-reporter=tap x10/test/control.test.mjs",
+    "passed": 85,
+    "failed": 1,
+    "total": 86,
+    "skipped": 0,
+    "todo": 0,
+    "failure": "Parent bookkeeping expected15 durable checks after adding a16th; all actual new and existing durable cases passed",
+    "correction": "Update expected count to16; no weakened runtime assertions",
+    "tapSha256": "9896680f68486987a1d894f696448980aff10d84ffcdca67a0b42b98ff70de9e"
+  },
+  "observedAtUTC": "2026-10-24T13:58:30.173904+00:00",
+  "finalFrozenAggregate": {
+    "command": "node x10/test/all.mjs --official --output ../run-evidence/native-readiness-final.json",
+    "exitCode": 0,
+    "success": true,
+    "groupsPassed": 20,
+    "groupsTotal": 20,
+    "rawResultSha256": "c3f3260bb53371c20a3176bbc115a7713c3abc34da145f35b347ba2ec1efd6d6",
+    "controller": {
+      "format": "node-test-tap",
+      "pass": 86,
+      "fail": 0,
+      "valid": true
+    },
+    "alphaLifecycle": {
+      "format": "node-test-tap",
+      "pass": 40,
+      "fail": 0,
+      "valid": true,
+      "total": 40,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "operatorStatus": {
+      "format": "node-test-tap",
+      "pass": 30,
+      "fail": 0,
+      "valid": true,
+      "total": 30,
+      "skipped": 0,
+      "todo": 0,
+      "cancelled": 0
+    },
+    "official": {
+      "files": 35,
+      "filesPassed": 32,
+      "filesSkipped": 3,
+      "filesFailed": 0,
+      "assertions": {
+        "run": 1109,
+        "passed": 1083,
+        "failed": 0,
+        "skipped": 25,
+        "todoFailed": 1,
+        "todoPassed": 0
+      }
+    },
+    "nativeProvenance": {
+      "binarySha256": "38b8ad1671932fb4d13c6ca09237bfef6d78d42d602c173651f3da44ae603ddb",
+      "manifestSha256": "57ed12b5d616b71e9fcfef7da0a26da5cbe406a83165e2baab8116088766c552",
+      "sourceDiffSha256": "b511aad052c1abb29a514660ae01473e1bfaadb941026d70e9019c2245ddeea5",
+      "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+      "checkoutRevision": "5faf99283f6eac55790a03b67c2482a378ae931c",
+      "compiledModuleCount": 105
+    },
+    "runtimeSourceIdentity": "Dirty helper/test working files are identified by runtimeSourceFiles; lease checkout SHA is not the final implementation commit",
+    "knownLimits": "Local UID0/Node24, not nonroot Node22 service or permanent published-file acceptance"
+  }
+}

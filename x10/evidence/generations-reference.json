@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "recordKind": "public-evidence-summary",
+  "date": "2026-10-23",
+  "publication": {
+    "rawRecordSha256": "24449c61edf54c67c664d5afdc4fc7597e2ee6769408907dd7a0a6f99007e7a1",
+    "rawRecordRetainedLocally": true,
+    "omitted": [
+      "absolute filesystem paths",
+      "live process and namespace identities",
+      "ephemeral network endpoints",
+      "raw configuration and certificate metadata",
+      "native and child logs",
+      "embedded raw reports and command output"
+    ],
+    "note": "This is a publication summary, not a raw runner record or input to the aggregate validator."
+  },
+  "suite": "native-control-generations",
+  "success": true,
+  "mode": "reference-absence",
+  "sourceUnchangedDuringTest": true,
+  "tests": [
+    {
+      "name": "native-profile-and-configuration-validation",
+      "status": "passed"
+    },
+    {
+      "name": "control-api-is-not-opened-without-explicit-listen-option",
+      "status": "passed"
+    },
+    {
+      "name": "pristine-reference-explicitly-lacks-generation-endpoint",
+      "status": "passed"
+    }
+  ],
+  "skipCount": 0,
+  "interrupted": false,
+  "fixtureErrorCount": 0,
+  "unexpectedNativeErrorCount": 0,
+  "nativeErrorLogRead": true,
+  "provenance": {
+    "sourceUnchangedDuringTest": true,
+    "binarySha256": "adf05f3088bf8ee1ed7c886e424a2d92258323dd78e036276b41e009fbaf634e",
+    "sourceFilesSha256": {
+      "src/core/nginx.c": "e10938c9cec230d0e1f3eab17bddd69f7abf4904c760149d54005f2776c3ce17",
+      "src/os/unix/ngx_control.c": "69fd6f589cabc38ccc4131d102078c4c2ac2697259985e329dcd09d757d9c094",
+      "src/os/unix/ngx_process.c": "5097cec7f4a3e95c766b31692eb4e9b16fb00ffa11e5c750d7f6bc93bd9d01f5",
+      "src/os/unix/ngx_process_cycle.c": "b8811ead5647f9cfc76f3085f4f57e622e434f403de2ca7aa131d33442fdbda6",
+      "src/core/ngx_cycle.c": "9f4474071bc95db1e0b51e4db39c12bad09be0ac126760b3643f95abe95f9ad6",
+      "src/os/unix/ngx_control.h": "12fda7d274b520f1550f550ba276ec4307d8c8b70f238a2d99e2d02b031fcf36",
+      "src/os/unix/ngx_process.h": "7098dfaa875fd04aff122c344f0dfa72bad5fb5f572b7177d30766303b3f27f6"
+    },
+    "harnessSha256": "39f335e42152dcb3022d153a32ac71fa5a0910fb24acf38975eee2010b894354",
+    "fixtureSha256": "b81d396fb7193120d505c72c668a26e2e1ce3a79af2b8884c3c7bbfa565a1786",
+    "binaryUnchangedDuringTest": true,
+    "harnessUnchangedDuringTest": true,
+    "fixtureUnchangedDuringTest": true
+  },
+  "transport": {
+    "kind": "tcp",
+    "automaticFallback": false
+  },
+  "cleanup": {
+    "nativeStopped": true,
+    "fixturesStopped": true,
+    "openSockets": 0,
+    "temporaryRootRemoved": true,
+    "shutdowns": [
+      {
+        "mode": "SIGQUIT",
+        "exited": true,
+        "exitCode": 0,
+        "signal": null
+      },
+      {
+        "mode": "SIGQUIT",
+        "exited": true,
+        "exitCode": 0,
+        "signal": null
+      }
+    ],
+    "errorCount": 0
+  }
+}

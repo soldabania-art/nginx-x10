@@ -1,0 +1,1004 @@
+{
+  "schemaVersion": 1,
+  "kind": "controller-reader-reviewed-shared-peers-exact-hosted-split-outcome",
+  "state": "PR_SCOPED_COMPATIBILITY_SUCCESS_PUSH_ALPHA_TIMEOUT_OPEN",
+  "sourceCommit": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+  "sourceTree": "c38e572a818a313fbc4b0debe6a84db7ef56e25e",
+  "sourceSoleParent": "42e458c97594d57fe061204f3b53eec0970d6be7",
+  "sourceBindings": {
+    "x10/control/manager.mjs": {
+      "bytes": 51246,
+      "sha256": "d6d1c325c4098fe8ea43dfa08c938a9f58e90075c42c8590d0816dbe793a7289"
+    },
+    "x10/control/cli.mjs": {
+      "bytes": 4766,
+      "sha256": "2674c8dc7be76ddc8ca02613fa384787060f5b2f498d1333ee708de78e1568ac"
+    },
+    "x10/control/record-input.test.mjs": {
+      "bytes": 22249,
+      "sha256": "eedae58efe27152f95cb2bb3d0526c7bdb24b5778ba1ba19807adf5ddc2dbbf8"
+    },
+    "x10/service/operator-package-return.mjs": {
+      "bytes": 68575,
+      "sha256": "612f9f882084d10bc9c921639fea3fca63520736b223b7761cc725d3aaa3a0d7"
+    },
+    "x10/service/operator-package-return-proof.mjs": {
+      "bytes": 12890,
+      "sha256": "baf6b3dc08ecf79311e95c57a8e16042c93f0f6852e173149bf78df67a2a87de"
+    },
+    "x10/service/operator-package-fallback.mjs": {
+      "bytes": 630,
+      "sha256": "a4cccc20636a1f4f5bf29eb0977d979fcf0da1f931b94d35eae80407094e26e3"
+    },
+    "x10/service/operator-package-fallback-proof.mjs": {
+      "bytes": 13468,
+      "sha256": "6f9291b947f4d5d70d9ccfc79944820e1ef45253cb87388a1d508d5b7bcc2ecb"
+    },
+    "x10/service/lifecycle-check.mjs": {
+      "bytes": 147483,
+      "sha256": "e88ef9604b1d955ca3235b04faf4e0cb37266bfef3255e68e27d75dc63ce1370"
+    },
+    "x10/service/verified-node.mjs": {
+      "bytes": 32439,
+      "sha256": "2febc8bdb6d890e738a426e4a80121ea840d143d9a718768ef10b5b09e839090"
+    },
+    "x10/service/legacy-cli-peers.test.mjs": {
+      "bytes": 15203,
+      "sha256": "807848cd6b9fc9dba52febeabc6831467c2e1d42010c06276149a71f90a5c7f8"
+    },
+    ".github/workflows/x10-native.yml": {
+      "bytes": 26465,
+      "sha256": "d3f92329a396b02d045b45736733cdb711bf55af10b30504bc24f1a0efc8eb73"
+    }
+  },
+  "scope": "Exact9b compatibility outcomes only: successful PR complete supported fixture path is scoped evidence for the bounded reader and explicit legacy-CLI/shared98b-peer profile; push alpha timeout remains failed and unresolved. This does not accept both events, fullG5 or V1.",
+  "profile": {
+    "name": "LEGACY_CLI_WITH_REVIEWED_CURRENT_PEERS",
+    "legacyCliCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+    "sharedPeerCommit": "98bc32d4ee9a6c1d6ed198135df01065ad1a65e7",
+    "sharedPeerCount": 8,
+    "bothAandBShare98bController": true,
+    "fullHistoricalAcbPackage": false,
+    "oldControllerDowngradeAccepted": false,
+    "historicalPublishedPackage": false,
+    "nativeBinaryUpgradeAccepted": false
+  },
+  "bothEventAcceptance": false,
+  "pullRequest": {
+    "run": 40541973327,
+    "job": 122322645757,
+    "conclusion": "success",
+    "actualStepsOrdered": [
+      {
+        "number": 1,
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 2,
+        "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 3,
+        "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 4,
+        "name": "Validate release-record contract and refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 5,
+        "name": "Validate alpha archive refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 6,
+        "name": "Validate guarded user-service recipe",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 7,
+        "name": "Validate fail-closed user-manager preflight",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 8,
+        "name": "Validate actual-service harness refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 9,
+        "name": "Validate bounded owned-service journal observations",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 10,
+        "name": "Validate bounded downstream HTTPS fixture controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 11,
+        "name": "Validate bounded verified HTTPS origin fixture controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 12,
+        "name": "Validate bounded paused TLS client controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 13,
+        "name": "Validate owned operator interruption controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 14,
+        "name": "Validate failed interruption containment controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 15,
+        "name": "Validate authenticated Node dependency refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 16,
+        "name": "Validate managed operator-package return refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 17,
+        "name": "Validate managed unhealthy-package fallback refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 18,
+        "name": "Build dependencies and optional test clients",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 19,
+        "name": "Install pinned HTTP3 interoperability client",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 20,
+        "name": "Install independent HTTP3 HEAD client",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 21,
+        "name": "Compile native profile",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 22,
+        "name": "Native regressions and pinned official compatibility sample",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 23,
+        "name": "Verify installed HTTPS upstream trust and hostname",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 24,
+        "name": "Verify managed frontend HTTPS and certificate lifecycle",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 25,
+        "name": "Verify native tenant cache contract experiment",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 26,
+        "name": "Verify private Unix control transport",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 27,
+        "name": "Build profile without control API",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 28,
+        "name": "Package local Linux alpha",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 29,
+        "name": "Checksum local Linux alpha",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 30,
+        "name": "Verify packed alpha before extraction",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 31,
+        "name": "Verify temporary user-service with authenticated private Node",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 32,
+        "name": "Preserve JSON evidence",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 33,
+        "name": "Preserve local Linux alpha",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 65,
+        "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 66,
+        "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 67,
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "actualStepCount": 36,
+    "mergeBuildCheckout": "78f261dd5a71decde3e67892ce5b2a07120f971b",
+    "checkoutTree": "c38e572a818a313fbc4b0debe6a84db7ef56e25e",
+    "checkoutOrderedParents": [
+      "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+      "9b4603997d21bc9755f647226bb4dd25fbcaa003"
+    ],
+    "checkoutAPIReadbackVerified": true,
+    "artifact": {
+      "id": 12751636658,
+      "bytes": 177866,
+      "sha256": "984790f0840d858e52fca3305558526d6ba050cb665d3825b5bc07beb4239413",
+      "APIDigestMatched": true,
+      "downloads": 1
+    },
+    "native": {
+      "groups": 20,
+      "passed": 20,
+      "success": true
+    },
+    "controller": {
+      "passed": true,
+      "exitCode": 0,
+      "elapsedMs": 60077,
+      "timedOut": false,
+      "TAP": {
+        "format": "node-test-tap",
+        "pass": 162,
+        "fail": 0,
+        "valid": true
+      }
+    },
+    "alpha": {
+      "passed": true,
+      "exitCode": 0,
+      "elapsedMs": 116866,
+      "timedOut": false,
+      "TAP": {
+        "format": "node-test-tap",
+        "pass": 617,
+        "fail": 0,
+        "valid": true,
+        "total": 617,
+        "skipped": 0,
+        "todo": 0,
+        "cancelled": 0
+      }
+    },
+    "official": {
+      "summary": {
+        "files": 35,
+        "filesPassed": 34,
+        "filesSkipped": 1,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1131,
+          "passed": 1105,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "cleanupErrors": []
+    },
+    "contractTAP": {
+      "service-package-return-contract.tap": {
+        "tests": 623,
+        "pass": 623,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "service-package-fallback-contract.tap": {
+        "tests": 545,
+        "pass": 545,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "verified-node-contract.tap": {
+        "tests": 138,
+        "pass": 138,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "release-record.tap": {
+        "tests": 119,
+        "pass": 119,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "alpha-archive.tap": {
+        "tests": 122,
+        "pass": 122,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "alpha-tls.tap": {
+        "tests": 76,
+        "pass": 76,
+        "fail": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    "newPeerTestsIncluded": {
+      "expectedNewControls": 79,
+      "actualCombinedReturnContractPASS": 623,
+      "priorContractControls": 544,
+      "scope": "Actual combined return-contract623 includes the new79 file in unchanged named workflow step; exact79 candidate source controls separately verified locally, not additional623 tests."
+    },
+    "normalProofCounts": {
+      "units": 3,
+      "invocations": 4,
+      "restarts": 1,
+      "journalChecks": 5,
+      "trafficGets": 4,
+      "posts": 4,
+      "streams": 4,
+      "bInitialPGetChecks": 1
+    },
+    "normalCleanup": {
+      "known": true,
+      "ownedProcessesAbsent": true,
+      "ownedLaunchersAbsent": true,
+      "ownedListenersClosed": true,
+      "ownedUnitsRemoved": 3,
+      "ownedInstallationsRemoved": 3,
+      "historicalBundleRemoved": true,
+      "backupFilesRemoved": true
+    },
+    "fallbackProofCounts": {
+      "units": 3,
+      "installations": 2,
+      "successfulInvocations": 2,
+      "failedAttempts": 1,
+      "restarts": 0,
+      "journalChecks": 2,
+      "trafficGets": 2,
+      "posts": 2,
+      "streams": 2
+    },
+    "fallbackCleanup": {
+      "known": true,
+      "ownedProcessesAbsent": true,
+      "ownedLaunchersAbsent": true,
+      "ownedListenersClosed": true,
+      "ownedUnitsRemoved": 3,
+      "ownedInstallationsRemoved": 2,
+      "historicalBundleRemoved": true,
+      "backupFilesRemoved": true
+    },
+    "legacy": {
+      "ok": true,
+      "code": "basic_lifecycle_verified",
+      "phase": "complete",
+      "nativeSessionsStarted": 5,
+      "nativeSessionsStopped": 5,
+      "completedManagerRestarts": 2,
+      "journalChecks": 6,
+      "downstreamTLSSessionChecks": 3,
+      "upstreamTLSSessionChecks": 3,
+      "restoredHTTPProof": {
+        "stoppedConfirmedSource": true,
+        "privateBackupCreated": true,
+        "sourceUnitRemoved": true,
+        "freshUnit": true,
+        "freshInstallation": true,
+        "freshSession": true,
+        "freshRevision": true,
+        "exactInputRestored": true,
+        "portsPreserved": true,
+        "bindingInitiallyAbsent": true,
+        "freshHistory": true,
+        "restoredHTTPServed": true,
+        "restoredHTTPRestarted": true,
+        "noPostReplay": true,
+        "sourceRecordsPreserved": true,
+        "backupPreserved": true,
+        "archivePreserved": true,
+        "sourceInstallationRemoved": true
+      },
+      "cleanup": {
+        "managerStopped": true,
+        "launcherExited": true,
+        "nativeGroupsAbsent": true,
+        "listeningPortsClosed": true,
+        "controlSocketAbsent": true,
+        "downstreamTLSPortClosed": true,
+        "runtimeLinkAbsent": true,
+        "upstreamTLSPortClosed": true,
+        "readinessRelayPortClosed": true,
+        "upstreamTLSOriginClosed": true,
+        "readinessRelayClosed": true,
+        "appSocketsRemaining": 0,
+        "installationRemoved": true,
+        "temporaryRootRemoved": true
+      }
+    },
+    "bootstrap": {
+      "ok": true,
+      "stage": "complete",
+      "code": "authenticated_dependency_lifecycle_complete",
+      "runtimeRemoved": true,
+      "temporaryRootRemoved": true,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "subprocessOutputsPublished": false,
+      "historicalCliVerified": true,
+      "managedPackageReturnExecuted": true,
+      "managedPackageFallbackAttempted": true,
+      "managedPackageFallbackExecuted": true
+    },
+    "privateNodeCleanup": {
+      "ok": true,
+      "code": "verified_node_removed",
+      "runtimeRemoved": true,
+      "serviceAccepted": false,
+      "productionAccepted": false,
+      "subprocessOutputsPublished": false
+    },
+    "strictPureArtifactReadback": {
+      "normal": true,
+      "fallback": true,
+      "combinedCleanup": true
+    },
+    "strictPureArtifactReadbackScope": "Reconstructed actual-report envelope for pure validation only; runtime cleanup authority is separately observed from actual successful cleanup report and completed source-pinned workflow.",
+    "scopedReaderFixtureCompatibilityAccepted": true,
+    "fullG5Accepted": false,
+    "productionAccepted": false
+  },
+  "push": {
+    "run": 40541963582,
+    "job": 122322581694,
+    "conclusion": "failure",
+    "failedStep": 22,
+    "actualStepsOrdered": [
+      {
+        "number": 1,
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 2,
+        "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 3,
+        "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 4,
+        "name": "Validate release-record contract and refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 5,
+        "name": "Validate alpha archive refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 6,
+        "name": "Validate guarded user-service recipe",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 7,
+        "name": "Validate fail-closed user-manager preflight",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 8,
+        "name": "Validate actual-service harness refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 9,
+        "name": "Validate bounded owned-service journal observations",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 10,
+        "name": "Validate bounded downstream HTTPS fixture controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 11,
+        "name": "Validate bounded verified HTTPS origin fixture controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 12,
+        "name": "Validate bounded paused TLS client controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 13,
+        "name": "Validate owned operator interruption controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 14,
+        "name": "Validate failed interruption containment controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 15,
+        "name": "Validate authenticated Node dependency refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 16,
+        "name": "Validate managed operator-package return refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 17,
+        "name": "Validate managed unhealthy-package fallback refusal controls",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 18,
+        "name": "Build dependencies and optional test clients",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 19,
+        "name": "Install pinned HTTP3 interoperability client",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 20,
+        "name": "Install independent HTTP3 HEAD client",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 21,
+        "name": "Compile native profile",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 22,
+        "name": "Native regressions and pinned official compatibility sample",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "number": 23,
+        "name": "Verify installed HTTPS upstream trust and hostname",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 24,
+        "name": "Verify managed frontend HTTPS and certificate lifecycle",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 25,
+        "name": "Verify native tenant cache contract experiment",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 26,
+        "name": "Verify private Unix control transport",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 27,
+        "name": "Build profile without control API",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 28,
+        "name": "Package local Linux alpha",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 29,
+        "name": "Checksum local Linux alpha",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 30,
+        "name": "Verify packed alpha before extraction",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 31,
+        "name": "Verify temporary user-service with authenticated private Node",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 32,
+        "name": "Preserve JSON evidence",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 33,
+        "name": "Preserve local Linux alpha",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 65,
+        "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "number": 66,
+        "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "number": 67,
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "actualStepCount": 36,
+    "buildCheckout": "9b4603997d21bc9755f647226bb4dd25fbcaa003",
+    "buildCheckoutObservedInArtifact": true,
+    "artifact": {
+      "id": 12750514537,
+      "bytes": 127573,
+      "sha256": "5a229961753f04ceda1c232612c76d7327a04238837517ae51761b8c89064c5f",
+      "apiDigestVerified": true,
+      "downloadedOnce": true
+    },
+    "nativeGroups": {
+      "pass": 19,
+      "total": 20
+    },
+    "controller": {
+      "passed": true,
+      "elapsedMs": 63534,
+      "exitCode": 0,
+      "summary": {
+        "format": "node-test-tap",
+        "pass": 162,
+        "fail": 0,
+        "valid": true
+      },
+      "new76InCommand": true
+    },
+    "alpha": {
+      "passed": false,
+      "elapsedMs": 120008,
+      "timedOut": true,
+      "budgetMs": 120000,
+      "exitCode": 1,
+      "signal": null,
+      "outputLimitExceeded": false,
+      "summary": {
+        "format": "node-test-tap",
+        "pass": null,
+        "fail": null,
+        "valid": false,
+        "total": null,
+        "skipped": null,
+        "todo": null,
+        "cancelled": null
+      },
+      "completeTAPSummaryPresent": false,
+      "lastRetainedCompletedTopLevelOrdinal": 568,
+      "lastOrdinalIsNotTotalPass": true,
+      "retainedAssertionFailureObserved": false,
+      "retainedPhaseDurations": [
+        {
+          "ordinal": 557,
+          "name": "isolated Linux alpha installs, controls native sessions, restarts and removes only owned data",
+          "durationMs": 32873.692593
+        },
+        {
+          "ordinal": 558,
+          "name": "application upstream port syntax and collisions refuse before creating a prefix",
+          "durationMs": 545.56543
+        },
+        {
+          "ordinal": 559,
+          "name": "extracted bundle proxies an independent app and preserves application readiness across config and sessions",
+          "durationMs": 56557.173835
+        },
+        {
+          "ordinal": 560,
+          "name": "shipped loopback upstream example is immutable in extracted installs and serves bounded echo and stream",
+          "durationMs": 1652.280023
+        },
+        {
+          "ordinal": 561,
+          "name": "wait-bind refuses malformed budgets before creating a lock and times out a prepared session",
+          "durationMs": 2149.0225
+        },
+        {
+          "ordinal": 562,
+          "name": "installed wait-bind releases a startup lock and binds exactly the observed native session",
+          "durationMs": 3041.608848
+        },
+        {
+          "ordinal": 563,
+          "name": "wait-bind refuses changed, faulted and cancelled prepared sessions without binding",
+          "durationMs": 1898.71034
+        },
+        {
+          "ordinal": 564,
+          "name": "wait-bind makes one real readiness attempt and refuses a wrong HTTP200 body",
+          "durationMs": 5812.852463
+        },
+        {
+          "ordinal": 565,
+          "name": "wait-bind retains possible durable binding after an injected alpha lock cleanup failure",
+          "durationMs": 2573.411448
+        },
+        {
+          "ordinal": 566,
+          "name": "prepare-run publishes a stable session before concurrent native run and wait-bind",
+          "durationMs": 5119.025655
+        },
+        {
+          "ordinal": 567,
+          "name": "prepare-run preserves live, faulted, locked and malformed prepared records",
+          "durationMs": 2825.016536
+        },
+        {
+          "ordinal": 568,
+          "name": "installed package-info identifies checked nonexecuted payload without state or lock writes",
+          "durationMs": 2322.160434
+        }
+      ]
+    },
+    "contractTAP": {
+      "service-package-return-contract.tap": {
+        "tests": 623,
+        "pass": 623,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "service-package-fallback-contract.tap": {
+        "tests": 545,
+        "pass": 545,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "release-record.tap": {
+        "tests": 119,
+        "pass": 119,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "alpha-archive.tap": {
+        "tests": 122,
+        "pass": 122,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "verified-node-contract.tap": {
+        "tests": 138,
+        "pass": 138,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    "official": {
+      "summary": {
+        "files": 35,
+        "filesPassed": 34,
+        "filesSkipped": 1,
+        "filesFailed": 0,
+        "assertions": {
+          "run": 1131,
+          "passed": 1105,
+          "failed": 0,
+          "skipped": 25,
+          "todoFailed": 1,
+          "todoPassed": 0
+        }
+      },
+      "cleanupErrors": [],
+      "success": true
+    },
+    "cleanup": {
+      "fullTimedOutAlphaOwnedCleanupConfirmed": false,
+      "fullTimedOutAlphaOwnedCleanupState": "UNKNOWN",
+      "foregroundReturnSubfixtureReportedOwnedCleanup": true,
+      "foregroundReturnCleanupCannotAttestWholeTimedOutAlpha": true,
+      "laterServiceTLSAndPrivateNodeSteps": "SKIPPED",
+      "runnerProcessStopAttemptsAreNotCleanupProof": true
+    },
+    "diagnosis": {
+      "slownessRootCause": "UNKNOWN",
+      "newSharedPeerGuardAssertionFailed": false,
+      "timeoutLocation": "After retained package-info ordinal568; before installedrecipe group complete receipts",
+      "notProven": [
+        "exclusive host-slowness cause",
+        "reader correctness defect",
+        "wholealpha cleanup",
+        "automatic safe retry"
+      ]
+    },
+    "scopedReaderFixtureCompatibilityAccepted": false,
+    "productionAccepted": false
+  },
+  "researchPR": {
+    "run": 40541973280,
+    "job": 122322712902,
+    "actualSteps": 11,
+    "conclusion": "success",
+    "actualCounts": [
+      21,
+      7,
+      27,
+      48
+    ],
+    "checkout": "78f261dd5a71decde3e67892ce5b2a07120f971b"
+  },
+  "researchPush": {
+    "run": 40541963867,
+    "scopeJob": 122322431977,
+    "scopeConclusion": "success",
+    "runtimeJob": 122322684483,
+    "runtimeConclusion": "skipped",
+    "runtimeAcceptance": false
+  },
+  "cla": {
+    "run": 40541967553,
+    "job": 122322437244,
+    "conclusion": "failure",
+    "failedStep": 3,
+    "agreementSignedByAgent": false
+  },
+  "receiptReconciliation": {
+    "nativeZIPDownloads": 2,
+    "eachArtifactDownloadedOnceAndAPIDigestVerified": true,
+    "alphaArchiveDownloads": 0,
+    "manualReruns": 0,
+    "localPhysicalFixturesExecuted": 0,
+    "localNetworkFixturesExecuted": 0,
+    "signalsSent": 0,
+    "artifactPureValidationIsNotNewRuntimeTAP": true,
+    "differentSuiteCountsNotSummed": true,
+    "currentSuccessDoesNotExplainHistoricalTimeouts": true
+  },
+  "preservedAdverseHistory": [
+    "9bpush alpha120008ms timeout: slownessrootcauseUNKNOWN/fullalphaownedcleanupUNKNOWN; lastretainedordinal568 isNOTtotalpass",
+    "98b bothnative historicalpeerprecondition failures614PASS/3FAIL; fullfailedalpha cleanupUNCONFIRMED",
+    "34f alpha120006ms timeout: slownessrootcauseUNKNOWN/cleanupUNKNOWN",
+    "c2 primaryUNKNOWN/privateNodeandbootstrapcleanupUNCONFIRMED",
+    "6401causeUNKNOWN; failedfixturecleanupconfirmed separate fromskippeddownstreamservicecleanup",
+    "historicallocalphysical FAIL_UNKNOWN",
+    "inheritedCLA failure"
+  ],
+  "boundaries": [
+    "PR36 successful steps and strict three actual service reports are evidence for this exact merge/build only; push outcome remains failed.",
+    "Normal3units/4successfulinvocations/1restart/5journalCHECKS; fallback3units/2installs/2successfulinvocations/1expectedfailedattempt/0restart/2journalCHECKS; legacy18restoredproofs/5sessions/2restarts/6journalCHECKS/TLS3 each direction remain separate. CHECKS are not exact raw journal query counts.",
+    "Both A and B use shared98b controller. Distinct legacyCLI bytes and operator fingerprints do not prove nativebinary upgrade, full historical package or published release rollback.",
+    "Pure revalidation uses observed actual reports in a reconstructed envelope; only actual completed source-pinned workflow and cleanup report establish observed cleanup execution.",
+    "Scope remains trusted nonroot Linux operator fixtures; no claim of production acceptance, general sameUID isolation, fullinputheap/kerneldeadline guarantees, trustedmanagerenvironment validation or globalalpha/config/binary/proc read limits."
+  ],
+  "nextTask": "Preserve and diagnose repeated alpha timeout before bounded fixture decomposition; retain complete test coverage, per-group and total bounds, and cleanup observations. Do not blindly raise120000 budget or manually rerun unchanged source. Session/inventory capacity stays dependent on required supported compatibility acceptance.",
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "fullG5Accepted": false,
+  "fullG7Accepted": false,
+  "productionAccepted": false,
+  "owner40hWindowChanged": false,
+  "deferredWindowsPlanChanged": false
+}

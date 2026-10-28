@@ -1,0 +1,2086 @@
+{
+  "schemaVersion": 1,
+  "state": "SUCCESS_SCOPED_EXACT_CANDIDATE_BOUND_TLS_RELAY_FIXTURE",
+  "implementationCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+  "evidence": "x10/evidence/g3-tls-relay-binding-hosted.json",
+  "runId": "x10-relay-ci-20261025T002429Z",
+  "publicationParent": "3bad586c6c920e1ff6ebdd22f64bd94428840b5e",
+  "ledger": "x10/review/g3-tls-relay-binding-hosted-ledger.json",
+  "nativeRunIds": [
+    40143307531,
+    40143311124
+  ],
+  "researchRunIds": [
+    40143307475,
+    40143311131
+  ],
+  "runtimeSourcesChanged": false,
+  "verificationFixtureChanged": false,
+  "readonlyNonrootManagerPrerequisitesObserved": true,
+  "serviceActivated": false,
+  "serviceAccepted": false,
+  "targetUserManagerAccepted": false,
+  "productionAccepted": false,
+  "originalNativePRFailureRetained": true,
+  "historicalFailureCauseKnown": false,
+  "jobRerunsRequested": 0,
+  "implementationTree": "52720de2baa0c540694fa918496a0cb7faf02ccb",
+  "verifiedAtUTC": "2026-10-25T00:28:14.566764Z",
+  "scope": "Exact resulting candidate-bound TLS relay fixture CI and unchanged native compatibility; actual service and Production V1 remain unaccepted",
+  "native": {
+    "schemaVersion": 1,
+    "scope": "Exact candidate-bound TLS relay fixture CI compatibility; no service activation or Production V1 acceptance",
+    "sourceCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+    "sourceTree": "52720de2baa0c540694fa918496a0cb7faf02ccb",
+    "readOnly": true,
+    "runtimeRerunsRequested": 0,
+    "mergeIdentity": {
+      "sha": "9f371da50c577a84320e939c5f425edd6e0ef171",
+      "tree": "52720de2baa0c540694fa918496a0cb7faf02ccb",
+      "parents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "376f810f4af2da2824914d0d74a5c0cec8e8f230"
+      ]
+    },
+    "runs": [
+      {
+        "run": {
+          "id": 40143307531,
+          "event": "push",
+          "head_sha": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+          "status": "completed",
+          "conclusion": "success",
+          "run_attempt": 1,
+          "run_started_at": "2026-10-24T23:34:44Z",
+          "updated_at": "2026-10-24T23:41:05Z",
+          "html_url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40143307531"
+        },
+        "jobId": 121019407003,
+        "allActualJobStepsCompletedSuccess": true,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Validate release-record contract and refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Validate alpha archive refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Validate guarded user-service recipe",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Validate fail-closed user-manager preflight",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Build dependencies and optional test clients",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Install pinned HTTP3 interoperability client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Install independent HTTP3 HEAD client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Compile native profile",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Native regressions and pinned official compatibility sample",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Verify installed HTTPS upstream trust and hostname",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Verify managed frontend HTTPS and certificate lifecycle",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Verify native tenant cache contract experiment",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Verify private Unix control transport",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Build profile without control API",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Package local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Checksum local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          },
+          {
+            "name": "Verify packed alpha before extraction",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20
+          },
+          {
+            "name": "Preserve JSON evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21
+          },
+          {
+            "name": "Preserve local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 43
+          },
+          {
+            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 44
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 45
+          }
+        ],
+        "actualFullJobLog": {
+          "bytes": 351829,
+          "sha256": "184dbe22b46ef99c2b6ddf52854ef02ac2849e4160442783ac03aba4b6b574ff",
+          "readCompletely": true,
+          "errorAnnotations": 0,
+          "nodeVersion": "v22.23.3",
+          "checkoutIdentityPresent": true
+        },
+        "artifact": {
+          "id": 12579477752,
+          "name": "x10-native-evidence",
+          "size_in_bytes": 95415,
+          "digest": "sha256:cc930cdd9fe5e997d659fcbbe5fa6e9bc6b233bdc867504bad8027ecb51516d3",
+          "created_at": "2026-10-24T23:41:00Z",
+          "expires_at": "2026-11-07T23:40:59Z",
+          "expired": false
+        },
+        "actualZIP": {
+          "bytes": 95415,
+          "sha256": "cc930cdd9fe5e997d659fcbbe5fa6e9bc6b233bdc867504bad8027ecb51516d3",
+          "matchesFreshAPIArtifactDigest": true,
+          "members": [
+            {
+              "name": "alpha-archive.json",
+              "bytes": 738,
+              "sha256": "dd560d55a58b4fd408e22718a6eef70e5a8d3c2587c94183ce3d7b401e8a2546"
+            },
+            {
+              "name": "alpha-archive.tap",
+              "bytes": 2931,
+              "sha256": "46a81c16db741b83e7f83eafceaa07f1e041d61d8a14bb1ea063219f2f0cd885"
+            },
+            {
+              "name": "alpha-package.json",
+              "bytes": 324,
+              "sha256": "52f455605f83230cab923357da3c2e83634ba9e1cd985ad1a95509eb0b6d08ae"
+            },
+            {
+              "name": "alpha-tls.tap",
+              "bytes": 4172,
+              "sha256": "0ea2c020e1fcdb81c485d0daf8ee690be7420f2d08b85a14e950ccf5a8402b0c"
+            },
+            {
+              "name": "build.json",
+              "bytes": 7437,
+              "sha256": "8bb44ee3c0dc8e60e27b5a4a8f2de7033d86810b53136866626115828520a3e0"
+            },
+            {
+              "name": "control-api-unix.json",
+              "bytes": 15841,
+              "sha256": "82f83296eb34d6ad26ba5b7015d4853f9eb25f1b1b9a36cd2c0dabdc32e149c8"
+            },
+            {
+              "name": "checks.json",
+              "bytes": 479785,
+              "sha256": "4d2937488f0073435a17a13b974f36b00821ee38c147c73d2de3489853c998d5"
+            },
+            {
+              "name": "control-disabled.json",
+              "bytes": 89148,
+              "sha256": "5641fec66e299f63a2c3559d1ca447825078968a188ce73ae4ea9d32d5c1b00c"
+            },
+            {
+              "name": "frontend-tls.tap",
+              "bytes": 4321,
+              "sha256": "c418503c68bf5a98ca46b181cadd70b21db262fd16bc4e63eacdb88a6a25356f"
+            },
+            {
+              "name": "generations-unix.json",
+              "bytes": 21387,
+              "sha256": "ecbca8388dc79f83c52129a33dfcaf63a3aff4b04269e507dea848055f9daee7"
+            },
+            {
+              "name": "guard-kernel.tap",
+              "bytes": 2103,
+              "sha256": "de765343a41236e5d655fe9a7095ec80e5e97e75a423c1bc959952a962b467e7"
+            },
+            {
+              "name": "operator-status-unix.tap",
+              "bytes": 5898,
+              "sha256": "cdfe24f8b992248961c517c38db8ec2794218f334c93fb7563181704d857adf6"
+            },
+            {
+              "name": "release-record.tap",
+              "bytes": 7257,
+              "sha256": "4d84af17649ce3ec34d09891b98e19feb90fae2dc1fcf197300b34cf7de7be8d"
+            },
+            {
+              "name": "service-preflight.tap",
+              "bytes": 7845,
+              "sha256": "aef3fb10e779402d9b7da8552c40cad7b05121d796d555a2fd93b79b2f0bd768"
+            },
+            {
+              "name": "user-unit.tap",
+              "bytes": 3116,
+              "sha256": "12db49c9f9a212489a51b761ce73c19bf0054147891a85a4bf7f69c787373c52"
+            }
+          ]
+        },
+        "identity": {
+          "sourceCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+          "implementationTree": "52720de2baa0c540694fa918496a0cb7faf02ccb",
+          "actualBuildCheckout": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+          "trackedClean": true,
+          "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "binary": {
+            "sha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+            "bytes": 8553072,
+            "mode": "0755",
+            "executable": true
+          },
+          "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+          "compiledModules": 105,
+          "dependenciesFromHeaders": {
+            "pcre2": "10.42",
+            "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+            "zlib": "1.3"
+          },
+          "dependenciesFromPkgConfig": {
+            "libpcre2-8": "10.42",
+            "openssl": "3.0.13",
+            "zlib": "1.3"
+          },
+          "machine": "x86_64"
+        },
+        "upstreamTLS": {
+          "tap": {
+            "tests": 18,
+            "suites": 0,
+            "pass": 18,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "syntheticNestedCases": 7,
+          "installedNativeNestedCases": 9,
+          "wrappers": 2,
+          "cleanup": {
+            "suite": "alpha-tls-owned-cleanup",
+            "nativeStopped": true,
+            "launcherExited": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true,
+            "relay502Observations": 203,
+            "candidateTagsWithMatched502": 3,
+            "applicationPostRequests": 1
+          },
+          "actualWrongCAWrongHostnamePlaintextRefusalsPassed": true,
+          "historicalFailedCIInterleavingReproduced": false
+        },
+        "frontendTLS": {
+          "tap": {
+            "tests": 16,
+            "suites": 0,
+            "pass": 16,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanup": {
+            "suite": "frontend-tls-owned-cleanup",
+            "nativeStopped": true,
+            "nativeSessionsStopped": 2,
+            "launcherExited": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true,
+            "applicationPostRequests": 1
+          }
+        },
+        "preflight": {
+          "tap": {
+            "tests": 42,
+            "suites": 0,
+            "pass": 42,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "actualReadonlyObservation": {
+            "suite": "service-preflight-live-observation",
+            "nonroot": true,
+            "managerAvailable": true,
+            "probeExecuted": true,
+            "reason": null,
+            "serviceAccepted": false,
+            "productionAccepted": false
+          }
+        },
+        "nativeAggregate": {
+          "groupsPassed": 20,
+          "groupsTotal": 20,
+          "controller": {
+            "format": "node-test-tap",
+            "pass": 86,
+            "fail": 0,
+            "valid": true
+          },
+          "alphaLifecycle": {
+            "format": "node-test-tap",
+            "pass": 45,
+            "fail": 0,
+            "valid": true,
+            "total": 45,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "operatorStatus": {
+            "format": "node-test-tap",
+            "pass": 30,
+            "fail": 0,
+            "valid": true,
+            "total": 30,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "listenerObserver": {
+            "format": "node-test-tap",
+            "pass": 42,
+            "fail": 0,
+            "valid": true
+          },
+          "official": {
+            "files": 35,
+            "filesPassed": 34,
+            "filesSkipped": 1,
+            "filesFailed": 0,
+            "assertions": {
+              "run": 1131,
+              "passed": 1105,
+              "failed": 0,
+              "skipped": 25,
+              "todoFailed": 1,
+              "todoPassed": 0
+            }
+          },
+          "reloadListenerObservation": {
+            "cases": 7,
+            "cleanup": {
+              "nativeStopped": true,
+              "nativeExitCode": 0,
+              "nativeSignal": null,
+              "mode": "SIGQUIT",
+              "stoppedWorkerResumeRequested": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          }
+        },
+        "requiredUnixAndOff": {
+          "control-api-unix.json": {
+            "tests": 9,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          },
+          "generations-unix.json": {
+            "tests": 10,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          },
+          "control-disabled.json": {
+            "tests": 4,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "temporaryRootRemoved": true,
+              "errors": [],
+              "activeChild": false,
+              "rootMakefileRestored": true
+            }
+          }
+        },
+        "unixOperatorTAP": {
+          "tests": 30,
+          "suites": 0,
+          "pass": 30,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "userRecipeTAP": {
+          "tests": 15,
+          "suites": 0,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "releaseRecordTAP": {
+          "tests": 35,
+          "suites": 0,
+          "pass": 35,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "archiveRefusalTAP": {
+          "tests": 15,
+          "suites": 0,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "guardKernelTAP": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "archiveVerification": {
+          "valid": true,
+          "code": "archive_consistent",
+          "archiveSha256": "aaf5aec494e524f8f26195313881ab2cf8180148288d593feb040caf29b5819c",
+          "archiveBytes": 3975573,
+          "tarBytes": 8755200,
+          "payloadFiles": 13,
+          "directories": 5,
+          "bundleManifestSha256": "ebf74455f59200a01cd9faece6a19cceb146dea3f993aad0ca62aac28417ab45",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+          "upstreamCommit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "machine": "x86_64",
+          "scope": "pre-extraction-consistency-only",
+          "evidenceAuthenticated": false,
+          "payloadExecuted": false,
+          "extracted": false,
+          "productionAccepted": false
+        }
+      },
+      {
+        "run": {
+          "id": 40143311124,
+          "event": "pull_request",
+          "head_sha": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+          "status": "completed",
+          "conclusion": "success",
+          "run_attempt": 1,
+          "run_started_at": "2026-10-24T23:34:48Z",
+          "updated_at": "2026-10-24T23:40:20Z",
+          "html_url": "https://github.com/soldabania-art/nginx-x10/actions/runs/40143311124"
+        },
+        "jobId": 121019414203,
+        "allActualJobStepsCompletedSuccess": true,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Validate release-record contract and refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Validate alpha archive refusal controls",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5
+          },
+          {
+            "name": "Validate guarded user-service recipe",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6
+          },
+          {
+            "name": "Validate fail-closed user-manager preflight",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Build dependencies and optional test clients",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8
+          },
+          {
+            "name": "Install pinned HTTP3 interoperability client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9
+          },
+          {
+            "name": "Install independent HTTP3 HEAD client",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10
+          },
+          {
+            "name": "Compile native profile",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11
+          },
+          {
+            "name": "Native regressions and pinned official compatibility sample",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12
+          },
+          {
+            "name": "Verify installed HTTPS upstream trust and hostname",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13
+          },
+          {
+            "name": "Verify managed frontend HTTPS and certificate lifecycle",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14
+          },
+          {
+            "name": "Verify native tenant cache contract experiment",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15
+          },
+          {
+            "name": "Verify private Unix control transport",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 16
+          },
+          {
+            "name": "Build profile without control API",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 17
+          },
+          {
+            "name": "Package local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 18
+          },
+          {
+            "name": "Checksum local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19
+          },
+          {
+            "name": "Verify packed alpha before extraction",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20
+          },
+          {
+            "name": "Preserve JSON evidence",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21
+          },
+          {
+            "name": "Preserve local Linux alpha",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22
+          },
+          {
+            "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 43
+          },
+          {
+            "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 44
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 45
+          }
+        ],
+        "actualFullJobLog": {
+          "bytes": 368268,
+          "sha256": "8af656e4783bb436cb1493a02fd09f5bde8e7152300b596f7016a8fabf01d39b",
+          "readCompletely": true,
+          "errorAnnotations": 0,
+          "nodeVersion": "v22.23.3",
+          "checkoutIdentityPresent": true
+        },
+        "artifact": {
+          "id": 12579084255,
+          "name": "x10-native-evidence",
+          "size_in_bytes": 95320,
+          "digest": "sha256:ffaa36ad769169e1a69a98699f8fa44212b13e249399b47f1c46c104e9f152da",
+          "created_at": "2026-10-24T23:40:16Z",
+          "expires_at": "2026-11-07T23:40:15Z",
+          "expired": false
+        },
+        "actualZIP": {
+          "bytes": 95320,
+          "sha256": "ffaa36ad769169e1a69a98699f8fa44212b13e249399b47f1c46c104e9f152da",
+          "matchesFreshAPIArtifactDigest": true,
+          "members": [
+            {
+              "name": "alpha-archive.json",
+              "bytes": 738,
+              "sha256": "531934931dbe553a80f630461110785e5961a0e33f92592e6f45bb346c7317c4"
+            },
+            {
+              "name": "alpha-archive.tap",
+              "bytes": 2934,
+              "sha256": "6c88ad05416c3f91e3217f24b5eeffe21e3a5f6a3007506a35ee9cad5cbbaa9c"
+            },
+            {
+              "name": "alpha-package.json",
+              "bytes": 324,
+              "sha256": "0b2df930154ef86e108992673cf73a39bc6d769545daa927014594ba9061eb03"
+            },
+            {
+              "name": "alpha-tls.tap",
+              "bytes": 4169,
+              "sha256": "bbcd4ce51dbb932ed6af0b323e1558405fc72ce327d301f62f01be96ed0e01f3"
+            },
+            {
+              "name": "build.json",
+              "bytes": 7437,
+              "sha256": "4b2c584c2673081bcee2634f2ea2f327bbe6e921e41a8e6a457143d7a6bfa95e"
+            },
+            {
+              "name": "checks.json",
+              "bytes": 478872,
+              "sha256": "9739a760eccc147a1f1608ab548547ff519369e9f0af568d3c94c59cc52ff652"
+            },
+            {
+              "name": "control-api-unix.json",
+              "bytes": 15924,
+              "sha256": "a477a26429955f9a6fbba038d68057f4a61bf00e10b0e0ba8b96f01b23ff8781"
+            },
+            {
+              "name": "control-disabled.json",
+              "bytes": 89148,
+              "sha256": "fa7ae699746f9faf4cec6bdc42807cac0fd7da3614a300bd1ade248dbf8889c5"
+            },
+            {
+              "name": "frontend-tls.tap",
+              "bytes": 4319,
+              "sha256": "595e12124282b96d3f2aabc8494096c04be545dde39f1a4c83feeced671e7185"
+            },
+            {
+              "name": "generations-unix.json",
+              "bytes": 21011,
+              "sha256": "8c3da29e978e641d5124a88e3b56608710330251ed9380286b68e6b1977879cb"
+            },
+            {
+              "name": "guard-kernel.tap",
+              "bytes": 2103,
+              "sha256": "6214674eea733ea45f392a64ece8d3510a757d3e2763d7dd48fde23f9309bc5f"
+            },
+            {
+              "name": "operator-status-unix.tap",
+              "bytes": 5895,
+              "sha256": "0915dc63b3ef43a4a4a79235df6e3b045b6a53421c9006817e340257b017158b"
+            },
+            {
+              "name": "release-record.tap",
+              "bytes": 7254,
+              "sha256": "965867cd0e591633036c41415b54ed52bcfb7d5d3d5d287133a1e9c53ee327d2"
+            },
+            {
+              "name": "service-preflight.tap",
+              "bytes": 7843,
+              "sha256": "c59961ce40492a5fafef6726c4ecd6a6049b541636594ff7437a67d6d97d4ec2"
+            },
+            {
+              "name": "user-unit.tap",
+              "bytes": 3113,
+              "sha256": "e28dc0d8047e722f8145b8781df9d0d3f665f3bd83fad1603a1d6bb6aa6b29c8"
+            }
+          ]
+        },
+        "identity": {
+          "sourceCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+          "implementationTree": "52720de2baa0c540694fa918496a0cb7faf02ccb",
+          "actualBuildCheckout": "9f371da50c577a84320e939c5f425edd6e0ef171",
+          "trackedClean": true,
+          "upstreamRevision": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "nativeSourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "binary": {
+            "sha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+            "bytes": 8553072,
+            "mode": "0755",
+            "executable": true
+          },
+          "generatedConfigSha256": "e7c2a38cf7710c596ec1923b03cc595327178faebc44e2cf4902e1a5e5963303",
+          "compiledModules": 105,
+          "dependenciesFromHeaders": {
+            "pcre2": "10.42",
+            "openssl": "OpenSSL 3.0.13 30 Jan 2024",
+            "zlib": "1.3"
+          },
+          "dependenciesFromPkgConfig": {
+            "libpcre2-8": "10.42",
+            "openssl": "3.0.13",
+            "zlib": "1.3"
+          },
+          "machine": "x86_64"
+        },
+        "upstreamTLS": {
+          "tap": {
+            "tests": 18,
+            "suites": 0,
+            "pass": 18,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "syntheticNestedCases": 7,
+          "installedNativeNestedCases": 9,
+          "wrappers": 2,
+          "cleanup": {
+            "suite": "alpha-tls-owned-cleanup",
+            "nativeStopped": true,
+            "launcherExited": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true,
+            "relay502Observations": 211,
+            "candidateTagsWithMatched502": 3,
+            "applicationPostRequests": 1
+          },
+          "actualWrongCAWrongHostnamePlaintextRefusalsPassed": true,
+          "historicalFailedCIInterleavingReproduced": false
+        },
+        "frontendTLS": {
+          "tap": {
+            "tests": 16,
+            "suites": 0,
+            "pass": 16,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "cleanup": {
+            "suite": "frontend-tls-owned-cleanup",
+            "nativeStopped": true,
+            "nativeSessionsStopped": 2,
+            "launcherExited": true,
+            "openSockets": 0,
+            "temporaryRootRemoved": true,
+            "applicationPostRequests": 1
+          }
+        },
+        "preflight": {
+          "tap": {
+            "tests": 42,
+            "suites": 0,
+            "pass": 42,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "actualReadonlyObservation": {
+            "suite": "service-preflight-live-observation",
+            "nonroot": true,
+            "managerAvailable": true,
+            "probeExecuted": true,
+            "reason": null,
+            "serviceAccepted": false,
+            "productionAccepted": false
+          }
+        },
+        "nativeAggregate": {
+          "groupsPassed": 20,
+          "groupsTotal": 20,
+          "controller": {
+            "format": "node-test-tap",
+            "pass": 86,
+            "fail": 0,
+            "valid": true
+          },
+          "alphaLifecycle": {
+            "format": "node-test-tap",
+            "pass": 45,
+            "fail": 0,
+            "valid": true,
+            "total": 45,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "operatorStatus": {
+            "format": "node-test-tap",
+            "pass": 30,
+            "fail": 0,
+            "valid": true,
+            "total": 30,
+            "skipped": 0,
+            "todo": 0,
+            "cancelled": 0
+          },
+          "listenerObserver": {
+            "format": "node-test-tap",
+            "pass": 42,
+            "fail": 0,
+            "valid": true
+          },
+          "official": {
+            "files": 35,
+            "filesPassed": 34,
+            "filesSkipped": 1,
+            "filesFailed": 0,
+            "assertions": {
+              "run": 1131,
+              "passed": 1105,
+              "failed": 0,
+              "skipped": 25,
+              "todoFailed": 1,
+              "todoPassed": 0
+            }
+          },
+          "reloadListenerObservation": {
+            "cases": 7,
+            "cleanup": {
+              "nativeStopped": true,
+              "nativeExitCode": 0,
+              "nativeSignal": null,
+              "mode": "SIGQUIT",
+              "stoppedWorkerResumeRequested": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          }
+        },
+        "requiredUnixAndOff": {
+          "control-api-unix.json": {
+            "tests": 9,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          },
+          "generations-unix.json": {
+            "tests": 10,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "nativeStopped": true,
+              "fixturesStopped": true,
+              "openSockets": 0,
+              "temporaryRootRemoved": true,
+              "errors": []
+            }
+          },
+          "control-disabled.json": {
+            "tests": 4,
+            "success": true,
+            "sourceUnchangedDuringTest": true,
+            "cleanup": {
+              "temporaryRootRemoved": true,
+              "errors": [],
+              "activeChild": false,
+              "rootMakefileRestored": true
+            }
+          }
+        },
+        "unixOperatorTAP": {
+          "tests": 30,
+          "suites": 0,
+          "pass": 30,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "userRecipeTAP": {
+          "tests": 15,
+          "suites": 0,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "releaseRecordTAP": {
+          "tests": 35,
+          "suites": 0,
+          "pass": 35,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "archiveRefusalTAP": {
+          "tests": 15,
+          "suites": 0,
+          "pass": 15,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "guardKernelTAP": {
+          "tests": 8,
+          "suites": 0,
+          "pass": 8,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0
+        },
+        "archiveVerification": {
+          "valid": true,
+          "code": "archive_consistent",
+          "archiveSha256": "bce39a1793a411b6daa4746eac881017c0cb0c38dbe50fad95f091ffd2386a0a",
+          "archiveBytes": 3975572,
+          "tarBytes": 8755200,
+          "payloadFiles": 13,
+          "directories": 5,
+          "bundleManifestSha256": "e83d8195ea745028f5c7324b7e044aa1cd6aee67acc01ea2cdc2b2ae731f460c",
+          "binarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2",
+          "sourceCommit": "9f371da50c577a84320e939c5f425edd6e0ef171",
+          "upstreamCommit": "148c75678cd4171338c31d4ed4c02411736d5fe9",
+          "sourceDiffSha256": "1ef11c1c083b072634536b423277a476e7f5678600744b8598a6d6486e19c7d1",
+          "machine": "x86_64",
+          "scope": "pre-extraction-consistency-only",
+          "evidenceAuthenticated": false,
+          "payloadExecuted": false,
+          "extracted": false,
+          "productionAccepted": false
+        }
+      }
+    ],
+    "historicalAdverseEvidenceRetained": {
+      "source9e63WrongCAApplyExit0": true,
+      "exactHistoricalInterleavingKnown": false,
+      "controllerOrNativeProductFixClaimed": false,
+      "earlierRunnerShutdownCauseKnown": false,
+      "earlierLocalESRCHCauseKnown": false
+    },
+    "limits": [
+      "Artifact ZIP bytes downloaded and checked against fresh API SHA-256. Payloads were parsed as data only, never executed.",
+      "Published package replay and permanent release distribution are not accepted by this audit. The separate package archive itself was not downloaded here; CI archive-verifier receipts were checked.",
+      "Readonly nonroot manager prerequisites were observed on these completed ephemeral runners. No service unit was installed/started and no persistence of these sessions is promised.",
+      "Current exact hosted compatibility does not reconstruct or erase the previous wrong-CA failure, runner shutdown or local ESRCH interleaving.",
+      "Aggregate groups, nested TAP tests, wrappers and official assertions remain separate units."
+    ]
+  },
+  "research": {
+    "schemaVersion": 1,
+    "suite": "exact-relay-binding-research-ci-audit",
+    "sourceCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+    "sourceTree": "52720de2baa0c540694fa918496a0cb7faf02ccb",
+    "recordedAtUTC": "2026-10-25 00:25:27 UTC",
+    "readOnly": true,
+    "runtimeTestsLocallyRerun": false,
+    "workflowRerunsRequested": 0,
+    "nodeVersion": "22.23.3",
+    "identity": {
+      "eventHead": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+      "prMergeCheckout": "9f371da50c577a84320e939c5f425edd6e0ef171",
+      "prMergeParents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "376f810f4af2da2824914d0d74a5c0cec8e8f230"
+      ],
+      "prMergeTree": "52720de2baa0c540694fa918496a0cb7faf02ccb",
+      "verifiedBy": [
+        "actual research/scope checkout and git log command output",
+        "fresh exact Git commit API"
+      ],
+      "treeEqualsImplementation": true
+    },
+    "runs": [
+      {
+        "runId": 40143307475,
+        "event": "push",
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "scope": {
+          "jobId": 121019366019,
+          "status": "completed",
+          "conclusion": "success",
+          "nodeVersion": "22.23.3",
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0,
+          "result": {
+            "schemaVersion": 1,
+            "suite": "x10-ci-source-scope",
+            "native": true,
+            "research": false,
+            "reason": "classified_delta",
+            "changedFiles": 9,
+            "sourceSha": "376f810f4af2da2824914d0d74a5c0cec8e8f230"
+          },
+          "actualLog": {
+            "sha256": "65ab50ed1b891477b68559e673ba21fb86ceb6f16699badfa6290cb21d9b3bbd",
+            "decodedCharacters": 74788
+          }
+        },
+        "runtime": {
+          "jobId": 121019411424,
+          "status": "completed",
+          "conclusion": "skipped",
+          "actualRuntimeVerified": false
+        },
+        "scopeOnly": true
+      },
+      {
+        "runId": 40143311131,
+        "event": "pull_request",
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success",
+        "scope": {
+          "jobId": 121019376762,
+          "status": "completed",
+          "conclusion": "success",
+          "nodeVersion": "22.23.3",
+          "tests": 7,
+          "pass": 7,
+          "fail": 0,
+          "cancelled": 0,
+          "skipped": 0,
+          "todo": 0,
+          "result": {
+            "schemaVersion": 1,
+            "suite": "x10-ci-source-scope",
+            "native": true,
+            "research": true,
+            "reason": "event_or_git_unavailable",
+            "changedFiles": null,
+            "sourceSha": null
+          },
+          "actualLog": {
+            "sha256": "4bae7a1a49af7951a4dd293ebb16dbdfac917b0662a21cbe78fc757542437415",
+            "decodedCharacters": 91191
+          }
+        },
+        "runtime": {
+          "jobId": 121019410168,
+          "status": "completed",
+          "conclusion": "success",
+          "actualRuntimeVerified": true,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Build dependencies for TLS interoperability and isolated source probe",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Independent record and state counterexamples",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Same TCP connection across research worker versions",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 6
+            },
+            {
+              "name": "Real TLS handshake and independent record observer",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 7
+            },
+            {
+              "name": "Pinned OpenSSL read-only state probe",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 8
+            },
+            {
+              "name": "Post Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 15
+            },
+            {
+              "name": "Post Run actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 16
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 17
+            }
+          ],
+          "suites": [
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-record-and-state-kernel",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "in-memory-record-and-state-only",
+              "liveTlsProcessHandover": false,
+              "counts": {
+                "tests": 21,
+                "suites": 0,
+                "pass": 21,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-real-handshake-and-record-observation",
+              "passed": true,
+              "testFiles": 2,
+              "scope": "real-handshake-and-record-observation-only",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 27,
+                "suites": 0,
+                "pass": 27,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            },
+            {
+              "schemaVersion": 1,
+              "suite": "continuum-pinned-openssl-state-probe",
+              "passed": true,
+              "testFiles": 1,
+              "scope": "pinned-openssl-read-only-state-observation",
+              "nativeNginxMigration": false,
+              "realSessionMigration": false,
+              "counts": {
+                "tests": 48,
+                "suites": 0,
+                "pass": 48,
+                "fail": 0,
+                "cancelled": 0,
+                "skipped": 0,
+                "todo": 0
+              },
+              "exitCode": 0,
+              "signal": null,
+              "timedOut": false,
+              "outputLimitExceeded": false,
+              "interrupted": false,
+              "runnerError": null
+            }
+          ],
+          "processHandover": {
+            "command": "node --test --test-reporter=tap x10/continuum/process-handover.test.mjs",
+            "tests": 7,
+            "pass": 7,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "actualLog": {
+            "sha256": "9d329d673083c8430bdf9f385dda0271a87d1a884787418214a31dbb21ef8a47",
+            "decodedCharacters": 30360
+          }
+        },
+        "scopeOnly": false
+      }
+    ],
+    "cla": {
+      "runId": 40143309739,
+      "jobId": 121019373257,
+      "status": "completed",
+      "conclusion": "failure",
+      "step": "Run F5 CLA assistant",
+      "actualDiagnostic": "Missing personal access token for signatures in the remote repository/organization; could not retrieve repository contents, status unknown.",
+      "actualLogSha256": "03a570f4d6c77047c4c27f017c3883022316b9917861dd472f3ff787b3f8db35",
+      "agreementSigned": false,
+      "publisherCredentialsChanged": false,
+      "separateFromRuntimeAcceptance": true
+    },
+    "limits": [
+      "Push research success is scope-only; its runtime job was skipped and proves no new research execution.",
+      "PR source scope conservative fallback selected both profiles; the cause behind event_or_git_unavailable is not further established here.",
+      "Actual C0 synthetic record/process, C1 handshake and C2a source-only observations are separate accepted scopes, not complete TLS migration, importer or native NGINX continuation.",
+      "This audit does not activate or accept any service, package release or Production V1.",
+      "No raw host logs, paths, PIDs, session material or private central identifiers are included."
+    ]
+  },
+  "reportSha256": {
+    "native": "a0d10a6f75c74f0c25deaf68449a595c212a25686b1304819dbde20f5e156f68",
+    "research": "cc28ec2bb18ace12169916303449addf1f3e2952f1d117ddf221392969094091"
+  },
+  "independentReview": {
+    "schemaVersion": 1,
+    "suite": "independent-exact-relay-binding-ci-review",
+    "sourceCommit": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+    "sourceTree": "52720de2baa0c540694fa918496a0cb7faf02ccb",
+    "prMergeCheckout": "9f371da50c577a84320e939c5f425edd6e0ef171",
+    "freshGitMergeAPIParentsVerified": [
+      "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+      "376f810f4af2da2824914d0d74a5c0cec8e8f230"
+    ],
+    "freshJobStepAPIsIndependentlyRead": true,
+    "readOnly": true,
+    "localRuntimeTestsExecuted": false,
+    "workflowRerunsRequested": 0,
+    "proofChecksPassed": 92,
+    "blockingFindings": [],
+    "sourceFreezeSha256": {
+      "x10/test/alpha-tls.test.mjs": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+      "x10/test/frontend-tls.test.mjs": "9d3168f14b8d7b8f6deeba1cc53bafe60a655786f00bd341a7354376a773cac9",
+      "x10/service/preflight.mjs": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+      "x10/service/preflight.test.mjs": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3",
+      ".github/workflows/x10-native.yml": "39e90a1273373ff67222ea35b498156d4d133a1cb25da107f3483753a8288958"
+    },
+    "native": [
+      {
+        "runId": 40143307531,
+        "jobId": 121019407003,
+        "checkout": "376f810f4af2da2824914d0d74a5c0cec8e8f230",
+        "artifactId": 12579477752,
+        "zipSha256": "cc930cdd9fe5e997d659fcbbe5fa6e9bc6b233bdc867504bad8027ecb51516d3",
+        "zipBytes": 95415,
+        "actualJobLogSha256": "184dbe22b46ef99c2b6ddf52854ef02ac2849e4160442783ac03aba4b6b574ff",
+        "tapCounts": {
+          "alpha-tls.tap": {
+            "tests": 18,
+            "pass": 18,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "frontend-tls.tap": {
+            "tests": 16,
+            "pass": 16,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "service-preflight.tap": {
+            "tests": 42,
+            "pass": 42,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "user-unit.tap": {
+            "tests": 15,
+            "pass": 15,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "alpha-archive.tap": {
+            "tests": 15,
+            "pass": 15,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "release-record.tap": {
+            "tests": 35,
+            "pass": 35,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "guard-kernel.tap": {
+            "tests": 8,
+            "pass": 8,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "operator-status-unix.tap": {
+            "tests": 30,
+            "pass": 30,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        },
+        "upstreamCleanup": {
+          "suite": "alpha-tls-owned-cleanup",
+          "nativeStopped": true,
+          "launcherExited": true,
+          "openSockets": 0,
+          "temporaryRootRemoved": true,
+          "relay502Observations": 203,
+          "candidateTagsWithMatched502": 3,
+          "applicationPostRequests": 1
+        },
+        "frontendCleanup": {
+          "suite": "frontend-tls-owned-cleanup",
+          "nativeStopped": true,
+          "nativeSessionsStopped": 2,
+          "launcherExited": true,
+          "openSockets": 0,
+          "temporaryRootRemoved": true,
+          "applicationPostRequests": 1
+        },
+        "preflightObservation": {
+          "suite": "service-preflight-live-observation",
+          "nonroot": true,
+          "managerAvailable": true,
+          "probeExecuted": true,
+          "reason": null,
+          "serviceAccepted": false,
+          "productionAccepted": false
+        },
+        "aggregateGroups": 20,
+        "officialSummary": {
+          "files": 35,
+          "filesPassed": 34,
+          "filesSkipped": 1,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1131,
+            "passed": 1105,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        }
+      },
+      {
+        "runId": 40143311124,
+        "jobId": 121019414203,
+        "checkout": "9f371da50c577a84320e939c5f425edd6e0ef171",
+        "artifactId": 12579084255,
+        "zipSha256": "ffaa36ad769169e1a69a98699f8fa44212b13e249399b47f1c46c104e9f152da",
+        "zipBytes": 95320,
+        "actualJobLogSha256": "8af656e4783bb436cb1493a02fd09f5bde8e7152300b596f7016a8fabf01d39b",
+        "tapCounts": {
+          "alpha-tls.tap": {
+            "tests": 18,
+            "pass": 18,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "frontend-tls.tap": {
+            "tests": 16,
+            "pass": 16,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "service-preflight.tap": {
+            "tests": 42,
+            "pass": 42,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "user-unit.tap": {
+            "tests": 15,
+            "pass": 15,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "alpha-archive.tap": {
+            "tests": 15,
+            "pass": 15,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "release-record.tap": {
+            "tests": 35,
+            "pass": 35,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "guard-kernel.tap": {
+            "tests": 8,
+            "pass": 8,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          },
+          "operator-status-unix.tap": {
+            "tests": 30,
+            "pass": 30,
+            "fail": 0,
+            "cancelled": 0,
+            "skipped": 0,
+            "todo": 0
+          }
+        },
+        "upstreamCleanup": {
+          "suite": "alpha-tls-owned-cleanup",
+          "nativeStopped": true,
+          "launcherExited": true,
+          "openSockets": 0,
+          "temporaryRootRemoved": true,
+          "relay502Observations": 211,
+          "candidateTagsWithMatched502": 3,
+          "applicationPostRequests": 1
+        },
+        "frontendCleanup": {
+          "suite": "frontend-tls-owned-cleanup",
+          "nativeStopped": true,
+          "nativeSessionsStopped": 2,
+          "launcherExited": true,
+          "openSockets": 0,
+          "temporaryRootRemoved": true,
+          "applicationPostRequests": 1
+        },
+        "preflightObservation": {
+          "suite": "service-preflight-live-observation",
+          "nonroot": true,
+          "managerAvailable": true,
+          "probeExecuted": true,
+          "reason": null,
+          "serviceAccepted": false,
+          "productionAccepted": false
+        },
+        "aggregateGroups": 20,
+        "officialSummary": {
+          "files": 35,
+          "filesPassed": 34,
+          "filesSkipped": 1,
+          "filesFailed": 0,
+          "assertions": {
+            "run": 1131,
+            "passed": 1105,
+            "failed": 0,
+            "skipped": 25,
+            "todoFailed": 1,
+            "todoPassed": 0
+          }
+        }
+      }
+    ],
+    "researchSummary": {
+      "actualPR": [
+        21,
+        7,
+        27,
+        48
+      ],
+      "pushScopeOnly": true,
+      "node": "22.23.3",
+      "safeReportSha256": "cc28ec2bb18ace12169916303449addf1f3e2952f1d117ddf221392969094091"
+    },
+    "diagnosticHistory": [
+      "Initial reviewer parser applied anchored TAP summary regex to timestamped scope log and failed; corrected by timestamp removal using the same actual bytes. No runtime or workflow rerun."
+    ],
+    "limits": [
+      "Candidate fixture exact hosted verification only. No service or Production V1 acceptance.",
+      "Historical9e63 wrong-CA exit0 FAIL and exact unknown interleaving remain retained. Later success does not explain or reconstruct it.",
+      "Prior frontend shutdown143 and historical local19/20 ESRCH causes remain unknown.",
+      "Readonly nonroot manager observation is no unit activation or promised persistent runner.",
+      "Synthetic7 relay controls are separate from9 native nested cases and2 wrappers; do not sum native groups or official assertions.",
+      "Research source-only observations are no semantic importer, TLS migration or native continuation.",
+      "CLA failure remains separate; no agreement or publisher credentials changed."
+    ],
+    "checks": [
+      {
+        "check": "40143307531: source/status/attempt",
+        "passed": true
+      },
+      {
+        "check": "40143307531: actual ZIP/API digest/size",
+        "passed": true
+      },
+      {
+        "check": "40143307531:25completed jobsteps",
+        "passed": true
+      },
+      {
+        "check": "40143307531: actualcheckout",
+        "passed": true
+      },
+      {
+        "check": "40143307531: Node22",
+        "passed": true
+      },
+      {
+        "check": "40143307531: actualcommand x10/test/alpha-tls.test.mjs",
+        "passed": true
+      },
+      {
+        "check": "40143307531: actualcommand x10/test/frontend-tls.test.mjs",
+        "passed": true
+      },
+      {
+        "check": "40143307531: actualcommand x10/service/preflight.test.mjs",
+        "passed": true
+      },
+      {
+        "check": "40143307531:15artifactmembers",
+        "passed": true
+      },
+      {
+        "check": "40143307531:alpha-tls.tap",
+        "passed": true
+      },
+      {
+        "check": "40143307531:frontend-tls.tap",
+        "passed": true
+      },
+      {
+        "check": "40143307531:service-preflight.tap",
+        "passed": true
+      },
+      {
+        "check": "40143307531:user-unit.tap",
+        "passed": true
+      },
+      {
+        "check": "40143307531:alpha-archive.tap",
+        "passed": true
+      },
+      {
+        "check": "40143307531:release-record.tap",
+        "passed": true
+      },
+      {
+        "check": "40143307531:guard-kernel.tap",
+        "passed": true
+      },
+      {
+        "check": "40143307531:operator-status-unix.tap",
+        "passed": true
+      },
+      {
+        "check": "40143307531:7synthetic9native2wrapper",
+        "passed": true
+      },
+      {
+        "check": "40143307531:wrong-ca actualrefusal",
+        "passed": true
+      },
+      {
+        "check": "40143307531:wrong-hostname actualrefusal",
+        "passed": true
+      },
+      {
+        "check": "40143307531:plaintext-peer actualrefusal",
+        "passed": true
+      },
+      {
+        "check": "40143307531:upstreamcleanup3bound502tags",
+        "passed": true
+      },
+      {
+        "check": "40143307531:frontendcleanup2sessions",
+        "passed": true
+      },
+      {
+        "check": "40143307531:readonlynonrootmanagerONLY",
+        "passed": true
+      },
+      {
+        "check": "40143307531:native20groups",
+        "passed": true
+      },
+      {
+        "check": "40143307531:buildcheckout/clean",
+        "passed": true
+      },
+      {
+        "check": "40143307531:nativepins/binary/modules",
+        "passed": true
+      },
+      {
+        "check": "40143307531:managed-native-control86",
+        "passed": true
+      },
+      {
+        "check": "40143307531:operator-status30",
+        "passed": true
+      },
+      {
+        "check": "40143307531:local-alpha-lifecycle45",
+        "passed": true
+      },
+      {
+        "check": "40143307531:listener-observer-boundaries42",
+        "passed": true
+      },
+      {
+        "check": "40143307531:official1105/25/1TODO/0FAIL",
+        "passed": true
+      },
+      {
+        "check": "40143307531:control-api-unix.jsonunix9",
+        "passed": true
+      },
+      {
+        "check": "40143307531:generations-unix.jsonunix10",
+        "passed": true
+      },
+      {
+        "check": "40143307531:featureoff4",
+        "passed": true
+      },
+      {
+        "check": "40143307531:packedpreextraction",
+        "passed": true
+      },
+      {
+        "check": "40143311124: source/status/attempt",
+        "passed": true
+      },
+      {
+        "check": "40143311124: actual ZIP/API digest/size",
+        "passed": true
+      },
+      {
+        "check": "40143311124:25completed jobsteps",
+        "passed": true
+      },
+      {
+        "check": "40143311124: actualcheckout",
+        "passed": true
+      },
+      {
+        "check": "40143311124: Node22",
+        "passed": true
+      },
+      {
+        "check": "40143311124: actualcommand x10/test/alpha-tls.test.mjs",
+        "passed": true
+      },
+      {
+        "check": "40143311124: actualcommand x10/test/frontend-tls.test.mjs",
+        "passed": true
+      },
+      {
+        "check": "40143311124: actualcommand x10/service/preflight.test.mjs",
+        "passed": true
+      },
+      {
+        "check": "40143311124:15artifactmembers",
+        "passed": true
+      },
+      {
+        "check": "40143311124:alpha-tls.tap",
+        "passed": true
+      },
+      {
+        "check": "40143311124:frontend-tls.tap",
+        "passed": true
+      },
+      {
+        "check": "40143311124:service-preflight.tap",
+        "passed": true
+      },
+      {
+        "check": "40143311124:user-unit.tap",
+        "passed": true
+      },
+      {
+        "check": "40143311124:alpha-archive.tap",
+        "passed": true
+      },
+      {
+        "check": "40143311124:release-record.tap",
+        "passed": true
+      },
+      {
+        "check": "40143311124:guard-kernel.tap",
+        "passed": true
+      },
+      {
+        "check": "40143311124:operator-status-unix.tap",
+        "passed": true
+      },
+      {
+        "check": "40143311124:7synthetic9native2wrapper",
+        "passed": true
+      },
+      {
+        "check": "40143311124:wrong-ca actualrefusal",
+        "passed": true
+      },
+      {
+        "check": "40143311124:wrong-hostname actualrefusal",
+        "passed": true
+      },
+      {
+        "check": "40143311124:plaintext-peer actualrefusal",
+        "passed": true
+      },
+      {
+        "check": "40143311124:upstreamcleanup3bound502tags",
+        "passed": true
+      },
+      {
+        "check": "40143311124:frontendcleanup2sessions",
+        "passed": true
+      },
+      {
+        "check": "40143311124:readonlynonrootmanagerONLY",
+        "passed": true
+      },
+      {
+        "check": "40143311124:native20groups",
+        "passed": true
+      },
+      {
+        "check": "40143311124:buildcheckout/clean",
+        "passed": true
+      },
+      {
+        "check": "40143311124:nativepins/binary/modules",
+        "passed": true
+      },
+      {
+        "check": "40143311124:managed-native-control86",
+        "passed": true
+      },
+      {
+        "check": "40143311124:operator-status30",
+        "passed": true
+      },
+      {
+        "check": "40143311124:local-alpha-lifecycle45",
+        "passed": true
+      },
+      {
+        "check": "40143311124:listener-observer-boundaries42",
+        "passed": true
+      },
+      {
+        "check": "40143311124:official1105/25/1TODO/0FAIL",
+        "passed": true
+      },
+      {
+        "check": "40143311124:control-api-unix.jsonunix9",
+        "passed": true
+      },
+      {
+        "check": "40143311124:generations-unix.jsonunix10",
+        "passed": true
+      },
+      {
+        "check": "40143311124:featureoff4",
+        "passed": true
+      },
+      {
+        "check": "40143311124:packedpreextraction",
+        "passed": true
+      },
+      {
+        "check": "40143307475:scopeloghash",
+        "passed": true
+      },
+      {
+        "check": "40143307475:scope7",
+        "passed": true
+      },
+      {
+        "check": "40143307475:scopechoice",
+        "passed": true
+      },
+      {
+        "check": "40143311131:scopeloghash",
+        "passed": true
+      },
+      {
+        "check": "40143311131:scope7",
+        "passed": true
+      },
+      {
+        "check": "40143311131:scopechoice",
+        "passed": true
+      },
+      {
+        "check": "40143311131:runtimeloghash",
+        "passed": true
+      },
+      {
+        "check": "researchPR:3actualJSONsuites",
+        "passed": true
+      },
+      {
+        "check": "researchPR:count21",
+        "passed": true
+      },
+      {
+        "check": "researchPR:count27",
+        "passed": true
+      },
+      {
+        "check": "researchPR:count48",
+        "passed": true
+      },
+      {
+        "check": "researchPR:process7",
+        "passed": true
+      },
+      {
+        "check": "researchpush:scopeonlyskip",
+        "passed": true
+      },
+      {
+        "check": "researchmerge:exactparents/tree",
+        "passed": true
+      },
+      {
+        "check": "sourcefreeze:x10/test/alpha-tls.test.mjs",
+        "passed": true
+      },
+      {
+        "check": "sourcefreeze:x10/test/frontend-tls.test.mjs",
+        "passed": true
+      },
+      {
+        "check": "sourcefreeze:x10/service/preflight.mjs",
+        "passed": true
+      },
+      {
+        "check": "sourcefreeze:x10/service/preflight.test.mjs",
+        "passed": true
+      },
+      {
+        "check": "sourcefreeze:.github/workflows/x10-native.yml",
+        "passed": true
+      },
+      {
+        "check": "sourcefreeze:newrelayfixture",
+        "passed": true
+      }
+    ]
+  },
+  "independentReviewSha256": "e9486e692a2c04c5ef23ed8efece6c33beeaf276257e03ff0b4677eb16df0316",
+  "implementationSourceFilesSha256": {
+    "x10/test/alpha-tls.test.mjs": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e",
+    "x10/test/frontend-tls.test.mjs": "9d3168f14b8d7b8f6deeba1cc53bafe60a655786f00bd341a7354376a773cac9",
+    "x10/service/preflight.mjs": "375b5e4339d3a725d29c5db8440bc1a788f9d1dfcd0d1cf9ec47518e4e3b6cc2",
+    "x10/service/preflight.test.mjs": "4dbd1f779e0228f04c0632d8d7d25c042e2d11c60b22f579cae3a12c89d94fe3",
+    ".github/workflows/x10-native.yml": "39e90a1273373ff67222ea35b498156d4d133a1cb25da107f3483753a8288958"
+  },
+  "runtimeFilesUnchanged": 508,
+  "originalLocalEvidence": "x10/evidence/g3-tls-relay-binding.json",
+  "originalLocalEvidenceSha256": "af9b3708d1dc75351e5557ff142f38257253ae252d066f09414da267235ff6ae",
+  "originalLocalEvidenceUnchanged": true,
+  "originalFailedNativePRReceipt": "x10/evidence/g3-service-preflight-hosted.json",
+  "retainedHistoricalObservation": "Original9e63 native PR run40138541844/job121005216512 expected wrong-CA applyCLI exit1 but observed0. Its exact historical interleaving/cause remains unknown. The deterministic borrowed-old-route counterexample motivated a fixture binding correction, not a proven controller/native vulnerability. Earlier frontend push shutdown143/skipped frontend step/absent artifact/unconfirmed final cleanup and local19/20 ESRCH process/interleaving uncertainty remain retained; later successes do not reconstruct or explain them.",
+  "actualServiceActivated": false,
+  "serviceInstalled": false,
+  "permanentAlphaAccepted": false,
+  "readinessAutomated": false,
+  "localRuntimeTestsExecutedInReceipt": 0,
+  "rawLogsPublished": false,
+  "hostPathsPublished": false,
+  "realProcessIdentifiersPublished": false,
+  "privateCoordinatorRevisionPublished": false,
+  "privateKeysPublished": false,
+  "newPurchases": false,
+  "productionDeployChanged": false,
+  "nextConcreteTask": "Continue G3 actual nonroot user-manager service startup/stop/restart, failed-start, drain and orphan behavior on a fresh authorized test host after its own fresh readonly preflight. Exact376 candidate-bound TLS relay fixture CI is verified narrowly; original9e63 wrong-CA apply-exit0 failure, deterministic borrowed-old-route counterexample and unknown historical CI interleaving/cause remain retained. No controller/native runtime vulnerability or historical product fix is claimed. Readonly manager prerequisites observed in completed ephemeral CI jobs are not service activation or guaranteed future host availability. Controller readiness remains HTTP rather than automatic TLS/expiry acceptance. G2 permanent versioned distribution/published-file replay, package upgrade/rollback/recovery, G4-G8/Production V1 and full deferred Continuum remain open.",
+  "limitations": [
+    "18 upstream TAP are7 synthetic route-binding controls plus9 installed native scenarios and2 wrappers; frontend16 and preflight42 are separate suites, not additive native groups.",
+    "Both native20/20, official assertions and required Unix/feature-off/package steps are separate counting units. Original local1083 and current hosted1105 strictPASS are not interchangeable.",
+    "Actual readonly nonroot user-manager prerequisites are observations of completed ephemeral jobs. No service unit was installed, enabled, activated or accepted; any next host must run fresh preflight.",
+    "New exact green CI does not erase the original9e63 failure, reconstruct its historical interleaving or establish a controller/native TLS vulnerability or product repair.",
+    "Research push runtime was skipped. Only PR actual21core/7process/27C1/48C2a is verified; none is full semantic TLS migration.",
+    "CLA failure remains separate; no agreement, publisher credential or workflow security change was performed.",
+    "No unchanged runtime rerun or new build was executed for this metadata receipt. CI artifacts expire and are not permanent distribution or authenticated release signatures.",
+    "Actual service lifecycle, permanent published package/replay, package rollback, recovery, soak, final Production V1 and deferred semantic Continuum remain open."
+  ]
+}

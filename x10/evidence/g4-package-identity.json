@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "sourceBase": "face7a77d6f9f93fc0c5657dc3bd6b44fa962cff",
+  "publicationParent": "f7fb1126fac572b66a1bcc6a3cac50dba822f1a1",
+  "implementationCommitLocator": "Containing implementation commit; exact resulting hosted run required",
+  "state": "CODE_PRESENT_LOCAL_CONTRACTS_VERIFIED_EXACT_HOSTED_PENDING",
+  "scope": "Read-only installed runtime payload identification as a prerequisite for a separately verified side-by-side package transition",
+  "evidence": "x10/evidence/g4-package-identity.json",
+  "perFileLedger": "x10/review/g4-package-identity-ledger.json",
+  "sourceBindingsFrozen": true,
+  "sourceBindings": {
+    "x10/alpha/cli.mjs": {
+      "beforeSha256": "38d92317731c155adb183eb918b86517a3474f625f2d53e4f39d608da5af68e0",
+      "afterSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+      "bytes": 68551
+    },
+    "x10/alpha/package-info.test.mjs": {
+      "beforeSha256": null,
+      "afterSha256": "54359382b4cfc192d42c547e4f4b4f49825e2e1dfd68d94acc09d4b49e650c83",
+      "bytes": 14701
+    },
+    "x10/test/alpha.test.mjs": {
+      "beforeSha256": "eb7bfc20173e002086c727b9838ab20a475ca46474d21f592a838783354ee5e0",
+      "afterSha256": "602312b3ee869a1a85b53466bd68b096184d7eaed48b0ca9e162e405bf96db48",
+      "bytes": 96332
+    }
+  },
+  "candidateBehavior": [
+    "Use only the exact installed package-info command after the existing complete canonical installation, immutable inventory and strict recorded dynamic-dependency validation.",
+    "Report sorted code-relative runtime file paths with bounded byte counts, allowed modes and SHA256 records; exclude configuration, session, prefix and host-library paths.",
+    "Compute canonical complete runtime and operator-only payload fingerprints and expose the native binary hash separately.",
+    "Exclude build records, source labels, archive timestamps, documentation, declarative example files, licenses and installation/provenance metadata from payload fingerprints, while retaining complete existing installation verification.",
+    "Acquire no alpha lock, write no state, invoke no native executable, activate no service and grant no package compatibility or transition authority.",
+    "Return finite redacted package_info_refused failures without paths; preserve the existing full native and installed-runtime contracts."
+  ],
+  "canonicalFingerprintInput": "JSON.stringify({schemaVersion:1,files:sortedRuntimeFileRecords})",
+  "operatorFingerprintExcludesNativeBinary": true,
+  "alphaRuntimeChanged": true,
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "serviceRecipeChanged": false,
+  "bundleAndInstallationSchemaChanged": false,
+  "packageInventoryChanged": false,
+  "localValidation": {
+    "state": "FROZEN_SELECTED_CONTRACTS_SUCCESS",
+    "nodeVersion": "v24.22.1",
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "x10/alpha/package-info.test.mjs",
+      "x10/alpha/backup.test.mjs",
+      "x10/alpha/prepare-run.test.mjs",
+      "x10/test/alpha-runtime.test.mjs",
+      "x10/test/alpha-pid.test.mjs"
+    ],
+    "counts": {
+      "tests": 248,
+      "pass": 248,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "exitCode": 0,
+    "newPureControlsIncludedOnce": 86,
+    "physicalNativeExecuted": false,
+    "systemdExecuted": false
+  },
+  "hostedVerification": {
+    "state": "PENDING_EXACT_RESULTING_NATIVE_CI",
+    "expectedEvidence": "Actual extracted-bundle package-info output, exact native/operator fingerprints, absence of management mutation and existing native/service regressions."
+  },
+  "acceptedPriorRestoredService": {
+    "implementationCommit": "831360a9a9770815c660f5bc06d002b92154a1b0",
+    "receiptCommit": "face7a77d6f9f93fc0c5657dc3bd6b44fa962cff",
+    "path": "x10/evidence/g4-restored-service-hosted.json",
+    "scope": "Same-package restored HTTP configuration in fresh temporary nonroot systemd-user installation/unit only",
+    "unchanged": true
+  },
+  "consistencyOnly": true,
+  "signatureProvided": false,
+  "compatibilityAccepted": false,
+  "upgradePerformed": false,
+  "rollbackAccepted": false,
+  "serviceAccepted": false,
+  "productionAccepted": false,
+  "packageUpgradeRollbackAccepted": false,
+  "nativeBinaryVersionChangeAccepted": false,
+  "tlsBackupAccepted": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "limitations": [
+    "Payload fingerprints are checked consistency observations, not cryptographic authentication, state or ABI compatibility, or an atomic filesystem/process fence.",
+    "No actual package staging, switching, migration, start, restore or rollback is performed.",
+    "Metadata-only or archive/provenance-only changes do not qualify as meaningfully different runtime packages.",
+    "The new operator payload may differ while the native NGINX binary remains identical; report those claims separately.",
+    "Local pure and virtual controls are not physical native/service or distinct-runtime-package A-to-B-to-A acceptance.",
+    "Previous historical local cleanup FAIL_UNKNOWN, unexercised actual failure containment, CLA failure and unknown historical causes remain preserved through the mandatory checkpoint history.",
+    "Meaningful A-to-B-to-A/state compatibility, permanent distribution, independent published replay,60-minute soak, fullG3/G4/V1 and semantic Continuum remain open."
+  ],
+  "separateInstalledCommandControl": {
+    "exitCode": 0,
+    "counts": {
+      "tests": 1,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "scope": "Actual Node command and private synthetic installation; native placeholder not executed, unrelated test callbacks filtered.",
+    "physicalNativeExecuted": false,
+    "systemdExecuted": false,
+    "notAddedToSelectedTAPCount": true,
+    "nodeVersion": "v24.22.1"
+  },
+  "separateIndependentReviewControls": {
+    "count": 10,
+    "scope": "Pure or virtual security controls; not added to selected TAP count",
+    "physicalNativeExecuted": false,
+    "systemdExecuted": false
+  },
+  "unpublishedDraftValidationHistory": {
+    "initialCombinedTests": 246,
+    "initialPassed": 242,
+    "initialFailed": 4,
+    "sourceExtractionMismatchCorrected": true,
+    "existingBackupAndPrepareTestsChanged": false,
+    "cause": "The exported helper placement entered a captured source-extracted test region. Source placement was corrected before final freeze; no physical native result or product vulnerability is inferred."
+  },
+  "expectedHostedPackageDiagnostic": {
+    "suite": "x10-package-identity",
+    "profile": "extracted-bundle-read-only",
+    "fieldCount": 15,
+    "runtimePayloadFiles": 11,
+    "requiredTrueFields": [
+      "actualInstalledBytesMatched",
+      "sourceAndRestoredPayloadIdentityMatched",
+      "preparedRecordsAndOwnedLockPreserved",
+      "invalidArgumentsRefused"
+    ],
+    "requiredFalseFields": [
+      "compatibilityAccepted",
+      "upgradePerformed",
+      "rollbackAccepted",
+      "serviceAccepted",
+      "productionAccepted"
+    ],
+    "expectedNotLocallyObserved": true
+  },
+  "independentReviewBlockers": 0
+}

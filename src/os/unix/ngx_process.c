@@ -208,6 +208,13 @@ ngx_spawn_process(ngx_cycle_t *cycle, ngx_spawn_proc_pt proc, void *data,
     ngx_processes[s].pid = pid;
     ngx_processes[s].exited = 0;
 
+#if (NGX_CONTROL_API)
+    if (pid > 0) {
+        ngx_control_process_spawned(cycle, s, pid,
+                                   respawn == NGX_PROCESS_DETACHED);
+    }
+#endif
+
     if (respawn >= 0) {
         return pid;
     }

@@ -1,0 +1,607 @@
+{
+  "schemaVersion": 1,
+  "sourceBase": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+  "publicationParent": "d80ab8694c807b85be13b0ab839d74957f01d713",
+  "implementationCommitLocator": "Containing implementation commit; exact resulting hosted TLS/native/service verification required",
+  "state": "FROZEN_FIXTURE_PURE_CONTROLS_VERIFIED_EXACT_HOSTED_PENDING",
+  "scope": "Fixture-only verified downstream HTTP route connection selection before a unique application POST and stream through the native HTTPS upstream proxy",
+  "evidence": "x10/evidence/g3-tls-verified-route.json",
+  "perFileLedger": "x10/review/g3-tls-verified-route-ledger.json",
+  "sourceBindingsFrozen": true,
+  "sourceBindings": {
+    "x10/test/tls-verified-route.mjs": {
+      "bytes": 12047,
+      "afterSha256": "2b62f31e33a4b3e419f014254b8cc891068783d376f4fe8b931c853240cb3478",
+      "beforeSha256": null
+    },
+    "x10/test/tls-verified-route.test.mjs": {
+      "bytes": 22241,
+      "afterSha256": "3729934702abbcb49d0e0e23092846b272142663487d13d7a3ae2f380e6418e0",
+      "beforeSha256": null
+    },
+    "x10/test/alpha-tls.test.mjs": {
+      "bytes": 20270,
+      "afterSha256": "f54a3b54705b2524bbfd49545ed181dcd10d28058f51dbd725ec692904c45ac6",
+      "beforeSha256": "8e2c900be3062c7d68bcb11b04aec6f2000bd8a127b890377bf5d8e46b58560e"
+    }
+  },
+  "candidateBehavior": [
+    "Select one downstream HTTP connection only after an actual GET returns exact expected good body, authenticated-origin marker and the exact candidate route tag.",
+    "Retain that socket for the unique POST and streamed response rather than opening unrelated downstream connections between route observation and application payload.",
+    "Disable automatic agent redial and inspect the exact assigned socket, expected reuse state, liveness and writability before calling end with the application payload.",
+    "Refuse a missing, changed, closed or unusable connection without retrying the POST on a replacement route.",
+    "Keep native upstream CA/hostname validation and existing negative TLS controls; the public route marker is not an authentication primitive.",
+    "Record finite observation facts only; preserve the historical failure and treat old-worker causality as unproven."
+  ],
+  "fixtureOnlyChange": true,
+  "alphaRuntimeChanged": false,
+  "nativeRuntimeChanged": false,
+  "controllerRuntimeChanged": false,
+  "serviceRecipeChanged": false,
+  "workflowChanged": false,
+  "bundleAndInstallationSchemaChanged": false,
+  "packageInventoryChanged": false,
+  "historicalExactObservation": {
+    "implementationCommit": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+    "push": {
+      "runId": 40475357966,
+      "jobId": 122092247049,
+      "state": "completed_success",
+      "actualSuccessfulSteps": 34,
+      "nativeGroups": 20,
+      "alphaTests": 617,
+      "actualBuildCheckout": "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad",
+      "artifact": {
+        "id": 12721146856,
+        "bytes": 138918,
+        "zipSha256": "684b6af6bf4b94d2342a20a720575a3c7bd512ce525be629d7bd2e96b2464759",
+        "digestVerified": true
+      },
+      "fullServiceRegressionObserved": true
+    },
+    "pullRequest": {
+      "runId": 40475365565,
+      "jobId": 122092230894,
+      "state": "completed_failure",
+      "failedStep": 21,
+      "failedStepName": "Verify installed HTTPS upstream trust and hostname",
+      "actualBuildCheckout": "2b2531b31f2b83cf52944b51badd80b13e6d42ac",
+      "actualBuildTree": "64e0c5f2d4c4122cb5881e351a0117f0e336e5a5",
+      "orderedMergeParents": [
+        "0b622c4a9f4dfe0876209c2a8bf5ce5e25caa812",
+        "6401c8f0fe4690a4daea0abac43d2e0efd91c0ad"
+      ],
+      "artifact": {
+        "id": 12721350737,
+        "bytes": 94904,
+        "zipSha256": "d3d774e5e77d01460a5d421419e86a540daa591ef58513debf7e6c23e9dc8152",
+        "digestVerified": true,
+        "downloadedOnce": true
+      },
+      "nativeAggregateComponentSucceeded": true,
+      "nativeGroups": 20,
+      "alphaTests": 617,
+      "actualForegroundReturnDiagnosticObserved": true,
+      "serviceRegressionExecuted": false,
+      "serviceArtifactAbsent": true,
+      "privateNodeServiceCleanupArtifactAbsent": true
+    },
+    "tlsFailure": {
+      "file": "x10/test/alpha-tls.test.mjs",
+      "line": 170,
+      "subtest": "verified native HTTPS proxy preserves POST bytes and streamed bytes",
+      "assertion": "POST echo HTTP status",
+      "expectedStatus": 200,
+      "actualStatus": 503,
+      "code": "ERR_ASSERTION",
+      "counts": {
+        "tests": 13,
+        "pass": 11,
+        "fail": 2,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "parentTestIncludedInFailCount": true,
+      "earlierPositiveCAHostnameGETSubtestPassed": true,
+      "laterNegativeTLSControlsNotReached": true,
+      "rootCauseEstablished": false,
+      "possibleOldRouteObservationIsInferenceOnly": true,
+      "ownedCleanup": {
+        "suite": "alpha-tls-owned-cleanup",
+        "nativeStopped": true,
+        "launcherExited": true,
+        "openSockets": 0,
+        "temporaryRootRemoved": true,
+        "relay502Observations": 0,
+        "candidateTagsWithMatched502": 0,
+        "applicationPostRequests": 0
+      }
+    },
+    "pushSuccessResolvesPRFailure": false,
+    "actualReturnProofObservedInBothEvents": true,
+    "newFixtureAcceptedByHistoricalPush": false,
+    "rootCauseEstablished": false,
+    "oldWorkerRouteInterleaving": "HYPOTHESIS_ONLY_NOT_ESTABLISHED",
+    "unchangedRerunRequested": false,
+    "foregroundReturnProofs": [
+      {
+        "event": "push",
+        "runId": 40475357966,
+        "proof": {
+          "schemaVersion": 1,
+          "kind": "nginx-x10-operator-package-return-proof",
+          "packages": {
+            "a": {
+              "runtimePayloadSha256": "9ab5c96813ca535d4724f5b690ca38650a5f01e808754e98fc239776b5c8e59f",
+              "operatorPayloadSha256": "9fbb29cf3245178393b5440587f807fa82accb4ffa1a57059f2141dcc4f0ad1a",
+              "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2"
+            },
+            "b": {
+              "runtimePayloadSha256": "f81149bd4f7666fa20bd1d3d71ba425bdf9158612b11a5a91796d51d1be16b9d",
+              "operatorPayloadSha256": "be4c71ca7036a428287ed7f4f8a4e3279f52de1cc95dce5554fac68a56b329cb",
+              "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2"
+            },
+            "a2": {
+              "runtimePayloadSha256": "9ab5c96813ca535d4724f5b690ca38650a5f01e808754e98fc239776b5c8e59f",
+              "operatorPayloadSha256": "9fbb29cf3245178393b5440587f807fa82accb4ffa1a57059f2141dcc4f0ad1a",
+              "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2"
+            }
+          },
+          "inputs": {
+            "pSha256": "0d2dd5c5c1ebf3bcb015caac5e5b9cc5ce455b5ca57321e6818114a9f20b75b8",
+            "qSha256": "e03c36037989cf6988adf36ea90091c05189d2315564428f4c648f4b1b67020c",
+            "a2RestoredSha256": "e03c36037989cf6988adf36ea90091c05189d2315564428f4c648f4b1b67020c"
+          },
+          "phases": [
+            "a_started",
+            "a_served",
+            "a_stopped",
+            "b_staged",
+            "b_started",
+            "b_readiness_refused",
+            "b_served",
+            "b_stopped",
+            "a2_restored",
+            "a2_started",
+            "a2_served",
+            "a2_stopped",
+            "cleanup"
+          ],
+          "legs": [
+            {
+              "name": "a",
+              "identityOrdinals": {
+                "installation": 1,
+                "session": 1,
+                "revision": 1,
+                "binding": 1
+              },
+              "inputSha256": "0d2dd5c5c1ebf3bcb015caac5e5b9cc5ce455b5ca57321e6818114a9f20b75b8",
+              "initialBindingAbsent": true,
+              "readinessAccepted": true,
+              "bindingMatchesOwnedRuntime": true,
+              "getExact": true,
+              "postExact": true,
+              "streamExact": true,
+              "postEffectsBefore": 0,
+              "postEffectsAfter": 1,
+              "stop": {
+                "stage": "stopped",
+                "runtimeIdentityVerified": true,
+                "masterAbsent": true,
+                "processGroupAbsent": true,
+                "launcherExited": true,
+                "launcherExitCode": 0,
+                "launcherSignal": null,
+                "portsClosed": true,
+                "operatorLockAbsent": true,
+                "pendingAbsent": true
+              }
+            },
+            {
+              "name": "b",
+              "identityOrdinals": {
+                "installation": 2,
+                "session": 2,
+                "revision": 2,
+                "binding": 2
+              },
+              "inputSha256": "e03c36037989cf6988adf36ea90091c05189d2315564428f4c648f4b1b67020c",
+              "initialBindingAbsent": true,
+              "readinessAccepted": true,
+              "bindingMatchesOwnedRuntime": true,
+              "getExact": true,
+              "postExact": true,
+              "streamExact": true,
+              "postEffectsBefore": 1,
+              "postEffectsAfter": 2,
+              "stop": {
+                "stage": "stopped",
+                "runtimeIdentityVerified": true,
+                "masterAbsent": true,
+                "processGroupAbsent": true,
+                "launcherExited": true,
+                "launcherExitCode": 0,
+                "launcherSignal": null,
+                "portsClosed": true,
+                "operatorLockAbsent": true,
+                "pendingAbsent": true
+              }
+            },
+            {
+              "name": "a2",
+              "identityOrdinals": {
+                "installation": 3,
+                "session": 3,
+                "revision": 3,
+                "binding": 3
+              },
+              "inputSha256": "e03c36037989cf6988adf36ea90091c05189d2315564428f4c648f4b1b67020c",
+              "initialBindingAbsent": true,
+              "readinessAccepted": true,
+              "bindingMatchesOwnedRuntime": true,
+              "getExact": true,
+              "postExact": true,
+              "streamExact": true,
+              "postEffectsBefore": 2,
+              "postEffectsAfter": 3,
+              "stop": {
+                "stage": "stopped",
+                "runtimeIdentityVerified": true,
+                "masterAbsent": true,
+                "processGroupAbsent": true,
+                "launcherExited": true,
+                "launcherExitCode": 0,
+                "launcherSignal": null,
+                "portsClosed": true,
+                "operatorLockAbsent": true,
+                "pendingAbsent": true
+              }
+            }
+          ],
+          "staging": {
+            "commandExercised": true,
+            "sourcePreserved": true,
+            "initialBindingAbsent": true,
+            "initialInputSha256": "0d2dd5c5c1ebf3bcb015caac5e5b9cc5ce455b5ca57321e6818114a9f20b75b8",
+            "runtimePayloadChanged": true,
+            "operatorPayloadChanged": true,
+            "nativeBinaryChanged": false
+          },
+          "controls": {
+            "bWrongReadinessRefused": true,
+            "bBindingAbsentAfterRefusal": true,
+            "retainedAAllFilesPreserved": true,
+            "retainedABackupPreserved": true,
+            "forwardStartedAfterConfirmedStop": true,
+            "returnStartedAfterConfirmedStop": true,
+            "oldAInstallerRestoredQ": true
+          },
+          "cleanup": {
+            "known": true,
+            "ownedProcessesAbsent": true,
+            "ownedLaunchersAbsent": true,
+            "ownedListenersClosed": true,
+            "ownedInstallationsRemoved": 3,
+            "historicalBundleRemoved": true,
+            "backupFilesRemoved": true
+          },
+          "limits": {
+            "consistencyOnly": true,
+            "nativeBinaryUpgradeAccepted": false,
+            "liveConnectionPreserved": false,
+            "applicationSideEffectsReversed": false,
+            "managedServiceAccepted": false,
+            "productionAccepted": false
+          }
+        },
+        "metadata": {
+          "suite": "x10-operator-package-return",
+          "profile": "foreground-http-reassembled-reviewed-operator-a-b-a2",
+          "historicalOperatorCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+          "historicalOperatorBlob": "f036791f3e843c3628964f5c61b0bc0ab903d6f9",
+          "historicalOperatorSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+          "historicalBundleReassembled": true,
+          "publishedHistoricalBundle": false,
+          "completedUniquePostEffects": 3,
+          "completedStreams": 3
+        }
+      },
+      {
+        "event": "pull_request",
+        "runId": 40475365565,
+        "proof": {
+          "schemaVersion": 1,
+          "kind": "nginx-x10-operator-package-return-proof",
+          "packages": {
+            "a": {
+              "runtimePayloadSha256": "9ab5c96813ca535d4724f5b690ca38650a5f01e808754e98fc239776b5c8e59f",
+              "operatorPayloadSha256": "9fbb29cf3245178393b5440587f807fa82accb4ffa1a57059f2141dcc4f0ad1a",
+              "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2"
+            },
+            "b": {
+              "runtimePayloadSha256": "f81149bd4f7666fa20bd1d3d71ba425bdf9158612b11a5a91796d51d1be16b9d",
+              "operatorPayloadSha256": "be4c71ca7036a428287ed7f4f8a4e3279f52de1cc95dce5554fac68a56b329cb",
+              "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2"
+            },
+            "a2": {
+              "runtimePayloadSha256": "9ab5c96813ca535d4724f5b690ca38650a5f01e808754e98fc239776b5c8e59f",
+              "operatorPayloadSha256": "9fbb29cf3245178393b5440587f807fa82accb4ffa1a57059f2141dcc4f0ad1a",
+              "nativeBinarySha256": "976905970d4b5bdf06ca5e70df6ce56af572ef532b0b042126628a3d9383adc2"
+            }
+          },
+          "inputs": {
+            "pSha256": "bf560fa9babf024999edad48e99e6159a1f8fa26781f00268405cf4299261d2d",
+            "qSha256": "f2a70fb717667c29d743301c89fe45b13071d7c84bc8a03e22e33b99877ce8f6",
+            "a2RestoredSha256": "f2a70fb717667c29d743301c89fe45b13071d7c84bc8a03e22e33b99877ce8f6"
+          },
+          "phases": [
+            "a_started",
+            "a_served",
+            "a_stopped",
+            "b_staged",
+            "b_started",
+            "b_readiness_refused",
+            "b_served",
+            "b_stopped",
+            "a2_restored",
+            "a2_started",
+            "a2_served",
+            "a2_stopped",
+            "cleanup"
+          ],
+          "legs": [
+            {
+              "name": "a",
+              "identityOrdinals": {
+                "installation": 1,
+                "session": 1,
+                "revision": 1,
+                "binding": 1
+              },
+              "inputSha256": "bf560fa9babf024999edad48e99e6159a1f8fa26781f00268405cf4299261d2d",
+              "initialBindingAbsent": true,
+              "readinessAccepted": true,
+              "bindingMatchesOwnedRuntime": true,
+              "getExact": true,
+              "postExact": true,
+              "streamExact": true,
+              "postEffectsBefore": 0,
+              "postEffectsAfter": 1,
+              "stop": {
+                "stage": "stopped",
+                "runtimeIdentityVerified": true,
+                "masterAbsent": true,
+                "processGroupAbsent": true,
+                "launcherExited": true,
+                "launcherExitCode": 0,
+                "launcherSignal": null,
+                "portsClosed": true,
+                "operatorLockAbsent": true,
+                "pendingAbsent": true
+              }
+            },
+            {
+              "name": "b",
+              "identityOrdinals": {
+                "installation": 2,
+                "session": 2,
+                "revision": 2,
+                "binding": 2
+              },
+              "inputSha256": "f2a70fb717667c29d743301c89fe45b13071d7c84bc8a03e22e33b99877ce8f6",
+              "initialBindingAbsent": true,
+              "readinessAccepted": true,
+              "bindingMatchesOwnedRuntime": true,
+              "getExact": true,
+              "postExact": true,
+              "streamExact": true,
+              "postEffectsBefore": 1,
+              "postEffectsAfter": 2,
+              "stop": {
+                "stage": "stopped",
+                "runtimeIdentityVerified": true,
+                "masterAbsent": true,
+                "processGroupAbsent": true,
+                "launcherExited": true,
+                "launcherExitCode": 0,
+                "launcherSignal": null,
+                "portsClosed": true,
+                "operatorLockAbsent": true,
+                "pendingAbsent": true
+              }
+            },
+            {
+              "name": "a2",
+              "identityOrdinals": {
+                "installation": 3,
+                "session": 3,
+                "revision": 3,
+                "binding": 3
+              },
+              "inputSha256": "f2a70fb717667c29d743301c89fe45b13071d7c84bc8a03e22e33b99877ce8f6",
+              "initialBindingAbsent": true,
+              "readinessAccepted": true,
+              "bindingMatchesOwnedRuntime": true,
+              "getExact": true,
+              "postExact": true,
+              "streamExact": true,
+              "postEffectsBefore": 2,
+              "postEffectsAfter": 3,
+              "stop": {
+                "stage": "stopped",
+                "runtimeIdentityVerified": true,
+                "masterAbsent": true,
+                "processGroupAbsent": true,
+                "launcherExited": true,
+                "launcherExitCode": 0,
+                "launcherSignal": null,
+                "portsClosed": true,
+                "operatorLockAbsent": true,
+                "pendingAbsent": true
+              }
+            }
+          ],
+          "staging": {
+            "commandExercised": true,
+            "sourcePreserved": true,
+            "initialBindingAbsent": true,
+            "initialInputSha256": "bf560fa9babf024999edad48e99e6159a1f8fa26781f00268405cf4299261d2d",
+            "runtimePayloadChanged": true,
+            "operatorPayloadChanged": true,
+            "nativeBinaryChanged": false
+          },
+          "controls": {
+            "bWrongReadinessRefused": true,
+            "bBindingAbsentAfterRefusal": true,
+            "retainedAAllFilesPreserved": true,
+            "retainedABackupPreserved": true,
+            "forwardStartedAfterConfirmedStop": true,
+            "returnStartedAfterConfirmedStop": true,
+            "oldAInstallerRestoredQ": true
+          },
+          "cleanup": {
+            "known": true,
+            "ownedProcessesAbsent": true,
+            "ownedLaunchersAbsent": true,
+            "ownedListenersClosed": true,
+            "ownedInstallationsRemoved": 3,
+            "historicalBundleRemoved": true,
+            "backupFilesRemoved": true
+          },
+          "limits": {
+            "consistencyOnly": true,
+            "nativeBinaryUpgradeAccepted": false,
+            "liveConnectionPreserved": false,
+            "applicationSideEffectsReversed": false,
+            "managedServiceAccepted": false,
+            "productionAccepted": false
+          }
+        },
+        "metadata": {
+          "suite": "x10-operator-package-return",
+          "profile": "foreground-http-reassembled-reviewed-operator-a-b-a2",
+          "historicalOperatorCommit": "acb648392e745b5246a5620f2ea6a6286dc06d42",
+          "historicalOperatorBlob": "f036791f3e843c3628964f5c61b0bc0ab903d6f9",
+          "historicalOperatorSha256": "4560b8b2503f109f210599a6277bdf5497118e3220c1d2fb6a0c041283c3810d",
+          "historicalBundleReassembled": true,
+          "publishedHistoricalBundle": false,
+          "completedUniquePostEffects": 3,
+          "completedStreams": 3
+        }
+      }
+    ]
+  },
+  "localValidation": {
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "x10/test/tls-verified-route.test.mjs",
+      "x10/test/package-return-proof.test.mjs",
+      "x10/alpha/stage.test.mjs",
+      "x10/alpha/package-info.test.mjs",
+      "x10/alpha/backup.test.mjs",
+      "x10/alpha/prepare-run.test.mjs",
+      "x10/test/alpha-runtime.test.mjs",
+      "x10/test/alpha-pid.test.mjs"
+    ],
+    "counts": {
+      "tests": 639,
+      "pass": 639,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "exitCode": 0,
+    "frozen": true,
+    "sourceBindings": {
+      "x10/test/tls-verified-route.mjs": {
+        "bytes": 12047,
+        "sha256": "2b62f31e33a4b3e419f014254b8cc891068783d376f4fe8b931c853240cb3478"
+      },
+      "x10/test/tls-verified-route.test.mjs": {
+        "bytes": 22241,
+        "sha256": "3729934702abbcb49d0e0e23092846b272142663487d13d7a3ae2f380e6418e0"
+      },
+      "x10/test/alpha-tls.test.mjs": {
+        "bytes": 20270,
+        "sha256": "f54a3b54705b2524bbfd49545ed181dcd10d28058f51dbd725ec692904c45ac6"
+      }
+    },
+    "nodeVersion": "v24.22.1",
+    "physicalNativeExecuted": false,
+    "networkFixtureExecuted": false,
+    "systemdExecuted": false,
+    "state": "FROZEN_PURE_VIRTUAL_PASS",
+    "newTLSVirtualControlsIncludedOnce": 58,
+    "unchangedSyntheticReadinessControlsSeparate": {
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-name-pattern=synthetic readiness relay input-binding counterexamples",
+        "x10/test/alpha-tls.test.mjs"
+      ],
+      "counts": {
+        "tests": 8,
+        "pass": 8,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "exitCode": 0,
+      "physicalNativeExecuted": false,
+      "scope": "Selected unchanged synthetic route-readiness controls only; native HTTPS fixture not executed."
+    },
+    "independentVirtualControlsSeparate": {
+      "securityCleanup": 3,
+      "integrationSocketLifecycle": 6
+    },
+    "processGroupOrSignalFixtureExecuted": false
+  },
+  "hostedVerification": {
+    "state": "PENDING_EXACT_RESULTING_NATIVE_CI",
+    "expectedEvidence": "Actual verified GET socket followed by exact unretried POST and stream on the same downstream connection, all existing CA/hostname refusal controls, preserved foreground operator return, full native/service regressions and owned/private-Node cleanup.",
+    "expectedRouteResultFields": 11,
+    "expectedRouteDiagnosticFields": 14,
+    "expectedUniquePostAttempts": 1,
+    "expectedOriginPosts": 1,
+    "postPayloadBytes": 65551,
+    "streamPayloadBytes": 65537,
+    "maxIdempotentGetAttempts": 8,
+    "maxAcquisitionMs": 8000
+  },
+  "rootCauseEstablished": false,
+  "nativeRuntimeFixClaimed": false,
+  "allWorkerReadinessAccepted": false,
+  "zeroDowntimeAccepted": false,
+  "liveConnectionMigrationAccepted": false,
+  "tlsFixtureCorrectionHostedAccepted": false,
+  "managedServicePackageTransitionAccepted": false,
+  "packageUpgradeRollbackAccepted": false,
+  "fullG3Accepted": false,
+  "fullG4Accepted": false,
+  "productionAccepted": false,
+  "limitations": [
+    "The selected socket is the client-to-native downstream HTTP connection, not a carried or pinned upstream TLS-library connection.",
+    "A route tag is public fixture metadata. Exact good body and origin checks plus actual CA/hostname verification remain separately required.",
+    "Pinning a known-working fixture connection narrows one test route; it does not prove every native worker or listener has switched, full drain, all-traffic readiness or zero downtime.",
+    "The historical503 source is not established. Possible old-worker/route interleaving is an inference, not an observed cause or a native runtime vulnerability/fix.",
+    "No automatic POST retry or replacement-connection replay is permitted; ambiguous network outcomes require failure and cleanup rather than a synthetic PASS.",
+    "Local pure/virtual controls do not execute actual native/TLS/process-group/signal/systemd fixtures or accept the changed hosted path.",
+    "Actual foreground return proofs observed on both6401 aggregate contexts do not erase the PR step21 TLS failure or replace its skipped service checks.",
+    "Known cleanup of the failed fixture is separate from unexecuted service/private-Node cleanup and from the still-unexercised full failure-containment matrix.",
+    "Permanent release, independent published replay,60-minute soak, managed-service package transition, fullG3/G4/V1 and semantic Continuum remain open.",
+    "The deferred unverified Windows plan, broad native/platform roadmap and G9 central portfolio protocol are unchanged.",
+    "Historical P/Q input digests include run-specific ports. Preserve both event proofs and compare P!=Q=A2 within each run; never demand whole-proof equality between events."
+  ],
+  "preFreezeFindings": [
+    "Initial47-case PASS was a draft diagnostic. Added controls exposed actual request.socket/event-socket mismatch and unhandled late ECONNRESET during destroy; intermediate53/55 FAIL was preserved, then terminal error draining and exact request.socket checks were fixed.",
+    "Cold acquisition GET sockets may still be connecting at assignment; only connected completed GET and Agent free-pool observation can mint the one-use permit. POST/stream keep strict live connected socket reuse.",
+    "Strict complete=true EOF, delayed free-pool ordering, late responses and bounded cleanup were independently reviewed before final frozen verification."
+  ]
+}
